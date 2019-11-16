@@ -10,6 +10,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using JetBrains.Annotations;
+using Settings;
 using UnityEngine;
 using static Logger.LogVerbosity;
 using static Logger.StackTraceFlags;
@@ -49,16 +50,11 @@ namespace Logger
 		private static readonly LogNamingMode LogNamingMode = LogNamingMode.DateTime;
 
 		/// <summary>
-		///     The directory that we save our log files in
-		/// </summary>
-		private static readonly string LogDirectory = $"{Environment.CurrentDirectory}/Logs";
-
-		/// <summary>
 		///     The path that the log file will be saved to while the game is running, will never change across runs unless the
 		///     logger undergoes a major revamp
 		/// </summary>
 		private static readonly string StaticLogPath =
-			Path.Combine(LogDirectory, "Latest.log");
+			Path.Combine(Logging.LogSaveDirectory, $"Latest{Logging.LogFileExtension}");
 
 		/// <summary>
 		///     The final log path in which each log file is copied to at the end of each session
@@ -113,7 +109,7 @@ namespace Logger
 			//Now create the new log file, as long as we don't already have it open
 			if (logStream == null)
 			{
-				Directory.CreateDirectory(LogDirectory);
+				Directory.CreateDirectory(Logging.LogSaveDirectory);
 				logStream = File.CreateText(StaticLogPath);
 				logStream.AutoFlush = true;
 			}
@@ -261,7 +257,7 @@ Process priority:       {process.PriorityClass}");
 			//Now copy our 'latest.log' to it's final destination
 			File.Copy(StaticLogPath, FinalLogPath, false);
 
-			Debug.Log("Cleaning up...");
+			Debug.Log("Logger closing...");
 
 			void WriteDirect(string str)
 			{
@@ -493,7 +489,7 @@ Process priority:       {process.PriorityClass}");
 					int fileNo = 0;
 					while (true)
 					{
-						fileName = Path.Combine(LogDirectory, $"{dateString} {fileNo}.log");
+						fileName = Path.Combine(Logging.LogSaveDirectory, $"{dateString} {fileNo}.log");
 						if (File.Exists(fileName)) fileNo++;
 						else break;
 					}
@@ -502,11 +498,12 @@ Process priority:       {process.PriorityClass}");
 				}
 				//Format as 'Logs/2019-06-21 '
 				case LogNamingMode.DateTime:
-					fileName = Path.Combine(LogDirectory, $"{now:yyyy-MM-dd HH-mm-ss}.log");
+					fileName = Path.Combine(Logging.LogSaveDirectory, $"{now:yyyy-MM-dd HH-mm-ss}.log");
 					break;
 				default:
 					Log($"Invalid log naming mode {LogNamingMode}", ERROR);
-					return Path.Combine(LogDirectory, "Log.log");
+					fileName = Path.Combine(Logging.LogSaveDirectory, "Log-Invalid-Naming-Mode.log");
+					break;
 			}
 
 			return fileName;
