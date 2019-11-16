@@ -1,4 +1,4 @@
-﻿namespace Scenes
+﻿namespace SceneManagement
 {
 	public class GamemodeSettings
 	{

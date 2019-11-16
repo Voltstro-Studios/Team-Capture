@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
-using Scenes;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Debug = UnityEngine.Debug;
 
 namespace SceneManagement
@@ -27,8 +26,8 @@ namespace SceneManagement
 		private static void ListAllEnabledScenes()
 		{
 			Debug.Log($"Enabled {nameof(TCScene)}s found:");
-			foreach (TCScene tcScene in GetAllTCScenes())
-			{
+			foreach (TCScene tcScene in GetAllEnabledTCScenes())
+			{	
 				Debug.Log($"\t{tcScene.sceneName} ({tcScene.displayName})");
 			}
 		}
@@ -44,6 +43,18 @@ namespace SceneManagement
 		/// Gets all enabled scenes in the build
 		/// </summary>
 		/// <returns></returns>
-		private static IEnumerable<TCScene> GetAllEnabledTCScenes() => GetAllTCScenes().Where(s => s.enabled);
+		private static IEnumerable<TCScene> GetAllEnabledTCScenes() => GetAllTCScenes().Where(s => s.enabled); 
+
+		[MenuItem("Team Capture/Scenes test")]
+		private static void SearchForTest()
+		{
+			const string searchFor = "search_for";
+			Debug.Log(FindScene(searchFor));
+		}
+
+		private static TCScene FindScene(string name)
+		{
+			return GetAllTCScenes().FirstOrDefault(s => s.name == name);
+		}
 	}
 }
