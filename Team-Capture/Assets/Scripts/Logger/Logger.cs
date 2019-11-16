@@ -101,9 +101,9 @@ namespace Logger
 		/// </summary>
 		public static LogVerbosity Verbosity { get; set; } = VERBOSE;
 
-		//Make sure this always runs as soon as possible
-		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+
 		//We use this to initialize the class
+		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
 		private static void Init()
 		{
 			//Now create the new log file, as long as we don't already have it open
@@ -116,7 +116,7 @@ namespace Logger
 			//If we already have a log stream, just log a message and return
 			else
 			{
-				Log("Log stream already open...", DEBUG);
+				Log("Log stream already open...", INFO);
 				return;
 			}
 

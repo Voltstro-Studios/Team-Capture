@@ -15,7 +15,7 @@ namespace SceneManagement
 	public static class TCScenesManagerTools
 	{
 		[MenuItem("Team Capture/List All Scenes")]
-		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+//		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
 		private static void ListAllTCScenes()
 		{
 			Debug.Log($"{nameof(TCScene)}s found:");
@@ -26,7 +26,7 @@ namespace SceneManagement
 		}
 		
 		[MenuItem("Team Capture/List Enabled Scenes")]
-		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+//		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
 		private static void ListAllEnabledScenes()
 		{
 			Debug.Log($"Enabled {nameof(TCScene)}s found:");
@@ -37,7 +37,7 @@ namespace SceneManagement
 		}
 		
 		[MenuItem("Team Capture/Scenes test")]
-		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+//		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
 		private static void SearchForTest()
 		{
 			const string searchFor = "test_scene";

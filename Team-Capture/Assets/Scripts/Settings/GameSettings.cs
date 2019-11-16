@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Helper;
+using Logger;
 using Newtonsoft.Json;
 using UnityEngine;
 
@@ -78,7 +79,7 @@ namespace Settings
 			}
 
 			HasBeenLoaded = true;
-			Debug.Log("Loaded settings");
+			Logger.Logger.Log("Loaded settings", LogVerbosity.INFO);
 
 			//Notify other classes that settings have updated
 			SettingsLoaded?.Invoke();
