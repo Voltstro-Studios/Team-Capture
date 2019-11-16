@@ -1,5 +1,6 @@
 ﻿using Mirror;
 using UnityEngine;
+using Weapons;
 
 namespace SceneManagement
 {
@@ -10,5 +11,7 @@ namespace SceneManagement
 		public string displayName;
 		[Tooltip("Is this scene playable?")]
 		public bool enabled = true;
+
+		public TCWeapon[] stockWeapons;
 	}
 }

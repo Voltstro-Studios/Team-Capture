@@ -1,5 +1,6 @@
 ﻿using Mirror;
 using UnityEngine;
+using Weapons;
 
 namespace Player
 {
@@ -28,6 +29,8 @@ namespace Player
 
 			Cursor.visible = false;
 			Cursor.lockState = CursorLockMode.Locked;
+
+			GetComponent<WeaponManager>().ResetWeapons();
 		}
 
 		public override void OnStartClient()

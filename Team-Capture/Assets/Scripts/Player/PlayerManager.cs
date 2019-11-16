@@ -6,13 +6,9 @@ namespace Player
 	{
 		[SyncVar] public string username;
 
-		public void CmdSetUsername(string playerId, string username)
+		public void Setup()
 		{
-			PlayerManager player = GameManager.GetPlayer(playerId);
-			if (player != null)
-			{
-				player.username = username;
-			}
+
 		}
 	}
 }
