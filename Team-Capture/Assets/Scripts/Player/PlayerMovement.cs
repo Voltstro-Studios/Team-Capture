@@ -54,10 +54,10 @@ namespace Player
 
 			charController.SimpleMove(Vector3.ClampMagnitude(forwardMovement + rightMovement, 1.0f) * movementSpeed);
 
-			// ReSharper disable once CompareOfFloatsByEqualityOperator
+			// ReSharper disable CompareOfFloatsByEqualityOperator
 			if ((vertInput != 0 || horizInput != 0) && OnSlope())
 				charController.Move(Time.deltaTime * charController.height / 2 * slopeForce * Vector3.down);
-
+			// ReSharper restore CompareOfFloatsByEqualityOperator
 			SetMovementSpeed();
 			JumpInput();
 		}
