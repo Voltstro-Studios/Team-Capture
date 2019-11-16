@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Helper;
 using HelperClasses.Logger;
+using SceneManagement;
 using Settings;
 using UnityEditor;
 using UnityEngine;
@@ -64,7 +65,7 @@ namespace Logger
 				LogStream.Close();
 			}
 
-			LogStream = new FileStream($"{logDirectory.FullName}Log{Logging.LogFileExtension}", FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.Read);
+			LogStream = new FileStream($"{logDirectory.FullName}/Log{Logging.LogFileExtension}", FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.Read);
 
 			Debug.Log($"Loading logger from thread '{Thread.CurrentThread.Name}'. Log location is {LogStream.Name}");
 

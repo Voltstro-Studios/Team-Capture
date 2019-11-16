@@ -12,6 +12,8 @@ namespace SceneManagement
 		[Tooltip("Is this scene playable?")]
 		public bool enabled = true;
 
+		public GamemodeSettings gamemodeSettings;
+
 		public TCWeapon[] stockWeapons;
 	}
 }

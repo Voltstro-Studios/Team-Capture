@@ -10,8 +10,12 @@ namespace SceneManagement
 		/// Returns a list of all <see cref="TCScene"/> objects in the build (as long as they were in the resources folder). Includes disabled scenes
 		/// </summary>
 		/// <returns></returns>
-		//Use FindObjectsOfType over LoadAll<T> because it's around 3x faster (190ms vs 500ms)
-		public static IEnumerable<TCScene> GetAllTCScenes() => Resources.FindObjectsOfTypeAll<TCScene>();
+		//FindObjectsOfType iss around 3x faster than LoadAll<T> (190ms vs 500ms), but might not work in the build
+		public static IEnumerable<TCScene> GetAllTCScenes()
+		{
+//			return Resources.LoadAll("").Where(r => r.GetType() == typeof(TCScene)).Select(t => (TCScene) t);
+			return Resources.LoadAll<TCScene>("");
+		}
 
 		/// <summary>
 		/// Gets all enabled scenes in the build
