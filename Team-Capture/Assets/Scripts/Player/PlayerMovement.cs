@@ -11,7 +11,7 @@ namespace Player
 		[SerializeField] private float walkSpeed = 12;
 		[SerializeField] private float slopeForce = 6;
 		[SerializeField] private float slopeForceRayLength = 2;
-		[SerializeField] private AnimationCurve jumpFallOff;
+		[SerializeField] private AnimationCurve jumpFallOff = null;
 		[SerializeField] private float jumpMultiplier = 2;
 		[SerializeField] private KeyCode jumpKey = KeyCode.Space;
 
