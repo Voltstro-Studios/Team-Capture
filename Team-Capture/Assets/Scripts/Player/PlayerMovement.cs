@@ -26,9 +26,6 @@ namespace Player
 
 		private void Awake()
 		{
-			if (!isLocalPlayer)
-				this.enabled = false;
-
 			_charController = GetComponent<CharacterController>();
 		}
 
