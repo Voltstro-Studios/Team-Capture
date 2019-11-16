@@ -341,11 +341,7 @@ Process priority:       {process.PriorityClass}");
 						Debug.LogWarning(message);
 						break;
 					case INFO:
-						Debug.Log(message);
-						break;
 					case DEBUG:
-						Debug.Log(message);
-						break;
 					case VERBOSE:
 						Debug.Log(message);
 						break;

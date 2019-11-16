@@ -1,77 +1,0 @@
-Unity Debug.Log message:	
-	
-Thank you for using Mirror! https://mirror-networking.com	
-	
-UnityEngine.Debug:Log(Object)	
-Mirror.NetworkManager:Awake() (at Assets/Mirror/Runtime/NetworkManager.cs:221)	
-	
-
-=====  Log file for Team-Capture  =====
-Current time is         16/11/2019 10:37:00 PM
-Command line arguments:	D:\Programs Files\Unity Editors\2019.2.11f1\Editor\Unity.exe, -projectpath, D:/Projects/_Clones/Team-Capture/Team-Capture, -useHub, -hubIPC, -cloudEnvironment, production, -hubSessionId, d48eb320-0802-11ea-b62f-730ce0532dc3, -accessToken, FKJseN-Y94GPcgXcAEpTsPnqmskDuDMzFFQXMYI3Jeo00ff
-
-=====  Executable info  =====
-Version:                0.1
-Unity version:          2019.2.11f1
-Build GUID:             
-Persistent data path:   C:/Users/Liam/AppData/LocalLow/Creepysin Studios/Team-Capture
-Data path:              D:/Projects/_Clones/Team-Capture/Team-Capture/Assets
-Installer name:         
-Installer mode:         Editor
-Target frame rate:      -1
-Genuine:                True
-Running as 64-Bit:      True
-
-=====  Device info      =====
-Platform:               WindowsEditor
-OS:                     Windows 10  (10.0.0) 64bit
-Version:                4.0
-Language:               English
-CPU:                    Intel(R) Core(TM) i5-6500 CPU @ 3.20GHz 4 core(s) @ 3192
-GPU:                    GeForce GTX 1060 3GB (Vulkan 1.1.119 [0x6e420000])
-64-Bit OS:              True
-Unity Debug.Log message:	
-	
-TelepathyTransport initialized!	
-	
-UnityEngine.Debug:Log(Object)	
-Mirror.TelepathyTransport:Awake() (at Assets/Mirror/Runtime/Transport/TelepathyTransport.cs:48)	
-	
-Unity Debug.Log message:	
-	
-Server: Start port=7777	
-	
-UnityEngine.Debug:Log(Object)	
-Telepathy.Server:Start(Int32) (at Assets/Mirror/Runtime/Transport/Telepathy/Server.cs:194)	
-Mirror.TelepathyTransport:ServerStart() (at Assets/Mirror/Runtime/Transport/TelepathyTransport.cs:112)	
-Mirror.NetworkServer:Listen(Int32) (at Assets/Mirror/Runtime/NetworkServer.cs:136)	
-Mirror.NetworkManager:StartServer() (at Assets/Mirror/Runtime/NetworkManager.cs:288)	
-Mirror.NetworkManager:StartHost() (at Assets/Mirror/Runtime/NetworkManager.cs:363)	
-Mirror.NetworkManagerHUD:OnGUI() (at Assets/Mirror/Runtime/NetworkManagerHUD.cs:55)	
-	
-Unity Debug.Log message:	
-	
-Server: listening port=7777	
-	
-UnityEngine.Debug:Log(Object)	
-Telepathy.Server:Listen(Int32) (at Assets/Mirror/Runtime/Transport/Telepathy/Server.cs:82)	
-Telepathy.<>c__DisplayClass9_0:<Start>b__0() (at Assets/Mirror/Runtime/Transport/Telepathy/Server.cs:195)	
-System.Threading.ThreadHelper:ThreadStart()	
-	
-Unity Debug.Log message:	
-	
-Added Player 1.	
-	
-UnityEngine.Debug:Log(Object)	
-GameManager:AddPlayer(String, PlayerManager) (at Assets/Scripts/GameManager.cs:61)	
-Player.PlayerSetup:OnStartClient() (at Assets/Scripts/Player/PlayerSetup.cs:40)	
-Mirror.NetworkIdentity:OnStartClient() (at Assets/Mirror/Runtime/NetworkIdentity.cs:540)	
-Mirror.ClientScene:OnLocalClientSpawn(SpawnMessage) (at Assets/Mirror/Runtime/ClientScene.cs:632)	
-Mirror.<>c__DisplayClass34_0`1:<RegisterHandler>b__0(NetworkConnection, SpawnMessage) (at Assets/Mirror/Runtime/NetworkClient.cs:395)	
-Mirror.<>c__DisplayClass7_0`1:<MessageHandler>b__0(NetworkMessage) (at Assets/Mirror/Runtime/MessagePacker.cs:163)	
-Mirror.NetworkConnection:InvokeHandler(Int32, NetworkReader, Int32) (at Assets/Mirror/Runtime/NetworkConnection.cs:272)	
-Mirror.NetworkConnection:TransportReceive(ArraySegment`1, Int32) (at Assets/Mirror/Runtime/NetworkConnection.cs:326)	
-Mirror.ULocalConnectionToServer:Update() (at Assets/Mirror/Runtime/LocalConnections.cs:81)	
-Mirror.NetworkClient:Update() (at Assets/Mirror/Runtime/NetworkClient.cs:251)	
-Mirror.NetworkManager:LateUpdate() (at Assets/Mirror/Runtime/NetworkManager.cs:260)	
-	
