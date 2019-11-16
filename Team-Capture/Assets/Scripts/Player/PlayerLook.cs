@@ -7,10 +7,10 @@ namespace Player
 		[SerializeField] private string mouseXInput = "Mouse X";
 		[SerializeField] private string mouseYInput = "Mouse Y";
 		[SerializeField] private float mouseSensitivity = 125f;
-		[SerializeField] private Transform playerTransform = null;
+		[SerializeField] private Transform playerTransform;
 		[SerializeField] private float axisClamp = 90.0f;
 
-		private float xRotation = 0f;
+		private float xRotation;
 
 		private void Update()
 		{

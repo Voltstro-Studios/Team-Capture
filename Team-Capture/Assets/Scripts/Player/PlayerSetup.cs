@@ -6,12 +6,12 @@ namespace Player
 	public class PlayerSetup : NetworkBehaviour
 	{
 		[Header("Components to Destroy")]
-		[SerializeField] private CapsuleCollider localCapsuleCollider = null;
+		[SerializeField] private CapsuleCollider localCapsuleCollider;
 
 		[Header("Components to Enable")]
-		[SerializeField] private CharacterController localCharacterController = null;
-		[SerializeField] private PlayerMovement localPlayerMovement = null;
-		[SerializeField] private GameObject localCamera = null;
+		[SerializeField] private CharacterController localCharacterController;
+		[SerializeField] private PlayerMovement localPlayerMovement;
+		[SerializeField] private GameObject localCamera;
 
 		public override void OnStartLocalPlayer()
 		{

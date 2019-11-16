@@ -45,7 +45,7 @@ public class GameManager : MonoBehaviour
 
 	private const string PlayerIdPrefix = "Player ";
 
-	private static readonly Dictionary<string, PlayerManager> _players = new Dictionary<string, PlayerManager>();
+	private static readonly Dictionary<string, PlayerManager> Players = new Dictionary<string, PlayerManager>();
 
 	/// <summary>
 	/// Adds a player
@@ -55,7 +55,7 @@ public class GameManager : MonoBehaviour
 	public static void AddPlayer(string netId, PlayerManager playerManager)
 	{
 		string playerId = PlayerIdPrefix + netId;
-		_players.Add(playerId, playerManager);
+		Players.Add(playerId, playerManager);
 		playerManager.transform.name = playerId;
 
 		Debug.Log($"Added {playerId}.");
@@ -67,12 +67,12 @@ public class GameManager : MonoBehaviour
 	/// <param name="playerId"></param>
 	public static void RemovePlayer(string playerId)
 	{
-		_players.Remove(playerId);
+		Players.Remove(playerId);
 	}
 
 	public static PlayerManager GetPlayer(string playerId)
 	{
-		return _players[playerId];
+		return Players[playerId];
 	}
 
 	#endregion

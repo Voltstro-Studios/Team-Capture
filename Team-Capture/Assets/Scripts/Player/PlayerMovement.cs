@@ -11,22 +11,22 @@ namespace Player
 		[SerializeField] private float walkSpeed = 12;
 		[SerializeField] private float slopeForce = 6;
 		[SerializeField] private float slopeForceRayLength = 2;
-		[SerializeField] private AnimationCurve jumpFallOff = null;
+		[SerializeField] private AnimationCurve jumpFallOff;
 		[SerializeField] private float jumpMultiplier = 2;
 		[SerializeField] private KeyCode jumpKey = KeyCode.Space;
 
-		private bool _isJumping;
+		private bool isJumping;
 
-		private CharacterController _charController;
+		private CharacterController charController;
 
-		private float _horizInput;
-		private float _vertInput;
+		private float horizInput;
+		private float vertInput;
 
-		private float _movementSpeed;
+		private float movementSpeed;
 
 		private void Awake()
 		{
-			_charController = GetComponent<CharacterController>();
+			charController = GetComponent<CharacterController>();
 		}
 
 		private void Update()
@@ -39,8 +39,8 @@ namespace Player
 
 		private void GetAxis()
 		{
-			_horizInput = Input.GetAxis(horizontalInputName);
-			_vertInput = Input.GetAxis(verticalInputName);
+			horizInput = Input.GetAxis(horizontalInputName);
+			vertInput = Input.GetAxis(verticalInputName);
 		}
 
 		private void PlayerMove()
@@ -48,15 +48,15 @@ namespace Player
 			GetAxis();
 
 			Transform transform1 = transform;
-			Vector3 forwardMovement = transform1.forward * _vertInput;
-			Vector3 rightMovement = transform1.right * _horizInput;
+			Vector3 forwardMovement = transform1.forward * vertInput;
+			Vector3 rightMovement = transform1.right * horizInput;
 
 
-			_charController.SimpleMove(Vector3.ClampMagnitude(forwardMovement + rightMovement, 1.0f) * _movementSpeed);
+			charController.SimpleMove(Vector3.ClampMagnitude(forwardMovement + rightMovement, 1.0f) * movementSpeed);
 
 			// ReSharper disable once CompareOfFloatsByEqualityOperator
-			if ((_vertInput != 0 || _horizInput != 0) && OnSlope())
-				_charController.Move(Time.deltaTime * _charController.height / 2 * slopeForce * Vector3.down);
+			if ((vertInput != 0 || horizInput != 0) && OnSlope())
+				charController.Move(Time.deltaTime * charController.height / 2 * slopeForce * Vector3.down);
 
 			SetMovementSpeed();
 			JumpInput();
@@ -64,16 +64,16 @@ namespace Player
 
 		private void SetMovementSpeed()
 		{
-			_movementSpeed = Mathf.Lerp(_movementSpeed, walkSpeed, Time.deltaTime);
+			movementSpeed = Mathf.Lerp(movementSpeed, walkSpeed, Time.deltaTime);
 		}
 
 		private bool OnSlope()
 		{
-			if (_isJumping)
+			if (isJumping)
 				return false;
 
 			if (!Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit,
-				_charController.height / 2 * slopeForceRayLength)) return false;
+				charController.height / 2 * slopeForceRayLength)) return false;
 
 			return hit.normal != Vector3.up;
 		}
@@ -82,7 +82,7 @@ namespace Player
 		{
 			if (!Input.GetKeyDown(jumpKey)) return;
 
-			if (_isJumping)
+			if (isJumping)
 				return;
 
 			StartCoroutine(JumpEvent());
@@ -90,21 +90,21 @@ namespace Player
 
 		private IEnumerator JumpEvent()
 		{
-			_charController.slopeLimit = 90.0f;
+			charController.slopeLimit = 90.0f;
 			float timeInAir = 0.0f;
 			do
 			{
 				float jumpForce = jumpFallOff.Evaluate(timeInAir);
-				if (_charController.enabled)
+				if (charController.enabled)
 				{
-					_charController.Move(Time.deltaTime * jumpForce * jumpMultiplier * Vector3.up);
+					charController.Move(Time.deltaTime * jumpForce * jumpMultiplier * Vector3.up);
 					timeInAir += Time.deltaTime;
 				}
 				yield return null;
-			} while (!_charController.isGrounded && _charController.collisionFlags != CollisionFlags.Above);
+			} while (!charController.isGrounded && charController.collisionFlags != CollisionFlags.Above);
 
-			_charController.slopeLimit = 45.0f;
-			_isJumping = false;
+			charController.slopeLimit = 45.0f;
+			isJumping = false;
 		}
 	}
 }

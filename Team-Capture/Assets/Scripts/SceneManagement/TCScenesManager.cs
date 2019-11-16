@@ -22,11 +22,8 @@ namespace SceneManagement
 		/// <summary>
 		/// Finds a scene
 		/// </summary>
-		/// <param name="name"></param>
+		/// <param name="name">The name of the scene to find</param>
 		/// <returns></returns>
-		public static TCScene FindScene(string name)
-		{
-			return GetAllTCScenes().FirstOrDefault(s => s.name == name);
-		}
+		public static TCScene FindScene(string name) => GetAllTCScenes().FirstOrDefault(s => s.name == name);
 	}
 }
