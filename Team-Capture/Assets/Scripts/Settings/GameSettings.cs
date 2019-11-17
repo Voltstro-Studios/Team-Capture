@@ -15,7 +15,7 @@ namespace Settings
 		public static event Action SettingsLoaded;
 
 		public static Input Input { get; private set; } = new Input();
-		public static bool HasBeenLoaded { get; private set; } = false;
+		public static bool HasBeenLoaded { get; private set; }
 
 		#region Saving, loading and resetting setting functions
 
