@@ -77,6 +77,16 @@ public class MainMenuController : MonoBehaviour
 		}
 	}
 
+	public void CloseAllPanels()
+	{
+		foreach (MainMenuPanels menuPanel in menuPanels.Where(menuPanel => menuPanel.isOpen))
+		{
+			menuPanel.panelObject.SetActive(false);
+			StartCoroutine(DeactivateTopBlackBar());
+			StartCoroutine(DeactivateBlackBackground());
+		}
+	}
+
 	private MainMenuPanels GetMenuPanel(string panelName)
 	{
 		IEnumerable<MainMenuPanels> result = from a in menuPanels

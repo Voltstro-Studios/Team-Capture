@@ -288,6 +288,36 @@ PrefabInstance:
       propertyPath: m_fontSize
       value: 72
       objectReference: {fileID: 0}
+    - target: {fileID: 2438872349478222782, guid: 012efb8539a764b41a36eec3a54461dd,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2438872349478222782, guid: 012efb8539a764b41a36eec3a54461dd,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2438872349478222782, guid: 012efb8539a764b41a36eec3a54461dd,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2438872349478222782, guid: 012efb8539a764b41a36eec3a54461dd,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 319514908}
+    - target: {fileID: 2438872349478222782, guid: 012efb8539a764b41a36eec3a54461dd,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: CloseAllPanels
+      objectReference: {fileID: 0}
+    - target: {fileID: 2438872349478222782, guid: 012efb8539a764b41a36eec3a54461dd,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 012efb8539a764b41a36eec3a54461dd, type: 3}
 --- !u!1 &289497519 stripped
