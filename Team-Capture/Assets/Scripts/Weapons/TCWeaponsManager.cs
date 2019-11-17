@@ -6,7 +6,7 @@ namespace Weapons
 {
 	public static class TCWeaponsManager
 	{
-		public static IEnumerable<TCWeapon> GetAllTCWeapons() => Resources.FindObjectsOfTypeAll<TCWeapon>();
+		public static IEnumerable<TCWeapon> GetAllTCWeapons() => Resources.LoadAll<TCWeapon>("");
 
 		public static TCWeapon GetWeapon(string weaponName) => GetAllTCWeapons().FirstOrDefault(w => w.weapon == weaponName);
 	}
