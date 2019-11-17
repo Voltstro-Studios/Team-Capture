@@ -20,8 +20,8 @@ using ThreadPriority = System.Threading.ThreadPriority;
 
 #endregion
 
-//! Figure out MethodImpl.NoInlining for functions to make sure stack trace is right
-//! Create monitoring app to check when game closes what the exit code was
+//TODO: Figure out MethodImpl.NoInlining for functions to make sure stack trace is right
+//TODO: Create monitoring app to check when game closes what the exit code was
 namespace Logger
 {
 	public static class Logger
