@@ -19,8 +19,6 @@ namespace Logger
 		/// </summary>
 		INFO = 2,
 
-		//If we're in the editor or a development build, allow use of DEBUG and VERBOSE levels
-#if UNITY_EDITOR || DEVELOPMENT_BUILD 
 		/// <summary>
 		///     Record almost everything, to ease debugging. Not recommended for normal use.
 		/// </summary>
@@ -30,6 +28,5 @@ namespace Logger
 		///     Most verbose, record every single message. Do not use except when debugging, as log files will be much larger and performance will be lower.
 		/// </summary>
 		VERBOSE = 4
-#endif
 	}
 }
