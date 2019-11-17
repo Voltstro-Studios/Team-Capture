@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: dm_test
   m_EditorClassIdentifier: 
   sceneName: dm_test
-  displayName: Test
+  displayName: Test World
   enabled: 1
   stockWeapons:
   - {fileID: 11400000, guid: da803de1f5f09f247aac351f1c13c59a, type: 2}

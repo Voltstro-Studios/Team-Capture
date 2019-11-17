@@ -39,6 +39,9 @@ public class MainMenuController : MonoBehaviour
 
 			if(panel.GetComponent<QuitPanel>() != null)
 				panel.GetComponent<QuitPanel>().noBtn.onClick.AddListener(delegate{TogglePanel(menuPanel.panelName);});
+
+			if (panel.GetComponent<CreateGamePanel>() != null)
+				panel.GetComponent<CreateGamePanel>().cancelButton.onClick.AddListener(delegate{TogglePanel(menuPanel.panelName);});
 		}
 	}
 
