@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Panels;
 using UnityEngine;
 
 public class MainMenuController : MonoBehaviour
@@ -35,6 +36,9 @@ public class MainMenuController : MonoBehaviour
 			panel.name = menuPanel.panelName;
 			panel.SetActive(false);
 			menuPanel.panelObject = panel;
+
+			if(panel.GetComponent<QuitPanel>() != null)
+				panel.GetComponent<QuitPanel>().noBtn.onClick.AddListener(delegate{TogglePanel(menuPanel.panelName);});
 		}
 	}
 
