@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Player;
 using SceneManagement;
 using UnityEngine;
@@ -73,6 +74,11 @@ public class GameManager : MonoBehaviour
 	public static PlayerManager GetPlayer(string playerId)
 	{
 		return Players[playerId];
+	}
+
+	public static PlayerManager[] GetAllPlayers()
+	{
+		return Players.Values.ToArray();
 	}
 
 	#endregion

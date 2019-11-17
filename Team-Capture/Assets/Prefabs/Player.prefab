@@ -124,6 +124,7 @@ GameObject:
   - component: {fileID: 4790435715656838203}
   - component: {fileID: 6221254021302100361}
   - component: {fileID: 2372551973129992940}
+  - component: {fileID: 4650911801006421196}
   - component: {fileID: 6438375962803020338}
   m_Layer: 0
   m_Name: Player
@@ -257,7 +258,9 @@ MonoBehaviour:
   localCapsuleCollider: {fileID: 8450580671024409085}
   localCharacterController: {fileID: 6438375962803020340}
   localPlayerMovement: {fileID: 6438375962803020339}
-  localCamera: {fileID: 6438375964343202626}
+  localCamera: {fileID: 6438375964343202625}
+  localAudioListener: {fileID: 5781786791537516909}
+  localPlayerLook: {fileID: 6438375964343202624}
 --- !u!114 &6221254021302100361
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -288,6 +291,22 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   compressRotation: 1
+--- !u!114 &4650911801006421196
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6438375962803020343}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 734b48bea0b204338958ee3d885e11f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  compressRotation: 1
+  target: {fileID: 6438375964343202627}
 --- !u!114 &6438375962803020338
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -321,7 +340,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &6438375964343202627
 Transform:
   m_ObjectHideFlags: 0
@@ -344,7 +363,7 @@ Camera:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6438375964343202626}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_ClearFlags: 1
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
@@ -387,7 +406,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6438375964343202626}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!114 &6438375964343202624
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -395,7 +414,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6438375964343202626}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ee6a9ee96937d1c4e9165c6bcd589329, type: 3}
   m_Name: 

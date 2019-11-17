@@ -1,6 +1,5 @@
 ﻿using Mirror;
 using UnityEngine;
-using Weapons;
 
 namespace Player
 {
@@ -12,7 +11,9 @@ namespace Player
 		[Header("Components to Enable")]
 		[SerializeField] private CharacterController localCharacterController;
 		[SerializeField] private PlayerMovement localPlayerMovement;
-		[SerializeField] private GameObject localCamera;
+		[SerializeField] private Camera localCamera;
+		[SerializeField] private AudioListener localAudioListener;
+		[SerializeField] private PlayerLook localPlayerLook;
 
 		public override void OnStartLocalPlayer()
 		{
@@ -25,12 +26,12 @@ namespace Player
 
 			GameManager.Instance.sceneCamera.SetActive(false);
 
-			localCamera.SetActive(true);
+			localCamera.enabled = true;
+			localAudioListener.enabled = true;
+			localPlayerLook.enabled = true;
 
 			Cursor.visible = false;
 			Cursor.lockState = CursorLockMode.Locked;
-
-			GetComponent<WeaponManager>().ResetWeapons();
 		}
 
 		public override void OnStartClient()

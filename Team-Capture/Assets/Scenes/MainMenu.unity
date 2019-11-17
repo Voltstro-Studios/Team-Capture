@@ -3000,21 +3000,6 @@ PrefabInstance:
       propertyPath: m_text
       value: Quit
       objectReference: {fileID: 0}
-    - target: {fileID: 2438872349478222781, guid: 012efb8539a764b41a36eec3a54461dd,
-        type: 3}
-      propertyPath: m_Color.r
-      value: 0.6792453
-      objectReference: {fileID: 0}
-    - target: {fileID: 2438872349478222781, guid: 012efb8539a764b41a36eec3a54461dd,
-        type: 3}
-      propertyPath: m_Color.g
-      value: 0.6792453
-      objectReference: {fileID: 0}
-    - target: {fileID: 2438872349478222781, guid: 012efb8539a764b41a36eec3a54461dd,
-        type: 3}
-      propertyPath: m_Color.b
-      value: 0.6792453
-      objectReference: {fileID: 0}
     - target: {fileID: 2438872349478222782, guid: 012efb8539a764b41a36eec3a54461dd,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
@@ -3064,6 +3049,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
       value: QuitPanel
+      objectReference: {fileID: 0}
+    - target: {fileID: 2438872349478222781, guid: 012efb8539a764b41a36eec3a54461dd,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0.6792453
+      objectReference: {fileID: 0}
+    - target: {fileID: 2438872349478222781, guid: 012efb8539a764b41a36eec3a54461dd,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0.6792453
+      objectReference: {fileID: 0}
+    - target: {fileID: 2438872349478222781, guid: 012efb8539a764b41a36eec3a54461dd,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0.6792453
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 012efb8539a764b41a36eec3a54461dd, type: 3}
