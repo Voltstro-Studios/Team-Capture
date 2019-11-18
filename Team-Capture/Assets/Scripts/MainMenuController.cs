@@ -9,7 +9,7 @@ public class MainMenuController : MonoBehaviour
 {
 	public Transform mainMenuPanel;
 
-	public List<MainMenuPanels> menuPanels = new List<MainMenuPanels>();
+	public List<MainMenuPanel> menuPanels = new List<MainMenuPanel>();
 
 	[Header("Black Background")]
 	public Animator blackBackgroundAnimator;
@@ -30,16 +30,18 @@ public class MainMenuController : MonoBehaviour
 		topBlackBarAnimator.gameObject.SetActive(false);
 
 		//Pre create all panels
-		foreach (MainMenuPanels menuPanel in menuPanels)
+		foreach (MainMenuPanel menuPanel in menuPanels)
 		{
 			GameObject panel = Instantiate(menuPanel.panelPrefab, mainMenuPanel);
 			panel.name = menuPanel.panelName;
 			panel.SetActive(false);
 			menuPanel.panelObject = panel;
 
+			//If the panel is a quit panel, then set its no button to toggle the panel
 			if(panel.GetComponent<QuitPanel>() != null)
 				panel.GetComponent<QuitPanel>().noBtn.onClick.AddListener(delegate{TogglePanel(menuPanel.panelName);});
 
+			//Basically, the same thing above
 			if (panel.GetComponent<CreateGamePanel>() != null)
 				panel.GetComponent<CreateGamePanel>().cancelButton.onClick.AddListener(delegate{TogglePanel(menuPanel.panelName);});
 		}
@@ -47,57 +49,48 @@ public class MainMenuController : MonoBehaviour
 
 	public void TogglePanel(string panelName)
 	{
-		MainMenuPanels panel = GetMenuPanel(panelName);
+		MainMenuPanel panel = GetMenuPanel(panelName);
 
-		if (panel.isOpen)
+		if (GetActivePanel() != null && panel != GetActivePanel())
 		{
-			Debug.Log($"Closing {panel.panelName}");
+			Debug.Log($"{GetActivePanel().panelName} is currently active, switching...");
 
-			if (panel.menuEvent.showTopBlackBar)
-				StartCoroutine(DeactivateTopBlackBar());
-
-			if (panel.menuEvent.darkenScreen)
-				StartCoroutine(DeactivateBlackBackground());
-				
-			panel.panelObject.SetActive(false);
-			panel.isOpen = false;
-
-			return;
+			ClosePanel(GetActivePanel(), true);
 		}
 
-		if (!panel.isOpen)
-		{
-			Debug.Log($"Opening {panel.panelName}");
-
-			if(panel.menuEvent.showTopBlackBar)
-				ActivateTopBlackBar();
-
-			if (panel.menuEvent.darkenScreen)
-				ActivateBlackBackground();
-
-			panel.panelObject.SetActive(true);
-			panel.isOpen = true;
-		}
+		if(!panel.isOpen)
+			OpenPanel(panel);
+		else
+			ClosePanel(panel);
 	}
 
-	public void CloseAllPanels()
+	public void CloseActivePanel()
 	{
-		foreach (MainMenuPanels menuPanel in menuPanels.Where(menuPanel => menuPanel.isOpen))
-		{
-			menuPanel.panelObject.SetActive(false);
-			StartCoroutine(DeactivateTopBlackBar());
-			StartCoroutine(DeactivateBlackBackground());
-		}
+		if(GetActivePanel() != null)
+			ClosePanel(GetActivePanel());
 	}
 
-	private MainMenuPanels GetMenuPanel(string panelName)
+	#region Panel List Functions
+
+	private MainMenuPanel GetMenuPanel(string panelName)
 	{
-		IEnumerable<MainMenuPanels> result = from a in menuPanels
+		IEnumerable<MainMenuPanel> result = from a in menuPanels
 			where a.panelName == panelName
 			select a;
 
 		return result.FirstOrDefault();
 	}
+
+	private MainMenuPanel GetActivePanel()
+	{
+		IEnumerable<MainMenuPanel> result = from a in menuPanels
+			where a.isOpen
+			select a;
+
+		return result.FirstOrDefault();
+	}
+
+	#endregion
 
 	#region Animation Functions
 
@@ -127,8 +120,43 @@ public class MainMenuController : MonoBehaviour
 
 	#endregion
 
+	#region Panel Functions
+
+	private void ClosePanel(MainMenuPanel panel, bool isSwitching = false)
+	{
+		Debug.Log($"Closing {panel.panelName}");
+
+		if (!isSwitching)
+		{
+			if (panel.menuEvent.showTopBlackBar)
+				StartCoroutine(DeactivateTopBlackBar());
+
+			if (panel.menuEvent.darkenScreen)
+				StartCoroutine(DeactivateBlackBackground());
+		}
+
+		panel.panelObject.SetActive(false);
+		panel.isOpen = false;
+	}
+
+	private void OpenPanel(MainMenuPanel panel)
+	{
+		Debug.Log($"Opening {panel.panelName}");
+
+		if(panel.menuEvent.showTopBlackBar)
+			ActivateTopBlackBar();
+
+		if (panel.menuEvent.darkenScreen)
+			ActivateBlackBackground();
+
+		panel.panelObject.SetActive(true);
+		panel.isOpen = true;
+	}
+
+	#endregion
+
 	[Serializable]
-	public class MainMenuPanels
+	public class MainMenuPanel
 	{
 		public string panelName;
 		public TCMainMenuEvent menuEvent;
