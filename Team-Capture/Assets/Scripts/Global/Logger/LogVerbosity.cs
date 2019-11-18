@@ -1,6 +1,6 @@
-﻿﻿// ReSharper disable InconsistentNaming
+﻿﻿﻿// ReSharper disable InconsistentNaming
 
-namespace Logger
+namespace Global
 {
 	public enum LogVerbosity
 	{

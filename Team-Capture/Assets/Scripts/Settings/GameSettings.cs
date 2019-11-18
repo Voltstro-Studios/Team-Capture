@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Global;
 using Helper;
-using Logger;
 using Newtonsoft.Json;
 using UnityEngine;
+using Logger = Global.Logger;
 
 namespace Settings
 {
@@ -79,7 +80,7 @@ namespace Settings
 			}
 
 			HasBeenLoaded = true;
-			Logger.Logger.Log("Loaded settings", LogVerbosity.INFO);
+			Logger.Log("Loaded settings", LogVerbosity.INFO);
 
 			//Notify other classes that settings have updated
 			SettingsLoaded?.Invoke();

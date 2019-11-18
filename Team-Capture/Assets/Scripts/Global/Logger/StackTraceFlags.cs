@@ -1,10 +1,10 @@
-﻿﻿#region
+﻿﻿﻿#region
 
- using System;
+  using System;
 
- #endregion
+  #endregion
 
-namespace Logger
+namespace Global
 {
 	[Flags]
 	public enum StackTraceFlags
