@@ -1395,7 +1395,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0.05496216, y: 60}
+  m_AnchoredPosition: {x: 0.05493164, y: 60}
   m_SizeDelta: {x: -127.599976, y: 75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &3740134704574186297
@@ -2322,6 +2322,7 @@ GameObject:
   - component: {fileID: 3606822461112431620}
   - component: {fileID: 688891334886240403}
   - component: {fileID: 3098042470848058873}
+  - component: {fileID: 505864837285636598}
   m_Layer: 5
   m_Name: CreateGame
   m_TagString: Untagged
@@ -2402,6 +2403,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mapsDropdown: {fileID: 9093951122153291162}
   cancelButton: {fileID: 1259114744681076850}
+--- !u!95 &505864837285636598
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7741058342783775882}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: dfcb012be5aea1a4a86ca821bf88e6a0, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &7998583404922000805
 GameObject:
   m_ObjectHideFlags: 0
