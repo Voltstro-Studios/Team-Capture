@@ -240,7 +240,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  username: 
+  username: Not Set
 --- !u!114 &4790435715656838203
 MonoBehaviour:
   m_ObjectHideFlags: 0

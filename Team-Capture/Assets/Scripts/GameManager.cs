@@ -56,8 +56,8 @@ public class GameManager : MonoBehaviour
 	public static void AddPlayer(string netId, PlayerManager playerManager)
 	{
 		string playerId = PlayerIdPrefix + netId;
-		Players.Add(playerId, playerManager);
 		playerManager.transform.name = playerId;
+		Players.Add(playerId, playerManager);
 
 		Debug.Log($"Added {playerId}.");
 	}

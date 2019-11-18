@@ -15,14 +15,14 @@ namespace Weapons
 		{
 			foreach (TCWeapon weapon in GameManager.Instance.scene.stockWeapons)
 			{
-				EquipWeapon(transform.name, weapon.weapon);
+				EquipWeapon(weapon.weapon);
 			}
 		}
 
-		private void EquipWeapon(string player, string weapon)
+		private void EquipWeapon(string weapon)
 		{
 			GameObject newWeapon = Instantiate(TCWeaponsManager.GetWeapon(weapon).baseWeaponPrefab, weaponsHolderSpot);
-			GameManager.GetPlayer(player).GetComponent<WeaponManager>().activeWeapons.Add(newWeapon);
+			GetComponent<WeaponManager>().activeWeapons.Add(newWeapon);
 		}
 	}
 }
