@@ -1,19 +1,19 @@
-﻿#region
+﻿﻿#region
 
-using System;
-using System.Collections.Concurrent;
-using System.Diagnostics;
-using System.Globalization;
-using System.IO;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading;
-using JetBrains.Annotations;
-using Settings;
-using UnityEngine;
-using static Logger.LogVerbosity;
-using static Logger.StackTraceFlags;
+ using System;
+ using System.Collections.Concurrent;
+ using System.Diagnostics;
+ using System.Globalization;
+ using System.IO;
+ using System.Reflection;
+ using System.Runtime.CompilerServices;
+ using System.Text;
+ using System.Threading;
+ using JetBrains.Annotations;
+ using Settings;
+ using UnityEngine;
+ using static Global.LogVerbosity;
+using static Global.StackTraceFlags;
 using DateTime = System.DateTime;
 using Debug = UnityEngine.Debug;
 using ThreadPriority = System.Threading.ThreadPriority;
@@ -22,7 +22,7 @@ using ThreadPriority = System.Threading.ThreadPriority;
 
 //TODO: Figure out MethodImpl.NoInlining for functions to make sure stack trace is right
 //TODO: Create monitoring app to check when game closes what the exit code was
-namespace Logger
+namespace Global
 {
 	public static class Logger
 	{

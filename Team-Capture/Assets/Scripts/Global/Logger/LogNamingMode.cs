@@ -1,4 +1,4 @@
-﻿﻿namespace Logger
+﻿﻿﻿namespace Global
 {
 	public enum LogNamingMode
 	{
