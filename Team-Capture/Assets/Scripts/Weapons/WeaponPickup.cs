@@ -1,17 +1,19 @@
 ﻿using Player;
-using Weapons;
 using UnityEngine;
 
-public class WeaponPickup : MonoBehaviour
+namespace Weapons
 {
-	[SerializeField] private TCWeapon weapon;
-
-	private void OnTriggerEnter(Collider other)
+	public class WeaponPickup : MonoBehaviour
 	{
-		PlayerManager player = other.GetComponent<PlayerManager>();
-		if (player != null)
+		[SerializeField] private TCWeapon weapon;
+
+		private void OnTriggerEnter(Collider other)
 		{
-			player.GetComponent<WeaponManager>().CmdEquipWeapon(other.transform.name, weapon.weapon);
+			PlayerManager player = other.GetComponent<PlayerManager>();
+			if (player != null)
+			{
+				player.GetComponent<WeaponManager>().CmdEquipWeapon(other.transform.name, weapon.weapon);
+			}
 		}
 	}
 }
