@@ -7,6 +7,10 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+	//On player equip weapon
+	public delegate void OnPlayerPickupWeapon(string player, GameObject weaponPickup);
+	public OnPlayerPickupWeapon onPlayerPickupWeapon;
+
 	public static GameManager Instance;
 
 	public TCScene scene;
