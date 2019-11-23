@@ -8,9 +8,11 @@ namespace Weapons
 	{
 		private class SyncListWeapons : SyncList<string> { }
 
-		[SerializeField] private Transform weaponsHolderSpot;
+		public Transform weaponsHolderSpot;
 
 		private readonly SyncListWeapons weapons = new SyncListWeapons();
+
+		[SyncVar(hook = nameof(SelectWeapon))] public int selectedWeaponIndex;
 
 		private void Start()
 		{
@@ -65,6 +67,8 @@ namespace Weapons
 			Instantiate(TCWeaponsManager.GetWeapon(weapon).baseWeaponPrefab, weaponsHolderSpot);
 		}
 
+		#region Add Weapons
+
 		public void AddWeapon(string weapon)
 		{
 			CmdAddWeapon(transform.name, weapon);
@@ -82,7 +86,45 @@ namespace Weapons
 			if(tcWeapon == null)
 				return;
 
-			player.GetComponent<WeaponManager>().weapons.Add(tcWeapon.weapon);
+
+			WeaponManager weaponManager = player.GetComponent<WeaponManager>();
+			weaponManager.weapons.Add(tcWeapon.weapon);
+		}
+
+		#endregion
+
+		public void SelectWeapon(int index)
+		{
+			CmdSelectWeapon(transform.name, index);
+		}
+
+		[Command]
+		public void CmdSetWeaponIndex(int index)
+		{
+			selectedWeaponIndex = index;
+		}
+
+		[Command]
+		public void CmdSelectWeapon(string player, int index)
+		{
+			if(GameManager.GetPlayer(player) == null)
+				return;
+
+			RpcSelectWeapon(player, index);
+		}
+
+		[ClientRpc]
+		private void RpcSelectWeapon(string player, int index)
+		{
+			WeaponManager weaponManager = GameManager.GetPlayer(player).GetComponent<WeaponManager>();
+
+			for (int i = 0; i < weaponManager.weaponsHolderSpot.childCount; i++)
+			{
+				if(i == index)
+					weaponManager.weaponsHolderSpot.GetChild(i).gameObject.SetActive(true);
+				else
+					weaponManager.weaponsHolderSpot.GetChild(i).gameObject.SetActive(false);
+			}
 		}
 	}
 }

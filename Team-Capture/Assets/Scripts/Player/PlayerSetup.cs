@@ -14,6 +14,7 @@ namespace Player
 		[SerializeField] private Camera localCamera;
 		[SerializeField] private AudioListener localAudioListener;
 		[SerializeField] private PlayerLook localPlayerLook;
+		[SerializeField] private PlayerInput localPlayerInput;
 
 		public override void OnStartLocalPlayer()
 		{
@@ -29,6 +30,7 @@ namespace Player
 			localCamera.enabled = true;
 			localAudioListener.enabled = true;
 			localPlayerLook.enabled = true;
+			localPlayerInput.enabled = true;
 
 			Cursor.visible = false;
 			Cursor.lockState = CursorLockMode.Locked;
