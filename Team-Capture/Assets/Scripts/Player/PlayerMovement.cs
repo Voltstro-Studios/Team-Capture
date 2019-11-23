@@ -1,10 +1,9 @@
 ﻿using System.Collections;
-using Mirror;
 using UnityEngine;
 
 namespace Player
 {
-	public class PlayerMovement : NetworkBehaviour
+	public class PlayerMovement : MonoBehaviour
 	{
 		[SerializeField] private string horizontalInputName = "Horizontal";
 		[SerializeField] private string verticalInputName = "Vertical";
@@ -31,10 +30,7 @@ namespace Player
 
 		private void Update()
 		{
-			if(isLocalPlayer)
-			{
-				PlayerMove();
-			}
+			PlayerMove();
 		}
 
 		private void GetAxis()
@@ -50,7 +46,6 @@ namespace Player
 			Transform transform1 = transform;
 			Vector3 forwardMovement = transform1.forward * vertInput;
 			Vector3 rightMovement = transform1.right * horizInput;
-
 
 			charController.SimpleMove(Vector3.ClampMagnitude(forwardMovement + rightMovement, 1.0f) * movementSpeed);
 

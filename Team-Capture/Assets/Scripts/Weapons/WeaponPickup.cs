@@ -12,7 +12,7 @@ namespace Weapons
 			PlayerManager player = other.GetComponent<PlayerManager>();
 			if (player != null)
 			{
-				player.GetComponent<WeaponManager>().CmdEquipWeapon(other.transform.name, weapon.weapon);
+				player.GetComponent<WeaponManager>().AddWeapon(weapon.weapon);
 			}
 		}
 	}

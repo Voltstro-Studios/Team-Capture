@@ -1,65 +1,88 @@
-﻿using Global;
-using Mirror;
+﻿using Mirror;
 using Player;
 using UnityEngine;
-using Logger = Global.Logger;
 
 namespace Weapons
 {
 	public class WeaponManager : NetworkBehaviour
 	{
-		public class SyncListWeapons : SyncList<GameObject> { }
+		private class SyncListWeapons : SyncList<string> { }
 
-		public Transform weaponsHolderSpot;
+		[SerializeField] private Transform weaponsHolderSpot;
 
-		[SerializeField] private SyncListWeapons activeWeapons;
+		private readonly SyncListWeapons weapons = new SyncListWeapons();
 
 		private void Start()
 		{
-			foreach (TCWeapon weapon in GameManager.Instance.scene.stockWeapons)
+			weapons.Callback += AddWeaponCallback;
+
+			//Create all existing weapons on start
+			foreach (string weapon in weapons)
 			{
-				EquipWeapon(weapon.weapon);
+				Instantiate(TCWeaponsManager.GetWeapon(weapon).baseWeaponPrefab, weaponsHolderSpot);
 			}
 		}
 
-		private void EquipWeapon(string weapon)
+		public override void OnStartLocalPlayer()
 		{
-			GameObject newWeapon = Instantiate(TCWeaponsManager.GetWeapon(weapon).baseWeaponPrefab, weaponsHolderSpot);
-			GetComponent<WeaponManager>().activeWeapons.Add(newWeapon);
+			base.OnStartLocalPlayer();
+
+			//Add stock weapons on client start
+			foreach (TCWeapon stockWeapon in GameManager.Instance.scene.stockWeapons)
+			{
+				AddWeapon(stockWeapon.weapon);
+			}
+		}
+
+		private void AddWeaponCallback(SyncList<string>.Operation op, int itemIndex, string item)
+		{
+			if (op == SyncList<string>.Operation.OP_ADD)
+			{
+				if (item == null)
+				{
+					Debug.Log("Item is null");
+					return;
+				}
+
+				CmdInstantiateWeaponOnClients(item);
+			}
 		}
 
 		[Command]
-		public void CmdEquipWeapon(string playerId, string weapon)
+		private void CmdInstantiateWeaponOnClients(string weapon)
 		{
-			RpcEquipWeapon(playerId, weapon);
+			RpcInstantiateWeaponOnClients(weapon);
 		}
 
 		[ClientRpc]
-		private void RpcEquipWeapon(string playerId, string weapon)
+		private void RpcInstantiateWeaponOnClients(string weapon)
 		{
-			TCWeapon tcWeapon = TCWeaponsManager.GetWeapon(weapon);
+			if (weapon == null)
+			{
+				return;
+			}
+
+			Instantiate(TCWeaponsManager.GetWeapon(weapon).baseWeaponPrefab, weaponsHolderSpot);
+		}
+
+		public void AddWeapon(string weapon)
+		{
+			CmdAddWeapon(transform.name, weapon);
+		}
+
+		[Command]
+		private void CmdAddWeapon(string playerId, string weapon)
+		{
 			PlayerManager player = GameManager.GetPlayer(playerId);
-
-			if (player == null)
-			{
-				Logger.Log("Imputed player was null!", LogVerbosity.ERROR);
-
+			if(player == null)
 				return;
-			}
 
-			if (tcWeapon != null)
-			{
-				GameObject newWeapon = Instantiate(tcWeapon.baseWeaponPrefab,
-					player.GetComponent<WeaponManager>().weaponsHolderSpot);
+			TCWeapon tcWeapon = TCWeaponsManager.GetWeapon(weapon);
 
-				player.GetComponent<WeaponManager>().activeWeapons.Add(newWeapon);
-
-				Logger.Log($"Added weapon {tcWeapon.weapon} to player {playerId}.", LogVerbosity.DEBUG);
-
+			if(tcWeapon == null)
 				return;
-			}
 
-			Logger.Log("Imputed weapon was null!", LogVerbosity.ERROR);
+			player.GetComponent<WeaponManager>().weapons.Add(tcWeapon.weapon);
 		}
 	}
 }
