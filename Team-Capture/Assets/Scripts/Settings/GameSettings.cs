@@ -112,7 +112,7 @@ namespace Settings
 
 	public static class Paths
 	{
-		public static string SavedFilesDirectory => "./Saved";
+		public static string SavedFilesDirectory => $"{Environment.CurrentDirectory}/Saved";
 		public static string SettingsSaveDirectory => $"{SavedFilesDirectory}/Settings";
 		public static string SettingFileExtension => ".json";
 	}

@@ -110,7 +110,19 @@ namespace Global
 			if (logStream == null)
 			{
 				Directory.CreateDirectory(Logging.LogSaveDirectory);
-				logStream = File.CreateText(StaticLogPath);
+				 //This is to avoid errors when there are multiple exes running at the same time e.g. editor and build
+				string path = StaticLogPath;
+				TryCreateFile:
+				try
+				{
+					logStream = File.CreateText(path);
+				}
+				catch (IOException e) when (e.Message.Contains("Sharing violation on path"))
+				{
+					path = $"_{path}";
+					goto TryCreateFile;
+				}
+
 				logStream.AutoFlush = true;
 			}
 			//If we already have a log stream, just log a message and return
@@ -492,7 +504,7 @@ Process priority:       {process.PriorityClass}");
 
 					break;
 				}
-				//Format as 'Logs/2019-06-21 '
+				//Format as 'Logs/2019-06-21 12-15-45'
 				case LogNamingMode.DateTime:
 					fileName = Path.Combine(Logging.LogSaveDirectory, $"{now:yyyy-MM-dd HH-mm-ss}.log");
 					break;
