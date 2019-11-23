@@ -48,7 +48,6 @@ namespace Mirror
     public sealed class NetworkIdentity : MonoBehaviour
     {
         // configuration
-        bool m_IsServer;
         NetworkBehaviour[] networkBehavioursCache;
 
         // member used to mark a identity for future reset
@@ -58,16 +57,12 @@ namespace Mirror
         /// <summary>
         /// Returns true if running as a client and this object was spawned by a server.
         /// </summary>
-        public bool isClient { get; internal set; }
+        public bool isClient => NetworkClient.active && netId != 0;
 
         /// <summary>
         /// Returns true if NetworkServer.active and server is not stopped.
         /// </summary>
-        public bool isServer
-        {
-            get => m_IsServer && NetworkServer.active && netId != 0;
-            internal set => m_IsServer = value;
-        }
+        public bool isServer => NetworkServer.active && netId != 0;
 
         /// <summary>
         /// This returns true if this object is the one that represents the player on the local machine.
@@ -75,36 +70,12 @@ namespace Mirror
         /// </summary>
         public bool isLocalPlayer => ClientScene.localPlayer == this;
 
-        bool isOwner;
-
         /// <summary>
         /// This returns true if this object is the authoritative player object on the client.
         /// <para>This value is determined at runtime. For most objects, authority is held by the server.</para>
         /// <para>For objects that had their authority set by AssignClientAuthority on the server, this will be true on the client that owns the object. NOT on other clients.</para>
         /// </summary>
-        public bool hasAuthority
-        {
-            get => isOwner;
-            set
-            {
-                bool previous = isOwner;
-                isOwner = value;
-
-                if (previous && !isOwner)
-                {
-                    OnStopAuthority();
-                }
-                if (!previous && isOwner)
-                {
-                    OnStartAuthority();
-                }
-            }
-        }
-
-        // whether this object has been spawned with authority
-        // we need hasAuthority and pendingOwner because
-        // we need to wait until all of them spawn before updating hasAuthority
-        internal bool pendingAuthority { get; set; }
+        public bool hasAuthority { get; internal set; }
 
         /// <summary>
         /// The set of network connections (players) that can see this object.
@@ -479,19 +450,19 @@ namespace Mirror
             sceneIds.Remove(sceneId);
             sceneIds.Remove(sceneId & 0x00000000FFFFFFFF);
 
-            if (m_IsServer && NetworkServer.active)
+            if (isServer)
             {
                 NetworkServer.Destroy(gameObject);
             }
         }
 
-        internal void OnStartServer(bool allowNonZeroNetId)
+        bool serverStarted;
+
+        internal void OnStartServer()
         {
-            if (m_IsServer)
-            {
+            if (serverStarted)
                 return;
-            }
-            m_IsServer = true;
+            serverStarted = true;
 
             observers = new Dictionary<int, NetworkConnection>();
 
@@ -502,11 +473,8 @@ namespace Mirror
             }
             else
             {
-                if (!allowNonZeroNetId)
-                {
-                    Debug.LogError("Object has non-zero netId " + netId + " for " + gameObject);
-                    return;
-                }
+                Debug.LogError("Object has non-zero netId " + netId + " for " + gameObject);
+                return;
             }
 
             if (LogFilter.Debug) Debug.Log("OnStartServer " + this + " NetId:" + netId + " SceneId:" + sceneId);
@@ -528,9 +496,12 @@ namespace Mirror
             }
         }
 
+        bool clientStarted;
+
         internal void OnStartClient()
         {
-            isClient = true;
+            if (clientStarted)
+                return;
 
             if (LogFilter.Debug) Debug.Log("OnStartClient " + gameObject + " netId:" + netId);
             foreach (NetworkBehaviour comp in NetworkBehaviours)
@@ -544,6 +515,17 @@ namespace Mirror
                     Debug.LogError("Exception in OnStartClient:" + e.Message + " " + e.StackTrace);
                 }
             }
+            clientStarted = true;
+        }
+
+        bool hadAuthority;
+        internal void NotifyAuthority()
+        {
+            if (!hadAuthority && hasAuthority)
+                OnStartAuthority();
+            if (hadAuthority && !hasAuthority)
+                OnStopAuthority();
+            hadAuthority = hasAuthority;
         }
 
         void OnStartAuthority()
@@ -860,6 +842,7 @@ namespace Mirror
             // or it will be called twice for this object, but that state is lost by the time OnStartAuthority
             // is called below, so the original value is cached here to be checked below.
             hasAuthority = true;
+            NotifyAuthority();
 
             foreach (NetworkBehaviour comp in networkBehavioursCache)
             {
@@ -874,7 +857,6 @@ namespace Mirror
                 NetworkBehaviour comp = networkBehavioursCache[i];
                 comp.OnNetworkDestroy();
             }
-            m_IsServer = false;
         }
 
         internal void ClearObservers()
@@ -1092,7 +1074,7 @@ namespace Mirror
 
             SetClientOwner(conn);
 
-            // The client will match to the existing object 
+            // The client will match to the existing object
             // update all variables and assign authority
             NetworkServer.SendSpawnMessage(this, conn);
             return true;
@@ -1110,8 +1092,8 @@ namespace Mirror
                 return;
 
             m_Reset = false;
-            m_IsServer = false;
-            isClient = false;
+            serverStarted = false;
+            clientStarted = false;
 
             netId = 0;
             connectionToServer = null;
