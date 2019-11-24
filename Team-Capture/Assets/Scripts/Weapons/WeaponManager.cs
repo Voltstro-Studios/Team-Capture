@@ -19,9 +19,12 @@ namespace Weapons
 			weapons.Callback += AddWeaponCallback;
 
 			//Create all existing weapons on start
-			foreach (string weapon in weapons)
+			for (int i = 0; i < weapons.Count; i++)
 			{
-				Instantiate(TCWeaponsManager.GetWeapon(weapon).baseWeaponPrefab, weaponsHolderSpot);
+				GameObject newWeapon =
+					Instantiate(TCWeaponsManager.GetWeapon(weapons[i]).baseWeaponPrefab, weaponsHolderSpot);
+
+				newWeapon.SetActive(selectedWeaponIndex == i);
 			}
 		}
 
@@ -47,6 +50,9 @@ namespace Weapons
 				}
 
 				CmdInstantiateWeaponOnClients(item);
+
+				if(itemIndex != 0)
+					selectedWeaponIndex++;
 			}
 		}
 
@@ -93,15 +99,17 @@ namespace Weapons
 
 		#endregion
 
-		public void SelectWeapon(int index)
-		{
-			CmdSelectWeapon(transform.name, index);
-		}
-
 		[Command]
 		public void CmdSetWeaponIndex(int index)
 		{
 			selectedWeaponIndex = index;
+		}
+
+		#region Weapon Selection
+
+		public void SelectWeapon(int index)
+		{
+			CmdSelectWeapon(transform.name, index);
 		}
 
 		[Command]
@@ -126,5 +134,7 @@ namespace Weapons
 					weaponManager.weaponsHolderSpot.GetChild(i).gameObject.SetActive(false);
 			}
 		}
+
+		#endregion
 	}
 }
