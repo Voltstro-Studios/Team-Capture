@@ -1,6 +1,6 @@
-﻿using Mirror;
+﻿using UnityEngine;
+using Mirror;
 using Player;
-using UnityEngine;
 
 namespace Weapons
 {

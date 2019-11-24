@@ -1,5 +1,5 @@
-﻿using Mirror;
-using UnityEngine;
+﻿using UnityEngine;
+using Mirror;
 
 namespace Player
 {

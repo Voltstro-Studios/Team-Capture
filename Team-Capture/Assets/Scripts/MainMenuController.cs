@@ -2,8 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Panels;
 using UnityEngine;
+using Panels;
 
 public class MainMenuController : MonoBehaviour
 {
@@ -47,10 +47,15 @@ public class MainMenuController : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Toggles between panels
+	/// </summary>
+	/// <param name="panelName"></param>
 	public void TogglePanel(string panelName)
 	{
 		MainMenuPanel panel = GetMenuPanel(panelName);
 
+		//There is a panel that is currently active, so close it
 		if (GetActivePanel() != null && panel != GetActivePanel())
 		{
 			Debug.Log($"{GetActivePanel().panelName} is currently active, switching...");

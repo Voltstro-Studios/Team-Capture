@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Mirror;
-using SceneManagement;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using SceneManagement;
+using TMPro;
+using Mirror;
 
 namespace Panels
 {
@@ -32,6 +32,9 @@ namespace Panels
 			netManager = NetworkManager.singleton;
 		}
 
+		/// <summary>
+		/// Starts the server and connects a player
+		/// </summary>
 		public void CreateGame()
 		{
 			netManager.onlineScene = activeTCScenes[mapsDropdown.value].sceneName;

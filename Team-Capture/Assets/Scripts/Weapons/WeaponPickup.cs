@@ -1,5 +1,5 @@
-﻿using Player;
-using UnityEngine;
+﻿using UnityEngine;
+using Player;
 
 namespace Weapons
 {
