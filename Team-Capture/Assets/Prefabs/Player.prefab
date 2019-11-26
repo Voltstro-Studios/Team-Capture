@@ -194,37 +194,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e13942667ba21734bab49808dcd3ef36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  horizontalInputName: Horizontal
-  verticalInputName: Vertical
-  walkSpeed: 12
-  slopeForce: 6
-  slopeForceRayLength: 2
-  jumpFallOff:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0.40234375
-      inSlope: -0.4032283
-      outSlope: -0.4032283
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1.0009327
-      value: -0.0012606464
-      inSlope: -0.4032283
-      outSlope: -0.4032283
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  jumpMultiplier: 20
-  jumpKey: 32
+  playerView: {fileID: 6438375964343202627}
+  xMouseSensitivity: 100
+  yMouseSensitivity: 100
+  gravity: 20
+  friction: 6
+  moveSpeed: 7
+  runAcceleration: 14
+  runDeacceleration: 10
+  airAcceleration: 2
+  airDecceleration: 2
+  airControl: 2
+  sideStrafeAcceleration: 50
+  sideStrafeSpeed: 1
+  jumpSpeed: 8
+  holdJumpToBhop: 1
 --- !u!114 &3448369259278931532
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -271,7 +255,6 @@ MonoBehaviour:
   localPlayerMovement: {fileID: 6438375962803020339}
   localCamera: {fileID: 6438375964343202625}
   localAudioListener: {fileID: 5781786791537516909}
-  localPlayerLook: {fileID: 6438375964343202624}
   localPlayerInput: {fileID: 8854156936004004421}
 --- !u!114 &6221254021302100361
 MonoBehaviour:
@@ -346,7 +329,6 @@ GameObject:
   - component: {fileID: 6438375964343202627}
   - component: {fileID: 6438375964343202625}
   - component: {fileID: 5781786791537516909}
-  - component: {fileID: 6438375964343202624}
   m_Layer: 0
   m_Name: Camera
   m_TagString: Untagged
@@ -420,23 +402,6 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6438375964343202626}
   m_Enabled: 0
---- !u!114 &6438375964343202624
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6438375964343202626}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee6a9ee96937d1c4e9165c6bcd589329, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mouseXInput: Mouse X
-  mouseYInput: Mouse Y
-  mouseSensitivity: 125
-  playerTransform: {fileID: 6438375962803020341}
-  axisClamp: 90
 --- !u!1 &6438375964401219431
 GameObject:
   m_ObjectHideFlags: 0
