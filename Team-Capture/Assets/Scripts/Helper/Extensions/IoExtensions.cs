@@ -2,9 +2,9 @@
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Helper
+namespace Helper.Extensions
 {
-	public static class Extensions
+	public static class IoExtensions
 	{
 		public static Task WriteStringAsync(this FileStream fs, string msg)
 		{
