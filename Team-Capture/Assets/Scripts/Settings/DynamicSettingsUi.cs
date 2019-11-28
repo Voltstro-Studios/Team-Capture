@@ -1,6 +1,9 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Diagnostics;
+using System.Reflection;
 using Helper.Extensions;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 namespace Settings
 {
@@ -25,10 +28,17 @@ namespace Settings
 
         private void UpdateUi()
         {
+            Stopwatch stopwatch = Stopwatch.StartNew();
+
             ClearOldUi();
+
+            stopwatch.Stop();
+
+            Debug.Log($"Time to clear: {stopwatch.ElapsedMilliseconds:n} ms");
 
             //TODO: Holy fucking hell this is ugly
             //Loop over each setting menu and all the sub-settings
+            stopwatch.Restart();
             foreach (PropertyInfo settingMenuInfo in GameSettings.GetSettingClasses())
             {
                 object menuInstance = settingMenuInfo.GetStaticValue<object>();
@@ -65,7 +75,8 @@ namespace Settings
                                 rangeAttribute.max,
                                 subSettingField, settingMenu);
                         else
-                            CreateFloatField(subSettingField.GetValue<float>(menuInstance), subSettingField, settingMenu);
+                            CreateFloatField(subSettingField.GetValue<float>(menuInstance), subSettingField,
+                                settingMenu);
                     }
                     else if (subSettingField.FieldType == typeof(bool))
                     {
@@ -80,14 +91,19 @@ namespace Settings
                     {
                         if (subSettingField.FieldType == typeof(KeyCode))
                             //We don't do a dropdown, we create a button and do some complicated shit that i'll steal from one of my other games
-                            CreateKeybindButton(subSettingField.GetValue<KeyCode>(menuInstance).ToString(), subSettingField,
+                            CreateKeybindButton(subSettingField.GetValue<KeyCode>(menuInstance),
+                                subSettingField,
                                 settingMenu);
                         //Just a normal enum popup
                         else
-                            CreateEnumDropdown(subSettingField.GetValue<int>(menuInstance), subSettingField, settingMenu);
+                            CreateEnumDropdown(subSettingField.GetValue<int>(menuInstance), subSettingField,
+                                settingMenu);
                     }
                 }
             }
+
+            stopwatch.Stop();
+            Debug.Log($"Time taken to update UI: {stopwatch.Elapsed.TotalMilliseconds:n} ms");
         }
 
         private class Menu
@@ -110,47 +126,61 @@ namespace Settings
 
         private void CreateSettingMenu(Menu menu)
         {
+            Debug.Log($"Found setting menu {menu.Name}");
+
 //            new GameObject(menu.Name);
         }
 
         //Use onValueChanged.AddListener so that every time one of the graphics gets updated, so does our setting
         private void CreateFloatSlider(float val, float min, float max, FieldInfo field, Menu menu)
         {
+            Debug.Log(
+                $"\tCreating float slider for {field.Name} in {menu.Name}. Range is {min} to {max}, current is {val}");
 //            new Slider().onValueChanged.AddListener(f => field.SetValue(null, f));
         }
 
         private void CreateIntSlider(int val, int min, int max, FieldInfo field, Menu menu)
         {
+            Debug.Log(
+                $"\tCreating int slider for {field.Name} in {menu.Name}. Range is {min} to {max}, current is {val}");
 //            new Slider().onValueChanged.AddListener(f => field.SetValue(null,(int) f));
         }
 
         private void CreateFloatField(float val, FieldInfo field, Menu menu)
         {
+            Debug.Log($"\tCreating float field for {field.Name} in {menu.Name}. Current is {val}");
 //            new FloatField().RegisterValueChangedCallback(c => field.SetValue(null, c.newValue));
         }
 
         private void CreateIntField(int val, FieldInfo field, Menu menu)
         {
+            Debug.Log($"\tCreating int field for {field.Name} in {menu.Name}. Current is {val}");
 //            new IntegerField().RegisterValueChangedCallback(c => field.SetValue(null, c.newValue));
         }
 
         private void CreateBoolToggle(bool val, FieldInfo field, Menu menu)
         {
+            Debug.Log(
+                $"\tCreating bool toggle for {field.Name} in {menu.Name}. Current is {val}");
 //            new Toggle().onValueChanged.AddListener(b => field.SetValue(null, b));
         }
 
         private void CreateStringField(string val, FieldInfo field, Menu menu)
         {
+            Debug.Log($"\tCreating string field for {field.Name} in {menu.Name}. Current is {val}");
 //            new TMP_InputField().onValueChanged.AddListener(s => field.SetValue(null, s));
         }
 
         private void CreateEnumDropdown(int val, FieldInfo field, Menu menu)
         {
+            Debug.Log(
+                $"\tCreating enum dropdown for {field.Name} in {menu.Name}. Current is {val}, options are {string.Join(", ", Enum.GetNames(field.FieldType))}");
 //            new Dropdown().onValueChanged.AddListener(i => field.SetValue(null, i));
         }
 
-        private void CreateKeybindButton(string val, FieldInfo field, Menu menu)
+        private void CreateKeybindButton(KeyCode val, FieldInfo field, Menu menu)
         {
+            Debug.Log($"\tCreating keybind button for {field.Name} in {menu.Name}. Current is {val}");
 //            new Button().onClick.AddListener(  () => field.SetValue(null, WaitForKeyPressAndReturnKeycode()));
         }
 

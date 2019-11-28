@@ -17,6 +17,15 @@ namespace Settings
 		public static event Action SettingsLoaded;
 
 		public static TestOne TestOne { get; private set; } = new TestOne();
+
+		public static AnotherTest AnotherTest { get; private set; } = new AnotherTest();
+		
+		public static AnotherTest AnotherAnotherTest { get; private set; } = new AnotherTest()
+		{
+			String = "I changed the string this time",
+			ThisIsAKey = KeyCode.KeypadPeriod
+		};
+
 		public static bool HasBeenLoaded { get; private set; }
 
 		#region Saving, loading and resetting setting functions
