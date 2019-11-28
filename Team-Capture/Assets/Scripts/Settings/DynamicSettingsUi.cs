@@ -25,6 +25,8 @@ namespace Settings
 
         private void UpdateUi()
         {
+            ClearOldUi();
+            
             //TODO: Holy fucking hell this is ugly
             //Loop over each setting menu and all the sub-settings
             foreach (PropertyInfo settingMenuInfo in GameSettings.GetSettingClasses())
@@ -91,6 +93,8 @@ namespace Settings
 
         private class Menu
         {
+            // ReSharper disable once NotAccessedField.Local
+            // ReSharper disable once MemberCanBePrivate.Local
             internal readonly string Name;
 
             internal Menu(string name)
