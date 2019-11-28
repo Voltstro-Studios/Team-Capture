@@ -13,13 +13,27 @@ namespace Settings
 {
 	public static class GameSettings
 	{
+		
 		public static event Action SettingsLoaded;
 
-		public static Input Input { get; private set; } = new Input();
+		public static TestOne TestOne { get; private set; } = new TestOne();
 		public static bool HasBeenLoaded { get; private set; }
 
 		#region Saving, loading and resetting setting functions
 
+		//We have this as internal so that our dynamic settings ui generator script can access it too
+		internal static IEnumerable<PropertyInfo> GetSettingClasses()
+		{
+			//Find all of the setting sub-types, and their instances in out main class
+			IEnumerable<Type> settingTypes = ReflectionHelper.GetInheritedTypes<Setting>();
+			//Get a list of all of the properties in our settings class
+			PropertyInfo[] settingProps = typeof(GameSettings).GetTypeInfo().GetProperties();
+			//Only add properties that are one of our inherited setting types
+			IEnumerable<PropertyInfo> foundSettings = settingProps.Where(p => settingTypes.Contains(p.PropertyType));
+
+			return foundSettings;
+		}
+		
 		public static void Save()
 		{
 			//Create directory if it doesn't exist
@@ -28,13 +42,7 @@ namespace Settings
 				Directory.CreateDirectory(Paths.SettingsSaveDirectory);
 			}
 
-			//Find all of the setting sub-types, and their instances in out main class
-			IEnumerable<Type> settingTypes = ReflectionHelper.GetInheritedTypes<Setting>();
-			//Get a list of all of the properties in our settings class
-			PropertyInfo[] settingProps = typeof(GameSettings).GetTypeInfo().GetProperties();
-			//Only add properties that are one of our inherited setting types
-			IEnumerable<PropertyInfo> foundSettings = settingProps.Where(p => settingTypes.Contains(p.PropertyType));
-			foreach (PropertyInfo settingProp in foundSettings)
+			foreach (PropertyInfo settingProp in GetSettingClasses())
 			{
 				ObjectSerializer.SaveJson(settingProp.GetValue(null), Paths.SettingsSaveDirectory, settingProp.Name,
 					extension: Paths.SettingFileExtension);
@@ -59,14 +67,7 @@ namespace Settings
 				return;
 			}
 
-			//Find all of the setting sub-types, and their instances in out main class
-			IEnumerable<Type> settingTypes = ReflectionHelper.GetInheritedTypes<Setting>();
-			//Get a list of all of the properties in our settings class
-			PropertyInfo[] settingProps = typeof(GameSettings).GetTypeInfo().GetProperties();
-			//Only add properties that are one of our inherited setting types
-			IEnumerable<PropertyInfo> foundSettings = settingProps.Where(p => settingTypes.Contains(p.PropertyType));
-
-			foreach (PropertyInfo settingProp in foundSettings)
+			foreach (PropertyInfo settingProp in GetSettingClasses())
 			{
 				string name = settingProp.Name;
 
@@ -88,14 +89,8 @@ namespace Settings
 		
 		public static void Reset()
 		{
-			//Find all of the setting sub-types, and their instances in out main class
-			IEnumerable<Type> settingTypes = ReflectionHelper.GetInheritedTypes<Setting>();
-			//Get a list of all of the properties in our settings class
-			PropertyInfo[] settingProps = typeof(GameSettings).GetTypeInfo().GetProperties();
-			//Only add properties that are one of our inherited setting types
-			IEnumerable<PropertyInfo> foundSettings = settingProps.Where(p => settingTypes.Contains(p.PropertyType));
 			//Now loop over all the settings we found
-			foreach (PropertyInfo settingProp in foundSettings)
+			foreach (PropertyInfo settingProp in GetSettingClasses())
 			{
 				//Default constructor
 				//settingProp.PropertyType.GetConstructor(Type.EmptyTypes);
@@ -126,11 +121,23 @@ namespace Settings
 	{
 	}
 
-	public sealed class Input
+	public sealed class TestOne : Setting
 	{
+		public int Int = 1;
+		[Range(1, 10)] public int RangeInt = 7;
+		[Range(-10, 58)] public float Slider = 5;
 	}
 
-	public sealed class Logging
+	public sealed class AnotherTest : Setting
+	{
+		public string String = "I'm a string!!";
+		public KeyCode ThisIsAKey = KeyCode.T;
+		
+	}
+	
+
+	//TODO: This is a real mess, the whole class needs a massive cleanup
+	public static class Logging
 	{
 		public static bool InterceptUnityDebug = true;
 		public static string LogFileExtension => ".log";
