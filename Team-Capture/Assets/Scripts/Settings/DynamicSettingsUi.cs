@@ -26,11 +26,12 @@ namespace Settings
         private void UpdateUi()
         {
             ClearOldUi();
-            
+
             //TODO: Holy fucking hell this is ugly
             //Loop over each setting menu and all the sub-settings
             foreach (PropertyInfo settingMenuInfo in GameSettings.GetSettingClasses())
             {
+                object menuInstance = settingMenuInfo.GetStaticValue<object>();
                 //Create a menu button
                 //TODO: Make this split words in camel case e.g. "CamelCaseIsGood" => "Camel Case Is Good"
                 Menu settingMenu = new Menu(settingMenuInfo.Name);
@@ -51,41 +52,39 @@ namespace Settings
                         RangeAttribute rangeAttribute = subSettingField.GetCustomAttribute<RangeAttribute>();
                         //If it has a range attribute, create a slider, otherwise use a input field
                         if (rangeAttribute != null)
-                            CreateIntSlider(subSettingField.GetStaticValue<int>(), (int) rangeAttribute.min,
+                            CreateIntSlider(subSettingField.GetValue<int>(menuInstance), (int) rangeAttribute.min,
                                 (int) rangeAttribute.max, subSettingField, settingMenu);
                         else
-                            CreateIntField(subSettingField.GetStaticValue<int>(), subSettingField, settingMenu);
+                            CreateIntField(subSettingField.GetValue<int>(menuInstance), subSettingField, settingMenu);
                     }
                     else if (subSettingField.FieldType == typeof(float))
                     {
                         RangeAttribute rangeAttribute = subSettingField.GetCustomAttribute<RangeAttribute>();
                         if (rangeAttribute != null)
-                            CreateFloatSlider(subSettingField.GetStaticValue<float>(), rangeAttribute.min,
+                            CreateFloatSlider(subSettingField.GetValue<float>(menuInstance), rangeAttribute.min,
                                 rangeAttribute.max,
                                 subSettingField, settingMenu);
                         else
-                            CreateFloatField(subSettingField.GetStaticValue<float>(), subSettingField, settingMenu);
+                            CreateFloatField(subSettingField.GetValue<float>(menuInstance), subSettingField, settingMenu);
                     }
                     else if (subSettingField.FieldType == typeof(bool))
                     {
-                        CreateBoolToggle(subSettingField.GetStaticValue<bool>(), subSettingField, settingMenu);
+                        CreateBoolToggle(subSettingField.GetValue<bool>(menuInstance), subSettingField, settingMenu);
                     }
                     else if (subSettingField.FieldType == typeof(string))
                     {
-                        CreateStringField(subSettingField.GetStaticValue<string>(), subSettingField, settingMenu);
+                        CreateStringField(subSettingField.GetValue<string>(menuInstance), subSettingField, settingMenu);
                     }
                     //TODO: Finish these
                     else if (subSettingField.FieldType.IsEnum)
                     {
                         if (subSettingField.FieldType == typeof(KeyCode))
-                        {
                             //We don't do a dropdown, we create a button and do some complicated shit that i'll steal from one of my other games
-                            CreateKeybindButton( subSettingField.GetStaticValue<KeyCode>().ToString(), subSettingField, settingMenu);
-                        }
+                            CreateKeybindButton(subSettingField.GetValue<KeyCode>(menuInstance).ToString(), subSettingField,
+                                settingMenu);
+                        //Just a normal enum popup
                         else
-                        {
-                            CreateEnumDropdown(subSettingField.GetStaticValue<int>(), subSettingField,settingMenu);
-                        }
+                            CreateEnumDropdown(subSettingField.GetValue<int>(menuInstance), subSettingField, settingMenu);
                     }
                 }
             }
