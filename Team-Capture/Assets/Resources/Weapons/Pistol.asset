@@ -16,5 +16,10 @@ MonoBehaviour:
   weaponName: Pistol
   damage: 10
   range: 30
+  fireRate: 0
   baseWeaponPrefab: {fileID: 2985817369304730979, guid: 5f5edb97b2388714ca78daa416284087,
     type: 3}
+  maxBullets: 18
+  reloadTime: 2
+  currentBulletsAmount: 0
+  isReloading: 0

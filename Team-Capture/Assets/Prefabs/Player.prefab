@@ -123,6 +123,7 @@ GameObject:
   - component: {fileID: 3448369259278931532}
   - component: {fileID: 8854156936004004421}
   - component: {fileID: 4790435715656838203}
+  - component: {fileID: 5871886052252796697}
   - component: {fileID: 6221254021302100361}
   - component: {fileID: 2372551973129992940}
   - component: {fileID: 4650911801006421196}
@@ -226,6 +227,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   username: Not Set
+  maxHealth: 100
 --- !u!114 &8854156936004004421
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -258,6 +260,20 @@ MonoBehaviour:
   localCamera: {fileID: 6438375964343202625}
   localAudioListener: {fileID: 5781786791537516909}
   localPlayerInput: {fileID: 8854156936004004421}
+--- !u!114 &5871886052252796697
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6438375962803020343}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b07ab6d790a5cca4a85d12523bf6aa58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
 --- !u!114 &6221254021302100361
 MonoBehaviour:
   m_ObjectHideFlags: 0

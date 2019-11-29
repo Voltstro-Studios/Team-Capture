@@ -1,4 +1,5 @@
 ﻿using Mirror;
+using UnityEngine;
 
 namespace Player
 {
@@ -6,9 +7,9 @@ namespace Player
 	{
 		[SyncVar] public string username = "Not Set";
 
-		public void Setup()
-		{
+		[SerializeField] private int maxHealth = 100;
+		[SyncVar] private int health;
 
-		}
+		public bool IsDead { get; protected set; }
 	}
 }

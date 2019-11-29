@@ -1,6 +1,10 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using Global;
+using UnityEngine;
 using Mirror;
 using Player;
+using Logger = Global.Logger;
 
 namespace Weapons
 {
@@ -77,6 +81,8 @@ namespace Weapons
 
 		public void AddWeapon(string weapon)
 		{
+			if (TCWeaponsManager.GetWeapon(weapon) == null) return;
+
 			CmdAddWeapon(transform.name, weapon);
 		}
 
@@ -92,9 +98,20 @@ namespace Weapons
 			if(tcWeapon == null)
 				return;
 
-
 			WeaponManager weaponManager = player.GetComponent<WeaponManager>();
 			weaponManager.weapons.Add(tcWeapon.weapon);
+
+			//Setup the new added weapon, and stop any reloading going on with the current weapon
+			TargetSetupWeapon(connectionToClient, weapon);
+		}
+
+		[TargetRpc]
+		private void TargetSetupWeapon(NetworkConnection target, string weapon)
+		{
+			Global.Logger.Log($"Setup weapon `{weapon}`", LogVerbosity.DEBUG);
+
+			StopCoroutine(ReloadCurrentWeapon());
+			TCWeaponsManager.GetWeapon(weapon).Reload();
 		}
 
 		#endregion
@@ -136,5 +153,35 @@ namespace Weapons
 		}
 
 		#endregion
+
+		#region Weapon Reloading
+
+		public IEnumerator ReloadCurrentWeapon()
+		{
+			Logger.Log($"Reloading weapon `{GetActiveWeapon().weapon}`", LogVerbosity.DEBUG);
+
+			if (GetActiveWeapon().isReloading)
+				yield break;
+
+			GetActiveWeapon().isReloading = true;
+
+			yield return new WaitForSeconds(GetActiveWeapon().reloadTime);
+
+			GetActiveWeapon().Reload();
+
+			GetActiveWeapon().isReloading = false;
+		}
+
+		#endregion
+
+		public TCWeapon GetActiveWeapon()
+		{
+			return weapons.Count == 0 ? null : TCWeaponsManager.GetWeapon(weapons[selectedWeaponIndex]);
+		}
+
+		public WeaponGraphics GetActiveWeaponGraphics()
+		{
+			return weaponsHolderSpot.GetChild(selectedWeaponIndex).GetComponent<WeaponGraphics>();
+		}
 	}
 }
