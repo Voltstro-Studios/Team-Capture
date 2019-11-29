@@ -22,7 +22,8 @@ namespace Mirror.Weaver
 
     public static class Program
     {
-        public static bool Process(string unityEngine, string netDLL, string outputDirectory, string[] assemblies, string[] extraAssemblyPaths, Action<string> printWarning, Action<string> printError)
+        public static bool Process(string unityEngine, string netDLL, string outputDirectory, string[] assemblies,
+            string[] extraAssemblyPaths, Action<string> printWarning, Action<string> printError)
         {
             CheckDLLPath(unityEngine);
             CheckDLLPath(netDLL);
@@ -33,30 +34,27 @@ namespace Mirror.Weaver
             return Weaver.WeaveAssemblies(assemblies, extraAssemblyPaths, outputDirectory, unityEngine, netDLL);
         }
 
-        static void CheckDLLPath(string path)
+        private static void CheckDLLPath(string path)
         {
             if (!File.Exists(path))
                 throw new Exception("dll could not be located at " + path + "!");
         }
 
-        static void CheckAssemblies(IEnumerable<string> assemblyPaths)
+        private static void CheckAssemblies(IEnumerable<string> assemblyPaths)
         {
             foreach (string assemblyPath in assemblyPaths)
                 CheckAssemblyPath(assemblyPath);
         }
 
-        static void CheckAssemblyPath(string assemblyPath)
+        private static void CheckAssemblyPath(string assemblyPath)
         {
             if (!File.Exists(assemblyPath))
                 throw new Exception("Assembly " + assemblyPath + " does not exist!");
         }
 
-        static void CheckOutputDirectory(string outputDir)
+        private static void CheckOutputDirectory(string outputDir)
         {
-            if (outputDir != null && !Directory.Exists(outputDir))
-            {
-                Directory.CreateDirectory(outputDir);
-            }
+            if (outputDir != null && !Directory.Exists(outputDir)) Directory.CreateDirectory(outputDir);
         }
     }
 }

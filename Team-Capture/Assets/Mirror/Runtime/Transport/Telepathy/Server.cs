@@ -9,37 +9,18 @@ namespace Telepathy
 {
     public class Server : Common
     {
-        // listener
-        public TcpListener listener;
-        Thread listenerThread;
-
-        // class with all the client's data. let's call it Token for consistency
-        // with the async socket methods.
-        class ClientToken
-        {
-            public TcpClient client;
-
-            // send queue
-            // SafeQueue is twice as fast as ConcurrentQueue, see SafeQueue.cs!
-            public SafeQueue<byte[]> sendQueue = new SafeQueue<byte[]>();
-
-            // ManualResetEvent to wake up the send thread. better than Thread.Sleep
-            // -> call Set() if everything was sent
-            // -> call Reset() if there is something to send again
-            // -> call WaitOne() to block until Reset was called
-            public ManualResetEvent sendPending = new ManualResetEvent(false);
-
-            public ClientToken(TcpClient client)
-            {
-                this.client = client;
-            }
-        }
-
         // clients with <connectionId, ClientData>
-        readonly ConcurrentDictionary<int, ClientToken> clients = new ConcurrentDictionary<int, ClientToken>();
+        private readonly ConcurrentDictionary<int, ClientToken> clients = new ConcurrentDictionary<int, ClientToken>();
 
         // connectionId counter
-        int counter;
+        private int counter;
+
+        // listener
+        public TcpListener listener;
+        private Thread listenerThread;
+
+        // check if the server is running
+        public bool Active => listenerThread != null && listenerThread.IsAlive;
 
         // public next id function in case someone needs to reserve an id
         // (e.g. if hostMode should always have 0 connection and external
@@ -54,21 +35,15 @@ namespace Telepathy
             //    the caller probably should stop accepting clients.
             // -> it's hardly worth using 'bool Next(out id)' for that case
             //    because it's just so unlikely.
-            if (id == int.MaxValue)
-            {
-                throw new Exception("connection id limit reached: " + id);
-            }
+            if (id == int.MaxValue) throw new Exception("connection id limit reached: " + id);
 
             return id;
         }
 
-        // check if the server is running
-        public bool Active => listenerThread != null && listenerThread.IsAlive;
-
         // the listener thread's listen function
         // note: no maxConnections parameter. high level API should handle that.
         //       (Transport can't send a 'too full' message anyway)
-        void Listen(int port)
+        private void Listen(int port)
         {
             // absolutely must wrap with try/catch, otherwise thread
             // exceptions are silent
@@ -224,7 +199,14 @@ namespace Telepathy
                 TcpClient client = kvp.Value.client;
                 // close the stream if not closed yet. it may have been closed
                 // by a disconnect already, so use try/catch
-                try { client.GetStream().Close(); } catch {}
+                try
+                {
+                    client.GetStream().Close();
+                }
+                catch
+                {
+                }
+
                 client.Close();
             }
 
@@ -253,9 +235,11 @@ namespace Telepathy
                     token.sendPending.Set(); // interrupt SendThread WaitOne()
                     return true;
                 }
+
                 Logger.Log("Server.Send: invalid connectionId: " + connectionId);
                 return false;
             }
+
             Logger.LogError("Client.Send: message too big: " + data.Length + ". Limit: " + MaxMessageSize);
             return false;
         }
@@ -266,9 +250,7 @@ namespace Telepathy
             // find the connection
             ClientToken token;
             if (clients.TryGetValue(connectionId, out token))
-            {
-                return ((IPEndPoint)token.client.Client.RemoteEndPoint).Address.ToString();
-            }
+                return ((IPEndPoint) token.client.Client.RemoteEndPoint).Address.ToString();
             return "";
         }
 
@@ -284,7 +266,30 @@ namespace Telepathy
                 Logger.Log("Server.Disconnect connectionId:" + connectionId);
                 return true;
             }
+
             return false;
+        }
+
+        // class with all the client's data. let's call it Token for consistency
+        // with the async socket methods.
+        private class ClientToken
+        {
+            public readonly TcpClient client;
+
+            // ManualResetEvent to wake up the send thread. better than Thread.Sleep
+            // -> call Set() if everything was sent
+            // -> call Reset() if there is something to send again
+            // -> call WaitOne() to block until Reset was called
+            public readonly ManualResetEvent sendPending = new ManualResetEvent(false);
+
+            // send queue
+            // SafeQueue is twice as fast as ConcurrentQueue, see SafeQueue.cs!
+            public readonly SafeQueue<byte[]> sendQueue = new SafeQueue<byte[]>();
+
+            public ClientToken(TcpClient client)
+            {
+                this.client = client;
+            }
         }
     }
 }

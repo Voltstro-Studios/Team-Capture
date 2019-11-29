@@ -1,140 +1,134 @@
-﻿using UnityEngine;
-using Mirror;
+﻿using Mirror;
 using Player;
+using UnityEngine;
 
 namespace Weapons
 {
-	public class WeaponManager : NetworkBehaviour
-	{
-		private class SyncListWeapons : SyncList<string> { }
+    public class WeaponManager : NetworkBehaviour
+    {
+        private readonly SyncListWeapons weapons = new SyncListWeapons();
 
-		public Transform weaponsHolderSpot;
+        [SyncVar(hook = nameof(SelectWeapon))] public int selectedWeaponIndex;
 
-		private readonly SyncListWeapons weapons = new SyncListWeapons();
+        public Transform weaponsHolderSpot;
 
-		[SyncVar(hook = nameof(SelectWeapon))] public int selectedWeaponIndex;
+        private void Start()
+        {
+            weapons.Callback += AddWeaponCallback;
 
-		private void Start()
-		{
-			weapons.Callback += AddWeaponCallback;
+            //Create all existing weapons on start
+            for (int i = 0; i < weapons.Count; i++)
+            {
+                GameObject newWeapon =
+                    Instantiate(TCWeaponsManager.GetWeapon(weapons[i]).baseWeaponPrefab, weaponsHolderSpot);
 
-			//Create all existing weapons on start
-			for (int i = 0; i < weapons.Count; i++)
-			{
-				GameObject newWeapon =
-					Instantiate(TCWeaponsManager.GetWeapon(weapons[i]).baseWeaponPrefab, weaponsHolderSpot);
+                newWeapon.SetActive(selectedWeaponIndex == i);
+            }
+        }
 
-				newWeapon.SetActive(selectedWeaponIndex == i);
-			}
-		}
+        public override void OnStartLocalPlayer()
+        {
+            base.OnStartLocalPlayer();
 
-		public override void OnStartLocalPlayer()
-		{
-			base.OnStartLocalPlayer();
+            //Add stock weapons on client start
+            foreach (TCWeapon stockWeapon in GameManager.Instance.scene.stockWeapons) AddWeapon(stockWeapon.weapon);
+        }
 
-			//Add stock weapons on client start
-			foreach (TCWeapon stockWeapon in GameManager.Instance.scene.stockWeapons)
-			{
-				AddWeapon(stockWeapon.weapon);
-			}
-		}
+        private void AddWeaponCallback(SyncList<string>.Operation op, int itemIndex, string item)
+        {
+            if (op == SyncList<string>.Operation.OP_ADD)
+            {
+                if (item == null)
+                {
+                    Debug.Log("Item is null");
+                    return;
+                }
 
-		private void AddWeaponCallback(SyncList<string>.Operation op, int itemIndex, string item)
-		{
-			if (op == SyncList<string>.Operation.OP_ADD)
-			{
-				if (item == null)
-				{
-					Debug.Log("Item is null");
-					return;
-				}
+                CmdInstantiateWeaponOnClients(item);
 
-				CmdInstantiateWeaponOnClients(item);
+                if (itemIndex != 0)
+                    selectedWeaponIndex++;
+            }
+        }
 
-				if(itemIndex != 0)
-					selectedWeaponIndex++;
-			}
-		}
+        [Command]
+        private void CmdInstantiateWeaponOnClients(string weapon)
+        {
+            RpcInstantiateWeaponOnClients(weapon);
+        }
 
-		[Command]
-		private void CmdInstantiateWeaponOnClients(string weapon)
-		{
-			RpcInstantiateWeaponOnClients(weapon);
-		}
+        [ClientRpc]
+        private void RpcInstantiateWeaponOnClients(string weapon)
+        {
+            if (weapon == null) return;
 
-		[ClientRpc]
-		private void RpcInstantiateWeaponOnClients(string weapon)
-		{
-			if (weapon == null)
-			{
-				return;
-			}
+            Instantiate(TCWeaponsManager.GetWeapon(weapon).baseWeaponPrefab, weaponsHolderSpot);
+        }
 
-			Instantiate(TCWeaponsManager.GetWeapon(weapon).baseWeaponPrefab, weaponsHolderSpot);
-		}
+        [Command]
+        public void CmdSetWeaponIndex(int index)
+        {
+            selectedWeaponIndex = index;
+        }
 
-		#region Add Weapons
+        private class SyncListWeapons : SyncList<string>
+        {
+        }
 
-		public void AddWeapon(string weapon)
-		{
-			CmdAddWeapon(transform.name, weapon);
-		}
+        #region Add Weapons
 
-		[Command]
-		private void CmdAddWeapon(string playerId, string weapon)
-		{
-			PlayerManager player = GameManager.GetPlayer(playerId);
-			if(player == null)
-				return;
+        public void AddWeapon(string weapon)
+        {
+            CmdAddWeapon(transform.name, weapon);
+        }
 
-			TCWeapon tcWeapon = TCWeaponsManager.GetWeapon(weapon);
+        [Command]
+        private void CmdAddWeapon(string playerId, string weapon)
+        {
+            PlayerManager player = GameManager.GetPlayer(playerId);
+            if (player == null)
+                return;
 
-			if(tcWeapon == null)
-				return;
+            TCWeapon tcWeapon = TCWeaponsManager.GetWeapon(weapon);
+
+            if (tcWeapon == null)
+                return;
 
 
-			WeaponManager weaponManager = player.GetComponent<WeaponManager>();
-			weaponManager.weapons.Add(tcWeapon.weapon);
-		}
+            WeaponManager weaponManager = player.GetComponent<WeaponManager>();
+            weaponManager.weapons.Add(tcWeapon.weapon);
+        }
 
-		#endregion
+        #endregion
 
-		[Command]
-		public void CmdSetWeaponIndex(int index)
-		{
-			selectedWeaponIndex = index;
-		}
+        #region Weapon Selection
 
-		#region Weapon Selection
+        public void SelectWeapon(int index)
+        {
+            CmdSelectWeapon(transform.name, index);
+        }
 
-		public void SelectWeapon(int index)
-		{
-			CmdSelectWeapon(transform.name, index);
-		}
+        [Command]
+        public void CmdSelectWeapon(string player, int index)
+        {
+            if (GameManager.GetPlayer(player) == null)
+                return;
 
-		[Command]
-		public void CmdSelectWeapon(string player, int index)
-		{
-			if(GameManager.GetPlayer(player) == null)
-				return;
+            RpcSelectWeapon(player, index);
+        }
 
-			RpcSelectWeapon(player, index);
-		}
+        [ClientRpc]
+        private void RpcSelectWeapon(string player, int index)
+        {
+            WeaponManager weaponManager = GameManager.GetPlayer(player).GetComponent<WeaponManager>();
 
-		[ClientRpc]
-		private void RpcSelectWeapon(string player, int index)
-		{
-			WeaponManager weaponManager = GameManager.GetPlayer(player).GetComponent<WeaponManager>();
+            for (int i = 0; i < weaponManager.weaponsHolderSpot.childCount; i++)
+                if (i == index)
+                    weaponManager.weaponsHolderSpot.GetChild(i).gameObject.SetActive(true);
+                else
+                    weaponManager.weaponsHolderSpot.GetChild(i).gameObject.SetActive(false);
+        }
 
-			for (int i = 0; i < weaponManager.weaponsHolderSpot.childCount; i++)
-			{
-				if(i == index)
-					weaponManager.weaponsHolderSpot.GetChild(i).gameObject.SetActive(true);
-				else
-					weaponManager.weaponsHolderSpot.GetChild(i).gameObject.SetActive(false);
-			}
-		}
-
-		#endregion
-	}
+        #endregion
+    }
 }

@@ -127,7 +127,6 @@ namespace Settings
         private void CreateSettingMenu(Menu menu)
         {
             Debug.Log($"Found setting menu {menu.Name}");
-
 //            new GameObject(menu.Name);
         }
 

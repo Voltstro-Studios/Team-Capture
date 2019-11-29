@@ -8,20 +8,17 @@ namespace Mirror
     // a transport that can listen to multiple underlying transport at the same time
     public class MultiplexTransport : Transport
     {
-        public Transport[] transports;
-
-        Transport available;
+        private Transport available;
 
         // used to partition recipients for each one of the base transports
         // without allocating a new list every time
-        List<int>[] recipientsCache;
+        private List<int>[] recipientsCache;
+        public Transport[] transports;
 
         public void Awake()
         {
             if (transports == null || transports.Length == 0)
-            {
                 Debug.LogError("Multiplex transport requires at least 1 underlying transport");
-            }
             InitClient();
             InitServer();
         }
@@ -30,25 +27,34 @@ namespace Mirror
         {
             // available if any of the transports is available
             foreach (Transport transport in transports)
-            {
                 if (transport.Available())
-                {
                     return true;
-                }
-            }
             return false;
         }
 
+        public override void Shutdown()
+        {
+            foreach (Transport transport in transports) transport.Shutdown();
+        }
+
+        public override string ToString()
+        {
+            StringBuilder builder = new StringBuilder();
+            foreach (Transport transport in transports) builder.AppendLine(transport.ToString());
+            return builder.ToString().Trim();
+        }
+
         #region Client
+
         // clients always pick the first transport
-        void InitClient()
+        private void InitClient()
         {
             // wire all the base transports to my events
             foreach (Transport transport in transports)
             {
-                transport.OnClientConnected.AddListener(OnClientConnected.Invoke );
+                transport.OnClientConnected.AddListener(OnClientConnected.Invoke);
                 transport.OnClientDataReceived.AddListener(OnClientDataReceived.Invoke);
-                transport.OnClientError.AddListener(OnClientError.Invoke );
+                transport.OnClientError.AddListener(OnClientError.Invoke);
                 transport.OnClientDisconnected.AddListener(OnClientDisconnected.Invoke);
             }
         }
@@ -56,14 +62,12 @@ namespace Mirror
         public override void ClientConnect(string address)
         {
             foreach (Transport transport in transports)
-            {
                 if (transport.Available())
                 {
                     available = transport;
                     transport.ClientConnect(address);
-
                 }
-            }
+
             throw new Exception("No transport suitable for this platform");
         }
 
@@ -92,27 +96,28 @@ namespace Mirror
 
 
         #region Server
+
         // connection ids get mapped to base transports
         // if we have 3 transports,  then
         // transport 0 will produce connection ids [0, 3, 6, 9, ...]
         // transport 1 will produce connection ids [1, 4, 7, 10, ...]
         // transport 2 will produce connection ids [2, 5, 8, 11, ...]
-        int FromBaseId(int transportId, int connectionId)
+        private int FromBaseId(int transportId, int connectionId)
         {
             return connectionId * transports.Length + transportId;
         }
 
-        int ToBaseId(int connectionId)
+        private int ToBaseId(int connectionId)
         {
             return connectionId / transports.Length;
         }
 
-        int ToTransportId(int connectionId)
+        private int ToTransportId(int connectionId)
         {
             return connectionId % transports.Length;
         }
 
-        void InitServer()
+        private void InitServer()
         {
             recipientsCache = new List<int>[transports.Length];
 
@@ -151,12 +156,8 @@ namespace Mirror
         {
             // avoid Linq.All allocations
             foreach (Transport transport in transports)
-            {
                 if (!transport.ServerActive())
-                {
                     return false;
-                }
-            }
             return true;
         }
 
@@ -178,10 +179,7 @@ namespace Mirror
         {
             // the message may be for different transports,
             // partition the recipients by transport
-            foreach (List<int> list in recipientsCache)
-            {
-                list.Clear();
-            }
+            foreach (List<int> list in recipientsCache) list.Clear();
 
             foreach (int connectionId in connectionIds)
             {
@@ -194,47 +192,22 @@ namespace Mirror
             for (int i = 0; i < transports.Length; ++i)
             {
                 List<int> baseRecipients = recipientsCache[i];
-                if (baseRecipients.Count > 0)
-                {
-                    result &= transports[i].ServerSend(baseRecipients, channelId, segment);
-                }
+                if (baseRecipients.Count > 0) result &= transports[i].ServerSend(baseRecipients, channelId, segment);
             }
+
             return result;
         }
 
         public override void ServerStart()
         {
-            foreach (Transport transport in transports)
-            {
-                transport.ServerStart();
-            }
+            foreach (Transport transport in transports) transport.ServerStart();
         }
 
         public override void ServerStop()
         {
-            foreach (Transport transport in transports)
-            {
-                transport.ServerStop();
-            }
+            foreach (Transport transport in transports) transport.ServerStop();
         }
+
         #endregion
-
-        public override void Shutdown()
-        {
-            foreach (Transport transport in transports)
-            {
-                transport.Shutdown();
-            }
-        }
-
-        public override string ToString()
-        {
-            StringBuilder builder = new StringBuilder();
-            foreach (Transport transport in transports)
-            {
-                builder.AppendLine(transport.ToString());
-            }
-            return builder.ToString().Trim();
-        }
     }
 }

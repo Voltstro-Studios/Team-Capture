@@ -8,15 +8,17 @@ namespace Mirror
     [CanEditMultipleObjects]
     public class NetworkIdentityEditor : Editor
     {
-        SerializedProperty serverOnlyProperty;
+        private readonly GUIContent serverOnlyLabel =
+            new GUIContent("Server Only", "True if the object should only exist on the server.");
 
-        readonly GUIContent serverOnlyLabel = new GUIContent("Server Only", "True if the object should only exist on the server.");
-        readonly GUIContent spawnLabel = new GUIContent("Spawn Object", "This causes an unspawned server object to be spawned on clients");
+        private readonly GUIContent spawnLabel = new GUIContent("Spawn Object",
+            "This causes an unspawned server object to be spawned on clients");
 
-        NetworkIdentity networkIdentity;
-        bool showObservers;
+        private NetworkIdentity networkIdentity;
+        private SerializedProperty serverOnlyProperty;
+        private bool showObservers;
 
-        void Init()
+        private void Init()
         {
             if (serverOnlyProperty == null)
             {
@@ -36,10 +38,7 @@ namespace Mirror
 
             serializedObject.ApplyModifiedProperties();
 
-            if (!Application.isPlaying)
-            {
-                return;
-            }
+            if (!Application.isPlaying) return;
 
             // Runtime actions below here
 
@@ -52,12 +51,11 @@ namespace Mirror
                 {
                     EditorGUI.indentLevel += 1;
                     foreach (KeyValuePair<int, NetworkConnection> kvp in networkIdentity.observers)
-                    {
                         if (kvp.Value.identity != null)
-                            EditorGUILayout.ObjectField(kvp.Value.ToString(), kvp.Value.identity.gameObject, typeof(GameObject), false);
+                            EditorGUILayout.ObjectField(kvp.Value.ToString(), kvp.Value.identity.gameObject,
+                                typeof(GameObject), false);
                         else
                             EditorGUILayout.TextField(kvp.Value.ToString());
-                    }
                     EditorGUI.indentLevel -= 1;
                 }
             }
@@ -72,8 +70,9 @@ namespace Mirror
                 if (GUILayout.Toggle(false, "Spawn", EditorStyles.miniButtonLeft))
                 {
                     NetworkServer.Spawn(networkIdentity.gameObject);
-                    EditorUtility.SetDirty(target);  // preview window STILL doens't update immediately..
+                    EditorUtility.SetDirty(target); // preview window STILL doens't update immediately..
                 }
+
                 EditorGUILayout.EndHorizontal();
             }
         }
