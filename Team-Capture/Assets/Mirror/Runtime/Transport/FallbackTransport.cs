@@ -1,7 +1,6 @@
 // uses the first available transport for server and client.
 // example: to use Apathy if on Windows/Mac/Linux and fall back to Telepathy
 //          otherwise.
-
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,14 +10,17 @@ namespace Mirror
     [HelpURL("https://mirror-networking.com/docs/Transports/Fallback.html")]
     public class FallbackTransport : Transport
     {
-        // the first transport that is available on this platform
-        private Transport available;
         public Transport[] transports;
+
+        // the first transport that is available on this platform
+        Transport available;
 
         public void Awake()
         {
             if (transports == null || transports.Length == 0)
+            {
                 throw new Exception("FallbackTransport requires at least 1 underlying transport");
+            }
             InitClient();
             InitServer();
             available = GetAvailableTransport();
@@ -26,11 +28,15 @@ namespace Mirror
         }
 
         // The client just uses the first transport available
-        private Transport GetAvailableTransport()
+        Transport GetAvailableTransport()
         {
             foreach (Transport transport in transports)
+            {
                 if (transport.Available())
+                {
                     return transport;
+                }
+            }
             throw new Exception("No transport suitable for this platform");
         }
 
@@ -40,7 +46,7 @@ namespace Mirror
         }
 
         // clients always pick the first transport
-        private void InitClient()
+        void InitClient()
         {
             // wire all the base transports to our events
             foreach (Transport transport in transports)
@@ -77,7 +83,7 @@ namespace Mirror
             return available.GetMaxPacketSize(channelId);
         }
 
-        private void InitServer()
+        void InitServer()
         {
             // wire all the base transports to our events
             foreach (Transport transport in transports)

@@ -1,5 +1,4 @@
 // all the SyncEvent code from NetworkBehaviourProcessor in one place
-
 using System.Collections.Generic;
 using Mono.CecilX;
 using Mono.CecilX.Cil;
@@ -13,12 +12,13 @@ namespace Mirror.Weaver
             // find the field that matches the event
             FieldDefinition eventField = null;
             foreach (FieldDefinition fd in td.Fields)
+            {
                 if (fd.FullName == ed.FullName)
                 {
                     eventField = fd;
                     break;
                 }
-
+            }
             if (eventField == null)
             {
                 Weaver.Error($"{td} not found. Did you declare the event?");
@@ -26,9 +26,9 @@ namespace Mirror.Weaver
             }
 
             MethodDefinition cmd = new MethodDefinition("InvokeSyncEvent" + ed.Name, MethodAttributes.Family |
-                                                                                     MethodAttributes.Static |
-                                                                                     MethodAttributes.HideBySig,
-                Weaver.voidType);
+                    MethodAttributes.Static |
+                    MethodAttributes.HideBySig,
+                    Weaver.voidType);
 
             ILProcessor cmdWorker = cmd.Body.GetILProcessor();
             Instruction label1 = cmdWorker.Create(OpCodes.Nop);
@@ -66,12 +66,14 @@ namespace Mirror.Weaver
         public static MethodDefinition ProcessEventCall(TypeDefinition td, EventDefinition ed, CustomAttribute ca)
         {
             MethodReference invoke = Resolvers.ResolveMethod(ed.EventType, Weaver.CurrentAssembly, "Invoke");
-            MethodDefinition evt = new MethodDefinition("Call" + ed.Name, MethodAttributes.Public |
-                                                                          MethodAttributes.HideBySig,
-                Weaver.voidType);
+            MethodDefinition evt = new MethodDefinition("Call" +  ed.Name, MethodAttributes.Public |
+                    MethodAttributes.HideBySig,
+                    Weaver.voidType);
             // add paramters
             foreach (ParameterDefinition pd in invoke.Parameters)
+            {
                 evt.Parameters.Add(new ParameterDefinition(pd.Name, ParameterAttributes.None, pd.ParameterType));
+            }
 
             ILProcessor evtWorker = evt.Body.GetILProcessor();
             Instruction label = evtWorker.Create(OpCodes.Nop);
@@ -102,45 +104,49 @@ namespace Mirror.Weaver
             return evt;
         }
 
-        public static void ProcessEvents(TypeDefinition td, List<EventDefinition> events,
-            List<MethodDefinition> eventInvocationFuncs)
+        public static void ProcessEvents(TypeDefinition td, List<EventDefinition> events, List<MethodDefinition> eventInvocationFuncs)
         {
             // find events
             foreach (EventDefinition ed in td.Events)
-            foreach (CustomAttribute ca in ed.CustomAttributes)
-                if (ca.AttributeType.FullName == Weaver.SyncEventType.FullName)
+            {
+                foreach (CustomAttribute ca in ed.CustomAttributes)
                 {
-                    if (!ed.Name.StartsWith("Event"))
+                    if (ca.AttributeType.FullName == Weaver.SyncEventType.FullName)
                     {
-                        Weaver.Error($"{ed} must start with Event.  Consider renaming it to Event{ed.Name}");
-                        return;
+                        if (!ed.Name.StartsWith("Event"))
+                        {
+                            Weaver.Error($"{ed} must start with Event.  Consider renaming it to Event{ed.Name}");
+                            return;
+                        }
+
+                        if (ed.EventType.Resolve().HasGenericParameters)
+                        {
+                            Weaver.Error($"{ed} must not have generic parameters.  Consider creating a new class that inherits from {ed.EventType} instead");
+                            return;
+                        }
+
+                        events.Add(ed);
+                        MethodDefinition eventFunc = ProcessEventInvoke(td, ed);
+                        if (eventFunc == null)
+                        {
+                            return;
+                        }
+
+                        td.Methods.Add(eventFunc);
+                        eventInvocationFuncs.Add(eventFunc);
+
+                        Weaver.DLog(td, "ProcessEvent " + ed);
+
+                        MethodDefinition eventCallFunc = ProcessEventCall(td, ed, ca);
+                        td.Methods.Add(eventCallFunc);
+
+                        Weaver.WeaveLists.replaceEvents[ed.Name] = eventCallFunc; // original weaver compares .Name, not EventDefinition.
+
+                        Weaver.DLog(td, "  Event: " + ed.Name);
+                        break;
                     }
-
-                    if (ed.EventType.Resolve().HasGenericParameters)
-                    {
-                        Weaver.Error(
-                            $"{ed} must not have generic parameters.  Consider creating a new class that inherits from {ed.EventType} instead");
-                        return;
-                    }
-
-                    events.Add(ed);
-                    MethodDefinition eventFunc = ProcessEventInvoke(td, ed);
-                    if (eventFunc == null) return;
-
-                    td.Methods.Add(eventFunc);
-                    eventInvocationFuncs.Add(eventFunc);
-
-                    Weaver.DLog(td, "ProcessEvent " + ed);
-
-                    MethodDefinition eventCallFunc = ProcessEventCall(td, ed, ca);
-                    td.Methods.Add(eventCallFunc);
-
-                    Weaver.WeaveLists.replaceEvents[ed.Name] =
-                        eventCallFunc; // original weaver compares .Name, not EventDefinition.
-
-                    Weaver.DLog(td, "  Event: " + ed.Name);
-                    break;
                 }
+            }
         }
     }
 }

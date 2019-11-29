@@ -7,11 +7,12 @@ namespace Weapons
     {
         public GameObject baseWeaponPrefab;
 
+        public string weapon;
+        public string weaponName;
+
 		public int damage;
 		public int range;
 		public int fireRate;
-
-		public GameObject baseWeaponPrefab;
 
 		public int maxBullets;
 

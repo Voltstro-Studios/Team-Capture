@@ -1,5 +1,4 @@
 ﻿// common code used by server and client
-
 using System;
 using System.Collections.Concurrent;
 using System.Net.Sockets;
@@ -9,6 +8,14 @@ namespace Telepathy
 {
     public abstract class Common
     {
+        // common code /////////////////////////////////////////////////////////
+        // incoming message queue of <connectionId, message>
+        // (not a HashSet because one connection can have multiple new messages)
+        protected ConcurrentQueue<Message> receiveQueue = new ConcurrentQueue<Message>();
+
+        // queue count, useful for debugging / benchmarks
+        public int ReceiveQueueCount => receiveQueue.Count;
+
         // warning if message queue gets too big
         // if the average message is about 20 bytes then:
         // -   1k messages are   20KB
@@ -17,37 +24,6 @@ namespace Telepathy
         // 2MB are not that much, but it is a bad sign if the caller process
         // can't call GetNextMessage faster than the incoming messages.
         public static int messageQueueSizeWarning = 100000;
-
-        // avoid header[4] allocations but don't use one buffer for all threads
-        [ThreadStatic] private static byte[] header;
-
-        // avoid payload[packetSize] allocations but don't use one buffer for
-        // all threads
-        [ThreadStatic] private static byte[] payload;
-
-        // Prevent allocation attacks. Each packet is prefixed with a length
-        // header, so an attacker could send a fake packet with length=2GB,
-        // causing the server to allocate 2GB and run out of memory quickly.
-        // -> simply increase max packet size if you want to send around bigger
-        //    files!
-        // -> 16KB per message should be more than enough.
-        public int MaxMessageSize = 16 * 1024;
-
-        // NoDelay disables nagle algorithm. lowers CPU% and latency but
-        // increases bandwidth
-        public bool NoDelay = true;
-
-        // common code /////////////////////////////////////////////////////////
-        // incoming message queue of <connectionId, message>
-        // (not a HashSet because one connection can have multiple new messages)
-        protected ConcurrentQueue<Message> receiveQueue = new ConcurrentQueue<Message>();
-
-        // Send would stall forever if the network is cut off during a send, so
-        // we need a timeout (in milliseconds)
-        public int SendTimeout = 5000;
-
-        // queue count, useful for debugging / benchmarks
-        public int ReceiveQueueCount => receiveQueue.Count;
 
         // removes and returns the oldest message from the message queue.
         // (might want to call this until it doesn't return anything anymore)
@@ -59,6 +35,29 @@ namespace Telepathy
         {
             return receiveQueue.TryDequeue(out message);
         }
+
+        // NoDelay disables nagle algorithm. lowers CPU% and latency but
+        // increases bandwidth
+        public bool NoDelay = true;
+
+        // Prevent allocation attacks. Each packet is prefixed with a length
+        // header, so an attacker could send a fake packet with length=2GB,
+        // causing the server to allocate 2GB and run out of memory quickly.
+        // -> simply increase max packet size if you want to send around bigger
+        //    files!
+        // -> 16KB per message should be more than enough.
+        public int MaxMessageSize = 16 * 1024;
+
+        // Send would stall forever if the network is cut off during a send, so
+        // we need a timeout (in milliseconds)
+        public int SendTimeout = 5000;
+
+        // avoid header[4] allocations but don't use one buffer for all threads
+        [ThreadStatic] static byte[] header;
+
+        // avoid payload[packetSize] allocations but don't use one buffer for
+        // all threads
+        [ThreadStatic] static byte[] payload;
 
         // static helper functions /////////////////////////////////////////////
         // send message (via stream) with the <size,content> message structure
@@ -137,15 +136,13 @@ namespace Telepathy
                 content = new byte[size];
                 return stream.ReadExactly(content, size);
             }
-
             Logger.LogWarning("ReadMessageBlocking: possible allocation attack with a header of: " + size + " bytes.");
             return false;
         }
 
         // thread receive function is the same for client and server's clients
         // (static to reduce state for maximum reliability)
-        protected static void ReceiveLoop(int connectionId, TcpClient client, ConcurrentQueue<Message> receiveQueue,
-            int MaxMessageSize)
+        protected static void ReceiveLoop(int connectionId, TcpClient client, ConcurrentQueue<Message> receiveQueue, int MaxMessageSize)
         {
             // get NetworkStream from client
             NetworkStream stream = client.GetStream();
@@ -198,8 +195,7 @@ namespace Telepathy
                         TimeSpan elapsed = DateTime.Now - messageQueueLastWarning;
                         if (elapsed.TotalSeconds > 10)
                         {
-                            Logger.LogWarning("ReceiveLoop: messageQueue is getting big(" + receiveQueue.Count +
-                                              "), try calling GetNextMessage more often. You can call it more than once per frame!");
+                            Logger.LogWarning("ReceiveLoop: messageQueue is getting big(" + receiveQueue.Count + "), try calling GetNextMessage more often. You can call it more than once per frame!");
                             messageQueueLastWarning = DateTime.Now;
                         }
                     }
@@ -210,8 +206,7 @@ namespace Telepathy
                 // something went wrong. the thread was interrupted or the
                 // connection closed or we closed our own connection or ...
                 // -> either way we should stop gracefully
-                Logger.Log("ReceiveLoop: finished receive function for connectionId=" + connectionId + " reason: " +
-                           exception);
+                Logger.Log("ReceiveLoop: finished receive function for connectionId=" + connectionId + " reason: " + exception);
             }
             finally
             {
@@ -231,8 +226,7 @@ namespace Telepathy
         // thread send function
         // note: we really do need one per connection, so that if one connection
         //       blocks, the rest will still continue to get sends
-        protected static void SendLoop(int connectionId, TcpClient client, SafeQueue<byte[]> sendQueue,
-            ManualResetEvent sendPending)
+        protected static void SendLoop(int connectionId, TcpClient client, SafeQueue<byte[]> sendQueue, ManualResetEvent sendPending)
         {
             // get NetworkStream from client
             NetworkStream stream = client.GetStream();
@@ -254,9 +248,11 @@ namespace Telepathy
                     // ConcurrentQueue, see SafeQueue.cs!
                     byte[][] messages;
                     if (sendQueue.TryDequeueAll(out messages))
+                    {
                         // send message (blocking) or stop if stream is closed
                         if (!SendMessagesBlocking(stream, messages))
                             break; // break instead of return so stream close still happens!
+                    }
 
                     // don't choke up the CPU: wait until queue not empty anymore
                     sendPending.WaitOne();

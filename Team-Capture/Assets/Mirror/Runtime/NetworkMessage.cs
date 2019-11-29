@@ -13,7 +13,7 @@ namespace Mirror
             // TMsg msg = new TMsg();
             // but mono calls an expensive method Activator.CreateInstance
             // For value types this is unnecesary,  just use the default value
-            TMsg msg = typeof(TMsg).IsValueType ? default : new TMsg();
+            TMsg msg = typeof(TMsg).IsValueType ? default(TMsg) : new TMsg();
             msg.Deserialize(reader);
             return msg;
         }

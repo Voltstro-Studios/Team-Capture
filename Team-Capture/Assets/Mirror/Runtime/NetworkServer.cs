@@ -1,84 +1,67 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using UnityEditor;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace Mirror
 {
     /// <summary>
-    ///     The NetworkServer uses a NetworkServerSimple for basic network functionality and adds more game-like functionality.
+    /// The NetworkServer uses a NetworkServerSimple for basic network functionality and adds more game-like functionality.
     /// </summary>
     /// <remarks>
-    ///     <para>
-    ///         NetworkServer handles remote connections from remote clients via a NetworkServerSimple instance, and also has
-    ///         a local connection for a local client.
-    ///     </para>
-    ///     <para>
-    ///         The NetworkServer is a singleton. It has static convenience functions such as NetworkServer.SendToAll() and
-    ///         NetworkServer.Spawn() which automatically use the singleton instance.
-    ///     </para>
-    ///     <para>The NetworkManager uses the NetworkServer, but it can be used without the NetworkManager.</para>
-    ///     <para>
-    ///         The set of networked objects that have been spawned is managed by NetworkServer. Objects are spawned with
-    ///         NetworkServer.Spawn() which adds them to this set, and makes them be created on clients. Spawned objects are
-    ///         removed automatically when they are destroyed, or than they can be removed from the spawned set by calling
-    ///         NetworkServer.UnSpawn() - this does not destroy the object.
-    ///     </para>
-    ///     <para>
-    ///         There are a number of internal messages used by NetworkServer, these are setup when NetworkServer.Listen() is
-    ///         called.
-    ///     </para>
+    /// <para>NetworkServer handles remote connections from remote clients via a NetworkServerSimple instance, and also has a local connection for a local client.</para>
+    /// <para>The NetworkServer is a singleton. It has static convenience functions such as NetworkServer.SendToAll() and NetworkServer.Spawn() which automatically use the singleton instance.</para>
+    /// <para>The NetworkManager uses the NetworkServer, but it can be used without the NetworkManager.</para>
+    /// <para>The set of networked objects that have been spawned is managed by NetworkServer. Objects are spawned with NetworkServer.Spawn() which adds them to this set, and makes them be created on clients. Spawned objects are removed automatically when they are destroyed, or than they can be removed from the spawned set by calling NetworkServer.UnSpawn() - this does not destroy the object.</para>
+    /// <para>There are a number of internal messages used by NetworkServer, these are setup when NetworkServer.Listen() is called.</para>
     /// </remarks>
     public static class NetworkServer
     {
-        private static bool initialized;
-        private static int maxConnections;
+        static bool initialized;
+        static int maxConnections;
 
         /// <summary>
-        ///     A list of local connections on the server.
+        /// The connection to the host mode client (if any).
         /// </summary>
-        public static Dictionary<int, NetworkConnectionToClient> connections =
-            new Dictionary<int, NetworkConnectionToClient>();
-
-        /// <summary>
-        ///     <para>Dictionary of the message handlers registered with the server.</para>
-        ///     <para>The key to the dictionary is the message Id.</para>
-        /// </summary>
-        public static Dictionary<int, NetworkMessageDelegate> handlers = new Dictionary<int, NetworkMessageDelegate>();
-
-        /// <summary>
-        ///     <para>If you enable this, the server will not listen for incoming connections on the regular network port.</para>
-        ///     <para>
-        ///         This can be used if the game is running in host mode and does not want external players to be able to connect
-        ///         - making it like a single-player game. Also this can be useful when using AddExternalConnection().
-        ///     </para>
-        /// </summary>
-        public static bool dontListen;
-
-        // cache the Send(connectionIds) list to avoid allocating each time
-        private static readonly List<int> connectionIdsCache = new List<int>();
-
         // original HLAPI has .localConnections list with only m_LocalConnection in it
         // (for backwards compatibility because they removed the real localConnections list a while ago)
         // => removed it for easier code. use .localConnection now!
         public static NetworkConnectionToClient localConnection { get; private set; }
 
         /// <summary>
-        ///     <para>Checks if the server has been started.</para>
-        ///     <para>This will be true after NetworkServer.Listen() has been called.</para>
+        /// A list of local connections on the server.
+        /// </summary>
+        public static Dictionary<int, NetworkConnectionToClient> connections = new Dictionary<int, NetworkConnectionToClient>();
+
+        /// <summary>
+        /// <para>Dictionary of the message handlers registered with the server.</para>
+        /// <para>The key to the dictionary is the message Id.</para>
+        /// </summary>
+        public static Dictionary<int, NetworkMessageDelegate> handlers = new Dictionary<int, NetworkMessageDelegate>();
+
+        /// <summary>
+        /// <para>If you enable this, the server will not listen for incoming connections on the regular network port.</para>
+        /// <para>This can be used if the game is running in host mode and does not want external players to be able to connect - making it like a single-player game. Also this can be useful when using AddExternalConnection().</para>
+        /// </summary>
+        public static bool dontListen;
+
+        /// <summary>
+        /// <para>Checks if the server has been started.</para>
+        /// <para>This will be true after NetworkServer.Listen() has been called.</para>
         /// </summary>
         public static bool active { get; private set; }
 
         /// <summary>
-        ///     <para>True is a local client is currently active on the server.</para>
-        ///     <para>This will be true for "Hosts" on hosted server games.</para>
+        /// <para>True is a local client is currently active on the server.</para>
+        /// <para>This will be true for "Hosts" on hosted server games.</para>
         /// </summary>
-        public static bool localClientActive { get; private set; }
+        public static bool localClientActive => localConnection != null;
+
+        // cache the Send(connectionIds) list to avoid allocating each time
+        static readonly List<int> connectionIdsCache = new List<int>();
 
         /// <summary>
-        ///     Reset the NetworkServer singleton.
+        /// Reset the NetworkServer singleton.
         /// </summary>
         public static void Reset()
         {
@@ -86,7 +69,7 @@ namespace Mirror
         }
 
         /// <summary>
-        ///     This shuts down the server and disconnects all clients.
+        /// This shuts down the server and disconnects all clients.
         /// </summary>
         public static void Shutdown()
         {
@@ -110,14 +93,13 @@ namespace Mirror
 
                 initialized = false;
             }
-
             dontListen = false;
             active = false;
 
             NetworkIdentity.ResetNextNetworkId();
         }
 
-        private static void Initialize()
+        static void Initialize()
         {
             if (initialized)
                 return;
@@ -142,7 +124,7 @@ namespace Mirror
         }
 
         /// <summary>
-        ///     Start the server, setting the maximum number of connections.
+        /// Start the server, setting the maximum number of connections.
         /// </summary>
         /// <param name="maxConns">Maximum number of allowed connections</param>
         /// <returns></returns>
@@ -164,8 +146,8 @@ namespace Mirror
         }
 
         /// <summary>
-        ///     <para>This accepts a network connection and adds it to the server.</para>
-        ///     <para>This connection will use the callbacks registered with the server.</para>
+        /// <para>This accepts a network connection and adds it to the server.</para>
+        /// <para>This connection will use the callbacks registered with the server.</para>
         /// </summary>
         /// <param name="conn">Network connection to add.</param>
         /// <returns>True if added.</returns>
@@ -179,13 +161,12 @@ namespace Mirror
                 conn.SetHandlers(handlers);
                 return true;
             }
-
             // already a connection with this id
             return false;
         }
 
         /// <summary>
-        ///     This removes an external connection added with AddExternalConnection().
+        /// This removes an external connection added with AddExternalConnection().
         /// </summary>
         /// <param name="connectionId">The id of the connection to remove.</param>
         /// <returns>True if the removal succeeded</returns>
@@ -204,7 +185,6 @@ namespace Mirror
             }
 
             localConnection = conn;
-            OnConnected(localConnection);
         }
 
         internal static void RemoveLocalConnection()
@@ -214,29 +194,25 @@ namespace Mirror
                 localConnection.Disconnect();
                 localConnection = null;
             }
-
-            localClientActive = false;
             RemoveConnection(0);
         }
 
         internal static void ActivateLocalClientScene()
         {
-            if (localClientActive)
-                return;
-
-            // ClientScene for a local connection is becoming active. any spawned objects need to be started as client objects
-            localClientActive = true;
             foreach (NetworkIdentity identity in NetworkIdentity.spawned.Values)
             {
-                if (LogFilter.Debug) Debug.Log("ActivateClientScene " + identity.netId + " " + identity);
+                if (!identity.isClient)
+                {
+                    if (LogFilter.Debug) Debug.Log("ActivateClientScene " + identity.netId + " " + identity);
 
-                identity.OnStartClient();
+                    identity.OnStartClient();
+                }
             }
         }
 
         // this is like SendToReady - but it doesn't check the ready flag on the connection.
         // this is used for ObjectDestroy messages.
-        private static bool SendToObservers<T>(NetworkIdentity identity, T msg) where T : IMessageBase
+        static bool SendToObservers<T>(NetworkIdentity identity, T msg) where T: IMessageBase
         {
             if (LogFilter.Debug) Debug.Log("Server.SendToObservers id:" + typeof(T));
 
@@ -255,12 +231,14 @@ namespace Mirror
                 connectionIdsCache.Clear();
                 bool result = true;
                 foreach (KeyValuePair<int, NetworkConnection> kvp in identity.observers)
+                {
                     // use local connection directly because it doesn't send via transport
                     if (kvp.Value is ULocalConnectionToClient)
                         result &= localConnection.Send(segment);
                     // gather all internet connections
                     else
                         connectionIdsCache.Add(kvp.Key);
+                }
 
                 // send to all internet connections at once
                 if (connectionIdsCache.Count > 0)
@@ -271,32 +249,32 @@ namespace Mirror
                 NetworkWriterPool.Recycle(writer);
                 return result;
             }
-
             return false;
         }
 
         /// <summary>
-        ///     Obsolete: Use <see cref="SendToAll{T}(T, int)" /> instead.
+        /// Obsolete: Use <see cref="SendToAll{T}(T, int)"/> instead.
         /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [Obsolete("Use SendToAll<T> instead.")]
+        [EditorBrowsable(EditorBrowsableState.Never), Obsolete("Use SendToAll<T> instead.")]
         public static bool SendToAll(int msgType, MessageBase msg, int channelId = Channels.DefaultReliable)
         {
             if (LogFilter.Debug) Debug.Log("Server.SendToAll id:" + msgType);
 
             // pack message into byte[] once
-            byte[] bytes = MessagePacker.PackMessage((ushort) msgType, msg);
+            byte[] bytes = MessagePacker.PackMessage((ushort)msgType, msg);
 
             // send to all
             bool result = true;
             foreach (KeyValuePair<int, NetworkConnectionToClient> kvp in connections)
+            {
                 result &= kvp.Value.Send(new ArraySegment<byte>(bytes), channelId);
+            }
             return result;
         }
 
         /// <summary>
-        ///     Send a message structure with the given type number to all connected clients.
-        ///     <para>This applies to clients that are ready and not-ready.</para>
+        /// Send a message structure with the given type number to all connected clients.
+        /// <para>This applies to clients that are ready and not-ready.</para>
         /// </summary>
         /// <typeparam name="T">Message type.</typeparam>
         /// <param name="msg">Message structure.</param>
@@ -320,12 +298,14 @@ namespace Mirror
             connectionIdsCache.Clear();
             bool result = true;
             foreach (KeyValuePair<int, NetworkConnectionToClient> kvp in connections)
+            {
                 // use local connection directly because it doesn't send via transport
                 if (kvp.Value is ULocalConnectionToClient)
                     result &= localConnection.Send(segment);
                 // gather all internet connections
                 else
                     connectionIdsCache.Add(kvp.Key);
+            }
 
             // send to all internet connections at once
             if (connectionIdsCache.Count > 0)
@@ -338,34 +318,35 @@ namespace Mirror
         }
 
         /// <summary>
-        ///     Obsolete: Use <see cref="SendToReady{T}(NetworkIdentity, T, int)" /> instead.
+        /// Obsolete: Use <see cref="SendToReady{T}(NetworkIdentity, T, int)"/> instead.
         /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [Obsolete("Use SendToReady<T> instead.")]
-        public static bool SendToReady(NetworkIdentity identity, short msgType, MessageBase msg,
-            int channelId = Channels.DefaultReliable)
+        [EditorBrowsable(EditorBrowsableState.Never), Obsolete("Use SendToReady<T> instead.")]
+        public static bool SendToReady(NetworkIdentity identity, short msgType, MessageBase msg, int channelId = Channels.DefaultReliable)
         {
             if (LogFilter.Debug) Debug.Log("Server.SendToReady msgType:" + msgType);
 
             if (identity != null && identity.observers != null)
             {
                 // pack message into byte[] once
-                byte[] bytes = MessagePacker.PackMessage((ushort) msgType, msg);
+                byte[] bytes = MessagePacker.PackMessage((ushort)msgType, msg);
 
                 // send to all ready observers
                 bool result = true;
                 foreach (KeyValuePair<int, NetworkConnection> kvp in identity.observers)
+                {
                     if (kvp.Value.isReady)
+                    {
                         result &= kvp.Value.Send(new ArraySegment<byte>(bytes), channelId);
+                    }
+                }
                 return result;
             }
-
             return false;
         }
 
         /// <summary>
-        ///     Send a message structure with the given type number to only clients which are ready.
-        ///     <para>See Networking.NetworkClient.Ready.</para>
+        /// Send a message structure with the given type number to only clients which are ready.
+        /// <para>See Networking.NetworkClient.Ready.</para>
         /// </summary>
         /// <typeparam name="T">Message type.</typeparam>
         /// <param name="identity"></param>
@@ -373,8 +354,7 @@ namespace Mirror
         /// <param name="includeOwner">Send to observers including self..</param>
         /// <param name="channelId">Transport channel to use</param>
         /// <returns></returns>
-        public static bool SendToReady<T>(NetworkIdentity identity, T msg, bool includeOwner = true,
-            int channelId = Channels.DefaultReliable) where T : IMessageBase
+        public static bool SendToReady<T>(NetworkIdentity identity, T msg, bool includeOwner = true, int channelId = Channels.DefaultReliable) where T : IMessageBase
         {
             if (LogFilter.Debug) Debug.Log("Server.SendToReady msgType:" + typeof(T));
 
@@ -418,28 +398,26 @@ namespace Mirror
                 NetworkWriterPool.Recycle(writer);
                 return result;
             }
-
             return false;
         }
 
         /// <summary>
-        ///     Send a message structure with the given type number to only clients which are ready.
-        ///     <para>See Networking.NetworkClient.Ready.</para>
+        /// Send a message structure with the given type number to only clients which are ready.
+        /// <para>See Networking.NetworkClient.Ready.</para>
         /// </summary>
         /// <typeparam name="T">Message type.</typeparam>
         /// <param name="identity"></param>
         /// <param name="msg">Message structure.</param>
         /// <param name="channelId">Transport channel to use</param>
         /// <returns></returns>
-        public static bool SendToReady<T>(NetworkIdentity identity, T msg, int channelId = Channels.DefaultReliable)
-            where T : IMessageBase
+        public static bool SendToReady<T>(NetworkIdentity identity, T msg, int channelId = Channels.DefaultReliable) where T : IMessageBase
         {
             return SendToReady(identity, msg, true, channelId);
         }
 
         /// <summary>
-        ///     Disconnect all currently connected clients, including the local connection.
-        ///     <para>This can only be called on the server. Clients will receive the Disconnect message.</para>
+        /// Disconnect all currently connected clients, including the local connection.
+        /// <para>This can only be called on the server. Clients will receive the Disconnect message.</para>
         /// </summary>
         public static void DisconnectAll()
         {
@@ -447,12 +425,11 @@ namespace Mirror
             localConnection = null;
 
             active = false;
-            localClientActive = false;
         }
 
         /// <summary>
-        ///     Disconnect all currently connected clients except the local connection.
-        ///     <para>This can only be called on the server. Clients will receive the Disconnect message.</para>
+        /// Disconnect all currently connected clients except the local connection.
+        /// <para>This can only be called on the server. Clients will receive the Disconnect message.</para>
         /// </summary>
         public static void DisconnectAllConnections()
         {
@@ -463,7 +440,6 @@ namespace Mirror
                 if (conn.connectionId != 0)
                     OnDisconnected(conn);
             }
-
             connections.Clear();
         }
 
@@ -475,24 +451,28 @@ namespace Mirror
 
             // update all server objects
             foreach (KeyValuePair<uint, NetworkIdentity> kvp in NetworkIdentity.spawned)
+            {
                 if (kvp.Value != null && kvp.Value.gameObject != null)
+                {
                     kvp.Value.MirrorUpdate();
+                }
                 else
+                {
                     // spawned list should have no null entries because we
                     // always call Remove in OnObjectDestroy everywhere.
-                    Debug.LogWarning("Found 'null' entry in spawned list for netId=" + kvp.Key +
-                                     ". Please call NetworkServer.Destroy to destroy networked objects. Don't use GameObject.Destroy.");
+                    Debug.LogWarning("Found 'null' entry in spawned list for netId=" + kvp.Key + ". Please call NetworkServer.Destroy to destroy networked objects. Don't use GameObject.Destroy.");
+                }
+            }
         }
 
-        private static void OnConnected(int connectionId)
+        static void OnConnected(int connectionId)
         {
             if (LogFilter.Debug) Debug.Log("Server accepted client:" + connectionId);
 
             // connectionId needs to be > 0 because 0 is reserved for local player
             if (connectionId <= 0)
             {
-                Debug.LogError("Server.HandleConnect: invalid connectionId: " + connectionId +
-                               " . Needs to be >0, because 0 is reserved for local player.");
+                Debug.LogError("Server.HandleConnect: invalid connectionId: " + connectionId + " . Needs to be >0, because 0 is reserved for local player.");
                 Transport.activeTransport.ServerDisconnect(connectionId);
                 return;
             }
@@ -501,8 +481,7 @@ namespace Mirror
             if (connections.ContainsKey(connectionId))
             {
                 Transport.activeTransport.ServerDisconnect(connectionId);
-                if (LogFilter.Debug)
-                    Debug.Log("Server connectionId " + connectionId + " already in use. kicked client:" + connectionId);
+                if (LogFilter.Debug) Debug.Log("Server connectionId " + connectionId + " already in use. kicked client:" + connectionId);
                 return;
             }
 
@@ -525,7 +504,7 @@ namespace Mirror
             }
         }
 
-        private static void OnConnected(NetworkConnectionToClient conn)
+        internal static void OnConnected(NetworkConnectionToClient conn)
         {
             if (LogFilter.Debug) Debug.Log("Server accepted client:" + conn);
 
@@ -534,7 +513,7 @@ namespace Mirror
             conn.InvokeHandler(new ConnectMessage(), -1);
         }
 
-        private static void OnDisconnected(int connectionId)
+        static void OnDisconnected(int connectionId)
         {
             if (LogFilter.Debug) Debug.Log("Server disconnect client:" + connectionId);
 
@@ -548,107 +527,101 @@ namespace Mirror
             }
         }
 
-        private static void OnDisconnected(NetworkConnection conn)
+        static void OnDisconnected(NetworkConnection conn)
         {
             conn.InvokeHandler(new DisconnectMessage(), -1);
             if (LogFilter.Debug) Debug.Log("Server lost client:" + conn);
         }
 
-        private static void OnDataReceived(int connectionId, ArraySegment<byte> data, int channelId)
+        static void OnDataReceived(int connectionId, ArraySegment<byte> data, int channelId)
         {
             if (connections.TryGetValue(connectionId, out NetworkConnectionToClient conn))
+            {
                 conn.TransportReceive(data, channelId);
+            }
             else
+            {
                 Debug.LogError("HandleData Unknown connectionId:" + connectionId);
+            }
         }
 
-        private static void OnError(int connectionId, Exception exception)
+        static void OnError(int connectionId, Exception exception)
         {
             // TODO Let's discuss how we will handle errors
             Debug.LogException(exception);
         }
 
         /// <summary>
-        ///     Obsolete: Use <see cref="RegisterHandler{T}(Action{NetworkConnection, T}, bool)" /> instead.
+        /// Obsolete: Use <see cref="RegisterHandler{T}(Action{NetworkConnection, T}, bool)"/> instead.
         /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [Obsolete("Use RegisterHandler<T>(Action<NetworkConnection, T>, bool) instead.")]
+        [EditorBrowsable(EditorBrowsableState.Never), Obsolete("Use RegisterHandler<T>(Action<NetworkConnection, T>, bool) instead.")]
         public static void RegisterHandler(int msgType, NetworkMessageDelegate handler)
         {
             if (handlers.ContainsKey(msgType))
-                if (LogFilter.Debug)
-                    Debug.Log("NetworkServer.RegisterHandler replacing " + msgType);
+            {
+                if (LogFilter.Debug) Debug.Log("NetworkServer.RegisterHandler replacing " + msgType);
+            }
             handlers[msgType] = handler;
         }
 
         /// <summary>
-        ///     Obsolete: Use <see cref="RegisterHandler{T}(Action{NetworkConnection, T}, bool)" /> instead.
+        /// Obsolete: Use <see cref="RegisterHandler{T}(Action{NetworkConnection, T}, bool)"/> instead.
         /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [Obsolete("Use RegisterHandler<T>(Action<NetworkConnection, T>, bool) instead.")]
+        [EditorBrowsable(EditorBrowsableState.Never), Obsolete("Use RegisterHandler<T>(Action<NetworkConnection, T>, bool) instead.")]
         public static void RegisterHandler(MsgType msgType, NetworkMessageDelegate handler)
         {
-            RegisterHandler((int) msgType, handler);
+            RegisterHandler((int)msgType, handler);
         }
 
         /// <summary>
-        ///     Register a handler for a particular message type.
-        ///     <para>
-        ///         There are several system message types which you can add handlers for. You can also add your own message
-        ///         types.
-        ///     </para>
+        /// Register a handler for a particular message type.
+        /// <para>There are several system message types which you can add handlers for. You can also add your own message types.</para>
         /// </summary>
         /// <typeparam name="T">Message type</typeparam>
         /// <param name="handler">Function handler which will be invoked for when this message type is received.</param>
         /// <param name="requireAuthentication">True if the message requires an authenticated connection</param>
-        public static void RegisterHandler<T>(Action<NetworkConnection, T> handler, bool requireAuthentication = true)
-            where T : IMessageBase, new()
+        public static void RegisterHandler<T>(Action<NetworkConnection, T> handler, bool requireAuthentication = true) where T: IMessageBase, new()
         {
             int msgType = MessagePacker.GetId<T>();
             if (handlers.ContainsKey(msgType))
-                if (LogFilter.Debug)
-                    Debug.Log("NetworkServer.RegisterHandler replacing " + msgType);
+            {
+                if (LogFilter.Debug) Debug.Log("NetworkServer.RegisterHandler replacing " + msgType);
+            }
             handlers[msgType] = MessagePacker.MessageHandler(handler, requireAuthentication);
         }
 
         /// <summary>
-        ///     Register a handler for a particular message type.
-        ///     <para>
-        ///         There are several system message types which you can add handlers for. You can also add your own message
-        ///         types.
-        ///     </para>
+        /// Register a handler for a particular message type.
+        /// <para>There are several system message types which you can add handlers for. You can also add your own message types.</para>
         /// </summary>
         /// <typeparam name="T">Message type</typeparam>
         /// <param name="handler">Function handler which will be invoked for when this message type is received.</param>
         /// <param name="requireAuthentication">True if the message requires an authenticated connection</param>
-        public static void RegisterHandler<T>(Action<T> handler, bool requireAuthentication = true)
-            where T : IMessageBase, new()
+        public static void RegisterHandler<T>(Action<T> handler, bool requireAuthentication = true) where T : IMessageBase, new()
         {
             RegisterHandler<T>((_, value) => { handler(value); }, requireAuthentication);
         }
 
         /// <summary>
-        ///     Obsolete: Use <see cref="UnregisterHandler{T}" /> instead.
+        /// Obsolete: Use <see cref="UnregisterHandler{T}"/> instead.
         /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [Obsolete("Use UnregisterHandler<T> instead.")]
+        [EditorBrowsable(EditorBrowsableState.Never), Obsolete("Use UnregisterHandler<T> instead.")]
         public static void UnregisterHandler(int msgType)
         {
             handlers.Remove(msgType);
         }
 
         /// <summary>
-        ///     Obsolete: Use <see cref="UnregisterHandler{T}" /> instead.
+        /// Obsolete: Use <see cref="UnregisterHandler{T}"/> instead.
         /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [Obsolete("Use UnregisterHandler<T> instead.")]
+        [EditorBrowsable(EditorBrowsableState.Never), Obsolete("Use UnregisterHandler<T> instead.")]
         public static void UnregisterHandler(MsgType msgType)
         {
-            UnregisterHandler((int) msgType);
+            UnregisterHandler((int)msgType);
         }
 
         /// <summary>
-        ///     Unregisters a handler for a particular message type.
+        /// Unregisters a handler for a particular message type.
         /// </summary>
         /// <typeparam name="T">Message type</typeparam>
         public static void UnregisterHandler<T>() where T : IMessageBase
@@ -658,7 +631,7 @@ namespace Mirror
         }
 
         /// <summary>
-        ///     Clear all registered callback handlers.
+        /// Clear all registered callback handlers.
         /// </summary>
         public static void ClearHandlers()
         {
@@ -666,10 +639,9 @@ namespace Mirror
         }
 
         /// <summary>
-        ///     Obsolete: Use <see cref="SendToClient{T}(int, T)" /> instead.
+        /// Obsolete: Use <see cref="SendToClient{T}(int, T)"/> instead.
         /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [Obsolete("Use connection.Send(msg) instead.")]
+        [EditorBrowsable(EditorBrowsableState.Never), Obsolete("Use connection.Send(msg) instead.")]
         public static void SendToClient(int connectionId, int msgType, MessageBase msg)
         {
             if (connections.TryGetValue(connectionId, out NetworkConnectionToClient conn))
@@ -677,18 +649,12 @@ namespace Mirror
                 conn.Send(msgType, msg);
                 return;
             }
-
-            Debug.LogError(
-                "Failed to send message to connection ID '" + connectionId + ", not found in connection list");
+            Debug.LogError("Failed to send message to connection ID '" + connectionId + ", not found in connection list");
         }
 
         /// <summary>
-        ///     Send a message to the client which owns the given connection ID.
-        ///     <para>
-        ///         It accepts the connection ID as a parameter as well as a message and MsgType. Remember to set the client up
-        ///         for receiving the messages by using NetworkClient.RegisterHandler. Also, for user messages you must use a
-        ///         MsgType with a higher ID number than MsgType.Highest.
-        ///     </para>
+        /// Send a message to the client which owns the given connection ID.
+        /// <para>It accepts the connection ID as a parameter as well as a message and MsgType. Remember to set the client up for receiving the messages by using NetworkClient.RegisterHandler. Also, for user messages you must use a MsgType with a higher ID number than MsgType.Highest.</para>
         /// </summary>
         /// <typeparam name="T">Message type</typeparam>
         /// <param name="connectionId">Client connection ID.</param>
@@ -701,45 +667,46 @@ namespace Mirror
                 conn.Send(msg);
                 return;
             }
-
-            Debug.LogError(
-                "Failed to send message to connection ID '" + connectionId + ", not found in connection list");
+            Debug.LogError("Failed to send message to connection ID '" + connectionId + ", not found in connection list");
         }
 
         /// <summary>
-        ///     Obsolete: Use <see cref="SendToClientOfPlayer{T}(NetworkIdentity, T)" /> instead.
+        /// Obsolete: Use <see cref="SendToClientOfPlayer{T}(NetworkIdentity, T)"/> instead.
         /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [Obsolete("Use SendToClientOfPlayer<T> instead.")]
+        [EditorBrowsable(EditorBrowsableState.Never), Obsolete("Use SendToClientOfPlayer<T> instead.")]
         public static void SendToClientOfPlayer(NetworkIdentity identity, int msgType, MessageBase msg)
         {
             if (identity != null)
+            {
                 identity.connectionToClient.Send(msgType, msg);
+            }
             else
+            {
                 Debug.LogError("SendToClientOfPlayer: player has no NetworkIdentity: " + identity.name);
+            }
         }
 
         /// <summary>
-        ///     send this message to the player only
+        /// send this message to the player only
         /// </summary>
         /// <typeparam name="T">Message type</typeparam>
         /// <param name="identity"></param>
         /// <param name="msg"></param>
-        public static void SendToClientOfPlayer<T>(NetworkIdentity identity, T msg) where T : IMessageBase
+        public static void SendToClientOfPlayer<T>(NetworkIdentity identity, T msg) where T: IMessageBase
         {
             if (identity != null)
+            {
                 identity.connectionToClient.Send(msg);
+            }
             else
+            {
                 Debug.LogError("SendToClientOfPlayer: player has no NetworkIdentity: " + identity.name);
+            }
         }
 
         /// <summary>
-        ///     This replaces the player object for a connection with a different player object. The old player object is not
-        ///     destroyed.
-        ///     <para>
-        ///         If a connection already has a player object, this can be used to replace that object with a different player
-        ///         object. This does NOT change the ready state of the connection, so it can safely be used while changing scenes.
-        ///     </para>
+        /// This replaces the player object for a connection with a different player object. The old player object is not destroyed.
+        /// <para>If a connection already has a player object, this can be used to replace that object with a different player object. This does NOT change the ready state of the connection, so it can safely be used while changing scenes.</para>
         /// </summary>
         /// <param name="conn">Connection which is adding the player.</param>
         /// <param name="player">Player object spawned for the player.</param>
@@ -747,17 +714,16 @@ namespace Mirror
         /// <returns></returns>
         public static bool ReplacePlayerForConnection(NetworkConnection conn, GameObject player, Guid assetId)
         {
-            if (GetNetworkIdentity(player, out NetworkIdentity identity)) identity.assetId = assetId;
+            if (GetNetworkIdentity(player, out NetworkIdentity identity))
+            {
+                identity.assetId = assetId;
+            }
             return InternalReplacePlayerForConnection(conn, player);
         }
 
         /// <summary>
-        ///     This replaces the player object for a connection with a different player object. The old player object is not
-        ///     destroyed.
-        ///     <para>
-        ///         If a connection already has a player object, this can be used to replace that object with a different player
-        ///         object. This does NOT change the ready state of the connection, so it can safely be used while changing scenes.
-        ///     </para>
+        /// This replaces the player object for a connection with a different player object. The old player object is not destroyed.
+        /// <para>If a connection already has a player object, this can be used to replace that object with a different player object. This does NOT change the ready state of the connection, so it can safely be used while changing scenes.</para>
         /// </summary>
         /// <param name="conn">Connection which is adding the player.</param>
         /// <param name="player">Player object spawned for the player.</param>
@@ -768,16 +734,8 @@ namespace Mirror
         }
 
         /// <summary>
-        ///     <para>
-        ///         When an AddPlayer message handler has received a request from a player, the server calls this to associate
-        ///         the player object with the connection.
-        ///     </para>
-        ///     <para>
-        ///         When a player is added for a connection, the client for that connection is made ready automatically. The
-        ///         player object is automatically spawned, so you do not need to call NetworkServer.Spawn for that object. This
-        ///         function is used for "adding" a player, not for "replacing" the player on a connection. If there is already a
-        ///         player for this connection, this will fail.
-        ///     </para>
+        /// <para>When an AddPlayer message handler has received a request from a player, the server calls this to associate the player object with the connection.</para>
+        /// <para>When a player is added for a connection, the client for that connection is made ready automatically. The player object is automatically spawned, so you do not need to call NetworkServer.Spawn for that object. This function is used for "adding" a player, not for "replacing" the player on a connection. If there is already a player on this playerControllerId for this connection, this will fail.</para>
         /// </summary>
         /// <param name="conn">Connection which is adding the player.</param>
         /// <param name="player">Player object spawned for the player.</param>
@@ -785,18 +743,23 @@ namespace Mirror
         /// <returns></returns>
         public static bool AddPlayerForConnection(NetworkConnection conn, GameObject player, Guid assetId)
         {
-            if (GetNetworkIdentity(player, out NetworkIdentity identity)) identity.assetId = assetId;
+            if (GetNetworkIdentity(player, out NetworkIdentity identity))
+            {
+                identity.assetId = assetId;
+            }
             return AddPlayerForConnection(conn, player);
         }
 
-        private static void SpawnObserversForConnection(NetworkConnection conn)
+        static void SpawnObserversForConnection(NetworkConnection conn)
         {
             if (LogFilter.Debug) Debug.Log("Spawning " + NetworkIdentity.spawned.Count + " objects for conn " + conn);
 
             if (!conn.isReady)
+            {
                 // client needs to finish initializing before we can spawn objects
                 // otherwise it would not find them.
                 return;
+            }
 
             // let connection know that we are about to start spawning...
             conn.Send(new ObjectSpawnStartedMessage());
@@ -804,15 +767,18 @@ namespace Mirror
             // add connection to each nearby NetworkIdentity's observers, which
             // internally sends a spawn message for each one to the connection.
             foreach (NetworkIdentity identity in NetworkIdentity.spawned.Values)
+            {
                 if (identity.gameObject.activeSelf) //TODO this is different // try with far away ones in ummorpg!
                 {
-                    if (LogFilter.Debug)
-                        Debug.Log("Sending spawn message for current server objects name='" + identity.name +
-                                  "' netId=" + identity.netId + " sceneId=" + identity.sceneId);
+                    if (LogFilter.Debug) Debug.Log("Sending spawn message for current server objects name='" + identity.name + "' netId=" + identity.netId + " sceneId=" + identity.sceneId);
 
                     bool visible = identity.OnCheckObserver(conn);
-                    if (visible) identity.AddObserver(conn);
+                    if (visible)
+                    {
+                        identity.AddObserver(conn);
+                    }
                 }
+            }
 
             // let connection know that we finished spawning, so it can call
             // OnStartClient on each one (only after all were spawned, which
@@ -821,16 +787,8 @@ namespace Mirror
         }
 
         /// <summary>
-        ///     <para>
-        ///         When an AddPlayer message handler has received a request from a player, the server calls this to associate
-        ///         the player object with the connection.
-        ///     </para>
-        ///     <para>
-        ///         When a player is added for a connection, the client for that connection is made ready automatically. The
-        ///         player object is automatically spawned, so you do not need to call NetworkServer.Spawn for that object. This
-        ///         function is used for "adding" a player, not for "replacing" the player on a connection. If there is already a
-        ///         player for this connection, this will fail.
-        ///     </para>
+        /// <para>When an AddPlayer message handler has received a request from a player, the server calls this to associate the player object with the connection.</para>
+        /// <para>When a player is added for a connection, the client for that connection is made ready automatically. The player object is automatically spawned, so you do not need to call NetworkServer.Spawn for that object. This function is used for "adding" a player, not for "replacing" the player on a connection. If there is already a player on this playerControllerId for this connection, this will fail.</para>
         /// </summary>
         /// <param name="conn">Connection which is adding the player.</param>
         /// <param name="player">Player object spawned for the player.</param>
@@ -840,11 +798,9 @@ namespace Mirror
             NetworkIdentity identity = player.GetComponent<NetworkIdentity>();
             if (identity == null)
             {
-                Debug.Log("AddPlayer: playerGameObject has no NetworkIdentity. Please add a NetworkIdentity to " +
-                          player);
+                Debug.Log("AddPlayer: playerGameObject has no NetworkIdentity. Please add a NetworkIdentity to " + player);
                 return false;
             }
-
             identity.Reset();
 
             // cannot have a player object in "Add" version
@@ -854,35 +810,65 @@ namespace Mirror
                 return false;
             }
 
-            // make sure we have an identity before we call SetClientReady
-            // because the observers will be rebuilt only if we have an identity
+            // make sure we have a controller before we call SetClientReady
+            // because the observers will be rebuilt only if we have a controller
             conn.identity = identity;
 
             // Set the connection on the NetworkIdentity on the server, NetworkIdentity.SetLocalPlayer is not called on the server (it is on clients)
-            identity.connectionToClient = (NetworkConnectionToClient) conn;
-
-            // special case to ensure that isLocalPlayer is true before calling OnStartServer
-            if (NetworkClient.active)
-                ClientScene.localPlayer = identity;
+            identity.connectionToClient = (NetworkConnectionToClient)conn;
 
             // set ready if not set yet
             SetClientReady(conn);
 
-            if (LogFilter.Debug)
-                Debug.Log("Adding new playerGameObject object netId: " + identity.netId + " asset ID " +
-                          identity.assetId);
+            if (SetupLocalPlayerForConnection(conn, identity))
+            {
+                return true;
+            }
+
+            if (LogFilter.Debug) Debug.Log("Adding new playerGameObject object netId: " + identity.netId + " asset ID " + identity.assetId);
 
             FinishPlayerForConnection(identity, player);
             identity.SetClientOwner(conn);
             return true;
         }
 
-        private static void FinishPlayerForConnection(NetworkIdentity identity, GameObject playerGameObject)
+        static bool SetupLocalPlayerForConnection(NetworkConnection conn, NetworkIdentity identity)
+        {
+            if (LogFilter.Debug) Debug.Log("NetworkServer SetupLocalPlayerForConnection netID:" + identity.netId);
+
+            if (conn is ULocalConnectionToClient)
+            {
+                if (LogFilter.Debug) Debug.Log("NetworkServer AddPlayer handling ULocalConnectionToClient");
+
+                // Spawn this player for other players, instead of SpawnObject:
+                if (identity.netId == 0)
+                {
+                    // it is allowed to provide an already spawned object as the new player object.
+                    // so dont spawn it again.
+                    identity.OnStartServer(true);
+                }
+                identity.RebuildObservers(true);
+                SendSpawnMessage(identity, null);
+
+                // Set up local player instance on the client instance and update local object map
+                NetworkClient.AddLocalPlayer(identity);
+                identity.SetClientOwner(conn);
+
+                // Trigger OnStartLocalPlayer
+                identity.SetLocalPlayer();
+                return true;
+            }
+            return false;
+        }
+
+        static void FinishPlayerForConnection(NetworkIdentity identity, GameObject playerGameObject)
         {
             if (identity.netId == 0)
+            {
                 // it is allowed to provide an already spawned object as the new player object.
                 // so dont spawn it again.
                 Spawn(playerGameObject, identity.connectionToClient);
+            }
         }
 
         internal static bool InternalReplacePlayerForConnection(NetworkConnection conn, GameObject player)
@@ -890,43 +876,49 @@ namespace Mirror
             NetworkIdentity identity = player.GetComponent<NetworkIdentity>();
             if (identity == null)
             {
-                Debug.LogError(
-                    "ReplacePlayer: playerGameObject has no NetworkIdentity. Please add a NetworkIdentity to " +
-                    player);
+                Debug.LogError("ReplacePlayer: playerGameObject has no NetworkIdentity. Please add a NetworkIdentity to " + player);
                 return false;
             }
 
             //NOTE: there can be an existing player
             if (LogFilter.Debug) Debug.Log("NetworkServer ReplacePlayer");
 
+            // is there already an owner that is a different object??
+            if (conn.identity != null)
+            {
+                conn.identity.SetNotLocalPlayer();
+                conn.identity.connectionToClient = null;
+            }
+
             conn.identity = identity;
 
             // Set the connection on the NetworkIdentity on the server, NetworkIdentity.SetLocalPlayer is not called on the server (it is on clients)
-            identity.connectionToClient = (NetworkConnectionToClient) conn;
-
-            // special case to ensure that isLocalPlayer is true before calling OnStartServer
-            if (NetworkClient.active)
-                ClientScene.localPlayer = identity;
+            identity.connectionToClient = (NetworkConnectionToClient)conn;
 
             //NOTE: DONT set connection ready.
 
-            // Add connection to observers AFTER the identity is set.
-            // By definition, there is nothing to observe if there is no identity.
+            // add connection to observers AFTER the playerController was set.
+            // by definition, there is nothing to observe if there is no player
+            // controller.
+            //
             // IMPORTANT: do this in AddPlayerForConnection & ReplacePlayerForConnection!
             SpawnObserversForConnection(conn);
 
             if (LogFilter.Debug) Debug.Log("NetworkServer ReplacePlayer setup local");
 
-            if (LogFilter.Debug)
-                Debug.Log("Replacing playerGameObject object netId: " + player.GetComponent<NetworkIdentity>().netId +
-                          " asset ID " + player.GetComponent<NetworkIdentity>().assetId);
+            if (SetupLocalPlayerForConnection(conn, identity))
+            {
+                return true;
+            }
+
+            if (LogFilter.Debug) Debug.Log("Replacing playerGameObject object netId: " + player.GetComponent<NetworkIdentity>().netId + " asset ID " + player.GetComponent<NetworkIdentity>().assetId);
 
             FinishPlayerForConnection(identity, player);
             identity.SetClientOwner(conn);
             return true;
         }
 
-        private static bool GetNetworkIdentity(GameObject go, out NetworkIdentity identity)
+        static bool GetNetworkIdentity(GameObject go, out NetworkIdentity identity)
         {
             identity = go.GetComponent<NetworkIdentity>();
             if (identity == null)
@@ -934,18 +926,12 @@ namespace Mirror
                 Debug.LogError("GameObject " + go.name + " doesn't have NetworkIdentity.");
                 return false;
             }
-
             return true;
         }
 
         /// <summary>
-        ///     Sets the client to be ready.
-        ///     <para>
-        ///         When a client has signaled that it is ready, this method tells the server that the client is ready to receive
-        ///         spawned objects and state synchronization updates. This is usually called in a handler for the SYSTEM_READY
-        ///         message. If there is not specific action a game needs to take for this message, relying on the default ready
-        ///         handler function is probably fine, so this call wont be needed.
-        ///     </para>
+        /// Sets the client to be ready.
+        /// <para>When a client has signaled that it is ready, this method tells the server that the client is ready to receive spawned objects and state synchronization updates. This is usually called in a handler for the SYSTEM_READY message. If there is not specific action a game needs to take for this message, relying on the default ready handler function is probably fine, so this call wont be needed.</para>
         /// </summary>
         /// <param name="conn">The connection of the client to make ready.</param>
         public static void SetClientReady(NetworkConnection conn)
@@ -976,23 +962,20 @@ namespace Mirror
         }
 
         /// <summary>
-        ///     Marks all connected clients as no longer ready.
-        ///     <para>
-        ///         All clients will no longer be sent state synchronization updates. The player's clients can call
-        ///         ClientManager.Ready() again to re-enter the ready state. This is useful when switching scenes.
-        ///     </para>
+        /// Marks all connected clients as no longer ready.
+        /// <para>All clients will no longer be sent state synchronization updates. The player's clients can call ClientManager.Ready() again to re-enter the ready state. This is useful when switching scenes.</para>
         /// </summary>
         public static void SetAllClientsNotReady()
         {
-            foreach (NetworkConnection conn in connections.Values) SetClientNotReady(conn);
+            foreach (NetworkConnection conn in connections.Values)
+            {
+                SetClientNotReady(conn);
+            }
         }
 
         /// <summary>
-        ///     Sets the client of the connection to be not-ready.
-        ///     <para>
-        ///         Clients that are not ready do not receive spawned objects or state synchronization updates. They client can
-        ///         be made ready again by calling SetClientReady().
-        ///     </para>
+        /// Sets the client of the connection to be not-ready.
+        /// <para>Clients that are not ready do not receive spawned objects or state synchronization updates. They client can be made ready again by calling SetClientReady().</para>
         /// </summary>
         /// <param name="conn">The connection of the client to make not ready.</param>
         public static void SetClientNotReady(NetworkConnection conn)
@@ -1008,14 +991,14 @@ namespace Mirror
         }
 
         // default ready handler.
-        private static void OnClientReadyMessage(NetworkConnection conn, ReadyMessage msg)
+        static void OnClientReadyMessage(NetworkConnection conn, ReadyMessage msg)
         {
             if (LogFilter.Debug) Debug.Log("Default handler for ready message from " + conn);
             SetClientReady(conn);
         }
 
         // default remove player handler
-        private static void OnRemovePlayerMessage(NetworkConnection conn, RemovePlayerMessage msg)
+        static void OnRemovePlayerMessage(NetworkConnection conn, RemovePlayerMessage msg)
         {
             if (conn.identity != null)
             {
@@ -1029,7 +1012,7 @@ namespace Mirror
         }
 
         // Handle command from specific player, this could be one of multiple players on a single client
-        private static void OnCommandMessage(NetworkConnection conn, CommandMessage msg)
+        static void OnCommandMessage(NetworkConnection conn, CommandMessage msg)
         {
             if (!NetworkIdentity.spawned.TryGetValue(msg.netId, out NetworkIdentity identity))
             {
@@ -1037,8 +1020,9 @@ namespace Mirror
                 return;
             }
 
-            // Commands can be for player objects, OR other objects with client authority, so if this
-            // connection's identity has a different netId then only allow the command if connectionToClient matches.
+            // Commands can be for player objects, OR other objects with client-authority
+            // -> so if this connection's controller has a different netId then
+            //    only allow the command if clientAuthorityOwner
             if (identity.connectionToClient != conn)
             {
                 Debug.LogWarning("Command for object without authority [netId=" + msg.netId + "]");
@@ -1053,31 +1037,22 @@ namespace Mirror
         {
             if (!active)
             {
-                Debug.LogError("SpawnObject for " + obj +
-                               ", NetworkServer is not active. Cannot spawn objects without an active server.");
+                Debug.LogError("SpawnObject for " + obj + ", NetworkServer is not active. Cannot spawn objects without an active server.");
                 return;
             }
 
             NetworkIdentity identity = obj.GetComponent<NetworkIdentity>();
             if (identity == null)
             {
-                Debug.LogError("SpawnObject " + obj + " has no NetworkIdentity. Please add a NetworkIdentity to " +
-                               obj);
+                Debug.LogError("SpawnObject " + obj + " has no NetworkIdentity. Please add a NetworkIdentity to " + obj);
                 return;
             }
-
             identity.Reset();
-            identity.connectionToClient = (NetworkConnectionToClient) ownerConnection;
+            identity.connectionToClient = (NetworkConnectionToClient)ownerConnection;
 
-            // special case to make sure hasAuthority is set
-            // on start server in host mode
-            if (ownerConnection is ULocalConnectionToClient)
-                identity.hasAuthority = true;
+            identity.OnStartServer(false);
 
-            identity.OnStartServer();
-
-            if (LogFilter.Debug)
-                Debug.Log("SpawnObject instance ID " + identity.netId + " asset ID " + identity.assetId);
+            if (LogFilter.Debug) Debug.Log("SpawnObject instance ID " + identity.netId + " asset ID " + identity.assetId);
 
             identity.RebuildObservers(true);
         }
@@ -1087,9 +1062,7 @@ namespace Mirror
             if (identity.serverOnly)
                 return;
 
-            if (LogFilter.Debug)
-                Debug.Log("Server SendSpawnMessage: name=" + identity.name + " sceneId=" +
-                          identity.sceneId.ToString("X") + " netid=" + identity.netId); // for easier debugging
+            if (LogFilter.Debug) Debug.Log("Server SendSpawnMessage: name=" + identity.name + " sceneId=" + identity.sceneId.ToString("X") + " netid=" + identity.netId); // for easier debugging
 
             // one writer for owner, one for observers
             NetworkWriter ownerWriter = NetworkWriterPool.GetWriter();
@@ -1098,12 +1071,11 @@ namespace Mirror
 
             // serialize all components with initialState = true
             // (can be null if has none)
-            identity.OnSerializeAllSafely(true, ownerWriter, out int ownerWritten, observersWriter,
-                out int observersWritten);
+            identity.OnSerializeAllSafely(true, ownerWriter, out int ownerWritten, observersWriter, out int observersWritten);
 
             // convert to ArraySegment to avoid reader allocations
             // (need to handle null case too)
-            ArraySegment<byte> ownerSegment = ownerWritten > 0 ? ownerWriter.ToArraySegment() : default;
+            ArraySegment<byte> ownerSegment     =     ownerWritten > 0 ?     ownerWriter.ToArraySegment() : default;
             ArraySegment<byte> observersSegment = observersWritten > 0 ? observersWriter.ToArraySegment() : default;
 
             SpawnMessage msg = new SpawnMessage
@@ -1119,21 +1091,42 @@ namespace Mirror
                 scale = identity.transform.localScale
             };
 
-            // use owner segment if 'conn' owns this identity, otherwise
-            // use observers segment
-            msg.payload = msg.isOwner ? ownerSegment : observersSegment;
-            conn.Send(msg);
+            // conn is != null when spawning it for a client
+            if (conn != null)
+            {
+                // use owner segment if 'conn' owns this identity, otherwise
+                // use observers segment
+                msg.payload = msg.isOwner ? ownerSegment : observersSegment;
+
+                conn.Send(msg);
+            }
+            // conn is == null when spawning it for the local player
+            else
+            {
+                // send ownerWriter to owner
+                // (spawn no matter what, even if no components were
+                //  serialized because the spawn message contains more data.
+                //  components might still be updated later on.)
+                msg.payload = ownerSegment;
+                msg.isOwner = true;
+                SendToClientOfPlayer(identity, msg);
+
+                // send observersWriter to everyone but owner
+                // (spawn no matter what, even if no components were
+                //  serialized because the spawn message contains more data.
+                //  components might still be updated later on.)
+                msg.payload = observersSegment;
+                msg.isOwner = false;
+                SendToReady(identity, msg, false);
+            }
 
             NetworkWriterPool.Recycle(ownerWriter);
             NetworkWriterPool.Recycle(observersWriter);
         }
 
         /// <summary>
-        ///     This destroys all the player objects associated with a NetworkConnections on a server.
-        ///     <para>
-        ///         This is used when a client disconnects, to remove the players for that client. This also destroys non-player
-        ///         objects that have client authority set for this connection.
-        ///     </para>
+        /// This destroys all the player objects associated with a NetworkConnections on a server.
+        /// <para>This is used when a client disconnects, to remove the players for that client. This also destroys non-player objects that have client authority set for this connection.</para>
         /// </summary>
         /// <param name="conn">The connections object to clean up for.</param>
         public static void DestroyPlayerForConnection(NetworkConnection conn)
@@ -1146,21 +1139,24 @@ namespace Mirror
         }
 
         /// <summary>
-        ///     Spawn the given game object on all clients which are ready.
-        ///     <para>This will cause a new object to be instantiated from the registered prefab, or from a custom spawn function.</para>
+        /// Spawn the given game object on all clients which are ready.
+        /// <para>This will cause a new object to be instantiated from the registered prefab, or from a custom spawn function.</para>
         /// </summary>
         /// <param name="obj">Game object with NetworkIdentity to spawn.</param>
         /// <param name="ownerConnection">The connection that has authority over the object</param>
         public static void Spawn(GameObject obj, NetworkConnection ownerConnection = null)
         {
-            if (VerifyCanSpawn(obj)) SpawnObject(obj, ownerConnection);
+            if (VerifyCanSpawn(obj))
+            {
+                SpawnObject(obj, ownerConnection);
+            }
         }
 
-        private static bool CheckForPrefab(GameObject obj)
+        static bool CheckForPrefab(GameObject obj)
         {
 #if UNITY_EDITOR
 #if UNITY_2018_3_OR_NEWER
-            return PrefabUtility.IsPartOfPrefabAsset(obj);
+            return UnityEditor.PrefabUtility.IsPartOfPrefabAsset(obj);
 #elif UNITY_2018_2_OR_NEWER
             return (UnityEditor.PrefabUtility.GetCorrespondingObjectFromSource(obj) == null) && (UnityEditor.PrefabUtility.GetPrefabObject(obj) != null);
 #else
@@ -1171,12 +1167,11 @@ namespace Mirror
 #endif
         }
 
-        private static bool VerifyCanSpawn(GameObject obj)
+        static bool VerifyCanSpawn(GameObject obj)
         {
             if (CheckForPrefab(obj))
             {
-                Debug.LogErrorFormat(
-                    "GameObject {0} is a prefab, it can't be spawned. This will cause errors in builds.", obj.name);
+                Debug.LogErrorFormat("GameObject {0} is a prefab, it can't be spawned. This will cause errors in builds.", obj.name);
                 return false;
             }
 
@@ -1184,9 +1179,9 @@ namespace Mirror
         }
 
         /// <summary>
-        ///     Use <see cref="Spawn(GameObject, GameObject)" /> instead
+        /// Obsolete: Use <see cref="Spawn(GameObject, GameObject)"/> instead.
         /// </summary>
-        [Obsolete("Use Spawn(obj, player) instead")]
+        [EditorBrowsable(EditorBrowsableState.Never), Obsolete("Use Spawn(GameObject, GameObject) instead.")]
         public static bool SpawnWithClientAuthority(GameObject obj, GameObject player)
         {
             Spawn(obj, player);
@@ -1194,24 +1189,32 @@ namespace Mirror
         }
 
         /// <summary>
-        ///     This spawns an object like NetworkServer.Spawn() but also assigns Client Authority to the specified client.
-        ///     <para>This is the same as calling NetworkIdentity.AssignClientAuthority on the spawned object.</para>
+        /// This spawns an object like NetworkServer.Spawn() but also assigns Client Authority to the specified client.
+        /// <para>This is the same as calling NetworkIdentity.AssignClientAuthority on the spawned object.</para>
         /// </summary>
         /// <param name="obj">The object to spawn.</param>
         /// <param name="player">The player object to set Client Authority to.</param>
-        /// <returns></returns>
         public static void Spawn(GameObject obj, GameObject player)
         {
             NetworkIdentity identity = player.GetComponent<NetworkIdentity>();
-            if (identity == null) Debug.LogError("Spawn player object has no NetworkIdentity");
+            if (identity == null)
+            {
+                Debug.LogError("Player object has no NetworkIdentity");
+                return;
+            }
 
-            if (identity.connectionToClient == null) Debug.LogError("Spawn player object is not a player.");
+            if (identity.connectionToClient == null)
+            {
+                Debug.LogError("Player object is not a player.");
+                return;
+            }
 
             Spawn(obj, identity.connectionToClient);
         }
 
+
         /// <summary>
-        ///     Use <see cref="Spawn(GameObject, NetworkConnection)" /> instead
+        /// Use <see cref="Spawn(GameObject, NetworkConnection)"/> instead
         /// </summary>
         [Obsolete("Use Spawn(obj, connection) instead")]
         public static bool SpawnWithClientAuthority(GameObject obj, NetworkConnection ownerConnection)
@@ -1221,7 +1224,7 @@ namespace Mirror
         }
 
         /// <summary>
-        ///     Use <see cref="Spawn(GameObject, Guid, NetworkConnection)" /> instead
+        /// Use <see cref="Spawn(GameObject, Guid, NetworkConnection)"/> instead
         /// </summary>
         [Obsolete("Use Spawn(obj, assetId, connection) instead")]
         public static bool SpawnWithClientAuthority(GameObject obj, Guid assetId, NetworkConnection ownerConnection)
@@ -1231,8 +1234,8 @@ namespace Mirror
         }
 
         /// <summary>
-        ///     This spawns an object like NetworkServer.Spawn() but also assigns Client Authority to the specified client.
-        ///     <para>This is the same as calling NetworkIdentity.AssignClientAuthority on the spawned object.</para>
+        /// This spawns an object like NetworkServer.Spawn() but also assigns Client Authority to the specified client.
+        /// <para>This is the same as calling NetworkIdentity.AssignClientAuthority on the spawned object.</para>
         /// </summary>
         /// <param name="obj">The object to spawn.</param>
         /// <param name="assetId">The assetId of the object to spawn. Used for custom spawn handlers.</param>
@@ -1241,12 +1244,15 @@ namespace Mirror
         {
             if (VerifyCanSpawn(obj))
             {
-                if (GetNetworkIdentity(obj, out NetworkIdentity identity)) identity.assetId = assetId;
+                if (GetNetworkIdentity(obj, out NetworkIdentity identity))
+                {
+                    identity.assetId = assetId;
+                }
                 SpawnObject(obj, ownerConnection);
             }
         }
 
-        private static void DestroyObject(NetworkIdentity identity, bool destroyServerObject)
+        static void DestroyObject(NetworkIdentity identity, bool destroyServerObject)
         {
             if (LogFilter.Debug) Debug.Log("DestroyObject instance:" + identity.netId);
             NetworkIdentity.spawned.Remove(identity.netId);
@@ -1260,19 +1266,22 @@ namespace Mirror
             SendToObservers(identity, msg);
 
             identity.ClearObservers();
-            if (NetworkClient.active && localClientActive) identity.OnNetworkDestroy();
+            if (NetworkClient.active && localClientActive)
+            {
+                identity.OnNetworkDestroy();
+            }
 
             // when unspawning, dont destroy the server's object
-            if (destroyServerObject) Object.Destroy(identity.gameObject);
+            if (destroyServerObject)
+            {
+                UnityEngine.Object.Destroy(identity.gameObject);
+            }
             identity.MarkForReset();
         }
 
         /// <summary>
-        ///     Destroys this object and corresponding objects on all clients.
-        ///     <para>
-        ///         In some cases it is useful to remove an object but not delete it on the server. For that, use
-        ///         NetworkServer.UnSpawn() instead of NetworkServer.Destroy().
-        ///     </para>
+        /// Destroys this object and corresponding objects on all clients.
+        /// <para>In some cases it is useful to remove an object but not delete it on the server. For that, use NetworkServer.UnSpawn() instead of NetworkServer.Destroy().</para>
         /// </summary>
         /// <param name="obj">Game object to destroy.</param>
         public static void Destroy(GameObject obj)
@@ -1283,19 +1292,16 @@ namespace Mirror
                 return;
             }
 
-            if (GetNetworkIdentity(obj, out NetworkIdentity identity)) DestroyObject(identity, true);
+            if (GetNetworkIdentity(obj, out NetworkIdentity identity))
+            {
+                DestroyObject(identity, true);
+            }
         }
 
         /// <summary>
-        ///     This takes an object that has been spawned and un-spawns it.
-        ///     <para>
-        ///         The object will be removed from clients that it was spawned on, or the custom spawn handler function on the
-        ///         client will be called for the object.
-        ///     </para>
-        ///     <para>
-        ///         Unlike when calling NetworkServer.Destroy(), on the server the object will NOT be destroyed. This allows the
-        ///         server to re-use the object, even spawn it again later.
-        ///     </para>
+        /// This takes an object that has been spawned and un-spawns it.
+        /// <para>The object will be removed from clients that it was spawned on, or the custom spawn handler function on the client will be called for the object.</para>
+        /// <para>Unlike when calling NetworkServer.Destroy(), on the server the object will NOT be destroyed. This allows the server to re-use the object, even spawn it again later.</para>
         /// </summary>
         /// <param name="obj">The spawned object to be unspawned.</param>
         public static void UnSpawn(GameObject obj)
@@ -1306,28 +1312,32 @@ namespace Mirror
                 return;
             }
 
-            if (GetNetworkIdentity(obj, out NetworkIdentity identity)) DestroyObject(identity, false);
+            if (GetNetworkIdentity(obj, out NetworkIdentity identity))
+            {
+                DestroyObject(identity, false);
+            }
         }
 
         /// <summary>
-        ///     Obsolete: Use <see cref="NetworkIdentity.spawned" /> instead.
+        /// Obsolete: Use <see cref="NetworkIdentity.spawned"/> instead.
         /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [Obsolete("Use NetworkIdentity.spawned[netId] instead.")]
+        [EditorBrowsable(EditorBrowsableState.Never), Obsolete("Use NetworkIdentity.spawned[netId] instead.")]
         public static GameObject FindLocalObject(uint netId)
         {
-            if (NetworkIdentity.spawned.TryGetValue(netId, out NetworkIdentity identity)) return identity.gameObject;
+            if (NetworkIdentity.spawned.TryGetValue(netId, out NetworkIdentity identity))
+            {
+                return identity.gameObject;
+            }
             return null;
         }
 
-        private static bool ValidateSceneObject(NetworkIdentity identity)
+        static bool ValidateSceneObject(NetworkIdentity identity)
         {
-            if (identity.gameObject.hideFlags == HideFlags.NotEditable ||
-                identity.gameObject.hideFlags == HideFlags.HideAndDontSave)
+            if (identity.gameObject.hideFlags == HideFlags.NotEditable || identity.gameObject.hideFlags == HideFlags.HideAndDontSave)
                 return false;
 
 #if UNITY_EDITOR
-            if (EditorUtility.IsPersistent(identity.gameObject))
+            if (UnityEditor.EditorUtility.IsPersistent(identity.gameObject))
                 return false;
 #endif
 
@@ -1336,11 +1346,8 @@ namespace Mirror
         }
 
         /// <summary>
-        ///     This causes NetworkIdentity objects in a scene to be spawned on a server.
-        ///     <para>
-        ///         NetworkIdentity objects in a scene are disabled by default. Calling SpawnObjects() causes these scene objects
-        ///         to be enabled and spawned. It is like calling NetworkServer.Spawn() for each of them.
-        ///     </para>
+        /// This causes NetworkIdentity objects in a scene to be spawned on a server.
+        /// <para>NetworkIdentity objects in a scene are disabled by default. Calling SpawnObjects() causes these scene objects to be enabled and spawned. It is like calling NetworkServer.Spawn() for each of them.</para>
         /// </summary>
         /// <returns>Success if objects where spawned.</returns>
         public static bool SpawnObjects()
@@ -1350,18 +1357,20 @@ namespace Mirror
 
             NetworkIdentity[] identities = Resources.FindObjectsOfTypeAll<NetworkIdentity>();
             foreach (NetworkIdentity identity in identities)
+            {
                 if (ValidateSceneObject(identity))
                 {
-                    if (LogFilter.Debug)
-                        Debug.Log("SpawnObjects sceneId:" + identity.sceneId.ToString("X") + " name:" +
-                                  identity.gameObject.name);
+                    if (LogFilter.Debug) Debug.Log("SpawnObjects sceneId:" + identity.sceneId.ToString("X") + " name:" + identity.gameObject.name);
                     identity.Reset();
                     identity.gameObject.SetActive(true);
                 }
+            }
 
             foreach (NetworkIdentity identity in identities)
+            {
                 if (ValidateSceneObject(identity))
                     Spawn(identity.gameObject);
+            }
             return true;
         }
     }

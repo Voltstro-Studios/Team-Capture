@@ -1,6 +1,9 @@
-using System.IO;
+using System;
 using Mono.CecilX;
 using UnityEditor.Compilation;
+using System.Linq;
+using System.Collections.Generic;
+using System.IO;
 
 namespace Mirror.Weaver
 {
@@ -13,29 +16,32 @@ namespace Mirror.Weaver
             Writers.Init();
 
             foreach (Assembly unityAsm in CompilationPipeline.GetAssemblies())
+            {
                 if (unityAsm.name != CurrentAssembly.Name.Name)
+                {
                     try
                     {
                         using (DefaultAssemblyResolver asmResolver = new DefaultAssemblyResolver())
-                        using (AssemblyDefinition assembly = AssemblyDefinition.ReadAssembly(unityAsm.outputPath,
-                            new ReaderParameters
-                                {ReadWrite = false, ReadSymbols = false, AssemblyResolver = asmResolver}))
+                        using (AssemblyDefinition assembly = AssemblyDefinition.ReadAssembly(unityAsm.outputPath, new ReaderParameters { ReadWrite = false, ReadSymbols = false, AssemblyResolver = asmResolver }))
                         {
                             ProcessAssemblyClasses(CurrentAssembly, assembly);
                         }
                     }
-                    catch (FileNotFoundException)
+                    catch(FileNotFoundException)
                     {
                         // During first import,  this gets called before some assemblies
                         // are built,  just skip them
                     }
+                }
+            }
 
             ProcessAssemblyClasses(CurrentAssembly, CurrentAssembly);
         }
 
-        private static void ProcessAssemblyClasses(AssemblyDefinition CurrentAssembly, AssemblyDefinition assembly)
+        static void ProcessAssemblyClasses(AssemblyDefinition CurrentAssembly, AssemblyDefinition assembly)
         {
             foreach (TypeDefinition klass in assembly.MainModule.Types)
+            {
                 // extension methods only live in static classes
                 // static classes are represented as sealed and abstract
                 if (klass.IsAbstract && klass.IsSealed)
@@ -43,9 +49,10 @@ namespace Mirror.Weaver
                     LoadWriters(CurrentAssembly, klass);
                     LoadReaders(CurrentAssembly, klass);
                 }
+            }
         }
 
-        private static void LoadWriters(AssemblyDefinition currentAssembly, TypeDefinition klass)
+        static void LoadWriters(AssemblyDefinition currentAssembly, TypeDefinition klass)
         {
             // register all the writers in this class.  Skip the ones with wrong signature
             foreach (MethodDefinition method in klass.Methods)
@@ -67,7 +74,7 @@ namespace Mirror.Weaver
             }
         }
 
-        private static void LoadReaders(AssemblyDefinition currentAssembly, TypeDefinition klass)
+        static void LoadReaders(AssemblyDefinition currentAssembly, TypeDefinition klass)
         {
             // register all the reader in this class.  Skip the ones with wrong signature
             foreach (MethodDefinition method in klass.Methods)

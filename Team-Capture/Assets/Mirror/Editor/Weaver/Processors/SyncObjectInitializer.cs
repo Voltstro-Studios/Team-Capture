@@ -1,5 +1,4 @@
 // SyncObject code
-
 using System;
 using System.Linq;
 using Mono.CecilX;
@@ -19,26 +18,29 @@ namespace Mirror.Weaver
         }
 
         // generates 'syncListInt = new SyncListInt()' if user didn't do that yet
-        private static void GenerateSyncObjectInstanceInitializer(ILProcessor ctorWorker, FieldDefinition fd)
+        static void GenerateSyncObjectInstanceInitializer(ILProcessor ctorWorker, FieldDefinition fd)
         {
             // check the ctor's instructions for an Stfld op-code for this specific sync list field.
             foreach (Instruction ins in ctorWorker.Body.Instructions)
+            {
                 if (ins.OpCode.Code == Code.Stfld)
                 {
-                    FieldDefinition field = (FieldDefinition) ins.Operand;
+                    FieldDefinition field = (FieldDefinition)ins.Operand;
                     if (field.DeclaringType == fd.DeclaringType && field.Name == fd.Name)
+                    {
                         // Already initialized by the user in the field definition, e.g:
                         // public SyncListInt Foo = new SyncListInt();
                         return;
+                    }
                 }
+            }
 
             // Not initialized by the user in the field definition, e.g:
             // public SyncListInt Foo;
             MethodReference objectConstructor;
             try
             {
-                objectConstructor = Weaver.CurrentAssembly.MainModule.ImportReference(fd.FieldType.Resolve().Methods
-                    .First(x => x.Name == ".ctor" && !x.HasParameters));
+                objectConstructor = Weaver.CurrentAssembly.MainModule.ImportReference(fd.FieldType.Resolve().Methods.First<MethodDefinition>(x => x.Name == ".ctor" && !x.HasParameters));
             }
             catch (Exception)
             {
@@ -56,7 +58,10 @@ namespace Mirror.Weaver
             try
             {
                 // value types cant inherit from SyncObject
-                if (typeRef.IsValueType) return false;
+                if (typeRef.IsValueType)
+                {
+                    return false;
+                }
 
                 return typeRef.Resolve().ImplementsInterface(Weaver.SyncObjectType);
             }
@@ -72,7 +77,7 @@ namespace Mirror.Weaver
             // generates code like:
             this.InitSyncObject(m_sizes);
         */
-        private static void GenerateSyncObjectRegistration(ILProcessor methodWorker, FieldDefinition fd)
+        static void GenerateSyncObjectRegistration(ILProcessor methodWorker, FieldDefinition fd)
         {
             methodWorker.Append(methodWorker.Create(OpCodes.Ldarg_0));
             methodWorker.Append(methodWorker.Create(OpCodes.Ldarg_0));

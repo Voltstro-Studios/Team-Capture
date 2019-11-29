@@ -5,17 +5,17 @@ using System.Threading.Tasks;
 namespace Ninja.WebSockets
 {
     /// <summary>
-    ///     Ping Pong Manager used to facilitate ping pong WebSocket messages
+    /// Ping Pong Manager used to facilitate ping pong WebSocket messages
     /// </summary>
-    internal interface IPingPongManager
+    interface IPingPongManager
     {
         /// <summary>
-        ///     Raised when a Pong frame is received
+        /// Raised when a Pong frame is received
         /// </summary>
         event EventHandler<PongEventArgs> Pong;
 
         /// <summary>
-        ///     Sends a ping frame
+        /// Sends a ping frame
         /// </summary>
         /// <param name="payload">The payload (must be 125 bytes of less)</param>
         /// <param name="cancellation">The cancellation token</param>

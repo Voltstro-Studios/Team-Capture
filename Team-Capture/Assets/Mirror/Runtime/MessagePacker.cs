@@ -1,6 +1,5 @@
 using System;
 using System.ComponentModel;
-using System.IO;
 using UnityEngine;
 
 namespace Mirror
@@ -34,15 +33,14 @@ namespace Mirror
         // pack message before sending
         // -> NetworkWriter passed as arg so that we can use .ToArraySegment
         //    and do an allocation free send before recycling it.
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [Obsolete("Use Pack<T> instead")]
+        [EditorBrowsable(EditorBrowsableState.Never), Obsolete("Use Pack<T> instead")]
         public static byte[] PackMessage(int msgType, MessageBase msg)
         {
             NetworkWriter writer = NetworkWriterPool.GetWriter();
             try
             {
                 // write message type
-                writer.WriteInt16((short) msgType);
+                writer.WriteInt16((short)msgType);
 
                 // serialize message into writer
                 msg.Serialize(writer);
@@ -66,7 +64,7 @@ namespace Mirror
             // if it is a reference type (for example IMessageBase),
             // ask the message for the real type
             int msgType = GetId(typeof(T).IsValueType ? typeof(T) : message.GetType());
-            writer.WriteUInt16((ushort) msgType);
+            writer.WriteUInt16((ushort)msgType);
 
             // serialize message into writer
             message.Serialize(writer);
@@ -116,60 +114,53 @@ namespace Mirror
                 msgType = messageReader.ReadUInt16();
                 return true;
             }
-            catch (EndOfStreamException)
+            catch (System.IO.EndOfStreamException)
             {
                 msgType = 0;
                 return false;
             }
         }
 
-        internal static NetworkMessageDelegate MessageHandler<T>(Action<NetworkConnection, T> handler,
-            bool requireAuthenication) where T : IMessageBase, new()
+        internal static NetworkMessageDelegate MessageHandler<T>(Action<NetworkConnection, T> handler, bool requireAuthenication) where T : IMessageBase, new() => networkMessage =>
         {
-            return networkMessage =>
+            // protect against DOS attacks if attackers try to send invalid
+            // data packets to crash the server/client. there are a thousand
+            // ways to cause an exception in data handling:
+            // - invalid headers
+            // - invalid message ids
+            // - invalid data causing exceptions
+            // - negative ReadBytesAndSize prefixes
+            // - invalid utf8 strings
+            // - etc.
+            //
+            // let's catch them all and then disconnect that connection to avoid
+            // further attacks.
+            T message = default;
+            try
             {
-                // protect against DOS attacks if attackers try to send invalid
-                // data packets to crash the server/client. there are a thousand
-                // ways to cause an exception in data handling:
-                // - invalid headers
-                // - invalid message ids
-                // - invalid data causing exceptions
-                // - negative ReadBytesAndSize prefixes
-                // - invalid utf8 strings
-                // - etc.
-                //
-                // let's catch them all and then disconnect that connection to avoid
-                // further attacks.
-                T message = default;
-                try
+                if (requireAuthenication && !networkMessage.conn.isAuthenticated)
                 {
-                    if (requireAuthenication && !networkMessage.conn.isAuthenticated)
-                    {
-                        // message requires authentication, but the connection was not authenticated
-                        Debug.LogWarning(
-                            $"Closing connection: {networkMessage.conn}. Received message {typeof(T)} that required authentication, but the user has not authenticated yet");
-                        networkMessage.conn.Disconnect();
-                        return;
-                    }
-
-                    message = networkMessage.ReadMessage<T>();
-                }
-                catch (Exception exception)
-                {
-                    Debug.LogError("Closed connection: " + networkMessage.conn +
-                                   ". This can happen if the other side accidentally (or an attacker intentionally) sent invalid data. Reason: " +
-                                   exception);
+                    // message requires authentication, but the connection was not authenticated
+                    Debug.LogWarning($"Closing connection: {networkMessage.conn}. Received message {typeof(T)} that required authentication, but the user has not authenticated yet");
                     networkMessage.conn.Disconnect();
                     return;
                 }
-                finally
-                {
-                    // TODO: Figure out the correct channel
-                    NetworkDiagnostics.OnReceive(message, networkMessage.channelId, networkMessage.reader.Length);
-                }
 
-                handler(networkMessage.conn, message);
-            };
-        }
+                message = networkMessage.ReadMessage<T>();
+            }
+            catch (Exception exception)
+            {
+                Debug.LogError("Closed connection: " + networkMessage.conn + ". This can happen if the other side accidentally (or an attacker intentionally) sent invalid data. Reason: " + exception);
+                networkMessage.conn.Disconnect();
+                return;
+            }
+            finally
+            {
+                // TODO: Figure out the correct channel
+                NetworkDiagnostics.OnReceive(message, networkMessage.channelId, networkMessage.reader.Length);
+            }
+
+            handler(networkMessage.conn, message);
+        };
     }
 }

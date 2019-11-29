@@ -6,11 +6,11 @@ namespace Mirror
 {
     // a server's connection TO a LocalClient.
     // sending messages on this connection causes the client's handler function to be invoked directly
-    internal class ULocalConnectionToClient : NetworkConnectionToClient
+    class ULocalConnectionToClient : NetworkConnectionToClient
     {
         internal ULocalConnectionToServer connectionToServer;
 
-        public ULocalConnectionToClient() : base(0)
+        public ULocalConnectionToClient() : base (0)
         {
         }
 
@@ -35,7 +35,7 @@ namespace Mirror
         }
 
         /// <summary>
-        ///     Disconnects this connection.
+        /// Disconnects this connection.
         /// </summary>
         public override void Disconnect()
         {
@@ -83,7 +83,7 @@ namespace Mirror
         }
 
         /// <summary>
-        ///     Disconnects this connection.
+        /// Disconnects this connection.
         /// </summary>
         internal void DisconnectInternal()
         {
@@ -94,7 +94,7 @@ namespace Mirror
         }
 
         /// <summary>
-        ///     Disconnects this connection.
+        /// Disconnects this connection.
         /// </summary>
         public override void Disconnect()
         {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 
@@ -7,6 +8,17 @@ namespace Telepathy
 {
     public class Client : Common
     {
+        public TcpClient client;
+        Thread receiveThread;
+        Thread sendThread;
+
+        // TcpClient.Connected doesn't check if socket != null, which
+        // results in NullReferenceExceptions if connection was closed.
+        // -> let's check it manually instead
+        public bool Connected => client != null &&
+                                 client.Client != null &&
+                                 client.Client.Connected;
+
         // TcpClient has no 'connecting' state to check. We need to keep track
         // of it manually.
         // -> checking 'thread.IsAlive && !Connected' is not enough because the
@@ -19,32 +31,21 @@ namespace Telepathy
         // => bools are atomic according to
         //    https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/variables
         //    made volatile so the compiler does not reorder access to it
-        private volatile bool _Connecting;
-        public TcpClient client;
-        private Thread receiveThread;
+        volatile bool _Connecting;
+        public bool Connecting => _Connecting;
+
+        // send queue
+        // => SafeQueue is twice as fast as ConcurrentQueue, see SafeQueue.cs!
+        SafeQueue<byte[]> sendQueue = new SafeQueue<byte[]>();
 
         // ManualResetEvent to wake up the send thread. better than Thread.Sleep
         // -> call Set() if everything was sent
         // -> call Reset() if there is something to send again
         // -> call WaitOne() to block until Reset was called
-        private readonly ManualResetEvent sendPending = new ManualResetEvent(false);
-
-        // send queue
-        // => SafeQueue is twice as fast as ConcurrentQueue, see SafeQueue.cs!
-        private readonly SafeQueue<byte[]> sendQueue = new SafeQueue<byte[]>();
-        private Thread sendThread;
-
-        // TcpClient.Connected doesn't check if socket != null, which
-        // results in NullReferenceExceptions if connection was closed.
-        // -> let's check it manually instead
-        public bool Connected => client != null &&
-                                 client.Client != null &&
-                                 client.Client.Connected;
-
-        public bool Connecting => _Connecting;
+        ManualResetEvent sendPending = new ManualResetEvent(false);
 
         // the thread function
-        private void ReceiveThreadFunction(string ip, int port)
+        void ReceiveThreadFunction(string ip, int port)
         {
             // absolutely must wrap with try/catch, otherwise thread
             // exceptions are silent
@@ -188,11 +189,9 @@ namespace Telepathy
                     sendPending.Set(); // interrupt SendThread WaitOne()
                     return true;
                 }
-
                 Logger.LogError("Client.Send: message too big: " + data.Length + ". Limit: " + MaxMessageSize);
                 return false;
             }
-
             Logger.LogWarning("Client.Send: not connected!");
             return false;
         }

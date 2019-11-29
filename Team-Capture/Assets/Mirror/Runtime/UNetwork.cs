@@ -28,8 +28,7 @@ namespace Mirror
     // original HLAPI uses short, so let's keep short to not break packet header etc.
     // => use .ToString() to get the field name from the field value
     // => we specify the short values so it's easier to look up opcodes when debugging packets
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    [Obsolete("Use Send<T>  with no message id instead")]
+    [EditorBrowsable(EditorBrowsableState.Never), Obsolete("Use Send<T>  with no message id instead")]
     public enum MsgType : short
     {
         // internal system messages - cannot be replaced by user code
@@ -78,26 +77,33 @@ namespace Mirror
     [StructLayout(LayoutKind.Explicit)]
     internal struct UIntFloat
     {
-        [FieldOffset(0)] public float floatValue;
+        [FieldOffset(0)]
+        public float floatValue;
 
-        [FieldOffset(0)] public uint intValue;
+        [FieldOffset(0)]
+        public uint intValue;
     }
 
     [StructLayout(LayoutKind.Explicit)]
     internal struct UIntDouble
     {
-        [FieldOffset(0)] public double doubleValue;
+        [FieldOffset(0)]
+        public double doubleValue;
 
-        [FieldOffset(0)] public ulong longValue;
+        [FieldOffset(0)]
+        public ulong longValue;
     }
 
     [StructLayout(LayoutKind.Explicit)]
     internal struct UIntDecimal
     {
-        [FieldOffset(0)] public ulong longValue1;
+        [FieldOffset(0)]
+        public ulong longValue1;
 
-        [FieldOffset(8)] public ulong longValue2;
+        [FieldOffset(8)]
+        public ulong longValue2;
 
-        [FieldOffset(0)] public decimal decimalValue;
+        [FieldOffset(0)]
+        public decimal decimalValue;
     }
 }

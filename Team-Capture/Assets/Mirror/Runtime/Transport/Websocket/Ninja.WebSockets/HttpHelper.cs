@@ -23,35 +23,36 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Ninja.WebSockets.Exceptions;
+using System.Linq;
 
 namespace Ninja.WebSockets
 {
     public class HttpHelper
     {
-        private const string HTTP_GET_HEADER_REGEX = @"^GET(.*)HTTP\/1\.1";
+        const string HTTP_GET_HEADER_REGEX = @"^GET(.*)HTTP\/1\.1";
 
         /// <summary>
-        ///     Calculates a random WebSocket key that can be used to initiate a WebSocket handshake
+        /// Calculates a random WebSocket key that can be used to initiate a WebSocket handshake
         /// </summary>
         /// <returns>A random websocket key</returns>
         public static string CalculateWebSocketKey()
         {
             // this is not used for cryptography so doing something simple like he code below is op
-            Random rand = new Random((int) DateTime.Now.Ticks);
+            Random rand = new Random((int)DateTime.Now.Ticks);
             byte[] keyAsBytes = new byte[16];
             rand.NextBytes(keyAsBytes);
             return Convert.ToBase64String(keyAsBytes);
         }
 
         /// <summary>
-        ///     Computes a WebSocket accept string from a given key
+        /// Computes a WebSocket accept string from a given key
         /// </summary>
         /// <param name="secWebSocketKey">The web socket key to base the accept string on</param>
         /// <returns>A web socket accept string</returns>
@@ -69,14 +70,14 @@ namespace Ninja.WebSockets
         }
 
         /// <summary>
-        ///     Reads an http header as per the HTTP spec
+        /// Reads an http header as per the HTTP spec
         /// </summary>
         /// <param name="stream">The stream to read UTF8 text from</param>
         /// <param name="token">The cancellation token</param>
         /// <returns>The HTTP header</returns>
         public static async Task<string> ReadHttpHeaderAsync(Stream stream, CancellationToken token)
         {
-            int length = 1024 * 16; // 16KB buffer more than enough for http header
+            int length = 1024*16; // 16KB buffer more than enough for http header
             byte[] buffer = new byte[length];
             int offset = 0;
             int bytesRead = 0;
@@ -84,25 +85,31 @@ namespace Ninja.WebSockets
             do
             {
                 if (offset >= length)
+                {
                     throw new EntityTooLargeException("Http header message too large to fit in buffer (16KB)");
+                }
 
                 bytesRead = await stream.ReadAsync(buffer, offset, length - offset, token);
                 offset += bytesRead;
                 string header = Encoding.UTF8.GetString(buffer, 0, offset);
 
                 // as per http specification, all headers should end this this
-                if (header.Contains("\r\n\r\n")) return header;
+                if (header.Contains("\r\n\r\n"))
+                {
+                    return header;
+                }
+
             } while (bytesRead > 0);
 
             return string.Empty;
         }
 
         /// <summary>
-        ///     Decodes the header to detect is this is a web socket upgrade response
+        /// Decodes the header to detect is this is a web socket upgrade response
         /// </summary>
         /// <param name="header">The HTTP header</param>
         /// <returns>True if this is an http WebSocket upgrade response</returns>
-        public static bool IsWebSocketUpgradeRequest(string header)
+        public static bool IsWebSocketUpgradeRequest(String header)
         {
             Regex getRegex = new Regex(HTTP_GET_HEADER_REGEX, RegexOptions.IgnoreCase);
             Match getRegexMatch = getRegex.Match(header);
@@ -119,7 +126,7 @@ namespace Ninja.WebSockets
         }
 
         /// <summary>
-        ///     Gets the path from the HTTP header
+        /// Gets the path from the HTTP header
         /// </summary>
         /// <param name="httpHeader">The HTTP header to read</param>
         /// <returns>The path</returns>
@@ -129,8 +136,10 @@ namespace Ninja.WebSockets
             Match getRegexMatch = getRegex.Match(httpHeader);
 
             if (getRegexMatch.Success)
+            {
                 // extract the path attribute from the first line of the header
                 return getRegexMatch.Groups[1].Value.Trim();
+            }
 
             return null;
         }
@@ -144,12 +153,13 @@ namespace Ninja.WebSockets
             {
                 const int MAX_LEN = 2048;
                 if (match.Length > MAX_LEN)
-                    throw new EntityTooLargeException(
-                        $"Sec-WebSocket-Protocol exceeded the maximum of length of {MAX_LEN}");
+                {
+                    throw new EntityTooLargeException($"Sec-WebSocket-Protocol exceeded the maximum of length of {MAX_LEN}");
+                }
 
                 // extract a csv list of sub protocols (in order of highest preference first)
                 string csv = match.Groups["protocols"].Value.Trim();
-                return csv.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries)
+                return csv.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
                     .Select(x => x.Trim())
                     .ToList();
             }
@@ -158,7 +168,7 @@ namespace Ninja.WebSockets
         }
 
         /// <summary>
-        ///     Reads the HTTP response code from the http response string
+        /// Reads the HTTP response code from the http response string
         /// </summary>
         /// <param name="response">The response string</param>
         /// <returns>the response code</returns>
@@ -168,14 +178,16 @@ namespace Ninja.WebSockets
             Match getRegexMatch = getRegex.Match(response);
 
             if (getRegexMatch.Success)
+            {
                 // extract the path attribute from the first line of the header
                 return getRegexMatch.Groups[1].Value.Trim();
+            }
 
             return null;
         }
 
         /// <summary>
-        ///     Writes an HTTP response string to the stream
+        /// Writes an HTTP response string to the stream
         /// </summary>
         /// <param name="response">The response (without the new line characters)</param>
         /// <param name="stream">The stream to write to</param>
@@ -183,7 +195,7 @@ namespace Ninja.WebSockets
         public static async Task WriteHttpHeaderAsync(string response, Stream stream, CancellationToken token)
         {
             response = response.Trim() + "\r\n\r\n";
-            byte[] bytes = Encoding.UTF8.GetBytes(response);
+            Byte[] bytes = Encoding.UTF8.GetBytes(response);
             await stream.WriteAsync(bytes, 0, bytes.Length, token);
         }
     }

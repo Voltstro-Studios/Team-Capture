@@ -1,11 +1,14 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace Ninja.WebSockets.Exceptions
 {
     [Serializable]
     public class WebSocketHandshakeFailedException : Exception
     {
-        public WebSocketHandshakeFailedException()
+        public WebSocketHandshakeFailedException() : base()
         {
         }
 

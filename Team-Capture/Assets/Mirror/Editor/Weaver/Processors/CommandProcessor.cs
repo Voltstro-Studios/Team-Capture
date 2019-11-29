@@ -1,5 +1,4 @@
 // all the [Command] code from NetworkBehaviourProcessor in one place
-
 using Mono.CecilX;
 using Mono.CecilX.Cil;
 
@@ -7,7 +6,7 @@ namespace Mirror.Weaver
 {
     public static class CommandProcessor
     {
-        private const string CmdPrefix = "InvokeCmd";
+        const string CmdPrefix = "InvokeCmd";
 
         /*
             // generates code like:
@@ -35,12 +34,14 @@ namespace Mirror.Weaver
         public static MethodDefinition ProcessCommandCall(TypeDefinition td, MethodDefinition md, CustomAttribute ca)
         {
             MethodDefinition cmd = new MethodDefinition("Call" + md.Name,
-                MethodAttributes.Public | MethodAttributes.HideBySig,
-                Weaver.voidType);
+                    MethodAttributes.Public | MethodAttributes.HideBySig,
+                    Weaver.voidType);
 
             // add parameters
             foreach (ParameterDefinition pd in md.Parameters)
+            {
                 cmd.Parameters.Add(new ParameterDefinition(pd.Name, ParameterAttributes.None, pd.ParameterType));
+            }
 
             // move the old body to the new function
             MethodBody newBody = cmd.Body;
@@ -66,7 +67,10 @@ namespace Mirror.Weaver
 
             string cmdName = md.Name;
             int index = cmdName.IndexOf(CmdPrefix);
-            if (index > -1) cmdName = cmdName.Substring(CmdPrefix.Length);
+            if (index > -1)
+            {
+                cmdName = cmdName.Substring(CmdPrefix.Length);
+            }
 
             // invoke internal send and return
             cmdWorker.Append(cmdWorker.Create(OpCodes.Ldarg_0)); // load 'base.' to call the SendCommand function with
@@ -95,8 +99,7 @@ namespace Mirror.Weaver
                 ((ShipControl)obj).CmdThrust(reader.ReadSingle(), (int)reader.ReadPackedUInt32());
             }
         */
-        public static MethodDefinition ProcessCommandInvoke(TypeDefinition td, MethodDefinition md,
-            MethodDefinition cmdCallFunc)
+        public static MethodDefinition ProcessCommandInvoke(TypeDefinition td, MethodDefinition md, MethodDefinition cmdCallFunc)
         {
             MethodDefinition cmd = new MethodDefinition(CmdPrefix + md.Name,
                 MethodAttributes.Family | MethodAttributes.Static | MethodAttributes.HideBySig,

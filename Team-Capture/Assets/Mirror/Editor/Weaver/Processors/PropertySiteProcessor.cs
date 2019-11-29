@@ -12,32 +12,45 @@ namespace Mirror.Weaver
 
             //Search through the types
             foreach (TypeDefinition td in moduleDef.Types)
+            {
                 if (td.IsClass)
+                {
                     ProcessSiteClass(td);
+                }
+            }
             if (Weaver.WeaveLists.generateContainerClass != null)
             {
                 moduleDef.Types.Add(Weaver.WeaveLists.generateContainerClass);
                 Weaver.CurrentAssembly.MainModule.ImportReference(Weaver.WeaveLists.generateContainerClass);
 
                 foreach (MethodDefinition f in Weaver.WeaveLists.generatedReadFunctions)
+                {
                     Weaver.CurrentAssembly.MainModule.ImportReference(f);
+                }
 
                 foreach (MethodDefinition f in Weaver.WeaveLists.generatedWriteFunctions)
+                {
                     Weaver.CurrentAssembly.MainModule.ImportReference(f);
+                }
             }
-
             Console.WriteLine("  ProcessSitesModule " + moduleDef.Name + " elapsed time:" + (DateTime.Now - startTime));
         }
 
-        private static void ProcessSiteClass(TypeDefinition td)
+        static void ProcessSiteClass(TypeDefinition td)
         {
             //Console.WriteLine("    ProcessSiteClass " + td);
-            foreach (MethodDefinition md in td.Methods) ProcessSiteMethod(td, md);
+            foreach (MethodDefinition md in td.Methods)
+            {
+                ProcessSiteMethod(td, md);
+            }
 
-            foreach (TypeDefinition nested in td.NestedTypes) ProcessSiteClass(nested);
+            foreach (TypeDefinition nested in td.NestedTypes)
+            {
+                ProcessSiteClass(nested);
+            }
         }
 
-        private static void ProcessSiteMethod(TypeDefinition td, MethodDefinition md)
+        static void ProcessSiteMethod(TypeDefinition td, MethodDefinition md)
         {
             // process all references to replaced members with properties
             //Weaver.DLog(td, "      ProcessSiteMethod " + md);
@@ -51,6 +64,7 @@ namespace Mirror.Weaver
             {
                 // TODO move this to NetworkBehaviourProcessor
                 foreach (CustomAttribute attr in md.CustomAttributes)
+                {
                     switch (attr.Constructor.DeclaringType.ToString())
                     {
                         case "Mirror.ServerAttribute":
@@ -66,8 +80,9 @@ namespace Mirror.Weaver
                             InjectClientGuard(td, md, false);
                             break;
                     }
+                }
 
-                for (int iCount = 0; iCount < md.Body.Instructions.Count;)
+                for (int iCount= 0; iCount < md.Body.Instructions.Count;)
                 {
                     Instruction instr = md.Body.Instructions[iCount];
                     iCount += ProcessInstruction(md, instr, iCount);
@@ -75,14 +90,13 @@ namespace Mirror.Weaver
             }
         }
 
-        private static void InjectServerGuard(TypeDefinition td, MethodDefinition md, bool logWarning)
+        static void InjectServerGuard(TypeDefinition td, MethodDefinition md, bool logWarning)
         {
             if (!Weaver.IsNetworkBehaviour(td))
             {
                 Weaver.Error($"[Server] {md} must be declared in a NetworkBehaviour");
                 return;
             }
-
             ILProcessor worker = md.Body.GetILProcessor();
             Instruction top = md.Body.Instructions[0];
 
@@ -90,24 +104,21 @@ namespace Mirror.Weaver
             worker.InsertBefore(top, worker.Create(OpCodes.Brtrue, top));
             if (logWarning)
             {
-                worker.InsertBefore(top,
-                    worker.Create(OpCodes.Ldstr, "[Server] function '" + md.FullName + "' called on client"));
+                worker.InsertBefore(top, worker.Create(OpCodes.Ldstr, "[Server] function '" + md.FullName + "' called on client"));
                 worker.InsertBefore(top, worker.Create(OpCodes.Call, Weaver.logWarningReference));
             }
-
             InjectGuardParameters(md, worker, top);
             InjectGuardReturnValue(md, worker, top);
             worker.InsertBefore(top, worker.Create(OpCodes.Ret));
         }
 
-        private static void InjectClientGuard(TypeDefinition td, MethodDefinition md, bool logWarning)
+        static void InjectClientGuard(TypeDefinition td, MethodDefinition md, bool logWarning)
         {
             if (!Weaver.IsNetworkBehaviour(td))
             {
                 Weaver.Error($"[Client] {md} must be declared in a NetworkBehaviour");
                 return;
             }
-
             ILProcessor worker = md.Body.GetILProcessor();
             Instruction top = md.Body.Instructions[0];
 
@@ -115,8 +126,7 @@ namespace Mirror.Weaver
             worker.InsertBefore(top, worker.Create(OpCodes.Brtrue, top));
             if (logWarning)
             {
-                worker.InsertBefore(top,
-                    worker.Create(OpCodes.Ldstr, "[Client] function '" + md.FullName + "' called on server"));
+                worker.InsertBefore(top, worker.Create(OpCodes.Ldstr, "[Client] function '" + md.FullName + "' called on server"));
                 worker.InsertBefore(top, worker.Create(OpCodes.Call, Weaver.logWarningReference));
             }
 
@@ -126,7 +136,7 @@ namespace Mirror.Weaver
         }
 
         // replaces syncvar write access with the NetworkXYZ.get property calls
-        private static void ProcessInstructionSetterField(MethodDefinition md, Instruction i, FieldDefinition opField)
+        static void ProcessInstructionSetterField(MethodDefinition md, Instruction i, FieldDefinition opField)
         {
             // dont replace property call sites in constructors
             if (md.Name == ".ctor")
@@ -144,7 +154,7 @@ namespace Mirror.Weaver
         }
 
         // replaces syncvar read access with the NetworkXYZ.get property calls
-        private static void ProcessInstructionGetterField(MethodDefinition md, Instruction i, FieldDefinition opField)
+        static void ProcessInstructionGetterField(MethodDefinition md, Instruction i, FieldDefinition opField)
         {
             // dont replace property call sites in constructors
             if (md.Name == ".ctor")
@@ -161,34 +171,49 @@ namespace Mirror.Weaver
             }
         }
 
-        private static int ProcessInstruction(MethodDefinition md, Instruction instr, int iCount)
+        static int ProcessInstruction(MethodDefinition md, Instruction instr, int iCount)
         {
             if (instr.OpCode == OpCodes.Call || instr.OpCode == OpCodes.Callvirt)
+            {
                 if (instr.Operand is MethodReference opMethod)
+                {
                     ProcessInstructionMethod(md, instr, opMethod, iCount);
+                }
+            }
 
             if (instr.OpCode == OpCodes.Stfld)
+            {
                 // this instruction sets the value of a field. cache the field reference.
                 if (instr.Operand is FieldDefinition opField)
+                {
                     ProcessInstructionSetterField(md, instr, opField);
+                }
+            }
 
             if (instr.OpCode == OpCodes.Ldfld)
+            {
                 // this instruction gets the value of a field. cache the field reference.
                 if (instr.Operand is FieldDefinition opField)
+                {
                     ProcessInstructionGetterField(md, instr, opField);
+                }
+            }
 
             if (instr.OpCode == OpCodes.Ldflda)
+            {
                 // loading a field by reference,  watch out for initobj instruction
                 // see https://github.com/vis2k/Mirror/issues/696
 
                 if (instr.Operand is FieldDefinition opField)
+                {
                     return ProcessInstructionLoadAddress(md, instr, opField, iCount);
+                }
+            }
 
             return 1;
         }
 
-        private static int ProcessInstructionLoadAddress(MethodDefinition md, Instruction instr,
-            FieldDefinition opField, int iCount)
+        static int ProcessInstructionLoadAddress(MethodDefinition md, Instruction instr, FieldDefinition opField, int iCount)
         {
             // dont replace property call sites in constructors
             if (md.Name == ".ctor")
@@ -218,14 +243,15 @@ namespace Mirror.Weaver
                     worker.Remove(instr);
                     worker.Remove(nextInstr);
                     return 4;
+
                 }
+
             }
 
             return 1;
         }
 
-        private static void ProcessInstructionMethod(MethodDefinition md, Instruction instr,
-            MethodReference opMethodRef, int iCount)
+        static void ProcessInstructionMethod(MethodDefinition md, Instruction instr, MethodReference opMethodRef, int iCount)
         {
             //DLog(td, "ProcessInstructionMethod " + opMethod.Name);
             if (opMethodRef.Name == "Invoke")
@@ -261,7 +287,7 @@ namespace Mirror.Weaver
 
 
         // this is required to early-out from a function with "ref" or "out" parameters
-        private static void InjectGuardParameters(MethodDefinition md, ILProcessor worker, Instruction top)
+        static void InjectGuardParameters(MethodDefinition md, ILProcessor worker, Instruction top)
         {
             int offset = md.Resolve().IsStatic ? 0 : 1;
             for (int index = 0; index < md.Parameters.Count; index++)
@@ -282,7 +308,7 @@ namespace Mirror.Weaver
                         md.Body.InitLocals = true;
 
                         worker.InsertBefore(top, worker.Create(OpCodes.Ldarg, index + offset));
-                        worker.InsertBefore(top, worker.Create(OpCodes.Ldloca_S, (byte) (md.Body.Variables.Count - 1)));
+                        worker.InsertBefore(top, worker.Create(OpCodes.Ldloca_S, (byte)(md.Body.Variables.Count - 1)));
                         worker.InsertBefore(top, worker.Create(OpCodes.Initobj, elementType));
                         worker.InsertBefore(top, worker.Create(OpCodes.Ldloc, md.Body.Variables.Count - 1));
                         worker.InsertBefore(top, worker.Create(OpCodes.Stobj, elementType));
@@ -292,7 +318,7 @@ namespace Mirror.Weaver
         }
 
         // this is required to early-out from a function with a return value.
-        private static void InjectGuardReturnValue(MethodDefinition md, ILProcessor worker, Instruction top)
+        static void InjectGuardReturnValue(MethodDefinition md, ILProcessor worker, Instruction top)
         {
             if (md.ReturnType.FullName != Weaver.voidType.FullName)
             {
@@ -305,7 +331,7 @@ namespace Mirror.Weaver
                     md.Body.Variables.Add(new VariableDefinition(md.ReturnType));
                     md.Body.InitLocals = true;
 
-                    worker.InsertBefore(top, worker.Create(OpCodes.Ldloca_S, (byte) (md.Body.Variables.Count - 1)));
+                    worker.InsertBefore(top, worker.Create(OpCodes.Ldloca_S, (byte)(md.Body.Variables.Count - 1)));
                     worker.InsertBefore(top, worker.Create(OpCodes.Initobj, md.ReturnType));
                     worker.InsertBefore(top, worker.Create(OpCodes.Ldloc, md.Body.Variables.Count - 1));
                 }

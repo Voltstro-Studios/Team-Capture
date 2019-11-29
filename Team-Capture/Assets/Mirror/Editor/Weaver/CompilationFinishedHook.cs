@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEditor.Compilation;
-using UnityEditorInternal;
 using UnityEngine;
 using UnityAssembly = UnityEditor.Compilation.Assembly;
 
@@ -12,84 +11,83 @@ namespace Mirror.Weaver
 {
     public static class CompilationFinishedHook
     {
-        private const string MirrorRuntimeAssemblyName = "Mirror";
-        private const string MirrorWeaverAssemblyName = "Mirror.Weaver";
+        const string MirrorRuntimeAssemblyName = "Mirror";
+        const string MirrorWeaverAssemblyName = "Mirror.Weaver";
 
         public static Action<string> OnWeaverMessage; // delegate for subscription to Weaver debug messages
         public static Action<string> OnWeaverWarning; // delegate for subscription to Weaver warning messages
         public static Action<string> OnWeaverError; // delete for subscription to Weaver error messages
 
-        public static bool
-            UnityLogEnabled =
-                true; // controls weather Weaver errors are reported direct to the Unity console (tests enable this)
-
-        public static bool
-            WeaverEnabled
-        {
-            get;
-            set;
-        } // controls whether we weave any assemblies when CompilationPipeline delegates are invoked
-
+        public static bool WeaverEnabled { get; set; } // controls whether we weave any assemblies when CompilationPipeline delegates are invoked
+        public static bool UnityLogEnabled = true; // controls weather Weaver errors are reported direct to the Unity console (tests enable this)
         public static bool WeaveFailed { get; private set; } // holds the result status of our latest Weave operation
 
         // debug message handler that also calls OnMessageMethod delegate
-        private static void HandleMessage(string msg)
+        static void HandleMessage(string msg)
         {
             if (UnityLogEnabled) Debug.Log(msg);
             if (OnWeaverMessage != null) OnWeaverMessage.Invoke(msg);
         }
 
         // warning message handler that also calls OnWarningMethod delegate
-        private static void HandleWarning(string msg)
+        static void HandleWarning(string msg)
         {
             if (UnityLogEnabled) Debug.LogWarning(msg);
             if (OnWeaverWarning != null) OnWeaverWarning.Invoke(msg);
         }
 
         // error message handler that also calls OnErrorMethod delegate
-        private static void HandleError(string msg)
+        static void HandleError(string msg)
         {
             if (UnityLogEnabled) Debug.LogError(msg);
             if (OnWeaverError != null) OnWeaverError.Invoke(msg);
         }
 
         [InitializeOnLoadMethod]
-        private static void OnInitializeOnLoad()
+        static void OnInitializeOnLoad()
         {
             CompilationPipeline.assemblyCompilationFinished += OnCompilationFinished;
 
             // We only need to run this once per session
             // after that, all assemblies will be weaved by the event
-            if (!SessionState.GetBool("MIRROR_WEAVED", false))
+            if (!SessionState.GetBool("MIRROR_WEAVED", false) )
             {
                 SessionState.SetBool("MIRROR_WEAVED", true);
                 WeaveExisingAssemblies();
             }
         }
 
-        private static void WeaveExisingAssemblies()
+        static void WeaveExisingAssemblies()
         {
             foreach (UnityAssembly assembly in CompilationPipeline.GetAssemblies())
+            {
                 if (File.Exists(assembly.outputPath))
+                {
                     OnCompilationFinished(assembly.outputPath, new CompilerMessage[0]);
+                }
+            }
 
-            InternalEditorUtility.RequestScriptReload();
+            UnityEditorInternal.InternalEditorUtility.RequestScriptReload();
         }
 
-        private static string FindMirrorRuntime()
+        static string FindMirrorRuntime()
         {
             foreach (UnityAssembly assembly in CompilationPipeline.GetAssemblies())
+            {
                 if (assembly.name == MirrorRuntimeAssemblyName)
+                {
                     return assembly.outputPath;
+                }
+            }
             return "";
         }
 
-        private static bool CompilerMessagesContainError(CompilerMessage[] messages)
+        static bool CompilerMessagesContainError(CompilerMessage[] messages)
         {
             return messages.Any(msg => msg.type == CompilerMessageType.Error);
         }
 
-        private static void OnCompilationFinished(string assemblyPath, CompilerMessage[] messages)
+        static void OnCompilationFinished(string assemblyPath, CompilerMessage[] messages)
         {
             // Do nothing if there were compile errors on the target
             if (CompilerMessagesContainError(messages))
@@ -99,11 +97,17 @@ namespace Mirror.Weaver
             }
 
             // Should not run on the editor only assemblies
-            if (assemblyPath.Contains("-Editor") || assemblyPath.Contains(".Editor")) return;
+            if (assemblyPath.Contains("-Editor") || assemblyPath.Contains(".Editor"))
+            {
+                return;
+            }
 
             // don't weave mirror files
             string assemblyName = Path.GetFileNameWithoutExtension(assemblyPath);
-            if (assemblyName == MirrorRuntimeAssemblyName || assemblyName == MirrorWeaverAssemblyName) return;
+            if (assemblyName == MirrorRuntimeAssemblyName || assemblyName == MirrorWeaverAssemblyName)
+            {
+                return;
+            }
 
             // find Mirror.dll
             string mirrorRuntimeDll = FindMirrorRuntime();
@@ -112,16 +116,17 @@ namespace Mirror.Weaver
                 Debug.LogError("Failed to find Mirror runtime assembly");
                 return;
             }
-
             if (!File.Exists(mirrorRuntimeDll))
+            {
                 // this is normal, it happens with any assembly that is built before mirror
                 // such as unity packages or your own assemblies
                 // those don't need to be weaved
                 // if any assembly depends on mirror, then it will be built after
                 return;
+            }
 
             // find UnityEngine.CoreModule.dll
-            string unityEngineCoreModuleDLL = InternalEditorUtility.GetEngineCoreModuleAssemblyPath();
+            string unityEngineCoreModuleDLL = UnityEditorInternal.InternalEditorUtility.GetEngineCoreModuleAssemblyPath();
             if (string.IsNullOrEmpty(unityEngineCoreModuleDLL))
             {
                 Debug.LogError("Failed to find UnityEngine assembly");
@@ -136,12 +141,13 @@ namespace Mirror.Weaver
                 if (unityAsm.outputPath != assemblyPath) continue;
 
                 foreach (string unityAsmRef in unityAsm.compiledAssemblyReferences)
+                {
                     dependencyPaths.Add(Path.GetDirectoryName(unityAsmRef));
+                }
             }
 
             // passing null in the outputDirectory param will do an in-place update of the assembly
-            if (Program.Process(unityEngineCoreModuleDLL, mirrorRuntimeDll, null, new[] {assemblyPath},
-                dependencyPaths.ToArray(), HandleWarning, HandleError))
+            if (Program.Process(unityEngineCoreModuleDLL, mirrorRuntimeDll, null, new[] { assemblyPath }, dependencyPaths.ToArray(), HandleWarning, HandleError))
             {
                 WeaveFailed = false;
                 //Debug.Log("Weaving succeeded for: " + assemblyPath);

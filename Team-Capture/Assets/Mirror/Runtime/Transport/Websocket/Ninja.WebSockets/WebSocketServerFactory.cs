@@ -34,15 +34,15 @@ using Ninja.WebSockets.Internal;
 namespace Ninja.WebSockets
 {
     /// <summary>
-    ///     Web socket server factory used to open web socket server connections
+    /// Web socket server factory used to open web socket server connections
     /// </summary>
     public class WebSocketServerFactory : IWebSocketServerFactory
     {
-        private readonly Func<MemoryStream> _bufferFactory;
-        private readonly IBufferPool _bufferPool;
+        readonly Func<MemoryStream> _bufferFactory;
+        readonly IBufferPool _bufferPool;
 
         /// <summary>
-        ///     Initialises a new instance of the WebSocketServerFactory class without caring about internal buffers
+        /// Initialises a new instance of the WebSocketServerFactory class without caring about internal buffers
         /// </summary>
         public WebSocketServerFactory()
         {
@@ -51,25 +51,21 @@ namespace Ninja.WebSockets
         }
 
         /// <summary>
-        ///     Initialises a new instance of the WebSocketClientFactory class with control over internal buffer creation
+        /// Initialises a new instance of the WebSocketClientFactory class with control over internal buffer creation
         /// </summary>
-        /// <param name="bufferFactory">
-        ///     Used to get a memory stream. Feel free to implement your own buffer pool. MemoryStreams
-        ///     will be disposed when no longer needed and can be returned to the pool.
-        /// </param>
+        /// <param name="bufferFactory">Used to get a memory stream. Feel free to implement your own buffer pool. MemoryStreams will be disposed when no longer needed and can be returned to the pool.</param>
         public WebSocketServerFactory(Func<MemoryStream> bufferFactory)
         {
             _bufferFactory = bufferFactory;
         }
 
         /// <summary>
-        ///     Reads a http header information from a stream and decodes the parts relating to the WebSocket protocot upgrade
+        /// Reads a http header information from a stream and decodes the parts relating to the WebSocket protocot upgrade
         /// </summary>
         /// <param name="stream">The network stream</param>
         /// <param name="token">The optional cancellation token</param>
         /// <returns>Http data read from the stream</returns>
-        public async Task<WebSocketHttpContext> ReadHttpHeaderFromStreamAsync(TcpClient client, Stream stream,
-            CancellationToken token = default)
+        public async Task<WebSocketHttpContext> ReadHttpHeaderFromStreamAsync(TcpClient client, Stream stream, CancellationToken token = default(CancellationToken))
         {
             string header = await HttpHelper.ReadHttpHeaderAsync(stream, token);
             string path = HttpHelper.GetPathFromHeader(header);
@@ -79,42 +75,39 @@ namespace Ninja.WebSockets
         }
 
         /// <summary>
-        ///     Accept web socket with default options
-        ///     Call ReadHttpHeaderFromStreamAsync first to get WebSocketHttpContext
+        /// Accept web socket with default options
+        /// Call ReadHttpHeaderFromStreamAsync first to get WebSocketHttpContext
         /// </summary>
         /// <param name="context">The http context used to initiate this web socket request</param>
         /// <param name="token">The optional cancellation token</param>
         /// <returns>A connected web socket</returns>
-        public async Task<WebSocket> AcceptWebSocketAsync(WebSocketHttpContext context,
-            CancellationToken token = default)
+        public async Task<WebSocket> AcceptWebSocketAsync(WebSocketHttpContext context, CancellationToken token = default(CancellationToken))
         {
             return await AcceptWebSocketAsync(context, new WebSocketServerOptions(), token);
         }
 
         /// <summary>
-        ///     Accept web socket with options specified
-        ///     Call ReadHttpHeaderFromStreamAsync first to get WebSocketHttpContext
+        /// Accept web socket with options specified
+        /// Call ReadHttpHeaderFromStreamAsync first to get WebSocketHttpContext
         /// </summary>
         /// <param name="context">The http context used to initiate this web socket request</param>
         /// <param name="options">The web socket options</param>
         /// <param name="token">The optional cancellation token</param>
         /// <returns>A connected web socket</returns>
-        public async Task<WebSocket> AcceptWebSocketAsync(WebSocketHttpContext context, WebSocketServerOptions options,
-            CancellationToken token = default)
+        public async Task<WebSocket> AcceptWebSocketAsync(WebSocketHttpContext context, WebSocketServerOptions options, CancellationToken token = default(CancellationToken))
         {
             Guid guid = Guid.NewGuid();
             Events.Log.AcceptWebSocketStarted(guid);
             await PerformHandshakeAsync(guid, context.HttpHeader, options.SubProtocol, context.Stream, token);
             Events.Log.ServerHandshakeSuccess(guid);
             string secWebSocketExtensions = null;
-            return new WebSocketImplementation(guid, _bufferFactory, context.Stream, options.KeepAliveInterval,
-                secWebSocketExtensions, options.IncludeExceptionInCloseResponse, false, options.SubProtocol)
+            return new WebSocketImplementation(guid, _bufferFactory, context.Stream, options.KeepAliveInterval, secWebSocketExtensions, options.IncludeExceptionInCloseResponse, false, options.SubProtocol)
             {
                 Context = context
             };
         }
 
-        private static void CheckWebSocketVersion(string httpHeader)
+        static void CheckWebSocketVersion(string httpHeader)
         {
             Regex webSocketVersionRegex = new Regex("Sec-WebSocket-Version: (.*)", RegexOptions.IgnoreCase);
 
@@ -125,9 +118,9 @@ namespace Ninja.WebSockets
             {
                 int secWebSocketVersion = Convert.ToInt32(match.Groups[1].Value.Trim());
                 if (secWebSocketVersion < WebSocketVersion)
-                    throw new WebSocketVersionNotSupportedException(string.Format(
-                        "WebSocket Version {0} not suported. Must be {1} or above", secWebSocketVersion,
-                        WebSocketVersion));
+                {
+                    throw new WebSocketVersionNotSupportedException(string.Format("WebSocket Version {0} not suported. Must be {1} or above", secWebSocketVersion, WebSocketVersion));
+                }
             }
             else
             {
@@ -135,8 +128,7 @@ namespace Ninja.WebSockets
             }
         }
 
-        private static async Task PerformHandshakeAsync(Guid guid, string httpHeader, string subProtocol, Stream stream,
-            CancellationToken token)
+        static async Task PerformHandshakeAsync(Guid guid, String httpHeader, string subProtocol, Stream stream, CancellationToken token)
         {
             try
             {
@@ -148,11 +140,11 @@ namespace Ninja.WebSockets
                 {
                     string secWebSocketKey = match.Groups[1].Value.Trim();
                     string setWebSocketAccept = HttpHelper.ComputeSocketAcceptString(secWebSocketKey);
-                    string response = "HTTP/1.1 101 Switching Protocols\r\n"
-                                      + "Connection: Upgrade\r\n"
-                                      + "Upgrade: websocket\r\n"
-                                      + (subProtocol != null ? $"Sec-WebSocket-Protocol: {subProtocol}\r\n" : "")
-                                      + $"Sec-WebSocket-Accept: {setWebSocketAccept}";
+                    string response = ("HTTP/1.1 101 Switching Protocols\r\n"
+                                       + "Connection: Upgrade\r\n"
+                                       + "Upgrade: websocket\r\n"
+                                       + (subProtocol != null ? $"Sec-WebSocket-Protocol: {subProtocol}\r\n" : "")
+                                       + $"Sec-WebSocket-Accept: {setWebSocketAccept}");
 
                     Events.Log.SendingHandshakeResponse(guid, response);
                     await HttpHelper.WriteHttpHeaderAsync(response, stream, token);

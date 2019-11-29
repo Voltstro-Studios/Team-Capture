@@ -5,18 +5,14 @@ namespace Mirror
     // https://en.wikipedia.org/wiki/Moving_average#Exponential_moving_average
     public class ExponentialMovingAverage
     {
-        private readonly float alpha;
-        private bool initialized;
+        readonly float alpha;
+        bool initialized;
 
         public ExponentialMovingAverage(int n)
         {
             // standard N-day EMA alpha calculation
             alpha = 2.0f / (n + 1);
         }
-
-        public double Value { get; private set; }
-
-        public double Var { get; private set; }
 
         public void Add(double newValue)
         {
@@ -34,5 +30,9 @@ namespace Mirror
                 initialized = true;
             }
         }
+
+        public double Value { get; private set; }
+
+        public double Var { get; private set; }
     }
 }

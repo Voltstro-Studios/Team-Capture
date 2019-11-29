@@ -30,14 +30,14 @@ namespace Ninja.WebSockets.Internal
 {
     internal class BinaryReaderWriter
     {
-        public static async Task ReadExactly(int length, Stream stream, ArraySegment<byte> buffer,
-            CancellationToken cancellationToken)
+        public static async Task ReadExactly(int length, Stream stream, ArraySegment<byte> buffer, CancellationToken cancellationToken)
         {
             if (buffer.Count < length)
+            {
                 // This will happen if the calling function supplied a buffer that was too small to fit the payload of the websocket frame.
                 // Note that this can happen on the close handshake where the message size can be larger than the regular payload
-                throw new InternalBufferOverflowException(
-                    $"Unable to read {length} bytes into buffer (offset: {buffer.Offset} size: {buffer.Count}). Use a larger read buffer");
+                throw new InternalBufferOverflowException($"Unable to read {length} bytes into buffer (offset: {buffer.Offset} size: {buffer.Count}). Use a larger read buffer");
+            }
 
             int offset = 0;
             while (offset < length)
@@ -46,48 +46,58 @@ namespace Ninja.WebSockets.Internal
 
                 NetworkStream networkStream = stream as NetworkStream;
                 if (networkStream != null && networkStream.DataAvailable)
+                {
                     // paul: if data is available read it immediatelly.
                     // in my tests this performed a lot better,  because ReadAsync always waited until
                     // the next frame.
                     bytesRead = stream.Read(buffer.Array, buffer.Offset + offset, length - offset);
+                }
                 else
-                    bytesRead = await stream.ReadAsync(buffer.Array, buffer.Offset + offset, length - offset,
-                        cancellationToken);
+                {
+                    bytesRead = await stream.ReadAsync(buffer.Array, buffer.Offset + offset, length - offset, cancellationToken);
+                }
 
                 if (bytesRead == 0)
-                    throw new EndOfStreamException(string.Format(
-                        "Unexpected end of stream encountered whilst attempting to read {0:#,##0} bytes", length));
+                {
+                    throw new EndOfStreamException(string.Format("Unexpected end of stream encountered whilst attempting to read {0:#,##0} bytes", length));
+                }
 
                 offset += bytesRead;
             }
         }
 
-        public static async Task<ushort> ReadUShortExactly(Stream stream, bool isLittleEndian,
-            ArraySegment<byte> buffer, CancellationToken cancellationToken)
+        public static async Task<ushort> ReadUShortExactly(Stream stream, bool isLittleEndian, ArraySegment<byte> buffer, CancellationToken cancellationToken)
         {
             await ReadExactly(2, stream, buffer, cancellationToken);
 
-            if (!isLittleEndian) Array.Reverse(buffer.Array, buffer.Offset, 2); // big endian
+            if (!isLittleEndian)
+            {
+                Array.Reverse(buffer.Array, buffer.Offset, 2); // big endian
+            }
 
             return BitConverter.ToUInt16(buffer.Array, buffer.Offset);
         }
 
-        public static async Task<ulong> ReadULongExactly(Stream stream, bool isLittleEndian, ArraySegment<byte> buffer,
-            CancellationToken cancellationToken)
+        public static async Task<ulong> ReadULongExactly(Stream stream, bool isLittleEndian, ArraySegment<byte> buffer, CancellationToken cancellationToken)
         {
             await ReadExactly(8, stream, buffer, cancellationToken);
 
-            if (!isLittleEndian) Array.Reverse(buffer.Array, buffer.Offset, 8); // big endian
+            if (!isLittleEndian)
+            {
+                Array.Reverse(buffer.Array, buffer.Offset, 8); // big endian
+            }
 
             return BitConverter.ToUInt64(buffer.Array, buffer.Offset);
         }
 
-        public static async Task<long> ReadLongExactly(Stream stream, bool isLittleEndian, ArraySegment<byte> buffer,
-            CancellationToken cancellationToken)
+        public static async Task<long> ReadLongExactly(Stream stream, bool isLittleEndian, ArraySegment<byte> buffer, CancellationToken cancellationToken)
         {
             await ReadExactly(8, stream, buffer, cancellationToken);
 
-            if (!isLittleEndian) Array.Reverse(buffer.Array, buffer.Offset, 8); // big endian
+            if (!isLittleEndian)
+            {
+                Array.Reverse(buffer.Array, buffer.Offset, 8); // big endian
+            }
 
             return BitConverter.ToInt64(buffer.Array, buffer.Offset);
         }
@@ -95,7 +105,10 @@ namespace Ninja.WebSockets.Internal
         public static void WriteInt(int value, Stream stream, bool isLittleEndian)
         {
             byte[] buffer = BitConverter.GetBytes(value);
-            if (BitConverter.IsLittleEndian && !isLittleEndian) Array.Reverse(buffer);
+            if (BitConverter.IsLittleEndian && !isLittleEndian)
+            {
+                Array.Reverse(buffer);
+            }
 
             stream.Write(buffer, 0, buffer.Length);
         }
@@ -103,7 +116,10 @@ namespace Ninja.WebSockets.Internal
         public static void WriteULong(ulong value, Stream stream, bool isLittleEndian)
         {
             byte[] buffer = BitConverter.GetBytes(value);
-            if (BitConverter.IsLittleEndian && !isLittleEndian) Array.Reverse(buffer);
+            if (BitConverter.IsLittleEndian && ! isLittleEndian)
+            {
+                Array.Reverse(buffer);
+            }
 
             stream.Write(buffer, 0, buffer.Length);
         }
@@ -111,7 +127,10 @@ namespace Ninja.WebSockets.Internal
         public static void WriteLong(long value, Stream stream, bool isLittleEndian)
         {
             byte[] buffer = BitConverter.GetBytes(value);
-            if (BitConverter.IsLittleEndian && !isLittleEndian) Array.Reverse(buffer);
+            if (BitConverter.IsLittleEndian && !isLittleEndian)
+            {
+                Array.Reverse(buffer);
+            }
 
             stream.Write(buffer, 0, buffer.Length);
         }
@@ -119,7 +138,10 @@ namespace Ninja.WebSockets.Internal
         public static void WriteUShort(ushort value, Stream stream, bool isLittleEndian)
         {
             byte[] buffer = BitConverter.GetBytes(value);
-            if (BitConverter.IsLittleEndian && !isLittleEndian) Array.Reverse(buffer);
+            if (BitConverter.IsLittleEndian && !isLittleEndian)
+            {
+                Array.Reverse(buffer);
+            }
 
             stream.Write(buffer, 0, buffer.Length);
         }

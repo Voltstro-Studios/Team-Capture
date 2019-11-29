@@ -1,13 +1,13 @@
 // this class generates OnSerialize/OnDeserialize for SyncLists
-
 using Mono.CecilX;
+using Mono.CecilX.Cil;
 
 namespace Mirror.Weaver
 {
-    internal static class SyncDictionaryProcessor
+    static class SyncDictionaryProcessor
     {
         /// <summary>
-        ///     Generates serialization methods for synclists
+        /// Generates serialization methods for synclists
         /// </summary>
         /// <param name="td">The synclist class</param>
         public static void Process(TypeDefinition td)
