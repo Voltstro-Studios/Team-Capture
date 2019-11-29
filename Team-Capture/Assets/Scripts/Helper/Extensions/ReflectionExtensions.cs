@@ -13,7 +13,7 @@ namespace Helper.Extensions
         {
             return (T) field.GetValue(instance);
         }
-        
+
         public static T GetStaticValue<T>(this PropertyInfo property)
         {
             return (T) property.GetValue(null);

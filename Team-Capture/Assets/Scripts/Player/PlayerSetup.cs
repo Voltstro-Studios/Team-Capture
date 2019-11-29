@@ -1,52 +1,54 @@
-﻿using UnityEngine;
-using Mirror;
+﻿using Mirror;
+using UnityEngine;
 
 namespace Player
 {
-	public class PlayerSetup : NetworkBehaviour
-	{
-		[Header("Components to Destroy")]
-		[SerializeField] private CapsuleCollider localCapsuleCollider;
+    public class PlayerSetup : NetworkBehaviour
+    {
+        [SerializeField] private AudioListener localAudioListener;
+        [SerializeField] private Camera localCamera;
 
-		[Header("Components to Enable")]
-		[SerializeField] private CharacterController localCharacterController;
-		[SerializeField] private PlayerMovement localPlayerMovement;
-		[SerializeField] private Camera localCamera;
-		[SerializeField] private AudioListener localAudioListener;
-		[SerializeField] private PlayerInput localPlayerInput;
+        [Header("Components to Destroy")] [SerializeField]
+        private CapsuleCollider localCapsuleCollider;
 
-		public override void OnStartLocalPlayer()
-		{
-			base.OnStartLocalPlayer();
+        [Header("Components to Enable")] [SerializeField]
+        private CharacterController localCharacterController;
 
-			Destroy(localCapsuleCollider);
+        [SerializeField] private PlayerInput localPlayerInput;
+        [SerializeField] private PlayerMovement localPlayerMovement;
 
-			localCharacterController.enabled = true;
-			localPlayerMovement.enabled = true;
+        public override void OnStartLocalPlayer()
+        {
+            base.OnStartLocalPlayer();
 
-			GameManager.Instance.sceneCamera.SetActive(false);
+            Destroy(localCapsuleCollider);
 
-			localCamera.enabled = true;
-			localAudioListener.enabled = true;
-			localPlayerInput.enabled = true;
+            localCharacterController.enabled = true;
+            localPlayerMovement.enabled = true;
 
-			Cursor.visible = false;
-			Cursor.lockState = CursorLockMode.Locked;
-		}
+            GameManager.Instance.sceneCamera.SetActive(false);
 
-		public override void OnStartClient()
-		{
-			base.OnStartClient();
+            localCamera.enabled = true;
+            localAudioListener.enabled = true;
+            localPlayerInput.enabled = true;
 
-			GameManager.AddPlayer(GetComponent<NetworkIdentity>().netId.ToString(), GetComponent<PlayerManager>());
-		}
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+        }
 
-		private void OnDisable()
-		{
-			GameManager.RemovePlayer(transform.name);
+        public override void OnStartClient()
+        {
+            base.OnStartClient();
 
-			Cursor.visible = true;
-			Cursor.lockState = CursorLockMode.None;
-		}
-	}
+            GameManager.AddPlayer(GetComponent<NetworkIdentity>().netId.ToString(), GetComponent<PlayerManager>());
+        }
+
+        private void OnDisable()
+        {
+            GameManager.RemovePlayer(transform.name);
+
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+        }
+    }
 }

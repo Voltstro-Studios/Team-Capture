@@ -5,8 +5,8 @@ using Mirror;
 
 public class TCNetworkManager : NetworkManager
 {
-	[Header("Team Capture")]
-	[SerializeField] private GameObject gameMangerPrefab;
+    [Header("Team Capture")] [SerializeField]
+    private GameObject gameMangerPrefab;
 
 	public override void OnStartServer()
 	{
@@ -20,6 +20,6 @@ public class TCNetworkManager : NetworkManager
 		Instantiate(gameMangerPrefab);
 		Global.Logger.Log("Created game manager object.", LogVerbosity.DEBUG);
 
-		base.OnClientSceneChanged(conn);
-	}
+        base.OnClientSceneChanged(conn);
+    }
 }

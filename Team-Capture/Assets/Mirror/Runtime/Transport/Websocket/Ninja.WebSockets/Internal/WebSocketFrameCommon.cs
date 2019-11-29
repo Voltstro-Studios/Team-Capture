@@ -29,18 +29,15 @@ namespace Ninja.WebSockets.Internal
         public const int MaskKeyLength = 4;
 
         /// <summary>
-        /// Mutate payload with the mask key
-        /// This is a reversible process
-        /// If you apply this to masked data it will be unmasked and visa versa
+        ///     Mutate payload with the mask key
+        ///     This is a reversible process
+        ///     If you apply this to masked data it will be unmasked and visa versa
         /// </summary>
         /// <param name="maskKey">The 4 byte mask key</param>
         /// <param name="payload">The payload to mutate</param>
         public static void ToggleMask(ArraySegment<byte> maskKey, ArraySegment<byte> payload)
         {
-            if (maskKey.Count != MaskKeyLength)
-            {
-                throw new Exception($"MaskKey key must be {MaskKeyLength} bytes");
-            }
+            if (maskKey.Count != MaskKeyLength) throw new Exception($"MaskKey key must be {MaskKeyLength} bytes");
 
             byte[] buffer = payload.Array;
             byte[] maskKeyArray = maskKey.Array;
@@ -54,8 +51,8 @@ namespace Ninja.WebSockets.Internal
             for (int i = payloadOffset; i < payloadCount; i++)
             {
                 int payloadIndex = i - payloadOffset; // index should start at zero
-                int maskKeyIndex = maskKeyOffset + (payloadIndex % MaskKeyLength);
-                buffer[i] = (Byte)(buffer[i] ^ maskKeyArray[maskKeyIndex]);
+                int maskKeyIndex = maskKeyOffset + payloadIndex % MaskKeyLength;
+                buffer[i] = (byte) (buffer[i] ^ maskKeyArray[maskKeyIndex]);
             }
         }
     }

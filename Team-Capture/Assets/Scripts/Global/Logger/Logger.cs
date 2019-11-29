@@ -10,13 +10,11 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
-using Helper.Extensions;
 using JetBrains.Annotations;
 using Settings;
 using UnityEngine;
 using static Global.LogVerbosity;
 using static Global.StackTraceFlags;
-using DateTime = System.DateTime;
 using Debug = UnityEngine.Debug;
 using ThreadPriority = System.Threading.ThreadPriority;
 
@@ -31,7 +29,7 @@ namespace Global
         private const StackTraceFlags FileInfo = StackTraceFlags.FileInfo;
 
         /// <summary>
-        /// How many stack frames we skip (so we don't include our of logging functions)
+        ///     How many stack frames we skip (so we don't include our of logging functions)
         /// </summary>
         private const int StackFramesToSkip = 2;
 
@@ -94,12 +92,12 @@ namespace Global
         public static bool SendToUnityDebug { get; set; } = true;
 
         /// <summary>
-        /// Should Unity Debug messages be intercepted and added to our log?
+        ///     Should Unity Debug messages be intercepted and added to our log?
         /// </summary>
         public static bool InterceptUnityDebug { get; set; }
 
         /// <summary>
-        /// How verbose should our log messages be
+        ///     How verbose should our log messages be
         /// </summary>
         public static LogVerbosity Verbosity { get; set; } = VERBOSE;
 
@@ -120,7 +118,6 @@ namespace Global
                 //A list of the exceptions that happened when trying to create the log file
                 List<IOException> exceptions = new List<IOException>(); //TODO: Make these get logged once initiialized
                 while (true)
-                {
                     //Success won't be set to true until we manage to create a file (if an exception is thrown, we'll never get to that stage_
                     try
                     {
@@ -137,7 +134,6 @@ namespace Global
                         //Include the exception name and the attempt in the filename
                         filename = $"Latest_Error_Sharing_Violation_{attempt}{Logging.LogFileExtension}";
                     }
-                }
 
                 logStream.AutoFlush = true;
             }
@@ -394,7 +390,7 @@ Process priority:       {process.PriorityClass}");
                         MethodBase method = frame.GetMethod();
 
                         //If the method belongs to a Unity function but we aren't including them, log a message and skip the rest of the trace
-                        if ((method.DeclaringType != null) && (method.DeclaringType.Namespace != null) &&
+                        if (method.DeclaringType != null && method.DeclaringType.Namespace != null &&
                             !HasStackFlag(IncludeUnity) && method.DeclaringType.Namespace.StartsWith("Unity"))
                         {
                             stackTraceBuilder.AppendFormat(

@@ -50,6 +50,7 @@ public static class NetworkStreamExtensions
             // otherwise add to bytes read
             bytesRead += result;
         }
+
         return true;
     }
 }

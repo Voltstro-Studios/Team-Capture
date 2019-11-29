@@ -30,55 +30,57 @@ using Ninja.WebSockets.Internal;
 namespace Ninja.WebSockets
 {
     /// <summary>
-    /// Ping Pong Manager used to facilitate ping pong WebSocket messages
+    ///     Ping Pong Manager used to facilitate ping pong WebSocket messages
     /// </summary>
     public class PingPongManager : IPingPongManager
     {
-        readonly WebSocketImplementation _webSocket;
-        readonly Guid _guid;
-        readonly TimeSpan _keepAliveInterval;
-        readonly Task _pingTask;
-        readonly CancellationToken _cancellationToken;
-        Stopwatch _stopwatch;
-        long _pingSentTicks;
+        private readonly CancellationToken _cancellationToken;
+        private readonly Guid _guid;
+        private readonly TimeSpan _keepAliveInterval;
+        private readonly Task _pingTask;
+        private readonly WebSocketImplementation _webSocket;
+        private long _pingSentTicks;
+        private readonly Stopwatch _stopwatch;
 
         /// <summary>
-        /// Raised when a Pong frame is received
-        /// </summary>
-        public event EventHandler<PongEventArgs> Pong;
-
-        /// <summary>
-        /// Initialises a new instance of the PingPongManager to facilitate ping pong WebSocket messages.
-        /// If you are manually creating an instance of this class then it is advisable to set keepAliveInterval to
-        /// TimeSpan.Zero when you create the WebSocket instance (using a factory) otherwise you may be automatically
-        /// be sending duplicate Ping messages (see keepAliveInterval below)
+        ///     Initialises a new instance of the PingPongManager to facilitate ping pong WebSocket messages.
+        ///     If you are manually creating an instance of this class then it is advisable to set keepAliveInterval to
+        ///     TimeSpan.Zero when you create the WebSocket instance (using a factory) otherwise you may be automatically
+        ///     be sending duplicate Ping messages (see keepAliveInterval below)
         /// </summary>
         /// <param name="webSocket">The web socket used to listen to ping messages and send pong messages</param>
-        /// <param name="keepAliveInterval">The time between automatically sending ping messages.
-        /// Set this to TimeSpan.Zero if you with to manually control sending ping messages.
+        /// <param name="keepAliveInterval">
+        ///     The time between automatically sending ping messages.
+        ///     Set this to TimeSpan.Zero if you with to manually control sending ping messages.
         /// </param>
-        /// <param name="cancellationToken">The token used to cancel a pending ping send AND the automatic sending of ping messages
-        /// if keepAliveInterval is positive</param>
-        public PingPongManager(Guid guid, WebSocket webSocket, TimeSpan keepAliveInterval, CancellationToken cancellationToken)
+        /// <param name="cancellationToken">
+        ///     The token used to cancel a pending ping send AND the automatic sending of ping messages
+        ///     if keepAliveInterval is positive
+        /// </param>
+        public PingPongManager(Guid guid, WebSocket webSocket, TimeSpan keepAliveInterval,
+            CancellationToken cancellationToken)
         {
             WebSocketImplementation webSocketImpl = webSocket as WebSocketImplementation;
             _webSocket = webSocketImpl;
             if (_webSocket == null)
-                throw new InvalidCastException("Cannot cast WebSocket to an instance of WebSocketImplementation. Please use the web socket factories to create a web socket");
+                throw new InvalidCastException(
+                    "Cannot cast WebSocket to an instance of WebSocketImplementation. Please use the web socket factories to create a web socket");
             _guid = guid;
             _keepAliveInterval = keepAliveInterval;
             _cancellationToken = cancellationToken;
             webSocketImpl.Pong += WebSocketImpl_Pong;
             _stopwatch = Stopwatch.StartNew();
 
-            if (keepAliveInterval != TimeSpan.Zero)
-            {
-                Task.Run(PingForever, cancellationToken);
-            }
+            if (keepAliveInterval != TimeSpan.Zero) Task.Run(PingForever, cancellationToken);
         }
 
         /// <summary>
-        /// Sends a ping frame
+        ///     Raised when a Pong frame is received
+        /// </summary>
+        public event EventHandler<PongEventArgs> Pong;
+
+        /// <summary>
+        ///     Sends a ping frame
         /// </summary>
         /// <param name="payload">The payload (must be 125 bytes of less)</param>
         /// <param name="cancellation">The cancellation token</param>
@@ -92,9 +94,9 @@ namespace Ninja.WebSockets
             Pong?.Invoke(this, e);
         }
 
-        async Task PingForever()
+        private async Task PingForever()
         {
-            Events.Log.PingPongManagerStarted(_guid, (int)_keepAliveInterval.TotalSeconds);
+            Events.Log.PingPongManagerStarted(_guid, (int) _keepAliveInterval.TotalSeconds);
 
             try
             {
@@ -102,15 +104,14 @@ namespace Ninja.WebSockets
                 {
                     await Task.Delay(_keepAliveInterval, _cancellationToken);
 
-                    if (_webSocket.State != WebSocketState.Open)
-                    {
-                        break;
-                    }
+                    if (_webSocket.State != WebSocketState.Open) break;
 
                     if (_pingSentTicks != 0)
                     {
-                        Events.Log.KeepAliveIntervalExpired(_guid, (int)_keepAliveInterval.TotalSeconds);
-                        await _webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, $"No Pong message received in response to a Ping after KeepAliveInterval {_keepAliveInterval}", _cancellationToken);
+                        Events.Log.KeepAliveIntervalExpired(_guid, (int) _keepAliveInterval.TotalSeconds);
+                        await _webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure,
+                            $"No Pong message received in response to a Ping after KeepAliveInterval {_keepAliveInterval}",
+                            _cancellationToken);
                         break;
                     }
 
@@ -130,7 +131,7 @@ namespace Ninja.WebSockets
             Events.Log.PingPongManagerEnded(_guid);
         }
 
-        void WebSocketImpl_Pong(object sender, PongEventArgs e)
+        private void WebSocketImpl_Pong(object sender, PongEventArgs e)
         {
             _pingSentTicks = 0;
             OnPong(e);

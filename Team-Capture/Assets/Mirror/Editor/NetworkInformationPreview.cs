@@ -6,65 +6,14 @@ using UnityObject = UnityEngine.Object;
 namespace Mirror
 {
     [CustomPreview(typeof(GameObject))]
-    class NetworkInformationPreview : ObjectPreview
+    internal class NetworkInformationPreview : ObjectPreview
     {
-        class NetworkIdentityInfo
-        {
-            public GUIContent name;
-            public GUIContent value;
-        }
+        private List<NetworkBehaviourInfo> behavioursInfo;
+        private NetworkIdentity identity;
 
-        class NetworkBehaviourInfo
-        {
-            // This is here just so we can check if it's enabled/disabled
-            public NetworkBehaviour behaviour;
-            public GUIContent name;
-        }
-
-        class Styles
-        {
-            public GUIStyle labelStyle = new GUIStyle(EditorStyles.label);
-            public GUIStyle componentName = new GUIStyle(EditorStyles.boldLabel);
-            public GUIStyle disabledName = new GUIStyle(EditorStyles.miniLabel);
-
-            public Styles()
-            {
-                Color fontColor = new Color(0.7f, 0.7f, 0.7f);
-                labelStyle.padding.right += 20;
-                labelStyle.normal.textColor    = fontColor;
-                labelStyle.active.textColor    = fontColor;
-                labelStyle.focused.textColor   = fontColor;
-                labelStyle.hover.textColor     = fontColor;
-                labelStyle.onNormal.textColor  = fontColor;
-                labelStyle.onActive.textColor  = fontColor;
-                labelStyle.onFocused.textColor = fontColor;
-                labelStyle.onHover.textColor   = fontColor;
-
-                componentName.normal.textColor = fontColor;
-                componentName.active.textColor = fontColor;
-                componentName.focused.textColor = fontColor;
-                componentName.hover.textColor = fontColor;
-                componentName.onNormal.textColor = fontColor;
-                componentName.onActive.textColor = fontColor;
-                componentName.onFocused.textColor = fontColor;
-                componentName.onHover.textColor = fontColor;
-
-                disabledName.normal.textColor = fontColor;
-                disabledName.active.textColor = fontColor;
-                disabledName.focused.textColor = fontColor;
-                disabledName.hover.textColor = fontColor;
-                disabledName.onNormal.textColor = fontColor;
-                disabledName.onActive.textColor = fontColor;
-                disabledName.onFocused.textColor = fontColor;
-                disabledName.onHover.textColor = fontColor;
-            }
-        }
-
-        List<NetworkIdentityInfo> info;
-        List<NetworkBehaviourInfo> behavioursInfo;
-        NetworkIdentity identity;
-        GUIContent title;
-        Styles styles = new Styles();
+        private List<NetworkIdentityInfo> info;
+        private Styles styles = new Styles();
+        private GUIContent title;
 
         public override void Initialize(UnityObject[] targets)
         {
@@ -74,10 +23,7 @@ namespace Mirror
 
         public override GUIContent GetPreviewTitle()
         {
-            if (title == null)
-            {
-                title = new GUIContent("Network Information");
-            }
+            if (title == null) title = new GUIContent("Network Information");
             return title;
         }
 
@@ -130,7 +76,8 @@ namespace Mirror
             if (behavioursInfo != null && behavioursInfo.Count > 0)
             {
                 Vector2 maxBehaviourLabelSize = GetMaxBehaviourLabelSize();
-                Rect behaviourRect = new Rect(initialX, labelRect.y + 10, maxBehaviourLabelSize.x, maxBehaviourLabelSize.y);
+                Rect behaviourRect = new Rect(initialX, labelRect.y + 10, maxBehaviourLabelSize.x,
+                    maxBehaviourLabelSize.y);
 
                 GUI.Label(behaviourRect, new GUIContent("Network Behaviours"), styles.labelStyle);
                 behaviourRect.x += 20; // indent names
@@ -139,12 +86,11 @@ namespace Mirror
                 foreach (NetworkBehaviourInfo info in behavioursInfo)
                 {
                     if (info.behaviour == null)
-                    {
                         // could be the case in the editor after existing play mode.
                         continue;
-                    }
 
-                    GUI.Label(behaviourRect, info.name, info.behaviour.enabled ? styles.componentName : styles.disabledName);
+                    GUI.Label(behaviourRect, info.name,
+                        info.behaviour.enabled ? styles.componentName : styles.disabledName);
                     behaviourRect.y += behaviourRect.height;
                     lastY = behaviourRect.y;
                 }
@@ -168,49 +114,40 @@ namespace Mirror
                 if (identity.connectionToClient != null)
                 {
                     Rect ownerRect = new Rect(initialX, lastY + 10, 400, 20);
-                    GUI.Label(ownerRect, new GUIContent("Client Authority: " + identity.connectionToClient), styles.labelStyle);
+                    GUI.Label(ownerRect, new GUIContent("Client Authority: " + identity.connectionToClient),
+                        styles.labelStyle);
                 }
             }
         }
 
         // Get the maximum size used by the value of information items
-        Vector2 GetMaxNameLabelSize()
+        private Vector2 GetMaxNameLabelSize()
         {
             Vector2 maxLabelSize = Vector2.zero;
             foreach (NetworkIdentityInfo info in info)
             {
                 Vector2 labelSize = styles.labelStyle.CalcSize(info.value);
-                if (maxLabelSize.x < labelSize.x)
-                {
-                    maxLabelSize.x = labelSize.x;
-                }
-                if (maxLabelSize.y < labelSize.y)
-                {
-                    maxLabelSize.y = labelSize.y;
-                }
+                if (maxLabelSize.x < labelSize.x) maxLabelSize.x = labelSize.x;
+                if (maxLabelSize.y < labelSize.y) maxLabelSize.y = labelSize.y;
             }
+
             return maxLabelSize;
         }
 
-        Vector2 GetMaxBehaviourLabelSize()
+        private Vector2 GetMaxBehaviourLabelSize()
         {
             Vector2 maxLabelSize = Vector2.zero;
             foreach (NetworkBehaviourInfo behaviour in behavioursInfo)
             {
                 Vector2 labelSize = styles.labelStyle.CalcSize(behaviour.name);
-                if (maxLabelSize.x < labelSize.x)
-                {
-                    maxLabelSize.x = labelSize.x;
-                }
-                if (maxLabelSize.y < labelSize.y)
-                {
-                    maxLabelSize.y = labelSize.y;
-                }
+                if (maxLabelSize.x < labelSize.x) maxLabelSize.x = labelSize.x;
+                if (maxLabelSize.y < labelSize.y) maxLabelSize.y = labelSize.y;
             }
+
             return maxLabelSize;
         }
 
-        void GetNetworkInformation(GameObject gameObject)
+        private void GetNetworkInformation(GameObject gameObject)
         {
             identity = gameObject.GetComponent<NetworkIdentity>();
             if (identity != null)
@@ -221,10 +158,7 @@ namespace Mirror
                     GetString("Scene ID", identity.sceneId.ToString("X"))
                 };
 
-                if (!Application.isPlaying)
-                {
-                    return;
-                }
+                if (!Application.isPlaying) return;
 
                 info.Add(GetString("Network ID", identity.netId.ToString()));
 
@@ -250,17 +184,14 @@ namespace Mirror
             }
         }
 
-        NetworkIdentityInfo GetAssetId()
+        private NetworkIdentityInfo GetAssetId()
         {
             string assetId = identity.assetId.ToString();
-            if (string.IsNullOrEmpty(assetId))
-            {
-                assetId = "<object has no prefab>";
-            }
+            if (string.IsNullOrEmpty(assetId)) assetId = "<object has no prefab>";
             return GetString("Asset ID", assetId);
         }
 
-        static NetworkIdentityInfo GetString(string name, string value)
+        private static NetworkIdentityInfo GetString(string name, string value)
         {
             NetworkIdentityInfo info = new NetworkIdentityInfo
             {
@@ -270,14 +201,66 @@ namespace Mirror
             return info;
         }
 
-        static NetworkIdentityInfo GetBoolean(string name, bool value)
+        private static NetworkIdentityInfo GetBoolean(string name, bool value)
         {
             NetworkIdentityInfo info = new NetworkIdentityInfo
             {
                 name = new GUIContent(name),
-                value = new GUIContent((value ? "Yes" : "No"))
+                value = new GUIContent(value ? "Yes" : "No")
             };
             return info;
+        }
+
+        private class NetworkIdentityInfo
+        {
+            public GUIContent name;
+            public GUIContent value;
+        }
+
+        private class NetworkBehaviourInfo
+        {
+            // This is here just so we can check if it's enabled/disabled
+            public NetworkBehaviour behaviour;
+            public GUIContent name;
+        }
+
+        private class Styles
+        {
+            public readonly GUIStyle componentName = new GUIStyle(EditorStyles.boldLabel);
+            public readonly GUIStyle disabledName = new GUIStyle(EditorStyles.miniLabel);
+            public readonly GUIStyle labelStyle = new GUIStyle(EditorStyles.label);
+
+            public Styles()
+            {
+                Color fontColor = new Color(0.7f, 0.7f, 0.7f);
+                labelStyle.padding.right += 20;
+                labelStyle.normal.textColor = fontColor;
+                labelStyle.active.textColor = fontColor;
+                labelStyle.focused.textColor = fontColor;
+                labelStyle.hover.textColor = fontColor;
+                labelStyle.onNormal.textColor = fontColor;
+                labelStyle.onActive.textColor = fontColor;
+                labelStyle.onFocused.textColor = fontColor;
+                labelStyle.onHover.textColor = fontColor;
+
+                componentName.normal.textColor = fontColor;
+                componentName.active.textColor = fontColor;
+                componentName.focused.textColor = fontColor;
+                componentName.hover.textColor = fontColor;
+                componentName.onNormal.textColor = fontColor;
+                componentName.onActive.textColor = fontColor;
+                componentName.onFocused.textColor = fontColor;
+                componentName.onHover.textColor = fontColor;
+
+                disabledName.normal.textColor = fontColor;
+                disabledName.active.textColor = fontColor;
+                disabledName.focused.textColor = fontColor;
+                disabledName.hover.textColor = fontColor;
+                disabledName.onNormal.textColor = fontColor;
+                disabledName.onActive.textColor = fontColor;
+                disabledName.onFocused.textColor = fontColor;
+                disabledName.onHover.textColor = fontColor;
+            }
         }
     }
 }

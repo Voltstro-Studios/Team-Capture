@@ -2,9 +2,8 @@
 
 namespace SceneManagement
 {
-	[Serializable]
-	public class GamemodeSettings
-	{
-		
-	}
+    [Serializable]
+    public class GamemodeSettings
+    {
+    }
 }

@@ -1,4 +1,5 @@
 // all the [SyncVar] code from NetworkBehaviourProcessor in one place
+
 using System.Collections.Generic;
 using Mono.CecilX;
 using Mono.CecilX.Cil;
@@ -7,57 +8,58 @@ namespace Mirror.Weaver
 {
     public static class SyncVarProcessor
     {
-        const int SyncVarLimit = 64; // ulong = 64 bytes
+        private const int SyncVarLimit = 64; // ulong = 64 bytes
 
         // returns false for error, not for no-hook-exists
-        public static bool CheckForHookFunction(TypeDefinition td, FieldDefinition syncVar, out MethodDefinition foundMethod)
+        public static bool CheckForHookFunction(TypeDefinition td, FieldDefinition syncVar,
+            out MethodDefinition foundMethod)
         {
             foundMethod = null;
             foreach (CustomAttribute ca in syncVar.CustomAttributes)
-            {
                 if (ca.AttributeType.FullName == Weaver.SyncVarType.FullName)
-                {
                     foreach (CustomAttributeNamedArgument customField in ca.Fields)
-                    {
                         if (customField.Name == "hook")
                         {
                             string hookFunctionName = customField.Argument.Value as string;
 
                             foreach (MethodDefinition m in td.Methods)
-                            {
                                 if (m.Name == hookFunctionName)
                                 {
                                     if (m.Parameters.Count == 1)
                                     {
                                         if (m.Parameters[0].ParameterType != syncVar.FieldType)
                                         {
-                                            Weaver.Error($"{m} should have signature:\npublic void {hookFunctionName}({syncVar.FieldType} value) {{ }}");
+                                            Weaver.Error(
+                                                $"{m} should have signature:\npublic void {hookFunctionName}({syncVar.FieldType} value) {{ }}");
                                             return false;
                                         }
+
                                         foundMethod = m;
                                         return true;
                                     }
-                                    Weaver.Error($"{m} should have signature:\npublic void {hookFunctionName}({syncVar.FieldType} value) {{ }}");
+
+                                    Weaver.Error(
+                                        $"{m} should have signature:\npublic void {hookFunctionName}({syncVar.FieldType} value) {{ }}");
                                     return false;
                                 }
-                            }
-                            Weaver.Error($"No hook implementation found for {syncVar}. Add this method to your class:\npublic void {hookFunctionName}({syncVar.FieldType} value) {{ }}" );
+
+                            Weaver.Error(
+                                $"No hook implementation found for {syncVar}. Add this method to your class:\npublic void {hookFunctionName}({syncVar.FieldType} value) {{ }}");
                             return false;
                         }
-                    }
-                }
-            }
+
             return true;
         }
 
-        public static MethodDefinition ProcessSyncVarGet(FieldDefinition fd, string originalName, FieldDefinition netFieldId)
+        public static MethodDefinition ProcessSyncVarGet(FieldDefinition fd, string originalName,
+            FieldDefinition netFieldId)
         {
             //Create the get method
             MethodDefinition get = new MethodDefinition(
-                    "get_Network" + originalName, MethodAttributes.Public |
-                    MethodAttributes.SpecialName |
-                    MethodAttributes.HideBySig,
-                    fd.FieldType);
+                "get_Network" + originalName, MethodAttributes.Public |
+                                              MethodAttributes.SpecialName |
+                                              MethodAttributes.HideBySig,
+                fd.FieldType);
 
             ILProcessor getWorker = get.Body.GetILProcessor();
 
@@ -100,13 +102,14 @@ namespace Mirror.Weaver
             return get;
         }
 
-        public static MethodDefinition ProcessSyncVarSet(TypeDefinition td, FieldDefinition fd, string originalName, long dirtyBit, FieldDefinition netFieldId)
+        public static MethodDefinition ProcessSyncVarSet(TypeDefinition td, FieldDefinition fd, string originalName,
+            long dirtyBit, FieldDefinition netFieldId)
         {
             //Create the set method
             MethodDefinition set = new MethodDefinition("set_Network" + originalName, MethodAttributes.Public |
-                    MethodAttributes.SpecialName |
-                    MethodAttributes.HideBySig,
-                    Weaver.voidType);
+                                                                                      MethodAttributes.SpecialName |
+                                                                                      MethodAttributes.HideBySig,
+                Weaver.voidType);
 
             ILProcessor setWorker = set.Body.GetILProcessor();
 
@@ -231,7 +234,8 @@ namespace Mirror.Weaver
             return set;
         }
 
-        public static void ProcessSyncVar(TypeDefinition td, FieldDefinition fd, Dictionary<FieldDefinition, FieldDefinition> syncVarNetIds, long dirtyBit)
+        public static void ProcessSyncVar(TypeDefinition td, FieldDefinition fd,
+            Dictionary<FieldDefinition, FieldDefinition> syncVarNetIds, long dirtyBit)
         {
             string originalName = fd.Name;
             Weaver.DLog(td, "Sync Var " + fd.Name + " " + fd.FieldType + " " + Weaver.gameObjectType);
@@ -253,10 +257,11 @@ namespace Mirror.Weaver
 
             //NOTE: is property even needed? Could just use a setter function?
             //create the property
-            PropertyDefinition propertyDefinition = new PropertyDefinition("Network" + originalName, PropertyAttributes.None, fd.FieldType)
-            {
-                GetMethod = get, SetMethod = set
-            };
+            PropertyDefinition propertyDefinition =
+                new PropertyDefinition("Network" + originalName, PropertyAttributes.None, fd.FieldType)
+                {
+                    GetMethod = get, SetMethod = set
+                };
 
             //add the methods and property to the type.
             td.Methods.Add(get);
@@ -270,12 +275,11 @@ namespace Mirror.Weaver
             //    end up in recursion.
             if (fd.FieldType.FullName == Weaver.gameObjectType.FullName ||
                 fd.FieldType.FullName == Weaver.NetworkIdentityType.FullName)
-            {
                 Weaver.WeaveLists.replacementGetterProperties[fd] = get;
-            }
         }
 
-        public static void ProcessSyncVars(TypeDefinition td, List<FieldDefinition> syncVars, List<FieldDefinition> syncObjects, Dictionary<FieldDefinition, FieldDefinition> syncVarNetIds)
+        public static void ProcessSyncVars(TypeDefinition td, List<FieldDefinition> syncVars,
+            List<FieldDefinition> syncObjects, Dictionary<FieldDefinition, FieldDefinition> syncVarNetIds)
         {
             int numSyncVars = 0;
 
@@ -289,7 +293,6 @@ namespace Mirror.Weaver
             foreach (FieldDefinition fd in td.Fields)
             {
                 foreach (CustomAttribute ca in fd.CustomAttributes)
-                {
                     if (ca.AttributeType.FullName == Weaver.SyncVarType.FullName)
                     {
                         TypeDefinition resolvedField = fd.FieldType.Resolve();
@@ -320,12 +323,13 @@ namespace Mirror.Weaver
 
                         if (dirtyBitCounter == SyncVarLimit)
                         {
-                            Weaver.Error($"{td} has too many SyncVars. Consider refactoring your class into multiple components");
+                            Weaver.Error(
+                                $"{td} has too many SyncVars. Consider refactoring your class into multiple components");
                             return;
                         }
+
                         break;
                     }
-                }
 
                 if (fd.FieldType.Resolve().ImplementsInterface(Weaver.SyncObjectType))
                 {
@@ -340,10 +344,7 @@ namespace Mirror.Weaver
             }
 
             // add all the new SyncVar __netId fields
-            foreach (FieldDefinition fd in syncVarNetIds.Values)
-            {
-                td.Fields.Add(fd);
-            }
+            foreach (FieldDefinition fd in syncVarNetIds.Values) td.Fields.Add(fd);
 
             Weaver.SetNumSyncVars(td.FullName, numSyncVars);
         }

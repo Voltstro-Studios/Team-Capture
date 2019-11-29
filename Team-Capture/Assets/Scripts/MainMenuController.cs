@@ -2,173 +2,173 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 using Panels;
+using UnityEngine;
 
 public class MainMenuController : MonoBehaviour
 {
-	public Transform mainMenuPanel;
+    [Header("Black Background")] public Animator blackBackgroundAnimator;
 
-	public List<MainMenuPanel> menuPanels = new List<MainMenuPanel>();
+    public string blackBackgroundCloseTriggerName = "Exit";
 
-	[Header("Black Background")]
-	public Animator blackBackgroundAnimator;
+    public float blackBackgroundWaitTime = 0.2f;
+    public Transform mainMenuPanel;
 
-	public string blackBackgroundCloseTriggerName = "Exit";
+    public List<MainMenuPanel> menuPanels = new List<MainMenuPanel>();
 
-	public float blackBackgroundWaitTime = 0.2f;
+    [Header("Top Black Bar")] public Animator topBlackBarAnimator;
 
-	[Header("Top Black Bar")]
-	public Animator topBlackBarAnimator;
+    public string topBlackBarCloseTriggerName = "Exit";
 
-	public string topBlackBarCloseTriggerName = "Exit";
+    public float topBlackBarWaitTime = 0.2f;
 
-	public float topBlackBarWaitTime = 0.2f;
+    public void Start()
+    {
+        topBlackBarAnimator.gameObject.SetActive(false);
 
-	public void Start()
-	{
-		topBlackBarAnimator.gameObject.SetActive(false);
+        //Pre create all panels
+        foreach (MainMenuPanel menuPanel in menuPanels)
+        {
+            GameObject panel = Instantiate(menuPanel.panelPrefab, mainMenuPanel);
+            panel.name = menuPanel.panelName;
+            panel.SetActive(false);
+            menuPanel.panelObject = panel;
 
-		//Pre create all panels
-		foreach (MainMenuPanel menuPanel in menuPanels)
-		{
-			GameObject panel = Instantiate(menuPanel.panelPrefab, mainMenuPanel);
-			panel.name = menuPanel.panelName;
-			panel.SetActive(false);
-			menuPanel.panelObject = panel;
+            //If the panel is a quit panel, then set its no button to toggle the panel
+            if (panel.GetComponent<QuitPanel>() != null)
+                panel.GetComponent<QuitPanel>().noBtn.onClick
+                    .AddListener(delegate { TogglePanel(menuPanel.panelName); });
 
-			//If the panel is a quit panel, then set its no button to toggle the panel
-			if(panel.GetComponent<QuitPanel>() != null)
-				panel.GetComponent<QuitPanel>().noBtn.onClick.AddListener(delegate{TogglePanel(menuPanel.panelName);});
+            //Basically, the same thing above
+            if (panel.GetComponent<CreateGamePanel>() != null)
+                panel.GetComponent<CreateGamePanel>().cancelButton.onClick.AddListener(delegate
+                {
+                    TogglePanel(menuPanel.panelName);
+                });
+        }
+    }
 
-			//Basically, the same thing above
-			if (panel.GetComponent<CreateGamePanel>() != null)
-				panel.GetComponent<CreateGamePanel>().cancelButton.onClick.AddListener(delegate{TogglePanel(menuPanel.panelName);});
-		}
-	}
+    /// <summary>
+    ///     Toggles between panels
+    /// </summary>
+    /// <param name="panelName"></param>
+    public void TogglePanel(string panelName)
+    {
+        MainMenuPanel panel = GetMenuPanel(panelName);
 
-	/// <summary>
-	/// Toggles between panels
-	/// </summary>
-	/// <param name="panelName"></param>
-	public void TogglePanel(string panelName)
-	{
-		MainMenuPanel panel = GetMenuPanel(panelName);
+        //There is a panel that is currently active, so close it
+        if (GetActivePanel() != null && panel != GetActivePanel())
+        {
+            Debug.Log($"{GetActivePanel().panelName} is currently active, switching...");
 
-		//There is a panel that is currently active, so close it
-		if (GetActivePanel() != null && panel != GetActivePanel())
-		{
-			Debug.Log($"{GetActivePanel().panelName} is currently active, switching...");
+            ClosePanel(GetActivePanel(), true);
+        }
 
-			ClosePanel(GetActivePanel(), true);
-		}
+        if (!panel.isOpen)
+            OpenPanel(panel);
+        else
+            ClosePanel(panel);
+    }
 
-		if(!panel.isOpen)
-			OpenPanel(panel);
-		else
-			ClosePanel(panel);
-	}
+    public void CloseActivePanel()
+    {
+        if (GetActivePanel() != null)
+            ClosePanel(GetActivePanel());
+    }
 
-	public void CloseActivePanel()
-	{
-		if(GetActivePanel() != null)
-			ClosePanel(GetActivePanel());
-	}
+    [Serializable]
+    public class MainMenuPanel
+    {
+        [HideInInspector] public bool isOpen;
+        public TCMainMenuEvent menuEvent;
+        public string panelName;
 
-	#region Panel List Functions
+        [HideInInspector] public GameObject panelObject;
+        public GameObject panelPrefab;
+    }
 
-	private MainMenuPanel GetMenuPanel(string panelName)
-	{
-		IEnumerable<MainMenuPanel> result = from a in menuPanels
-			where a.panelName == panelName
-			select a;
+    #region Panel List Functions
 
-		return result.FirstOrDefault();
-	}
+    private MainMenuPanel GetMenuPanel(string panelName)
+    {
+        IEnumerable<MainMenuPanel> result = from a in menuPanels
+            where a.panelName == panelName
+            select a;
 
-	private MainMenuPanel GetActivePanel()
-	{
-		IEnumerable<MainMenuPanel> result = from a in menuPanels
-			where a.isOpen
-			select a;
+        return result.FirstOrDefault();
+    }
 
-		return result.FirstOrDefault();
-	}
+    private MainMenuPanel GetActivePanel()
+    {
+        IEnumerable<MainMenuPanel> result = from a in menuPanels
+            where a.isOpen
+            select a;
 
-	#endregion
+        return result.FirstOrDefault();
+    }
 
-	#region Animation Functions
+    #endregion
 
-	private void ActivateTopBlackBar()
-	{
-		topBlackBarAnimator.gameObject.SetActive(true);
-	}
+    #region Animation Functions
 
-	private IEnumerator DeactivateTopBlackBar()
-	{
-		topBlackBarAnimator.SetTrigger(topBlackBarCloseTriggerName);
-		yield return new WaitForSeconds(topBlackBarWaitTime);
-		topBlackBarAnimator.gameObject.SetActive(false);
-	}
+    private void ActivateTopBlackBar()
+    {
+        topBlackBarAnimator.gameObject.SetActive(true);
+    }
 
-	private void ActivateBlackBackground()
-	{
-		blackBackgroundAnimator.gameObject.SetActive(true);
-	}
+    private IEnumerator DeactivateTopBlackBar()
+    {
+        topBlackBarAnimator.SetTrigger(topBlackBarCloseTriggerName);
+        yield return new WaitForSeconds(topBlackBarWaitTime);
+        topBlackBarAnimator.gameObject.SetActive(false);
+    }
 
-	private IEnumerator DeactivateBlackBackground()
-	{
-		blackBackgroundAnimator.SetTrigger(blackBackgroundCloseTriggerName);
-		yield return new WaitForSeconds(blackBackgroundWaitTime);
-		blackBackgroundAnimator.gameObject.SetActive(false);
-	}
+    private void ActivateBlackBackground()
+    {
+        blackBackgroundAnimator.gameObject.SetActive(true);
+    }
 
-	#endregion
+    private IEnumerator DeactivateBlackBackground()
+    {
+        blackBackgroundAnimator.SetTrigger(blackBackgroundCloseTriggerName);
+        yield return new WaitForSeconds(blackBackgroundWaitTime);
+        blackBackgroundAnimator.gameObject.SetActive(false);
+    }
 
-	#region Panel Functions
+    #endregion
 
-	private void ClosePanel(MainMenuPanel panel, bool isSwitching = false)
-	{
-		Debug.Log($"Closing {panel.panelName}");
+    #region Panel Functions
 
-		if (!isSwitching)
-		{
-			if (panel.menuEvent.showTopBlackBar)
-				StartCoroutine(DeactivateTopBlackBar());
+    private void ClosePanel(MainMenuPanel panel, bool isSwitching = false)
+    {
+        Debug.Log($"Closing {panel.panelName}");
 
-			if (panel.menuEvent.darkenScreen)
-				StartCoroutine(DeactivateBlackBackground());
-		}
+        if (!isSwitching)
+        {
+            if (panel.menuEvent.showTopBlackBar)
+                StartCoroutine(DeactivateTopBlackBar());
 
-		panel.panelObject.SetActive(false);
-		panel.isOpen = false;
-	}
+            if (panel.menuEvent.darkenScreen)
+                StartCoroutine(DeactivateBlackBackground());
+        }
 
-	private void OpenPanel(MainMenuPanel panel)
-	{
-		Debug.Log($"Opening {panel.panelName}");
+        panel.panelObject.SetActive(false);
+        panel.isOpen = false;
+    }
 
-		if(panel.menuEvent.showTopBlackBar)
-			ActivateTopBlackBar();
+    private void OpenPanel(MainMenuPanel panel)
+    {
+        Debug.Log($"Opening {panel.panelName}");
 
-		if (panel.menuEvent.darkenScreen)
-			ActivateBlackBackground();
+        if (panel.menuEvent.showTopBlackBar)
+            ActivateTopBlackBar();
 
-		panel.panelObject.SetActive(true);
-		panel.isOpen = true;
-	}
+        if (panel.menuEvent.darkenScreen)
+            ActivateBlackBackground();
 
-	#endregion
+        panel.panelObject.SetActive(true);
+        panel.isOpen = true;
+    }
 
-	[Serializable]
-	public class MainMenuPanel
-	{
-		public string panelName;
-		public TCMainMenuEvent menuEvent;
-		public GameObject panelPrefab;
-
-		[HideInInspector] public GameObject panelObject;
-
-		[HideInInspector] public bool isOpen;
-	}
+    #endregion
 }

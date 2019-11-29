@@ -20,10 +20,8 @@
 // THE SOFTWARE.
 // ---------------------------------------------------------------------
 
-using System.IO;
 using System;
-using System.Net.WebSockets;
-using System.Text;
+using System.IO;
 
 namespace Ninja.WebSockets.Internal
 {
@@ -36,50 +34,51 @@ namespace Ninja.WebSockets.Internal
     internal static class WebSocketFrameWriter
     {
         /// <summary>
-        /// This is used for data masking so that web proxies don't cache the data
-        /// Therefore, there are no cryptographic concerns
+        ///     This is used for data masking so that web proxies don't cache the data
+        ///     Therefore, there are no cryptographic concerns
         /// </summary>
-        static readonly Random _random;
+        private static readonly Random _random;
 
         static WebSocketFrameWriter()
         {
-            _random = new Random((int)DateTime.Now.Ticks);
+            _random = new Random((int) DateTime.Now.Ticks);
         }
 
         /// <summary>
-        /// No async await stuff here because we are dealing with a memory stream
+        ///     No async await stuff here because we are dealing with a memory stream
         /// </summary>
         /// <param name="opCode">The web socket opcode</param>
         /// <param name="fromPayload">Array segment to get payload data from</param>
         /// <param name="toStream">Stream to write to</param>
         /// <param name="isLastFrame">True is this is the last frame in this message (usually true)</param>
-        public static void Write(WebSocketOpCode opCode, ArraySegment<byte> fromPayload, MemoryStream toStream, bool isLastFrame, bool isClient)
+        public static void Write(WebSocketOpCode opCode, ArraySegment<byte> fromPayload, MemoryStream toStream,
+            bool isLastFrame, bool isClient)
         {
             MemoryStream memoryStream = toStream;
-            byte finBitSetAsByte = isLastFrame ? (byte)0x80 : (byte)0x00;
-            byte byte1 = (byte)(finBitSetAsByte | (byte)opCode);
+            byte finBitSetAsByte = isLastFrame ? (byte) 0x80 : (byte) 0x00;
+            byte byte1 = (byte) (finBitSetAsByte | (byte) opCode);
             memoryStream.WriteByte(byte1);
 
             // NB, set the mask flag if we are constructing a client frame
-            byte maskBitSetAsByte = isClient ? (byte)0x80 : (byte)0x00;
+            byte maskBitSetAsByte = isClient ? (byte) 0x80 : (byte) 0x00;
 
             // depending on the size of the length we want to write it as a byte, ushort or ulong
             if (fromPayload.Count < 126)
             {
-                byte byte2 = (byte)(maskBitSetAsByte | (byte)fromPayload.Count);
+                byte byte2 = (byte) (maskBitSetAsByte | (byte) fromPayload.Count);
                 memoryStream.WriteByte(byte2);
             }
             else if (fromPayload.Count <= ushort.MaxValue)
             {
-                byte byte2 = (byte)(maskBitSetAsByte | 126);
+                byte byte2 = (byte) (maskBitSetAsByte | 126);
                 memoryStream.WriteByte(byte2);
-                BinaryReaderWriter.WriteUShort((ushort)fromPayload.Count, memoryStream, false);
+                BinaryReaderWriter.WriteUShort((ushort) fromPayload.Count, memoryStream, false);
             }
             else
             {
-                byte byte2 = (byte)(maskBitSetAsByte | 127);
+                byte byte2 = (byte) (maskBitSetAsByte | 127);
                 memoryStream.WriteByte(byte2);
-                BinaryReaderWriter.WriteULong((ulong)fromPayload.Count, memoryStream, false);
+                BinaryReaderWriter.WriteULong((ulong) fromPayload.Count, memoryStream, false);
             }
 
             // if we are creating a client frame then we MUST mack the payload as per the spec
