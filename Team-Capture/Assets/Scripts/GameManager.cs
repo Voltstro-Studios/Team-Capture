@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Player;
-using SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Player;
+using SceneManagement;
 
 public class GameManager : MonoBehaviour
 {

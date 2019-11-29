@@ -1,7 +1,6 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using Global;
 using UnityEngine;
+using Global;
 using Mirror;
 using Player;
 using Logger = Global.Logger;
@@ -108,7 +107,7 @@ namespace Weapons
 		[TargetRpc]
 		private void TargetSetupWeapon(NetworkConnection target, string weapon)
 		{
-			Global.Logger.Log($"Setup weapon `{weapon}`", LogVerbosity.DEBUG);
+			Logger.Log($"Setup weapon `{weapon}`", LogVerbosity.DEBUG);
 
 			StopCoroutine(ReloadCurrentWeapon());
 			TCWeaponsManager.GetWeapon(weapon).Reload();
@@ -158,10 +157,10 @@ namespace Weapons
 
 		public IEnumerator ReloadCurrentWeapon()
 		{
-			Logger.Log($"Reloading weapon `{GetActiveWeapon().weapon}`", LogVerbosity.DEBUG);
-
 			if (GetActiveWeapon().isReloading)
 				yield break;
+
+			Logger.Log($"Reloading weapon `{GetActiveWeapon().weapon}`", LogVerbosity.DEBUG);
 
 			GetActiveWeapon().isReloading = true;
 

@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Mirror;
-using SceneManagement;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
+using Mirror;
+using SceneManagement;
 
 namespace Panels
 {

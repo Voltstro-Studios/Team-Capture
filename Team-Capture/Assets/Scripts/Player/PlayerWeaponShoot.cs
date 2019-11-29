@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using Mirror;
 using Weapons;
 
@@ -23,13 +22,54 @@ namespace Player
 			if(GetCurrentWeapon() == null)
 				return;
 
-			if(Input.GetButtonDown("Fire1"))
-				ShootWeapon();
-		}
+			if (GetComponent<PlayerManager>().IsDead)
+			{
+				CancelInvoke(nameof(ShootWeapon));
+				return;
+			}
 
+			if(GetCurrentWeapon().currentBulletsAmount < GetCurrentWeapon().maxBullets && !GetCurrentWeapon().isReloading)
+			{
+				//Do a reload
+				if (Input.GetButtonDown("Reload"))
+				{
+					CancelInvoke(nameof(ShootWeapon));
+					weaponManager.StartCoroutine(nameof(WeaponManager.ReloadCurrentWeapon));
+					return;
+				}
+			}
+
+			if(GetCurrentWeapon().fireRate <= 0f)
+			{
+				if (Input.GetButtonDown("Fire1") && !GetCurrentWeapon().isReloading)
+				{
+					ShootWeapon();
+				}
+			}
+			else
+			{
+				if(Input.GetButtonDown("Fire1") && !GetCurrentWeapon().isReloading)
+				{
+					InvokeRepeating(nameof(ShootWeapon), 0f, 1f/GetCurrentWeapon().fireRate);
+				}
+				else if(Input.GetButtonUp("Fire1"))
+				{
+					CancelInvoke(nameof(ShootWeapon));
+				}
+			}
+		}
+		
+		[Client]
 		private void ShootWeapon()
 		{
-			Debug.Log("Shoot");
+			if(!isLocalPlayer)
+				return;
+
+			if (GetCurrentWeapon().currentBulletsAmount <= 0)
+			{
+				weaponManager.StartCoroutine(nameof(WeaponManager.ReloadCurrentWeapon));
+				return;
+			}
 
 			GetCurrentWeapon().currentBulletsAmount--;
 
