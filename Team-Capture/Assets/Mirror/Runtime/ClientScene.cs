@@ -479,6 +479,11 @@ namespace Mirror
             identity.transform.localPosition = msg.position;
             identity.transform.localRotation = msg.rotation;
             identity.transform.localScale = msg.scale;
+            identity.hasAuthority = msg.isOwner;
+            identity.netId = msg.netId;
+
+            if (msg.isLocalPlayer)
+                InternalAddPlayer(identity);
 
             // deserialize components if any payload
             // (Count is 0 if there were no components)
@@ -488,16 +493,14 @@ namespace Mirror
                 identity.OnUpdateVars(payloadReader, true);
             }
 
-            identity.netId = msg.netId;
             NetworkIdentity.spawned[msg.netId] = identity;
-            identity.pendingAuthority = msg.isOwner;
 
             // objects spawned as part of initial state are started on a second pass
             if (isSpawnFinished)
             {
+                identity.NotifyAuthority();
                 identity.OnStartClient();
                 CheckForLocalPlayer(identity);
-                identity.hasAuthority = identity.pendingAuthority;
             }
         }
 
@@ -595,12 +598,9 @@ namespace Mirror
             // use data from scene objects
             foreach (NetworkIdentity identity in NetworkIdentity.spawned.Values.OrderBy(uv => uv.netId))
             {
-                identity.hasAuthority = identity.pendingAuthority;
-                if (!identity.isClient)
-                {
-                    identity.OnStartClient();
-                    CheckForLocalPlayer(identity);
-                }
+                identity.NotifyAuthority();
+                identity.OnStartClient();
+                CheckForLocalPlayer(identity);
             }
             isSpawnFinished = true;
         }
@@ -667,8 +667,12 @@ namespace Mirror
         {
             if (NetworkIdentity.spawned.TryGetValue(msg.netId, out NetworkIdentity localObject) && localObject != null)
             {
+                localObject.pendingLocalPlayer = msg.isLocalPlayer;
+                localObject.OnStartClient();
                 localObject.hasAuthority = msg.isOwner;
                 localObject.OnSetHostVisibility(true);
+                localObject.NotifyAuthority();
+                CheckForLocalPlayer(localObject);
             }
         }
 
@@ -725,7 +729,6 @@ namespace Mirror
                 identity.SetLocalPlayer();
 
                 if (LogFilter.Debug) Debug.Log("ClientScene.OnOwnerMessage - player=" + identity.name);
-                InternalAddPlayer(identity);
 
                 identity.pendingLocalPlayer = false;
             }

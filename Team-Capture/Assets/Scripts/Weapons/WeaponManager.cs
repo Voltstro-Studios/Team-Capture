@@ -52,6 +52,8 @@ namespace Weapons
 					return;
 				}
 
+				if(!isLocalPlayer) return;
+
 				CmdInstantiateWeaponOnClients(item);
 
 				if(itemIndex != 0)
@@ -101,11 +103,11 @@ namespace Weapons
 			weaponManager.weapons.Add(tcWeapon.weapon);
 
 			//Setup the new added weapon, and stop any reloading going on with the current weapon
-			TargetSetupWeapon(connectionToClient, weapon);
+			TargetSetupWeapon(weapon);
 		}
 
 		[TargetRpc]
-		private void TargetSetupWeapon(NetworkConnection target, string weapon)
+		private void TargetSetupWeapon(string weapon)
 		{
 			Logger.Log($"Setup weapon `{weapon}`", LogVerbosity.DEBUG);
 
