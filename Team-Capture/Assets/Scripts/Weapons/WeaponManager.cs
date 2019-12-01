@@ -66,23 +66,23 @@ namespace Weapons
 		}
 
 		[ClientRpc]
-		private void RpcInstantiateWeaponOnClients(string weapon)
+		private void RpcInstantiateWeaponOnClients(string weaponName)
 		{
-			if (weapon == null)
+			if (weaponName == null)
 			{
 				return;
 			}
 
-			Instantiate(TCWeaponsManager.GetWeapon(weapon).baseWeaponPrefab, weaponsHolderSpot);
+			Instantiate(TCWeaponsManager.GetWeapon(weaponName).baseWeaponPrefab, weaponsHolderSpot);
 		}
 
 		#region Add Weapons
 
-		public void AddWeapon(string weapon)
+		public void AddWeapon(string weaponName)
 		{
-			if (TCWeaponsManager.GetWeapon(weapon) == null) return;
+			if (TCWeaponsManager.GetWeapon(weaponName) == null) return;
 
-			CmdAddWeapon(transform.name, weapon);
+			CmdAddWeapon(transform.name, weaponName);
 		}
 
 		[Command]
@@ -157,18 +157,20 @@ namespace Weapons
 
 		public IEnumerator ReloadCurrentWeapon()
 		{
-			if (GetActiveWeapon().isReloading)
+			TCWeapon weapon = GetActiveWeapon();
+			
+			if (weapon.isReloading)
 				yield break;
 
-			Logger.Log($"Reloading weapon `{GetActiveWeapon().weapon}`", LogVerbosity.DEBUG);
+			Logger.Log($"Reloading weapon `{weapon.weapon}`", LogVerbosity.DEBUG);
 
-			GetActiveWeapon().isReloading = true;
+			weapon.isReloading = true;
 
-			yield return new WaitForSeconds(GetActiveWeapon().reloadTime);
+			yield return new WaitForSeconds(weapon.reloadTime);
 
-			GetActiveWeapon().Reload();
+			weapon.Reload();
 
-			GetActiveWeapon().isReloading = false;
+			weapon.isReloading = false;
 		}
 
 		#endregion

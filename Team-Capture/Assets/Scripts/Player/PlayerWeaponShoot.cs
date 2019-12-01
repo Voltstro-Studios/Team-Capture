@@ -4,110 +4,115 @@ using Weapons;
 
 namespace Player
 {
-	public class PlayerWeaponShoot : NetworkBehaviour
-	{
-		private WeaponManager weaponManager;
+    public class PlayerWeaponShoot : NetworkBehaviour
+    {
+        private WeaponManager weaponManager;
 
-		private void Start()
-		{
-			weaponManager = GetComponent<WeaponManager>();
-		}
+        private void Start()
+        {
+            weaponManager = GetComponent<WeaponManager>();
+        }
 
-		private void Update()
-		{
-			if(!isLocalPlayer)
-				return;
+        private void Update()
+        {
+            if (!isLocalPlayer)
+                return;
 
-			//Looks like the weapon isn't setup yet
-			if(GetCurrentWeapon() == null)
-				return;
+            //Cache our current weapon
+            TCWeapon weapon = GetCurrentWeapon();
 
-			if (GetComponent<PlayerManager>().IsDead)
-			{
-				CancelInvoke(nameof(ShootWeapon));
-				return;
-			}
+            //Looks like the weapon isn't setup yet
+            if (weapon == null)
+                return;
 
-			if(GetCurrentWeapon().currentBulletsAmount < GetCurrentWeapon().maxBullets && !GetCurrentWeapon().isReloading)
-			{
-				//Do a reload
-				if (Input.GetButtonDown("Reload"))
-				{
-					CancelInvoke(nameof(ShootWeapon));
-					weaponManager.StartCoroutine(nameof(WeaponManager.ReloadCurrentWeapon));
-					return;
-				}
-			}
+            if (GetComponent<PlayerManager>().IsDead)
+            {
+                CancelInvoke(nameof(ShootWeapon));
+                return;
+            }
 
-			if(GetCurrentWeapon().fireRate <= 0f)
-			{
-				if (Input.GetButtonDown("Fire1") && !GetCurrentWeapon().isReloading)
-				{
-					ShootWeapon();
-				}
-			}
-			else
-			{
-				if(Input.GetButtonDown("Fire1") && !GetCurrentWeapon().isReloading)
-				{
-					InvokeRepeating(nameof(ShootWeapon), 0f, 1f/GetCurrentWeapon().fireRate);
-				}
-				else if(Input.GetButtonUp("Fire1"))
-				{
-					CancelInvoke(nameof(ShootWeapon));
-				}
-			}
-		}
-		
-		[Client]
-		private void ShootWeapon()
-		{
-			if(!isLocalPlayer)
-				return;
+            if (weapon.currentBulletsAmount < weapon.maxBullets && !weapon.isReloading)
+            {
+                //Do a reload
+                if (Input.GetButtonDown("Reload"))
+                {
+                    CancelInvoke(nameof(ShootWeapon));
+                    weaponManager.StartCoroutine(weaponManager.ReloadCurrentWeapon());
+                    return;
+                }
+            }
+            //Semi-automatic weapons
+            if (weapon.fireRate <= 0f)
+            {
+                //Only shoot if the player just pressed the button
+                if (Input.GetButtonDown("Fire1") && !weapon.isReloading)
+                {
+                    ShootWeapon();
+                }
+            }
+            //Full auto weapons
+            else
+            {
+                if (Input.GetButtonDown("Fire1") && !weapon.isReloading)
+                {
+                    InvokeRepeating(nameof(ShootWeapon), 0f, 1f / weapon.fireRate);
+                }
+                else if (Input.GetButtonUp("Fire1"))
+                {
+                    CancelInvoke(nameof(ShootWeapon));
+                }
+            }
+        }
 
-			if (GetCurrentWeapon().currentBulletsAmount <= 0)
-			{
-				weaponManager.StartCoroutine(nameof(WeaponManager.ReloadCurrentWeapon));
-				return;
-			}
+        [Client]
+        private void ShootWeapon()
+        {
+            if (!isLocalPlayer)
+                return;
 
-			GetCurrentWeapon().currentBulletsAmount--;
+            TCWeapon weapon = GetCurrentWeapon();
 
-			CmdWeaponMuzzleFlash(transform.name);
-		}
+            if (weapon.currentBulletsAmount <= 0)
+            {
+                weaponManager.StartCoroutine(weaponManager.ReloadCurrentWeapon());
+                return;
+            }
 
-		#region Weapon Effects
+            weapon.currentBulletsAmount--;
 
-		#region Weapon Muzzle
+            CmdWeaponMuzzleFlash(transform.name);
+        }
 
-		[Command]
-		private void CmdWeaponMuzzleFlash(string playerId)
-		{
-			RpcWeaponMuzzleFlash(playerId);
-		}
+        #region Weapon Effects
 
-		[ClientRpc]
-		private void RpcWeaponMuzzleFlash(string playerId)
-		{
-			PlayerManager player = GameManager.GetPlayer(playerId);
-			if(player == null) return;
+        #region Weapon Muzzle
 
-			player.GetComponent<WeaponManager>().GetActiveWeaponGraphics().muzzleFlash.Play(true);
-		}
+        [Command]
+        private void CmdWeaponMuzzleFlash(string playerId)
+        {
+            RpcWeaponMuzzleFlash(playerId);
+        }
 
-		#endregion
+        [ClientRpc]
+        private void RpcWeaponMuzzleFlash(string playerId)
+        {
+            PlayerManager player = GameManager.GetPlayer(playerId);
+            if (player == null) return;
 
-		#region Weapon Impact
+            player.GetComponent<WeaponManager>().GetActiveWeaponGraphics().muzzleFlash.Play(true);
+        }
 
-		
+        #endregion
 
-		#endregion
+        #region Weapon Impact
 
-		#endregion
+        #endregion
 
-		private TCWeapon GetCurrentWeapon()
-		{
-			return weaponManager.GetActiveWeapon();
-		}
-	}
+        #endregion
+
+        private TCWeapon GetCurrentWeapon()
+        {
+            return weaponManager.GetActiveWeapon();
+        }
+    }
 }
