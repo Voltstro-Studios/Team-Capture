@@ -1036,25 +1036,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53f16aed0ae221d45851676ca49f2f28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainMenuPanel: {fileID: 319514907}
-  menuPanels:
-  - panelName: QuitPanel
-    menuEvent: {fileID: 11400000, guid: 501c13d390213f647b2cc936a29e1c40, type: 2}
-    panelPrefab: {fileID: 7514135527730688467, guid: e5686af300d60624093846365e1f45d8,
-      type: 3}
-    panelObject: {fileID: 7514135527730688467, guid: e5686af300d60624093846365e1f45d8,
-      type: 3}
-    isOpen: 0
-  - panelName: CreateGamePanel
-    menuEvent: {fileID: 11400000, guid: 28cdc30fea405604d8606f47dce57ea2, type: 2}
-    panelPrefab: {fileID: 7741058342783775882, guid: b6dbb189b8a5596458672dda86230873,
-      type: 3}
-    panelObject: {fileID: 7514135527730688467, guid: e5686af300d60624093846365e1f45d8,
-      type: 3}
-    isOpen: 0
   blackBackgroundAnimator: {fileID: 1669149775}
   blackBackgroundCloseTriggerName: Exit
   blackBackgroundWaitTime: 0.2
+  mainMenuPanel: {fileID: 319514907}
+  menuPanels:
+  - isOpen: 0
+    menuEvent: {fileID: 11400000, guid: 501c13d390213f647b2cc936a29e1c40, type: 2}
+    panelName: QuitPanel
+    panelObject: {fileID: 7514135527730688467, guid: e5686af300d60624093846365e1f45d8,
+      type: 3}
+    panelPrefab: {fileID: 7514135527730688467, guid: e5686af300d60624093846365e1f45d8,
+      type: 3}
+  - isOpen: 0
+    menuEvent: {fileID: 11400000, guid: 28cdc30fea405604d8606f47dce57ea2, type: 2}
+    panelName: CreateGamePanel
+    panelObject: {fileID: 7514135527730688467, guid: e5686af300d60624093846365e1f45d8,
+      type: 3}
+    panelPrefab: {fileID: 7741058342783775882, guid: b6dbb189b8a5596458672dda86230873,
+      type: 3}
   topBlackBarAnimator: {fileID: 1843545829}
   topBlackBarCloseTriggerName: Exit
   topBlackBarWaitTime: 0.5
@@ -1278,7 +1278,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh17458
+  m_Name: pb_Mesh17466
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -1601,7 +1601,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh17426
+  m_Name: pb_Mesh17434
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -2319,7 +2319,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh17390
+  m_Name: pb_Mesh17398
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -3231,7 +3231,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh17446
+  m_Name: pb_Mesh17454
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -3661,7 +3661,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh17330
+  m_Name: pb_Mesh17338
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2

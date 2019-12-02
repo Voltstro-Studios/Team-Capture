@@ -38,9 +38,9 @@ namespace Player
 
         public override void OnStartClient()
         {
-            base.OnStartClient();
+	        GameManager.AddPlayer(GetComponent<NetworkIdentity>().netId.ToString(), GetComponent<PlayerManager>());
 
-            GameManager.AddPlayer(GetComponent<NetworkIdentity>().netId.ToString(), GetComponent<PlayerManager>());
+            base.OnStartClient();
         }
 
         private void OnDisable()
@@ -49,6 +49,11 @@ namespace Player
 
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
+        }
+
+        public Camera GetPlayerCamera()
+        {
+	        return localCamera;
         }
     }
 }

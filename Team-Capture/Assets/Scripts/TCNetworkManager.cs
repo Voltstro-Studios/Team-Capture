@@ -8,7 +8,7 @@ public class TCNetworkManager : NetworkManager
     [Header("Team Capture")] [SerializeField]
     private GameObject gameMangerPrefab;
 
-	public override void OnStartServer()
+    public override void OnStartServer()
 	{
 		base.OnStartServer();
 

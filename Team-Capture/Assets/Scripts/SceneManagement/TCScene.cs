@@ -15,5 +15,8 @@ namespace SceneManagement
         [Scene] public string sceneName;
 
         public TCWeapon[] stockWeapons;
+
+        public GameObject weaponHit;
+        public float hitObjectLastTime = 2.0f;
     }
 }

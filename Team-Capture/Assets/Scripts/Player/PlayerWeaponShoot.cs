@@ -81,6 +81,42 @@ namespace Player
             weapon.currentBulletsAmount--;
 
             CmdWeaponMuzzleFlash(transform.name);
+
+            WeaponRayCast(transform.name, weapon.weapon, GetComponent<PlayerSetup>().GetPlayerCamera().transform.position, GetComponent<PlayerSetup>().GetPlayerCamera().transform.forward);
+        }
+
+        private void WeaponRayCast(string sourcePlayer, string weapon, Vector3 transform, Vector3 direction)
+        {
+	        //We would do the weapon ray cast on the server, but you need to do lag compensation.
+	        //Since the client and server are basically never synced(E.G: Player location), so when we tell the server
+	        //to do a ray cast, what the server sees will be different to what the client sees
+	        //TODO: Handle ray cast on the server once we have lag compensation
+
+	        TCWeapon tcWeapon = TCWeaponsManager.GetWeapon(weapon);
+			if(tcWeapon == null)
+				return;
+
+			// ReSharper disable once Unity.PreferNonAllocApi
+			RaycastHit[] hits = Physics.RaycastAll(transform, direction, tcWeapon.range);
+			bool hitPlayer = false;
+
+			foreach (RaycastHit hit in hits)
+			{
+				//If we have already hit a player, return
+				if(hitPlayer)
+					return;
+
+				//If the hit was the sourcePlayer, then ignore it
+				if(hit.collider.name == sourcePlayer)
+					continue;
+
+				CmdWeaponImpact(hit.point, hit.normal);
+
+				if (hit.collider.GetComponent<PlayerManager>() == null) continue;
+
+				hit.collider.GetComponent<PlayerManager>().CmdTakeDamage(sourcePlayer, tcWeapon.damage);
+				hitPlayer = true;
+			}
         }
 
         #region Weapon Effects
@@ -105,6 +141,19 @@ namespace Player
         #endregion
 
         #region Weapon Impact
+
+		[Command]
+		private void CmdWeaponImpact(Vector3 pos, Vector3 normal)
+        {
+	        RpcWeaponImpact(pos, normal);
+        }
+
+        [ClientRpc]
+        private void RpcWeaponImpact(Vector3 pos, Vector3 normal)
+        {
+	       GameObject hitEffect = Instantiate(GameManager.Instance.scene.weaponHit, pos, Quaternion.LookRotation(normal));
+		   Destroy(hitEffect, GameManager.Instance.scene.hitObjectLastTime);
+        }
 
         #endregion
 
