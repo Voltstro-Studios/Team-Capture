@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Global;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Player;
 using SceneManagement;
+using Logger = Global.Logger;
 
 public class GameManager : MonoBehaviour
 {
@@ -57,7 +59,7 @@ public class GameManager : MonoBehaviour
         playerManager.transform.name = playerId;
         Players.Add(playerId, playerManager);
 
-        Debug.Log($"Added {playerId}.");
+        Logger.Log($"Added player {playerId}.", LogVerbosity.INFO);
     }
 
     /// <summary>
@@ -67,6 +69,7 @@ public class GameManager : MonoBehaviour
     public static void RemovePlayer(string playerId)
     {
         Players.Remove(playerId);
+        Logger.Log($"Removed player {playerId}", LogVerbosity.INFO);
     }
 
     public static PlayerManager GetPlayer(string playerId)
