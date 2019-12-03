@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Player;
 using UnityEngine;
 using UnityEngine.AI;
+using Logger = Global.Logger;
 
 // ReSharper disable BuiltInTypeReferenceStyle
 
@@ -14,7 +15,7 @@ namespace LagCompensation
     public class PlayerPositionRecord
     {
         private const int TicksPerSecond = 20;
-        
+
         /// <summary>
         ///     Holds our <see cref="PlayerPositionRecord" />s, indexed by (server) time
         /// </summary>
@@ -24,11 +25,11 @@ namespace LagCompensation
         private PlayerManager player;
         private Vector3 playerPosition;
 
+        private static float TimeNow => RoundedTickTime(Time.time);
+
         //Called every physics/movement tick
         internal static void DoSeverTick()
         {
-            float timeNow = RoundedTickTime(Time.time);
-
             //Get a list of all our players
             PlayerManager[] players = GameManager.GetAllPlayers();
 
@@ -44,9 +45,9 @@ namespace LagCompensation
                     playerPosition = GetPlayerPositionFromIdentifier(player)
                 };
             }
-            
+
             //Add our records to the dictionary
-            playerPositionRecords.Add(timeNow, positionRecords);
+            playerPositionRecords.Add(TimeNow, positionRecords);
         }
 
         private static float RoundedTickTime(float t)
@@ -56,22 +57,38 @@ namespace LagCompensation
         }
 
         // ReSharper disable once SuggestBaseTypeForParameter
-        private static Vector3 GetPlayerPositionFromIdentifier(PlayerManager playerManager) => playerManager.transform.position;
+        private static Vector3 GetPlayerPositionFromIdentifier(PlayerManager playerManager) =>
+            playerManager.transform.position;
 
-        private static bool PlayerWasHit(PlayerManager player, Ray bulletPath, float time)
+        private static void PlayerWasHit(PlayerManager player, Ray bulletPath, float time)
         {
             //Move the players into the positions they were in at the time of the shot
             for (int i = 0; i < playerPositionRecords.Count; i++)
             {
-                playerPositionRecords[time][i].player.transform.position = playerPositionRecords[time][i].playerPosition;
+                playerPositionRecords[TimeNow][i].player.transform.position =
+                    playerPositionRecords[time][i].playerPosition;
             }
-            
+
             //Do a raycast to see if it hit
             bool hit = Physics.Raycast(bulletPath, out RaycastHit raycastHit, 1000f);
 
             if (hit)
             {
-                Dance()
+                //Check if we hit a player
+                if (raycastHit.collider.CompareTag("Player"))
+                {
+                    PlayerManager playerManager = raycastHit.collider.GetComponent<PlayerManager>();
+                    Debug.Log($"Hit player {playerManager.username}");
+//                   playerManager.IsDead = true;
+                }
+            }
+
+            //Now move all our players back to where they are now
+            //Move the players into the positions they were in at the time of the shot
+            for (int i = 0; i < playerPositionRecords.Count; i++)
+            {
+                playerPositionRecords[TimeNow][i].player.transform.position =
+                    playerPositionRecords[TimeNow][i].playerPosition;
             }
         }
     }
