@@ -85,7 +85,7 @@ namespace Player
             WeaponRayCast(transform.name, weapon.weapon, GetComponent<PlayerSetup>().GetPlayerCamera().transform.position, GetComponent<PlayerSetup>().GetPlayerCamera().transform.forward);
         }
 
-        private void WeaponRayCast(string sourcePlayer, string weapon, Vector3 transform, Vector3 direction)
+        private void WeaponRayCast(string sourcePlayer, string weapon, Vector3 orgin, Vector3 direction)
         {
 	        //We would do the weapon ray cast on the server, but you need to do lag compensation.
 	        //Since the client and server are basically never synced(E.G: Player location), so when we tell the server
@@ -97,7 +97,7 @@ namespace Player
 				return;
 
 			// ReSharper disable once Unity.PreferNonAllocApi
-			RaycastHit[] hits = Physics.RaycastAll(transform, direction, tcWeapon.range);
+			RaycastHit[] hits = Physics.RaycastAll(orgin, direction, tcWeapon.range);
 			bool hitPlayer = false;
 
 			foreach (RaycastHit hit in hits)
