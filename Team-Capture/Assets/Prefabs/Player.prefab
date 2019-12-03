@@ -195,23 +195,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e13942667ba21734bab49808dcd3ef36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerView: {fileID: 6438375964343202627}
-  xMouseSensitivity: 100
-  yMouseSensitivity: 100
-  gravity: 20
+  airAcceleration: 2
+  airControl: 5
+  airDecceleration: 2
+  forwardMove: 0
   friction: 9
+  gravity: 20
+  holdJumpToBhop: 1
+  jumpSpeed: 8
   moveSpeed: 11
+  playerView: {fileID: 6438375964343202627}
+  rightMove: 0
   runAcceleration: 14
   runDeacceleration: 10
-  airAcceleration: 2
-  airDecceleration: 2
-  airControl: 5
   sideStrafeAcceleration: 50
   sideStrafeSpeed: 1
-  jumpSpeed: 8
-  holdJumpToBhop: 1
-  forwardMove: 0
-  rightMove: 0
+  xMouseSensitivity: 100
+  yMouseSensitivity: 100
 --- !u!114 &3448369259278931532
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -254,12 +254,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+  localAudioListener: {fileID: 5781786791537516909}
+  localCamera: {fileID: 6438375964343202625}
   localCapsuleCollider: {fileID: 8450580671024409085}
   localCharacterController: {fileID: 6438375962803020340}
-  localPlayerMovement: {fileID: 6438375962803020339}
-  localCamera: {fileID: 6438375964343202625}
-  localAudioListener: {fileID: 5781786791537516909}
   localPlayerInput: {fileID: 8854156936004004421}
+  localPlayerMovement: {fileID: 6438375962803020339}
 --- !u!114 &5871886052252796697
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -362,7 +362,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6438375964343202626}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.576, z: 0}
+  m_LocalPosition: {x: 0, y: 0.576, z: 0.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8771585192178499609}
@@ -392,7 +392,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.4
+  near clip plane: 0.01
   far clip plane: 1000
   field of view: 90
   orthographic: 0
