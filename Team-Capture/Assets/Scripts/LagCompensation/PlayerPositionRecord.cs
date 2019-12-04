@@ -15,9 +15,8 @@ namespace LagCompensation
         [RuntimeInitializeOnLoadMethod]
         private static void Init()
         {
-            
         }
-        
+
         private const int TicksPerSecond = 20;
 
         /// <summary>
@@ -52,7 +51,10 @@ namespace LagCompensation
 
             //Add our records to the dictionary
             //TODO: Make old entries automatically get removed after a certain time (maybe 3sec?)
-            playerPositionRecords.Add(TimeNow, positionRecords);
+            if (!playerPositionRecords.ContainsKey(TimeNow))
+                playerPositionRecords.Add(TimeNow, positionRecords);
+            else
+                playerPositionRecords[TimeNow] = positionRecords;
         }
 
         private static float RoundedTickTime(float t)
@@ -67,19 +69,22 @@ namespace LagCompensation
 
         public static void Simulate(float time, Action action)
         {
+            //Round our time to ensure we don't get invalid index for our dictionary
             time = RoundedTickTime(time);
-            
-           //Move the players into the positions they were in at the time of the shot
+            //Update our player positions just in case
+            RecordPlayerPositions();
+
+            //Move the players into the positions they were in at the time of the action
             for (int i = 0; i < playerPositionRecords.Count; i++)
             {
                 playerPositionRecords[TimeNow][i].player.transform.position =
                     playerPositionRecords[time][i].playerPosition;
             }
 
+            //Simulate the action
             action();
-            
+
             //Now move all our players back to where they are now
-            //Move the players into the positions they were in at the time of the shot
             for (int i = 0; i < playerPositionRecords.Count; i++)
             {
                 playerPositionRecords[TimeNow][i].player.transform.position =
