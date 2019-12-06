@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace LagCompensation
 {
-    internal partial class Simulator : MonoBehaviour
+    internal static partial class Simulator
     {
         private const int TicksPerSecond = 20;
 
