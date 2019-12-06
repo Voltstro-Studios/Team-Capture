@@ -25,7 +25,7 @@ namespace LagCompensation
         private static Dictionary<float, PlayerPositionRecord[]> playerPositionRecords =
             new Dictionary<float, PlayerPositionRecord[]>();
 
-        private PlayerManager player;
+        private PlayerManager playerManager;
         private Vector3 playerPosition;
 
         private static float TimeNow => RoundedTickTime(Time.time);
@@ -44,7 +44,7 @@ namespace LagCompensation
                 PlayerManager player = players[i];
                 positionRecords[i] = new PlayerPositionRecord
                 {
-                    player = player,
+                    playerManager = player,
                     playerPosition = GetPlayerPositionFromIdentifier(player)
                 };
             }
@@ -77,7 +77,9 @@ namespace LagCompensation
             //Move the players into the positions they were in at the time of the action
             for (int i = 0; i < playerPositionRecords.Count; i++)
             {
-                playerPositionRecords[TimeNow][i].player.transform.position =
+                //Move all our players
+                playerPositionRecords[TimeNow][i].playerManager.transform.position =
+                    //Into the position they were in at the time of simulation
                     playerPositionRecords[time][i].playerPosition;
             }
 
@@ -87,7 +89,8 @@ namespace LagCompensation
             //Now move all our players back to where they are now
             for (int i = 0; i < playerPositionRecords.Count; i++)
             {
-                playerPositionRecords[TimeNow][i].player.transform.position =
+                //Move all the players back to where they were before simulation
+                playerPositionRecords[TimeNow][i].playerManager.transform.position =
                     playerPositionRecords[TimeNow][i].playerPosition;
             }
         }
