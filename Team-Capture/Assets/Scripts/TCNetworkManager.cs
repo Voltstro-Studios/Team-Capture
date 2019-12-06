@@ -1,5 +1,4 @@
-﻿using System;
-using Global;
+﻿using Global;
 using UnityEngine;
 using Mirror;
 

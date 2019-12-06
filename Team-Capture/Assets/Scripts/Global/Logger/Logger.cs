@@ -53,7 +53,7 @@ namespace Global
         ///     The path that the log file will be saved to while the game is running, will never change across runs unless the
         ///     logger undergoes a major revamp
         /// </summary>
-        private static string StaticLogPath;
+        private static string staticLogPath;
 
         /// <summary>
         ///     The final log path in which each log file is copied to at the end of each session
@@ -123,7 +123,7 @@ namespace Global
                     {
                         logStream = File.CreateText(Path.Combine(Logging.LogSaveDirectory, filename));
                         //We've succeeded by now, so update our log path and break our of the loop
-                        StaticLogPath = ((FileStream) logStream.BaseStream).Name;
+                        staticLogPath = ((FileStream) logStream.BaseStream).Name;
                         break;
                     }
                     //This catches any sharing violations. https://stackoverflow.com/questions/425956/how-do-i-determine-if-an-ioexception-is-thrown-because-of-a-sharing-violation#comment47286987_25695342
@@ -279,7 +279,7 @@ Process priority:       {process.PriorityClass}");
             logStream.Dispose();
 
             //Now copy our 'latest.log' to it's final destination
-            File.Copy(StaticLogPath, FinalLogPath, false);
+            File.Copy(staticLogPath, FinalLogPath, false);
 
             Debug.Log("Logger closing...");
 
