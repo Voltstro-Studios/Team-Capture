@@ -59,6 +59,13 @@ namespace Weapons
 				if(itemIndex != 0)
 					selectedWeaponIndex++;
 			}
+
+			if (op == SyncList<string>.Operation.OP_CLEAR)
+			{
+				if(!isLocalPlayer) return;
+
+				CmdRemoveAllActiveWeapons();
+			}
 		}
 
 		[Command]
@@ -113,6 +120,31 @@ namespace Weapons
 
 			StopCoroutine(ReloadCurrentWeapon());
 			TCWeaponsManager.GetWeapon(weapon).Reload();
+		}
+
+		#endregion
+
+		#region Weapon Removal
+
+		[Command]
+		public void CmdRemoveAllWeapons()
+		{
+			weapons.Clear();
+		}
+
+		[Command]
+		private void CmdRemoveAllActiveWeapons()
+		{
+			RpcRemoveAllActiveWeapons();
+		}
+
+		[ClientRpc]
+		private void RpcRemoveAllActiveWeapons()
+		{
+			for (int i = 0; i < weaponsHolderSpot.childCount; i++)
+			{
+				Destroy(weaponsHolderSpot.GetChild(i).gameObject);
+			}
 		}
 
 		#endregion

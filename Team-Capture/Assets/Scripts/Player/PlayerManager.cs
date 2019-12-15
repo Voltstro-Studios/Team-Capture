@@ -63,8 +63,9 @@ namespace Player
 		{
 			IsDead = true;
 
-			//TODO: Remove all player's weapons
-			//localWeaponManager.ClearWeapons();
+			if(isLocalPlayer)
+				localWeaponManager.CmdRemoveAllWeapons();
+
 			localWeaponManager.enabled = false;
 			localPlayerWeaponShoot.enabled = false;
 
@@ -111,6 +112,11 @@ namespace Player
 
 				//Switch cams
 				GameManager.Instance.sceneCamera.SetActive(false);
+
+				foreach (TCWeapon stockWeapon in GameManager.Instance.scene.stockWeapons)
+				{
+					localWeaponManager.AddWeapon(stockWeapon.weapon);
+				}
 			}
 			else
 			{
