@@ -42,7 +42,7 @@ namespace Weapons
 			}
 		}
 
-		private void AddWeaponCallback(SyncList<string>.Operation op, int itemIndex, string item)
+		private void AddWeaponCallback(SyncList<string>.Operation op, int itemIndex, string item, string newItem)
 		{
 			if (op == SyncList<string>.Operation.OP_ADD)
 			{
