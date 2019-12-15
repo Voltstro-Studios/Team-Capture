@@ -18,5 +18,7 @@ namespace SceneManagement
 
         public GameObject weaponHit;
         public float hitObjectLastTime = 2.0f;
+
+        public float respawnTime = 4.0f;
     }
 }
