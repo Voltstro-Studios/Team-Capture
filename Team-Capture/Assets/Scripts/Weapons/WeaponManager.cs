@@ -46,7 +46,7 @@ namespace Weapons
 		{
 			if (op == SyncList<string>.Operation.OP_ADD)
 			{
-				if (item == null)
+				if (newItem == null)
 				{
 					Debug.Log("Item is null");
 					return;
@@ -54,7 +54,7 @@ namespace Weapons
 
 				if(!isLocalPlayer) return;
 
-				CmdInstantiateWeaponOnClients(item);
+				CmdInstantiateWeaponOnClients(newItem);
 
 				if(itemIndex != 0)
 					selectedWeaponIndex++;
