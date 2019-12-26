@@ -82,15 +82,13 @@ namespace Player
 
             CmdWeaponMuzzleFlash(transform.name);
 
-            WeaponRayCast(transform.name, weapon.weapon, GetComponent<PlayerSetup>().GetPlayerCamera().transform.position, GetComponent<PlayerSetup>().GetPlayerCamera().transform.forward);
+            CmdWeaponRayCast(transform.name, weapon.weapon, GetComponent<PlayerSetup>().GetPlayerCamera().transform.position, GetComponent<PlayerSetup>().GetPlayerCamera().transform.forward);
         }
 
-        private void WeaponRayCast(string sourcePlayer, string weapon, Vector3 origin, Vector3 direction)
+        [Command]
+        private void CmdWeaponRayCast(string sourcePlayer, string weapon, Vector3 origin, Vector3 direction)
         {
-	        //We would do the weapon ray cast on the server, but you need to do lag compensation.
-	        //Since the client and server are basically never synced(E.G: Player location), so when we tell the server
-	        //to do a ray cast, what the server sees will be different to what the client sees
-	        //TODO: Handle ray cast on the server once we have lag compensation
+	        //TODO: Do lag compensation
 
 	        TCWeapon tcWeapon = TCWeaponsManager.GetWeapon(weapon);
 			if(tcWeapon == null)
@@ -110,11 +108,11 @@ namespace Player
 				if(hit.collider.name == sourcePlayer)
 					continue;
 
-				CmdWeaponImpact(hit.point, hit.normal);
+				RpcWeaponImpact(hit.point, hit.normal);
 
 				if (hit.collider.GetComponent<PlayerManager>() == null) continue;
 
-				hit.collider.GetComponent<PlayerManager>().CmdTakeDamage(sourcePlayer, tcWeapon.damage);
+				hit.collider.GetComponent<PlayerManager>().RpcTakeDamage(sourcePlayer, tcWeapon.damage);
 				hitPlayer = true;
 			}
         }
@@ -141,12 +139,6 @@ namespace Player
         #endregion
 
         #region Weapon Impact
-
-		[Command]
-		private void CmdWeaponImpact(Vector3 pos, Vector3 normal)
-        {
-	        RpcWeaponImpact(pos, normal);
-        }
 
         [ClientRpc]
         private void RpcWeaponImpact(Vector3 pos, Vector3 normal)

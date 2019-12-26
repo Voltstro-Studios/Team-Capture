@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
+using Global;
 using UnityEngine;
 using Mirror;
 using Weapons;
+using Logger = Global.Logger;
 
 namespace Player
 {
@@ -15,69 +15,35 @@ namespace Player
 		[SyncVar] private int health;
 
 		[SerializeField] private GameObject[] disableGameObjectsOnDeath;
+		[SerializeField] private Behaviour[] disableBehaviourOnDeath;
 
 		public bool IsDead { get; protected set; }
-
-		private WeaponManager localWeaponManager;
-		private PlayerWeaponShoot localPlayerWeaponShoot;
-		private PlayerMovement localPlayerMovement;
 
 		private void Start()
 		{
 			health = maxHealth;
-
-			localWeaponManager = GetComponent<WeaponManager>();
-			localPlayerWeaponShoot = GetComponent<PlayerWeaponShoot>();
-			localPlayerMovement = GetComponent<PlayerMovement>();
-		}
-
-		private void Update()
-		{
-			//This is temp
-			if (Input.GetKeyDown(KeyCode.G))
-			{
-				CmdTakeDamage(transform.name, 100000);
-			}
-		}
-
-		[Command]
-		public void CmdTakeDamage(string sourceId, int damage)
-		{
-			PlayerManager player = GameManager.GetPlayer(sourceId);
-			if(player == null)
-				return;
-
-			player.health -= damage;
-
-			if (player.health <= 0)
-			{
-				//Dead
-				Debug.Log("Dead");
-
-				RpcDie();
-			}
 		}
 
 		[ClientRpc]
-		private void RpcDie()
+		public void RpcTakeDamage(string sourceId, int damage)
 		{
+			health -= damage;
+
+			if(health <= 0)
+				Die();
+		}
+
+		private void Die()
+		{
+			Logger.Log($"{transform.name} died.", LogVerbosity.INFO);
+
 			IsDead = true;
-
-			if(isLocalPlayer)
-				localWeaponManager.CmdRemoveAllWeapons();
-
-			localWeaponManager.enabled = false;
-			localPlayerWeaponShoot.enabled = false;
-
-			foreach (GameObject toDisable in disableGameObjectsOnDeath)
-			{
-				toDisable.SetActive(false);
-			}
 
 			//Disable the collider, or the Char controller
 			if (isLocalPlayer)
 			{
-				localPlayerMovement.enabled = false;
+				GetComponent<WeaponManager>().CmdRemoveAllWeapons();
+				GetComponent<PlayerMovement>().enabled = false;
 				GetComponent<CharacterController>().enabled = false;
 
 				//Switch cams
@@ -88,6 +54,16 @@ namespace Player
 				GetComponent<CapsuleCollider>().enabled = false;
 			}
 
+			foreach (GameObject toDisable in disableGameObjectsOnDeath)
+			{
+				toDisable.SetActive(false);
+			}
+
+			foreach (Behaviour toDisable in disableBehaviourOnDeath)
+			{
+				toDisable.enabled = false;
+			}
+
 			StartCoroutine(Respawn());
 		}
 
@@ -95,27 +71,31 @@ namespace Player
 		{
 			yield return new WaitForSeconds(GameManager.Instance.scene.respawnTime);
 
-			localWeaponManager.enabled = true;
-			localPlayerWeaponShoot.enabled = true;
-
 			//Enable game objects
-			foreach (GameObject gameObjectToDisable in disableGameObjectsOnDeath)
+			foreach (GameObject toEnable in disableGameObjectsOnDeath)
 			{
-				gameObjectToDisable.SetActive(true);
+				toEnable.SetActive(true);
+			}
+
+			foreach (Behaviour toEnable in disableBehaviourOnDeath)
+			{
+				toEnable.enabled = true;
 			}
 
 			//Enable the collider, or the Char controller
 			if (isLocalPlayer)
 			{
-				localPlayerMovement.enabled = true;
 				GetComponent<CharacterController>().enabled = true;
+				GetComponent<PlayerMovement>().enabled = true;
 
 				//Switch cams
 				GameManager.Instance.sceneCamera.SetActive(false);
 
+				//TODO: Get stock weapons from server
+				WeaponManager weaponManager = GetComponent<WeaponManager>();
 				foreach (TCWeapon stockWeapon in GameManager.Instance.scene.stockWeapons)
 				{
-					localWeaponManager.AddWeapon(stockWeapon.weapon);
+					weaponManager.AddWeapon(stockWeapon.weapon);
 				}
 			}
 			else

@@ -231,7 +231,7 @@ MonoBehaviour:
   disableGameObjectsOnDeath:
   - {fileID: 6438375964343202626}
   - {fileID: 6438375964401219431}
-  disableBehavioursOnDeath: []
+  disableBehaviourOnDeath: []
 --- !u!114 &8854156936004004421
 MonoBehaviour:
   m_ObjectHideFlags: 0
