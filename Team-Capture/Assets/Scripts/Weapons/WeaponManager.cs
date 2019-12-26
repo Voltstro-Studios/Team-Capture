@@ -116,7 +116,7 @@ namespace Weapons
 		[TargetRpc]
 		private void TargetSetupWeapon(string weapon)
 		{
-			Logger.Log($"Setup weapon `{weapon}`", LogVerbosity.DEBUG);
+			Logger.Log($"Setup weapon `{weapon}`", LogVerbosity.Debug);
 
 			StopCoroutine(ReloadCurrentWeapon());
 			TCWeaponsManager.GetWeapon(weapon).Reload();
@@ -196,7 +196,7 @@ namespace Weapons
 			if (weapon.isReloading)
 				yield break;
 
-			Logger.Log($"Reloading weapon `{weapon.weapon}`", LogVerbosity.DEBUG);
+			Logger.Log($"Reloading weapon `{weapon.weapon}`", LogVerbosity.Debug);
 
 			weapon.isReloading = true;
 

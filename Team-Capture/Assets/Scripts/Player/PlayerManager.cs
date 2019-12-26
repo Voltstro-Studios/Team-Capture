@@ -35,7 +35,7 @@ namespace Player
 
 		private void Die()
 		{
-			Logger.Log($"{transform.name} died.", LogVerbosity.INFO);
+			Logger.Log($"{transform.name} died.");
 
 			IsDead = true;
 

@@ -1,34 +1,25 @@
-﻿// ReSharper disable InconsistentNaming
-
-namespace Global
+﻿namespace Global
 {
     public enum LogVerbosity
     {
 	    /// <summary>
-	    ///     Errors only; only critical errors will be logged. It is not recommended to use this setting, use
-	    ///     <see cref="WARN" /> or <see cref="INFO" /> instead
+	    /// The most basic form of a log
 	    /// </summary>
-	    ERROR = 0,
+	    Info,
 
 	    /// <summary>
-	    ///     Errors and warnings are logged.
+	    /// Use for errors
 	    /// </summary>
-	    WARN = 1,
+	    Error,
 
 	    /// <summary>
-	    ///     Messages that provides extra information, such as platform information etc
+	    /// Warnings about stuff
 	    /// </summary>
-	    INFO = 2,
+	    Warn,
 
 	    /// <summary>
-	    ///     Record almost everything, to ease debugging. Not recommended for normal use.
+	    /// Debug messages, use for debugging, duh
 	    /// </summary>
-	    DEBUG = 3,
-
-	    /// <summary>
-	    ///     Most verbose, record every single message. Do not use except when debugging, as log files will be much larger and
-	    ///     performance will be lower.
-	    /// </summary>
-	    VERBOSE = 4
+	    Debug,
     }
 }

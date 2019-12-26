@@ -11,13 +11,13 @@ public class TCNetworkManager : NetworkManager
 	{
 		base.OnStartServer();
 
-		Global.Logger.Log("Server Initialized!", LogVerbosity.INFO);
+		Global.Logger.Log("Server Initialized!");
 	}
 
 	public override void OnClientSceneChanged(NetworkConnection conn)
 	{
 		Instantiate(gameMangerPrefab);
-		Global.Logger.Log("Created game manager object.", LogVerbosity.DEBUG);
+		Global.Logger.Log("Created game manager object.", LogVerbosity.Debug);
 
         base.OnClientSceneChanged(conn);
     }

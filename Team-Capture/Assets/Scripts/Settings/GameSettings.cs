@@ -82,7 +82,7 @@ namespace Settings
             }
 
             HasBeenLoaded = true;
-            Logger.Log("Loaded settings", LogVerbosity.INFO);
+            Logger.Log("Loaded settings");
 
             //Notify other classes that settings have updated
             SettingsLoaded?.Invoke();
@@ -131,15 +131,6 @@ namespace Settings
     {
         public string String = "I'm a string!!";
         public KeyCode ThisIsAKey = KeyCode.T;
-    }
-
-
-    //TODO: This is a real mess, the whole class needs a massive cleanup
-    public static class Logging
-    {
-        public static bool InterceptUnityDebug = true;
-        public static string LogFileExtension => ".log";
-        public static string LogSaveDirectory => $"{Paths.SavedFilesDirectory}/Logs";
     }
 
     #endregion

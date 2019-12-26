@@ -59,7 +59,7 @@ public class GameManager : MonoBehaviour
         playerManager.transform.name = playerId;
         Players.Add(playerId, playerManager);
 
-        Logger.Log($"Added player {playerId}.", LogVerbosity.INFO);
+        Logger.Log($"Added player {playerId}.");
     }
 
     /// <summary>
@@ -69,7 +69,7 @@ public class GameManager : MonoBehaviour
     public static void RemovePlayer(string playerId)
     {
         Players.Remove(playerId);
-        Logger.Log($"Removed player {playerId}", LogVerbosity.INFO);
+        Logger.Log($"Removed player {playerId}");
     }
 
     public static PlayerManager GetPlayer(string playerId)
