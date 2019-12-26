@@ -1,24 +1,25 @@
 ﻿using Global;
-using UnityEngine;
 using Mirror;
+using UnityEngine;
+using Logger = Global.Logger;
 
 public class TCNetworkManager : NetworkManager
 {
-    [Header("Team Capture")] [SerializeField]
-    private GameObject gameMangerPrefab;
+	[Header("Team Capture")] [SerializeField]
+	private GameObject gameMangerPrefab;
 
-    public override void OnStartServer()
+	public override void OnStartServer()
 	{
 		base.OnStartServer();
 
-		Global.Logger.Log("Server Initialized!");
+		Logger.Log("Server Initialized!");
 	}
 
 	public override void OnClientSceneChanged(NetworkConnection conn)
 	{
 		Instantiate(gameMangerPrefab);
-		Global.Logger.Log("Created game manager object.", LogVerbosity.Debug);
+		Logger.Log("Created game manager object.", LogVerbosity.Debug);
 
-        base.OnClientSceneChanged(conn);
-    }
+		base.OnClientSceneChanged(conn);
+	}
 }

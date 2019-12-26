@@ -1,21 +1,20 @@
 ﻿using System.Collections;
-using Global;
-using UnityEngine;
 using Mirror;
+using UnityEngine;
 using Weapons;
 using Logger = Global.Logger;
 
 namespace Player
 {
-    public class PlayerManager : NetworkBehaviour
-    {
-        [SyncVar] public string username = "Not Set";
-
-		[SerializeField] private int maxHealth = 100;
-		[SyncVar] private int health;
+	public class PlayerManager : NetworkBehaviour
+	{
+		[SerializeField] private Behaviour[] disableBehaviourOnDeath;
 
 		[SerializeField] private GameObject[] disableGameObjectsOnDeath;
-		[SerializeField] private Behaviour[] disableBehaviourOnDeath;
+		[SyncVar] private int health;
+
+		[SerializeField] private int maxHealth = 100;
+		[SyncVar] public string username = "Not Set";
 
 		public bool IsDead { get; protected set; }
 
@@ -29,7 +28,7 @@ namespace Player
 		{
 			health -= damage;
 
-			if(health <= 0)
+			if (health <= 0)
 				Die();
 		}
 
@@ -54,15 +53,9 @@ namespace Player
 				GetComponent<CapsuleCollider>().enabled = false;
 			}
 
-			foreach (GameObject toDisable in disableGameObjectsOnDeath)
-			{
-				toDisable.SetActive(false);
-			}
+			foreach (GameObject toDisable in disableGameObjectsOnDeath) toDisable.SetActive(false);
 
-			foreach (Behaviour toDisable in disableBehaviourOnDeath)
-			{
-				toDisable.enabled = false;
-			}
+			foreach (Behaviour toDisable in disableBehaviourOnDeath) toDisable.enabled = false;
 
 			StartCoroutine(Respawn());
 		}
@@ -72,15 +65,9 @@ namespace Player
 			yield return new WaitForSeconds(GameManager.Instance.scene.respawnTime);
 
 			//Enable game objects
-			foreach (GameObject toEnable in disableGameObjectsOnDeath)
-			{
-				toEnable.SetActive(true);
-			}
+			foreach (GameObject toEnable in disableGameObjectsOnDeath) toEnable.SetActive(true);
 
-			foreach (Behaviour toEnable in disableBehaviourOnDeath)
-			{
-				toEnable.enabled = true;
-			}
+			foreach (Behaviour toEnable in disableBehaviourOnDeath) toEnable.enabled = true;
 
 			//Enable the collider, or the Char controller
 			if (isLocalPlayer)
@@ -94,9 +81,7 @@ namespace Player
 				//TODO: Get stock weapons from server
 				WeaponManager weaponManager = GetComponent<WeaponManager>();
 				foreach (TCWeapon stockWeapon in GameManager.Instance.scene.stockWeapons)
-				{
 					weaponManager.AddWeapon(stockWeapon.weapon);
-				}
 			}
 			else
 			{
@@ -106,5 +91,5 @@ namespace Player
 			health = maxHealth;
 			IsDead = false;
 		}
-    }
+	}
 }

@@ -5,15 +5,15 @@ using UnityEngine;
 
 namespace LagCompensation
 {
-    internal partial class Simulator
-    {
-        /// <summary>
-        ///     Keeps a record of what position a player was in at what time
-        /// </summary>
-        private class PlayerPositionRecord
-        {
-            internal PlayerManager PlayerManager;
-            internal Vector3 PlayerPosition;
-        }
-    }
+	internal partial class Simulator
+	{
+		/// <summary>
+		/// Keeps a record of what position a player was in at what time
+		/// </summary>
+		private class PlayerPositionRecord
+		{
+			internal PlayerManager PlayerManager;
+			internal Vector3 PlayerPosition;
+		}
+	}
 }

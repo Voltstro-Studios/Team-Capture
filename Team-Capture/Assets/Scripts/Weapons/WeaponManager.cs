@@ -1,21 +1,19 @@
 ﻿using System.Collections;
-using UnityEngine;
 using Global;
 using Mirror;
 using Player;
+using UnityEngine;
 using Logger = Global.Logger;
 
 namespace Weapons
 {
 	public class WeaponManager : NetworkBehaviour
 	{
-		private class SyncListWeapons : SyncList<string> { }
-
-		public Transform weaponsHolderSpot;
-
 		private readonly SyncListWeapons weapons = new SyncListWeapons();
 
 		[SyncVar(hook = nameof(SelectWeapon))] public int selectedWeaponIndex;
+
+		public Transform weaponsHolderSpot;
 
 		private void Start()
 		{
@@ -36,10 +34,7 @@ namespace Weapons
 			base.OnStartLocalPlayer();
 
 			//Add stock weapons on client start
-			foreach (TCWeapon stockWeapon in GameManager.Instance.scene.stockWeapons)
-			{
-				AddWeapon(stockWeapon.weapon);
-			}
+			foreach (TCWeapon stockWeapon in GameManager.Instance.scene.stockWeapons) AddWeapon(stockWeapon.weapon);
 		}
 
 		private void AddWeaponCallback(SyncList<string>.Operation op, int itemIndex, string item, string newItem)
@@ -52,17 +47,17 @@ namespace Weapons
 					return;
 				}
 
-				if(!isLocalPlayer) return;
+				if (!isLocalPlayer) return;
 
 				CmdInstantiateWeaponOnClients(newItem);
 
-				if(itemIndex != 0)
+				if (itemIndex != 0)
 					selectedWeaponIndex++;
 			}
 
 			if (op == SyncList<string>.Operation.OP_CLEAR)
 			{
-				if(!isLocalPlayer) return;
+				if (!isLocalPlayer) return;
 
 				CmdRemoveAllActiveWeapons();
 			}
@@ -77,12 +72,51 @@ namespace Weapons
 		[ClientRpc]
 		private void RpcInstantiateWeaponOnClients(string weaponName)
 		{
-			if (weaponName == null)
-			{
-				return;
-			}
+			if (weaponName == null) return;
 
 			Instantiate(TCWeaponsManager.GetWeapon(weaponName).baseWeaponPrefab, weaponsHolderSpot);
+		}
+
+		[Command]
+		public void CmdSetWeaponIndex(int index)
+		{
+			selectedWeaponIndex = index;
+		}
+
+		#region Weapon Reloading
+
+		public IEnumerator ReloadCurrentWeapon()
+		{
+			TCWeapon weapon = GetActiveWeapon();
+
+			if (weapon.isReloading)
+				yield break;
+
+			Logger.Log($"Reloading weapon `{weapon.weapon}`", LogVerbosity.Debug);
+
+			weapon.isReloading = true;
+
+			yield return new WaitForSeconds(weapon.reloadTime);
+
+			weapon.Reload();
+
+			weapon.isReloading = false;
+		}
+
+		#endregion
+
+		public TCWeapon GetActiveWeapon()
+		{
+			return weapons.Count == 0 ? null : TCWeaponsManager.GetWeapon(weapons[selectedWeaponIndex]);
+		}
+
+		public WeaponGraphics GetActiveWeaponGraphics()
+		{
+			return weaponsHolderSpot.GetChild(selectedWeaponIndex).GetComponent<WeaponGraphics>();
+		}
+
+		private class SyncListWeapons : SyncList<string>
+		{
 		}
 
 		#region Add Weapons
@@ -98,12 +132,12 @@ namespace Weapons
 		private void CmdAddWeapon(string playerId, string weapon)
 		{
 			PlayerManager player = GameManager.GetPlayer(playerId);
-			if(player == null)
+			if (player == null)
 				return;
 
 			TCWeapon tcWeapon = TCWeaponsManager.GetWeapon(weapon);
 
-			if(tcWeapon == null)
+			if (tcWeapon == null)
 				return;
 
 			WeaponManager weaponManager = player.GetComponent<WeaponManager>();
@@ -141,19 +175,10 @@ namespace Weapons
 		[ClientRpc]
 		private void RpcRemoveAllActiveWeapons()
 		{
-			for (int i = 0; i < weaponsHolderSpot.childCount; i++)
-			{
-				Destroy(weaponsHolderSpot.GetChild(i).gameObject);
-			}
+			for (int i = 0; i < weaponsHolderSpot.childCount; i++) Destroy(weaponsHolderSpot.GetChild(i).gameObject);
 		}
 
 		#endregion
-
-		[Command]
-		public void CmdSetWeaponIndex(int index)
-		{
-			selectedWeaponIndex = index;
-		}
 
 		#region Weapon Selection
 
@@ -165,7 +190,7 @@ namespace Weapons
 		[Command]
 		public void CmdSelectWeapon(string player, int index)
 		{
-			if(GameManager.GetPlayer(player) == null)
+			if (GameManager.GetPlayer(player) == null)
 				return;
 
 			RpcSelectWeapon(player, index);
@@ -177,46 +202,12 @@ namespace Weapons
 			WeaponManager weaponManager = GameManager.GetPlayer(player).GetComponent<WeaponManager>();
 
 			for (int i = 0; i < weaponManager.weaponsHolderSpot.childCount; i++)
-			{
-				if(i == index)
+				if (i == index)
 					weaponManager.weaponsHolderSpot.GetChild(i).gameObject.SetActive(true);
 				else
 					weaponManager.weaponsHolderSpot.GetChild(i).gameObject.SetActive(false);
-			}
 		}
 
 		#endregion
-
-		#region Weapon Reloading
-
-		public IEnumerator ReloadCurrentWeapon()
-		{
-			TCWeapon weapon = GetActiveWeapon();
-			
-			if (weapon.isReloading)
-				yield break;
-
-			Logger.Log($"Reloading weapon `{weapon.weapon}`", LogVerbosity.Debug);
-
-			weapon.isReloading = true;
-
-			yield return new WaitForSeconds(weapon.reloadTime);
-
-			weapon.Reload();
-
-			weapon.isReloading = false;
-		}
-
-		#endregion
-
-		public TCWeapon GetActiveWeapon()
-		{
-			return weapons.Count == 0 ? null : TCWeaponsManager.GetWeapon(weapons[selectedWeaponIndex]);
-		}
-
-		public WeaponGraphics GetActiveWeaponGraphics()
-		{
-			return weaponsHolderSpot.GetChild(selectedWeaponIndex).GetComponent<WeaponGraphics>();
-		}
 	}
 }
