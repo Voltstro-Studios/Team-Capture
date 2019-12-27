@@ -1,4 +1,6 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using Global;
 using Mirror;
 using Player;
@@ -82,7 +84,7 @@ namespace Weapons
 			PlayerManager player = GameManager.GetPlayer(playerId);
 			if(player == null) return;
 
-			Logger.Log($"Player {transform.name} set their weapon index to {index}.");
+			Logger.Log($"Player {transform.name} set their weapon index to {index}.", LogVerbosity.Debug);
 
 			player.GetComponent<WeaponManager>().selectedWeaponIndex = index;
 		}
@@ -214,5 +216,14 @@ namespace Weapons
 		}
 
 		#endregion
+
+		public TCWeapon GetWeapon(string weapon)
+		{
+			IEnumerable<string> result = from a in weapons
+				where a == weapon
+				select a;
+
+			return TCWeaponsManager.GetWeapon(result.FirstOrDefault());
+		}
 	}
 }

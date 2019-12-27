@@ -10,7 +10,13 @@ namespace Weapons
 		private void OnTriggerEnter(Collider other)
 		{
 			PlayerManager player = other.GetComponent<PlayerManager>();
-			if (player != null) player.GetComponent<WeaponManager>().AddWeapon(weapon.weapon);
+			if (player == null) return;
+
+			if (player.GetComponent<WeaponManager>().GetWeapon(weapon.weapon) == null)
+			{
+				//TODO: Make the spinning weapon transparent and have a delay before others can pick it up
+				player.GetComponent<WeaponManager>().AddWeapon(weapon.weapon);
+			}
 		}
 	}
 }
