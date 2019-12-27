@@ -1,19 +1,29 @@
-﻿using UnityEngine;
+﻿using Mirror;
+using UnityEngine;
 using Weapons;
 
 namespace Player
 {
-	public class PlayerInput : MonoBehaviour
+	public class PlayerInput : NetworkBehaviour
 	{
+		[SerializeField] private KeyCode suicideKey = KeyCode.P;
+
 		private WeaponManager weaponManager;
+		private PlayerManager playerManager;
 
 		private void Start()
 		{
 			weaponManager = GetComponent<WeaponManager>();
+			playerManager = GetComponent<PlayerManager>();
 		}
 
 		private void Update()
 		{
+			if(!isLocalPlayer) return;
+
+			if (!playerManager.IsDead && Input.GetKeyDown(suicideKey))
+				playerManager.CmdSuicide();
+
 			int selectedWeaponIndex = weaponManager.selectedWeaponIndex;
 			int weaponHolderChildCount = weaponManager.weaponsHolderSpot.childCount - 1;
 
@@ -36,5 +46,7 @@ namespace Player
 			if (selectedWeaponIndex != weaponManager.selectedWeaponIndex)
 				weaponManager.CmdSetWeaponIndex(transform.name, selectedWeaponIndex);
 		}
+
+		
 	}
 }

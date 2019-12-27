@@ -23,6 +23,14 @@ namespace Player
 			health = maxHealth;
 		}
 
+		[Command]
+		public void CmdSuicide()
+		{
+			RpcTakeDamage(transform.name, health);
+		}
+
+		#region Death, Respawn, Damage
+
 		[ClientRpc]
 		public void RpcTakeDamage(string sourceId, int damage)
 		{
@@ -91,5 +99,7 @@ namespace Player
 			health = maxHealth;
 			IsDead = false;
 		}
+
+		#endregion
 	}
 }

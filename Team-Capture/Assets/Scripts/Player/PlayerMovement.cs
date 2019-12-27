@@ -11,6 +11,8 @@ namespace Player
 		private CharacterController charController;
 
 		public float forwardMove;
+		public float rightMove;
+
 		public float friction = 6;
 
 		public float gravity = 20.0f;
@@ -21,7 +23,6 @@ namespace Player
 
 		private Vector3 playerVelocity = Vector3.zero;
 		public Transform playerView; // Camera
-		public float rightMove;
 
 		private float rotX;
 		private float rotY;
@@ -217,6 +218,21 @@ namespace Player
 
 			playerVelocity.x += accelerationSpeed * wishDirection.x;
 			playerVelocity.z += accelerationSpeed * wishDirection.z;
+		}
+
+		private void OnDisable()
+		{
+			//Reset all values to 0
+			forwardMove = 0;
+			rightMove = 0;
+
+			rotX = 0;
+			rotY = 0;
+
+			wishJump = false;
+
+			playerVelocity = Vector3.zero;
+			charController.Move(Vector3.zero);
 		}
 	}
 }
