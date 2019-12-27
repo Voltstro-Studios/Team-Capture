@@ -47,12 +47,11 @@ namespace Weapons
 					return;
 				}
 
+				selectedWeaponIndex = itemIndex;
+
 				if (!isLocalPlayer) return;
 
 				CmdInstantiateWeaponOnClients(newItem);
-
-				if (itemIndex != 0)
-					selectedWeaponIndex++;
 			}
 
 			if (op == SyncList<string>.Operation.OP_CLEAR)
@@ -78,9 +77,14 @@ namespace Weapons
 		}
 
 		[Command]
-		public void CmdSetWeaponIndex(int index)
+		public void CmdSetWeaponIndex(string playerId, int index)
 		{
-			selectedWeaponIndex = index;
+			PlayerManager player = GameManager.GetPlayer(playerId);
+			if(player == null) return;
+
+			Logger.Log($"Player {transform.name} set their weapon index to {index}.");
+
+			player.GetComponent<WeaponManager>().selectedWeaponIndex = index;
 		}
 
 		#region Weapon Reloading
@@ -184,7 +188,8 @@ namespace Weapons
 
 		public void SelectWeapon(int index)
 		{
-			CmdSelectWeapon(transform.name, index);
+			if(isLocalPlayer)
+				CmdSelectWeapon(transform.name, index);
 		}
 
 		[Command]

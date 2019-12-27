@@ -34,7 +34,7 @@ namespace Player
 			}
 
 			if (selectedWeaponIndex != weaponManager.selectedWeaponIndex)
-				weaponManager.CmdSetWeaponIndex(selectedWeaponIndex);
+				weaponManager.CmdSetWeaponIndex(transform.name, selectedWeaponIndex);
 		}
 	}
 }
