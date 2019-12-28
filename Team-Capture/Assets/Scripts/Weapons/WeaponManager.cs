@@ -29,6 +29,10 @@ namespace Weapons
 
 				newWeapon.SetActive(selectedWeaponIndex == i);
 			}
+
+			//Add our weapon sway only to the local client
+			if (isLocalPlayer)
+				weaponsHolderSpot.gameObject.AddComponent<WeaponSway>();
 		}
 
 		public override void OnStartLocalPlayer()
