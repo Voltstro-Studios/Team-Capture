@@ -17,6 +17,8 @@ namespace Player
 		[SerializeField] private PlayerInput localPlayerInput;
 		[SerializeField] private PlayerMovement localPlayerMovement;
 
+		[Header("Player UI")] [SerializeField] private GameObject clientUiPrefab;
+
 		public override void OnStartLocalPlayer()
 		{
 			base.OnStartLocalPlayer();
@@ -31,6 +33,11 @@ namespace Player
 			localCamera.enabled = true;
 			localAudioListener.enabled = true;
 			localPlayerInput.enabled = true;
+
+			//Setup UI
+			ClientUI clientUi = Instantiate(clientUiPrefab).GetComponent<ClientUI>();
+			GetComponent<PlayerManager>().clientUi = clientUi;
+			clientUi.SetupUi(GetComponent<PlayerManager>());
 
 			Cursor.visible = false;
 			Cursor.lockState = CursorLockMode.Locked;

@@ -104,13 +104,17 @@ namespace Weapons
 
 			Logger.Log($"Reloading weapon `{weapon.weapon}`", LogVerbosity.Debug);
 
+			weapon.currentBulletsAmount = 0;
 			weapon.isReloading = true;
+
+			GetComponent<PlayerManager>().clientUi.hud.UpdateAmmoUi(this);
 
 			yield return new WaitForSeconds(weapon.reloadTime);
 
 			weapon.Reload();
-
 			weapon.isReloading = false;
+
+			GetComponent<PlayerManager>().clientUi.hud.UpdateAmmoUi(this);
 		}
 
 		#endregion
@@ -164,6 +168,8 @@ namespace Weapons
 
 			StopCoroutine(ReloadCurrentWeapon());
 			TCWeaponsManager.GetWeapon(weapon).Reload();
+
+			GetComponent<PlayerManager>().clientUi.hud.UpdateAmmoUi(this);
 		}
 
 		#endregion

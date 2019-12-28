@@ -84,6 +84,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -199,13 +200,13 @@ MonoBehaviour:
   airControl: 5
   airDecceleration: 2
   forwardMove: 0
+  rightMove: 0
   friction: 9
   gravity: 20
   holdJumpToBhop: 1
   jumpSpeed: 8
   moveSpeed: 11
   playerView: {fileID: 6438375964343202627}
-  rightMove: 0
   runAcceleration: 14
   runDeacceleration: 10
   sideStrafeAcceleration: 50
@@ -226,12 +227,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  username: Not Set
-  maxHealth: 100
+  disableBehaviourOnDeath: []
   disableGameObjectsOnDeath:
   - {fileID: 6438375964343202626}
   - {fileID: 6438375964401219431}
-  disableBehaviourOnDeath: []
+  maxHealth: 100
+  username: Not Set
+  clientUi: {fileID: 0}
 --- !u!114 &8854156936004004421
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -244,6 +246,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f80e52b21ce331449ea46f8c10f8a10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  suicideKey: 112
 --- !u!114 &4790435715656838203
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -264,6 +269,8 @@ MonoBehaviour:
   localCharacterController: {fileID: 6438375962803020340}
   localPlayerInput: {fileID: 8854156936004004421}
   localPlayerMovement: {fileID: 6438375962803020339}
+  clientUiPrefab: {fileID: 2142721828509503496, guid: 8f7e8441a5d36bf47babd28e6be83faf,
+    type: 3}
 --- !u!114 &5871886052252796697
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -292,8 +299,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  weaponsHolderSpot: {fileID: 8771585192178499609}
   selectedWeaponIndex: 0
+  weaponsHolderSpot: {fileID: 8771585192178499609}
 --- !u!114 &2372551973129992940
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -480,6 +487,7 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:

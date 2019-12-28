@@ -7,10 +7,12 @@ namespace Player
 	public class PlayerWeaponShoot : NetworkBehaviour
 	{
 		private WeaponManager weaponManager;
+		private PlayerManager playerManager;
 
 		private void Start()
 		{
 			weaponManager = GetComponent<WeaponManager>();
+			playerManager = GetComponent<PlayerManager>();
 		}
 
 		private void Update()
@@ -25,7 +27,7 @@ namespace Player
 			if (weapon == null)
 				return;
 
-			if (GetComponent<PlayerManager>().IsDead)
+			if (playerManager.IsDead)
 			{
 				CancelInvoke(nameof(ShootWeapon));
 				return;
@@ -66,8 +68,11 @@ namespace Player
 			if (weapon.currentBulletsAmount <= 0)
 			{
 				weaponManager.StartCoroutine(weaponManager.ReloadCurrentWeapon());
+				playerManager.clientUi.hud.UpdateAmmoUi(weaponManager);
 				return;
 			}
+
+			playerManager.clientUi.hud.UpdateAmmoUi(weaponManager);
 
 			weapon.currentBulletsAmount--;
 

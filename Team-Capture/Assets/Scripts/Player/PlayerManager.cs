@@ -18,6 +18,10 @@ namespace Player
 
 		public bool IsDead { get; protected set; }
 
+		public int GetHealth => health;
+
+		[HideInInspector] public ClientUI clientUi;
+
 		private void Start()
 		{
 			health = maxHealth;
@@ -35,6 +39,9 @@ namespace Player
 		public void RpcTakeDamage(string sourceId, int damage)
 		{
 			health -= damage;
+
+			if(isLocalPlayer)
+				clientUi.hud.UpdateHealthUi();
 
 			if (health <= 0)
 				Die();
@@ -90,6 +97,8 @@ namespace Player
 				WeaponManager weaponManager = GetComponent<WeaponManager>();
 				foreach (TCWeapon stockWeapon in GameManager.Instance.scene.stockWeapons)
 					weaponManager.AddWeapon(stockWeapon.weapon);
+
+				clientUi.hud.UpdateHealthUi();
 			}
 			else
 			{
