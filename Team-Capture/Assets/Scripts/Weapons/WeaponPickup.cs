@@ -16,6 +16,7 @@ namespace Weapons
 			{
 				//TODO: Make the spinning weapon transparent and have a delay before others can pick it up
 				player.GetComponent<WeaponManager>().AddWeapon(weapon.weapon);
+				player.clientUi.hud.UpdateAmmoUi(player.GetComponent<WeaponManager>());
 			}
 		}
 	}

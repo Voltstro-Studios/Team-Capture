@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d1747c1ef55c3549b1304650c765215, type: 3}
   m_Name: Pistol
   m_EditorClassIdentifier: 
+  weapon: pistol
+  weaponFormattedName: Pistol
   baseWeaponPrefab: {fileID: 2985817369304730979, guid: 5f5edb97b2388714ca78daa416284087,
     type: 3}
-  weapon: pistol
-  weaponName: Pistol
   damage: 10
-  range: 30
   fireRate: 4
-  maxBullets: 18
+  range: 30
   reloadTime: 2
-  currentBulletsAmount: -47
+  maxBullets: 18
+  currentBulletsAmount: 18
   isReloading: 0

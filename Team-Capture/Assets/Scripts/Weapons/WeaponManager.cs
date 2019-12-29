@@ -91,6 +91,14 @@ namespace Weapons
 			Logger.Log($"Player {transform.name} set their weapon index to {index}.", LogVerbosity.Debug);
 
 			player.GetComponent<WeaponManager>().selectedWeaponIndex = index;
+
+			TargetUpdateAmmUi();
+		}
+
+		[TargetRpc]
+		private void TargetUpdateAmmUi()
+		{
+			GetComponent<PlayerManager>().clientUi.hud.UpdateAmmoUi(this);
 		}
 
 		#region Weapon Reloading
