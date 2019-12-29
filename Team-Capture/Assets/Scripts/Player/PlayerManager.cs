@@ -62,6 +62,8 @@ namespace Player
 
 				//Switch cams
 				GameManager.Instance.sceneCamera.SetActive(true);
+
+				clientUi.hud.gameObject.SetActive(false);
 			}
 			else
 			{
@@ -78,6 +80,14 @@ namespace Player
 		private IEnumerator Respawn()
 		{
 			yield return new WaitForSeconds(GameManager.Instance.scene.respawnTime);
+
+			Transform spawnPoint = NetworkManager.singleton.GetStartPosition();
+			transform.position = spawnPoint.position;
+			transform.rotation = spawnPoint.rotation;
+
+			yield return new WaitForSeconds(0.1f);
+
+			health = maxHealth;
 
 			//Enable game objects
 			foreach (GameObject toEnable in disableGameObjectsOnDeath) toEnable.SetActive(true);
@@ -98,6 +108,7 @@ namespace Player
 				foreach (TCWeapon stockWeapon in GameManager.Instance.scene.stockWeapons)
 					weaponManager.AddWeapon(stockWeapon.weapon);
 
+				clientUi.hud.gameObject.SetActive(true);
 				clientUi.hud.UpdateHealthUi();
 			}
 			else
@@ -105,7 +116,6 @@ namespace Player
 				GetComponent<CapsuleCollider>().enabled = true;
 			}
 
-			health = maxHealth;
 			IsDead = false;
 		}
 
