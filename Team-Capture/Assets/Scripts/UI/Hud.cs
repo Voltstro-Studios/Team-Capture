@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using TMPro;
+using UI;
 using Weapons;
 
 public class Hud : MonoBehaviour

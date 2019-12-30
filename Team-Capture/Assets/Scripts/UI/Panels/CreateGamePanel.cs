@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Mirror;
 using SceneManagement;
@@ -6,7 +8,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Panels
+namespace UI.Panels
 {
 	public class CreateGamePanel : MonoBehaviour
 	{
@@ -36,8 +38,28 @@ namespace Panels
 		/// </summary>
 		public void CreateGame()
 		{
+			if (netManager.isNetworkActive)
+			{
+				StartCoroutine(QuitExistingGame(StartServer));
+				return;
+			}
+
+			StartServer();
+		}
+
+		private void StartServer()
+		{
 			netManager.onlineScene = activeTCScenes[mapsDropdown.value].sceneName;
 			netManager.StartHost();
+		}
+
+		private IEnumerator QuitExistingGame(Action doLast)
+		{
+			netManager.StopHost();
+
+			yield return new WaitForSeconds(0.1f);
+
+			doLast();
 		}
 	}
 }

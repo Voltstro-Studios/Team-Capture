@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Panels
+namespace UI.Panels
 {
 	public class QuitPanel : MonoBehaviour
 	{

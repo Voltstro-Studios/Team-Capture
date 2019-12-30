@@ -1,37 +1,40 @@
 ﻿using Player;
 using UnityEngine;
 
-public class ClientUI : MonoBehaviour
+namespace UI
 {
-	[HideInInspector] public PlayerManager player;
-
-	public Hud hud;
-
-	public GameObject pauseMenuGameObject;
-
-	public static bool IsPauseMenuOpen;
-
-	public ClientUI SetupUi(PlayerManager playerManager)
+	public class ClientUI : MonoBehaviour
 	{
-		IsPauseMenuOpen = false;
+		[HideInInspector] public PlayerManager player;
 
-		player = playerManager;
+		public Hud hud;
 
-		hud.clientUi = this;
+		public GameObject pauseMenuGameObject;
 
-		pauseMenuGameObject.SetActive(false);
+		public static bool IsPauseMenuOpen;
 
-		return this;
-	}
+		public ClientUI SetupUi(PlayerManager playerManager)
+		{
+			IsPauseMenuOpen = false;
 
-	public void TogglePauseMenu()
-	{
-		IsPauseMenuOpen = !IsPauseMenuOpen;
+			player = playerManager;
 
-		Cursor.visible = IsPauseMenuOpen;
-		Cursor.lockState = Cursor.lockState == CursorLockMode.Locked ? CursorLockMode.None : CursorLockMode.Locked;
+			hud.clientUi = this;
 
-		pauseMenuGameObject.SetActive(IsPauseMenuOpen);
-		hud.gameObject.SetActive(!IsPauseMenuOpen);
+			pauseMenuGameObject.SetActive(false);
+
+			return this;
+		}
+
+		public void TogglePauseMenu()
+		{
+			IsPauseMenuOpen = !IsPauseMenuOpen;
+
+			Cursor.visible = IsPauseMenuOpen;
+			Cursor.lockState = Cursor.lockState == CursorLockMode.Locked ? CursorLockMode.None : CursorLockMode.Locked;
+
+			pauseMenuGameObject.SetActive(IsPauseMenuOpen);
+			hud.gameObject.SetActive(!IsPauseMenuOpen);
+		}
 	}
 }

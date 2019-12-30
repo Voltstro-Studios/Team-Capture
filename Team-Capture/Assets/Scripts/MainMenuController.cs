@@ -3,24 +3,20 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Mirror;
-using Panels;
+using UI.Panels;
 using UnityEngine;
 
 public class MainMenuController : MonoBehaviour
 {
+	public List<MainMenuPanel> menuPanels = new List<MainMenuPanel>();
+
 	[Header("Black Background")] public Animator blackBackgroundAnimator;
-
 	public string blackBackgroundCloseTriggerName = "Exit";
-
 	public float blackBackgroundWaitTime = 0.2f;
 	public Transform mainMenuPanel;
 
-	public List<MainMenuPanel> menuPanels = new List<MainMenuPanel>();
-
 	[Header("Top Black Bar")] public Animator topBlackBarAnimator;
-
 	public string topBlackBarCloseTriggerName = "Exit";
-
 	public float topBlackBarWaitTime = 0.2f;
 
 	public void Start()
@@ -43,6 +39,13 @@ public class MainMenuController : MonoBehaviour
 			//Basically, the same thing above
 			if (panel.GetComponent<CreateGamePanel>() != null)
 				panel.GetComponent<CreateGamePanel>().cancelButton.onClick.AddListener(delegate
+				{
+					TogglePanel(menuPanel.panelName);
+				});
+
+			//Same as the above except for a disconnect panel
+			if(panel.GetComponent<DisconnectPanel>() != null)
+				panel.GetComponent<DisconnectPanel>().noBtn.onClick.AddListener(delegate
 				{
 					TogglePanel(menuPanel.panelName);
 				});
