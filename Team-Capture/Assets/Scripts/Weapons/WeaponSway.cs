@@ -23,6 +23,9 @@ namespace Weapons
 
 		private void Update()
 		{
+			if(ClientUI.IsPauseMenuOpen)
+				return;
+
 			float fx = -Input.GetAxis("Mouse X") * xSwayAmount;
 			float fy = -Input.GetAxis("Mouse Y") * ySwayAmount;
 

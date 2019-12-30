@@ -42,6 +42,14 @@ namespace Player
 
 		private void Update()
 		{
+			if (ClientUI.IsPauseMenuOpen)
+			{
+				if (charController.velocity != Vector3.zero)
+					charController.Move(Vector3.zero);
+
+				return;
+			}
+
 			rotX -= Input.GetAxisRaw("Mouse Y") * xMouseSensitivity * 0.02f;
 			rotY += Input.GetAxisRaw("Mouse X") * yMouseSensitivity * 0.02f;
 

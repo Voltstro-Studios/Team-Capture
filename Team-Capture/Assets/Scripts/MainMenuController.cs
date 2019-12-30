@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Mirror;
 using Panels;
 using UnityEngine;
 
@@ -70,6 +71,9 @@ public class MainMenuController : MonoBehaviour
 			ClosePanel(panel);
 	}
 
+	/// <summary>
+	/// Closes the active panel
+	/// </summary>
 	public void CloseActivePanel()
 	{
 		if (GetActivePanel() != null)
@@ -125,11 +129,17 @@ public class MainMenuController : MonoBehaviour
 
 	private void ActivateBlackBackground()
 	{
+		if(NetworkManager.singleton.isNetworkActive) //If we are in game we want the black background always active
+			return;
+
 		blackBackgroundAnimator.gameObject.SetActive(true);
 	}
 
 	private IEnumerator DeactivateBlackBackground()
 	{
+		if(NetworkManager.singleton.isNetworkActive) //If we are in game we want the black background always active
+			yield break;
+
 		blackBackgroundAnimator.SetTrigger(blackBackgroundCloseTriggerName);
 		yield return new WaitForSeconds(blackBackgroundWaitTime);
 		blackBackgroundAnimator.gameObject.SetActive(false);

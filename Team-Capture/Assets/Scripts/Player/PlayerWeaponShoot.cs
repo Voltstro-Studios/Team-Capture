@@ -20,6 +20,9 @@ namespace Player
 			if (!isLocalPlayer)
 				return;
 
+			if(ClientUI.IsPauseMenuOpen)
+				return;
+
 			//Cache our current weapon
 			TCWeapon weapon = GetCurrentWeapon();
 

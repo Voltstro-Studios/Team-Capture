@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using Mirror;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -18,6 +19,9 @@ namespace Panels
 
 		public void Quit()
 		{
+			if(NetworkManager.singleton.isNetworkActive)
+				NetworkManager.singleton.StopHost();
+
 			Application.Quit(0);
 		}
 	}

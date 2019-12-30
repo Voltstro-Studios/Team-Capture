@@ -7,6 +7,7 @@ namespace Player
 	public class PlayerInput : NetworkBehaviour
 	{
 		[SerializeField] private KeyCode suicideKey = KeyCode.P;
+		[SerializeField] private KeyCode pauseMenuKey = KeyCode.Escape;
 
 		private WeaponManager weaponManager;
 		private PlayerManager playerManager;
@@ -20,6 +21,12 @@ namespace Player
 		private void Update()
 		{
 			if(!isLocalPlayer) return;
+
+			if(Input.GetKeyDown(pauseMenuKey))
+				playerManager.clientUi.TogglePauseMenu();
+
+			if (ClientUI.IsPauseMenuOpen)
+				return;
 
 			if (!playerManager.IsDead && Input.GetKeyDown(suicideKey))
 				playerManager.CmdSuicide();
