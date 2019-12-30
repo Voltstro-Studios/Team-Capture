@@ -1849,8 +1849,8 @@ GameObject:
   m_Component:
   - component: {fileID: 635598617}
   - component: {fileID: 635598615}
-  - component: {fileID: 635598614}
   - component: {fileID: 635598616}
+  - component: {fileID: 635598614}
   m_Layer: 0
   m_Name: _NetworkManager
   m_TagString: Untagged
@@ -1867,7 +1867,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 635598613}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c7424c1070fad4ba2a7a96b02fbeb4bb, type: 3}
+  m_Script: {fileID: 11500000, guid: 5671dcb80f9d69240b71f5612676a3fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   OnClientConnected:
@@ -1894,10 +1894,31 @@ MonoBehaviour:
   OnServerDisconnected:
     m_PersistentCalls:
       m_Calls: []
+  clientAddress: 127.0.0.1
+  serverIPv4BindAddress: 0.0.0.0
+  serverIPv6BindAddress: '::'
   port: 7777
-  NoDelay: 1
-  serverMaxMessageSize: 16384
-  clientMaxMessageSize: 16384
+  useUpnP: 1
+  maxConnections: 20
+  ipv6Enabled: 1
+  channels: 0204010300
+  authCode: 
+  updateTime: 15
+  pingInterval: 1000
+  disconnectTimeout: 5000
+  reconnectDelay: 500
+  maxConnectAttempts: 6
+  simulatePacketLoss: 0
+  simulationPacketLossChance: 10
+  simulateLatency: 0
+  simulationMinLatency: 30
+  simulationMaxLatency: 100
+  onClientSocketError:
+    m_PersistentCalls:
+      m_Calls: []
+  onServerSocketError:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &635598615
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3303,7 +3324,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 44.974976}
+  m_AnchoredPosition: {x: 0, y: 44.97461}
   m_SizeDelta: {x: 0, y: -89.95}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!95 &1669149775

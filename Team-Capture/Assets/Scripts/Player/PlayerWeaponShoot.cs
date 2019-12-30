@@ -76,8 +76,6 @@ namespace Player
 				return;
 			}
 
-			playerManager.clientUi.hud.UpdateAmmoUi(weaponManager);
-
 			weapon.currentBulletsAmount--;
 
 			CmdWeaponMuzzleFlash(transform.name);
@@ -85,6 +83,8 @@ namespace Player
 			CmdWeaponRayCast(transform.name, weapon.weapon,
 				GetComponent<PlayerSetup>().GetPlayerCamera().transform.position,
 				GetComponent<PlayerSetup>().GetPlayerCamera().transform.forward);
+
+			playerManager.clientUi.hud.UpdateAmmoUi(weaponManager);
 		}
 
 		[Command]
