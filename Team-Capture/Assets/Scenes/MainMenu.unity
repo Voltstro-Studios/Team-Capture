@@ -1898,9 +1898,9 @@ MonoBehaviour:
   serverIPv4BindAddress: 0.0.0.0
   serverIPv6BindAddress: '::'
   port: 7777
-  useUpnP: 1
+  useUpnP: 0
   maxConnections: 20
-  ipv6Enabled: 1
+  ipv6Enabled: 0
   channels: 0204010300
   authCode: 
   updateTime: 15

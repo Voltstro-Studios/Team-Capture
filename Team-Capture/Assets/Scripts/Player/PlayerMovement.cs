@@ -43,29 +43,22 @@ namespace Player
 
 		private void Update()
 		{
-			if (ClientUI.IsPauseMenuOpen)
+			if (!ClientUI.IsPauseMenuOpen)
 			{
-				if (charController.velocity != Vector3.zero)
-					charController.Move(Vector3.zero);
-
-				return;
+				rotX -= Input.GetAxisRaw("Mouse Y") * xMouseSensitivity * 0.02f;
+				rotY += Input.GetAxisRaw("Mouse X") * yMouseSensitivity * 0.02f;
 			}
 
-			rotX -= Input.GetAxisRaw("Mouse Y") * xMouseSensitivity * 0.02f;
-			rotY += Input.GetAxisRaw("Mouse X") * yMouseSensitivity * 0.02f;
-
 			// Clamp the X rotation
-			if (rotX < -90)
-				rotX = -90;
-			else if (rotX > 90)
-				rotX = 90;
+			rotX = Mathf.Clamp(rotX, -90, 90);
 
 			transform.rotation = Quaternion.Euler(0, rotY, 0); // Rotates the collider
 			playerView.rotation = Quaternion.Euler(rotX, rotY, 0); // Rotates the camera
 
 			/* Movement, here's the important part */
 			QueueJump();
-			if (charController.isGrounded)
+
+			if (charController.isGrounded )
 				GroundMove();
 			else if (!charController.isGrounded)
 				AirMove();
@@ -76,13 +69,23 @@ namespace Player
 
 		private void SetMovementDir()
 		{
+			if (ClientUI.IsPauseMenuOpen)
+			{
+				forwardMove = 0;
+				rightMove = 0;
+
+				return;
+			}
+
 			forwardMove = Input.GetAxisRaw("Vertical");
 			rightMove = Input.GetAxisRaw("Horizontal");
 		}
 
-
 		private void QueueJump()
 		{
+			if(ClientUI.IsPauseMenuOpen)
+				return;
+
 			if (holdJumpToBhop)
 			{
 				wishJump = Input.GetButton("Jump");
@@ -101,32 +104,35 @@ namespace Player
 
 			SetMovementDir();
 
-			Vector3 wishDirection = new Vector3(rightMove, 0, forwardMove);
-			wishDirection = transform.TransformDirection(wishDirection);
-
-			float wishSpeed = wishDirection.magnitude;
-			wishSpeed *= moveSpeed;
-
-			wishDirection.Normalize();
-
-			if (Vector3.Dot(playerVelocity, wishDirection) < 0)
-				acceleration = airDecceleration;
-			else
-				acceleration = airAcceleration;
-			// If the player is ONLY strafing left or right
-			// ReSharper disable CompareOfFloatsByEqualityOperator
-			if (forwardMove == 0 && rightMove != 0)
+			if (!ClientUI.IsPauseMenuOpen)
 			{
-				if (wishSpeed > sideStrafeSpeed)
-					wishSpeed = sideStrafeSpeed;
-				acceleration = sideStrafeAcceleration;
+				Vector3 wishDirection = new Vector3(rightMove, 0, forwardMove);
+				wishDirection = transform.TransformDirection(wishDirection);
+
+				float wishSpeed = wishDirection.magnitude;
+				wishSpeed *= moveSpeed;
+
+				wishDirection.Normalize();
+
+				if (Vector3.Dot(playerVelocity, wishDirection) < 0)
+					acceleration = airDecceleration;
+				else
+					acceleration = airAcceleration;
+				// If the player is ONLY strafing left or right
+				// ReSharper disable CompareOfFloatsByEqualityOperator
+				if (forwardMove == 0 && rightMove != 0)
+				{
+					if (wishSpeed > sideStrafeSpeed)
+						wishSpeed = sideStrafeSpeed;
+					acceleration = sideStrafeAcceleration;
+				}
+
+				// ReSharper restore CompareOfFloatsByEqualityOperator
+
+				Accelerate(wishDirection, wishSpeed, acceleration);
+				if (airControl > 0)
+					AirControl(wishDirection, wishSpeed);
 			}
-
-			// ReSharper restore CompareOfFloatsByEqualityOperator
-
-			Accelerate(wishDirection, wishSpeed, acceleration);
-			if (airControl > 0)
-				AirControl(wishDirection, wishSpeed);
 
 			// Apply gravity
 			playerVelocity.y -= gravity * Time.deltaTime;
@@ -134,6 +140,9 @@ namespace Player
 
 		private void AirControl(Vector3 wishDirection, float wishSpeed)
 		{
+			if(ClientUI.IsPauseMenuOpen)
+				return;
+
 			// Can't control movement if not moving forward or backward
 			if (Mathf.Abs(forwardMove) < 0.001 || Mathf.Abs(wishSpeed) < 0.001)
 				return;
