@@ -92,7 +92,7 @@ namespace Player
 		{
 			//TODO: Do lag compensation
 
-			TCWeapon tcWeapon = TCWeaponsManager.GetWeapon(weapon);
+			TCWeapon tcWeapon = WeaponsResourceManager.GetWeapon(weapon);
 			if (tcWeapon == null)
 				return;
 

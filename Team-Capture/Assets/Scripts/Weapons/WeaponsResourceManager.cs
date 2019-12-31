@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Weapons
 {
-	public static class TCWeaponsManager
+	public static class WeaponsResourceManager
 	{
 		public static IEnumerable<TCWeapon> GetAllTCWeapons()
 		{

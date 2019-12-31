@@ -25,7 +25,7 @@ namespace Weapons
 			for (int i = 0; i < weapons.Count; i++)
 			{
 				GameObject newWeapon =
-					Instantiate(TCWeaponsManager.GetWeapon(weapons[i]).baseWeaponPrefab, weaponsHolderSpot);
+					Instantiate(WeaponsResourceManager.GetWeapon(weapons[i]).baseWeaponPrefab, weaponsHolderSpot);
 
 				newWeapon.SetActive(selectedWeaponIndex == i);
 			}
@@ -79,7 +79,7 @@ namespace Weapons
 		{
 			if (weaponName == null) return;
 
-			Instantiate(TCWeaponsManager.GetWeapon(weaponName).baseWeaponPrefab, weaponsHolderSpot);
+			Instantiate(WeaponsResourceManager.GetWeapon(weaponName).baseWeaponPrefab, weaponsHolderSpot);
 		}
 
 		[Command]
@@ -129,7 +129,7 @@ namespace Weapons
 
 		public TCWeapon GetActiveWeapon()
 		{
-			return weapons.Count == 0 ? null : TCWeaponsManager.GetWeapon(weapons[selectedWeaponIndex]);
+			return weapons.Count == 0 ? null : WeaponsResourceManager.GetWeapon(weapons[selectedWeaponIndex]);
 		}
 
 		public WeaponGraphics GetActiveWeaponGraphics()
@@ -145,7 +145,7 @@ namespace Weapons
 
 		public void AddWeapon(string weaponName)
 		{
-			if (TCWeaponsManager.GetWeapon(weaponName) == null) return;
+			if (WeaponsResourceManager.GetWeapon(weaponName) == null) return;
 
 			CmdAddWeapon(transform.name, weaponName);
 		}
@@ -157,7 +157,7 @@ namespace Weapons
 			if (player == null)
 				return;
 
-			TCWeapon tcWeapon = TCWeaponsManager.GetWeapon(weapon);
+			TCWeapon tcWeapon = WeaponsResourceManager.GetWeapon(weapon);
 
 			if (tcWeapon == null)
 				return;
@@ -175,7 +175,7 @@ namespace Weapons
 			Logger.Log($"Setup weapon `{weapon}`", LogVerbosity.Debug);
 
 			StopCoroutine(ReloadCurrentWeapon());
-			TCWeaponsManager.GetWeapon(weapon).Reload();
+			WeaponsResourceManager.GetWeapon(weapon).Reload();
 
 			GetComponent<PlayerManager>().clientUi.hud.UpdateAmmoUi(this);
 		}
@@ -241,7 +241,7 @@ namespace Weapons
 				where a == weapon
 				select a;
 
-			return TCWeaponsManager.GetWeapon(result.FirstOrDefault());
+			return WeaponsResourceManager.GetWeapon(result.FirstOrDefault());
 		}
 	}
 }
