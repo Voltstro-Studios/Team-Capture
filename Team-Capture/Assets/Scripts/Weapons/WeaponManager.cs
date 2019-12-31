@@ -58,6 +58,8 @@ namespace Weapons
 				if (!isLocalPlayer) return;
 
 				CmdInstantiateWeaponOnClients(newItem);
+
+				GetComponent<PlayerManager>().clientUi.hud.UpdateAmmoUi(this);
 			}
 
 			if (op == SyncList<string>.Operation.OP_CLEAR)
@@ -91,14 +93,6 @@ namespace Weapons
 			Logger.Log($"Player {transform.name} set their weapon index to {index}.", LogVerbosity.Debug);
 
 			player.GetComponent<WeaponManager>().selectedWeaponIndex = index;
-
-			TargetUpdateAmmUi();
-		}
-
-		[TargetRpc]
-		private void TargetUpdateAmmUi()
-		{
-			GetComponent<PlayerManager>().clientUi.hud.UpdateAmmoUi(this);
 		}
 
 		#region Weapon Reloading
@@ -176,8 +170,6 @@ namespace Weapons
 
 			StopCoroutine(ReloadCurrentWeapon());
 			WeaponsResourceManager.GetWeapon(weapon).Reload();
-
-			GetComponent<PlayerManager>().clientUi.hud.UpdateAmmoUi(this);
 		}
 
 		#endregion
@@ -208,8 +200,10 @@ namespace Weapons
 
 		public void SelectWeapon(int index)
 		{
-			if(isLocalPlayer)
-				CmdSelectWeapon(transform.name, index);
+			if(!isLocalPlayer)
+				return;
+
+			CmdSelectWeapon(transform.name, index);
 		}
 
 		[Command]
@@ -231,6 +225,9 @@ namespace Weapons
 					weaponManager.weaponsHolderSpot.GetChild(i).gameObject.SetActive(true);
 				else
 					weaponManager.weaponsHolderSpot.GetChild(i).gameObject.SetActive(false);
+
+			if(isLocalPlayer)
+				GetComponent<PlayerManager>().clientUi.hud.UpdateAmmoUi(this);
 		}
 
 		#endregion
