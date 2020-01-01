@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Global;
+using Helper;
 using Mirror;
 using Player;
 using UnityEngine;
@@ -16,6 +17,8 @@ namespace Weapons
 		[SyncVar(hook = nameof(SelectWeapon))] public int selectedWeaponIndex;
 
 		public Transform weaponsHolderSpot;
+
+		[SerializeField] private string weaponLayerName = "LocalWeapon";
 
 		private void Start()
 		{
@@ -81,7 +84,9 @@ namespace Weapons
 		{
 			if (weaponName == null) return;
 
-			Instantiate(WeaponsResourceManager.GetWeapon(weaponName).baseWeaponPrefab, weaponsHolderSpot);
+			GameObject newWeapon = Instantiate(WeaponsResourceManager.GetWeapon(weaponName).baseWeaponPrefab, weaponsHolderSpot);
+			if (isLocalPlayer)
+				Layers.SetLayerRecursively(newWeapon, LayerMask.NameToLayer(weaponLayerName));
 		}
 
 		[Command]
