@@ -70,10 +70,10 @@ MonoBehaviour:
       failOperation: 0
       zFailOperation: 0
     cameraSettings:
-      overrideCamera: 0
+      overrideCamera: 1
       restoreCamera: 1
       offset: {x: 0, y: 0, z: 0, w: 0}
-      cameraFieldOfView: 60
+      cameraFieldOfView: 75
 --- !u!114 &7637940509982023686
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -108,7 +108,7 @@ MonoBehaviour:
       failOperation: 0
       zFailOperation: 0
     cameraSettings:
-      overrideCamera: 0
+      overrideCamera: 1
       restoreCamera: 1
       offset: {x: 0, y: 0, z: 0, w: 0}
-      cameraFieldOfView: 60
+      cameraFieldOfView: 75
