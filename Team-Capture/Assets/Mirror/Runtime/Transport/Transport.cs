@@ -9,11 +9,11 @@ using UnityEngine.Events;
 namespace Mirror
 {
     // UnityEvent definitions
-    [Serializable] public class ClientDataReceivedEvent : UnityEvent<ArraySegment<byte>, int> {}
-    [Serializable] public class UnityEventException : UnityEvent<Exception> {}
-    [Serializable] public class UnityEventInt : UnityEvent<int> {}
-    [Serializable] public class ServerDataReceivedEvent : UnityEvent<int, ArraySegment<byte>, int> {}
-    [Serializable] public class UnityEventIntException : UnityEvent<int, Exception> {}
+    [Serializable] public class ClientDataReceivedEvent : UnityEvent<ArraySegment<byte>, int> { }
+    [Serializable] public class UnityEventException : UnityEvent<Exception> { }
+    [Serializable] public class UnityEventInt : UnityEvent<int> { }
+    [Serializable] public class ServerDataReceivedEvent : UnityEvent<int, ArraySegment<byte>, int> { }
+    [Serializable] public class UnityEventIntException : UnityEvent<int, Exception> { }
 
     public abstract class Transport : MonoBehaviour
     {
@@ -59,13 +59,13 @@ namespace Mirror
         public abstract bool ClientConnected();
 
         /// <summary>
-        /// Establish a connecion to a server
+        /// Establish a connection to a server
         /// </summary>
         /// <param name="address">The IP address or FQDN of the server we are trying to connect to</param>
         public abstract void ClientConnect(string address);
 
         /// <summary>
-        /// Establish a connecion to a server
+        /// Establish a connection to a server
         /// </summary>
         /// <param name="uri">The address of the server we are trying to connect to</param>
         public virtual void ClientConnect(Uri uri)
@@ -203,6 +203,6 @@ namespace Mirror
         //            e.g. in uSurvival Transport would apply Cmds before
         //            ShoulderRotation.LateUpdate, resulting in projectile
         //            spawns at the point before shoulder rotation.
-        public void Update() {}
+        public void Update() { }
     }
 }
