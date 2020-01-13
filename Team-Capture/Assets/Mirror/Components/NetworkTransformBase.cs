@@ -32,12 +32,6 @@ namespace Mirror
         [SerializeField] Compression compressRotation = Compression.Much;
         public enum Compression { None, Much, Lots, NoRotation }; // easily understandable and funny
 
-        [Tooltip("Set to true if moves come from owner client, set to false if moves always come from server")]
-        public bool clientAuthority;
-
-        // is this a local player with authority over his own transform?
-        bool isLocalPlayerWithAuthority => isLocalPlayer && clientAuthority;
-
         // server
         Vector3 lastPosition;
         Quaternion lastRotation;
@@ -370,7 +364,7 @@ namespace Mirror
             {
                 // send to server if we have local authority (and aren't the server)
                 // -> only if connectionToServer has been initialized yet too
-                if (!isServer && isLocalPlayerWithAuthority)
+                if (!isServer && hasAuthority)
                 {
                     // check only each 'syncInterval'
                     if (Time.time - lastClientSendTime >= syncInterval)
@@ -392,7 +386,7 @@ namespace Mirror
                 // apply interpolation on client for all players
                 // unless this client has authority over the object. could be
                 // himself or another object that he was assigned authority over
-                if (!isLocalPlayerWithAuthority)
+                if (!hasAuthority)
                 {
                     // received one yet? (initialized?)
                     if (goal != null)

@@ -29,12 +29,6 @@ namespace Mirror
         public static NetworkConnectionToClient localConnection { get; private set; }
 
         /// <summary>
-        /// <para>True is a local client is currently active on the server.</para>
-        /// <para>This will be true for "Hosts" on hosted server games.</para>
-        /// </summary>
-        public static bool localClientActive => localConnection != null;
-
-        /// <summary>
         /// A list of local connections on the server.
         /// </summary>
         public static Dictionary<int, NetworkConnectionToClient> connections = new Dictionary<int, NetworkConnectionToClient>();
@@ -56,6 +50,12 @@ namespace Mirror
         /// <para>This will be true after NetworkServer.Listen() has been called.</para>
         /// </summary>
         public static bool active { get; private set; }
+
+        /// <summary>
+        /// <para>True is a local client is currently active on the server.</para>
+        /// <para>This will be true for "Hosts" on hosted server games.</para>
+        /// </summary>
+        public static bool localClientActive => localConnection != null;
 
         // cache the Send(connectionIds) list to avoid allocating each time
         static readonly List<int> connectionIdsCache = new List<int>();
@@ -128,7 +128,7 @@ namespace Mirror
         /// </summary>
         /// <param name="maxConns">Maximum number of allowed connections</param>
         /// <returns></returns>
-        public static void Listen(int maxConns)
+        public static bool Listen(int maxConns)
         {
             Initialize();
             maxConnections = maxConns;
@@ -142,6 +142,7 @@ namespace Mirror
 
             active = true;
             RegisterMessageHandlers();
+            return true;
         }
 
         /// <summary>
@@ -212,7 +213,7 @@ namespace Mirror
 
         // this is like SendToReady - but it doesn't check the ready flag on the connection.
         // this is used for ObjectDestroy messages.
-        static bool SendToObservers<T>(NetworkIdentity identity, T msg) where T : IMessageBase
+        static bool SendToObservers<T>(NetworkIdentity identity, T msg) where T: IMessageBase
         {
             if (LogFilter.Debug) Debug.Log("Server.SendToObservers id:" + typeof(T));
 
@@ -580,7 +581,7 @@ namespace Mirror
         /// <typeparam name="T">Message type</typeparam>
         /// <param name="handler">Function handler which will be invoked for when this message type is received.</param>
         /// <param name="requireAuthentication">True if the message requires an authenticated connection</param>
-        public static void RegisterHandler<T>(Action<NetworkConnection, T> handler, bool requireAuthentication = true) where T : IMessageBase, new()
+        public static void RegisterHandler<T>(Action<NetworkConnection, T> handler, bool requireAuthentication = true) where T: IMessageBase, new()
         {
             int msgType = MessagePacker.GetId<T>();
             if (handlers.ContainsKey(msgType))
@@ -692,7 +693,7 @@ namespace Mirror
         /// <typeparam name="T">Message type</typeparam>
         /// <param name="identity"></param>
         /// <param name="msg"></param>
-        public static void SendToClientOfPlayer<T>(NetworkIdentity identity, T msg) where T : IMessageBase
+        public static void SendToClientOfPlayer<T>(NetworkIdentity identity, T msg) where T: IMessageBase
         {
             if (identity != null)
             {
@@ -700,7 +701,7 @@ namespace Mirror
             }
             else
             {
-                Debug.LogError("SendToClientOfPlayer: player has no NetworkIdentity: " + identity);
+                Debug.LogError("SendToClientOfPlayer: player has no NetworkIdentity: " + identity.name);
             }
         }
 
@@ -1061,7 +1062,7 @@ namespace Mirror
 
             // convert to ArraySegment to avoid reader allocations
             // (need to handle null case too)
-            ArraySegment<byte> ownerSegment = ownerWritten > 0 ? ownerWriter.ToArraySegment() : default;
+            ArraySegment<byte> ownerSegment     =     ownerWritten > 0 ?     ownerWriter.ToArraySegment() : default;
             ArraySegment<byte> observersSegment = observersWritten > 0 ? observersWriter.ToArraySegment() : default;
 
             SpawnMessage msg = new SpawnMessage

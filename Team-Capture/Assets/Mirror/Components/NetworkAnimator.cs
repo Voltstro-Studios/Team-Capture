@@ -132,7 +132,7 @@ namespace Mirror
 
         void CheckSendRate()
         {
-            if (sendMessagesAllowed && syncInterval > 0 && sendTimer < Time.time)
+            if (sendMessagesAllowed && syncInterval != 0 && sendTimer < Time.time)
             {
                 sendTimer = Time.time + syncInterval;
 
@@ -299,11 +299,11 @@ namespace Mirror
         /// Custom Serialization
         /// </summary>
         /// <param name="writer"></param>
-        /// <param name="initialState"></param>
+        /// <param name="forceAll"></param>
         /// <returns></returns>
-        public override bool OnSerialize(NetworkWriter writer, bool initialState)
+        public override bool OnSerialize(NetworkWriter writer, bool forceAll)
         {
-            if (initialState)
+            if (forceAll)
             {
                 for (int i = 0; i < animator.layerCount; i++)
                 {
@@ -320,7 +320,7 @@ namespace Mirror
                         writer.WriteSingle(st.normalizedTime);
                     }
                 }
-                WriteParameters(writer, initialState);
+                WriteParameters(writer, forceAll);
                 return true;
             }
             return false;
