@@ -14,6 +14,9 @@ namespace Player
 		[SerializeField] private GameObject[] disableGameObjectsOnDeath;
 		[SyncVar] private int health;
 
+		[SyncVar] private int kills;
+		[SyncVar] private int deaths;
+
 		[SerializeField] private int maxHealth = 100;
 		[SyncVar] public string username = "Not Set";
 
@@ -44,8 +47,13 @@ namespace Player
 			if(isLocalPlayer)
 				clientUi.hud.UpdateHealthUi();
 
-			if (health <= 0)
-				Die();
+			if (health > 0) return;
+
+			Die();
+
+			if (sourceId != transform.name)
+				GameManager.GetPlayer(sourceId).kills++;
+
 		}
 
 		private void Die()
@@ -57,6 +65,8 @@ namespace Player
 			//Disable the collider, or the Char controller
 			if (isLocalPlayer)
 			{
+				deaths++;
+
 				GetComponent<WeaponManager>().CmdRemoveAllWeapons();
 				GetComponent<PlayerMovement>().enabled = false;
 				GetComponent<CharacterController>().enabled = false;
