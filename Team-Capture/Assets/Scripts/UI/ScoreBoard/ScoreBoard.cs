@@ -19,6 +19,8 @@ namespace UI.ScoreBoard
 		[SerializeField] private TextMeshProUGUI mapNameText;
 		[SerializeField] private TextMeshProUGUI ipText;
 		[SerializeField] private TextMeshProUGUI playerNameText;
+		[SerializeField] private TextMeshProUGUI killDeathRatioText;
+		[SerializeField] private TextMeshProUGUI playerStatsText;
 
 		[Header("Player List Settings")]
 		[SerializeField] private Transform playerListTransform;
@@ -65,6 +67,11 @@ namespace UI.ScoreBoard
 			{
 				playerListTransform.GetChild(i).GetComponent<ScoreBoardPlayer>().UpdatePlayerStats();
 			}
+
+			if(clientPlayer.GetKills != 0 && clientPlayer.GetDeaths != 0)
+				killDeathRatioText.text = "K/D: " + (clientPlayer.GetKills / clientPlayer.GetDeaths).ToString();
+
+			playerStatsText.text = $"Kills: {clientPlayer.GetKills}\nDeaths: {clientPlayer.GetDeaths}";
 		}
 	}
 }
