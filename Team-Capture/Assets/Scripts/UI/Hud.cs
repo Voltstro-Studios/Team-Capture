@@ -1,32 +1,34 @@
-﻿using UnityEngine;
-using TMPro;
-using UI;
+﻿using TMPro;
+using UnityEngine;
 using Weapons;
 
-public class Hud : MonoBehaviour
+namespace UI
 {
-	[Header("Health")]
-	public TextMeshProUGUI healthText;
+	public class Hud : MonoBehaviour
+	{
+		[Header("Health")]
+		public TextMeshProUGUI healthText;
 
-	[Header("Ammo")] 
-	public TextMeshProUGUI ammoText;
-	public TextMeshProUGUI maxAmmoText;
-	public GameObject reloadTextGameObject;
+		[Header("Ammo")] 
+		public TextMeshProUGUI ammoText;
+		public TextMeshProUGUI maxAmmoText;
+		public GameObject reloadTextGameObject;
 	
-	[HideInInspector] public ClientUI clientUi;
+		[HideInInspector] public ClientUI clientUi;
 
-	public void UpdateHealthUi()
-	{
-		healthText.text = clientUi.player.GetHealth.ToString();
-	}
+		public void UpdateHealthUi()
+		{
+			healthText.text = clientUi.player.GetHealth.ToString();
+		}
 
-	public void UpdateAmmoUi(WeaponManager weaponManager)
-	{
-		TCWeapon activeWeapon = weaponManager.GetActiveWeapon();
+		public void UpdateAmmoUi(WeaponManager weaponManager)
+		{
+			TCWeapon activeWeapon = weaponManager.GetActiveWeapon();
 
-		ammoText.text = activeWeapon.currentBulletsAmount.ToString();
-		maxAmmoText.text = activeWeapon.maxBullets.ToString();
+			ammoText.text = activeWeapon.currentBulletsAmount.ToString();
+			maxAmmoText.text = activeWeapon.maxBullets.ToString();
 
-		reloadTextGameObject.SetActive(activeWeapon.isReloading);
+			reloadTextGameObject.SetActive(activeWeapon.isReloading);
+		}
 	}
 }

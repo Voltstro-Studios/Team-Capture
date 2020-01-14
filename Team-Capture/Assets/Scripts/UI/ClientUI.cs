@@ -25,7 +25,7 @@ namespace UI
 			pauseMenuGameObject.SetActive(false);
 
 			scoreBoardObject.SetActive(false);
-			scoreBoardObject.GetComponent<ScoreBoard>().clientPlayer = playerManager;
+			scoreBoardObject.GetComponent<ScoreBoard.ScoreBoard>().clientPlayer = playerManager;
 
 			return this;
 		}
