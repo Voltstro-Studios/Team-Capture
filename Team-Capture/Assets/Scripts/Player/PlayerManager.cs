@@ -23,6 +23,8 @@ namespace Player
 		public bool IsDead { get; protected set; }
 
 		public int GetHealth => health;
+		public int GetKills => kills;
+		public int GetDeaths => deaths;
 
 		[HideInInspector] public ClientUI clientUi;
 

@@ -10,6 +10,7 @@ namespace UI
 		public Hud hud;
 
 		public GameObject pauseMenuGameObject;
+		public GameObject scoreBoardObject;
 
 		public static bool IsPauseMenuOpen;
 
@@ -23,6 +24,9 @@ namespace UI
 
 			pauseMenuGameObject.SetActive(false);
 
+			scoreBoardObject.SetActive(false);
+			scoreBoardObject.GetComponent<ScoreBoard>().clientPlayer = playerManager;
+
 			return this;
 		}
 
@@ -35,6 +39,11 @@ namespace UI
 
 			pauseMenuGameObject.SetActive(IsPauseMenuOpen);
 			hud.gameObject.SetActive(!IsPauseMenuOpen);
+		}
+
+		public void ToggleScoreBoard()
+		{
+			scoreBoardObject.SetActive(!scoreBoardObject.activeSelf);
 		}
 	}
 }

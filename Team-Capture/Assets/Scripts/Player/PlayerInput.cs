@@ -9,6 +9,7 @@ namespace Player
 	{
 		[SerializeField] private KeyCode suicideKey = KeyCode.P;
 		[SerializeField] private KeyCode pauseMenuKey = KeyCode.Escape;
+		[SerializeField] private KeyCode scoreBoardKey = KeyCode.Tab;
 
 		private WeaponManager weaponManager;
 		private PlayerManager playerManager;
@@ -28,6 +29,9 @@ namespace Player
 
 			if (ClientUI.IsPauseMenuOpen)
 				return;
+
+			if(Input.GetKeyDown(scoreBoardKey) || Input.GetKeyUp(scoreBoardKey))
+				playerManager.clientUi.ToggleScoreBoard();
 
 			if (!playerManager.IsDead && Input.GetKeyDown(suicideKey))
 				playerManager.CmdSuicide();
