@@ -1,4 +1,6 @@
-﻿using Player;
+﻿using System;
+using System.Globalization;
+using Player;
 using TMPro;
 using UnityEngine;
 
@@ -9,6 +11,7 @@ namespace UI.ScoreBoard
 		[SerializeField] private TextMeshProUGUI playerNameText;
 		[SerializeField] private TextMeshProUGUI playerKillsText;
 		[SerializeField] private TextMeshProUGUI playerDeathsText;
+		[SerializeField] private TextMeshProUGUI playerPingText;
 
 		private PlayerManager playerToTrack;
 
@@ -25,6 +28,7 @@ namespace UI.ScoreBoard
 
 			playerKillsText.text = playerToTrack.GetKills.ToString();
 			playerDeathsText.text = playerToTrack.GetDeaths.ToString();
+			playerPingText.text = Math.Round(playerToTrack.latency).ToString(CultureInfo.InvariantCulture);
 		}
 	}
 }
