@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using Mirror;
 using UI;
 using UnityEngine;
 using Weapons;
-using Debug = System.Diagnostics.Debug;
 using Logger = Global.Logger;
 
 namespace Player
@@ -32,12 +30,12 @@ namespace Player
 
 		[SerializeField] private float latencyUpdateTime = 2.0f;
 
-		private bool isConnected;
-
 		/// <summary>
 		/// Updated every X amount of seconds and haves this player's latency
 		/// </summary>
 		[SyncVar] public double latency;
+
+		private bool isConnected;
 
 		private void Start()
 		{

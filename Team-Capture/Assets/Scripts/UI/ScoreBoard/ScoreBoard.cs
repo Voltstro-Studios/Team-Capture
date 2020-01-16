@@ -37,6 +37,7 @@ namespace UI.ScoreBoard
 			playerNameText.text = clientPlayer.username;
 
 			players = GameManager.GetAllPlayers().ToList();
+			players.Sort(new PlayerListComparer());
 
 			foreach (PlayerManager player in players)
 			{
@@ -72,6 +73,19 @@ namespace UI.ScoreBoard
 				killDeathRatioText.text = "K/D: " + (clientPlayer.GetKills / clientPlayer.GetDeaths).ToString();
 
 			playerStatsText.text = $"Kills: {clientPlayer.GetKills}\nDeaths: {clientPlayer.GetDeaths}";
+		}
+
+		private class PlayerListComparer : IComparer<PlayerManager>
+		{
+			public int Compare(PlayerManager x, PlayerManager y)
+			{
+				// ReSharper disable PossibleNullReferenceException
+				if (x.GetKills == 0 && y.GetKills == 0)
+					return 0;
+
+				return y.GetKills.CompareTo(x.GetKills);
+				// ReSharper enable PossibleNullReferenceException
+			}
 		}
 	}
 }
