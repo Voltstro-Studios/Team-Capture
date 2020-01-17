@@ -183,6 +183,7 @@ namespace Weapons
 		[Command]
 		public void CmdRemoveAllWeapons()
 		{
+			selectedWeaponIndex = 0;
 			weapons.Clear();
 		}
 
