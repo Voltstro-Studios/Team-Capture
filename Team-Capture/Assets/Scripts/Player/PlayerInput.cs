@@ -57,7 +57,7 @@ namespace Player
 
 			if (selectedWeaponIndex != weaponManager.selectedWeaponIndex)
 			{
-				weaponManager.CmdSetWeaponIndex(transform.name, selectedWeaponIndex);
+				weaponManager.CmdSetWeaponIndex(selectedWeaponIndex);
 				playerManager.clientUi.hud.UpdateAmmoUi(weaponManager);
 			}
 		}

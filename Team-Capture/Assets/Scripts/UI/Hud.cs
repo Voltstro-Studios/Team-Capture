@@ -24,6 +24,7 @@ namespace UI
 		public void UpdateAmmoUi(WeaponManager weaponManager)
 		{
 			TCWeapon activeWeapon = weaponManager.GetActiveWeapon();
+			if(activeWeapon == null) return;
 
 			ammoText.text = activeWeapon.currentBulletsAmount.ToString();
 			maxAmmoText.text = activeWeapon.maxBullets.ToString();

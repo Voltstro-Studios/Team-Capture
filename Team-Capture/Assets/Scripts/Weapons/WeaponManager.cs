@@ -20,8 +20,12 @@ namespace Weapons
 
 		[SerializeField] private string weaponLayerName = "LocalWeapon";
 
+		private PlayerManager playerManager;
+
 		private void Start()
 		{
+			playerManager = GetComponent<PlayerManager>();
+
 			weapons.Callback += AddWeaponCallback;
 
 			//Create all existing weapons on start
@@ -59,8 +63,6 @@ namespace Weapons
 				if (!isLocalPlayer) return;
 
 				CmdInstantiateWeaponOnClients(newItem);
-
-				GetComponent<PlayerManager>().clientUi.hud.UpdateAmmoUi(this);
 			}
 
 			if (op == SyncList<string>.Operation.OP_CLEAR)
@@ -88,14 +90,11 @@ namespace Weapons
 		}
 
 		[Command]
-		public void CmdSetWeaponIndex(string playerId, int index)
+		public void CmdSetWeaponIndex(int index)
 		{
-			PlayerManager player = GameManager.GetPlayer(playerId);
-			if(player == null) return;
+			Logger.Log($"Player `{transform.name}` set their weapon index to `{index}`.", LogVerbosity.Debug);
 
-			Logger.Log($"Player {transform.name} set their weapon index to {index}.", LogVerbosity.Debug);
-
-			player.GetComponent<WeaponManager>().selectedWeaponIndex = index;
+			selectedWeaponIndex = index;
 		}
 
 		#region Weapon Reloading
@@ -144,23 +143,18 @@ namespace Weapons
 		{
 			if (WeaponsResourceManager.GetWeapon(weaponName) == null) return;
 
-			CmdAddWeapon(transform.name, weaponName);
+			CmdAddWeapon(weaponName);
 		}
 
 		[Command]
-		private void CmdAddWeapon(string playerId, string weapon)
+		private void CmdAddWeapon(string weapon)
 		{
-			PlayerManager player = GameManager.GetPlayer(playerId);
-			if (player == null)
-				return;
-
 			TCWeapon tcWeapon = WeaponsResourceManager.GetWeapon(weapon);
 
 			if (tcWeapon == null)
 				return;
 
-			WeaponManager weaponManager = player.GetComponent<WeaponManager>();
-			weaponManager.weapons.Add(tcWeapon.weapon);
+			weapons.Add(tcWeapon.weapon);
 
 			//Setup the new added weapon, and stop any reloading going on with the current weapon
 			TargetSetupWeapon(weapon);
@@ -172,7 +166,7 @@ namespace Weapons
 		[TargetRpc]
 		private void TargetSetupWeapon(string weapon)
 		{
-			Logger.Log($"Setup weapon `{weapon}`", LogVerbosity.Debug);
+			Logger.Log($"Setting up weapon `{weapon}`", LogVerbosity.Debug);
 
 			StopCoroutine(ReloadCurrentWeapon());
 			WeaponsResourceManager.GetWeapon(weapon).Reload();
@@ -209,32 +203,26 @@ namespace Weapons
 			if(!isLocalPlayer)
 				return;
 
-			CmdSelectWeapon(transform.name, newValue);
-
+			CmdSelectWeapon(newValue);
 		}
 
 		[Command]
-		public void CmdSelectWeapon(string player, int index)
+		public void CmdSelectWeapon(int index)
 		{
-			if (GameManager.GetPlayer(player) == null)
-				return;
-
-			RpcSelectWeapon(player, index);
+			RpcSelectWeapon(index);
 		}
 
 		[ClientRpc]
-		private void RpcSelectWeapon(string player, int index)
+		private void RpcSelectWeapon(int index)
 		{
-			WeaponManager weaponManager = GameManager.GetPlayer(player).GetComponent<WeaponManager>();
-
-			for (int i = 0; i < weaponManager.weaponsHolderSpot.childCount; i++)
+			for (int i = 0; i < weaponsHolderSpot.childCount; i++)
 				if (i == index)
-					weaponManager.weaponsHolderSpot.GetChild(i).gameObject.SetActive(true);
+					weaponsHolderSpot.GetChild(i).gameObject.SetActive(true);
 				else
-					weaponManager.weaponsHolderSpot.GetChild(i).gameObject.SetActive(false);
+					weaponsHolderSpot.GetChild(i).gameObject.SetActive(false);
 
 			if(isLocalPlayer)
-				GetComponent<PlayerManager>().clientUi.hud.UpdateAmmoUi(this);
+				playerManager.clientUi.hud.UpdateAmmoUi(this);
 		}
 
 		#endregion
