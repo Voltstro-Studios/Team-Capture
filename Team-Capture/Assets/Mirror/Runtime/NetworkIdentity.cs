@@ -52,7 +52,7 @@ namespace Mirror
 
         // member used to mark a identity for future reset
         // check MarkForReset for more information.
-        bool m_Reset;
+        bool reset;
 
         /// <summary>
         /// Returns true if running as a client and this object was spawned by a server.
@@ -62,7 +62,7 @@ namespace Mirror
         /// <summary>
         /// Returns true if NetworkServer.active and server is not stopped.
         /// </summary>
-        public bool isServer =>  NetworkServer.active && netId != 0;
+        public bool isServer => NetworkServer.active && netId != 0;
 
         /// <summary>
         /// This returns true if this object is the one that represents the player on the local machine.
@@ -1121,16 +1121,16 @@ namespace Mirror
         // marks the identity for future reset, this is because we cant reset the identity during destroy
         // as people might want to be able to read the members inside OnDestroy(), and we have no way
         // of invoking reset after OnDestroy is called.
-        internal void MarkForReset() => m_Reset = true;
+        internal void MarkForReset() => reset = true;
 
         // if we have marked an identity for reset we do the actual reset.
         internal void Reset()
         {
-            if (!m_Reset)
+            if (!reset)
                 return;
 
             clientStarted = false;
-            m_Reset = false;
+            reset = false;
 
             netId = 0;
             connectionToServer = null;

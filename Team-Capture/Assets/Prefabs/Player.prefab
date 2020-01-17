@@ -234,6 +234,8 @@ MonoBehaviour:
   maxHealth: 100
   username: Not Set
   clientUi: {fileID: 0}
+  latencyUpdateTime: 2
+  latency: 0
 --- !u!114 &8854156936004004421
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -249,6 +251,8 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   suicideKey: 112
+  pauseMenuKey: 27
+  scoreBoardKey: 9
 --- !u!114 &4790435715656838203
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -301,6 +305,7 @@ MonoBehaviour:
   syncInterval: 0.1
   selectedWeaponIndex: 0
   weaponsHolderSpot: {fileID: 8771585192178499609}
+  weaponLayerName: LocalWeapon
 --- !u!114 &2372551973129992940
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -316,6 +321,10 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   compressRotation: 1
+  clientAuthority: 1
+  localPositionSensitivity: 0.001
+  localEulerAnglesSensitivity: 0.001
+  localScaleSensitivity: 0.01
 --- !u!114 &4650911801006421196
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -329,8 +338,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   syncMode: 0
-  syncInterval: 0.1
+  syncInterval: 0.01
   compressRotation: 1
+  clientAuthority: 1
+  localPositionSensitivity: 0.01
+  localEulerAnglesSensitivity: 0.01
+  localScaleSensitivity: 0.01
   target: {fileID: 6438375964343202627}
 --- !u!114 &6438375962803020338
 MonoBehaviour:

@@ -203,12 +203,13 @@ namespace Weapons
 
 		#region Weapon Selection
 
-		public void SelectWeapon(int index)
+		public void SelectWeapon(int oldValue, int newValue)
 		{
 			if(!isLocalPlayer)
 				return;
 
-			CmdSelectWeapon(transform.name, index);
+			CmdSelectWeapon(transform.name, newValue);
+
 		}
 
 		[Command]

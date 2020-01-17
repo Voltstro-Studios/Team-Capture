@@ -16,11 +16,13 @@ public class TCNetworkManager : LiteNetLib4MirrorNetworkManager
 		Logger.Log("Server Initialized!");
 	}
 
-	public override void OnClientSceneChanged(NetworkConnection conn)
+	public override void OnClientConnect(NetworkConnection conn)
 	{
+		base.OnClientConnect(conn);
+
+		Logger.Log($"Connected to server `{conn.address}` with the net ID of {conn.connectionId}.");
+
 		Instantiate(gameMangerPrefab);
 		Logger.Log("Created game manager object.", LogVerbosity.Debug);
-
-		base.OnClientSceneChanged(conn);
 	}
 }

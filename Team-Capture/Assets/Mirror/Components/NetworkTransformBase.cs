@@ -32,6 +32,23 @@ namespace Mirror
         [SerializeField] Compression compressRotation = Compression.Much;
         public enum Compression { None, Much, Lots, NoRotation }; // easily understandable and funny
 
+        [Tooltip("Set to true if moves come from owner client, set to false if moves always come from server")]
+        public bool clientAuthority;
+
+        // Is this a client with authority over this transform?
+        // This component could be on the player object or any object that has been assigned authority to this client.
+        bool isClientWithAuthority => hasAuthority && clientAuthority;
+
+        // Sensitivity is added for VR where human players tend to have micro movements so this can quiet down
+        // the network traffic.  Additionally, rigidbody drift should send less traffic, e.g very slow sliding / rolling.
+        [Header("Sensitivity")]
+        [Tooltip("Changes to the transform must exceed these values to be transmitted on the network.")]
+        public float localPositionSensitivity = .01f;
+        [Tooltip("Changes to the transform must exceed these values to be transmitted on the network.")]
+        public float localEulerAnglesSensitivity = .01f;
+        [Tooltip("Changes to the transform must exceed these values to be transmitted on the network.")]
+        public float localScaleSensitivity = .01f;
+
         // server
         Vector3 lastPosition;
         Quaternion lastRotation;
@@ -318,9 +335,9 @@ namespace Mirror
         {
             // moved or rotated or scaled?
             // local position/rotation/scale for VR support
-            bool moved = lastPosition != targetComponent.transform.localPosition;
-            bool rotated = lastRotation != targetComponent.transform.localRotation;
-            bool scaled = lastScale != targetComponent.transform.localScale;
+            bool moved = Vector3.Distance(lastPosition, targetComponent.transform.localPosition) > localPositionSensitivity;
+            bool rotated = Vector3.Distance(lastRotation.eulerAngles, targetComponent.transform.localRotation.eulerAngles) > localEulerAnglesSensitivity;
+            bool scaled = Vector3.Distance(lastScale, targetComponent.transform.localScale) > localScaleSensitivity;
 
             // save last for next frame to compare
             // (only if change was detected. otherwise slow moving objects might
@@ -364,7 +381,7 @@ namespace Mirror
             {
                 // send to server if we have local authority (and aren't the server)
                 // -> only if connectionToServer has been initialized yet too
-                if (!isServer && hasAuthority)
+                if (!isServer && isClientWithAuthority)
                 {
                     // check only each 'syncInterval'
                     if (Time.time - lastClientSendTime >= syncInterval)
@@ -373,11 +390,12 @@ namespace Mirror
                         {
                             // serialize
                             // local position/rotation for VR support
-                            NetworkWriter writer = new NetworkWriter();
+                            NetworkWriter writer = NetworkWriterPool.GetWriter();
                             SerializeIntoWriter(writer, targetComponent.transform.localPosition, targetComponent.transform.localRotation, compressRotation, targetComponent.transform.localScale);
 
                             // send to server
                             CmdClientToServerSync(writer.ToArray());
+                            NetworkWriterPool.Recycle(writer);
                         }
                         lastClientSendTime = Time.time;
                     }
@@ -386,7 +404,7 @@ namespace Mirror
                 // apply interpolation on client for all players
                 // unless this client has authority over the object. could be
                 // himself or another object that he was assigned authority over
-                if (!hasAuthority)
+                if (!isClientWithAuthority)
                 {
                     // received one yet? (initialized?)
                     if (goal != null)
@@ -396,6 +414,10 @@ namespace Mirror
                         {
                             // local position/rotation for VR support
                             ApplyPositionRotationScale(goal.localPosition, goal.localRotation, goal.localScale);
+
+                            // reset data points so we don't keep interpolating
+                            start = null;
+                            goal = null;
                         }
                         else
                         {

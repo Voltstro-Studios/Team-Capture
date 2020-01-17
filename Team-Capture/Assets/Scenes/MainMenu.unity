@@ -1907,7 +1907,7 @@ MonoBehaviour:
   pingInterval: 1000
   disconnectTimeout: 5000
   reconnectDelay: 500
-  maxConnectAttempts: 6
+  maxConnectAttempts: 10
   simulatePacketLoss: 0
   simulationPacketLossChance: 10
   simulateLatency: 0
