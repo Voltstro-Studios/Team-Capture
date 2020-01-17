@@ -114,7 +114,7 @@ namespace Player
 
 				if (hit.collider.GetComponent<PlayerManager>() == null) continue;
 
-				hit.collider.GetComponent<PlayerManager>().RpcTakeDamage(sourcePlayer, tcWeapon.damage);
+				hit.collider.GetComponent<PlayerManager>().TakeDamage(tcWeapon.damage, sourcePlayer);
 				hitPlayer = true;
 			}
 		}

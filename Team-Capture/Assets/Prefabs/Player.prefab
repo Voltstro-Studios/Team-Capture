@@ -231,6 +231,7 @@ MonoBehaviour:
   disableGameObjectsOnDeath:
   - {fileID: 6438375964343202626}
   - {fileID: 6438375964401219431}
+  test: 100
   maxHealth: 100
   username: Not Set
   clientUi: {fileID: 0}

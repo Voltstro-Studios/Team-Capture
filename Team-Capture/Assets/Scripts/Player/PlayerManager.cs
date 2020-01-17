@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using Global;
 using Mirror;
 using UI;
 using UnityEngine;
@@ -12,7 +13,8 @@ namespace Player
 		[SerializeField] private Behaviour[] disableBehaviourOnDeath;
 
 		[SerializeField] private GameObject[] disableGameObjectsOnDeath;
-		[SyncVar] private int health;
+
+		[SyncVar(hook = nameof(UpdateHealthUi))] private int health;
 
 		[SyncVar] private int kills;
 		[SyncVar] private int deaths;
@@ -61,39 +63,66 @@ namespace Player
 		[Command]
 		public void CmdSuicide()
 		{
-			RpcTakeDamage(transform.name, health);
+			TakeDamage(GetHealth, transform.name);
 		}
 
 		#region Death, Respawn, Damage
 
-		[ClientRpc]
-		public void RpcTakeDamage(string sourceId, int damage)
+		[Server]
+		public void TakeDamage(int damageAmount, string sourcePlayerId)
 		{
-			health -= damage;
+			if (string.IsNullOrWhiteSpace(sourcePlayerId))
+			{
+				Logger.Log("The sourcePlayerId cannot be empty or null!", LogVerbosity.Error);
+				return;
+			}
 
-			if(isLocalPlayer)
-				clientUi.hud.UpdateHealthUi();
+			health -= damageAmount;
 
-			if (health > 0) return;
+			if(health > 0) return;
 
-			Die();
-
-			if (sourceId != transform.name)
-				GameManager.GetPlayer(sourceId).kills++;
-
+			//Player is dead
+			ServerPlayerDie(sourcePlayerId);
 		}
 
-		private void Die()
+		/// <summary>
+		/// The server side method that handles a player's death
+		/// </summary>
+		[Server]
+		private void ServerPlayerDie(string sourcePlayerId)
 		{
-			Logger.Log($"{transform.name} died.");
-
 			IsDead = true;
 
+			RpcClientPlayerDie();
+
+			//Update the stats, for both players
+			deaths++;
+			GameManager.GetPlayer(sourcePlayerId).kills++;
+
+			StartCoroutine(ServerPlayerRespawn());
+		}
+
+		private IEnumerator ServerPlayerRespawn()
+		{
+			yield return new WaitForSeconds(GameManager.Instance.scene.respawnTime);
+
+			health = maxHealth;
+
+			Transform spawnPoint = NetworkManager.singleton.GetStartPosition();
+			RpcClientRespawn(spawnPoint.position, spawnPoint.rotation);
+
+			IsDead = false;
+		}
+
+		/// <summary>
+		/// Disables components on each of the clients
+		/// </summary>
+		[ClientRpc]
+		private void RpcClientPlayerDie()
+		{
 			//Disable the collider, or the Char controller
 			if (isLocalPlayer)
 			{
-				deaths++;
-
 				GetComponent<WeaponManager>().CmdRemoveAllWeapons();
 				GetComponent<PlayerMovement>().enabled = false;
 				GetComponent<CharacterController>().enabled = false;
@@ -111,21 +140,13 @@ namespace Player
 			foreach (GameObject toDisable in disableGameObjectsOnDeath) toDisable.SetActive(false);
 
 			foreach (Behaviour toDisable in disableBehaviourOnDeath) toDisable.enabled = false;
-
-			StartCoroutine(Respawn());
 		}
 
-		private IEnumerator Respawn()
+		[ClientRpc]
+		private void RpcClientRespawn(Vector3 spawnPos, Quaternion spawnRot)
 		{
-			yield return new WaitForSeconds(GameManager.Instance.scene.respawnTime);
-
-			Transform spawnPoint = NetworkManager.singleton.GetStartPosition();
-			transform.position = spawnPoint.position;
-			transform.rotation = spawnPoint.rotation;
-
-			yield return new WaitForSeconds(0.1f);
-
-			health = maxHealth;
+			transform.position = spawnPos;
+			transform.rotation = spawnRot;
 
 			//Enable game objects
 			foreach (GameObject toEnable in disableGameObjectsOnDeath) toEnable.SetActive(true);
@@ -153,8 +174,12 @@ namespace Player
 			{
 				GetComponent<CapsuleCollider>().enabled = true;
 			}
+		}
 
-			IsDead = false;
+		private void UpdateHealthUi(int oldHealth, int newHealth)
+		{
+			if(isLocalPlayer && clientUi != null)
+				clientUi.hud.UpdateHealthUi();
 		}
 
 		#endregion
