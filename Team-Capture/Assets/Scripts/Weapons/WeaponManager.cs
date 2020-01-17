@@ -56,8 +56,6 @@ namespace Weapons
 					return;
 				}
 
-				selectedWeaponIndex = itemIndex;
-
 				if (!isLocalPlayer) return;
 
 				CmdInstantiateWeaponOnClients(newItem);
@@ -166,6 +164,9 @@ namespace Weapons
 
 			//Setup the new added weapon, and stop any reloading going on with the current weapon
 			TargetSetupWeapon(weapon);
+
+			if(weapons.Count > 1)
+				selectedWeaponIndex += 1;
 		}
 
 		[TargetRpc]
