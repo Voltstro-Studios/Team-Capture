@@ -97,7 +97,9 @@ namespace Player
 
 			//Update the stats, for both players
 			deaths++;
-			GameManager.GetPlayer(sourcePlayerId).kills++;
+
+			if(sourcePlayerId != transform.name)
+				GameManager.GetPlayer(sourcePlayerId).kills++;
 
 			StartCoroutine(ServerPlayerRespawn());
 		}
