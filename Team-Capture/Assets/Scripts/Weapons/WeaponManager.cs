@@ -48,6 +48,10 @@ namespace Weapons
 
 			//Add stock weapons on client start
 			foreach (TCWeapon stockWeapon in GameManager.Instance.scene.stockWeapons) AddWeapon(stockWeapon.weapon);
+
+			Logger.Log("Weapon manager is now ready!");
+
+			playerManager.clientUi.hud.UpdateAmmoUi(this);
 		}
 
 		private void AddWeaponCallback(SyncList<string>.Operation op, int itemIndex, string item, string newItem)

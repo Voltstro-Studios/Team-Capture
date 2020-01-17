@@ -1,5 +1,6 @@
 ﻿using Player;
 using UnityEngine;
+using Logger = Global.Logger;
 
 namespace UI
 {
@@ -26,6 +27,8 @@ namespace UI
 
 			scoreBoardObject.SetActive(false);
 			scoreBoardObject.GetComponent<ScoreBoard.ScoreBoard>().clientPlayer = playerManager;
+
+			Logger.Log("The ClientUI is now ready.");
 
 			return this;
 		}

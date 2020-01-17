@@ -1,6 +1,7 @@
 ﻿using Mirror;
 using UI;
 using UnityEngine;
+using Logger = Global.Logger;
 
 namespace Player
 {
@@ -22,6 +23,8 @@ namespace Player
 
 		public override void OnStartLocalPlayer()
 		{
+			Logger.Log("Setting up player!");
+
 			base.OnStartLocalPlayer();
 
 			Destroy(localCapsuleCollider);
@@ -42,6 +45,8 @@ namespace Player
 
 			Cursor.visible = false;
 			Cursor.lockState = CursorLockMode.Locked;
+
+			Logger.Log("I am now ready! :)");
 		}
 
 		public override void OnStartClient()
