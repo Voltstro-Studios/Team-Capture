@@ -1949,7 +1949,7 @@ MonoBehaviour:
   spawnPrefabs: []
   gameMangerPrefab: {fileID: 5023681518765488030, guid: 924fec1313feb8346bd0bf297c02c3fb,
     type: 3}
-  maxFrameCount: 20
+  maxFrameCount: 128
 --- !u!114 &635598616
 MonoBehaviour:
   m_ObjectHideFlags: 0

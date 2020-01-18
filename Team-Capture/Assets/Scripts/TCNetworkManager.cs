@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Global;
+﻿using Global;
 using LagCompensation;
 using Mirror;
 using Mirror.LiteNetLib4Mirror;
@@ -14,7 +10,7 @@ public class TCNetworkManager : LiteNetLib4MirrorNetworkManager
 	[Header("Team Capture")] 
 	[SerializeField] private GameObject gameMangerPrefab;
 
-	[SerializeField] private int maxFrameCount = 20;
+	[SerializeField] private int maxFrameCount = 128;
 
 	public static int MaxFrameCount;
 

@@ -1,4 +1,5 @@
-﻿using Mirror;
+﻿using LagCompensation;
+using Mirror;
 using UI;
 using UnityEngine;
 using Weapons;
@@ -80,24 +81,39 @@ namespace Player
 
 			CmdWeaponMuzzleFlash(transform.name);
 
-			CmdWeaponRayCast(transform.name, weapon.weapon,
-				GetComponent<PlayerSetup>().GetPlayerCamera().transform.position,
-				GetComponent<PlayerSetup>().GetPlayerCamera().transform.forward);
+			CmdWeaponShoot(transform.name);
 
 			playerManager.clientUi.hud.UpdateAmmoUi(weaponManager);
 		}
 
 		[Command]
-		private void CmdWeaponRayCast(string sourcePlayer, string weapon, Vector3 origin, Vector3 direction)
+		private void CmdWeaponShoot(string sourcePlayer)
 		{
-			//TODO: Do lag compensation
+			PlayerManager player = GameManager.GetPlayer(sourcePlayer);
+			if(player == null) return;
 
-			TCWeapon tcWeapon = WeaponsResourceManager.GetWeapon(weapon);
+			//SimulationHelper.SimulateCommand(player, () => CmdWeaponRayCast(sourcePlayer));
+			CmdWeaponRayCast(sourcePlayer);
+		}
+
+		[Command]
+		private void CmdWeaponRayCast(string sourcePlayer)
+		{
+			//First, get our player
+			PlayerManager player = GameManager.GetPlayer(sourcePlayer);
+			if(player == null) return;
+
+			//Next, get what weapon the player was using
+			TCWeapon tcWeapon = player.GetComponent<WeaponManager>().GetActiveWeapon();
 			if (tcWeapon == null)
 				return;
 
+			//Get the direction the player was facing
+			Transform playerFacingDirection = player.GetComponent<PlayerSetup>().GetPlayerCamera().transform;
+
+			//Now do our raycast
 			// ReSharper disable once Unity.PreferNonAllocApi
-			RaycastHit[] hits = Physics.RaycastAll(origin, direction, tcWeapon.range);
+			RaycastHit[] hits = Physics.RaycastAll(playerFacingDirection.position, playerFacingDirection.forward, tcWeapon.range);
 			bool hitPlayer = false;
 
 			foreach (RaycastHit hit in hits)
