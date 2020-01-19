@@ -112,6 +112,7 @@ namespace Player
 			StartCoroutine(ServerPlayerRespawn());
 		}
 
+		[Server]
 		private IEnumerator ServerPlayerRespawn()
 		{
 			yield return new WaitForSeconds(GameManager.Instance.scene.respawnTime);
