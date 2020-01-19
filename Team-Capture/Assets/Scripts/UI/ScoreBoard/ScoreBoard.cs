@@ -11,20 +11,21 @@ namespace UI.ScoreBoard
 {
 	public class ScoreBoard : MonoBehaviour
 	{
-		private List<PlayerManager> players = new List<PlayerManager>();
-
 		[HideInInspector] public PlayerManager clientPlayer;
-
-		[Header("Scoreboard Settings")]
-		[SerializeField] private TextMeshProUGUI mapNameText;
 		[SerializeField] private TextMeshProUGUI ipText;
-		[SerializeField] private TextMeshProUGUI playerNameText;
 		[SerializeField] private TextMeshProUGUI killDeathRatioText;
-		[SerializeField] private TextMeshProUGUI playerStatsText;
 
-		[Header("Player List Settings")]
-		[SerializeField] private Transform playerListTransform;
+		[Header("Scoreboard Settings")] [SerializeField]
+		private TextMeshProUGUI mapNameText;
+
 		[SerializeField] private GameObject playerItemPrefab;
+
+		[Header("Player List Settings")] [SerializeField]
+		private Transform playerListTransform;
+
+		[SerializeField] private TextMeshProUGUI playerNameText;
+		private List<PlayerManager> players = new List<PlayerManager>();
+		[SerializeField] private TextMeshProUGUI playerStatsText;
 
 		private void Start()
 		{
@@ -45,7 +46,8 @@ namespace UI.ScoreBoard
 				ScoreBoardPlayer playerItemLogic = newPlayerItem.GetComponent<ScoreBoardPlayer>();
 				if (playerItemLogic == null)
 				{
-					Logger.Log("The playerItemPrefab doesn't have a ScoreBoardPlayer behaviour on it!", LogVerbosity.Error);
+					Logger.Log("The playerItemPrefab doesn't have a ScoreBoardPlayer behaviour on it!",
+						LogVerbosity.Error);
 					return;
 				}
 
@@ -57,20 +59,16 @@ namespace UI.ScoreBoard
 		private void OnDisable()
 		{
 			for (int i = 0; i < playerListTransform.childCount; i++)
-			{
 				Destroy(playerListTransform.GetChild(i).gameObject);
-			}
 		}
 
 		private void Update()
 		{
 			for (int i = 0; i < playerListTransform.childCount; i++)
-			{
 				playerListTransform.GetChild(i).GetComponent<ScoreBoardPlayer>().UpdatePlayerStats();
-			}
 
-			if(clientPlayer.GetKills != 0 && clientPlayer.GetDeaths != 0)
-				killDeathRatioText.text = "K/D: " + (clientPlayer.GetKills / clientPlayer.GetDeaths).ToString();
+			if (clientPlayer.GetKills != 0 && clientPlayer.GetDeaths != 0)
+				killDeathRatioText.text = "K/D: " + clientPlayer.GetKills / clientPlayer.GetDeaths;
 
 			playerStatsText.text = $"Kills: {clientPlayer.GetKills}\nDeaths: {clientPlayer.GetDeaths}";
 		}

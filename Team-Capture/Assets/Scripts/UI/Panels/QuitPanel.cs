@@ -19,7 +19,7 @@ namespace UI.Panels
 
 		public void Quit()
 		{
-			if(NetworkManager.singleton.isNetworkActive)
+			if (NetworkManager.singleton.isNetworkActive)
 				NetworkManager.singleton.StopHost();
 
 			Application.Quit(0);

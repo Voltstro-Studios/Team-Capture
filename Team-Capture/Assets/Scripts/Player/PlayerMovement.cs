@@ -12,7 +12,6 @@ namespace Player
 		private CharacterController charController;
 
 		public float forwardMove;
-		public float rightMove;
 
 		public float friction = 6;
 
@@ -24,6 +23,7 @@ namespace Player
 
 		private Vector3 playerVelocity = Vector3.zero;
 		public Transform playerView; // Camera
+		public float rightMove;
 
 		private float rotX;
 		private float rotY;
@@ -58,7 +58,7 @@ namespace Player
 			/* Movement, here's the important part */
 			QueueJump();
 
-			if (charController.isGrounded )
+			if (charController.isGrounded)
 				GroundMove();
 			else if (!charController.isGrounded)
 				AirMove();
@@ -83,7 +83,7 @@ namespace Player
 
 		private void QueueJump()
 		{
-			if(ClientUI.IsPauseMenuOpen)
+			if (ClientUI.IsPauseMenuOpen)
 				return;
 
 			if (holdJumpToBhop)
@@ -140,7 +140,7 @@ namespace Player
 
 		private void AirControl(Vector3 wishDirection, float wishSpeed)
 		{
-			if(ClientUI.IsPauseMenuOpen)
+			if (ClientUI.IsPauseMenuOpen)
 				return;
 
 			// Can't control movement if not moving forward or backward

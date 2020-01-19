@@ -10,38 +10,35 @@ namespace Player
 {
 	public class PlayerManager : NetworkBehaviour
 	{
+		[HideInInspector] public ClientUI clientUi;
 		[SerializeField] private Behaviour[] disableBehaviourOnDeath;
 
 		[SerializeField] private GameObject[] disableGameObjectsOnDeath;
 
-		[SyncVar(hook = nameof(UpdateHealthUi))] private int health;
-
-		[SyncVar] private int kills;
-		[SyncVar] private int deaths;
-
-		[SerializeField] private int maxHealth = 100;
-		[SyncVar] public string username = "Not Set";
-
-		public bool IsDead { get; protected set; }
-
-		public int GetHealth => health;
-		public int GetKills => kills;
-		public int GetDeaths => deaths;
-
-		[HideInInspector] public ClientUI clientUi;
-
-		[SerializeField] private float latencyUpdateTime = 2.0f;
+		private bool isConnected;
 
 		/// <summary>
 		/// Updated every X amount of seconds and haves this player's latency
 		/// </summary>
 		[SyncVar] public double latency;
 
-		private bool isConnected;
+		[SerializeField] private float latencyUpdateTime = 2.0f;
+
+		[SerializeField] private int maxHealth = 100;
+		[SyncVar] public string username = "Not Set";
+
+		public bool IsDead { get; protected set; }
+
+		[field: SyncVar(hook = nameof(UpdateHealthUi))]
+		public int GetHealth { get; private set; }
+
+		[field: SyncVar] public int GetKills { get; private set; }
+
+		[field: SyncVar] public int GetDeaths { get; private set; }
 
 		private void Start()
 		{
-			health = maxHealth;
+			GetHealth = maxHealth;
 		}
 
 		public override void OnStartLocalPlayer()
@@ -49,7 +46,7 @@ namespace Player
 			base.OnStartLocalPlayer();
 
 			isConnected = true;
-			
+
 			StartCoroutine(LatencyUpdateLoop());
 		}
 
@@ -66,6 +63,15 @@ namespace Player
 			TakeDamage(GetHealth, transform.name);
 		}
 
+		private IEnumerator LatencyUpdateLoop()
+		{
+			while (isConnected)
+			{
+				latency = NetworkTime.rtt;
+				yield return new WaitForSeconds(latencyUpdateTime);
+			}
+		}
+
 		#region Death, Respawn, Damage
 
 		[Server]
@@ -77,9 +83,9 @@ namespace Player
 				return;
 			}
 
-			health -= damageAmount;
+			GetHealth -= damageAmount;
 
-			if(health > 0) return;
+			if (GetHealth > 0) return;
 
 			//Player is dead
 			ServerPlayerDie(sourcePlayerId);
@@ -99,9 +105,9 @@ namespace Player
 			RpcClientPlayerDie();
 
 			//Update the stats, for both players
-			deaths++;
-			if(sourcePlayerId != transform.name)
-				GameManager.GetPlayer(sourcePlayerId).kills++;
+			GetDeaths++;
+			if (sourcePlayerId != transform.name)
+				GameManager.GetPlayer(sourcePlayerId).GetKills++;
 
 			StartCoroutine(ServerPlayerRespawn());
 		}
@@ -110,7 +116,7 @@ namespace Player
 		{
 			yield return new WaitForSeconds(GameManager.Instance.scene.respawnTime);
 
-			health = maxHealth;
+			GetHealth = maxHealth;
 
 			Transform spawnPoint = NetworkManager.singleton.GetStartPosition();
 			RpcClientRespawn(spawnPoint.position, spawnPoint.rotation);
@@ -181,19 +187,10 @@ namespace Player
 
 		private void UpdateHealthUi(int oldHealth, int newHealth)
 		{
-			if(isLocalPlayer && clientUi != null)
+			if (isLocalPlayer && clientUi != null)
 				clientUi.hud.UpdateHealthUi();
 		}
 
 		#endregion
-
-		private IEnumerator LatencyUpdateLoop()
-		{
-			while (isConnected)
-			{
-				latency = NetworkTime.rtt;
-				yield return new WaitForSeconds(latencyUpdateTime);
-			}
-		}
 	}
 }

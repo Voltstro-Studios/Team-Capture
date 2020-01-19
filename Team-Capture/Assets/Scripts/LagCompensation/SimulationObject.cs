@@ -6,11 +6,10 @@ namespace LagCompensation
 {
 	public class SimulationObject : MonoBehaviour
 	{
-		[SerializeField] private bool showPreviousPositionsGizmos;
-
 		//TODO: For the StoredFrames list, it would probably be a lot more efficient to use a Queue instead of a List
 		/// <summary>
-		/// A <see cref="Dictionary{TKey,TValue}"/> containing the stored <see cref="SimulationFrameData"/>, accessible by frame index (stored in
+		/// A <see cref="Dictionary{TKey,TValue}"/> containing the stored <see cref="SimulationFrameData"/>, accessible by frame
+		/// index (stored in
 		/// <see cref="StoredFrames"/>).
 		/// </summary>
 		[NonSerialized]
@@ -20,9 +19,11 @@ namespace LagCompensation
 
 		//TODO: Make this have a getter returning a IReadonlyCollection, and hide this one
 		/// <summary>
-		///     A list of the frames available in <see cref="FrameData" />
+		/// A list of the frames available in <see cref="FrameData"/>
 		/// </summary>
 		[NonSerialized] public readonly List<int> StoredFrames = new List<int>();
+
+		[SerializeField] private bool showPreviousPositionsGizmos;
 
 		private void Start()
 		{
@@ -38,20 +39,20 @@ namespace LagCompensation
 
 		private void OnDrawGizmos()
 		{
-			if(!showPreviousPositionsGizmos) return;
+			if (!showPreviousPositionsGizmos) return;
 
 			for (int i = 0; i < StoredFrames.Count; i++)
 			{
 				//Get the decimal part. Shorthand for f = f % 1
-			    Gizmos.color = Color.green;
-			    Gizmos.DrawSphere(FrameData[StoredFrames[i]].Position, 0.5f);
+				Gizmos.color = Color.green;
+				Gizmos.DrawSphere(FrameData[StoredFrames[i]].Position, 0.5f);
 			}
 		}
 
 #endif
 
 		/// <summary>
-		///     Creates and stores a new <see cref="SimulationFrameData" /> using the current position and rotation data
+		/// Creates and stores a new <see cref="SimulationFrameData"/> using the current position and rotation data
 		/// </summary>
 		public void AddFrame()
 		{
@@ -74,14 +75,14 @@ namespace LagCompensation
 
 		/// <summary>
 		///     <para>
-		///         Sets the <see cref="GameObject" />s <see cref="Transform" /> position and rotation using the given frame index,
-		///         and optional interpolation value.
+		///     Sets the <see cref="GameObject"/>s <see cref="Transform"/> position and rotation using the given frame index,
+		///     and optional interpolation value.
 		///     </para>
 		///     <para>
-		///         The <see cref="Transform" /> will not be changed back until a call to <see cref="ResetStateTransform" />
+		///     The <see cref="Transform"/> will not be changed back until a call to <see cref="ResetStateTransform"/>
 		///     </para>
 		/// </summary>
-		/// <param name="frameId">The frame from which the <see cref="Transform" /> is set</param>
+		/// <param name="frameId">The frame from which the <see cref="Transform"/> is set</param>
 		/// <param name="nextFrameInterpolation">A value used to interpolate between the selected frame and the next one</param>
 		public void SetStateTransform(int frameId, float nextFrameInterpolation)
 		{
@@ -96,7 +97,7 @@ namespace LagCompensation
 		}
 
 		/// <summary>
-		///     Resets the <see cref="Transform" /> to the position before the call to <see cref="SetStateTransform" />
+		/// Resets the <see cref="Transform"/> to the position before the call to <see cref="SetStateTransform"/>
 		/// </summary>
 		public void ResetStateTransform()
 		{

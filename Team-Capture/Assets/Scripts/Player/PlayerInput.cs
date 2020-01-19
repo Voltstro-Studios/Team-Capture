@@ -7,12 +7,12 @@ namespace Player
 {
 	public class PlayerInput : NetworkBehaviour
 	{
-		[SerializeField] private KeyCode suicideKey = KeyCode.P;
 		[SerializeField] private KeyCode pauseMenuKey = KeyCode.Escape;
+		private PlayerManager playerManager;
 		[SerializeField] private KeyCode scoreBoardKey = KeyCode.Tab;
+		[SerializeField] private KeyCode suicideKey = KeyCode.P;
 
 		private WeaponManager weaponManager;
-		private PlayerManager playerManager;
 
 		private void Start()
 		{
@@ -22,15 +22,15 @@ namespace Player
 
 		private void Update()
 		{
-			if(!isLocalPlayer) return;
+			if (!isLocalPlayer) return;
 
-			if(Input.GetKeyDown(pauseMenuKey))
+			if (Input.GetKeyDown(pauseMenuKey))
 				playerManager.clientUi.TogglePauseMenu();
 
 			if (ClientUI.IsPauseMenuOpen)
 				return;
 
-			if(Input.GetKeyDown(scoreBoardKey) || Input.GetKeyUp(scoreBoardKey))
+			if (Input.GetKeyDown(scoreBoardKey) || Input.GetKeyUp(scoreBoardKey))
 				playerManager.clientUi.ToggleScoreBoard();
 
 			if (!playerManager.IsDead && Input.GetKeyDown(suicideKey))

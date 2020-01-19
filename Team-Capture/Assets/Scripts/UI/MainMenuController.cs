@@ -10,12 +10,11 @@ namespace UI
 {
 	public class MainMenuController : MonoBehaviour
 	{
-		public List<MainMenuPanel> menuPanels = new List<MainMenuPanel>();
-
 		[Header("Black Background")] public Animator blackBackgroundAnimator;
 		public string blackBackgroundCloseTriggerName = "Exit";
 		public float blackBackgroundWaitTime = 0.2f;
 		public Transform mainMenuPanel;
+		public List<MainMenuPanel> menuPanels = new List<MainMenuPanel>();
 
 		[Header("Top Black Bar")] public Animator topBlackBarAnimator;
 		public string topBlackBarCloseTriggerName = "Exit";
@@ -46,7 +45,7 @@ namespace UI
 					});
 
 				//Same as the above except for a disconnect panel
-				if(panel.GetComponent<DisconnectPanel>() != null)
+				if (panel.GetComponent<DisconnectPanel>() != null)
 					panel.GetComponent<DisconnectPanel>().noBtn.onClick.AddListener(delegate
 					{
 						TogglePanel(menuPanel.panelName);
@@ -134,7 +133,7 @@ namespace UI
 
 		private void ActivateBlackBackground()
 		{
-			if(NetworkManager.singleton.isNetworkActive) //If we are in game we want the black background always active
+			if (NetworkManager.singleton.isNetworkActive) //If we are in game we want the black background always active
 				return;
 
 			blackBackgroundAnimator.gameObject.SetActive(true);
@@ -142,7 +141,7 @@ namespace UI
 
 		private IEnumerator DeactivateBlackBackground()
 		{
-			if(NetworkManager.singleton.isNetworkActive) //If we are in game we want the black background always active
+			if (NetworkManager.singleton.isNetworkActive) //If we are in game we want the black background always active
 				yield break;
 
 			blackBackgroundAnimator.SetTrigger(blackBackgroundCloseTriggerName);

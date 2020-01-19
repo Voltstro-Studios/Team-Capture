@@ -6,14 +6,13 @@ namespace UI
 {
 	public class ClientUI : MonoBehaviour
 	{
-		[HideInInspector] public PlayerManager player;
+		public static bool IsPauseMenuOpen;
 
 		public Hud hud;
 
 		public GameObject pauseMenuGameObject;
+		[HideInInspector] public PlayerManager player;
 		public GameObject scoreBoardObject;
-
-		public static bool IsPauseMenuOpen;
 
 		public ClientUI SetupUi(PlayerManager playerManager)
 		{

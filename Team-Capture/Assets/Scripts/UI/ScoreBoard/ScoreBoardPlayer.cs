@@ -8,9 +8,9 @@ namespace UI.ScoreBoard
 {
 	public class ScoreBoardPlayer : MonoBehaviour
 	{
-		[SerializeField] private TextMeshProUGUI playerNameText;
-		[SerializeField] private TextMeshProUGUI playerKillsText;
 		[SerializeField] private TextMeshProUGUI playerDeathsText;
+		[SerializeField] private TextMeshProUGUI playerKillsText;
+		[SerializeField] private TextMeshProUGUI playerNameText;
 		[SerializeField] private TextMeshProUGUI playerPingText;
 
 		private PlayerManager playerToTrack;

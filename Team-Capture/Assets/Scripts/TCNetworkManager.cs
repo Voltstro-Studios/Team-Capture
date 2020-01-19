@@ -7,12 +7,12 @@ using Logger = Global.Logger;
 
 public class TCNetworkManager : LiteNetLib4MirrorNetworkManager
 {
-	[Header("Team Capture")] 
-	[SerializeField] private GameObject gameMangerPrefab;
+	public static int MaxFrameCount;
+
+	[Header("Team Capture")] [SerializeField]
+	private GameObject gameMangerPrefab;
 
 	[SerializeField] private int maxFrameCount = 128;
-
-	public static int MaxFrameCount;
 
 	public override void Start()
 	{
@@ -25,7 +25,7 @@ public class TCNetworkManager : LiteNetLib4MirrorNetworkManager
 	{
 		base.LateUpdate();
 
-		if(isNetworkActive)
+		if (isNetworkActive)
 			SimulationHelper.UpdateSimulationObjectData();
 	}
 
@@ -55,5 +55,4 @@ public class TCNetworkManager : LiteNetLib4MirrorNetworkManager
 
 		NetworkServer.AddPlayerForConnection(conn, player);
 	}
-
 }

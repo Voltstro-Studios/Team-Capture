@@ -1,5 +1,4 @@
-﻿using LagCompensation;
-using Mirror;
+﻿using Mirror;
 using UI;
 using UnityEngine;
 using Weapons;
@@ -8,8 +7,8 @@ namespace Player
 {
 	public class PlayerWeaponShoot : NetworkBehaviour
 	{
-		private WeaponManager weaponManager;
 		private PlayerManager playerManager;
+		private WeaponManager weaponManager;
 
 		private void Start()
 		{
@@ -22,7 +21,7 @@ namespace Player
 			if (!isLocalPlayer)
 				return;
 
-			if(ClientUI.IsPauseMenuOpen)
+			if (ClientUI.IsPauseMenuOpen)
 				return;
 
 			//Cache our current weapon
@@ -90,7 +89,7 @@ namespace Player
 		private void CmdWeaponShoot(string sourcePlayer)
 		{
 			PlayerManager player = GameManager.GetPlayer(sourcePlayer);
-			if(player == null) return;
+			if (player == null) return;
 
 			//SimulationHelper.SimulateCommand(player, () => CmdWeaponRayCast(sourcePlayer));
 			WeaponRayCast(sourcePlayer);
@@ -101,7 +100,7 @@ namespace Player
 		{
 			//First, get our player
 			PlayerManager player = GameManager.GetPlayer(sourcePlayer);
-			if(player == null) return;
+			if (player == null) return;
 
 			//Next, get what weapon the player was using
 			TCWeapon tcWeapon = player.GetComponent<WeaponManager>().GetActiveWeapon();
@@ -113,7 +112,8 @@ namespace Player
 
 			//Now do our raycast
 			// ReSharper disable once Unity.PreferNonAllocApi
-			RaycastHit[] hits = Physics.RaycastAll(playerFacingDirection.position, playerFacingDirection.forward, tcWeapon.range);
+			RaycastHit[] hits = Physics.RaycastAll(playerFacingDirection.position, playerFacingDirection.forward,
+				tcWeapon.range);
 			bool hitPlayer = false;
 
 			foreach (RaycastHit hit in hits)

@@ -1,5 +1,6 @@
 ﻿using DiscordRPC;
 using DiscordRPC.Logging;
+using DiscordRPC.Message;
 using Global;
 using UnityEngine;
 using Logger = Global.Logger;
@@ -18,9 +19,9 @@ namespace GameManagers.Discord
 		public string defaultGameState = "Loading...";
 		public string defaultLargeImage = "tc_icon";
 
-		public LogLevel logLevel = LogLevel.Warning;
-
 		private bool isDuplicate;
+
+		public LogLevel logLevel = LogLevel.Warning;
 
 		private void Start()
 		{
@@ -44,7 +45,7 @@ namespace GameManagers.Discord
 
 		private void OnDestroy()
 		{
-			if(!isDuplicate)
+			if (!isDuplicate)
 				client.Dispose();
 		}
 
@@ -79,12 +80,12 @@ namespace GameManagers.Discord
 			});
 		}
 
-		private void ClientReady(object sender, DiscordRPC.Message.ReadyMessage args)
+		private void ClientReady(object sender, ReadyMessage args)
 		{
 			Logger.Log("Client ready: " + args.User.Username);
 		}
 
-		private void ClientError(object sender, DiscordRPC.Message.ErrorMessage args)
+		private void ClientError(object sender, ErrorMessage args)
 		{
 			Logger.Log($"Error with Discord RPC: {args.Code}:{args.Message}");
 		}

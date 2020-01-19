@@ -6,15 +6,14 @@ namespace UI
 {
 	public class Hud : MonoBehaviour
 	{
-		[Header("Health")]
-		public TextMeshProUGUI healthText;
+		[Header("Ammo")] public TextMeshProUGUI ammoText;
 
-		[Header("Ammo")] 
-		public TextMeshProUGUI ammoText;
+		[HideInInspector] public ClientUI clientUi;
+
+		[Header("Health")] public TextMeshProUGUI healthText;
+
 		public TextMeshProUGUI maxAmmoText;
 		public GameObject reloadTextGameObject;
-	
-		[HideInInspector] public ClientUI clientUi;
 
 		public void UpdateHealthUi()
 		{
@@ -24,7 +23,7 @@ namespace UI
 		public void UpdateAmmoUi(WeaponManager weaponManager)
 		{
 			TCWeapon activeWeapon = weaponManager.GetActiveWeapon();
-			if(activeWeapon == null) return;
+			if (activeWeapon == null) return;
 
 			ammoText.text = activeWeapon.currentBulletsAmount.ToString();
 			maxAmmoText.text = activeWeapon.maxBullets.ToString();

@@ -14,13 +14,13 @@ namespace Weapons
 	{
 		private readonly SyncListWeapons weapons = new SyncListWeapons();
 
-		[SyncVar(hook = nameof(SelectWeapon))] public int selectedWeaponIndex;
+		private PlayerManager playerManager;
 
-		public Transform weaponsHolderSpot;
+		[SyncVar(hook = nameof(SelectWeapon))] public int selectedWeaponIndex;
 
 		[SerializeField] private string weaponLayerName = "LocalWeapon";
 
-		private PlayerManager playerManager;
+		public Transform weaponsHolderSpot;
 
 		private void Start()
 		{
@@ -89,7 +89,8 @@ namespace Weapons
 		{
 			if (weaponName == null) return;
 
-			GameObject newWeapon = Instantiate(WeaponsResourceManager.GetWeapon(weaponName).baseWeaponPrefab, weaponsHolderSpot);
+			GameObject newWeapon = Instantiate(WeaponsResourceManager.GetWeapon(weaponName).baseWeaponPrefab,
+				weaponsHolderSpot);
 			if (isLocalPlayer)
 				Layers.SetLayerRecursively(newWeapon, LayerMask.NameToLayer(weaponLayerName));
 		}
@@ -136,6 +137,15 @@ namespace Weapons
 		public WeaponGraphics GetActiveWeaponGraphics()
 		{
 			return weaponsHolderSpot.GetChild(selectedWeaponIndex).GetComponent<WeaponGraphics>();
+		}
+
+		public TCWeapon GetWeapon(string weapon)
+		{
+			IEnumerable<string> result = from a in weapons
+				where a == weapon
+				select a;
+
+			return WeaponsResourceManager.GetWeapon(result.FirstOrDefault());
 		}
 
 		private class SyncListWeapons : SyncList<string>
@@ -188,7 +198,7 @@ namespace Weapons
 			//Setup the new added weapon, and stop any reloading going on with the current weapon
 			TargetSetupWeapon(weapon);
 
-			if(weapons.Count > 1)
+			if (weapons.Count > 1)
 				selectedWeaponIndex += 1;
 		}
 
@@ -230,7 +240,7 @@ namespace Weapons
 
 		public void SelectWeapon(int oldValue, int newValue)
 		{
-			if(!isLocalPlayer)
+			if (!isLocalPlayer)
 				return;
 
 			CmdSelectWeapon(newValue);
@@ -251,19 +261,10 @@ namespace Weapons
 				else
 					weaponsHolderSpot.GetChild(i).gameObject.SetActive(false);
 
-			if(isLocalPlayer)
+			if (isLocalPlayer)
 				playerManager.clientUi.hud.UpdateAmmoUi(this);
 		}
 
 		#endregion
-
-		public TCWeapon GetWeapon(string weapon)
-		{
-			IEnumerable<string> result = from a in weapons
-				where a == weapon
-				select a;
-
-			return WeaponsResourceManager.GetWeapon(result.FirstOrDefault());
-		}
 	}
 }

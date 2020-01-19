@@ -5,15 +5,14 @@ namespace Weapons
 {
 	public class WeaponSway : MonoBehaviour
 	{
-		public float xSwayAmount = 0.1f;
-		public float ySwayAmount = 0.05f;
+		private Vector3 localPosition;
 
 		public float maxXAmount = 0.35f;
 		public float maxYAmount = 0.2f;
 
-		private Vector3 localPosition;
-
 		public float smooth = 3.0f;
+		public float xSwayAmount = 0.1f;
+		public float ySwayAmount = 0.05f;
 
 		private void Start()
 		{
@@ -24,7 +23,7 @@ namespace Weapons
 
 		private void Update()
 		{
-			if(ClientUI.IsPauseMenuOpen)
+			if (ClientUI.IsPauseMenuOpen)
 				return;
 
 			float fx = -Input.GetAxis("Mouse X") * xSwayAmount;
