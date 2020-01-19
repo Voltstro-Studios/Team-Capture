@@ -46,16 +46,17 @@ namespace Weapons
 		{
 			base.OnStartLocalPlayer();
 
-			//Add stock weapons on client start
-			foreach (TCWeapon stockWeapon in GameManager.Instance.scene.stockWeapons) AddWeapon(stockWeapon.weapon);
-
 			Logger.Log("Weapon manager is now ready!");
+
+			//Add stock weapons on client start
+			CmdAddStockWeapons();
 
 			playerManager.clientUi.hud.UpdateAmmoUi(this);
 		}
 
 		private void AddWeaponCallback(SyncList<string>.Operation op, int itemIndex, string item, string newItem)
 		{
+			//TODO: Make all of this happen only on the server
 			if (op == SyncList<string>.Operation.OP_ADD)
 			{
 				if (newItem == null)
@@ -143,15 +144,39 @@ namespace Weapons
 
 		#region Add Weapons
 
-		public void AddWeapon(string weaponName)
+		[Command]
+		public void CmdAddStockWeapons()
+		{
+			foreach (TCWeapon stockWeapon in GameManager.Instance.scene.stockWeapons)
+				AddWeapon(stockWeapon.weapon);
+		}
+
+		/// <summary>
+		/// A command, that calls the server side function <see cref="ServerAddWeapon"/>.
+		/// This function adds a weapon to a player
+		/// </summary>
+		/// <param name="weaponName"></param>
+		[Command]
+		public void CmdAddWeapon(string weaponName)
+		{
+			ServerAddWeapon(weaponName);
+		}
+
+		/// <summary>
+		/// Direct server command.
+		/// This function adds a weapon to a player
+		/// </summary>
+		/// <param name="weaponName"></param>
+		[Server]
+		public void ServerAddWeapon(string weaponName)
 		{
 			if (WeaponsResourceManager.GetWeapon(weaponName) == null) return;
 
-			CmdAddWeapon(weaponName);
+			AddWeapon(weaponName);
 		}
 
-		[Command]
-		private void CmdAddWeapon(string weapon)
+		[Server]
+		private void AddWeapon(string weapon)
 		{
 			TCWeapon tcWeapon = WeaponsResourceManager.GetWeapon(weapon);
 
@@ -180,7 +205,7 @@ namespace Weapons
 
 		#region Weapon Removal
 
-		[Command]
+		[Server]
 		public void CmdRemoveAllWeapons()
 		{
 			selectedWeaponIndex = 0;

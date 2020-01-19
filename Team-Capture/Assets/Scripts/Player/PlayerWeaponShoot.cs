@@ -93,11 +93,11 @@ namespace Player
 			if(player == null) return;
 
 			//SimulationHelper.SimulateCommand(player, () => CmdWeaponRayCast(sourcePlayer));
-			CmdWeaponRayCast(sourcePlayer);
+			WeaponRayCast(sourcePlayer);
 		}
 
-		[Command]
-		private void CmdWeaponRayCast(string sourcePlayer)
+		[Server]
+		private void WeaponRayCast(string sourcePlayer)
 		{
 			//First, get our player
 			PlayerManager player = GameManager.GetPlayer(sourcePlayer);

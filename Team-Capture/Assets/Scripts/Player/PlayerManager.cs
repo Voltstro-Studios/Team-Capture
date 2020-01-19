@@ -93,11 +93,13 @@ namespace Player
 		{
 			IsDead = true;
 
+			//Remove all the weapons on the player
+			GetComponent<WeaponManager>().CmdRemoveAllWeapons();
+
 			RpcClientPlayerDie();
 
 			//Update the stats, for both players
 			deaths++;
-
 			if(sourcePlayerId != transform.name)
 				GameManager.GetPlayer(sourcePlayerId).kills++;
 
@@ -113,6 +115,11 @@ namespace Player
 			Transform spawnPoint = NetworkManager.singleton.GetStartPosition();
 			RpcClientRespawn(spawnPoint.position, spawnPoint.rotation);
 
+			//Add scene stock weapons
+			WeaponManager weaponManager = GetComponent<WeaponManager>();
+			foreach (TCWeapon stockWeapon in GameManager.Instance.scene.stockWeapons)
+				weaponManager.ServerAddWeapon(stockWeapon.weapon);
+
 			IsDead = false;
 		}
 
@@ -125,7 +132,6 @@ namespace Player
 			//Disable the collider, or the Char controller
 			if (isLocalPlayer)
 			{
-				GetComponent<WeaponManager>().CmdRemoveAllWeapons();
 				GetComponent<PlayerMovement>().enabled = false;
 				GetComponent<CharacterController>().enabled = false;
 
@@ -163,11 +169,6 @@ namespace Player
 
 				//Switch cams
 				GameManager.Instance.sceneCamera.SetActive(false);
-
-				//TODO: Get stock weapons from server
-				WeaponManager weaponManager = GetComponent<WeaponManager>();
-				foreach (TCWeapon stockWeapon in GameManager.Instance.scene.stockWeapons)
-					weaponManager.AddWeapon(stockWeapon.weapon);
 
 				clientUi.hud.gameObject.SetActive(true);
 				clientUi.hud.UpdateHealthUi();
