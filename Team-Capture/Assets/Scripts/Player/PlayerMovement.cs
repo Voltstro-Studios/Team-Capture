@@ -5,8 +5,6 @@ namespace Player
 {
 	public class PlayerMovement : MonoBehaviour
 	{
-		[SerializeField] private bool holdJumpToBhop;
-
 		[Header("Speed")]
 		[SerializeField] private float moveSpeed = 7.0f;
 		[SerializeField] private float jumpSpeed = 8.0f;
@@ -38,7 +36,7 @@ namespace Player
 		private float rotationX;
 		private float rotationY;
 
-		private bool wishJump;
+		public bool WishToJump { get; private set; }
 
 		private CharacterController charController;
 		private Transform cameraTransform;
@@ -51,13 +49,6 @@ namespace Player
 
 		private void Update()
 		{
-			//TODO: Move this PlayerInput.cs
-			if (!ClientUI.IsPauseMenuOpen)
-			{
-				rotationX -= Input.GetAxisRaw("Mouse Y") * xMouseSensitivity * 0.02f;
-				rotationY += Input.GetAxisRaw("Mouse X") * yMouseSensitivity * 0.02f;
-			}
-
 			//Clamp the X rotation
 			rotationX = Mathf.Clamp(rotationX, -90, 90);
 
@@ -76,42 +67,13 @@ namespace Player
 			charController.Move(playerVelocity * Time.deltaTime);
 		}
 
-		private void SetMovementDir()
-		{
-			if (ClientUI.IsPauseMenuOpen)
-			{
-				verticalMove = 0;
-				horizontalMove = 0;
-
-				return;
-			}
-
-			//TODO: Move this PlayerInput.cs
-			verticalMove = Input.GetAxisRaw("Vertical");
-			horizontalMove = Input.GetAxisRaw("Horizontal");
-		}
-
 		private void QueueJump()
 		{
-			if (ClientUI.IsPauseMenuOpen)
-				return;
-
-			if (holdJumpToBhop)
-			{
-				wishJump = Input.GetButton("Jump");
-				return;
-			}
-
-			if (Input.GetButtonDown("Jump") && !wishJump)
-				wishJump = true;
-			if (Input.GetButtonUp("Jump"))
-				wishJump = false;
+			
 		}
 
 		private void AirMove()
 		{
-			SetMovementDir();
-
 			if (!ClientUI.IsPauseMenuOpen)
 			{
 				Vector3 wishDirection = new Vector3(horizontalMove, 0, verticalMove);
@@ -183,12 +145,10 @@ namespace Player
 		private void GroundMove()
 		{
 			//Do not apply frictionAmount if the player is queueing up the next jump
-			if (!wishJump)
+			if (!WishToJump)
 				ApplyFriction(1.0f);
 			else
 				ApplyFriction(0);
-
-			SetMovementDir();
 
 			Vector3 wishDirection = new Vector3(horizontalMove, 0, verticalMove);
 			wishDirection = transform.TransformDirection(wishDirection);
@@ -202,10 +162,10 @@ namespace Player
 			//Reset the gravity velocity
 			playerVelocity.y = -gravityAmount * Time.deltaTime;
 
-			if (!wishJump) return;
+			if (!WishToJump) return;
 
 			playerVelocity.y = jumpSpeed;
-			wishJump = false;
+			WishToJump = false;
 		}
 
 		private void ApplyFriction(float t)
@@ -247,19 +207,21 @@ namespace Player
 			playerVelocity.z += accelerationSpeed * wishDirection.z;
 		}
 
-		private void OnDisable()
+		public void SetMovementDir(float verticalAxis, float horizontalAxis)
 		{
-			//Reset all values to 0
-			verticalMove = 0;
-			horizontalMove = 0;
+			verticalMove = verticalAxis;
+			horizontalMove = horizontalAxis;
+		}
 
-			rotationX = 0;
-			rotationY = 0;
+		public void SetWishJump(bool wishToJump)
+		{
+			WishToJump = wishToJump;
+		}
 
-			wishJump = false;
-
-			playerVelocity = Vector3.zero;
-			charController.Move(Vector3.zero);
+		public void SetMouseRotation(float x, float y)
+		{
+			rotationX -= x * xMouseSensitivity * 0.02f;
+			rotationY += y * yMouseSensitivity * 0.02f;
 		}
 	}
 }

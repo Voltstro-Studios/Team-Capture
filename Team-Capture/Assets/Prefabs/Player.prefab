@@ -196,21 +196,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e13942667ba21734bab49808dcd3ef36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  airAcceleration: 2
-  airControl: 5
-  airDecceleration: 2
-  forwardMove: 0
-  rightMove: 0
-  friction: 9
-  gravity: 20
-  holdJumpToBhop: 1
-  jumpSpeed: 8
   moveSpeed: 11
-  playerView: {fileID: 6438375964343202627}
+  jumpSpeed: 8
+  sideStrafeSpeed: 1
+  airAcceleration: 2
+  airDeacceleration: 2
+  airControl: 5
   runAcceleration: 14
   runDeacceleration: 10
   sideStrafeAcceleration: 50
-  sideStrafeSpeed: 1
+  frictionAmount: 6
+  gravityAmount: 20
   xMouseSensitivity: 100
   yMouseSensitivity: 100
 --- !u!114 &3448369259278931532
@@ -227,16 +223,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+  clientUi: {fileID: 0}
   disableBehaviourOnDeath: []
   disableGameObjectsOnDeath:
   - {fileID: 6438375964343202626}
   - {fileID: 6438375964401219431}
-  test: 100
+  latency: 0
+  latencyUpdateTime: 2
   maxHealth: 100
   username: Not Set
-  clientUi: {fileID: 0}
-  latencyUpdateTime: 2
-  latency: 0
 --- !u!114 &8854156936004004421
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -251,9 +246,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  suicideKey: 112
   pauseMenuKey: 27
   scoreBoardKey: 9
+  suicideKey: 112
+  jumpKey: 32
+  rawAxis: 1
+  rawMouseAxis: 1
+  verticalAxisName: Vertical
+  horizontalAxisName: Horizontal
+  yMouseAxisName: Mouse Y
+  xMouseAxisName: Mouse X
+  holdJumpToBhop: 1
 --- !u!114 &4790435715656838203
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -305,8 +308,8 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   selectedWeaponIndex: 0
-  weaponsHolderSpot: {fileID: 8771585192178499609}
   weaponLayerName: LocalWeapon
+  weaponsHolderSpot: {fileID: 8771585192178499609}
 --- !u!114 &2372551973129992940
 MonoBehaviour:
   m_ObjectHideFlags: 0
