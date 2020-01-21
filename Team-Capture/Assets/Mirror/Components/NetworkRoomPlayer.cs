@@ -46,6 +46,8 @@ namespace Mirror
                 if (room.dontDestroyOnLoad)
                     DontDestroyOnLoad(gameObject);
 
+                room.roomSlots.Add(this);
+
                 OnClientEnterRoom();
             }
             else
@@ -71,7 +73,7 @@ namespace Mirror
 
         #region SyncVar Hooks
 
-        void ReadyStateChanged(bool oldState, bool newReadyState)
+        void ReadyStateChanged(bool oldReadyState, bool newReadyState)
         {
             OnClientReady(newReadyState);
         }
