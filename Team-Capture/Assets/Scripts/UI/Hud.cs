@@ -17,7 +17,7 @@ namespace UI
 
 		public void UpdateHealthUi()
 		{
-			healthText.text = clientUi.player.GetHealth.ToString();
+			healthText.text = clientUi.player.Health.ToString();
 		}
 
 		public void UpdateAmmoUi(WeaponManager weaponManager)

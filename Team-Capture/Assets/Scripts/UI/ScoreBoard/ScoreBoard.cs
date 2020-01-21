@@ -13,20 +13,23 @@ namespace UI.ScoreBoard
 	public class ScoreBoard : MonoBehaviour
 	{
 		[HideInInspector] public PlayerManager clientPlayer;
+
 		[SerializeField] private TextMeshProUGUI ipText;
 		[SerializeField] private TextMeshProUGUI killDeathRatioText;
 
-		[Header("Scoreboard Settings")] [SerializeField]
-		private TextMeshProUGUI mapNameText;
+		[Header("Scoreboard Settings")] 
+		[SerializeField] private TextMeshProUGUI mapNameText;
 
 		[SerializeField] private GameObject playerItemPrefab;
 
-		[Header("Player List Settings")] [SerializeField]
-		private Transform playerListTransform;
+		[Header("Player List Settings")] 
+		[SerializeField] private Transform playerListTransform;
 
 		[SerializeField] private TextMeshProUGUI playerNameText;
-		private List<PlayerManager> players = new List<PlayerManager>();
 		[SerializeField] private TextMeshProUGUI playerStatsText;
+
+		private Dictionary<PlayerManager, GameObject> playerList = new Dictionary<PlayerManager, GameObject>();
+		private List<PlayerManager> players = new List<PlayerManager>();
 
 		private void Start()
 		{
@@ -39,39 +42,89 @@ namespace UI.ScoreBoard
 			playerNameText.text = clientPlayer.username;
 
 			players = GameManager.GetAllPlayers().ToList();
-			players.Sort(new PlayerListComparer());
-
+			
 			foreach (PlayerManager player in players)
 			{
-				GameObject newPlayerItem = Instantiate(playerItemPrefab, playerListTransform, false);
-				ScoreBoardPlayer playerItemLogic = newPlayerItem.GetComponent<ScoreBoardPlayer>();
-				if (playerItemLogic == null)
-				{
-					Logger.Log("The playerItemPrefab doesn't have a ScoreBoardPlayer behaviour on it!",
-						LogVerbosity.Error);
-					return;
-				}
-
-				playerItemLogic.SetupPlayerInfo(player);
-				playerItemLogic.UpdatePlayerStats();
+				CreateNewPlayerItem(player);
 			}
+
+			UpdatePlayerStats();
+
+			if (clientPlayer.Kills != 0 && clientPlayer.Deaths != 0)
+				killDeathRatioText.text = "K/D: " + clientPlayer.Kills / clientPlayer.Deaths;
+
+			playerStatsText.text = $"Kills: {clientPlayer.Kills}\nDeaths: {clientPlayer.Deaths}";
 		}
 
 		private void OnDisable()
 		{
 			for (int i = 0; i < playerListTransform.childCount; i++)
 				Destroy(playerListTransform.GetChild(i).gameObject);
+
+			foreach (PlayerManager player in players)
+			{
+				//Unsubscribe from the player killed event
+				player.EventPlayerKilled -= PlayerOnEventPlayerKilled;
+			}
+
+			playerList.Clear();
 		}
 
-		private void Update()
+		private void UpdatePlayerStats()
 		{
-			for (int i = 0; i < playerListTransform.childCount; i++)
-				playerListTransform.GetChild(i).GetComponent<ScoreBoardPlayer>().UpdatePlayerStats();
+			players.Sort(new PlayerListComparer());
 
-			if (clientPlayer.GetKills != 0 && clientPlayer.GetDeaths != 0)
-				killDeathRatioText.text = "K/D: " + clientPlayer.GetKills / clientPlayer.GetDeaths;
+			for (int i = 0; i < players.Count; i++)
+			{
+				//Get the player in the dictionary
+				GameObject player = playerList[players[i]];
+				if (player == null)
+				{
+					CreateNewPlayerItem(players[i]);
 
-			playerStatsText.text = $"Kills: {clientPlayer.GetKills}\nDeaths: {clientPlayer.GetDeaths}";
+					//Now it defiantly should exist
+					player = playerList[players[i]];
+				}
+
+				//Update its spot
+				player.transform.SetSiblingIndex(i);
+
+				//Update its stats
+				player.GetComponent<ScoreBoardPlayer>().UpdatePlayerStats();
+			}
+		}
+
+		private void CreateNewPlayerItem(PlayerManager player)
+		{
+			GameObject newPlayerItem = Instantiate(playerItemPrefab, playerListTransform, false);
+			ScoreBoardPlayer playerItemLogic = newPlayerItem.GetComponent<ScoreBoardPlayer>();
+			if (playerItemLogic == null)
+			{
+				Logger.Log("The playerItemPrefab doesn't have a ScoreBoardPlayer behaviour on it!",
+					LogVerbosity.Error);
+				return;
+			}
+
+			playerItemLogic.SetupPlayerInfo(player);
+			playerItemLogic.UpdatePlayerStats();
+
+			player.EventPlayerKilled += PlayerOnEventPlayerKilled;
+
+			playerList.Add(player, newPlayerItem);
+		}
+
+		private void PlayerOnEventPlayerKilled(string playerKilledId, string playerKillerId)
+		{
+			UpdatePlayerStats();
+
+			//Update our stats if it was our client
+			if (GameManager.GetPlayer(playerKilledId) != clientPlayer &&
+			    GameManager.GetPlayer(playerKillerId) != clientPlayer) return;
+
+			if (clientPlayer.Kills != 0 && clientPlayer.Deaths != 0)
+				killDeathRatioText.text = "K/D: " + clientPlayer.Kills / clientPlayer.Deaths;
+
+			playerStatsText.text = $"Kills: {clientPlayer.Kills}\nDeaths: {clientPlayer.Deaths}";
 		}
 
 		private class PlayerListComparer : IComparer<PlayerManager>
@@ -79,10 +132,10 @@ namespace UI.ScoreBoard
 			public int Compare(PlayerManager x, PlayerManager y)
 			{
 				// ReSharper disable PossibleNullReferenceException
-				if (x.GetKills == 0 && y.GetKills == 0)
+				if (x.Kills == 0 && y.Kills == 0)
 					return 0;
 
-				return y.GetKills.CompareTo(x.GetKills);
+				return y.Kills.CompareTo(x.Kills);
 				// ReSharper enable PossibleNullReferenceException
 			}
 		}

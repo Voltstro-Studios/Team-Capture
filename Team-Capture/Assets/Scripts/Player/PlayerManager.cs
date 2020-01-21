@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using Core;
 using Core.Logger;
+using Delegates;
 using Mirror;
 using UI;
 using UnityEngine;
@@ -18,28 +19,38 @@ namespace Player
 
 		private bool isConnected;
 
-		/// <summary>
-		/// Updated every X amount of seconds and haves this player's latency
-		/// </summary>
-		[SyncVar] public double latency;
-
 		[SerializeField] private float latencyUpdateTime = 2.0f;
 
 		[SerializeField] private int maxHealth = 100;
-		[SyncVar] public string username = "Not Set";
-
+		
 		public bool IsDead { get; protected set; }
 
+		#region Sync Vars
+
+		[SyncVar] public string username = "Not Set";
+
 		[field: SyncVar(hook = nameof(UpdateHealthUi))]
-		public int GetHealth { get; private set; }
+		public int Health { get; private set; }
 
-		[field: SyncVar] public int GetKills { get; private set; }
+		[field: SyncVar] public int Kills { get; private set; }
 
-		[field: SyncVar] public int GetDeaths { get; private set; }
+		[field: SyncVar] public int Deaths { get; private set; }
 
-		private void Start()
+		/// <summary>
+		/// Updated every X amount of seconds and haves this player's latency
+		/// </summary>
+		//TODO: We gotta find a better way of getting a client's latency
+		[SyncVar] public double latency;
+
+		[SyncEvent] public event PlayerKilledDelegate EventPlayerKilled;
+
+		#endregion
+
+		public override void OnStartServer()
 		{
-			GetHealth = maxHealth;
+			base.OnStartServer();
+
+			Health = maxHealth;
 		}
 
 		public override void OnStartLocalPlayer()
@@ -61,7 +72,7 @@ namespace Player
 		[Command]
 		public void CmdSuicide()
 		{
-			TakeDamage(GetHealth, transform.name);
+			TakeDamage(Health, transform.name);
 		}
 
 		private IEnumerator LatencyUpdateLoop()
@@ -84,9 +95,11 @@ namespace Player
 				return;
 			}
 
-			GetHealth -= damageAmount;
+			if(IsDead) return;
 
-			if (GetHealth > 0) return;
+			Health -= damageAmount;
+
+			if (Health > 0) return;
 
 			//Player is dead
 			ServerPlayerDie(sourcePlayerId);
@@ -106,9 +119,11 @@ namespace Player
 			RpcClientPlayerDie();
 
 			//Update the stats, for both players
-			GetDeaths++;
+			Deaths++;
 			if (sourcePlayerId != transform.name)
-				GameManager.GetPlayer(sourcePlayerId).GetKills++;
+				GameManager.GetPlayer(sourcePlayerId).Kills++;
+
+			EventPlayerKilled?.Invoke(transform.name, sourcePlayerId);
 
 			StartCoroutine(ServerPlayerRespawn());
 		}
@@ -118,7 +133,7 @@ namespace Player
 		{
 			yield return new WaitForSeconds(GameManager.Instance.scene.respawnTime);
 
-			GetHealth = maxHealth;
+			Health = maxHealth;
 
 			Transform spawnPoint = NetworkManager.singleton.GetStartPosition();
 			RpcClientRespawn(spawnPoint.position, spawnPoint.rotation);
@@ -162,6 +177,7 @@ namespace Player
 		private void RpcClientRespawn(Vector3 spawnPos, Quaternion spawnRot)
 		{
 			transform.position = spawnPos;
+			// ReSharper disable once Unity.InefficientPropertyAccess
 			transform.rotation = spawnRot;
 
 			//Enable game objects
@@ -187,11 +203,15 @@ namespace Player
 			}
 		}
 
+#pragma warning disable IDE0060 // Remove unused parameter, yes these paramaters HAVE to be here for the hook! And yea we gotta do it for both ReSharper and VS
+		// ReSharper disable UnusedParameter.Local
 		private void UpdateHealthUi(int oldHealth, int newHealth)
+			// ReSharper restore UnusedParameter.Local
 		{
 			if (isLocalPlayer && clientUi != null)
 				clientUi.hud.UpdateHealthUi();
 		}
+#pragma warning restore IDE0060 // Remove unused parameter
 
 		#endregion
 	}

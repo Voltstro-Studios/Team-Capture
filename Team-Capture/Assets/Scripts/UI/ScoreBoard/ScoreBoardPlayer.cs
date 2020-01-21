@@ -26,8 +26,8 @@ namespace UI.ScoreBoard
 			if (playerNameText.text != playerToTrack.username)
 				playerNameText.text = playerToTrack.username;
 
-			playerKillsText.text = playerToTrack.GetKills.ToString();
-			playerDeathsText.text = playerToTrack.GetDeaths.ToString();
+			playerKillsText.text = playerToTrack.Kills.ToString();
+			playerDeathsText.text = playerToTrack.Deaths.ToString();
 			playerPingText.text = Math.Round(playerToTrack.latency).ToString(CultureInfo.InvariantCulture);
 		}
 	}

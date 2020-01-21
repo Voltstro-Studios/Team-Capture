@@ -41,6 +41,9 @@ namespace Player
 			if (Input.GetKeyDown(pauseMenuKey))
 				playerManager.clientUi.TogglePauseMenu();
 
+			//Make sure mouse lock/visibility is correct
+			HandleMouseLock();
+
 			//If the pause menu is open, set player movement direction to 0 and return
 			if (ClientUI.IsPauseMenuOpen)
 			{
@@ -67,6 +70,26 @@ namespace Player
 
 			//Weapon selection, we do this last
 			SetSelectedWeaponIndex();
+		}
+
+		private void HandleMouseLock()
+		{
+			if (ClientUI.IsPauseMenuOpen)
+			{
+				if (!Cursor.visible)
+					Cursor.visible = true;
+
+				if (Cursor.lockState != CursorLockMode.None)
+					Cursor.lockState = CursorLockMode.None;
+
+				return;
+			}
+			
+			if (Cursor.visible)
+				Cursor.visible = false;
+
+			if (Cursor.lockState != CursorLockMode.Locked)
+				Cursor.lockState = CursorLockMode.Locked;
 		}
 
 		private void SetPlayerMouseRotation()
