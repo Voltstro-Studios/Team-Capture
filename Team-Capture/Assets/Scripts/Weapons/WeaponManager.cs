@@ -1,12 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Global;
+using Core;
+using Core.Logger;
 using Helper;
 using Mirror;
 using Player;
 using UnityEngine;
-using Logger = Global.Logger;
+using Logger = Core.Logger.Logger;
 
 namespace Weapons
 {

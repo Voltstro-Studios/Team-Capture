@@ -1,10 +1,11 @@
 ﻿using System.Collections;
-using Global;
+using Core;
+using Core.Logger;
 using Mirror;
 using UI;
 using UnityEngine;
 using Weapons;
-using Logger = Global.Logger;
+using Logger = Core.Logger.Logger;
 
 namespace Player
 {

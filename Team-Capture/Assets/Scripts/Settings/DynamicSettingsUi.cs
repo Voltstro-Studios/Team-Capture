@@ -7,6 +7,8 @@ using Debug = UnityEngine.Debug;
 
 namespace Settings
 {
+	//TODO: A lot is gonna change in this... I am gonna have fun rewriting this, thanks Rowan...
+
 	[ExecuteAlways]
 	public class DynamicSettingsUi : MonoBehaviour
 	{

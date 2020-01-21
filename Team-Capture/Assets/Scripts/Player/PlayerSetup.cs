@@ -1,7 +1,8 @@
-﻿using Mirror;
+﻿using Core;
+using Mirror;
 using UI;
 using UnityEngine;
-using Logger = Global.Logger;
+using Logger = Core.Logger.Logger;
 
 namespace Player
 {

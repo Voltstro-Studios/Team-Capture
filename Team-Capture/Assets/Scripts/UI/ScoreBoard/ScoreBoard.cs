@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Global;
+using Core;
+using Core.Logger;
 using Mirror;
 using Player;
 using TMPro;
 using UnityEngine;
-using Logger = Global.Logger;
+using Logger = Core.Logger.Logger;
 
 namespace UI.ScoreBoard
 {

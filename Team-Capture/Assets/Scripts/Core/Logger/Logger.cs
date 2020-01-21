@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
-namespace Global
+namespace Core.Logger
 {
 	public static class Logger
 	{

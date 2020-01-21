@@ -1,5 +1,5 @@
-﻿using DiscordRPC.Logging;
-using Global;
+﻿using Core.Logger;
+using DiscordRPC.Logging;
 
 namespace GameManagers.Discord
 {

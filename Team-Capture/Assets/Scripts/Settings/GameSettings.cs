@@ -6,7 +6,7 @@ using System.Reflection;
 using Helper;
 using Newtonsoft.Json;
 using UnityEngine;
-using Logger = Global.Logger;
+using Logger = Core.Logger.Logger;
 
 namespace Settings
 {

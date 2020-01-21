@@ -1,9 +1,9 @@
-﻿using DiscordRPC;
+﻿using Core.Logger;
+using DiscordRPC;
 using DiscordRPC.Logging;
 using DiscordRPC.Message;
-using Global;
 using UnityEngine;
-using Logger = Global.Logger;
+using Logger = Core.Logger.Logger;
 
 namespace GameManagers.Discord
 {

@@ -1,6 +1,6 @@
 ﻿using Player;
 using UnityEngine;
-using Logger = Global.Logger;
+using Logger = Core.Logger.Logger;
 
 namespace UI
 {
