@@ -306,7 +306,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   syncMode: 0
-  syncInterval: 0.1
+  syncInterval: 0
   selectedWeaponIndex: 0
   weaponLayerName: LocalWeapon
   weaponsHolderSpot: {fileID: 8771585192178499609}

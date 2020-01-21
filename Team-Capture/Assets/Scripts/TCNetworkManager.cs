@@ -1,4 +1,5 @@
-﻿using Global;
+﻿using System;
+using Global;
 using LagCompensation;
 using Mirror;
 using Mirror.LiteNetLib4Mirror;
@@ -25,15 +26,18 @@ public class TCNetworkManager : LiteNetLib4MirrorNetworkManager
 	{
 		base.LateUpdate();
 
-		if (isNetworkActive)
+		if (mode == NetworkManagerMode.Host || mode == NetworkManagerMode.ServerOnly)
 			SimulationHelper.UpdateSimulationObjectData();
 	}
 
-	public override void OnServerReady(NetworkConnection conn)
+	public override void OnServerSceneChanged(string sceneName)
 	{
-		base.OnServerReady(conn);
+		base.OnServerSceneChanged(sceneName);
 
-		Logger.Log("Server is ready!");
+		Logger.Log($"Server changed scene to `{sceneName}`.");
+
+		Instantiate(gameMangerPrefab);
+		Logger.Log("Created GameManager object.", LogVerbosity.Debug);
 	}
 
 	public override void OnClientConnect(NetworkConnection conn)
@@ -42,8 +46,11 @@ public class TCNetworkManager : LiteNetLib4MirrorNetworkManager
 
 		Logger.Log($"Connected to server `{conn.address}` with the net ID of {conn.connectionId}.");
 
-		Instantiate(gameMangerPrefab);
-		Logger.Log("Created game manager object.", LogVerbosity.Debug);
+		if (mode != NetworkManagerMode.Host)
+		{
+			Instantiate(gameMangerPrefab);
+			Logger.Log("Created game manager object.", LogVerbosity.Debug);
+		}
 	}
 
 	public override void OnServerAddPlayer(NetworkConnection conn)

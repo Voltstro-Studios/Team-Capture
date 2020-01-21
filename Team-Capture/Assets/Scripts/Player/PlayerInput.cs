@@ -105,7 +105,7 @@ namespace Player
 		private void SetSelectedWeaponIndex()
 		{
 			int selectedWeaponIndex = weaponManager.selectedWeaponIndex;
-			int weaponHolderChildCount = weaponManager.weaponsHolderSpot.childCount - 1;
+			int weaponHolderChildCount = weaponManager.WeaponHolderSpotChildCount - 1;
 
 			if (Input.GetAxis("Mouse ScrollWheel") > 0f)
 			{

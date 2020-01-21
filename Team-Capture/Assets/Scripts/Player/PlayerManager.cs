@@ -100,7 +100,7 @@ namespace Player
 			IsDead = true;
 
 			//Remove all the weapons on the player
-			GetComponent<WeaponManager>().CmdRemoveAllWeapons();
+			GetComponent<WeaponManager>().RemoveAllWeapons();
 
 			RpcClientPlayerDie();
 

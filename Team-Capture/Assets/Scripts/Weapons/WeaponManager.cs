@@ -14,19 +14,19 @@ namespace Weapons
 	{
 		private readonly SyncListWeapons weapons = new SyncListWeapons();
 
-		private PlayerManager playerManager;
-
-		[SyncVar(hook = nameof(SelectWeapon))] public int selectedWeaponIndex;
+		[SyncVar(hook = nameof(SelectWeapon))] [HideInInspector] public int selectedWeaponIndex;
 
 		[SerializeField] private string weaponLayerName = "LocalWeapon";
 
-		public Transform weaponsHolderSpot;
+		[SerializeField] private Transform weaponsHolderSpot;
+
+		private PlayerManager playerManager;
+
+		public int WeaponHolderSpotChildCount => weaponsHolderSpot.childCount;
 
 		private void Start()
 		{
 			playerManager = GetComponent<PlayerManager>();
-
-			weapons.Callback += AddWeaponCallback;
 
 			//Create all existing weapons on start
 			for (int i = 0; i < weapons.Count; i++)
@@ -36,52 +36,45 @@ namespace Weapons
 
 				newWeapon.SetActive(selectedWeaponIndex == i);
 			}
+		}
 
-			//Add our weapon sway only to the local client
-			if (isLocalPlayer)
-				weaponsHolderSpot.gameObject.AddComponent<WeaponSway>();
+		public override void OnStartServer()
+		{
+			base.OnStartServer();
+
+			//Setup our add weapon callback
+			weapons.Callback += AddWeaponCallback;
+
+			//Add stock weapons to client
+			AddStockWeapons();
 		}
 
 		public override void OnStartLocalPlayer()
 		{
 			base.OnStartLocalPlayer();
 
-			Logger.Log("Weapon manager is now ready!");
-
-			//Add stock weapons on client start
-			CmdAddStockWeapons();
-
-			playerManager.clientUi.hud.UpdateAmmoUi(this);
+			weaponsHolderSpot.gameObject.AddComponent<WeaponSway>();
 		}
 
+		[Server]
 		private void AddWeaponCallback(SyncList<string>.Operation op, int itemIndex, string item, string newItem)
 		{
-			//TODO: Make all of this happen only on the server
 			if (op == SyncList<string>.Operation.OP_ADD)
 			{
 				if (newItem == null)
 				{
-					Debug.Log("Item is null");
+					Logger.Log("Passed in weapon to be added is null!", LogVerbosity.Error);
+					weapons.Remove(item);
 					return;
 				}
 
-				if (!isLocalPlayer) return;
-
-				CmdInstantiateWeaponOnClients(newItem);
+				RpcInstantiateWeaponOnClients(newItem);
 			}
 
 			if (op == SyncList<string>.Operation.OP_CLEAR)
 			{
-				if (!isLocalPlayer) return;
-
-				CmdRemoveAllActiveWeapons();
+				RpcRemoveAllActiveWeapons();
 			}
-		}
-
-		[Command]
-		private void CmdInstantiateWeaponOnClients(string weapon)
-		{
-			RpcInstantiateWeaponOnClients(weapon);
 		}
 
 		[ClientRpc]
@@ -154,8 +147,8 @@ namespace Weapons
 
 		#region Add Weapons
 
-		[Command]
-		public void CmdAddStockWeapons()
+		[Server]
+		public void AddStockWeapons()
 		{
 			foreach (TCWeapon stockWeapon in GameManager.Instance.scene.stockWeapons)
 				AddWeapon(stockWeapon.weapon);
@@ -216,16 +209,10 @@ namespace Weapons
 		#region Weapon Removal
 
 		[Server]
-		public void CmdRemoveAllWeapons()
+		public void RemoveAllWeapons()
 		{
 			selectedWeaponIndex = 0;
 			weapons.Clear();
-		}
-
-		[Command]
-		private void CmdRemoveAllActiveWeapons()
-		{
-			RpcRemoveAllActiveWeapons();
 		}
 
 		[ClientRpc]
