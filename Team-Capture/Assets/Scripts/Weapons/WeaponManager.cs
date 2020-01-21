@@ -43,7 +43,7 @@ namespace Weapons
 			base.OnStartServer();
 
 			//Setup our add weapon callback
-			weapons.Callback += AddWeaponCallback;
+			weapons.Callback += ServerWeaponCallback;
 
 			//Add stock weapons to client
 			AddStockWeapons();
@@ -53,11 +53,13 @@ namespace Weapons
 		{
 			base.OnStartLocalPlayer();
 
+			weapons.Callback += ClientWeaponCallback;
+
 			weaponsHolderSpot.gameObject.AddComponent<WeaponSway>();
 		}
 
 		[Server]
-		private void AddWeaponCallback(SyncList<string>.Operation op, int itemIndex, string item, string newItem)
+		private void ServerWeaponCallback(SyncList<string>.Operation op, int itemIndex, string item, string newItem)
 		{
 			if (op == SyncList<string>.Operation.OP_ADD)
 			{
@@ -75,6 +77,20 @@ namespace Weapons
 			{
 				RpcRemoveAllActiveWeapons();
 			}
+		}
+
+		[Client]
+		private void ClientWeaponCallback(SyncList<string>.Operation op, int itemIndex, string item, string newItem)
+		{
+			if (op != SyncList<string>.Operation.OP_ADD) return;
+
+			if (newItem == null)
+			{
+				Logger.Log("Passed in weapon to be added is null!", LogVerbosity.Error);
+				return;
+			}
+
+			playerManager.clientUi.hud.UpdateAmmoUi(this);
 		}
 
 		[ClientRpc]
