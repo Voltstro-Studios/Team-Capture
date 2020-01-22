@@ -1,3 +1,5 @@
+#if UNITY_EDITOR
+
 using UnityEditor;
 using UnityEngine;
 
@@ -51,3 +53,5 @@ namespace Mirror.Attributes.Editor
         }
     }
 }
+
+#endif
