@@ -57,7 +57,7 @@ namespace Mirror
         [FormerlySerializedAs("m_ShowDebugMessages")]
         public bool showDebugMessages;
 
-        /// <summary>
+	    /// <summary>
         /// The scene to switch to when offline.
         /// <para>Setting this makes the NetworkManager do scene management. This scene will be switched to when a network session is completed - such as a client disconnect, or a server shutdown.</para>
         /// </summary>
@@ -183,13 +183,6 @@ namespace Mirror
         //    in other words, we need this to know which mode we are running in
         //    during FinishLoadScene.
         public NetworkManagerMode mode { get; private set; }
-
-        /// <summary>
-        /// Obsolete: Use <see cref="NetworkClient"/> directly
-        /// <para>For example, use <c>NetworkClient.Send(message)</c> instead of <c>NetworkManager.client.Send(message)</c></para>
-        /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Never), Obsolete("Use NetworkClient directly, it will be made static soon. For example, use NetworkClient.Send(message) instead of NetworkManager.client.Send(message)")]
-        public NetworkClient client => NetworkClient.singleton;
 
         #region Unity Callbacks
 
@@ -1466,22 +1459,9 @@ namespace Mirror
         public virtual void OnStartServer() { }
 
         /// <summary>
-        /// Obsolete: Use <see cref="OnStartClient()"/> instead of OnStartClient(NetworkClient client).
-        /// <para>All NetworkClient functions are static now, so you can use NetworkClient.Send(message) instead of client.Send(message) directly now.</para>
+        /// Invoked when a client is started
         /// </summary>
-        /// <param name="client">The NetworkClient object that was started.</param>
-        [EditorBrowsable(EditorBrowsableState.Never), Obsolete("Use OnStartClient() instead of OnStartClient(NetworkClient client). All NetworkClient functions are static now, so you can use NetworkClient.Send(message) instead of client.Send(message) directly now.")]
-        public virtual void OnStartClient(NetworkClient client) { }
-
-        /// <summary>
-        /// This is invoked when the client is started.
-        /// </summary>
-        public virtual void OnStartClient()
-        {
-#pragma warning disable CS0618 // Type or member is obsolete
-            OnStartClient(NetworkClient.singleton);
-#pragma warning restore CS0618 // Type or member is obsolete
-        }
+        public virtual void OnStartClient() { }
 
         /// <summary>
         /// This is called when a server is stopped - including when a host is stopped.
