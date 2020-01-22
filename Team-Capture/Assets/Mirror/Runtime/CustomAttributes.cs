@@ -85,9 +85,4 @@ namespace Mirror
     /// </summary>
     [AttributeUsage(AttributeTargets.Method)]
     public class ClientCallbackAttribute : Attribute { }
-
-    /// <summary>
-    /// Converts a string property into a Scene property in the inspector
-    /// </summary>
-    public class SceneAttribute : PropertyAttribute { }
 }

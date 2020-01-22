@@ -1,7 +1,8 @@
 {
     "name": "Mirror.Components",
     "references": [
-        "Mirror"
+        "Mirror",
+        "Mirror.Attributes"
     ],
     "optionalUnityReferences": [],
     "includePlatforms": [],

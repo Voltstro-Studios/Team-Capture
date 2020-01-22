@@ -3,6 +3,7 @@ using LagCompensation;
 using Mirror;
 using Mirror.LiteNetLib4Mirror;
 using UnityEngine;
+using Weapons;
 
 namespace Core
 {
@@ -10,16 +11,21 @@ namespace Core
 	{
 		public static int MaxFrameCount;
 
+		public static TCWeapon[] StockWeapons;
+
 		[Header("Team Capture")] [SerializeField]
 		private GameObject gameMangerPrefab;
 
 		[SerializeField] private int maxFrameCount = 128;
+
+		[SerializeField] private TCWeapon[] stockWeapons;
 
 		public override void Start()
 		{
 			base.Start();
 
 			MaxFrameCount = maxFrameCount;
+			StockWeapons = stockWeapons;
 		}
 
 		public override void LateUpdate()

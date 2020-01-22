@@ -23,7 +23,7 @@ namespace UI.Panels
 		{
 			mapsDropdown.ClearOptions();
 
-			activeTCScenes = TCScenesManager.GetAllEnabledTCScenes().ToList();
+			activeTCScenes = TCScenesManager.GetAllEnabledTCScenesInfo().ToList();
 
 			List<string> scenes = activeTCScenes.Select(scene => scene.displayName).ToList();
 

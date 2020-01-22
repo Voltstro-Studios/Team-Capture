@@ -1038,6 +1038,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53f16aed0ae221d45851676ca49f2f28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  blackBackgroundAnimator: {fileID: 1669149775}
+  blackBackgroundCloseTriggerName: Exit
+  blackBackgroundWaitTime: 0.2
+  mainMenuPanel: {fileID: 319514907}
   menuPanels:
   - isOpen: 0
     menuEvent: {fileID: 11400000, guid: 501c13d390213f647b2cc936a29e1c40, type: 2}
@@ -1053,10 +1057,6 @@ MonoBehaviour:
       type: 3}
     panelPrefab: {fileID: 7741058342783775882, guid: b6dbb189b8a5596458672dda86230873,
       type: 3}
-  blackBackgroundAnimator: {fileID: 1669149775}
-  blackBackgroundCloseTriggerName: Exit
-  blackBackgroundWaitTime: 0.2
-  mainMenuPanel: {fileID: 319514907}
   topBlackBarAnimator: {fileID: 1843545829}
   topBlackBarCloseTriggerName: Exit
   topBlackBarWaitTime: 0.5
@@ -1950,6 +1950,8 @@ MonoBehaviour:
   gameMangerPrefab: {fileID: 5023681518765488030, guid: 924fec1313feb8346bd0bf297c02c3fb,
     type: 3}
   maxFrameCount: 128
+  stockWeapons:
+  - {fileID: 11400000, guid: da803de1f5f09f247aac351f1c13c59a, type: 2}
 --- !u!114 &635598616
 MonoBehaviour:
   m_ObjectHideFlags: 0

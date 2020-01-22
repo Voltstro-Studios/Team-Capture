@@ -1,6 +1,5 @@
-﻿using Mirror;
+﻿using Mirror.Attributes;
 using UnityEngine;
-using Weapons;
 
 namespace SceneManagement
 {
@@ -19,9 +18,6 @@ namespace SceneManagement
 
 		[Header("Basic Scene Settings")] [Scene]
 		public string sceneName;
-
-		[Tooltip("What weapons do you want the player to start with?")]
-		public TCWeapon[] stockWeapons;
 
 		public GameObject weaponHit;
 	}

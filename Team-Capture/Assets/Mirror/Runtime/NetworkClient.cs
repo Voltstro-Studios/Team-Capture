@@ -13,14 +13,29 @@ namespace Mirror
         Disconnected
     }
 
+    // TODO make fully static after removing obsoleted singleton!
     /// <summary>
     /// This is a network client class used by the networking system. It contains a NetworkConnection that is used to connect to a network server.
     /// <para>The <see cref="NetworkClient">NetworkClient</see> handle connection state, messages handlers, and connection configuration. There can be many <see cref="NetworkClient">NetworkClient</see> instances in a process at a time, but only one that is connected to a game server (<see cref="NetworkServer">NetworkServer</see>) that uses spawned objects.</para>
     /// <para><see cref="NetworkClient">NetworkClient</see> has an internal update function where it handles events from the transport layer. This includes asynchronous connect events, disconnect events and incoming data from a server.</para>
     /// <para>The <see cref="NetworkManager">NetworkManager</see> has a NetworkClient instance that it uses for games that it starts, but the NetworkClient may be used by itself.</para>
     /// </summary>
-    public static class NetworkClient
+    public class NetworkClient
     {
+        /// <summary>
+        /// Obsolete: Use <see cref="NetworkClient"/> directly.
+        /// <para>Singleton isn't needed anymore, all functions are static now. For example: NetworkClient.Send(message) instead of NetworkClient.singleton.Send(message).</para>
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never), Obsolete("Use NetworkClient directly. Singleton isn't needed anymore, all functions are static now. For example: NetworkClient.Send(message) instead of NetworkClient.singleton.Send(message).")]
+        public static NetworkClient singleton = new NetworkClient();
+
+        /// <summary>
+        /// A list of all the active network clients in the current process.
+        /// <para>This is NOT a list of all clients that are connected to the remote server, it is client instances on the local game.</para>
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never), Obsolete("Use NetworkClient directly instead. There is always exactly one client.")]
+        public static List<NetworkClient> allClients => new List<NetworkClient> { singleton };
+
         /// <summary>
         /// The registered network message handlers.
         /// </summary>

@@ -2,16 +2,15 @@
     "name": "Mirror",
     "references": [
         "Mirror.CompilerSymbols",
-        "Ninja.WebSockets",
-        "Team-Capture"
+        "Mirror.Attributes",
+        "Ninja.WebSockets"
     ],
+    "optionalUnityReferences": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,
-    "defineConstraints": [],
-    "versionDefines": [],
-    "noEngineReferences": false
+    "defineConstraints": []
 }

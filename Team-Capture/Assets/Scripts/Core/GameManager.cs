@@ -31,7 +31,7 @@ namespace Core
 
 		public void Setup()
 		{
-			scene = TCScenesManager.FindScene(SceneManager.GetActiveScene().name);
+			scene = TCScenesManager.FindSceneInfo(SceneManager.GetActiveScene().name);
 			if (scene == null) Debug.LogError("This scene doesn't have a TCScene!");
 
 			sceneCamera = GameObject.FindWithTag("SceneCamera");

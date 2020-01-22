@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using Mirror.Attributes;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;

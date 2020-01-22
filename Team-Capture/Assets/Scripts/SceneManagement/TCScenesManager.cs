@@ -12,7 +12,7 @@ namespace SceneManagement
 		/// </summary>
 		/// <returns></returns>
 		//FindObjectsOfType iss around 3x faster than LoadAll<T> (190ms vs 500ms), but might not work in the build
-		public static IEnumerable<TCScene> GetAllTCScenes()
+		public static IEnumerable<TCScene> GetAllTCScenesInfo()
 		{
 //			return Resources.LoadAll("").Where(r => r.GetType() == typeof(TCScene)).Select(t => (TCScene) t);
 			return Resources.LoadAll<TCScene>("");
@@ -22,9 +22,9 @@ namespace SceneManagement
 		/// Gets all enabled scenes in the build
 		/// </summary>
 		/// <returns></returns>
-		public static IEnumerable<TCScene> GetAllEnabledTCScenes()
+		public static IEnumerable<TCScene> GetAllEnabledTCScenesInfo()
 		{
-			return GetAllTCScenes().Where(s => s.enabled);
+			return GetAllTCScenesInfo().Where(s => s.enabled);
 		}
 
 		/// <summary>
@@ -32,9 +32,9 @@ namespace SceneManagement
 		/// </summary>
 		/// <param name="name">The name of the scene to find</param>
 		/// <returns></returns>
-		public static TCScene FindScene(string name)
+		public static TCScene FindSceneInfo(string name)
 		{
-			return GetAllTCScenes().FirstOrDefault(s => s.name == name);
+			return GetAllEnabledTCScenesInfo().FirstOrDefault(s => s.name == name);
 		}
 	}
 }

@@ -138,10 +138,8 @@ namespace Player
 			Transform spawnPoint = NetworkManager.singleton.GetStartPosition();
 			RpcClientRespawn(spawnPoint.position, spawnPoint.rotation);
 
-			//Add scene stock weapons
-			WeaponManager weaponManager = GetComponent<WeaponManager>();
-			foreach (TCWeapon stockWeapon in GameManager.Instance.scene.stockWeapons)
-				weaponManager.ServerAddWeapon(stockWeapon.weapon);
+			//Add stock weapons
+			GetComponent<WeaponManager>().AddStockWeapons();
 
 			IsDead = false;
 		}

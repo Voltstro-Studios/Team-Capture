@@ -1,16 +1,13 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Mirror
+namespace Mirror.Attributes.Editor
 {
-
     [CustomPropertyDrawer(typeof(SceneAttribute))]
     public class SceneDrawer : PropertyDrawer
     {
-
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-
             if (property.propertyType == SerializedPropertyType.String)
             {
                 SceneAsset sceneObject = GetSceneObject(property.stringValue);
