@@ -10,7 +10,7 @@ namespace SceneManagement
         {
             Debug.Log($"{nameof(TCScene)}s found:");
             foreach (TCScene tcScene in TCScenesManager.GetAllTCScenesInfo())
-                Debug.Log($"{tcScene.sceneName} ({tcScene.displayName})");
+                Debug.Log($"{tcScene.scene} ({tcScene.displayName})");
         }
 
         [MenuItem("Team Capture/List Enabled Scenes")]
@@ -18,7 +18,7 @@ namespace SceneManagement
         {
             Debug.Log($"Enabled {nameof(TCScene)}s found:");
             foreach (TCScene tcScene in TCScenesManager.GetAllEnabledTCScenesInfo())
-                Debug.Log($"{tcScene.sceneName} ({tcScene.displayName})");
+                Debug.Log($"{tcScene.scene} ({tcScene.displayName})");
         }
     }
 }

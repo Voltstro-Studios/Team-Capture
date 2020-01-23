@@ -6,19 +6,22 @@ namespace SceneManagement
 	[CreateAssetMenu(fileName = "New TC Scene", menuName = "Team Capture/TCScene")]
 	public class TCScene : ScriptableObject
 	{
-		[Tooltip("Its 'nice' name")] public string displayName;
+		[Header("Basic Scene Settings")] 
+		[Scene] public string scene;
 
-		[Tooltip("Is this scene playable?")] public bool enabled = true;
+		[Tooltip("Its 'nice' name")] 
+		public string displayName;
 
-		[Header("Game Settings")] public GamemodeSettings gamemodeSettings;
+		[Tooltip("Will this scene be included in the build?")] 
+		public bool enabled = true;
 
-		[Header("Temp Stuff")] public float hitObjectLastTime = 2.0f;
-
+		[Header("Game Settings")] 
+		public GamemodeSettings gamemodeSettings;
+		
 		public float respawnTime = 4.0f;
 
-		[Header("Basic Scene Settings")] [Scene]
-		public string sceneName;
-
+		[Header("Temp Stuff")] 
+		public float hitObjectLastTime = 2.0f;
 		public GameObject weaponHit;
 	}
 }

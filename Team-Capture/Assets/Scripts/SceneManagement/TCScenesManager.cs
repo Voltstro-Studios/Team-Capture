@@ -32,9 +32,9 @@ namespace SceneManagement
 		public static AsyncOperation LoadScene(TCScene scene, LoadSceneMode loadMode = LoadSceneMode.Single)
 		{
 			PreparingSceneLoadEvent?.Invoke();
-			Debug.Log($"The scene `{scene.sceneName}` was requested to be loaded.");
+			Debug.Log($"The scene `{scene.scene}` was requested to be loaded.");
 
-			AsyncOperation sceneLoad = SceneManager.LoadSceneAsync(scene.sceneName, loadMode);
+			AsyncOperation sceneLoad = SceneManager.LoadSceneAsync(scene.scene, loadMode);
 
 			StartSceneLoadEvent?.Invoke(sceneLoad);
 
