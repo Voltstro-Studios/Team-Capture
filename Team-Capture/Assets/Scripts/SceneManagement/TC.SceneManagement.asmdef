@@ -1,9 +1,7 @@
 {
     "name": "TC.SceneManagement",
     "references": [
-        "GUID:3d3c7bc9694aaa64e9a3b3b6cd4dcb48",
-        "GUID:30817c1a0e6d646d99c048fc403f5979",
-        "GUID:72872094b21c16e48b631b2224833d49"
+        "GUID:3d3c7bc9694aaa64e9a3b3b6cd4dcb48"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

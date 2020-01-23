@@ -1,11 +1,50 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace SceneManagement
 {
 	public static class TCScenesManager
 	{
+		#region Loading Scenes
+
+		public delegate void PreparingSceneLoad();
+		public delegate void StartSceneLoad(AsyncOperation sceneLoadOperation);
+
+		/// <summary>
+		/// An event that triggers when a new scene is requested to be loaded through <see cref="TCScenesManager"/>
+		/// <para>This is so we get a bit of time to prepare other stuff, such as a loading screen.</para>
+		/// </summary>
+		public static event PreparingSceneLoad PreparingSceneLoadEvent;
+
+		/// <summary>
+		/// An event that triggers when a new scene is being loaded through <see cref="TCScenesManager"/>.
+		/// </summary>
+		public static event StartSceneLoad StartSceneLoadEvent;
+
+		/// <summary>
+		/// Loads a scene
+		/// </summary>
+		/// <param name="scene"></param>
+		/// <param name="loadMode"></param>
+		/// <returns></returns>
+		public static AsyncOperation LoadScene(TCScene scene, LoadSceneMode loadMode = LoadSceneMode.Single)
+		{
+			PreparingSceneLoadEvent?.Invoke();
+			Debug.Log($"The scene `{scene.sceneName}` was requested to be loaded.");
+
+			AsyncOperation sceneLoad = SceneManager.LoadSceneAsync(scene.sceneName, loadMode);
+
+			StartSceneLoadEvent?.Invoke(sceneLoad);
+
+			return sceneLoad;
+		}
+
+		#endregion
+
+		#region Getting Scene
+
 		/// <summary>
 		/// Returns a list of all <see cref="TCScene"/> objects in the build (as long as they were in the resources folder).
 		/// Includes disabled scenes
@@ -36,5 +75,7 @@ namespace SceneManagement
 		{
 			return GetAllEnabledTCScenesInfo().FirstOrDefault(s => s.name == name);
 		}
+
+		#endregion
 	}
 }

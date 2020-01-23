@@ -2,11 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using Mirror.Attributes;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
+#if TEAM_CAPTURE
+using SceneManagement;
+#else
+using Mirror.Attributes;
+#endif
 
 namespace Mirror
 {
@@ -58,6 +62,19 @@ namespace Mirror
         [FormerlySerializedAs("m_ShowDebugMessages")]
         public bool showDebugMessages;
 
+#if TEAM_CAPTURE
+	    /// <summary>
+	    /// The scene to switch to when offline.
+	    /// <para>Setting this makes the NetworkManager do scene management. This scene will be switched to when a network session is completed - such as a client disconnect, or a server shutdown.</para>
+	    /// </summary>
+	    public TCScene offlineScene;
+
+	    /// <summary>
+	    /// The scene to switch to when online.
+	    /// <para>Setting this makes the NetworkManager do scene management. This scene will be switched to when a network session is started - such as a client connect, or a server listen.</para>
+	    /// </summary>
+	    public TCScene onlineScene;
+#else
         /// <summary>
         /// The scene to switch to when offline.
         /// <para>Setting this makes the NetworkManager do scene management. This scene will be switched to when a network session is completed - such as a client disconnect, or a server shutdown.</para>
@@ -73,6 +90,7 @@ namespace Mirror
         [Scene]
         [FormerlySerializedAs("m_OnlineScene")]
         public string onlineScene = "";
+#endif
 
         [Header("Network Info")]
 
@@ -232,7 +250,11 @@ namespace Mirror
 
             // Set the networkSceneName to prevent a scene reload
             // if client connection to server fails.
+#if TEAM_CAPTURE
+            networkSceneName = offlineScene.sceneName;
+#else
             networkSceneName = offlineScene;
+#endif
 
             InitializeSingleton();
 
@@ -280,7 +302,12 @@ namespace Mirror
         {
             // Only change scene if the requested online scene is not blank, and is not already loaded
             string loadedSceneName = SceneManager.GetActiveScene().name;
+
+#if TEAM_CAPTURE
+            return !string.IsNullOrEmpty(onlineScene.sceneName) && onlineScene.sceneName != loadedSceneName && onlineScene != offlineScene;
+#else
             return !string.IsNullOrEmpty(onlineScene) && onlineScene != loadedSceneName && onlineScene != offlineScene;
+#endif
         }
 
         // full server setup code, without spawning objects yet
@@ -349,7 +376,11 @@ namespace Mirror
             // scene change needed? then change scene and spawn afterwards.
             if (IsServerOnlineSceneChangeNeeded())
             {
+#if TEAM_CAPTURE
+                ServerChangeScene(onlineScene.sceneName);
+#else
                 ServerChangeScene(onlineScene);
+#endif
             }
             // otherwise spawn directly
             else
@@ -539,7 +570,12 @@ namespace Mirror
             {
                 // call FinishStartHost after changing scene.
                 finishStartHostPending = true;
+
+#if TEAM_CAPTURE
+                ServerChangeScene(onlineScene.sceneName);
+#else
                 ServerChangeScene(onlineScene);
+#endif
             }
             // otherwise call FinishStartHost directly
             else
@@ -584,10 +620,17 @@ namespace Mirror
             // doesn't think we need initialize anything.
             mode = NetworkManagerMode.Offline;
 
+#if TEAM_CAPTURE
+            if (!string.IsNullOrEmpty(offlineScene.sceneName))
+            {
+                ServerChangeScene(offlineScene.sceneName);
+            }
+#else
             if (!string.IsNullOrEmpty(offlineScene))
             {
                 ServerChangeScene(offlineScene);
             }
+#endif
             CleanupNetworkIdentities();
 
             startPositionIndex = 0;
@@ -616,10 +659,17 @@ namespace Mirror
 
             // If this is the host player, StopServer will already be changing scenes.
             // Check loadingSceneAsync to ensure we don't double-invoke the scene change.
+#if TEAM_CAPTURE
+            if (!string.IsNullOrEmpty(offlineScene.sceneName) && SceneManager.GetActiveScene().name != offlineScene.sceneName && loadingSceneAsync == null)
+            {
+                ClientChangeScene(offlineScene.sceneName, SceneOperation.Normal);
+            }
+#else
             if (!string.IsNullOrEmpty(offlineScene) && SceneManager.GetActiveScene().name != offlineScene && loadingSceneAsync == null)
             {
                 ClientChangeScene(offlineScene, SceneOperation.Normal);
             }
+#endif
 
             CleanupNetworkIdentities();
         }
@@ -802,7 +852,11 @@ namespace Mirror
             // It will be re-enabled in FinishScene.
             Transport.activeTransport.enabled = false;
 
+#if TEAM_CAPTURE
+	        loadingSceneAsync = TCScenesManager.LoadScene(TCScenesManager.FindSceneInfo(newSceneName));
+#else
             loadingSceneAsync = SceneManager.LoadSceneAsync(newSceneName);
+#endif
 
             // notify all clients about the new scene
             NetworkServer.SendToAll(new SceneMessage { sceneName = newSceneName });
@@ -837,14 +891,26 @@ namespace Mirror
                 return;
             }
 
+#if TEAM_CAPTURE
+	        TCScene scene = TCScenesManager.FindSceneInfo(newSceneName);
+#endif
+
             switch (sceneOperation)
             {
                 case SceneOperation.Normal:
+#if TEAM_CAPTURE
+	                loadingSceneAsync = TCScenesManager.LoadScene(scene);
+#else
                     loadingSceneAsync = SceneManager.LoadSceneAsync(newSceneName);
+#endif
                     break;
                 case SceneOperation.LoadAdditive:
                     if (!SceneManager.GetSceneByName(newSceneName).IsValid())
-                        loadingSceneAsync = SceneManager.LoadSceneAsync(newSceneName, LoadSceneMode.Additive);
+#if TEAM_CAPTURE
+                        loadingSceneAsync = TCScenesManager.LoadScene(scene, LoadSceneMode.Additive);
+#else
+						loadingSceneAsync = SceneManager.LoadSceneAsync(newSceneName, LoadSceneMode.Additive);
+#endif
                     else
                         Debug.LogWarningFormat("Scene {0} is already loaded", newSceneName);
                     break;
@@ -1090,7 +1156,11 @@ namespace Mirror
             conn.isAuthenticated = true;
 
             // proceed with the login handshake by calling OnServerConnect
-            if (networkSceneName != "" && networkSceneName != offlineScene)
+#if TEAM_CAPTURE
+            if (networkSceneName != "" && networkSceneName != offlineScene.sceneName)
+#else
+			if (networkSceneName != "" && networkSceneName != offlineScene)
+#endif
             {
                 SceneMessage msg = new SceneMessage() { sceneName = networkSceneName };
                 conn.Send(msg);
@@ -1185,7 +1255,11 @@ namespace Mirror
 
             // proceed with the login handshake by calling OnClientConnect
             string loadedSceneName = SceneManager.GetActiveScene().name;
-            if (string.IsNullOrEmpty(onlineScene) || onlineScene == offlineScene || loadedSceneName == onlineScene)
+#if TEAM_CAPTURE
+            if (string.IsNullOrEmpty(onlineScene.sceneName) || onlineScene == offlineScene || loadedSceneName == onlineScene.sceneName)
+#else 
+	        if(string.IsNullOrEmpty(onlineScene) || onlineScene == offlineScene || loadedSceneName == onlineScene)
+#endif
             {
                 clientLoadedScene = false;
                 OnClientConnect(conn);

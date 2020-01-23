@@ -49,7 +49,7 @@ namespace UI.Panels
 
 		private void StartServer()
 		{
-			netManager.onlineScene = activeTCScenes[mapsDropdown.value].sceneName;
+			netManager.onlineScene = activeTCScenes[mapsDropdown.value];
 			netManager.StartHost();
 		}
 

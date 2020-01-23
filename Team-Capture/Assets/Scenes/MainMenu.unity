@@ -1936,8 +1936,8 @@ MonoBehaviour:
   startOnHeadless: 1
   serverTickRate: 128
   showDebugMessages: 0
-  offlineScene: MainMenu
-  onlineScene: dm_test
+  offlineScene: {fileID: 11400000, guid: fee6dc6d01051db4c8826c383c58d001, type: 2}
+  onlineScene: {fileID: 11400000, guid: 7cef4664e096be744b0582e0bca826cb, type: 2}
   transport: {fileID: 635598614}
   networkAddress: localhost
   maxConnections: 16

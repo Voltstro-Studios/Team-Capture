@@ -1,7 +1,9 @@
-﻿using Core.Logger;
+﻿using System.Collections;
+using Core.Logger;
 using LagCompensation;
 using Mirror;
 using Mirror.LiteNetLib4Mirror;
+using SceneManagement;
 using UnityEngine;
 using Weapons;
 
@@ -26,6 +28,8 @@ namespace Core
 
 			MaxFrameCount = maxFrameCount;
 			StockWeapons = stockWeapons;
+
+			TCScenesManager.StartSceneLoadEvent += StartSceneLoad;
 		}
 
 		public override void LateUpdate()
@@ -56,6 +60,24 @@ namespace Core
 			{
 				Instantiate(gameMangerPrefab);
 				Logger.Logger.Log("Created game manager object.", LogVerbosity.Debug);
+			}
+		}
+
+		private void StartSceneLoad(AsyncOperation sceneLoadOperation)
+		{
+			if(mode == NetworkManagerMode.Offline) return;
+
+			StartCoroutine(StartSceneLoadAsync(sceneLoadOperation));
+		}
+
+		private IEnumerator StartSceneLoadAsync(AsyncOperation sceneloadoperation)
+		{
+			//TODO: This is temp shit
+			while (!sceneloadoperation.isDone)
+			{
+				Debug.Log(sceneloadoperation.progress);
+
+				yield return null;
 			}
 		}
 
