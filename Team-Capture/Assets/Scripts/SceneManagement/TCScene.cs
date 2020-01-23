@@ -15,6 +15,9 @@ namespace SceneManagement
 		[Tooltip("Will this scene be included in the build?")] 
 		public bool enabled = true;
 
+		[Tooltip("Is this scene an online scene, the only offline one should be Main Menus and such")]
+		public bool isOnlineScene = true;
+
 		[Header("Game Settings")] 
 		public GamemodeSettings gamemodeSettings;
 		
@@ -23,5 +26,13 @@ namespace SceneManagement
 		[Header("Temp Stuff")] 
 		public float hitObjectLastTime = 2.0f;
 		public GameObject weaponHit;
+
+		[Header("Discord RPC")] 
+		public bool showStartTime = true;
+
+		public bool isMainMenu;
+
+		public string largeImageKey = "tc_icon";
+		public string largeImageKeyText = "Team Capture";
 	}
 }

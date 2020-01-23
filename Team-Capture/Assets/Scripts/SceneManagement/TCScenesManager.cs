@@ -7,10 +7,17 @@ namespace SceneManagement
 {
 	public static class TCScenesManager
 	{
+		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+		private static void InitTcSceneManager()
+		{
+			SceneManager.sceneLoaded += UnitySceneManagerLoaded;
+		}
+
 		#region Loading Scenes
 
-		public delegate void PreparingSceneLoad();
+		public delegate void PreparingSceneLoad(TCScene scene);
 		public delegate void StartSceneLoad(AsyncOperation sceneLoadOperation);
+		public delegate void SceneLoaded(TCScene scene);
 
 		/// <summary>
 		/// An event that triggers when a new scene is requested to be loaded through <see cref="TCScenesManager"/>
@@ -24,6 +31,11 @@ namespace SceneManagement
 		public static event StartSceneLoad StartSceneLoadEvent;
 
 		/// <summary>
+		/// Called after a scene is loaded
+		/// </summary>
+		public static event SceneLoaded OnSceneLoadedEvent;
+
+		/// <summary>
 		/// Loads a scene
 		/// </summary>
 		/// <param name="scene"></param>
@@ -31,7 +43,7 @@ namespace SceneManagement
 		/// <returns></returns>
 		public static AsyncOperation LoadScene(TCScene scene, LoadSceneMode loadMode = LoadSceneMode.Single)
 		{
-			PreparingSceneLoadEvent?.Invoke();
+			PreparingSceneLoadEvent?.Invoke(scene);
 			Debug.Log($"The scene `{scene.scene}` was requested to be loaded.");
 
 			AsyncOperation sceneLoad = SceneManager.LoadSceneAsync(scene.scene, loadMode);
@@ -39,6 +51,14 @@ namespace SceneManagement
 			StartSceneLoadEvent?.Invoke(sceneLoad);
 
 			return sceneLoad;
+		}
+
+		private static void UnitySceneManagerLoaded(Scene scene, LoadSceneMode mode)
+		{
+			TCScene tcScene = FindSceneInfo(scene.name);
+			if(tcScene == null) return;
+
+			OnSceneLoadedEvent?.Invoke(tcScene);
 		}
 
 		#endregion
@@ -74,6 +94,11 @@ namespace SceneManagement
 		public static TCScene FindSceneInfo(string name)
 		{
 			return GetAllEnabledTCScenesInfo().FirstOrDefault(s => s.name == name);
+		}
+
+		public static TCScene GetActiveScene()
+		{
+			return FindSceneInfo(SceneManager.GetActiveScene().name);
 		}
 
 		#endregion

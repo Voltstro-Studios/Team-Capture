@@ -12,9 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a692c30e14efcc94f80cd287f38164f9, type: 3}
   m_Name: MainMenu
   m_EditorClassIdentifier: 
+  scene: MainMenu
   displayName: MainMenu
   enabled: 1
-  hitObjectLastTime: 0
+  isOnlineScene: 0
   respawnTime: 0
-  sceneName: MainMenu
+  hitObjectLastTime: 0
   weaponHit: {fileID: 0}
+  showStartTime: 0
+  isMainMenu: 1
+  largeImageKey: tc_icon
+  largeImageKeyText: Main Menu

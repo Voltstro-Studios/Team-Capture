@@ -1,7 +1,9 @@
-﻿using Core.Logger;
+﻿using System;
+using Core.Logger;
 using DiscordRPC;
 using DiscordRPC.Logging;
 using DiscordRPC.Message;
+using SceneManagement;
 using UnityEngine;
 using Logger = Core.Logger.Logger;
 
@@ -68,16 +70,10 @@ namespace GameManagers.Discord
 
 			client.Initialize();
 
-			//Update our rich presence to just have the default
-			UpdatePresence(new RichPresence
-			{
-				Assets = new Assets
-				{
-					LargeImageKey = defaultLargeImage
-				},
-				Details = defaultGameDetail,
-				State = defaultGameState
-			});
+			TCScenesManager.PreparingSceneLoadEvent += PreparingSceneLoad;
+			TCScenesManager.OnSceneLoadedEvent += SceneLoaded;
+
+			SceneLoaded(TCScenesManager.GetActiveScene());
 		}
 
 		private void ClientReady(object sender, ReadyMessage args)
@@ -94,5 +90,59 @@ namespace GameManagers.Discord
 		{
 			client.SetPresence(presence);
 		}
+
+		#region Scene Discord RPC Stuff
+
+		private void PreparingSceneLoad(TCScene scene)
+		{
+			//Update our RPC to show we are loading
+			if (client.IsInitialized)
+			{
+				UpdatePresence(new RichPresence
+				{
+					Assets = new Assets
+					{
+						LargeImageKey = scene.largeImageKey,
+						LargeImageText = scene.largeImageKeyText
+					},
+					Details = $"Loading into {scene.displayName}",
+					State = "Loading..."
+				});
+			}
+		}
+
+		private void SceneLoaded(TCScene scene)
+		{
+			if (client.IsInitialized)
+			{
+				RichPresence presence = new RichPresence
+				{
+					Assets = new Assets
+					{
+						LargeImageKey = scene.largeImageKey,
+						LargeImageText = scene.largeImageKeyText
+					}
+				};
+
+				if(scene.showStartTime)
+					presence.Timestamps = new Timestamps(DateTime.UtcNow, null);
+
+				if (scene.isOnlineScene)
+				{
+					presence.Details = TCScenesManager.GetActiveScene().displayName;
+					presence.State = "Team Capture";
+				}
+				else if (scene.isMainMenu)
+					presence.Details = "Main Menu";
+				else if(!scene.isMainMenu && !scene.isOnlineScene)
+					presence.Details = "Loading...";
+				else
+					Logger.Log("You CANNOT have a online scene and a main menu scene!", LogVerbosity.Error);
+
+				UpdatePresence(presence);
+			}
+		}
+
+		#endregion
 	}
 }

@@ -12,11 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a692c30e14efcc94f80cd287f38164f9, type: 3}
   m_Name: dm_test
   m_EditorClassIdentifier: 
+  scene: dm_test
   displayName: Test World
   enabled: 1
-  sceneName: dm_test
-  stockWeapons:
-  - {fileID: 11400000, guid: da803de1f5f09f247aac351f1c13c59a, type: 2}
+  isOnlineScene: 1
+  respawnTime: 4
+  hitObjectLastTime: 2
   weaponHit: {fileID: 8445816577206117301, guid: 70b310801ddf1f7439c40eec488e3fb2,
     type: 3}
-  hitObjectLastTime: 2
+  showStartTime: 1
+  largeImageKey: tc_icon
+  largeImageKeyText: Deathmatch
