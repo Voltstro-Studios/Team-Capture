@@ -4,6 +4,7 @@ using LagCompensation;
 using Mirror;
 using Mirror.LiteNetLib4Mirror;
 using SceneManagement;
+using UI.Panels;
 using UnityEngine;
 using Weapons;
 
@@ -22,6 +23,9 @@ namespace Core
 
 		[SerializeField] private TCWeapon[] stockWeapons;
 
+		[SerializeField] private GameObject loadingScreenPrefab;
+		private LoadingScreenPanel loadingScreenPanel;
+
 		public override void Start()
 		{
 			base.Start();
@@ -29,6 +33,7 @@ namespace Core
 			MaxFrameCount = maxFrameCount;
 			StockWeapons = stockWeapons;
 
+			TCScenesManager.PreparingSceneLoadEvent += OnPreparingSceneLoad;
 			TCScenesManager.StartSceneLoadEvent += StartSceneLoad;
 		}
 
@@ -63,24 +68,6 @@ namespace Core
 			}
 		}
 
-		private void StartSceneLoad(AsyncOperation sceneLoadOperation)
-		{
-			if(mode == NetworkManagerMode.Offline) return;
-
-			StartCoroutine(StartSceneLoadAsync(sceneLoadOperation));
-		}
-
-		private IEnumerator StartSceneLoadAsync(AsyncOperation sceneloadoperation)
-		{
-			//TODO: This is temp shit
-			while (!sceneloadoperation.isDone)
-			{
-				Debug.Log(sceneloadoperation.progress);
-
-				yield return null;
-			}
-		}
-
 		public override void OnServerAddPlayer(NetworkConnection conn)
 		{
 			Transform spawnPoint = NetworkManager.singleton.GetStartPosition();
@@ -90,5 +77,32 @@ namespace Core
 
 			NetworkServer.AddPlayerForConnection(conn, player);
 		}
+
+		#region Loading Screen
+
+		private void OnPreparingSceneLoad(TCScene scene)
+		{
+			if(mode == NetworkManagerMode.Offline) return;
+			loadingScreenPanel = Instantiate(loadingScreenPrefab).GetComponent<LoadingScreenPanel>();
+		} 
+
+		private void StartSceneLoad(AsyncOperation sceneLoadOperation)
+		{
+			if(mode == NetworkManagerMode.Offline || loadingScreenPanel == null) return;
+
+			StartCoroutine(StartSceneLoadAsync(sceneLoadOperation));
+		}
+
+		private IEnumerator StartSceneLoadAsync(AsyncOperation sceneLoadOperation)
+		{
+			while (!sceneLoadOperation.isDone)
+			{
+				loadingScreenPanel.SetLoadingBarAmount(Mathf.Clamp01(sceneLoadOperation.progress / .9f));
+
+				yield return null;
+			}
+		}
+
+		#endregion
 	}
 }
