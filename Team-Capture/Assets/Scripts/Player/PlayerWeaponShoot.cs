@@ -168,8 +168,8 @@ namespace Player
 		private void RpcWeaponImpact(Vector3 pos, Vector3 normal)
 		{
 			GameObject hitEffect =
-				Instantiate(GameManager.Instance.scene.weaponHit, pos, Quaternion.LookRotation(normal));
-			Destroy(hitEffect, GameManager.Instance.scene.hitObjectLastTime);
+				Instantiate(GameManager.GetActiveScene().weaponHit, pos, Quaternion.LookRotation(normal));
+			Destroy(hitEffect, GameManager.GetActiveScene().hitObjectLastTime);
 		}
 
 		#endregion

@@ -131,7 +131,7 @@ namespace Player
 		[Server]
 		private IEnumerator ServerPlayerRespawn()
 		{
-			yield return new WaitForSeconds(GameManager.Instance.scene.respawnTime);
+			yield return new WaitForSeconds(GameManager.GetActiveScene().respawnTime);
 
 			Health = maxHealth;
 
@@ -157,7 +157,7 @@ namespace Player
 				GetComponent<CharacterController>().enabled = false;
 
 				//Switch cams
-				GameManager.Instance.sceneCamera.SetActive(true);
+				GameManager.GetActiveSceneCamera().SetActive(true);
 
 				//Disable the UI
 				clientUi.hud.gameObject.SetActive(false);
@@ -191,7 +191,7 @@ namespace Player
 				GetComponent<PlayerMovement>().enabled = true;
 
 				//Switch cams
-				GameManager.Instance.sceneCamera.SetActive(false);
+				GameManager.GetActiveSceneCamera().SetActive(false);
 
 				//Enable our UI
 				clientUi.hud.gameObject.SetActive(true);

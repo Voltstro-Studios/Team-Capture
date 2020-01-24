@@ -33,7 +33,7 @@ namespace Player
 			localCharacterController.enabled = true;
 			localPlayerMovement.enabled = true;
 
-			GameManager.Instance.sceneCamera.SetActive(false);
+			GameManager.GetActiveSceneCamera().SetActive(false);
 
 			localCamera.enabled = true;
 			localAudioListener.enabled = true;

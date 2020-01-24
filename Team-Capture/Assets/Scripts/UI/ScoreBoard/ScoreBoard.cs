@@ -33,7 +33,7 @@ namespace UI.ScoreBoard
 
 		private void Start()
 		{
-			mapNameText.text = GameManager.Instance.scene.displayName;
+			mapNameText.text = GameManager.GetActiveScene().displayName;
 			ipText.text = NetworkManager.singleton.networkAddress;
 		}
 
