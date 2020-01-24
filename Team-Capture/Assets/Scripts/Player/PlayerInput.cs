@@ -48,31 +48,36 @@ namespace Player
 			if (ClientUI.IsPauseMenuOpen)
 			{
 				playerMovement.SetMovementDir(0, 0);
+				playerMovement.SetWishJump(false);
 				return;
 			}
-
-			//Player movement rotation
-			SetPlayerMouseRotation();
-
-			//Player movement jump
-			SetPlayerWishToJump();
-
-			//Player movement direction
-			SetPlayerMovementDirection();
 
 			//Scoreboard
 			if (Input.GetKeyDown(scoreBoardKey) || Input.GetKeyUp(scoreBoardKey))
 				playerManager.clientUi.ToggleScoreBoard();
 
-			//Good ol' suicide button
-			if (!playerManager.IsDead && Input.GetKeyDown(suicideKey))
-				playerManager.CmdSuicide();
+			//Don't want to move if the player is dead
+			if (!playerManager.IsDead)
+			{
+				//Player movement rotation
+				SetPlayerMouseRotation();
 
-			//Weapon selection, we do this last
-			SetSelectedWeaponIndex();
+				//Player movement jump
+				SetPlayerWishToJump();
+
+				//Player movement direction
+				SetPlayerMovementDirection();
+
+				//Good ol' suicide button
+				if (Input.GetKeyDown(suicideKey))
+					playerManager.CmdSuicide();
+
+				//Weapon selection, we do this last
+				SetSelectedWeaponIndex();
+			}
 		}
 
-		private void HandleMouseLock()
+		private static void HandleMouseLock()
 		{
 			if (ClientUI.IsPauseMenuOpen)
 			{

@@ -1,4 +1,5 @@
-﻿using UI;
+﻿using System;
+using UI;
 using UnityEngine;
 
 namespace Player
@@ -40,11 +41,13 @@ namespace Player
 
 		private CharacterController charController;
 		private Transform cameraTransform;
+		private PlayerManager playerManager;
 
 		private void Start()
 		{
 			charController = GetComponent<CharacterController>();
 			cameraTransform = GetComponent<PlayerSetup>().GetPlayerCamera().transform;
+			playerManager = GetComponent<PlayerManager>();
 		}
 
 		private void Update()
@@ -52,11 +55,12 @@ namespace Player
 			//Clamp the X rotation
 			rotationX = Mathf.Clamp(rotationX, -90, 90);
 
-			transform.rotation = Quaternion.Euler(0, rotationY, 0); // Rotates the collider
-			cameraTransform.rotation = Quaternion.Euler(rotationX, rotationY, 0); // Rotates the camera
-
-			//Movement
-			QueueJump();
+			if (!ClientUI.IsPauseMenuOpen)
+			{
+				//TODO: The server should handle player velocity and such
+				transform.rotation = Quaternion.Euler(0, rotationY, 0); // Rotates the collider
+				cameraTransform.rotation = Quaternion.Euler(rotationX, rotationY, 0); // Rotates the camera
+			}
 
 			if (charController.isGrounded)
 				GroundMove();
@@ -67,9 +71,17 @@ namespace Player
 			charController.Move(playerVelocity * Time.deltaTime);
 		}
 
-		private void QueueJump()
+		private void OnDisable()
 		{
-			
+			verticalMove = 0;
+			horizontalMove = 0;
+
+			rotationX = 0;
+			rotationY = 0;
+
+			playerVelocity = Vector3.zero;
+
+			WishToJump = false;
 		}
 
 		private void AirMove()

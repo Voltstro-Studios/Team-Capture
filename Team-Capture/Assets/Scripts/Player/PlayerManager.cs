@@ -23,9 +23,9 @@ namespace Player
 
 		[SerializeField] private int maxHealth = 100;
 		
-		public bool IsDead { get; protected set; }
-
 		#region Sync Vars
+
+		[field: SyncVar] public bool IsDead { get; protected set; }
 
 		[SyncVar] public string username = "Not Set";
 
@@ -159,6 +159,7 @@ namespace Player
 				//Switch cams
 				GameManager.Instance.sceneCamera.SetActive(true);
 
+				//Disable the UI
 				clientUi.hud.gameObject.SetActive(false);
 			}
 			else
@@ -192,8 +193,8 @@ namespace Player
 				//Switch cams
 				GameManager.Instance.sceneCamera.SetActive(false);
 
+				//Enable our UI
 				clientUi.hud.gameObject.SetActive(true);
-				clientUi.hud.UpdateHealthUi();
 			}
 			else
 			{
