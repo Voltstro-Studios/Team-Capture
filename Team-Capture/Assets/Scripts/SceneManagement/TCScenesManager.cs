@@ -87,6 +87,15 @@ namespace SceneManagement
 		}
 
 		/// <summary>
+		/// Gets all enabled, online scenes
+		/// </summary>
+		/// <returns></returns>
+		public static IEnumerable<TCScene> GetAllEnabledOnlineScenesInfo()
+		{
+			return GetAllEnabledTCScenesInfo().Where(s => s.isOnlineScene);
+		}
+
+		/// <summary>
 		/// Finds a scene
 		/// </summary>
 		/// <param name="name">The name of the scene to find</param>
@@ -96,6 +105,10 @@ namespace SceneManagement
 			return GetAllEnabledTCScenesInfo().FirstOrDefault(s => s.name == name);
 		}
 
+		/// <summary>
+		/// Gets the current active scene
+		/// </summary>
+		/// <returns></returns>
 		public static TCScene GetActiveScene()
 		{
 			return FindSceneInfo(SceneManager.GetActiveScene().name);
