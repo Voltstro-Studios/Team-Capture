@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Core.Logger;
 using Mirror;
 using UI.Panels;
 using UnityEngine;
+using Logger = Core.Logger.Logger;
 
 namespace UI
 {
@@ -14,7 +15,7 @@ namespace UI
 		public string blackBackgroundCloseTriggerName = "Exit";
 		public float blackBackgroundWaitTime = 0.2f;
 		public Transform mainMenuPanel;
-		public List<MainMenuPanel> menuPanels = new List<MainMenuPanel>();
+		public TCMainMenuEvent[] menuPanels;
 
 		[Header("Top Black Bar")] public Animator topBlackBarAnimator;
 		public string topBlackBarCloseTriggerName = "Exit";
@@ -25,31 +26,41 @@ namespace UI
 			topBlackBarAnimator.gameObject.SetActive(false);
 
 			//Pre create all panels
-			foreach (MainMenuPanel menuPanel in menuPanels)
+			foreach (TCMainMenuEvent menuPanel in menuPanels)
 			{
 				GameObject panel = Instantiate(menuPanel.panelPrefab, mainMenuPanel);
-				panel.name = menuPanel.panelName;
+				panel.name = menuPanel.name;
 				panel.SetActive(false);
-				menuPanel.panelObject = panel;
+				menuPanel.activePanel = panel;
 
 				//If the panel is a quit panel, then set its no button to toggle the panel
 				if (panel.GetComponent<QuitPanel>() != null)
 					panel.GetComponent<QuitPanel>().noBtn.onClick
-						.AddListener(delegate { TogglePanel(menuPanel.panelName); });
+						.AddListener(delegate { TogglePanel(menuPanel.name); });
 
 				//Basically, the same thing above
 				if (panel.GetComponent<CreateGamePanel>() != null)
 					panel.GetComponent<CreateGamePanel>().cancelButton.onClick.AddListener(delegate
 					{
-						TogglePanel(menuPanel.panelName);
+						TogglePanel(menuPanel.name);
 					});
 
 				//Same as the above except for a disconnect panel
 				if (panel.GetComponent<DisconnectPanel>() != null)
 					panel.GetComponent<DisconnectPanel>().noBtn.onClick.AddListener(delegate
 					{
-						TogglePanel(menuPanel.panelName);
+						TogglePanel(menuPanel.name);
 					});
+			}
+		}
+
+		private void OnDestroy()
+		{
+			Logger.Log("Resetting all main menu events...", LogVerbosity.Debug);
+			foreach (TCMainMenuEvent menu in menuPanels)
+			{
+				menu.isOpen = false;
+				menu.activePanel = null;
 			}
 		}
 
@@ -59,12 +70,12 @@ namespace UI
 		/// <param name="panelName"></param>
 		public void TogglePanel(string panelName)
 		{
-			MainMenuPanel panel = GetMenuPanel(panelName);
+			TCMainMenuEvent panel = GetMenuPanel(panelName);
 
 			//There is a panel that is currently active, so close it
 			if (GetActivePanel() != null && panel != GetActivePanel())
 			{
-				Debug.Log($"{GetActivePanel().panelName} is currently active, switching...");
+				Logger.Log($"{GetActivePanel().name} is currently active, switching...", LogVerbosity.Debug);
 
 				ClosePanel(GetActivePanel(), true);
 			}
@@ -84,31 +95,20 @@ namespace UI
 				ClosePanel(GetActivePanel());
 		}
 
-		[Serializable]
-		public class MainMenuPanel
-		{
-			[HideInInspector] public bool isOpen;
-			public TCMainMenuEvent menuEvent;
-			public string panelName;
-
-			[HideInInspector] public GameObject panelObject;
-			public GameObject panelPrefab;
-		}
-
 		#region Panel List Functions
 
-		private MainMenuPanel GetMenuPanel(string panelName)
+		private TCMainMenuEvent GetMenuPanel(string panelName)
 		{
-			IEnumerable<MainMenuPanel> result = from a in menuPanels
-				where a.panelName == panelName
+			IEnumerable<TCMainMenuEvent> result = from a in menuPanels
+				where a.name == panelName
 				select a;
 
 			return result.FirstOrDefault();
 		}
 
-		private MainMenuPanel GetActivePanel()
+		private TCMainMenuEvent GetActivePanel()
 		{
-			IEnumerable<MainMenuPanel> result = from a in menuPanels
+			IEnumerable<TCMainMenuEvent> result = from a in menuPanels
 				where a.isOpen
 				select a;
 
@@ -153,34 +153,34 @@ namespace UI
 
 		#region Panel Functions
 
-		private void ClosePanel(MainMenuPanel panel, bool isSwitching = false)
+		private void ClosePanel(TCMainMenuEvent panel, bool isSwitching = false)
 		{
-			Debug.Log($"Closing {panel.panelName}");
+			Logger.Log($"Closing {panel.name}", LogVerbosity.Debug);
 
 			if (!isSwitching)
 			{
-				if (panel.menuEvent.showTopBlackBar)
+				if (panel.showTopBlackBar)
 					StartCoroutine(DeactivateTopBlackBar());
 
-				if (panel.menuEvent.darkenScreen)
+				if (panel.darkenScreen)
 					StartCoroutine(DeactivateBlackBackground());
 			}
 
-			panel.panelObject.SetActive(false);
+			panel.activePanel.SetActive(false);
 			panel.isOpen = false;
 		}
 
-		private void OpenPanel(MainMenuPanel panel)
+		private void OpenPanel(TCMainMenuEvent panel)
 		{
-			Debug.Log($"Opening {panel.panelName}");
+			Logger.Log($"Opening {panel.name}", LogVerbosity.Debug);
 
-			if (panel.menuEvent.showTopBlackBar)
+			if (panel.showTopBlackBar)
 				ActivateTopBlackBar();
 
-			if (panel.menuEvent.darkenScreen)
+			if (panel.darkenScreen)
 				ActivateBlackBackground();
 
-			panel.panelObject.SetActive(true);
+			panel.activePanel.SetActive(true);
 			panel.isOpen = true;
 		}
 

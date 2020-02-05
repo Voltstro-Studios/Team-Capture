@@ -1043,20 +1043,8 @@ MonoBehaviour:
   blackBackgroundWaitTime: 0.2
   mainMenuPanel: {fileID: 319514907}
   menuPanels:
-  - isOpen: 0
-    menuEvent: {fileID: 11400000, guid: 501c13d390213f647b2cc936a29e1c40, type: 2}
-    panelName: QuitPanel
-    panelObject: {fileID: 7514135527730688467, guid: e5686af300d60624093846365e1f45d8,
-      type: 3}
-    panelPrefab: {fileID: 3910787854586941505, guid: fc0c3b7f06cf22344aca24509c545e4d,
-      type: 3}
-  - isOpen: 0
-    menuEvent: {fileID: 11400000, guid: 28cdc30fea405604d8606f47dce57ea2, type: 2}
-    panelName: CreateGamePanel
-    panelObject: {fileID: 7514135527730688467, guid: e5686af300d60624093846365e1f45d8,
-      type: 3}
-    panelPrefab: {fileID: 7741058342783775882, guid: b6dbb189b8a5596458672dda86230873,
-      type: 3}
+  - {fileID: 11400000, guid: 28cdc30fea405604d8606f47dce57ea2, type: 2}
+  - {fileID: 11400000, guid: 501c13d390213f647b2cc936a29e1c40, type: 2}
   topBlackBarAnimator: {fileID: 1843545829}
   topBlackBarCloseTriggerName: Exit
   topBlackBarWaitTime: 0.5

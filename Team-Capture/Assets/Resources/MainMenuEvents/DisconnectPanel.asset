@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 84f4ece660a7cf4448e653043839f59c, type: 3}
-  m_Name: CreateGamePanel
+  m_Name: DisconnectPanel
   m_EditorClassIdentifier: 
-  panelPrefab: {fileID: 7741058342783775882, guid: b6dbb189b8a5596458672dda86230873,
+  panelPrefab: {fileID: 4596493256159796345, guid: 894db4747ab52f74c8ec53d1c252408e,
     type: 3}
   darkenScreen: 1
   showTopBlackBar: 1

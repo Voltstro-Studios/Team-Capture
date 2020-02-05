@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84f4ece660a7cf4448e653043839f59c, type: 3}
   m_Name: QuitPanel
   m_EditorClassIdentifier: 
-  showTopBlackBar: 1
-  showMainMenuBar: 0
+  panelPrefab: {fileID: 3910787854586941505, guid: fc0c3b7f06cf22344aca24509c545e4d,
+    type: 3}
   darkenScreen: 1
-  animationDelay: 0
+  showTopBlackBar: 1
+  isOpen: 0
+  activePanel: {fileID: 0}

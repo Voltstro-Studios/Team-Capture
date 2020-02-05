@@ -1446,32 +1446,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53f16aed0ae221d45851676ca49f2f28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  menuPanels:
-  - isOpen: 0
-    menuEvent: {fileID: 11400000, guid: 501c13d390213f647b2cc936a29e1c40, type: 2}
-    panelName: QuitPanel
-    panelObject: {fileID: 7514135527730688467, guid: e5686af300d60624093846365e1f45d8,
-      type: 3}
-    panelPrefab: {fileID: 3910787854586941505, guid: fc0c3b7f06cf22344aca24509c545e4d,
-      type: 3}
-  - isOpen: 0
-    menuEvent: {fileID: 11400000, guid: 28cdc30fea405604d8606f47dce57ea2, type: 2}
-    panelName: CreateGamePanel
-    panelObject: {fileID: 7514135527730688467, guid: e5686af300d60624093846365e1f45d8,
-      type: 3}
-    panelPrefab: {fileID: 7741058342783775882, guid: b6dbb189b8a5596458672dda86230873,
-      type: 3}
-  - isOpen: 0
-    menuEvent: {fileID: 11400000, guid: 501c13d390213f647b2cc936a29e1c40, type: 2}
-    panelName: DisconnectPanel
-    panelObject: {fileID: 7514135527730688467, guid: e5686af300d60624093846365e1f45d8,
-      type: 3}
-    panelPrefab: {fileID: 4596493256159796345, guid: 894db4747ab52f74c8ec53d1c252408e,
-      type: 3}
   blackBackgroundAnimator: {fileID: 2663404252843937796}
   blackBackgroundCloseTriggerName: Exit
   blackBackgroundWaitTime: 0.2
   mainMenuPanel: {fileID: 2741456346434555905}
+  menuPanels:
+  - {fileID: 11400000, guid: 28cdc30fea405604d8606f47dce57ea2, type: 2}
+  - {fileID: 11400000, guid: 501c13d390213f647b2cc936a29e1c40, type: 2}
+  - {fileID: 11400000, guid: d89cb19e3e3417f4d934e3bf309dc51e, type: 2}
   topBlackBarAnimator: {fileID: 3178942827251164820}
   topBlackBarCloseTriggerName: Exit
   topBlackBarWaitTime: 0.5
