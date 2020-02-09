@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using Core.Logger;
+using Core.Networking.Discovery;
 using LagCompensation;
 using Mirror;
 using Mirror.LiteNetLib4Mirror;
@@ -10,6 +11,7 @@ using Weapons;
 
 namespace Core
 {
+	[RequireComponent(typeof(TCGameDiscovery))]
 	public class TCNetworkManager : LiteNetLib4MirrorNetworkManager
 	{
 		public static int MaxFrameCount;
@@ -26,6 +28,8 @@ namespace Core
 		[SerializeField] private GameObject loadingScreenPrefab;
 		private LoadingScreenPanel loadingScreenPanel;
 
+		private TCGameDiscovery gameDiscovery;
+
 		public override void Start()
 		{
 			base.Start();
@@ -35,6 +39,9 @@ namespace Core
 
 			TCScenesManager.PreparingSceneLoadEvent += OnPreparingSceneLoad;
 			TCScenesManager.StartSceneLoadEvent += StartSceneLoad;
+
+			gameDiscovery = GetComponent<TCGameDiscovery>();
+			gameDiscovery.StartDiscovery();
 		}
 
 		public override void LateUpdate()
@@ -55,6 +62,25 @@ namespace Core
 			Logger.Logger.Log("Created GameManager object.", LogVerbosity.Debug);
 		}
 
+		public override void OnServerAddPlayer(NetworkConnection conn)
+		{
+			Transform spawnPoint = NetworkManager.singleton.GetStartPosition();
+
+			GameObject player = Instantiate(playerPrefab, spawnPoint.position, spawnPoint.rotation);
+			player.AddComponent<SimulationObject>();
+
+			NetworkServer.AddPlayerForConnection(conn, player);
+		}
+
+		public override void OnStartServer()
+		{
+			base.OnStartServer();
+
+			gameDiscovery.AdvertiseServer();
+
+			Logger.Logger.Log("Started server!");
+		}
+
 		public override void OnClientConnect(NetworkConnection conn)
 		{
 			base.OnClientConnect(conn);
@@ -65,17 +91,25 @@ namespace Core
 			{
 				Instantiate(gameMangerPrefab);
 				Logger.Logger.Log("Created game manager object.", LogVerbosity.Debug);
+
+				gameDiscovery.StopDiscovery();
 			}
 		}
 
-		public override void OnServerAddPlayer(NetworkConnection conn)
+		public override void OnClientDisconnect(NetworkConnection conn)
 		{
-			Transform spawnPoint = NetworkManager.singleton.GetStartPosition();
+			base.OnClientDisconnect(conn);
 
-			GameObject player = Instantiate(playerPrefab, spawnPoint.position, spawnPoint.rotation);
-			player.AddComponent<SimulationObject>();
+			Logger.Logger.Log($"Disconnected from server `{conn.address}`.");
 
-			NetworkServer.AddPlayerForConnection(conn, player);
+			gameDiscovery.StartDiscovery();
+		}
+
+		public override void OnStopHost()
+		{
+			base.OnStopHost();
+
+			gameDiscovery.StartDiscovery();
 		}
 
 		#region Loading Screen

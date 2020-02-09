@@ -127,6 +127,8 @@ namespace Mirror.Discovery
                 MulticastLoopback = false
             };
 
+            Debug.Log("Started to advertise server!");
+
             // listen for client pings
             _ = ServerListenAsync();
         }
@@ -257,6 +259,8 @@ namespace Mirror.Discovery
                 throw;
             }
 
+            Debug.Log("Started discovery!");
+
             _ = ClientListenAsync();
 
             InvokeRepeating(nameof(BroadcastDiscoveryRequest), 0, ActiveDiscoveryInterval);
@@ -267,6 +271,8 @@ namespace Mirror.Discovery
         /// </summary>
         public void StopDiscovery()
         {
+            Debug.Log("Stopped discovering!");
+
             Shutdown();
         }
 
