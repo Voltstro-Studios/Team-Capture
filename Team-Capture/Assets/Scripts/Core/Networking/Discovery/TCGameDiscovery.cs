@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
+using System.Security.Cryptography.X509Certificates;
 using Core.Logger;
 using Mirror.Discovery;
 using SceneManagement;
@@ -50,7 +52,7 @@ namespace Core.Networking.Discovery
 				return;
 
 			//If we already have this IP then ignore
-			if(Servers.Contains(response))
+			if(Servers.Any(x => Equals(x.EndPoint, endpoint)))
 				return;
 
 			response.EndPoint = endpoint;
