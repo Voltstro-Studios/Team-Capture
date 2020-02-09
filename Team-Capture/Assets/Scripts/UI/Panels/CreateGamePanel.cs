@@ -6,15 +6,13 @@ using Mirror;
 using SceneManagement;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace UI.Panels
 {
-	public class CreateGamePanel : MonoBehaviour
+	public class CreateGamePanel : MainMenuPanelBase
 	{
 		private List<TCScene> activeTCScenes;
 
-		public Button cancelButton;
 		public TMP_Dropdown mapsDropdown;
 
 		private NetworkManager netManager;

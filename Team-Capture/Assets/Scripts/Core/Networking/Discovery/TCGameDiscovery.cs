@@ -66,12 +66,12 @@ namespace Core.Networking.Discovery
 
 		#region Server List Functions
 
-		public TCServerResponse[] GetServers()
+		public static TCServerResponse[] GetServers()
 		{
 			return Servers.ToArray();
 		}
 
-		public void ClearServers()
+		public static void ClearServers()
 		{
 			Servers.Clear();
 		}
