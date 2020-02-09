@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6774111644135708768}
   - component: {fileID: 6774111643069101509}
   m_Layer: 5
-  m_Name: QuitPanel 1
+  m_Name: QuitPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -110,7 +110,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccf55abf3e9171c4ba3f0687734aedab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  noBtn: {fileID: 6774111643981136855}
+  cancelButton: {fileID: 6774111643981136855}
   quitSentences:
   - Are you saying that desktop is better than me?
   - Bruh, you are leaving?

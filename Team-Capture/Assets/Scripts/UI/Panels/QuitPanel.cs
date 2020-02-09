@@ -1,13 +1,11 @@
 ﻿using Mirror;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace UI.Panels
 {
-	public class QuitPanel : MonoBehaviour
+	public class QuitPanel : MainMenuPanelBase
 	{
-		public Button noBtn;
 		public string[] quitSentences;
 
 		public TextMeshProUGUI quitSentenceText;

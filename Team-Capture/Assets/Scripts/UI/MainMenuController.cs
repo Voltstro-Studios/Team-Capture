@@ -33,24 +33,10 @@ namespace UI
 				panel.SetActive(false);
 				menuPanel.activePanel = panel;
 
-				//If the panel is a quit panel, then set its no button to toggle the panel
-				if (panel.GetComponent<QuitPanel>() != null)
-					panel.GetComponent<QuitPanel>().noBtn.onClick
-						.AddListener(delegate { TogglePanel(menuPanel.name); });
-
-				//Basically, the same thing above
-				if (panel.GetComponent<CreateGamePanel>() != null)
-					panel.GetComponent<CreateGamePanel>().cancelButton.onClick.AddListener(delegate
-					{
-						TogglePanel(menuPanel.name);
-					});
-
-				//Same as the above except for a disconnect panel
-				if (panel.GetComponent<DisconnectPanel>() != null)
-					panel.GetComponent<DisconnectPanel>().noBtn.onClick.AddListener(delegate
-					{
-						TogglePanel(menuPanel.name);
-					});
+				if (panel.GetComponent<MainMenuPanelBase>() != null)
+				{
+					panel.GetComponent<MainMenuPanelBase>().cancelButton.onClick.AddListener(delegate{TogglePanel(menuPanel.name);});
+				}
 			}
 		}
 
