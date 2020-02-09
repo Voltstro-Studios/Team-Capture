@@ -23,6 +23,7 @@ namespace Mirror
 {
     public abstract class NetworkTransformBase : NetworkBehaviour
     {
+        [Header("Authority")]
         [Tooltip("Set to true if moves come from owner client, set to false if moves always come from server")]
         public bool clientAuthority;
 
@@ -36,7 +37,7 @@ namespace Mirror
         [Tooltip("Changes to the transform must exceed these values to be transmitted on the network.")]
         public float localPositionSensitivity = .01f;
         [Tooltip("Changes to the transform must exceed these values to be transmitted on the network.")]
-        public float localEulerAnglesSensitivity = .01f;
+        public float localRotationSensitivity = .01f;
         [Tooltip("Changes to the transform must exceed these values to be transmitted on the network.")]
         public float localScaleSensitivity = .01f;
 
@@ -252,8 +253,9 @@ namespace Mirror
         void CmdClientToServerSync(byte[] payload)
         {
             // deserialize payload
-            NetworkReader reader = new NetworkReader(payload);
-            DeserializeFromReader(reader);
+            NetworkReader networkReader = NetworkReaderPool.GetReader(payload);
+            DeserializeFromReader(networkReader);
+            NetworkReaderPool.Recycle(networkReader);
 
             // server-only mode does no interpolation to save computations,
             // but let's set the position directly
@@ -339,7 +341,7 @@ namespace Mirror
             // moved or rotated or scaled?
             // local position/rotation/scale for VR support
             bool moved = Vector3.Distance(lastPosition, targetComponent.transform.localPosition) > localPositionSensitivity;
-            bool rotated = Vector3.Distance(lastRotation.eulerAngles, targetComponent.transform.localRotation.eulerAngles) > localEulerAnglesSensitivity;
+            bool rotated = Vector3.Distance(lastRotation.eulerAngles, targetComponent.transform.localRotation.eulerAngles) > localRotationSensitivity;
             bool scaled = Vector3.Distance(lastScale, targetComponent.transform.localScale) > localScaleSensitivity;
 
             // save last for next frame to compare

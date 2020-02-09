@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Net;
 using LiteNetLib;
 using LiteNetLib.Utils;
 using LiteNetLib4Mirror.Open.Nat;
@@ -37,6 +38,8 @@ namespace Mirror.LiteNetLib4Mirror
 #endif
 		public bool ipv6Enabled = true;
 #endif
+
+		public const string Scheme = "tcp4";
 
 #if UNITY_EDITOR
 		[ArrayRename("Channel")]
@@ -210,6 +213,17 @@ namespace Mirror.LiteNetLib4Mirror
 			{
 				LiteNetLib4MirrorCore.StopTransport();
 			}
+		}
+
+		public override Uri ServerUri()
+		{
+			UriBuilder builder = new UriBuilder
+			{
+				Scheme = Scheme,
+				Host = Dns.GetHostName(),
+				Port = port
+			};
+			return builder.Uri;
 		}
 
 		public override bool ServerActive()

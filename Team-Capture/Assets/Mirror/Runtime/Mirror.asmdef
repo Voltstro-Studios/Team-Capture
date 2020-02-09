@@ -2,9 +2,9 @@
     "name": "Mirror",
     "references": [
         "Mirror.CompilerSymbols",
+        "Mirror.Attributes",
         "Ninja.WebSockets",
-        "TC.SceneManagement",
-        "Mirror.Attributes"
+        "TC.SceneManagement"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

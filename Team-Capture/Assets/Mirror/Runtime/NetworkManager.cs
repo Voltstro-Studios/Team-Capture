@@ -865,6 +865,11 @@ namespace Mirror
             startPositions.Clear();
         }
 
+        // This is only set in ClientChangeScene below...never on server.
+        // We need to check this in OnClientSceneChanged called from FinishLoadSceneClientOnly
+        // to prevent AddPlayer message after loading/unloading additive scenes
+        SceneOperation clientSceneOperation = SceneOperation.Normal;
+
         internal void ClientChangeScene(string newSceneName, SceneOperation sceneOperation = SceneOperation.Normal, bool customHandling = false)
         {
             if (string.IsNullOrEmpty(newSceneName))
@@ -894,6 +899,8 @@ namespace Mirror
 #if TEAM_CAPTURE
 	        TCScene scene = TCScenesManager.FindSceneInfo(newSceneName);
 #endif
+            // cache sceneOperation so we know what was done in OnClientSceneChanged called from FinishLoadSceneClientOnly
+            clientSceneOperation = sceneOperation;
 
             switch (sceneOperation)
             {
@@ -1513,7 +1520,8 @@ namespace Mirror
             // always become ready.
             if (!ClientScene.ready) ClientScene.Ready(conn);
 
-            if (autoCreatePlayer && ClientScene.localPlayer == null)
+            // Only call AddPlayer for normal scene changes, not additive load/unload
+            if (clientSceneOperation == SceneOperation.Normal && autoCreatePlayer && ClientScene.localPlayer == null)
             {
                 // add player if existing one is null
                 ClientScene.AddPlayer();
