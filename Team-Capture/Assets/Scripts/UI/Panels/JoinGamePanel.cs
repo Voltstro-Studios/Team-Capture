@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using Core;
 using Core.Logger;
 using Core.Networking.Discovery;
+using Mirror;
+using TMPro;
 using UI.Elements;
 using UnityEngine;
 
@@ -17,6 +20,8 @@ namespace UI.Panels
 		[SerializeField] private GameObject serverItemPrefab;
 
 		[SerializeField] private Transform serverListTransform;
+
+		[SerializeField] private TextMeshProUGUI statusText;
 
 		private void Awake()
 		{
@@ -39,7 +44,7 @@ namespace UI.Panels
 		private void AddServerItem(TCServerResponse server)
 		{
 			GameObject newItem = Instantiate(serverItemPrefab, serverListTransform, false);
-			newItem.GetComponent<JoinServerButton>().SetupConnectButton(server);
+			newItem.GetComponent<JoinServerButton>().SetupConnectButton(server, () => ConnectToServer(server.EndPoint));
 		}
 
 		public void RefreshServerList()
@@ -49,17 +54,36 @@ namespace UI.Panels
 			{
 				Destroy(serverListTransform.GetChild(i).gameObject);
 			}
+
+			statusText.text = "Searching for games...";
+			statusText.gameObject.SetActive(true);
 		}
 
 		public void AddServer(TCServerResponse server)
 		{
+			//We are connecting to a server...
+			if(NetworkManager.singleton.mode == NetworkManagerMode.ClientOnly) return;
+
 			if(servers.Any(x => Equals(x.EndPoint, server.EndPoint)))
 				return;
 
 			servers.Add(server);
 			AddServerItem(server);
 
+			statusText.gameObject.SetActive(false);
+
 			Core.Logger.Logger.Log($"Found server at {server.EndPoint.Address}", LogVerbosity.Debug);
+		}
+
+		public void ConnectToServer(IPEndPoint ip)
+		{
+			NetworkManager.singleton.networkAddress = ip.Address.ToString();
+			NetworkManager.singleton.StartClient();
+
+			statusText.gameObject.SetActive(true);
+			statusText.text = $"Connecting to '{ip.Address}'...";
+
+			RefreshServerList();
 		}
 	}
 }

@@ -599,8 +599,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 3234213782541408686}
   - {fileID: 8901785924319846718}
+  - {fileID: 3234213782541408686}
   m_Father: {fileID: 8600812936400862820}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1032,6 +1032,7 @@ MonoBehaviour:
   serverItemPrefab: {fileID: 7816917684181772842, guid: 197f3fcdc2511694382f2650049c91b9,
     type: 3}
   serverListTransform: {fileID: 3234213782541408686}
+  statusText: {fileID: 557984278314695590}
 --- !u!1 &5905853302195589508
 GameObject:
   m_ObjectHideFlags: 0
@@ -1300,7 +1301,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6664010928725863308}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -1467,7 +1468,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &8901785924319846718
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1480,7 +1481,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6664010928725863308}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}

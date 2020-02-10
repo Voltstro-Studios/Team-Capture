@@ -1,7 +1,8 @@
-﻿using Core.Networking.Discovery;
-using Mirror;
+﻿using System;
+using Core.Networking.Discovery;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI.Elements
 {
@@ -12,25 +13,24 @@ namespace UI.Elements
 		[SerializeField] private TextMeshProUGUI pingText;
 		[SerializeField] private TextMeshProUGUI playerCountText;
 
-		private string serverAddress;
-		private int serverPort;
+		[SerializeField] private Button baseButton;
 
-		public void SetupConnectButton(TCServerResponse server)
+		/// <summary>
+		/// Sets up this button for connecting to a server
+		/// </summary>
+		/// <param name="server">The server details</param>
+		/// <param name="call">The connect action</param>
+		public void SetupConnectButton(TCServerResponse server, Action call)
 		{
-			serverAddress = server.EndPoint.Address.ToString();
-			serverPort = server.EndPoint.Port;
+			baseButton.onClick.AddListener(delegate
+			{
+				call();
+			});
 
 			gameNameText.text = server.GameName;
 			mapNameText.text = server.SceneName;
 			pingText.text = "0";
 			playerCountText.text = $"{server.CurrentAmountOfPlayers}/{server.MaxPlayers}";
-		}
-
-		public void ConnectToServer()
-		{
-			//TODO: Better connection stuff with Lite Net Lib 4 Mirror Transport
-			NetworkManager.singleton.networkAddress = serverAddress;
-			NetworkManager.singleton.StartClient();
 		}
 	}
 }
