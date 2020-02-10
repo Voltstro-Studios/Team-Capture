@@ -1873,9 +1873,9 @@ GameObject:
   m_Component:
   - component: {fileID: 635598617}
   - component: {fileID: 635598615}
-  - component: {fileID: 635598616}
-  - component: {fileID: 635598614}
   - component: {fileID: 635598618}
+  - component: {fileID: 635598614}
+  - component: {fileID: 635598616}
   m_Layer: 0
   m_Name: _NetworkManager
   m_TagString: Untagged
@@ -1979,6 +1979,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: da803de1f5f09f247aac351f1c13c59a, type: 2}
   loadingScreenPrefab: {fileID: 6528200632955751276, guid: d142e4e46a570a34e82fcd92ea58b4ba,
     type: 3}
+  gameDiscovery: {fileID: 0}
 --- !u!114 &635598616
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1991,7 +1992,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6442dc8070ceb41f094e44de0bf87274, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showGUI: 1
+  showGUI: 0
   offsetX: 0
   offsetY: 0
 --- !u!4 &635598617
