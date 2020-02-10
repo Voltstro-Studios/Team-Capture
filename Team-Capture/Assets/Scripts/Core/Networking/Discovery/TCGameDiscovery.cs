@@ -6,15 +6,18 @@ using Core.Logger;
 using Mirror.Discovery;
 using SceneManagement;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Core.Networking.Discovery
 {
 	[RequireComponent(typeof(TCNetworkManager))]
 	public class TCGameDiscovery : NetworkDiscoveryBase<TCServerRequest, TCServerResponse>
 	{
-		private TCNetworkManager netManager;
+		public class ServerFoundUnityEvent : UnityEvent<TCServerResponse> { };
 
-		private static readonly List<TCServerResponse> Servers = new List<TCServerResponse>();
+		public static ServerFoundUnityEvent OnServerFound = new ServerFoundUnityEvent();
+
+		private TCNetworkManager netManager;
 
 		public override void Start()
 		{
@@ -50,32 +53,14 @@ namespace Core.Networking.Discovery
 			if(response == null)
 				return;
 
-			//If we already have this IP then ignore
-			if(Servers.Any(x => Equals(x.EndPoint, endpoint)))
-				return;
-
 			response.EndPoint = endpoint;
 
-			Servers.Add(response);
+			OnServerFound.Invoke(response);
 
 			Logger.Logger.Log($"Found server at {endpoint.Address}", LogVerbosity.Debug);
 		}
 
 		protected override TCServerRequest GetRequest() => new TCServerRequest();
-
-			#endregion
-
-		#region Server List Functions
-
-		public static TCServerResponse[] GetServers()
-		{
-			return Servers.ToArray();
-		}
-
-		public static void ClearServers()
-		{
-			Servers.Clear();
-		}
 
 		#endregion
 	}

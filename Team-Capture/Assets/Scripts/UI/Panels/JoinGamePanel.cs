@@ -1,5 +1,6 @@
-﻿using System.Net;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 using Core.Networking.Discovery;
 using Mirror;
 using UnityEngine;
@@ -9,7 +10,7 @@ namespace UI.Panels
 {
 	public class JoinGamePanel : MainMenuPanelBase
 	{
-		private TCServerResponse[] servers;
+		private readonly List<TCServerResponse> servers = new List<TCServerResponse>();
 
 		[SerializeField] private GameObject serverItemPrefab;
 
@@ -17,18 +18,36 @@ namespace UI.Panels
 
 		private void Start()
 		{
-			servers = TCGameDiscovery.GetServers();
-
-			AddAllServersToServerList();
+			TCGameDiscovery.OnServerFound.AddListener(AddServer);
 		}
 
-		private void AddAllServersToServerList()
+		private void OnDisable()
 		{
-			foreach (TCServerResponse server in servers)
+			servers.Clear();
+			for (int i = 0; i < serverListTransform.childCount; i++)
 			{
-				GameObject newItem = Instantiate(serverItemPrefab, serverListTransform, false);
-				newItem.GetComponent<Button>().onClick.AddListener(delegate { ConnectToServer(server.EndPoint); });
+				Destroy(serverListTransform.GetChild(i));
 			}
+		}
+
+		private void OnDestroy()
+		{
+			TCGameDiscovery.OnServerFound.RemoveListener(AddServer);
+		}
+
+		private void AddServerItem(TCServerResponse server)
+		{
+			GameObject newItem = Instantiate(serverItemPrefab, serverListTransform, false);
+			newItem.GetComponent<Button>().onClick.AddListener(delegate { ConnectToServer(server.EndPoint); });
+		}
+
+		public void AddServer(TCServerResponse server)
+		{
+			if(servers.Any(x => Equals(x.EndPoint, server.EndPoint)))
+				return;
+
+			servers.Add(server);
+			AddServerItem(server);
 		}
 
 		public void ConnectToServer(IPEndPoint ip)
