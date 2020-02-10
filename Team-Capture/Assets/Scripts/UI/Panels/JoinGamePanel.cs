@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Net;
+using Core.Logger;
 using Core.Networking.Discovery;
-using Mirror;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace UI.Panels
 {
@@ -48,6 +46,8 @@ namespace UI.Panels
 
 			servers.Add(server);
 			AddServerItem(server);
+
+			Core.Logger.Logger.Log($"Found server at {server.EndPoint.Address}", LogVerbosity.Debug);
 		}
 	}
 }

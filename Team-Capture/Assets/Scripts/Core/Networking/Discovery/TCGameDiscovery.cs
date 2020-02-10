@@ -55,8 +55,6 @@ namespace Core.Networking.Discovery
 			response.EndPoint = endpoint;
 
 			OnServerFound.Invoke(response);
-
-			Logger.Logger.Log($"Found server at {endpoint.Address}", LogVerbosity.Debug);
 		}
 
 		protected override TCServerRequest GetRequest() => new TCServerRequest();
