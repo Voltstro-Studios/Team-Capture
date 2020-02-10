@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using Core.Logger;
 using Mirror.Discovery;
@@ -36,6 +34,7 @@ namespace Core.Networking.Discovery
 				{
 					GameName = "WIP",
 					MaxPlayers = netManager.maxConnections,
+					CurrentAmountOfPlayers = netManager.numPlayers,
 					SceneName = TCScenesManager.GetActiveScene().name
 				};
 			}

@@ -38,7 +38,7 @@ namespace UI.Panels
 		private void AddServerItem(TCServerResponse server)
 		{
 			GameObject newItem = Instantiate(serverItemPrefab, serverListTransform, false);
-			newItem.GetComponent<Button>().onClick.AddListener(delegate { ConnectToServer(server.EndPoint); });
+			newItem.GetComponent<JoinServerButton>().SetupConnectButton(server);
 		}
 
 		public void AddServer(TCServerResponse server)
@@ -48,13 +48,6 @@ namespace UI.Panels
 
 			servers.Add(server);
 			AddServerItem(server);
-		}
-
-		public void ConnectToServer(IPEndPoint ip)
-		{
-			//TODO: Better connection stuff with Lite Net Lib 4 Mirror Transport
-			NetworkManager.singleton.networkAddress = ip.Address.ToString();
-			NetworkManager.singleton.StartClient();
 		}
 	}
 }

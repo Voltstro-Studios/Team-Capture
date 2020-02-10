@@ -7,10 +7,11 @@ namespace Core.Networking.Discovery
 	{
 		public IPEndPoint EndPoint { get; set; }
 
-		public int MaxPlayers { get; set; }
+		public int MaxPlayers;
+		public int CurrentAmountOfPlayers;
 
-		public string GameName { get; set; }
+		public string GameName;
 
-		public string SceneName { get; set; }
+		public string SceneName;
 	}
 }
