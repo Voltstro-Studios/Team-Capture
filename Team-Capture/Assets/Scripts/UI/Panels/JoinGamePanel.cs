@@ -21,11 +21,7 @@ namespace UI.Panels
 
 		private void OnDisable()
 		{
-			servers.Clear();
-			for (int i = 0; i < serverListTransform.childCount; i++)
-			{
-				Destroy(serverListTransform.GetChild(i));
-			}
+			RefreshServerList();
 		}
 
 		private void OnDestroy()
@@ -37,6 +33,15 @@ namespace UI.Panels
 		{
 			GameObject newItem = Instantiate(serverItemPrefab, serverListTransform, false);
 			newItem.GetComponent<JoinServerButton>().SetupConnectButton(server);
+		}
+
+		public void RefreshServerList()
+		{
+			servers.Clear();
+			for (int i = 0; i < serverListTransform.childCount; i++)
+			{
+				Destroy(serverListTransform.GetChild(i).gameObject);
+			}
 		}
 
 		public void AddServer(TCServerResponse server)
