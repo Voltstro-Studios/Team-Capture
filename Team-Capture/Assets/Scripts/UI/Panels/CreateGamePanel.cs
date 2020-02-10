@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Mirror;
+using Core;
 using SceneManagement;
 using TMPro;
 using UnityEngine;
@@ -15,7 +15,7 @@ namespace UI.Panels
 
 		public TMP_Dropdown mapsDropdown;
 
-		private NetworkManager netManager;
+		private TCNetworkManager netManager;
 
 		private void Start()
 		{
@@ -28,7 +28,7 @@ namespace UI.Panels
 			mapsDropdown.AddOptions(scenes);
 			mapsDropdown.RefreshShownValue();
 
-			netManager = NetworkManager.singleton;
+			netManager = TCNetworkManager.Instance;
 		}
 
 		/// <summary>

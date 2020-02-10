@@ -3,7 +3,6 @@ using Core.Logger;
 using Core.Networking.Discovery;
 using LagCompensation;
 using Mirror;
-using Mirror.LiteNetLib4Mirror;
 using SceneManagement;
 using UI.Panels;
 using UnityEngine;
@@ -12,7 +11,7 @@ using Weapons;
 namespace Core
 {
 	[RequireComponent(typeof(TCGameDiscovery))]
-	public class TCNetworkManager : LiteNetLib4MirrorNetworkManager
+	public class TCNetworkManager : NetworkManager
 	{
 		public static TCNetworkManager Instance;
 
@@ -34,10 +33,16 @@ namespace Core
 
 		public override void Awake()
 		{
+			if (Instance != null)
+			{
+				Destroy(gameObject);
+				return;
+			}
+
 			base.Awake();
 
 			Instance = this;
-			NetworkManager.singleton = this;
+			singleton = this;
 		}
 
 		public override void Start()
