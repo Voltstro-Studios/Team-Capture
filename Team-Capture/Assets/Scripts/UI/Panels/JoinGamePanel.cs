@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Core;
 using Core.Logger;
 using Core.Networking.Discovery;
 using UI.Elements;
@@ -11,23 +12,28 @@ namespace UI.Panels
 	{
 		private readonly List<TCServerResponse> servers = new List<TCServerResponse>();
 
+		private TCGameDiscovery gameDiscovery;
+
 		[SerializeField] private GameObject serverItemPrefab;
 
 		[SerializeField] private Transform serverListTransform;
 
-		private void Start()
+		private void Awake()
 		{
-			TCGameDiscovery.OnServerFound.AddListener(AddServer);
+			gameDiscovery = TCNetworkManager.Instance.gameDiscovery;
+		}
+
+		private void OnEnable()
+		{
+			gameDiscovery.onServerFound.AddListener(AddServer);
+			gameDiscovery.StartDiscovery();
 		}
 
 		private void OnDisable()
 		{
+			gameDiscovery.onServerFound.RemoveListener(AddServer);
+			gameDiscovery.StopDiscovery();
 			RefreshServerList();
-		}
-
-		private void OnDestroy()
-		{
-			TCGameDiscovery.OnServerFound.RemoveListener(AddServer);
 		}
 
 		private void AddServerItem(TCServerResponse server)

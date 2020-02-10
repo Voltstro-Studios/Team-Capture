@@ -14,6 +14,8 @@ namespace Core
 	[RequireComponent(typeof(TCGameDiscovery))]
 	public class TCNetworkManager : LiteNetLib4MirrorNetworkManager
 	{
+		public static TCNetworkManager Instance;
+
 		public static int MaxFrameCount;
 
 		public static TCWeapon[] StockWeapons;
@@ -28,7 +30,15 @@ namespace Core
 		[SerializeField] private GameObject loadingScreenPrefab;
 		private LoadingScreenPanel loadingScreenPanel;
 
-		private TCGameDiscovery gameDiscovery;
+		[HideInInspector] public TCGameDiscovery gameDiscovery;
+
+		public override void Awake()
+		{
+			base.Awake();
+
+			Instance = this;
+			NetworkManager.singleton = this;
+		}
 
 		public override void Start()
 		{
@@ -39,9 +49,6 @@ namespace Core
 
 			TCScenesManager.PreparingSceneLoadEvent += OnPreparingSceneLoad;
 			TCScenesManager.StartSceneLoadEvent += StartSceneLoad;
-
-			gameDiscovery = GetComponent<TCGameDiscovery>();
-			gameDiscovery.StartDiscovery();
 		}
 
 		public override void LateUpdate()
@@ -81,6 +88,13 @@ namespace Core
 			Logger.Logger.Log("Started server!");
 		}
 
+		public override void OnStopServer()
+		{
+			base.OnStopServer();
+
+			gameDiscovery.StopDiscovery();
+		}
+
 		public override void OnClientConnect(NetworkConnection conn)
 		{
 			base.OnClientConnect(conn);
@@ -101,15 +115,6 @@ namespace Core
 			base.OnClientDisconnect(conn);
 
 			Logger.Logger.Log($"Disconnected from server `{conn.address}`.");
-
-			gameDiscovery.StartDiscovery();
-		}
-
-		public override void OnStopHost()
-		{
-			base.OnStopHost();
-
-			gameDiscovery.StartDiscovery();
 		}
 
 		#region Loading Screen
