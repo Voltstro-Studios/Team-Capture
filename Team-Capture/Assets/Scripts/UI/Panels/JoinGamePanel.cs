@@ -2,6 +2,7 @@
 using System.Linq;
 using Core.Logger;
 using Core.Networking.Discovery;
+using UI.Elements;
 using UnityEngine;
 
 namespace UI.Panels
