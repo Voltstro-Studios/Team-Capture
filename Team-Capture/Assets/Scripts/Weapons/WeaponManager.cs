@@ -167,7 +167,7 @@ namespace Weapons
 		[Server]
 		public void AddStockWeapons()
 		{
-			foreach (TCWeapon weapon in TCNetworkManager.StockWeapons)
+			foreach (TCWeapon weapon in TCNetworkManager.Instance.stockWeapons)
 				AddWeapon(weapon.weapon);
 		}
 

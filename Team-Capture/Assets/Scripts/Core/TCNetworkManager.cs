@@ -13,23 +13,21 @@ namespace Core
 	[RequireComponent(typeof(TCGameDiscovery))]
 	public class TCNetworkManager : NetworkManager
 	{
+		/// <summary>
+		/// The active <see cref="TCNetworkManager"/>
+		/// </summary>
 		public static TCNetworkManager Instance;
 
-		public static int MaxFrameCount;
-
-		public static TCWeapon[] StockWeapons;
-
-		[Header("Team Capture")] [SerializeField]
-		private GameObject gameMangerPrefab;
-
-		[SerializeField] private int maxFrameCount = 128;
-
-		[SerializeField] private TCWeapon[] stockWeapons;
-
-		[SerializeField] private GameObject loadingScreenPrefab;
-		private LoadingScreenPanel loadingScreenPanel;
+		[Header("Team Capture")] 
+		[SerializeField] private GameObject gameMangerPrefab;
+		public int maxFrameCount = 128;
+		public TCWeapon[] stockWeapons;
 
 		[HideInInspector] public TCGameDiscovery gameDiscovery;
+
+		[Header("Loading Screen")]
+		[SerializeField] private GameObject loadingScreenPrefab;
+		private LoadingScreenPanel loadingScreenPanel;
 
 		public override void Awake()
 		{
@@ -49,9 +47,6 @@ namespace Core
 		{
 			base.Start();
 
-			MaxFrameCount = maxFrameCount;
-			StockWeapons = stockWeapons;
-
 			TCScenesManager.PreparingSceneLoadEvent += OnPreparingSceneLoad;
 			TCScenesManager.StartSceneLoadEvent += StartSceneLoad;
 		}
@@ -60,6 +55,7 @@ namespace Core
 		{
 			base.LateUpdate();
 
+			//If we are playing, then update our simulation objects
 			if (mode == NetworkManagerMode.Host || mode == NetworkManagerMode.ServerOnly)
 				SimulationHelper.UpdateSimulationObjectData();
 		}
@@ -70,17 +66,21 @@ namespace Core
 
 			Logger.Logger.Log($"Server changed scene to `{sceneName}`.");
 
+			//Instantiate the new game manager
 			Instantiate(gameMangerPrefab);
 			Logger.Logger.Log("Created GameManager object.", LogVerbosity.Debug);
 		}
 
 		public override void OnServerAddPlayer(NetworkConnection conn)
 		{
-			Transform spawnPoint = NetworkManager.singleton.GetStartPosition();
+			//Get a spawn point for the player
+			Transform spawnPoint = singleton.GetStartPosition();
 
+			//Create the player object
 			GameObject player = Instantiate(playerPrefab, spawnPoint.position, spawnPoint.rotation);
 			player.AddComponent<SimulationObject>();
 
+			//Add the connection for the player
 			NetworkServer.AddPlayerForConnection(conn, player);
 		}
 
@@ -88,6 +88,7 @@ namespace Core
 		{
 			base.OnStartServer();
 
+			//Start advertising the server when the server starts
 			gameDiscovery.AdvertiseServer();
 
 			Logger.Logger.Log("Started server!");
@@ -97,6 +98,7 @@ namespace Core
 		{
 			base.OnStopServer();
 
+			//Stop advertising the server when the server stops
 			gameDiscovery.StopDiscovery();
 		}
 
@@ -108,9 +110,11 @@ namespace Core
 
 			if (mode != NetworkManagerMode.Host)
 			{
+				//Create our own game manager
 				Instantiate(gameMangerPrefab);
 				Logger.Logger.Log("Created game manager object.", LogVerbosity.Debug);
 
+				//And stop searching for servers
 				gameDiscovery.StopDiscovery();
 			}
 		}
@@ -126,13 +130,13 @@ namespace Core
 
 		private void OnPreparingSceneLoad(TCScene scene)
 		{
-			if(mode == NetworkManagerMode.Offline) return;
+			if (mode == NetworkManagerMode.Offline) return;
 			loadingScreenPanel = Instantiate(loadingScreenPrefab).GetComponent<LoadingScreenPanel>();
-		} 
+		}
 
 		private void StartSceneLoad(AsyncOperation sceneLoadOperation)
 		{
-			if(mode == NetworkManagerMode.Offline || loadingScreenPanel == null) return;
+			if (mode == NetworkManagerMode.Offline || loadingScreenPanel == null) return;
 
 			StartCoroutine(StartSceneLoadAsync(sceneLoadOperation));
 		}

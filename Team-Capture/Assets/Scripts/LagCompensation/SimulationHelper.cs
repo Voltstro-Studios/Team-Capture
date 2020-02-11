@@ -23,8 +23,8 @@ namespace LagCompensation
 			//TODO: Figure out what frame ID to use
 			int frameId = 1;
 
-			if (frameId > TCNetworkManager.MaxFrameCount)
-				frameId = TCNetworkManager.MaxFrameCount;
+			if (frameId > TCNetworkManager.Instance.maxFrameCount)
+				frameId = TCNetworkManager.Instance.maxFrameCount;
 
 			Simulate(frameId, command, playerExecutedCommand);
 		}

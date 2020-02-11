@@ -58,7 +58,7 @@ namespace LagCompensation
 		public void AddFrame()
 		{
 			//If we've got too many frames stored
-			if (StoredFrames.Count >= TCNetworkManager.MaxFrameCount)
+			if (StoredFrames.Count >= TCNetworkManager.Instance.maxFrameCount)
 			{
 				int oldestFrameIndex = StoredFrames[0];
 				StoredFrames.RemoveAt(0);
