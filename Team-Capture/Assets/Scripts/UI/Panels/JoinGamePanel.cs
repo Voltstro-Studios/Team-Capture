@@ -30,12 +30,16 @@ namespace UI.Panels
 
 		private void OnEnable()
 		{
+			if (gameDiscovery == null) return;
+
 			gameDiscovery.onServerFound.AddListener(AddServer);
 			gameDiscovery.StartDiscovery();
 		}
 
 		private void OnDisable()
 		{
+			if(gameDiscovery == null) return;
+
 			gameDiscovery.onServerFound.RemoveListener(AddServer);
 			gameDiscovery.StopDiscovery();
 			RefreshServerList();
