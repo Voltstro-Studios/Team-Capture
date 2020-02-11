@@ -24,6 +24,7 @@ namespace Core
 		public TCWeapon[] stockWeapons;
 
 		[HideInInspector] public TCGameDiscovery gameDiscovery;
+		public string gameName;
 
 		[Header("Loading Screen")]
 		[SerializeField] private GameObject loadingScreenPrefab;

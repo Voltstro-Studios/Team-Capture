@@ -6,6 +6,7 @@ using Core;
 using SceneManagement;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI.Panels
 {
@@ -14,6 +15,10 @@ namespace UI.Panels
 		private List<TCScene> activeTCScenes;
 
 		public TMP_Dropdown mapsDropdown;
+
+		public TMP_InputField gameNameText;
+
+		public Color gameNameErrorColor = Color.red;
 
 		private TCNetworkManager netManager;
 
@@ -36,6 +41,12 @@ namespace UI.Panels
 		/// </summary>
 		public void CreateGame()
 		{
+			if (string.IsNullOrWhiteSpace(gameNameText.text))
+			{
+				gameNameText.GetComponent<Image>().color = gameNameErrorColor;
+				return;
+			}
+
 			if (netManager.isNetworkActive)
 			{
 				StartCoroutine(QuitExistingGame(StartServer));
@@ -48,6 +59,7 @@ namespace UI.Panels
 		private void StartServer()
 		{
 			netManager.onlineScene = activeTCScenes[mapsDropdown.value];
+			netManager.gameName = gameNameText.text;
 			netManager.StartHost();
 		}
 

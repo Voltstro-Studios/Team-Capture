@@ -812,7 +812,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Enter Game Name (WIP)
+  m_text: Enter Game Name
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -821,7 +821,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 2133996082
+    rgba: 2150773298
   m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 0.5}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -881,10 +881,10 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 4432817888253903398}
-    characterCount: 21
+    characterCount: 15
     spriteCount: 0
-    spaceCount: 3
-    wordCount: 4
+    spaceCount: 2
+    wordCount: 3
     linkCount: 0
     lineCount: 1
     pageCount: 1
@@ -2321,8 +2321,8 @@ GameObject:
   - component: {fileID: 2625857668999992619}
   - component: {fileID: 3606822461112431620}
   - component: {fileID: 688891334886240403}
-  - component: {fileID: 3098042470848058873}
   - component: {fileID: 505864837285636598}
+  - component: {fileID: 3098042470848058873}
   m_Layer: 5
   m_Name: CreateGame
   m_TagString: Untagged
@@ -2389,20 +2389,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &3098042470848058873
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7741058342783775882}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f5c8131eb93beec48a91b0a294080bbe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mapsDropdown: {fileID: 9093951122153291162}
-  cancelButton: {fileID: 1259114744681076850}
 --- !u!95 &505864837285636598
 Animator:
   serializedVersion: 3
@@ -2422,6 +2408,22 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &3098042470848058873
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7741058342783775882}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5c8131eb93beec48a91b0a294080bbe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cancelButton: {fileID: 1259114744681076850}
+  mapsDropdown: {fileID: 9093951122153291162}
+  gameNameText: {fileID: 2264948728219538258}
+  gameNameErrorColor: {r: 1, g: 0.41037738, b: 0.41037738, a: 1}
 --- !u!1 &7998583404922000805
 GameObject:
   m_ObjectHideFlags: 0

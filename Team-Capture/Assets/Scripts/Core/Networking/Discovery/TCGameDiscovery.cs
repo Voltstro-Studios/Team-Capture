@@ -47,7 +47,7 @@ namespace Core.Networking.Discovery
 			{
 				return new TCServerResponse
 				{
-					GameName = "WIP", //TODO: Do game name stuff
+					GameName = netManager.gameName,
 					MaxPlayers = netManager.maxConnections,
 					CurrentAmountOfPlayers = netManager.numPlayers,
 					SceneName = TCScenesManager.GetActiveScene().name
