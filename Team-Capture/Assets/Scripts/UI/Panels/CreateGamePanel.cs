@@ -17,8 +17,14 @@ namespace UI.Panels
 		public TMP_Dropdown mapsDropdown;
 
 		public TMP_InputField gameNameText;
+		private Image gameNameImage;
 
-		public Color gameNameErrorColor = Color.red;
+		public TMP_InputField maxPlayersText;
+		private Image maxPlayersImage;
+
+		public Color errorColor = Color.red;
+
+		private int maxPlayers = 16;
 
 		private TCNetworkManager netManager;
 
@@ -34,6 +40,9 @@ namespace UI.Panels
 			mapsDropdown.RefreshShownValue();
 
 			netManager = TCNetworkManager.Instance;
+
+			gameNameImage = gameNameText.GetComponent<Image>();
+			maxPlayersImage = maxPlayersText.GetComponent<Image>();
 		}
 
 		/// <summary>
@@ -43,7 +52,24 @@ namespace UI.Panels
 		{
 			if (string.IsNullOrWhiteSpace(gameNameText.text))
 			{
-				gameNameText.GetComponent<Image>().color = gameNameErrorColor;
+				gameNameImage.color = errorColor;
+				return;
+			}
+
+			if (int.TryParse(maxPlayersText.text, out int result))
+			{
+				//Make sure max players is greater then 1
+				if (result <= 1)
+				{
+					maxPlayersImage.color = errorColor;
+					return;
+				}
+
+				maxPlayers = result;
+			}
+			else
+			{
+				maxPlayersImage.color = errorColor;
 				return;
 			}
 
@@ -60,6 +86,7 @@ namespace UI.Panels
 		{
 			netManager.onlineScene = activeTCScenes[mapsDropdown.value];
 			netManager.gameName = gameNameText.text;
+			netManager.maxConnections = maxPlayers;
 			netManager.StartHost();
 		}
 
@@ -70,6 +97,18 @@ namespace UI.Panels
 			yield return new WaitForSeconds(0.1f);
 
 			doLast();
+		}
+
+		public void ResetGameNameTextColor()
+		{
+			if(gameNameImage.color == errorColor)
+				gameNameText.GetComponent<Image>().color = Color.white;
+		}
+
+		public void ResetMaxPlayersTextColor()
+		{
+			if(maxPlayersImage.color == errorColor)
+				maxPlayersImage.color = Color.white;
 		}
 	}
 }
