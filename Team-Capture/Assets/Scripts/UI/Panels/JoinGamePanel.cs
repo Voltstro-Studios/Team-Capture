@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using Core;
 using Core.Logger;
+using Core.Networking;
 using Core.Networking.Discovery;
 using Mirror;
 using TMPro;

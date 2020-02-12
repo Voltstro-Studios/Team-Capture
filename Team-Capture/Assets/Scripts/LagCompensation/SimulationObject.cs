@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Core;
+using Core.Networking;
 using UnityEngine;
 
 namespace LagCompensation

@@ -11,6 +11,8 @@ namespace Player
 		private PlayerManager playerManager;
 		private WeaponManager weaponManager;
 
+		[SerializeField] private string pickupTag = "Pickup";
+
 		private void Start()
 		{
 			weaponManager = GetComponent<WeaponManager>();
@@ -125,6 +127,10 @@ namespace Player
 
 				//If the hit was the sourcePlayer, then ignore it
 				if (hit.collider.name == sourcePlayer)
+					continue;
+
+				//We want bullets to go through pickups
+				if(hit.collider.CompareTag(pickupTag))
 					continue;
 
 				RpcWeaponImpact(hit.point, hit.normal);

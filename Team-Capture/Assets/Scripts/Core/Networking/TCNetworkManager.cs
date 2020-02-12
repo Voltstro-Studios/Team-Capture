@@ -3,12 +3,13 @@ using Core.Logger;
 using Core.Networking.Discovery;
 using LagCompensation;
 using Mirror;
+using Mirror.LiteNetLib4Mirror;
 using SceneManagement;
 using UI.Panels;
 using UnityEngine;
 using Weapons;
 
-namespace Core
+namespace Core.Networking
 {
 	[RequireComponent(typeof(TCGameDiscovery))]
 	public class TCNetworkManager : NetworkManager
@@ -50,6 +51,8 @@ namespace Core
 
 			TCScenesManager.PreparingSceneLoadEvent += OnPreparingSceneLoad;
 			TCScenesManager.StartSceneLoadEvent += StartSceneLoad;
+
+			LiteNetLib4MirrorTransport.Singleton.maxConnections = (ushort)maxConnections;
 		}
 
 		public override void LateUpdate()
