@@ -4,6 +4,8 @@ using Core.Networking.Discovery;
 using LagCompensation;
 using Mirror;
 using Mirror.LiteNetLib4Mirror;
+using Pickups;
+using Player;
 using SceneManagement;
 using UI.Panels;
 using UnityEngine;
@@ -21,6 +23,9 @@ namespace Core.Networking
 
 		[Header("Team Capture")] 
 		[SerializeField] private GameObject gameMangerPrefab;
+
+		[SerializeField] private string pickupTagName = "Pickup";
+
 		public int maxFrameCount = 128;
 		public TCWeapon[] stockWeapons;
 
@@ -73,6 +78,36 @@ namespace Core.Networking
 			//Instantiate the new game manager
 			Instantiate(gameMangerPrefab);
 			Logger.Logger.Log("Created GameManager object.", LogVerbosity.Debug);
+
+			//Setup pickups
+			GameObject[] pickups = GameObject.FindGameObjectsWithTag(pickupTagName);
+
+			foreach (GameObject pickup in pickups)
+			{
+				Pickup pickupLogic = pickup.GetComponent<Pickup>();
+				if(pickupLogic == null) continue;
+
+				//Setup the trigger
+				pickupLogic.SetupTrigger();
+
+				WeaponPickup weaponPickupLogic = pickup.GetComponent<WeaponPickup>();
+				if (weaponPickupLogic != null)
+				{
+					pickupLogic.playerPickupEvent.AddListener((delegate(PlayerManager player, GameObject pickupObject)
+					{
+						WeaponManager weaponManager = player.GetComponent<WeaponManager>();
+
+						//Don't want to pickup the same weapon
+						if(weaponManager.GetWeapon(weaponPickupLogic.weapon.weapon) != null) return;
+
+						weaponManager.ServerAddWeapon(weaponPickupLogic.weapon.weapon);
+
+						//TODO: Make the weapon disappear for a certain amount of time
+					}));
+				}
+
+				//TODO: Do health packs
+			}
 		}
 
 		public override void OnServerAddPlayer(NetworkConnection conn)
@@ -83,6 +118,9 @@ namespace Core.Networking
 			//Create the player object
 			GameObject player = Instantiate(playerPrefab, spawnPoint.position, spawnPoint.rotation);
 			player.AddComponent<SimulationObject>();
+
+			//We need to add a rigid body, but we don't want to do physics, so also set kinematic to true
+			player.AddComponent<Rigidbody>().isKinematic = true;
 
 			//Add the connection for the player
 			NetworkServer.AddPlayerForConnection(conn, player);
@@ -114,13 +152,21 @@ namespace Core.Networking
 
 			if (mode != NetworkManagerMode.Host)
 			{
-				//Create our own game manager
-				Instantiate(gameMangerPrefab);
-				Logger.Logger.Log("Created game manager object.", LogVerbosity.Debug);
-
-				//And stop searching for servers
+				//Stop searching for servers
 				gameDiscovery.StopDiscovery();
+
+				//We need to call it here as well, since OnClientChangeScene isn't called when first connecting to a server
+				SetupNeededSceneStuffClient();
 			}
+		}
+
+		public override void OnClientChangeScene(string newSceneName, SceneOperation sceneOperation, bool customHandling)
+		{
+			base.OnClientChangeScene(newSceneName, sceneOperation, customHandling);
+
+			Logger.Logger.Log($"The server has changed the scene to `{newSceneName}`.");
+
+			SetupNeededSceneStuffClient();
 		}
 
 		public override void OnClientDisconnect(NetworkConnection conn)
@@ -156,5 +202,26 @@ namespace Core.Networking
 		}
 
 		#endregion
+
+		private void SetupNeededSceneStuffClient()
+		{
+			//Don't want to do this stuff in host mode, since we are also the server
+			if (mode == NetworkManagerMode.Host) return;
+
+			//Create our own game manager
+			Instantiate(gameMangerPrefab);
+			Logger.Logger.Log("Created game manager object.", LogVerbosity.Debug);
+
+			//Setup pickups
+			GameObject[] pickups = GameObject.FindGameObjectsWithTag(pickupTagName);
+			foreach (GameObject pickup in pickups)
+			{
+				Pickup pickupLogic = pickup.GetComponent<Pickup>();
+				if(pickupLogic == null) continue;
+
+				//Destroy the logic of pickups since it is handled by the server
+				Destroy(pickupLogic);
+			}
+		}
 	}
 }

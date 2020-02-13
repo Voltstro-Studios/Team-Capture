@@ -172,17 +172,6 @@ namespace Weapons
 		}
 
 		/// <summary>
-		/// A command, that calls the server side function <see cref="ServerAddWeapon"/>.
-		/// This function adds a weapon to a player
-		/// </summary>
-		/// <param name="weaponName"></param>
-		[Command]
-		public void CmdAddWeapon(string weaponName)
-		{
-			ServerAddWeapon(weaponName);
-		}
-
-		/// <summary>
 		/// Direct server command.
 		/// This function adds a weapon to a player
 		/// </summary>

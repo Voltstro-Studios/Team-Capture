@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 739785285574288705}
   - component: {fileID: 739785285574288704}
-  - component: {fileID: 739785285574288711}
   m_Layer: 0
   m_Name: Rifle
   m_TagString: Pickup
@@ -45,20 +44,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb0acf6f74bc13f48b7601adbebefec9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  triggerRadius: 1.3
+  triggerCenter: {x: 0, y: 0, z: 0}
   weapon: {fileID: 11400000, guid: 7f2272658027c3c4088001bda3a587b5, type: 2}
---- !u!135 &739785285574288711
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 739785285574288710}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 1.4576726
-  m_Center: {x: 0, y: 0, z: 0.07756758}
 --- !u!1 &4722497643790761709
 GameObject:
   m_ObjectHideFlags: 0
