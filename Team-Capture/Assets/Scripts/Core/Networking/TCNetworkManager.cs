@@ -81,32 +81,17 @@ namespace Core.Networking
 
 			//Setup pickups
 			GameObject[] pickups = GameObject.FindGameObjectsWithTag(pickupTagName);
-
 			foreach (GameObject pickup in pickups)
 			{
 				Pickup pickupLogic = pickup.GetComponent<Pickup>();
-				if(pickupLogic == null) continue;
+				if(pickupLogic == null)
+				{
+					Logger.Logger.Log($"The pickup with the name of `{pickup.name}` @ {pickup.transform} doesn't have the {typeof(Pickup)} behaviour on it!", LogVerbosity.Error);
+					continue;
+				}
 
 				//Setup the trigger
 				pickupLogic.SetupTrigger();
-
-				WeaponPickup weaponPickupLogic = pickup.GetComponent<WeaponPickup>();
-				if (weaponPickupLogic != null)
-				{
-					pickupLogic.playerPickupEvent.AddListener((delegate(PlayerManager player, GameObject pickupObject)
-					{
-						WeaponManager weaponManager = player.GetComponent<WeaponManager>();
-
-						//Don't want to pickup the same weapon
-						if(weaponManager.GetWeapon(weaponPickupLogic.weapon.weapon) != null) return;
-
-						weaponManager.ServerAddWeapon(weaponPickupLogic.weapon.weapon);
-
-						//TODO: Make the weapon disappear for a certain amount of time
-					}));
-				}
-
-				//TODO: Do health packs
 			}
 		}
 
