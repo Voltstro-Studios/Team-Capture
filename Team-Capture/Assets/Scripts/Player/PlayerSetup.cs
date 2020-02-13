@@ -59,8 +59,11 @@ namespace Player
 
 		private void OnDisable()
 		{
-			GameManager.GetActiveSceneCamera().SetActive(true);
 			GameManager.RemovePlayer(transform.name);
+
+			if (!isLocalPlayer) return;
+
+			GameManager.GetActiveSceneCamera().SetActive(true);
 
 			Cursor.visible = true;
 			Cursor.lockState = CursorLockMode.None;
