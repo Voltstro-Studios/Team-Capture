@@ -15,6 +15,8 @@ namespace Pickups
 			if(weaponManager.GetWeapon(weapon.weapon) != null) return;
 
 			weaponManager.ServerAddWeapon(weapon.weapon);
+
+			ServerPickupManager.DeActivePickup(gameObject);
 		}
 	}
 }

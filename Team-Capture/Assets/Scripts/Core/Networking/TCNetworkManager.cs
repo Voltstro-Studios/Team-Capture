@@ -5,7 +5,6 @@ using LagCompensation;
 using Mirror;
 using Mirror.LiteNetLib4Mirror;
 using Pickups;
-using Player;
 using SceneManagement;
 using UI.Panels;
 using UnityEngine;
@@ -73,6 +72,8 @@ namespace Core.Networking
 		{
 			base.OnServerSceneChanged(sceneName);
 
+			ServerPickupManager.ClearUnActivePickupsList();
+
 			Logger.Logger.Log($"Server changed scene to `{sceneName}`.");
 
 			//Instantiate the new game manager
@@ -97,6 +98,12 @@ namespace Core.Networking
 
 		public override void OnServerAddPlayer(NetworkConnection conn)
 		{
+			conn.Send(new ClientServerInfoMessage
+			{
+				GameName = gameName,
+				UnActivePickups = ServerPickupManager.GetUnActivePickups()
+			});
+
 			//Get a spawn point for the player
 			Transform spawnPoint = singleton.GetStartPosition();
 
@@ -131,6 +138,8 @@ namespace Core.Networking
 
 		public override void OnClientConnect(NetworkConnection conn)
 		{
+			NetworkClient.RegisterHandler<ClientServerInfoMessage>(OnServerJoinMessage);
+
 			base.OnClientConnect(conn);
 
 			Logger.Logger.Log($"Connected to server `{conn.address}` with the net ID of {conn.connectionId}.");
@@ -183,6 +192,23 @@ namespace Core.Networking
 				loadingScreenPanel.SetLoadingBarAmount(Mathf.Clamp01(sceneLoadOperation.progress / .9f));
 
 				yield return null;
+			}
+		}
+
+		#endregion
+
+		#region Inital Server Join Message
+
+		private void OnServerJoinMessage(NetworkConnection conn, ClientServerInfoMessage message)
+		{
+			//We don't need to listen for the initial server message any more
+			NetworkClient.UnregisterHandler<ClientServerInfoMessage>();
+
+			gameName = message.GameName;
+
+			foreach (GameObject unActivePickups in message.UnActivePickups)
+			{
+				unActivePickups.SetActive(false);
 			}
 		}
 
