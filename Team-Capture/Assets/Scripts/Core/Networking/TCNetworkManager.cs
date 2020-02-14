@@ -158,6 +158,8 @@ namespace Core.Networking
 		{
 			base.OnClientChangeScene(newSceneName, sceneOperation, customHandling);
 
+			if (mode != NetworkManagerMode.ClientOnly) return;
+
 			Logger.Logger.Log($"The server has changed the scene to `{newSceneName}`.");
 
 			SetupNeededSceneStuffClient();
