@@ -208,9 +208,16 @@ namespace Core.Networking
 
 			gameName = message.GameName;
 
-			foreach (GameObject unActivePickups in message.UnActivePickups)
+			foreach (string unActivePickup in message.UnActivePickups)
 			{
-				unActivePickups.SetActive(false);
+				GameObject pickup = GameObject.Find(unActivePickup);
+				if (pickup == null)
+				{
+					Logger.Logger.Log($"There was a pickup with the name `{pickup}` sent by the server that doesn't exist! Either the server's game is out of date or yours is!", LogVerbosity.Error);
+					continue;
+				}
+
+				pickup.GetComponent<Pickup>().pickupGfx.SetActive(false);
 			}
 		}
 
@@ -224,17 +231,6 @@ namespace Core.Networking
 			//Create our own game manager
 			Instantiate(gameMangerPrefab);
 			Logger.Logger.Log("Created game manager object.", LogVerbosity.Debug);
-
-			//Setup pickups
-			GameObject[] pickups = GameObject.FindGameObjectsWithTag(pickupTagName);
-			foreach (GameObject pickup in pickups)
-			{
-				Pickup pickupLogic = pickup.GetComponent<Pickup>();
-				if(pickupLogic == null) continue;
-
-				//Destroy the logic of pickups since it is handled by the server
-				Destroy(pickupLogic);
-			}
 		}
 	}
 }

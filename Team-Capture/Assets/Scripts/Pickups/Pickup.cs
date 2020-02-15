@@ -1,10 +1,13 @@
-﻿using Player;
+﻿using System.Collections;
+using Player;
 using UnityEngine;
 
 namespace Pickups
 {
 	public abstract class Pickup : MonoBehaviour
 	{
+		public GameObject pickupGfx;
+		public float pickupRespawnTime = 4.0f;
 		[SerializeField] private float triggerRadius = 1.3f;
 		[SerializeField] private Vector3 triggerCenter = Vector3.zero;
 
@@ -24,5 +27,12 @@ namespace Pickups
 		}
 
 		public abstract void OnPlayerPickup(PlayerManager player);
+
+		public IEnumerator RespawnPickup()
+		{
+			yield return new WaitForSeconds(pickupRespawnTime);
+
+			ServerPickupManager.ActivatePickup(gameObject);
+		}
 	}
 }

@@ -16,6 +16,7 @@ MonoBehaviour:
   displayName: 
   enabled: 1
   isOnlineScene: 0
+  pickupsParent: 
   respawnTime: 0
   hitObjectLastTime: 0
   weaponHit: {fileID: 0}

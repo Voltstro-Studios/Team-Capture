@@ -1,13 +1,15 @@
 ﻿using System.Collections.Generic;
+using Core.Networking.Messages;
+using Mirror;
 using UnityEngine;
 
 namespace Pickups
 {
 	public class ServerPickupManager : MonoBehaviour
 	{
-		private static List<GameObject> UnActivePickups = new List<GameObject>();
+		private static readonly List<string> UnActivePickups = new List<string>();
 
-		public static GameObject[] GetUnActivePickups()
+		public static string[] GetUnActivePickups()
 		{
 			return UnActivePickups.ToArray();
 		}
@@ -17,18 +19,26 @@ namespace Pickups
 			UnActivePickups.Clear();
 		}
 
-		public static void DeActivePickup(GameObject pickup)
+		public static void DeactivatePickup(GameObject pickup)
 		{
-			UnActivePickups.Add(pickup);
+			UnActivePickups.Add(pickup.name);
 
-			pickup.SetActive(false);
+			NetworkServer.SendToAll(new SetPickupStatus
+			{
+				PickupName = pickup.name,
+				IsActive = false
+			});
 		}
 
 		public static void ActivatePickup(GameObject pickup)
 		{
-			UnActivePickups.Remove(pickup);
+			UnActivePickups.Remove(pickup.name);
 
-			pickup.SetActive(true);
+			NetworkServer.SendToAll(new SetPickupStatus
+			{
+				PickupName = pickup.name,
+				IsActive = true
+			});
 		}
 	}
 }

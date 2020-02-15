@@ -16,7 +16,9 @@ namespace Pickups
 
 			weaponManager.ServerAddWeapon(weapon.weapon);
 
-			ServerPickupManager.DeActivePickup(gameObject);
+			//Deactivate the pickup and respawn it
+			ServerPickupManager.DeactivatePickup(gameObject);
+			StartCoroutine(RespawnPickup());
 		}
 	}
 }

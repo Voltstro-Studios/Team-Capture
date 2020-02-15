@@ -5,7 +5,7 @@ namespace Core.Networking
 {
 	public class ClientServerInfoMessage : MessageBase
 	{
-		public GameObject[] UnActivePickups;
+		public string[] UnActivePickups;
 
 		public string GameName;
 	}

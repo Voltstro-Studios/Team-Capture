@@ -44,6 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb0acf6f74bc13f48b7601adbebefec9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pickupGfx: {fileID: 7384456044620243290}
+  pickupRespawnTime: 4
   triggerRadius: 1.3
   triggerCenter: {x: 0, y: 0, z: 0}
   weapon: {fileID: 11400000, guid: 7f2272658027c3c4088001bda3a587b5, type: 2}
