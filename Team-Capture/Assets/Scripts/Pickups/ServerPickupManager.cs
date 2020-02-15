@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Pickups
 {
-	public class ServerPickupManager : MonoBehaviour
+	public static class ServerPickupManager
 	{
 		private static readonly List<string> UnActivePickups = new List<string>();
 

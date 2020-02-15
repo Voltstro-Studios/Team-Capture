@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using Core.Logger;
 using Core.Networking.Discovery;
+using Core.Networking.Messages;
 using LagCompensation;
 using Mirror;
 using Mirror.LiteNetLib4Mirror;
@@ -98,10 +99,10 @@ namespace Core.Networking
 
 		public override void OnServerAddPlayer(NetworkConnection conn)
 		{
-			conn.Send(new ClientServerInfoMessage
+			conn.Send(new InitialClientJoinMessage
 			{
 				GameName = gameName,
-				UnActivePickups = ServerPickupManager.GetUnActivePickups()
+				DeactivatedPickups = ServerPickupManager.GetUnActivePickups()
 			});
 
 			//Get a spawn point for the player
@@ -138,7 +139,7 @@ namespace Core.Networking
 
 		public override void OnClientConnect(NetworkConnection conn)
 		{
-			NetworkClient.RegisterHandler<ClientServerInfoMessage>(OnServerJoinMessage);
+			NetworkClient.RegisterHandler<InitialClientJoinMessage>(OnServerJoinMessage);
 
 			base.OnClientConnect(conn);
 
@@ -201,16 +202,16 @@ namespace Core.Networking
 
 		#region Inital Server Join Message
 
-		private void OnServerJoinMessage(NetworkConnection conn, ClientServerInfoMessage message)
+		private void OnServerJoinMessage(NetworkConnection conn, InitialClientJoinMessage message)
 		{
 			//We don't need to listen for the initial server message any more
-			NetworkClient.UnregisterHandler<ClientServerInfoMessage>();
+			NetworkClient.UnregisterHandler<InitialClientJoinMessage>();
 
 			gameName = message.GameName;
 
-			foreach (string unActivePickup in message.UnActivePickups)
+			foreach (string unActivePickup in message.DeactivatedPickups)
 			{
-				GameObject pickup = GameObject.Find(unActivePickup);
+				GameObject pickup = GameObject.Find(GameManager.GetActiveScene().pickupsParent + unActivePickup);
 				if (pickup == null)
 				{
 					Logger.Logger.Log($"There was a pickup with the name `{pickup}` sent by the server that doesn't exist! Either the server's game is out of date or yours is!", LogVerbosity.Error);
