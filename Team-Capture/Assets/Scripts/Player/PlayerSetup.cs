@@ -11,39 +11,55 @@ namespace Player
 {
 	public class PlayerSetup : NetworkBehaviour
 	{
-		[SerializeField] private AudioListener localAudioListener;
 		[SerializeField] private Camera localCamera;
 
 		[Header("Components to Destroy")] [SerializeField]
 		private CapsuleCollider localCapsuleCollider;
 
-		[Header("Components to Enable")] [SerializeField]
-		private CharacterController localCharacterController;
+		[Header("Player UI")] 
+		[SerializeField] private GameObject clientUiPrefab;
 
-		[SerializeField] private PlayerInput localPlayerInput;
-		[SerializeField] private PlayerMovement localPlayerMovement;
-
-		[Header("Player UI")] [SerializeField] private GameObject clientUiPrefab;
+		[Header("Char Controller Settings")] 
+		[SerializeField] private float charControllerSlopeLimit = 45.0f;
+		[SerializeField] private float charControllerStepOffset = 0.3f;
+		[SerializeField] private float charControllerSkinWidth = 0.08f;
+		[SerializeField] private float charControllerMinMoveDistance = 0.001f;
+		[SerializeField] private float charControllerRadius = 0.5f;
+		[SerializeField] private float charControllerHeight = 2f;
+		[SerializeField] private Vector3 charControllerCenter = Vector3.zero;
 
 		public override void OnStartLocalPlayer()
 		{
-			Logger.Log("Setting up player!");
+			Logger.Log("Setting up my local player...");
 
 			base.OnStartLocalPlayer();
 
+			//Don't need a collider since the charController acts as one
 			Destroy(localCapsuleCollider);
 
 			//Register our handler for pickups
 			NetworkClient.RegisterHandler<SetPickupStatus>(PickupMessage);
 
-			localCharacterController.enabled = true;
-			localPlayerMovement.enabled = true;
+			//Character Controller
+			CharacterController charController = gameObject.AddComponent<CharacterController>();
+			charController.slopeLimit = charControllerSlopeLimit;
+			charController.stepOffset = charControllerStepOffset;
+			charController.skinWidth = charControllerSkinWidth;
+			charController.minMoveDistance = charControllerMinMoveDistance;
+			charController.radius = charControllerRadius;
+			charController.height = charControllerHeight;
+			charController.center = charControllerCenter;
 
+			//Player Movement
+			gameObject.AddComponent<PlayerMovement>();
+
+			//Set up scene stuff
 			GameManager.GetActiveSceneCamera().SetActive(false);
-
 			localCamera.enabled = true;
-			localAudioListener.enabled = true;
-			localPlayerInput.enabled = true;
+			localCamera.gameObject.AddComponent<AudioListener>();
+			
+			//Player Input
+			gameObject.AddComponent<PlayerInput>();
 
 			//Setup UI
 			ClientUI clientUi = Instantiate(clientUiPrefab).GetComponent<ClientUI>();
@@ -53,7 +69,7 @@ namespace Player
 			Cursor.visible = false;
 			Cursor.lockState = CursorLockMode.Locked;
 
-			Logger.Log("I am now ready! :)");
+			Logger.Log("Local player is ready!");
 		}
 
 		public override void OnStartClient()

@@ -6,14 +6,14 @@ namespace Player
 	public class PlayerMovement : MonoBehaviour
 	{
 		[Header("Speed")]
-		[SerializeField] private float moveSpeed = 7.0f;
+		[SerializeField] private float moveSpeed = 11.0f;
 		[SerializeField] private float jumpSpeed = 8.0f;
 		[SerializeField] private float sideStrafeSpeed = 1.0f;
 
 		[Header("Acceleration")]
 		[SerializeField] private float airAcceleration = 2.0f;
 		[SerializeField] private float airDeacceleration = 2.0f;
-		[SerializeField] private float airControl = 1.0f;
+		[SerializeField] private float airControl = 5.0f;
 
 		[SerializeField] private float runAcceleration = 14.0f;
 		[SerializeField] private float runDeacceleration = 10.0f;
@@ -25,8 +25,8 @@ namespace Player
 		[SerializeField] private float gravityAmount = 20.0f;
 
 		[Header("Sensitivity")]
-		[SerializeField] private float xMouseSensitivity = 30.0f;
-		[SerializeField] private float yMouseSensitivity = 30.0f;
+		[SerializeField] private float xMouseSensitivity = 100.0f;
+		[SerializeField] private float yMouseSensitivity = 100.0f;
 
 		private Vector3 playerVelocity = Vector3.zero;
 

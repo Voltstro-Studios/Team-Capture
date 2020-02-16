@@ -20,7 +20,7 @@ namespace Player
 		[SerializeField] private string horizontalAxisName = "Horizontal";
 		[SerializeField] private string yMouseAxisName = "Mouse Y";
 		[SerializeField] private string xMouseAxisName = "Mouse X";
-		[SerializeField] private bool holdJumpToBhop;
+		[SerializeField] private bool holdJumpToBhop = true;
 
 		private WeaponManager weaponManager;
 		private PlayerManager playerManager;
