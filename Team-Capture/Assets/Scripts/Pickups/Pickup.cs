@@ -26,7 +26,12 @@ namespace Pickups
 			OnPlayerPickup(other.GetComponent<PlayerManager>());
 		}
 
-		public abstract void OnPlayerPickup(PlayerManager player);
+		public virtual void OnPlayerPickup(PlayerManager player)
+		{
+			//Deactivate the pickup and respawn it
+			ServerPickupManager.DeactivatePickup(gameObject);
+			StartCoroutine(RespawnPickup());
+		}
 
 		public IEnumerator RespawnPickup()
 		{
