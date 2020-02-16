@@ -1,5 +1,4 @@
-﻿using System;
-using UI;
+﻿using UI;
 using UnityEngine;
 
 namespace Player
@@ -10,7 +9,7 @@ namespace Player
 		[SerializeField] private float moveSpeed = 7.0f;
 		[SerializeField] private float jumpSpeed = 8.0f;
 		[SerializeField] private float sideStrafeSpeed = 1.0f;
-		
+
 		[Header("Acceleration")]
 		[SerializeField] private float airAcceleration = 2.0f;
 		[SerializeField] private float airDeacceleration = 2.0f;
@@ -41,13 +40,11 @@ namespace Player
 
 		private CharacterController charController;
 		private Transform cameraTransform;
-		private PlayerManager playerManager;
 
 		private void Start()
 		{
 			charController = GetComponent<CharacterController>();
 			cameraTransform = GetComponent<PlayerSetup>().GetPlayerCamera().transform;
-			playerManager = GetComponent<PlayerManager>();
 		}
 
 		private void Update()
