@@ -99,7 +99,7 @@ LightmapSettings:
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 112000000, guid: be7857d38ef26094faa9aeeb69ace4e7,
     type: 2}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -4010,7 +4010,7 @@ PrefabInstance:
     - target: {fileID: 739785285574288710, guid: 1cb2406c378873a439e6d27fee28a882,
         type: 3}
       propertyPath: m_Name
-      value: RiflePickup1
+      value: Rifle1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1cb2406c378873a439e6d27fee28a882, type: 3}
@@ -4079,7 +4079,7 @@ PrefabInstance:
     - target: {fileID: 1369320542312873042, guid: 0ae707cd6882ff842951820829382e2a,
         type: 3}
       propertyPath: m_Name
-      value: HealthPack
+      value: HealthPack1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0ae707cd6882ff842951820829382e2a, type: 3}

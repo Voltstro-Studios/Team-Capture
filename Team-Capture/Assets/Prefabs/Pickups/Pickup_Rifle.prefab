@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 739785285574288705}
   - component: {fileID: 739785285574288704}
   m_Layer: 0
-  m_Name: Rifle
+  m_Name: Pickup_Rifle
   m_TagString: Pickup
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -141,7 +141,7 @@ GameObject:
   - component: {fileID: 5602778636532101167}
   - component: {fileID: 739785286011178614}
   m_Layer: 0
-  m_Name: RiflePickup
+  m_Name: GFX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

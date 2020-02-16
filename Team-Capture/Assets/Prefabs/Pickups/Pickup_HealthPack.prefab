@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1369320542312873040}
   - component: {fileID: 1369320542312873043}
   m_Layer: 0
-  m_Name: HealthPack
+  m_Name: Pickup_HealthPack
   m_TagString: Pickup
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pickupGfx: {fileID: 6926853783928199072}
-  pickupRespawnTime: 4
+  pickupRespawnTime: 5
   triggerRadius: 1.3
   triggerCenter: {x: 0, y: 0, z: 0}
   givenHealthAmount: 30
