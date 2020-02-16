@@ -21,8 +21,8 @@ namespace Player
 
 		[SerializeField] private float latencyUpdateTime = 2.0f;
 
-		[SerializeField] private int maxHealth = 100;
-		
+		public int MaxHealth { get; private set; } = 100;
+
 		#region Sync Vars
 
 		[field: SyncVar] public bool IsDead { get; protected set; }
@@ -50,7 +50,7 @@ namespace Player
 		{
 			base.OnStartServer();
 
-			Health = maxHealth;
+			Health = MaxHealth;
 		}
 
 		public override void OnStartLocalPlayer()
@@ -105,6 +105,21 @@ namespace Player
 			ServerPlayerDie(sourcePlayerId);
 		}
 
+		[Server]
+		public void AddHealth(int amount)
+		{
+			if(Health == amount)
+				return;
+
+			if (Health + amount > MaxHealth)
+			{
+				Health = MaxHealth;
+				return;
+			}
+
+			Health += amount;
+		}
+
 		/// <summary>
 		/// The server side method that handles a player's death
 		/// </summary>
@@ -133,7 +148,7 @@ namespace Player
 		{
 			yield return new WaitForSeconds(GameManager.GetActiveScene().respawnTime);
 
-			Health = maxHealth;
+			Health = MaxHealth;
 
 			Transform spawnPoint = NetworkManager.singleton.GetStartPosition();
 			RpcClientRespawn(spawnPoint.position, spawnPoint.rotation);
