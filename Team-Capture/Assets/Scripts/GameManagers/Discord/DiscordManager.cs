@@ -21,15 +21,12 @@ namespace GameManagers.Discord
 		public string defaultGameState = "Loading...";
 		public string defaultLargeImage = "tc_icon";
 
-		private bool isDuplicate;
-
 		public LogLevel logLevel = LogLevel.Warning;
 
 		private void Start()
 		{
 			if (Instance != null)
 			{
-				isDuplicate = true;
 				Destroy(gameObject);
 				return;
 			}
@@ -47,7 +44,7 @@ namespace GameManagers.Discord
 
 		private void OnDestroy()
 		{
-			if (!isDuplicate)
+			if (Instance == this)
 				client.Dispose();
 		}
 
