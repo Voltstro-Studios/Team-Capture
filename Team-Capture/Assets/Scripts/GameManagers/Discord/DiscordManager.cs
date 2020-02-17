@@ -64,6 +64,7 @@ namespace GameManagers.Discord
 
 			client.OnError += ClientError;
 			client.OnReady += ClientReady;
+			client.OnConnectionFailed += ClientConnectionFailed;
 
 			client.Initialize();
 
@@ -71,6 +72,11 @@ namespace GameManagers.Discord
 			TCScenesManager.OnSceneLoadedEvent += SceneLoaded;
 
 			SceneLoaded(TCScenesManager.GetActiveScene());
+		}
+
+		private void ClientConnectionFailed(object sender, ConnectionFailedMessage args)
+		{
+			Logger.Log($"Error communicating with Discord: Pipe: `{args.FailedPipe}`. Is discord running?", LogVerbosity.Error);
 		}
 
 		private void ClientReady(object sender, ReadyMessage args)
