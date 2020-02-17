@@ -65,6 +65,7 @@ namespace GameManagers.Discord
 			client.OnError += ClientError;
 			client.OnReady += ClientReady;
 			client.OnConnectionFailed += ClientConnectionFailed;
+			client.OnClose += ClientOnClose;
 
 			client.Initialize();
 
@@ -74,9 +75,16 @@ namespace GameManagers.Discord
 			SceneLoaded(TCScenesManager.GetActiveScene());
 		}
 
+		private void ClientOnClose(object sender, CloseMessage args)
+		{
+			Logger.Log($"Discord RPC was closed: {args.Code}:{args.Reason}");
+		}
+
 		private void ClientConnectionFailed(object sender, ConnectionFailedMessage args)
 		{
-			Logger.Log($"Error communicating with Discord: Pipe: `{args.FailedPipe}`. Is discord running?", LogVerbosity.Error);
+			Logger.Log($"Error communicating with Discord: Pipe: `{args.FailedPipe}`. Is Discord running?", LogVerbosity.Error);
+
+			client.Deinitialize();
 		}
 
 		private void ClientReady(object sender, ReadyMessage args)
