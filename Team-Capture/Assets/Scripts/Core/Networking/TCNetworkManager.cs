@@ -218,7 +218,8 @@ namespace Core.Networking
 					continue;
 				}
 
-				pickup.GetComponent<Pickup>().pickupGfx.SetActive(false);
+				pickup.GetComponent<Pickup>().pickupPickedUpMaterial =
+					pickup.GetComponent<Pickup>().pickupPickedUpMaterial;
 			}
 		}
 

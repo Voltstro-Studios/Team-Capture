@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using Core.Networking.Messages;
 using Mirror;
-using UnityEngine;
 
 namespace Pickups
 {
@@ -33,7 +32,7 @@ namespace Pickups
 		/// Deactivate a pickup
 		/// </summary>
 		/// <param name="pickup"></param>
-		public static void DeactivatePickup(GameObject pickup)
+		public static void DeactivatePickup(Pickup pickup)
 		{
 			UnActivePickups.Add(pickup.name);
 
@@ -48,7 +47,7 @@ namespace Pickups
 		/// Activate a pickup
 		/// </summary>
 		/// <param name="pickup"></param>
-		public static void ActivatePickup(GameObject pickup)
+		public static void ActivatePickup(Pickup pickup)
 		{
 			UnActivePickups.Remove(pickup.name);
 

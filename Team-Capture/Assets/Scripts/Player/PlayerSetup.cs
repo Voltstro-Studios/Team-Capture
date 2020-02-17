@@ -110,7 +110,9 @@ namespace Player
 				return;
 			}
 
-			pickup.GetComponent<Pickup>().pickupGfx.SetActive(status.IsActive);
+			Pickup pickupLogic = pickup.GetComponent<Pickup>();
+
+			pickupLogic.gfxMesh.material = status.IsActive ? pickupLogic.pickupMaterial : pickupLogic.pickupPickedUpMaterial;
 		}
 
 		#endregion

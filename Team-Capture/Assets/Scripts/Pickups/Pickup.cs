@@ -6,7 +6,11 @@ namespace Pickups
 {
 	public abstract class Pickup : MonoBehaviour
 	{
-		public GameObject pickupGfx;
+		public MeshRenderer gfxMesh;
+
+		public Material pickupMaterial;
+		public Material pickupPickedUpMaterial;
+
 		public float pickupRespawnTime = 4.0f;
 		[SerializeField] private float triggerRadius = 1.3f;
 		[SerializeField] private Vector3 triggerCenter = Vector3.zero;
@@ -40,7 +44,7 @@ namespace Pickups
 		public virtual void OnPlayerPickup(PlayerManager player)
 		{
 			//Deactivate the pickup and respawn it
-			ServerPickupManager.DeactivatePickup(gameObject);
+			ServerPickupManager.DeactivatePickup(this);
 			StartCoroutine(RespawnPickup());
 		}
 
@@ -52,7 +56,7 @@ namespace Pickups
 		{
 			yield return new WaitForSeconds(pickupRespawnTime);
 
-			ServerPickupManager.ActivatePickup(gameObject);
+			ServerPickupManager.ActivatePickup(this);
 		}
 	}
 }
