@@ -1,8 +1,6 @@
 ﻿using Core;
-using Core.Logger;
 using Core.Networking.Messages;
 using Mirror;
-using Pickups;
 using UI;
 using UnityEngine;
 using Logger = Core.Logger.Logger;
@@ -37,8 +35,7 @@ namespace Player
 			//Don't need a collider since the charController acts as one
 			Destroy(localCapsuleCollider);
 
-			//Register our handler for pickups
-			NetworkClient.RegisterHandler<SetPickupStatus>(PickupMessage);
+			gameObject.AddComponent<PlayerServerMessages>();
 
 			//Character Controller
 			CharacterController charController = gameObject.AddComponent<CharacterController>();
@@ -97,24 +94,5 @@ namespace Player
 		{
 			return localCamera;
 		}
-
-		#region Pickups
-
-		private void PickupMessage(NetworkConnection conn, SetPickupStatus status)
-		{
-			string pickupDirectory = GameManager.GetActiveScene().pickupsParent + status.PickupName;
-			GameObject pickup = GameObject.Find(pickupDirectory);
-			if (pickup == null)
-			{
-				Logger.Log($"Was told to change status of a pickup at `{pickupDirectory}` that doesn't exist!", LogVerbosity.Error);
-				return;
-			}
-
-			Pickup pickupLogic = pickup.GetComponent<Pickup>();
-
-			pickupLogic.gfxMesh.material = status.IsActive ? pickupLogic.pickupMaterial : pickupLogic.pickupPickedUpMaterial;
-		}
-
-		#endregion
 	}
 }
