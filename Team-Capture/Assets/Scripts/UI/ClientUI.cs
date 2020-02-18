@@ -10,9 +10,13 @@ namespace UI
 
 		public Hud hud;
 
+		public KillFeed killFeed;
+
 		public GameObject pauseMenuGameObject;
-		[HideInInspector] public PlayerManager player;
+
 		public GameObject scoreBoardObject;
+
+		[HideInInspector] public PlayerManager player;
 
 		public ClientUI SetupUi(PlayerManager playerManager)
 		{

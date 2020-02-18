@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using Core;
 using Core.Logger;
+using Core.Networking.Messages;
 using Delegates;
 using Mirror;
 using UI;
@@ -46,11 +47,18 @@ namespace Player
 
 		#endregion
 
+		/// <summary>
+		/// Only set on the server!
+		/// <para>The player's active <see cref="WeaponManager"/></para>
+		/// </summary>
+		private WeaponManager weaponManager;
+
 		public override void OnStartServer()
 		{
 			base.OnStartServer();
 
 			Health = MaxHealth;
+			weaponManager = GetComponent<WeaponManager>();
 		}
 
 		public override void OnStartLocalPlayer()
@@ -128,15 +136,24 @@ namespace Player
 		{
 			IsDead = true;
 
+			//Send a message about this player's death
+			NetworkServer.SendToAll(new PlayerDiedMessage
+			{
+				PlayerKilled = transform.name,
+				PlayerKiller = sourcePlayerId,
+				WeaponName = weaponManager.GetActiveWeapon().weapon
+			});
+
 			//Remove all the weapons on the player
-			GetComponent<WeaponManager>().RemoveAllWeapons();
+			weaponManager.RemoveAllWeapons();
 
 			RpcClientPlayerDie();
 
 			//Update the stats, for both players
+			PlayerManager killer = GameManager.GetPlayer(sourcePlayerId);
 			Deaths++;
 			if (sourcePlayerId != transform.name)
-				GameManager.GetPlayer(sourcePlayerId).Kills++;
+				killer.Kills++;
 
 			EventPlayerKilled?.Invoke(transform.name, sourcePlayerId);
 
