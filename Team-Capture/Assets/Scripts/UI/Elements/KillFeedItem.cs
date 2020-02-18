@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 
 namespace UI.Elements
@@ -8,18 +7,9 @@ namespace UI.Elements
 	{
 		[SerializeField] private TMP_Text killFeedText;
 
-		public void SetupItem(string killerName, string killedName, float destroyTime)
+		public void SetupItem(string killerName, string killedName)
 		{
 			killFeedText.text = $"<b>{killerName}</b> / {killedName}";
-
-			StartCoroutine(DestructInTime(destroyTime));
-		}
-
-		private IEnumerator DestructInTime(float time)
-		{
-			yield return new WaitForSeconds(time);
-
-			Destroy(gameObject);
 		}
 	}
 }

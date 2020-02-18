@@ -44,6 +44,9 @@ namespace UI
 			Cursor.lockState = Cursor.lockState == CursorLockMode.Locked ? CursorLockMode.None : CursorLockMode.Locked;
 
 			pauseMenuGameObject.SetActive(IsPauseMenuOpen);
+			killFeed.killFeedItemsHolder.gameObject.SetActive(!IsPauseMenuOpen);
+
+			if (player.IsDead) return;
 			hud.gameObject.SetActive(!IsPauseMenuOpen);
 		}
 
