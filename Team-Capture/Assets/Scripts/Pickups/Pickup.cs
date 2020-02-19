@@ -15,6 +15,8 @@ namespace Pickups
 		[SerializeField] private float triggerRadius = 1.3f;
 		[SerializeField] private Vector3 triggerCenter = Vector3.zero;
 
+		private bool isPickedUp;
+
 		/// <summary>
 		/// Sets up the collider (trigger) for the server
 		/// </summary>
@@ -32,6 +34,8 @@ namespace Pickups
 		/// <param name="other"></param>
 		public void OnTriggerEnter(Collider other)
 		{
+			if(isPickedUp) return;
+
 			if(other.GetComponent<PlayerManager>() == null) return;
 
 			OnPlayerPickup(other.GetComponent<PlayerManager>());
@@ -43,6 +47,8 @@ namespace Pickups
 		/// <param name="player"></param>
 		public virtual void OnPlayerPickup(PlayerManager player)
 		{
+			isPickedUp = true;
+
 			//Deactivate the pickup and respawn it
 			ServerPickupManager.DeactivatePickup(this);
 			StartCoroutine(RespawnPickup());
@@ -57,6 +63,7 @@ namespace Pickups
 			yield return new WaitForSeconds(pickupRespawnTime);
 
 			ServerPickupManager.ActivatePickup(this);
+			isPickedUp = false;
 		}
 	}
 }
