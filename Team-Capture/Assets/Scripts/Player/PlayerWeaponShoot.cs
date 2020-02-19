@@ -117,14 +117,8 @@ namespace Player
 			// ReSharper disable once Unity.PreferNonAllocApi
 			RaycastHit[] hits = Physics.RaycastAll(playerFacingDirection.position, playerFacingDirection.forward,
 				tcWeapon.range);
-			bool hitPlayer = false;
-
 			foreach (RaycastHit hit in hits)
 			{
-				//If we have already hit a player, return
-				if (hitPlayer)
-					return;
-
 				//If the hit was the sourcePlayer, then ignore it
 				if (hit.collider.name == sourcePlayer)
 					continue;
@@ -138,7 +132,7 @@ namespace Player
 				if (hit.collider.GetComponent<PlayerManager>() == null) continue;
 
 				hit.collider.GetComponent<PlayerManager>().TakeDamage(tcWeapon.damage, sourcePlayer);
-				hitPlayer = true;
+				return;
 			}
 		}
 
