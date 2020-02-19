@@ -18,11 +18,12 @@ namespace Player
 
 		[SerializeField] private GameObject[] disableGameObjectsOnDeath;
 
-		private bool isConnected;
-
+		[SerializeField] private float invincibilityLastTime = 3.0f;
 		[SerializeField] private float latencyUpdateTime = 2.0f;
 
-		public int MaxHealth { get; private set; } = 100;
+		private bool isConnected;
+
+		public int MaxHealth { get; } = 100;
 
 		#region Sync Vars
 
@@ -47,11 +48,21 @@ namespace Player
 
 		#endregion
 
+		#region Server Variables
+
 		/// <summary>
 		/// Only set on the server!
 		/// <para>The player's active <see cref="WeaponManager"/></para>
 		/// </summary>
 		private WeaponManager weaponManager;
+
+		/// <summary>
+		/// Only set on the server!
+		/// <para>Is this player invincible?</para>
+		/// </summary>
+		public bool IsInvincible { get; private set; }
+		
+		#endregion
 
 		public override void OnStartServer()
 		{
@@ -104,6 +115,8 @@ namespace Player
 			}
 
 			if(IsDead) return;
+
+			if(IsInvincible) return;
 
 			Health -= damageAmount;
 
@@ -174,6 +187,11 @@ namespace Player
 			GetComponent<WeaponManager>().AddStockWeapons();
 
 			IsDead = false;
+
+			IsInvincible = true;
+			yield return new WaitForSeconds(invincibilityLastTime);
+
+			IsInvincible = false;
 		}
 
 		/// <summary>
