@@ -30,11 +30,11 @@ namespace UI
 			Logger.Log($"`{killer.username}` killed `{killed.username}` using `{message.WeaponName}`.");
 		}
 
-		private IEnumerator DestructInTime(GameObject killFeedItem)
+		private IEnumerator DestructInTime(Object killFeedItemToDestroy)
 		{
 			yield return new WaitForSeconds(killFeedItemLastTime);
 
-			Destroy(killFeedItem);
+			Destroy(killFeedItemToDestroy);
 		}
 	}
 }
