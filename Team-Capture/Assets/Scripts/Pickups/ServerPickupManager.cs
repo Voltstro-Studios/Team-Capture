@@ -11,6 +11,8 @@ namespace Pickups
 	{
 		private static readonly List<string> UnActivePickups = new List<string>();
 
+		private static readonly int channelToSendOnId = 1;
+
 		/// <summary>
 		/// Gets all un active pickups
 		/// </summary>
@@ -40,7 +42,7 @@ namespace Pickups
 			{
 				PickupName = pickup.name,
 				IsActive = false
-			});
+			}, channelToSendOnId);
 		}
 
 		/// <summary>
@@ -55,7 +57,7 @@ namespace Pickups
 			{
 				PickupName = pickup.name,
 				IsActive = true
-			});
+			}, channelToSendOnId);
 		}
 	}
 }

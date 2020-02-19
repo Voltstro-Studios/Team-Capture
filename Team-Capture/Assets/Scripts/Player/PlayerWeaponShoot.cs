@@ -164,7 +164,7 @@ namespace Player
 
 		#region Weapon Impact
 
-		[ClientRpc]
+		[ClientRpc(channel = 2)]
 		private void RpcWeaponImpact(Vector3 pos, Vector3 normal)
 		{
 			GameObject hitEffect =

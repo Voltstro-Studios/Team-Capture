@@ -155,7 +155,7 @@ namespace Player
 				PlayerKilled = transform.name,
 				PlayerKiller = sourcePlayerId,
 				WeaponName = weaponManager.GetActiveWeapon().weapon
-			});
+			}, 2);
 
 			//Remove all the weapons on the player
 			weaponManager.RemoveAllWeapons();
@@ -197,7 +197,7 @@ namespace Player
 		/// <summary>
 		/// Disables components on each of the clients
 		/// </summary>
-		[ClientRpc]
+		[ClientRpc(channel = 1)]
 		private void RpcClientPlayerDie()
 		{
 			//Disable the collider, or the Char controller
