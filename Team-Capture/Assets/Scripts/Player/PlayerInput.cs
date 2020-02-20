@@ -153,7 +153,7 @@ namespace Player
 
 			if (selectedWeaponIndex == weaponManager.selectedWeaponIndex) return;
 			weaponManager.CmdSetWeaponIndex(selectedWeaponIndex);
-			playerManager.clientUi.hud.UpdateAmmoUi(weaponManager);
+			//playerManager.clientUi.hud.UpdateAmmoUi(weaponManager);
 		}
 	}
 }

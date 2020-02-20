@@ -27,15 +27,30 @@ namespace Player
 
 		#region Sync Vars
 
+		/// <summary>
+		/// Is this player dead?
+		/// </summary>
 		[field: SyncVar] public bool IsDead { get; protected set; }
 
+		/// <summary>
+		/// The username of this player
+		/// </summary>
 		[SyncVar] public string username = "Not Set";
 
+		/// <summary>
+		/// How much health does this player have?
+		/// </summary>
 		[field: SyncVar(hook = nameof(UpdateHealthUi))]
 		public int Health { get; private set; }
 
+		/// <summary>
+		/// How many kills does this player have in this active game
+		/// </summary>
 		[field: SyncVar] public int Kills { get; private set; }
 
+		/// <summary>
+		/// How many deaths does this player have in this active game
+		/// </summary>
 		[field: SyncVar] public int Deaths { get; private set; }
 
 		/// <summary>
@@ -88,6 +103,9 @@ namespace Player
 			isConnected = false;
 		}
 
+		/// <summary>
+		/// Kills the player
+		/// </summary>
 		[Command]
 		public void CmdSuicide()
 		{
@@ -105,6 +123,11 @@ namespace Player
 
 		#region Death, Respawn, Damage
 
+		/// <summary>
+		/// Take damage
+		/// </summary>
+		/// <param name="damageAmount"></param>
+		/// <param name="sourcePlayerId"></param>
 		[Server]
 		public void TakeDamage(int damageAmount, string sourcePlayerId)
 		{
@@ -114,9 +137,8 @@ namespace Player
 				return;
 			}
 
-			if(IsDead) return;
-
-			if(IsInvincible) return;
+			//Can't do damage on a player if they are dead or just re-spawned
+			if(IsDead || IsInvincible) return;
 
 			Health -= damageAmount;
 
@@ -126,6 +148,10 @@ namespace Player
 			ServerPlayerDie(sourcePlayerId);
 		}
 
+		/// <summary>
+		/// Adds health to the player
+		/// </summary>
+		/// <param name="amount"></param>
 		[Server]
 		public void AddHealth(int amount)
 		{
@@ -160,6 +186,7 @@ namespace Player
 			//Remove all the weapons on the player
 			weaponManager.RemoveAllWeapons();
 
+			//Call the client side code on each player
 			RpcClientPlayerDie();
 
 			//Update the stats, for both players
@@ -173,6 +200,10 @@ namespace Player
 			StartCoroutine(ServerPlayerRespawn());
 		}
 
+		/// <summary>
+		/// Server side method that handles the player's
+		/// </summary>
+		/// <returns></returns>
 		[Server]
 		private IEnumerator ServerPlayerRespawn()
 		{
@@ -222,6 +253,11 @@ namespace Player
 			foreach (Behaviour toDisable in disableBehaviourOnDeath) toDisable.enabled = false;
 		}
 
+		/// <summary>
+		/// Client side method of enabling client side stuff per client
+		/// </summary>
+		/// <param name="spawnPos"></param>
+		/// <param name="spawnRot"></param>
 		[ClientRpc]
 		private void RpcClientRespawn(Vector3 spawnPos, Quaternion spawnRot)
 		{

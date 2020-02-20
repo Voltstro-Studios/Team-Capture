@@ -81,8 +81,10 @@ namespace Player
 
 			weapon.currentBulletsAmount--;
 
+			//Do a muzzle flash
 			CmdWeaponMuzzleFlash(transform.name);
 
+			//Do the actual weapon shoot logic
 			CmdWeaponShoot(transform.name);
 
 			playerManager.clientUi.hud.UpdateAmmoUi(weaponManager);

@@ -40,8 +40,8 @@ namespace UI.ScoreBoard
 		{
 			playerNameText.text = clientPlayer.username;
 
+			//Get all players and create a player item on the scoreboard for them
 			players = GameManager.GetAllPlayers().ToList();
-			
 			foreach (PlayerManager player in players)
 			{
 				CreateNewPlayerItem(player);
@@ -49,6 +49,7 @@ namespace UI.ScoreBoard
 
 			UpdatePlayerStats();
 
+			//Set our stats at the bottom of the screen
 			if (clientPlayer.Kills != 0 && clientPlayer.Deaths != 0)
 				killDeathRatioText.text = "K/D: " + clientPlayer.Kills / clientPlayer.Deaths;
 
@@ -71,12 +72,15 @@ namespace UI.ScoreBoard
 
 		private void UpdatePlayerStats()
 		{
+			//Sort the player list
 			players.Sort(new PlayerListComparer());
 
 			for (int i = 0; i < players.Count; i++)
 			{
 				//Get the player in the dictionary
 				GameObject player = playerList[players[i]];
+
+				//If the player doesn't exist then create a new player item on the scoreboard
 				if (player == null)
 				{
 					CreateNewPlayerItem(players[i]);
