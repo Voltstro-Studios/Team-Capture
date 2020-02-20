@@ -956,9 +956,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87e690bb481a79641923b870e3fbf8f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerNameText: {fileID: 3890248634888685890}
-  playerKillsText: {fileID: 3890248635892361534}
   playerDeathsText: {fileID: 3348577668286976270}
+  playerKillsText: {fileID: 3890248635892361534}
+  playerNameText: {fileID: 3890248634888685890}
   playerPingText: {fileID: 0}
 --- !u!1 &5993677598051021484
 GameObject:
@@ -1050,14 +1050,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   clientPlayer: {fileID: 0}
-  mapNameText: {fileID: 5993677600075685234}
-  ipText: {fileID: 5993677599342936603}
-  playerNameText: {fileID: 5993677598437606707}
+  mapNameText: {fileID: 5993677599342936603}
+  gameNameText: {fileID: 5993677600075685234}
   killDeathRatioText: {fileID: 3004070584557931867}
-  playerStatsText: {fileID: 2414800354378044243}
-  playerListTransform: {fileID: 5993677599477096704}
   playerItemPrefab: {fileID: 4013258042580914726, guid: 20aa87f401365464fa48aedfe715671e,
     type: 3}
+  playerNameText: {fileID: 5993677598437606707}
+  playerStatsText: {fileID: 2414800354378044243}
+  playerListTransform: {fileID: 5993677599477096704}
 --- !u!1 &5993677598437606717
 GameObject:
   m_ObjectHideFlags: 0
@@ -1301,7 +1301,7 @@ GameObject:
   - component: {fileID: 5993677599342936602}
   - component: {fileID: 5993677599342936603}
   m_Layer: 5
-  m_Name: Text_IpAddress
+  m_Name: SceneNameText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1352,7 +1352,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 666.666.66.66
+  m_text: DM Test
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1421,10 +1421,10 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 5993677599342936603}
-    characterCount: 13
+    characterCount: 7
     spriteCount: 0
-    spaceCount: 0
-    wordCount: 4
+    spaceCount: 1
+    wordCount: 2
     linkCount: 0
     lineCount: 1
     pageCount: 1
@@ -1592,7 +1592,7 @@ GameObject:
   - component: {fileID: 5993677600075685233}
   - component: {fileID: 5993677600075685234}
   m_Layer: 5
-  m_Name: Text_Map
+  m_Name: GameNameText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1643,7 +1643,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: DM swagboi
+  m_text: Team Capture Server
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1671,7 +1671,7 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 72
+  m_fontSize: 60.6
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1712,10 +1712,10 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 5993677600075685234}
-    characterCount: 10
+    characterCount: 19
     spriteCount: 0
-    spaceCount: 1
-    wordCount: 2
+    spaceCount: 2
+    wordCount: 3
     linkCount: 0
     lineCount: 1
     pageCount: 1

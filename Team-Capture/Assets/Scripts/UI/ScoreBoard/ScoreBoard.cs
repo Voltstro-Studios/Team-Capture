@@ -2,7 +2,7 @@
 using System.Linq;
 using Core;
 using Core.Logger;
-using Mirror;
+using Core.Networking;
 using Player;
 using TMPro;
 using UnityEngine;
@@ -14,27 +14,26 @@ namespace UI.ScoreBoard
 	{
 		[HideInInspector] public PlayerManager clientPlayer;
 
-		[SerializeField] private TextMeshProUGUI ipText;
-		[SerializeField] private TextMeshProUGUI killDeathRatioText;
-
 		[Header("Scoreboard Settings")] 
 		[SerializeField] private TextMeshProUGUI mapNameText;
+		[SerializeField] private TextMeshProUGUI gameNameText;
+		[SerializeField] private TextMeshProUGUI killDeathRatioText;
 
 		[SerializeField] private GameObject playerItemPrefab;
 
-		[Header("Player List Settings")] 
-		[SerializeField] private Transform playerListTransform;
-
+		[Header("Player List Settings")]
 		[SerializeField] private TextMeshProUGUI playerNameText;
 		[SerializeField] private TextMeshProUGUI playerStatsText;
 
-		private Dictionary<PlayerManager, GameObject> playerList = new Dictionary<PlayerManager, GameObject>();
+		[SerializeField] private Transform playerListTransform;
+
+		private readonly Dictionary<PlayerManager, GameObject> playerList = new Dictionary<PlayerManager, GameObject>();
 		private List<PlayerManager> players = new List<PlayerManager>();
 
 		private void Start()
 		{
 			mapNameText.text = GameManager.GetActiveScene().displayName;
-			ipText.text = NetworkManager.singleton.networkAddress;
+			gameNameText.text = TCNetworkManager.Instance.gameName;
 		}
 
 		private void OnEnable()
