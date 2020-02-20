@@ -63,6 +63,7 @@ namespace Player
 			GetComponent<PlayerManager>().clientUi = clientUi;
 			clientUi.SetupUi(GetComponent<PlayerManager>());
 
+			//Lock the cursor
 			Cursor.visible = false;
 			Cursor.lockState = CursorLockMode.Locked;
 
@@ -81,8 +82,6 @@ namespace Player
 			GameManager.RemovePlayer(transform.name);
 
 			if (!isLocalPlayer) return;
-
-			NetworkClient.UnregisterHandler<SetPickupStatus>();
 
 			GameManager.GetActiveSceneCamera().SetActive(true);
 

@@ -17,8 +17,16 @@ namespace Player
 		{
 			clientUi = GetComponent<PlayerManager>().clientUi;
 
+			//Register all our custom messages
 			NetworkClient.RegisterHandler<SetPickupStatus>(PickupMessage);
 			NetworkClient.RegisterHandler<PlayerDiedMessage>(PlayerDiedMessage);
+		}
+
+		private void OnDestroy()
+		{
+			//Unregister our custom messages on destroy
+			NetworkClient.UnregisterHandler<SetPickupStatus>();
+			NetworkClient.UnregisterHandler<PlayerDiedMessage>();
 		}
 
 		private void PlayerDiedMessage(NetworkConnection conn, PlayerDiedMessage message)
