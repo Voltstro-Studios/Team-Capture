@@ -63,21 +63,18 @@ namespace Weapons
 		[Server]
 		private void ServerWeaponCallback(SyncList<string>.Operation op, int itemIndex, string item, string newItem)
 		{
-			if (op == SyncList<string>.Operation.OP_ADD)
+			switch (op)
 			{
-				if (newItem == null)
-				{
+				case SyncList<string>.Operation.OP_ADD when newItem == null:
 					Logger.Log("Passed in weapon to be added is null!", LogVerbosity.Error);
 					weapons.Remove(item);
 					return;
-				}
-
-				RpcInstantiateWeaponOnClients(newItem);
-			}
-
-			if (op == SyncList<string>.Operation.OP_CLEAR)
-			{
-				RpcRemoveAllActiveWeapons();
+				case SyncList<string>.Operation.OP_ADD:
+					RpcInstantiateWeaponOnClients(newItem);
+					break;
+				case SyncList<string>.Operation.OP_CLEAR:
+					RpcRemoveAllActiveWeapons();
+					break;
 			}
 		}
 
@@ -249,13 +246,7 @@ namespace Weapons
 		private void RpcSelectWeapon(int index)
 		{
 			for (int i = 0; i < weaponsHolderSpot.childCount; i++)
-				if (i == index)
-					weaponsHolderSpot.GetChild(i).gameObject.SetActive(true);
-				else
-					weaponsHolderSpot.GetChild(i).gameObject.SetActive(false);
-
-			if (isLocalPlayer)
-				playerManager.clientUi.hud.UpdateAmmoUi(this);
+				weaponsHolderSpot.GetChild(i).gameObject.SetActive(i == index);
 		}
 
 		#endregion
