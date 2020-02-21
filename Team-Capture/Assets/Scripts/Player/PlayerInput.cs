@@ -132,7 +132,7 @@ namespace Player
 
 		private void SetSelectedWeaponIndex()
 		{
-			int selectedWeaponIndex = weaponManager.selectedWeaponIndex;
+			int selectedWeaponIndex = weaponManager.SelectedWeaponIndex;
 			int weaponHolderChildCount = weaponManager.WeaponHolderSpotChildCount - 1;
 
 			if (Input.GetAxis("Mouse ScrollWheel") > 0f)
@@ -151,8 +151,8 @@ namespace Player
 					selectedWeaponIndex--;
 			}
 
-			if (selectedWeaponIndex == weaponManager.selectedWeaponIndex) return;
-			weaponManager.CmdSetWeaponIndex(selectedWeaponIndex);
+			if (selectedWeaponIndex == weaponManager.SelectedWeaponIndex) return;
+			weaponManager.CmdSetWeapon(selectedWeaponIndex);
 			//playerManager.clientUi.hud.UpdateAmmoUi(weaponManager);
 		}
 	}

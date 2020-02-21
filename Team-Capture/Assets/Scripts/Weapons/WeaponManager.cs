@@ -15,7 +15,8 @@ namespace Weapons
 	{
 		private readonly SyncListWeapons weapons = new SyncListWeapons();
 
-		[SyncVar(hook = nameof(SelectWeapon))] [HideInInspector] public int selectedWeaponIndex;
+		[field: SyncVar(hook = nameof(SelectWeapon))] 
+		public int SelectedWeaponIndex { get; private set; }
 
 		[SerializeField] private string weaponLayerName = "LocalWeapon";
 
@@ -35,7 +36,7 @@ namespace Weapons
 				GameObject newWeapon =
 					Instantiate(WeaponsResourceManager.GetWeapon(weapons[i]).baseWeaponPrefab, weaponsHolderSpot);
 
-				newWeapon.SetActive(selectedWeaponIndex == i);
+				newWeapon.SetActive(SelectedWeaponIndex == i);
 			}
 		}
 
@@ -105,14 +106,6 @@ namespace Weapons
 				Layers.SetLayerRecursively(newWeapon, LayerMask.NameToLayer(weaponLayerName));
 		}
 
-		[Command]
-		public void CmdSetWeaponIndex(int index)
-		{
-			Logger.Log($"Player `{transform.name}` set their weapon index to `{index}`.", LogVerbosity.Debug);
-
-			selectedWeaponIndex = index;
-		}
-
 		#region Weapon Reloading
 
 		public IEnumerator ReloadCurrentWeapon()
@@ -141,12 +134,12 @@ namespace Weapons
 
 		public TCWeapon GetActiveWeapon()
 		{
-			return weapons.Count == 0 ? null : WeaponsResourceManager.GetWeapon(weapons[selectedWeaponIndex]);
+			return weapons.Count == 0 ? null : WeaponsResourceManager.GetWeapon(weapons[SelectedWeaponIndex]);
 		}
 
 		public WeaponGraphics GetActiveWeaponGraphics()
 		{
-			return weaponsHolderSpot.GetChild(selectedWeaponIndex).GetComponent<WeaponGraphics>();
+			return weaponsHolderSpot.GetChild(SelectedWeaponIndex).GetComponent<WeaponGraphics>();
 		}
 
 		public TCWeapon GetWeapon(string weapon)
@@ -198,7 +191,10 @@ namespace Weapons
 			TargetSetupWeapon(weapon);
 
 			if (weapons.Count > 1)
-				selectedWeaponIndex += 1;
+			{
+				SelectedWeaponIndex += 1;
+				RpcSelectWeapon(SelectedWeaponIndex);
+			}
 		}
 
 		[TargetRpc]
@@ -217,7 +213,7 @@ namespace Weapons
 		[Server]
 		public void RemoveAllWeapons()
 		{
-			selectedWeaponIndex = 0;
+			SelectedWeaponIndex = 0;
 			weapons.Clear();
 		}
 
@@ -236,12 +232,16 @@ namespace Weapons
 			if (!isLocalPlayer)
 				return;
 
-			CmdSelectWeapon(newValue);
+			playerManager.clientUi.hud.UpdateAmmoUi(this);
 		}
 
 		[Command]
-		public void CmdSelectWeapon(int index)
+		public void CmdSetWeapon(int index)
 		{
+			Logger.Log($"Player `{transform.name}` set their weapon index to `{index}`.", LogVerbosity.Debug);
+
+			//Set the selected weapon index and update the visible gameobject
+			SelectedWeaponIndex = index;
 			RpcSelectWeapon(index);
 		}
 
