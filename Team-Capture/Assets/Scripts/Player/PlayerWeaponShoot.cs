@@ -117,13 +117,14 @@ namespace Player
 
 			for (int i = 0; i < tcWeapon.bulletsAmount; i++)
 			{
-				Vector3 direction = playerFacingDirection.forward;
+				//Calculate random spread
 				Vector3 spread = Vector3.zero;
 				spread += playerFacingDirection.up * Random.Range(tcWeapon.spreadMin, tcWeapon.spreadMax);
 				spread += playerFacingDirection.right * Random.Range(tcWeapon.spreadMin, tcWeapon.spreadMax);
 
-				direction += spread.normalized * Random.Range(0f, 0.2f);
+				Vector3 direction = playerFacingDirection.forward + spread.normalized * Random.Range(0f, 0.2f);
 
+				//Was a player hit?
 				bool playerHit = false;
 
 				//Now do our raycast
@@ -132,6 +133,7 @@ namespace Player
 					tcWeapon.range);
 				foreach (RaycastHit hit in hits)
 				{
+					//If a player was hit then skip through
 					if(playerHit)
 						continue;
 
@@ -143,10 +145,11 @@ namespace Player
 					if(hit.collider.CompareTag(pickupTag))
 						continue;
 
+					//Do impact effect on all clients
 					RpcWeaponImpact(hit.point, hit.normal);
 
+					//So if we hit a player then do damage
 					if (hit.collider.GetComponent<PlayerManager>() == null) continue;
-
 					hit.collider.GetComponent<PlayerManager>().TakeDamage(tcWeapon.damage, sourcePlayer);
 					playerHit = true;
 				}
