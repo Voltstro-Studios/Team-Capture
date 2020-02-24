@@ -115,26 +115,41 @@ namespace Player
 			//Get the direction the player was facing
 			Transform playerFacingDirection = player.GetComponent<PlayerSetup>().GetPlayerCamera().transform;
 
-			//Now do our raycast
-			// ReSharper disable once Unity.PreferNonAllocApi
-			RaycastHit[] hits = Physics.RaycastAll(playerFacingDirection.position, playerFacingDirection.forward,
-				tcWeapon.range);
-			foreach (RaycastHit hit in hits)
+			for (int i = 0; i < tcWeapon.bulletsAmount; i++)
 			{
-				//If the hit was the sourcePlayer, then ignore it
-				if (hit.collider.name == sourcePlayer)
-					continue;
+				Vector3 direction = playerFacingDirection.forward;
+				Vector3 spread = Vector3.zero;
+				spread += playerFacingDirection.up * Random.Range(tcWeapon.spreadMin, tcWeapon.spreadMax);
+				spread += playerFacingDirection.right * Random.Range(tcWeapon.spreadMin, tcWeapon.spreadMax);
 
-				//We want bullets to go through pickups
-				if(hit.collider.CompareTag(pickupTag))
-					continue;
+				direction += spread.normalized * Random.Range(0f, 0.2f);
 
-				RpcWeaponImpact(hit.point, hit.normal);
+				bool playerHit = false;
 
-				if (hit.collider.GetComponent<PlayerManager>() == null) continue;
+				//Now do our raycast
+				// ReSharper disable once Unity.PreferNonAllocApi
+				RaycastHit[] hits = Physics.RaycastAll(playerFacingDirection.position, direction,
+					tcWeapon.range);
+				foreach (RaycastHit hit in hits)
+				{
+					if(playerHit)
+						continue;
 
-				hit.collider.GetComponent<PlayerManager>().TakeDamage(tcWeapon.damage, sourcePlayer);
-				return;
+					//If the hit was the sourcePlayer, then ignore it
+					if (hit.collider.name == sourcePlayer)
+						continue;
+
+					//We want bullets to go through pickups
+					if(hit.collider.CompareTag(pickupTag))
+						continue;
+
+					RpcWeaponImpact(hit.point, hit.normal);
+
+					if (hit.collider.GetComponent<PlayerManager>() == null) continue;
+
+					hit.collider.GetComponent<PlayerManager>().TakeDamage(tcWeapon.damage, sourcePlayer);
+					playerHit = true;
+				}
 			}
 		}
 
