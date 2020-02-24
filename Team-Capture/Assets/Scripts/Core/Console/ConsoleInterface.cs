@@ -6,12 +6,11 @@ using UnityEngine;
 
 namespace Core.Console
 {
-	public static class ConsoleInterface
+	public class ConsoleInterface : MonoBehaviour
 	{
 		private static readonly Dictionary<string, ConsoleCommand> Commands = new Dictionary<string, ConsoleCommand>();
 
-		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
-		private static void RegisterCommands()
+		public static void RegisterCommands()
 		{
 			const BindingFlags bindingFlags = BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
 
@@ -30,21 +29,21 @@ namespace Core.Console
 			}
 		}
 
-		public static void AddCommand(string name, string summary, MethodDelegate method)
+		public static void AddCommand(string commandName, string summary, MethodDelegate method)
 		{
-			name = name.ToLower();
+			commandName = commandName.ToLower();
 
-			Logger.Logger.Log($"Added command `{name}`.", LogVerbosity.Debug);
+			Logger.Logger.Log($"Added command `{commandName}`.", LogVerbosity.Debug);
 
-			Commands.Add(name, new ConsoleCommand
+			Commands.Add(commandName, new ConsoleCommand
 			{
-				CommandName = name,
+				CommandName = commandName,
 				CommandSummary = summary,
 				CommandMethod = method
 			});
 		}
 
-		public static void ExecuteCommand(string command)
+		public void ExecuteCommand(string command)
 		{
 			List<string> tokens = Tokenize(command);
 			if (tokens.Count < 1)
