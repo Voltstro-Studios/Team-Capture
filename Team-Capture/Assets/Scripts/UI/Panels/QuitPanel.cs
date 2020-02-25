@@ -1,4 +1,5 @@
-﻿using Mirror;
+﻿using Core;
+using Mirror;
 using TMPro;
 using UnityEngine;
 
@@ -20,7 +21,7 @@ namespace UI.Panels
 			if (NetworkManager.singleton.isNetworkActive)
 				NetworkManager.singleton.StopHost();
 
-			Application.Quit(0);
+			Game.QuitGame();
 		}
 	}
 }

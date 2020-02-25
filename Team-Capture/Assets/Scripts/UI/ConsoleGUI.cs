@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Core;
 using Core.Console;
 using Core.Logger;
 using TMPro;
@@ -42,6 +43,8 @@ namespace UI
 			//Not the greatest idea hard coding this but what ever
 			ExecuteCommand("scene MainMenu");
 #endif
+
+			Logger.Log("Console ready!");
 		}
 
 		private void Update()
@@ -120,7 +123,7 @@ namespace UI
 		[ConCommand("quit", "Quits the game")]
 		public static void QuitGameCommand(string[] args)
 		{
-			Application.Quit();
+			Game.QuitGame();
 		}
 
 		[ConCommand("echo", "Echos back what you type in")]
