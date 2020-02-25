@@ -8,6 +8,8 @@ namespace UI
 	public class ConsoleGUI : ConsoleInterface
 	{
 		[SerializeField] private TMP_InputField inputField;
+		[SerializeField] private GameObject consolePanel;
+		[SerializeField] private KeyCode consoleToggleKey = KeyCode.F1;
 
 		private static ConsoleGUI _instance;
 
@@ -26,13 +28,42 @@ namespace UI
 
 		private void Update()
 		{
+			if (Input.GetKeyDown(consoleToggleKey))
+			{
+				ToggleConsole();
+			}
+
+			if(!consolePanel.activeSelf) return;
+
 			if (Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.Return))
 			{
-				HandleInput(inputField.text);
-
-				inputField.text = "";
-				inputField.ActivateInputField();
+				SubmitInput();
 			}
+		}
+
+		#region Console GUI
+
+		public void ToggleConsole()
+		{
+			consolePanel.SetActive(!consolePanel.activeSelf);
+		}
+		
+		[ConCommand(Name = "console", Summary = "Toggles the console")]
+		public static void ToggleConsoleCommand(string[] args)
+		{
+			_instance.ToggleConsole();
+		}
+
+		#endregion
+
+		#region Console Input
+
+		public void SubmitInput()
+		{
+			HandleInput(inputField.text);
+
+			inputField.text = "";
+			inputField.ActivateInputField();
 		}
 
 		private void HandleInput(string value)
@@ -43,5 +74,7 @@ namespace UI
 
 			ExecuteCommand(value);
 		}
+		
+		#endregion
 	}
 }
