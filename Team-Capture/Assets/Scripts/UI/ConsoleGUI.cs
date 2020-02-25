@@ -43,7 +43,6 @@ namespace UI
 			//Not the greatest idea hard coding this but what ever
 			ExecuteCommand("scene MainMenu");
 #endif
-
 			Logger.Log("Console ready!");
 		}
 

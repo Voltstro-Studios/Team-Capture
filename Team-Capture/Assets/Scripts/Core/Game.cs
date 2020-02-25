@@ -13,6 +13,8 @@ namespace Core
 		/// </summary>
 		public static void QuitGame()
 		{
+			Logger.Logger.Log("Goodbye!");
+
 #if UNITY_EDITOR
 			EditorApplication.isPlaying = false;
 #else
