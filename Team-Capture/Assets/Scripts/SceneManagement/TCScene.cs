@@ -18,6 +18,8 @@ namespace SceneManagement
 		[Tooltip("Is this scene an online scene, the only offline one should be Main Menus and such")]
 		public bool isOnlineScene = true;
 
+		public bool canLoadTo = true;
+
 		public string pickupsParent = "/Pickups/";
 
 		[Header("Game Settings")] 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using Core.Logger;
 using UnityEngine;
@@ -27,6 +28,8 @@ namespace Core.Console
 					AddCommand(attribute.Name, attribute.Summary, methodDelegate);
 				}
 			}
+
+			ConfigFilesLocation = Directory.GetParent(Application.dataPath).FullName + "/Cfg/";
 		}
 
 		public static void AddCommand(string commandName, string summary, MethodDelegate method)
@@ -43,7 +46,7 @@ namespace Core.Console
 			});
 		}
 
-		public void ExecuteCommand(string command)
+		public static void ExecuteCommand(string command)
 		{
 			List<string> tokens = Tokenize(command);
 			if (tokens.Count < 1)
@@ -119,6 +122,37 @@ namespace Core.Console
 				pos++;
 			}
 			return input.Substring(startPos);
+		}
+		
+		#endregion
+
+		#region File Executuion
+
+		private static string ConfigFilesLocation;
+
+		[ConCommand(Name = "exec", Summary = "Executes a file and runs all the commands")]
+		public static void ExecuteFile(string[] args)
+		{
+			if (args.Length != 1)
+			{
+				Logger.Logger.Log("Invalid arguments!", LogVerbosity.Error);
+				return;
+			}
+
+			string fileName = args[0] + ".cfg";
+			if (!File.Exists(ConfigFilesLocation + fileName))
+			{
+				Logger.Logger.Log($"`{fileName}` doesn't exist! Not executing.", LogVerbosity.Error);
+				return;
+			}
+
+			string[] lines = File.ReadAllLines(ConfigFilesLocation + fileName);
+			foreach (string line in lines)
+			{
+				if(line.StartsWith("//")) continue;
+
+				ExecuteCommand(line);
+			}
 		}
 		
 		#endregion

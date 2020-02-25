@@ -34,6 +34,11 @@ namespace UI
 			_instance = this;
 			DontDestroyOnLoad(gameObject);
 			RegisterCommands();
+
+#if !UNITY_EDITOR
+			string[] file = {"autoexec"};
+			ExecuteFile(file);
+#endif
 		}
 
 		private void Update()
@@ -107,6 +112,20 @@ namespace UI
 		
 		#endregion
 
+		#region Console Commands
+
+		[ConCommand(Name = "quit", Summary = "Quits the game")]
+		public static void QuitGameCommand(string[] args)
+		{
+			Application.Quit();
+		}
+
+		[ConCommand(Name = "echo")]
+		public static void EchoCommand(string[] args)
+		{
+			Logger.Log(string.Join(" ", args));
+		}
+
 		[ConCommand(Name = "debug_messages", Summary = "Do you want to show debug messages in the console?")]
 		public static void ShowDebugMessagesCommand(string[] args)
 		{
@@ -135,5 +154,7 @@ namespace UI
 					break;
 			}
 		}
+
+		#endregion
 	}
 }

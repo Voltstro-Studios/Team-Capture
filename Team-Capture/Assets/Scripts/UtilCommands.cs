@@ -1,4 +1,5 @@
-﻿using Core.Console;
+﻿using System;
+using Core.Console;
 using Core.Logger;
 using Core.Networking;
 using Mirror;
@@ -28,6 +29,32 @@ public static class UtilCommands
 			return;
 		}
 
+		if (!scene.canLoadTo)
+		{
+			Logger.Log("You cannot load to this scene!");
+			return;
+		}
+
 		TCScenesManager.LoadScene(scene);
+	}
+
+	[ConCommand(Name = "connect", Summary = "Connects to a server")]
+	public static void ConnectCommand(string[] args)
+	{
+		if (args.Length != 1)
+		{
+			Logger.Log("Invalid arguments!", LogVerbosity.Error);
+			return;
+		}
+
+		try
+		{
+			NetworkManager.singleton.StopHost();
+			NetworkManager.singleton.StartClient(new Uri(args[0]));
+		}
+		catch (Exception e)
+		{
+			Logger.Log(e.Message, LogVerbosity.Error);
+		}
 	}
 }
