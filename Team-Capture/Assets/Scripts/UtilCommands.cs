@@ -1,12 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Core.Console;
+﻿using Core.Console;
 using Core.Logger;
 using Core.Networking;
 using Mirror;
 using SceneManagement;
-using UnityEngine;
-using Logger = Core.Logger.Logger;
 
 public static class UtilCommands
 {
