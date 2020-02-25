@@ -38,6 +38,9 @@ namespace UI
 #if !UNITY_EDITOR
 			string[] file = {"autoexec"};
 			ExecuteFile(file);
+#else
+			//Not the greatest idea hard coding this but what ever
+			ExecuteCommand("scene MainMenu");
 #endif
 		}
 
