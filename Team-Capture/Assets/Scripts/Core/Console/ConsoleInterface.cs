@@ -130,7 +130,7 @@ namespace Core.Console
 
 		private static string ConfigFilesLocation;
 
-		[ConCommand(Name = "exec", Summary = "Executes a file and runs all the commands")]
+		[ConCommand("exec", "Executes a file", 1, 1)]
 		public static void ExecuteFile(string[] args)
 		{
 			if (args.Length != 1)

@@ -7,7 +7,7 @@ using SceneManagement;
 
 public static class UtilCommands
 {
-	[ConCommand(Name = "scene", Summary = "Loads a scene")]
+	[ConCommand("scene", "Loads a scene")]
 	public static void LoadScene(string[] args)
 	{
 		if (args.Length != 1)
@@ -38,7 +38,7 @@ public static class UtilCommands
 		TCScenesManager.LoadScene(scene);
 	}
 
-	[ConCommand(Name = "connect", Summary = "Connects to a server")]
+	[ConCommand("connect", "Connects to a server")]
 	public static void ConnectCommand(string[] args)
 	{
 		if (args.Length != 1)

@@ -86,7 +86,7 @@ namespace UI
 			return consolePanel.activeSelf;
 		}
 		
-		[ConCommand(Name = "console", Summary = "Toggles the console")]
+		[ConCommand("console", "Toggles the console")]
 		public static void ToggleConsoleCommand(string[] args)
 		{
 			_instance.ToggleConsole();
@@ -117,19 +117,19 @@ namespace UI
 
 		#region Console Commands
 
-		[ConCommand(Name = "quit", Summary = "Quits the game")]
+		[ConCommand("quit", "Quits the game")]
 		public static void QuitGameCommand(string[] args)
 		{
 			Application.Quit();
 		}
 
-		[ConCommand(Name = "echo")]
+		[ConCommand("echo", "Echos back what you type in")]
 		public static void EchoCommand(string[] args)
 		{
 			Logger.Log(string.Join(" ", args));
 		}
 
-		[ConCommand(Name = "debug_messages", Summary = "Do you want to show debug messages in the console?")]
+		[ConCommand("debug_messages", "Do you want to show debug messages in the console?")]
 		public static void ShowDebugMessagesCommand(string[] args)
 		{
 			if (args.Length == 0)
