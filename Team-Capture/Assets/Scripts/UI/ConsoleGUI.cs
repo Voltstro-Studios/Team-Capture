@@ -1,6 +1,9 @@
-﻿using Core.Console;
+﻿using System.Collections.Generic;
+using Core.Console;
+using Core.Logger;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using Logger = Core.Logger.Logger;
 
 namespace UI
@@ -8,8 +11,13 @@ namespace UI
 	public class ConsoleGUI : ConsoleInterface
 	{
 		[SerializeField] private TMP_InputField inputField;
+		[SerializeField] private Text consoleTextArea;
 		[SerializeField] private GameObject consolePanel;
 		[SerializeField] private KeyCode consoleToggleKey = KeyCode.F1;
+
+		private readonly List<string> lines = new List<string>();
+
+		private bool showDebugMessages;
 
 		private static ConsoleGUI _instance;
 
@@ -20,6 +28,8 @@ namespace UI
 				Destroy(gameObject);
 				return;
 			}
+
+			Logger.ConsoleLogEvent += LoggerLog;
 
 			_instance = this;
 			DontDestroyOnLoad(gameObject);
@@ -41,11 +51,31 @@ namespace UI
 			}
 		}
 
+		private void LoggerLog(string message, LogVerbosity logVerbosity)
+		{
+			if(consoleTextArea == null) return;
+
+			if(logVerbosity == LogVerbosity.Debug && !showDebugMessages) return;
+
+			lines.Add(message);
+			int count = Mathf.Min(100, lines.Count);
+			int start = lines.Count - count;
+			consoleTextArea.text = string.Join("\n", lines.GetRange(start, count).ToArray());
+		}
+
 		#region Console GUI
 
 		public void ToggleConsole()
 		{
-			consolePanel.SetActive(!consolePanel.activeSelf);
+			consolePanel.SetActive(!IsOpen());
+
+			if(IsOpen())
+				inputField.ActivateInputField();
+		}
+
+		public bool IsOpen()
+		{
+			return consolePanel.activeSelf;
 		}
 		
 		[ConCommand(Name = "console", Summary = "Toggles the console")]
@@ -76,5 +106,34 @@ namespace UI
 		}
 		
 		#endregion
+
+		[ConCommand(Name = "debug_messages", Summary = "Do you want to show debug messages in the console?")]
+		public static void ShowDebugMessagesCommand(string[] args)
+		{
+			if (args.Length == 0)
+			{
+				Logger.Log("Invalid argument!", LogVerbosity.Error);
+				return;
+			}
+
+			string toggle = args[0].ToLower();
+
+			switch (toggle)
+			{
+				case "1":
+				case "true":
+					_instance.showDebugMessages = true;
+					Logger.Log("Console will now show debug messages.");
+					break;
+				case "0":
+				case "false":
+					_instance.showDebugMessages = false;
+					Logger.Log("Console will no longer show debug messages.");
+					break;
+				default:
+					Logger.Log("Invalid argument!", LogVerbosity.Error);
+					break;
+			}
+		}
 	}
 }

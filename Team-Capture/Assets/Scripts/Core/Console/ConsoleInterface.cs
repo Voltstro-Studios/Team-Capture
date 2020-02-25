@@ -49,7 +49,7 @@ namespace Core.Console
 			if (tokens.Count < 1)
 				return;
 
-			if (Commands.TryGetValue(command, out ConsoleCommand conCommand))
+			if (Commands.TryGetValue(tokens[0].ToLower(), out ConsoleCommand conCommand))
 			{
 				string[] arguments = tokens.GetRange(1, tokens.Count - 1).ToArray();
 				conCommand.CommandMethod.Invoke(arguments);

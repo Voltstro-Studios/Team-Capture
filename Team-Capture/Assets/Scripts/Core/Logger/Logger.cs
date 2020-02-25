@@ -6,6 +6,7 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using Delegates;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
@@ -37,6 +38,8 @@ namespace Core.Logger
 		/// The final log name
 		/// </summary>
 		private static string finalLogName;
+
+		public static event ConsoleLogDelegate ConsoleLogEvent;
 
 		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
 		private static void Init()
@@ -137,6 +140,8 @@ namespace Core.Logger
 			//Now add it to our messages queue, if it isn't a debug message
 			if (verbosity != LogVerbosity.Debug)
 				Messages.Enqueue(message);
+
+			ConsoleLogEvent?.Invoke(message, verbosity);
 
 			//Send to the Unity console if we need to
 			switch (verbosity)
