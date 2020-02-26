@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text;
 using Core.Console;
 using Core.Logger;
 using TMPro;
@@ -117,15 +118,23 @@ namespace UI
 
 		#region Console Commands
 
+		[ConCommand("help", "Shows a list of all the commands")]
+		public static void HelpCommand(string[] args)
+		{
+			StringBuilder sb = new StringBuilder();
+			sb.Append("\n");
+
+			foreach (KeyValuePair<string, ConsoleCommand> command in GetAllCommands())
+			{
+				sb.Append($"`{command.Key}` - {command.Value.CommandSummary}\n");
+			}
+
+			Logger.Log(sb.ToString());
+		}
+
 		[ConCommand("debug_messages", "Do you want to show debug messages in the console?", 1, 1)]
 		public static void ShowDebugMessagesCommand(string[] args)
 		{
-			if (args.Length == 0)
-			{
-				Logger.Log("Invalid argument!", LogVerbosity.Error);
-				return;
-			}
-
 			string toggle = args[0].ToLower();
 
 			switch (toggle)

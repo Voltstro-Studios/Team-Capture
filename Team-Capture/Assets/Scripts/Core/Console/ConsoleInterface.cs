@@ -54,6 +54,11 @@ namespace Core.Console
 			});
 		}
 
+		public static Dictionary<string, ConsoleCommand> GetAllCommands()
+		{
+			return Commands;
+		}
+
 		public static void ExecuteCommand(string command)
 		{
 			List<string> tokens = Tokenize(command);
