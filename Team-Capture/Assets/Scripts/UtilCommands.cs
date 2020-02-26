@@ -1,4 +1,5 @@
 ﻿using System;
+using Core;
 using Core.Console;
 using Core.Logger;
 using Core.Networking;
@@ -7,7 +8,19 @@ using SceneManagement;
 
 public static class UtilCommands
 {
-	[ConCommand("scene", "Loads a scene")]
+	[ConCommand("quit", "Quits the game")]
+	public static void QuitGameCommand(string[] args)
+	{
+		Game.QuitGame();
+	}
+
+	[ConCommand("echo", "Echos back what you type in")]
+	public static void EchoCommand(string[] args)
+	{
+		Logger.Log(string.Join(" ", args));
+	}
+
+	[ConCommand("scene", "Loads a scene", 1, 1)]
 	public static void LoadScene(string[] args)
 	{
 		if (args.Length != 1)
@@ -36,25 +49,5 @@ public static class UtilCommands
 		}
 
 		TCScenesManager.LoadScene(scene);
-	}
-
-	[ConCommand("connect", "Connects to a server")]
-	public static void ConnectCommand(string[] args)
-	{
-		if (args.Length != 1)
-		{
-			Logger.Log("Invalid arguments!", LogVerbosity.Error);
-			return;
-		}
-
-		try
-		{
-			NetworkManager.singleton.StopHost();
-			NetworkManager.singleton.StartClient(new Uri(args[0]));
-		}
-		catch (Exception e)
-		{
-			Logger.Log(e.Message, LogVerbosity.Error);
-		}
 	}
 }

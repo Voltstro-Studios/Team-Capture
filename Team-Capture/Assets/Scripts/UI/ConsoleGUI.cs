@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Core;
 using Core.Console;
 using Core.Logger;
 using TMPro;
@@ -118,18 +117,6 @@ namespace UI
 		#endregion
 
 		#region Console Commands
-
-		[ConCommand("quit", "Quits the game")]
-		public static void QuitGameCommand(string[] args)
-		{
-			Game.QuitGame();
-		}
-
-		[ConCommand("echo", "Echos back what you type in")]
-		public static void EchoCommand(string[] args)
-		{
-			Logger.Log(string.Join(" ", args));
-		}
 
 		[ConCommand("debug_messages", "Do you want to show debug messages in the console?")]
 		public static void ShowDebugMessagesCommand(string[] args)

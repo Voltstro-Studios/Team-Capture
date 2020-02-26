@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.IO;
+using UnityEngine;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -19,6 +20,15 @@ namespace Core
 			EditorApplication.isPlaying = false;
 #else
 			Application.Quit();
+#endif
+		}
+
+		public static string GetGameExecutePath()
+		{
+#if UNITY_EDITOR
+			return Directory.GetParent(Application.dataPath).FullName + "Game/Cfg/";
+#else
+			Directory.GetParent(Application.dataPath).FullName + "/Cfg/"
 #endif
 		}
 	}

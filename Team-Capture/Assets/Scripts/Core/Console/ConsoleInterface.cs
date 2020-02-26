@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using Core.Logger;
+using Delegates;
 using UnityEngine;
 
 namespace Core.Console
@@ -25,24 +26,33 @@ namespace Core.Console
 					MethodDelegate methodDelegate =
 						(MethodDelegate) Delegate.CreateDelegate(typeof(MethodDelegate), method);
 
-					AddCommand(attribute.Name, attribute.Summary, methodDelegate);
+					AddCommand(attribute, methodDelegate);
 				}
 			}
 
-			ConfigFilesLocation = Directory.GetParent(Application.dataPath).FullName + "/Cfg/";
+			_configFilesLocation = Directory.GetParent(Application.dataPath).FullName + "/Cfg/";
 		}
 
-		public static void AddCommand(string commandName, string summary, MethodDelegate method)
+		public static void AddCommand(ConCommand conCommand, MethodDelegate method)
 		{
-			commandName = commandName.ToLower();
+			string commandName = conCommand.Name.ToLower();
+
+			//Make sure the command doesn't already exist
+			if (Commands.ContainsKey(commandName))
+			{
+				Logger.Logger.Log($"The command `{commandName}` already exists!", LogVerbosity.Error);
+				return;
+			}
 
 			Logger.Logger.Log($"Added command `{commandName}`.", LogVerbosity.Debug);
 
+			//Add the command
 			Commands.Add(commandName, new ConsoleCommand
 			{
-				CommandName = commandName,
-				CommandSummary = summary,
-				CommandMethod = method
+				CommandSummary = conCommand.Summary,
+				CommandMethod = method,
+				MinArgs = conCommand.MinArguments,
+				MaxArgs = conCommand.MaxArguments
 			});
 		}
 
@@ -55,12 +65,35 @@ namespace Core.Console
 			if (Commands.TryGetValue(tokens[0].ToLower(), out ConsoleCommand conCommand))
 			{
 				string[] arguments = tokens.GetRange(1, tokens.Count - 1).ToArray();
-				conCommand.CommandMethod.Invoke(arguments);
 
+				//Command min arguments
+				if (conCommand.MinArgs != 0)
+				{
+					if(arguments.Length <= conCommand.MinArgs-1)
+					{
+						Logger.Logger.Log(arguments.Length.ToString());
+						Logger.Logger.Log(conCommand.MinArgs.ToString());
+						Logger.Logger.Log($"Invalid arguments: More arguments are required!", LogVerbosity.Error);
+						return;
+					}
+				}
+
+				//Command max arguments
+				if (conCommand.MaxArgs != 0)
+				{
+					if (arguments.Length > conCommand.MaxArgs)
+					{
+						Logger.Logger.Log($"Invalid arguments: Less arguments are required!", LogVerbosity.Error);
+						return;
+					}
+				}
+
+				//Invoke the method
+				conCommand.CommandMethod.Invoke(arguments);
 				return;
 			}
 
-			Logger.Logger.Log($"Unknown command: {tokens[0]}", LogVerbosity.Error);
+			Logger.Logger.Log($"Unknown command: `{tokens[0]}`.", LogVerbosity.Error);
 		}
 
 		#region Argument Parsing
@@ -128,7 +161,7 @@ namespace Core.Console
 
 		#region File Executuion
 
-		private static string ConfigFilesLocation;
+		private static string _configFilesLocation;
 
 		[ConCommand("exec", "Executes a file", 1, 1)]
 		public static void ExecuteFile(string[] args)
@@ -140,13 +173,13 @@ namespace Core.Console
 			}
 
 			string fileName = args[0] + ".cfg";
-			if (!File.Exists(ConfigFilesLocation + fileName))
+			if (!File.Exists(_configFilesLocation + fileName))
 			{
 				Logger.Logger.Log($"`{fileName}` doesn't exist! Not executing.", LogVerbosity.Error);
 				return;
 			}
 
-			string[] lines = File.ReadAllLines(ConfigFilesLocation + fileName);
+			string[] lines = File.ReadAllLines(_configFilesLocation + fileName);
 			foreach (string line in lines)
 			{
 				if(line.StartsWith("//")) continue;

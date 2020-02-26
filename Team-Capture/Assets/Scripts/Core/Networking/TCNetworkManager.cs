@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using Core.Console;
 using Core.Logger;
 using Core.Networking.Discovery;
 using Core.Networking.Messages;
@@ -233,6 +235,34 @@ namespace Core.Networking
 			//Create our own game manager
 			Instantiate(gameMangerPrefab);
 			Logger.Logger.Log("Created game manager object.", LogVerbosity.Debug);
+		}
+
+		[ConCommand("connect", "Connects to a server", 1, 1)]
+		public static void ConnectCommand(string[] args)
+		{
+			try
+			{
+				singleton.StopHost();
+
+				singleton.networkAddress = args[0];
+				singleton.StartClient();
+			}
+			catch (Exception e)
+			{
+				Logger.Logger.Log(e.Message, LogVerbosity.Error);
+			}
+		}
+
+		[ConCommand("disconnect", "Disconnect from the current game")]
+		public static void DisconnectCommand(string[] args)
+		{
+			if (singleton.mode == NetworkManagerMode.Offline)
+			{
+				Logger.Logger.Log("You are not in a game!");
+				return;
+			}
+
+			singleton.StopHost();
 		}
 	}
 }
