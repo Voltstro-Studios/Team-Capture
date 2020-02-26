@@ -91,12 +91,6 @@ namespace UI
 		{
 			return consolePanel.activeSelf;
 		}
-		
-		[ConCommand("console", "Toggles the console")]
-		public static void ToggleConsoleCommand(string[] args)
-		{
-			instance.ToggleConsole();
-		}
 
 		#endregion
 
@@ -150,6 +144,12 @@ namespace UI
 					Logger.Log("Invalid argument!", LogVerbosity.Error);
 					break;
 			}
+		}
+
+		[ConCommand("console", "Toggles the console")]
+		public static void ToggleConsoleCommand(string[] args)
+		{
+			instance.ToggleConsole();
 		}
 
 		[ConCommand("console_scale", "Changes the console's text scale", 1, 1)]
