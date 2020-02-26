@@ -393,6 +393,26 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2324242924063158382, guid: 5f6ed9e4996ff504e845787b05563f99,
+        type: 3}
+      propertyPath: m_FontData.m_AlignByGeometry
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2324242924063158382, guid: 5f6ed9e4996ff504e845787b05563f99,
+        type: 3}
+      propertyPath: m_FontData.m_BestFit
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2324242924063158382, guid: 5f6ed9e4996ff504e845787b05563f99,
+        type: 3}
+      propertyPath: m_FontData.m_MinSize
+      value: 19
+      objectReference: {fileID: 0}
+    - target: {fileID: 2324242924063158382, guid: 5f6ed9e4996ff504e845787b05563f99,
+        type: 3}
+      propertyPath: m_FontData.m_MaxSize
+      value: 23
+      objectReference: {fileID: 0}
     - target: {fileID: 2324242924212268514, guid: 5f6ed9e4996ff504e845787b05563f99,
         type: 3}
       propertyPath: m_Name

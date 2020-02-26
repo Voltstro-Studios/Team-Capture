@@ -30,7 +30,7 @@ namespace Core.Console
 				}
 			}
 
-			_configFilesLocation = Directory.GetParent(Application.dataPath).FullName + "/Cfg/";
+			_configFilesLocation = Game.GetGameExecutePath();
 		}
 
 		public static void AddCommand(ConCommand conCommand, MethodDelegate method)
