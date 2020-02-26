@@ -378,41 +378,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2324242924063158369, guid: 5f6ed9e4996ff504e845787b05563f99,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2324242924063158369, guid: 5f6ed9e4996ff504e845787b05563f99,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2324242924063158369, guid: 5f6ed9e4996ff504e845787b05563f99,
-        type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2324242924063158382, guid: 5f6ed9e4996ff504e845787b05563f99,
-        type: 3}
-      propertyPath: m_FontData.m_AlignByGeometry
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2324242924063158382, guid: 5f6ed9e4996ff504e845787b05563f99,
-        type: 3}
-      propertyPath: m_FontData.m_BestFit
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2324242924063158382, guid: 5f6ed9e4996ff504e845787b05563f99,
-        type: 3}
-      propertyPath: m_FontData.m_MinSize
-      value: 19
-      objectReference: {fileID: 0}
-    - target: {fileID: 2324242924063158382, guid: 5f6ed9e4996ff504e845787b05563f99,
-        type: 3}
-      propertyPath: m_FontData.m_MaxSize
-      value: 23
-      objectReference: {fileID: 0}
     - target: {fileID: 2324242924212268514, guid: 5f6ed9e4996ff504e845787b05563f99,
         type: 3}
       propertyPath: m_Name
@@ -521,16 +486,6 @@ PrefabInstance:
     - target: {fileID: 2324242924212268527, guid: 5f6ed9e4996ff504e845787b05563f99,
         type: 3}
       propertyPath: m_Pivot.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5583072722887456809, guid: 5f6ed9e4996ff504e845787b05563f99,
-        type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5583072722887456809, guid: 5f6ed9e4996ff504e845787b05563f99,
-        type: 3}
-      propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

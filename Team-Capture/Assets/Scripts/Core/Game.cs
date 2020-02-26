@@ -28,7 +28,7 @@ namespace Core
 #if UNITY_EDITOR
 			return Directory.GetParent(Application.dataPath).FullName + "/Game/Cfg/";
 #else
-			Directory.GetParent(Application.dataPath).FullName + "/Cfg/"
+			return Directory.GetParent(Application.dataPath).FullName + "/Cfg/";
 #endif
 		}
 	}

@@ -1,5 +1,4 @@
-﻿using System;
-using Core;
+﻿using Core;
 using Core.Console;
 using Core.Logger;
 using Core.Networking;

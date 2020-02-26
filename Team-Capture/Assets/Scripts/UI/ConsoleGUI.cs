@@ -117,7 +117,7 @@ namespace UI
 
 		#region Console Commands
 
-		[ConCommand("debug_messages", "Do you want to show debug messages in the console?")]
+		[ConCommand("debug_messages", "Do you want to show debug messages in the console?", 1, 1)]
 		public static void ShowDebugMessagesCommand(string[] args)
 		{
 			if (args.Length == 0)

@@ -16,7 +16,7 @@ MonoBehaviour:
   weaponFormattedName: Pistol
   baseWeaponPrefab: {fileID: 2985817369304730979, guid: 5f5edb97b2388714ca78daa416284087,
     type: 3}
-  currentBulletsAmount: 9
+  currentBulletsAmount: 18
   damage: 25
   fireRate: 4
   bulletsAmount: 1
@@ -24,5 +24,5 @@ MonoBehaviour:
   maxBullets: 18
   range: 30
   reloadTime: 2
-  spreadMin: -1
-  spreadMax: 1
+  spreadMin: -0.1
+  spreadMax: 0.1

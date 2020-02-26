@@ -24,7 +24,8 @@ namespace Core.Console
 
 			if (minArgs > maxArgs)
 			{
-				Logger.Logger.Log($"Min args cannot be less then max args! Argument requirements have not been set for the command `{name}`.");
+				Logger.Logger.Log(
+					$"Min args cannot be less then max args! Argument requirements have not been set for the command `{name}`.");
 				return;
 			}
 

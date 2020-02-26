@@ -17,20 +17,18 @@ namespace Core.Console
 			const BindingFlags bindingFlags = BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
 
 			foreach (Type type in Assembly.GetExecutingAssembly().GetTypes())
+			foreach (MethodInfo method in type.GetMethods(bindingFlags))
 			{
-				foreach (MethodInfo method in type.GetMethods(bindingFlags))
-				{
-					if (!(Attribute.GetCustomAttribute(method, typeof(ConCommand)) is ConCommand attribute))
-						continue;
+				if (!(Attribute.GetCustomAttribute(method, typeof(ConCommand)) is ConCommand attribute))
+					continue;
 
-					MethodDelegate methodDelegate =
-						(MethodDelegate) Delegate.CreateDelegate(typeof(MethodDelegate), method);
+				MethodDelegate methodDelegate =
+					(MethodDelegate) Delegate.CreateDelegate(typeof(MethodDelegate), method);
 
-					AddCommand(attribute, methodDelegate);
-				}
+				AddCommand(attribute, methodDelegate);
 			}
 
-			_configFilesLocation = Game.GetGameExecutePath();
+			configFilesLocation = Game.GetGameExecutePath();
 		}
 
 		public static void AddCommand(ConCommand conCommand, MethodDelegate method)
@@ -68,25 +66,21 @@ namespace Core.Console
 
 				//Command min arguments
 				if (conCommand.MinArgs != 0)
-				{
-					if(arguments.Length <= conCommand.MinArgs-1)
+					if (arguments.Length <= conCommand.MinArgs - 1)
 					{
 						Logger.Logger.Log(arguments.Length.ToString());
 						Logger.Logger.Log(conCommand.MinArgs.ToString());
-						Logger.Logger.Log($"Invalid arguments: More arguments are required!", LogVerbosity.Error);
+						Logger.Logger.Log("Invalid arguments: More arguments are required!", LogVerbosity.Error);
 						return;
 					}
-				}
 
 				//Command max arguments
 				if (conCommand.MaxArgs != 0)
-				{
 					if (arguments.Length > conCommand.MaxArgs)
 					{
-						Logger.Logger.Log($"Invalid arguments: Less arguments are required!", LogVerbosity.Error);
+						Logger.Logger.Log("Invalid arguments: Less arguments are required!", LogVerbosity.Error);
 						return;
 					}
-				}
 
 				//Invoke the method
 				conCommand.CommandMethod.Invoke(arguments);
@@ -110,12 +104,11 @@ namespace Core.Console
 					break;
 
 				if (input[pos] == '"' && (pos == 0 || input[pos - 1] != '\\'))
-				{
 					res.Add(ParseQuoted(input, ref pos));
-				}
 				else
 					res.Add(Parse(input, ref pos));
 			}
+
 			return res;
 		}
 
@@ -138,8 +131,10 @@ namespace Core.Console
 					pos++;
 					return input.Substring(startPos, pos - startPos - 1);
 				}
+
 				pos++;
 			}
+
 			return input.Substring(startPos);
 		}
 
@@ -148,20 +143,18 @@ namespace Core.Console
 			int startPos = pos;
 			while (pos < input.Length)
 			{
-				if (" \t".IndexOf(input[pos]) > -1)
-				{
-					return input.Substring(startPos, pos - startPos);
-				}
+				if (" \t".IndexOf(input[pos]) > -1) return input.Substring(startPos, pos - startPos);
 				pos++;
 			}
+
 			return input.Substring(startPos);
 		}
-		
+
 		#endregion
 
 		#region File Executuion
 
-		private static string _configFilesLocation;
+		private static string configFilesLocation;
 
 		[ConCommand("exec", "Executes a file", 1, 1)]
 		public static void ExecuteFile(string[] args)
@@ -173,21 +166,21 @@ namespace Core.Console
 			}
 
 			string fileName = args[0] + ".cfg";
-			if (!File.Exists(_configFilesLocation + fileName))
+			if (!File.Exists(configFilesLocation + fileName))
 			{
 				Logger.Logger.Log($"`{fileName}` doesn't exist! Not executing.", LogVerbosity.Error);
 				return;
 			}
 
-			string[] lines = File.ReadAllLines(_configFilesLocation + fileName);
+			string[] lines = File.ReadAllLines(configFilesLocation + fileName);
 			foreach (string line in lines)
 			{
-				if(line.StartsWith("//")) continue;
+				if (line.StartsWith("//")) continue;
 
 				ExecuteCommand(line);
 			}
 		}
-		
+
 		#endregion
 	}
 }
