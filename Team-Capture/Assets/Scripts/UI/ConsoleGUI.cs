@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using Core.Console;
 using Core.Logger;
@@ -72,7 +73,22 @@ namespace UI
 
 			if(logVerbosity == LogVerbosity.Debug && !showDebugMessages) return;
 
-			lines.Add(message);
+			switch (logVerbosity)
+			{
+				case LogVerbosity.Debug:
+				case LogVerbosity.Info:
+					lines.Add(message);
+					break;
+				case LogVerbosity.Error:
+					lines.Add($"<color=red>{message}</color>");
+					break;
+				case LogVerbosity.Warn:
+					lines.Add($"<color=yellow>{message}</color>");
+					break;
+				default:
+					throw new ArgumentOutOfRangeException(nameof(logVerbosity), logVerbosity, null);
+			}
+
 			int count = Mathf.Min(100, lines.Count);
 			int start = lines.Count - count;
 			consoleTextArea.text = string.Join("\n", lines.GetRange(start, count).ToArray());
