@@ -38,16 +38,21 @@ namespace UI
 
 		public void TogglePauseMenu()
 		{
-			IsPauseMenuOpen = !IsPauseMenuOpen;
+			ActivatePauseMenu(!IsPauseMenuOpen);
+		}
+
+		public void ActivatePauseMenu(bool state)
+		{
+			IsPauseMenuOpen = state;
 
 			Cursor.visible = IsPauseMenuOpen;
-			Cursor.lockState = Cursor.lockState == CursorLockMode.Locked ? CursorLockMode.None : CursorLockMode.Locked;
+			Cursor.lockState = state ? CursorLockMode.None : CursorLockMode.Locked;
 
-			pauseMenuGameObject.SetActive(IsPauseMenuOpen);
-			killFeed.killFeedItemsHolder.gameObject.SetActive(!IsPauseMenuOpen);
+			pauseMenuGameObject.SetActive(state);
+			killFeed.killFeedItemsHolder.gameObject.SetActive(!state);
 
 			if (player.IsDead) return;
-			hud.gameObject.SetActive(!IsPauseMenuOpen);
+			hud.gameObject.SetActive(!state);
 		}
 
 		public void ToggleScoreBoard()

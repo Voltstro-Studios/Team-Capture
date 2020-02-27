@@ -23,11 +23,11 @@ namespace UI
 
 		private readonly List<string> lines = new List<string>();
 
-		private static ConsoleGUI instance;
+		public static ConsoleGUI Instance;
 
 		private void Awake()
 		{
-			if (instance != null)
+			if (Instance != null)
 			{
 				Destroy(gameObject);
 				return;
@@ -35,7 +35,7 @@ namespace UI
 
 			Logger.ConsoleLogEvent += LoggerLog;
 
-			instance = this;
+			Instance = this;
 			DontDestroyOnLoad(gameObject);
 			RegisterCommands();
 
@@ -141,12 +141,12 @@ namespace UI
 			{
 				case "1":
 				case "true":
-					instance.showDebugMessages = true;
+					Instance.showDebugMessages = true;
 					Logger.Log("Console will now show debug messages.");
 					break;
 				case "0":
 				case "false":
-					instance.showDebugMessages = false;
+					Instance.showDebugMessages = false;
 					Logger.Log("Console will no longer show debug messages.");
 					break;
 				default:
@@ -158,7 +158,7 @@ namespace UI
 		[ConCommand("console", "Toggles the console")]
 		public static void ToggleConsoleCommand(string[] args)
 		{
-			instance.ToggleConsole();
+			Instance.ToggleConsole();
 		}
 
 		[ConCommand("console_scale", "Changes the console's text scale", 1, 1)]
@@ -166,8 +166,8 @@ namespace UI
 		{
 			if (int.TryParse(args[0], out int result))
 			{
-				instance.consoleTextScale = result;
-				instance.consoleTextArea.resizeTextMaxSize = instance.defaultFontSize * instance.consoleTextScale;
+				Instance.consoleTextScale = result;
+				Instance.consoleTextArea.resizeTextMaxSize = Instance.defaultFontSize * Instance.consoleTextScale;
 
 				return;
 			}

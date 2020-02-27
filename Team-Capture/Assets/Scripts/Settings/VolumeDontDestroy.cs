@@ -1,21 +1,27 @@
 ﻿using UnityEngine;
+using Logger = Core.Logger.Logger;
 
 namespace Settings
 {
 	public class VolumeDontDestroy : MonoBehaviour
 	{
-		private VolumeDontDestroy Instance;
+		private static VolumeDontDestroy instance;
 
 		private void Awake()
 		{
-			if (Instance != null)
+			if (instance != null)
 			{
 				Destroy(gameObject);
 				return;
 			}
 
-			Instance = this;
+			instance = this;
 			DontDestroyOnLoad(gameObject);
+		}
+
+		private void Start()
+		{
+			Logger.Log("Volume settings are ready!");
 		}
 	}
 }

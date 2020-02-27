@@ -44,6 +44,15 @@ namespace Player
 			//Make sure mouse lock/visibility is correct
 			HandleMouseLock();
 
+			if (ConsoleGUI.Instance != null)
+			{
+				if (ConsoleGUI.Instance.IsOpen())
+				{
+					playerManager.clientUi.ActivatePauseMenu(true);
+					return;
+				}
+			}
+
 			//If the pause menu is open, set player movement direction to 0 and return
 			if (ClientUI.IsPauseMenuOpen)
 			{
