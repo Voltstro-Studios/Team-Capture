@@ -148,6 +148,12 @@ namespace UI
 			Logger.Log(sb.ToString());
 		}
 
+		[ConCommand("version", "Shows Team-Capture's current version")]
+		public static void VersionCommand(string[] args)
+		{
+			Logger.Log($"You are running TC version {Application.version} using Unity {Application.unityVersion}");
+		}
+
 		[ConCommand("debug_messages", "Do you want to show debug messages in the console?", 1, 1)]
 		public static void ShowDebugMessagesCommand(string[] args)
 		{
