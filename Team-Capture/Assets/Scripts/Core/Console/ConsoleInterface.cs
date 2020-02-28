@@ -28,7 +28,7 @@ namespace Core.Console
 				AddCommand(attribute, methodDelegate);
 			}
 
-			configFilesLocation = Game.GetGameExecutePath();
+			configFilesLocation = Game.GetGameExecutePath() + "/Cfg/";
 		}
 
 		public static void AddCommand(ConCommand conCommand, MethodDelegate method)

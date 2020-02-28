@@ -121,9 +121,9 @@ namespace UI
 			inputField.ActivateInputField();
 		}
 
-		private void HandleInput(string value)
+		private static void HandleInput(string value)
 		{
-			Logger.Log($" cmd>: {value}");
+			Logger.Log($"cmd>: {value}");
 
 			if(string.IsNullOrWhiteSpace(value)) return;
 
