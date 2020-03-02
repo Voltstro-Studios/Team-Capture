@@ -28,7 +28,7 @@ namespace Core.Console
 				AddCommand(attribute, methodDelegate);
 			}
 
-			configFilesLocation = Game.GetGameExecutePath();
+			configFilesLocation = Game.GetGameExecutePath() + "/Cfg/";
 		}
 
 		public static void AddCommand(ConCommand conCommand, MethodDelegate method)
@@ -73,8 +73,6 @@ namespace Core.Console
 				if (conCommand.MinArgs != 0)
 					if (arguments.Length <= conCommand.MinArgs - 1)
 					{
-						Logger.Logger.Log(arguments.Length.ToString());
-						Logger.Logger.Log(conCommand.MinArgs.ToString());
 						Logger.Logger.Log("Invalid arguments: More arguments are required!", LogVerbosity.Error);
 						return;
 					}

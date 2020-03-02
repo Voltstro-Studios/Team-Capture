@@ -121,9 +121,9 @@ namespace UI
 			inputField.ActivateInputField();
 		}
 
-		private void HandleInput(string value)
+		private static void HandleInput(string value)
 		{
-			Logger.Log($" cmd>: {value}");
+			Logger.Log($"cmd>: {value}");
 
 			if(string.IsNullOrWhiteSpace(value)) return;
 
@@ -146,6 +146,12 @@ namespace UI
 			}
 
 			Logger.Log(sb.ToString());
+		}
+
+		[ConCommand("version", "Shows Team-Capture's current version")]
+		public static void VersionCommand(string[] args)
+		{
+			Logger.Log($"You are running TC version {Application.version} using Unity {Application.unityVersion}");
 		}
 
 		[ConCommand("debug_messages", "Do you want to show debug messages in the console?", 1, 1)]

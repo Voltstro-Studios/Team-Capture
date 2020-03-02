@@ -48,7 +48,7 @@ namespace Core.Logger
 			if (logStream == null)
 			{
 				//Gets the data path then backs out one
-				logDirectory = Directory.GetParent(Application.dataPath).FullName + "/Logs/";
+				logDirectory = Game.GetGameExecutePath() + "/Logs/";
 
 				if (!Directory.Exists(logDirectory))
 					Directory.CreateDirectory(logDirectory);
