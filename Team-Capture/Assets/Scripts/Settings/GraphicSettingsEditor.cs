@@ -21,7 +21,7 @@ namespace Settings
 			urpPipelineAsset.supportsHDR = active;
 		}
 
-		public void SetShadowAntiAliasing(MsaaQuality msaaSampleCount)
+		public void SetAntiAliasing(MsaaQuality msaaSampleCount)
 		{
 			urpPipelineAsset.msaaSampleCount = (int)msaaSampleCount;
 		}

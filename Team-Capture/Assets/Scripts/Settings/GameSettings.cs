@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Core;
 using Core.Logger;
 using Helper;
 using Newtonsoft.Json;
@@ -14,11 +15,18 @@ namespace Settings
 {
 	public static class GameSettings
 	{
-		public static URPSettingsClass URPSettings { get; } = new URPSettingsClass();
+		#region Settings
+
+		public static AdvSettingsClass AdvSettings { get; } = new AdvSettingsClass();
+
+		#endregion
 
 		public static bool HasBeenLoaded { get; private set; }
 
 		public static event Action SettingsLoaded;
+
+		private const string SettingsFileExtension = ".json";
+		private static string settingsSaveDirectory;
 
 		#region Saving, loading and resetting setting functions
 
@@ -39,12 +47,13 @@ namespace Settings
 
 		public static void Save()
 		{
-			//Create directory if it doesn't exist
-			if (!Directory.Exists(Paths.SettingsSaveDirectory)) Directory.CreateDirectory(Paths.SettingsSaveDirectory);
-
 			foreach (PropertyInfo settingProp in GetSettingClasses())
-				ObjectSerializer.SaveJson(settingProp.GetValue(null), Paths.SettingsSaveDirectory, settingProp.Name,
-					Paths.SettingFileExtension);
+			{
+				Logger.Log($"Saved {settingProp.Name}", LogVerbosity.Debug);
+				ObjectSerializer.SaveJson(settingProp.GetValue(null), settingsSaveDirectory, settingProp.Name);
+			}
+
+			SettingsLoaded?.Invoke();
 		}
 
 		//Assemblies aren't always reloaded in the editor, so we have to do it just before the scene is loaded
@@ -57,23 +66,17 @@ namespace Settings
 #endif
 		public static void Load()
 		{
-			//If the directory doesn't exist, create it
-			if (!Directory.Exists(Paths.SettingsSaveDirectory))
-			{
-				Directory.CreateDirectory(Paths.SettingsSaveDirectory);
-				//Now quit
-				return;
-			}
+			settingsSaveDirectory = Game.GetGameConfigPath();
 
 			foreach (PropertyInfo settingProp in GetSettingClasses())
 			{
 				string name = settingProp.Name;
 				Logger.Log($"Got settings `{name}`", LogVerbosity.Debug);
 
-				if (File.Exists(Paths.SettingsSaveDirectory + name + Paths.SettingFileExtension))
+				if (File.Exists(settingsSaveDirectory + name + SettingsFileExtension))
 					//This will enable us to use internal setters on our settings to avoid anyone being able to edit them
-					ObjectSerializer.LoadJsonOverwrite(settingProp.GetValue(null), Paths.SettingsSaveDirectory, name,
-						Paths.SettingFileExtension,
+					ObjectSerializer.LoadJsonOverwrite(settingProp.GetValue(null), settingsSaveDirectory, name,
+						SettingsFileExtension,
 						new JsonSerializerSettings {ContractResolver = new NonPublicPropertiesResolver()});
 			}
 
@@ -98,13 +101,6 @@ namespace Settings
 		}
 
 		#endregion
-	}
-
-	public static class Paths
-	{
-		public static string SavedFilesDirectory => $"{Environment.CurrentDirectory}/Saved";
-		public static string SettingsSaveDirectory => $"{SavedFilesDirectory}/Settings";
-		public static string SettingFileExtension => ".json";
 	}
 
 	#region Setting classes

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Settings;
+using UnityEngine;
 
 namespace UI.Panels
 {
@@ -36,6 +37,11 @@ namespace UI.Panels
 		{
 			CloseAll();
 			otherMenu.SetActive(true);
+		}
+
+		public void SaveSettings()
+		{
+			GameSettings.Save();
 		}
 
 		private void CloseAll()

@@ -1134,8 +1134,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_MethodName: CreateGame
+      - m_Target: {fileID: 7122441748490425237}
+        m_MethodName: SaveSettings
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1834,7 +1834,6 @@ MonoBehaviour:
   videoMenu: {fileID: 5804727490355854068}
   advVideoMenu: {fileID: 7494122195287926127}
   otherMenu: {fileID: 4320447942481581013}
-  lightweightRender: {fileID: 11400000, guid: 99988d4fc3bd19a4e95740ceb44fde08, type: 2}
 --- !u!1 &8606007719599353898
 GameObject:
   m_ObjectHideFlags: 0
