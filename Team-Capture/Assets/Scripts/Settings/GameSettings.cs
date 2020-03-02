@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Core.Logger;
 using Helper;
 using Newtonsoft.Json;
+using Settings.SettingClasses;
 using UnityEngine;
 using Logger = Core.Logger.Logger;
 
@@ -12,15 +14,7 @@ namespace Settings
 {
 	public static class GameSettings
 	{
-		public static TestOne TestOne { get; } = new TestOne();
-
-		public static AnotherTest AnotherTest { get; } = new AnotherTest();
-
-		public static AnotherTest AnotherAnotherTest { get; } = new AnotherTest
-		{
-			String = "I changed the string this time",
-			ThisIsAKey = KeyCode.KeypadPeriod
-		};
+		public static URPSettingsClass URPSettings { get; } = new URPSettingsClass();
 
 		public static bool HasBeenLoaded { get; private set; }
 
@@ -33,8 +27,10 @@ namespace Settings
 		{
 			//Find all of the setting sub-types, and their instances in out main class
 			IEnumerable<Type> settingTypes = ReflectionHelper.GetInheritedTypes<Setting>();
+
 			//Get a list of all of the properties in our settings class
 			PropertyInfo[] settingProps = typeof(GameSettings).GetTypeInfo().GetProperties();
+
 			//Only add properties that are one of our inherited setting types
 			IEnumerable<PropertyInfo> foundSettings = settingProps.Where(p => settingTypes.Contains(p.PropertyType));
 
@@ -72,6 +68,7 @@ namespace Settings
 			foreach (PropertyInfo settingProp in GetSettingClasses())
 			{
 				string name = settingProp.Name;
+				Logger.Log($"Got settings `{name}`", LogVerbosity.Debug);
 
 				if (File.Exists(Paths.SettingsSaveDirectory + name + Paths.SettingFileExtension))
 					//This will enable us to use internal setters on our settings to avoid anyone being able to edit them
@@ -117,19 +114,6 @@ namespace Settings
 	/// </summary>
 	public abstract class Setting
 	{
-	}
-
-	public sealed class TestOne : Setting
-	{
-		public int Int = 1;
-		[Range(1, 10)] public int RangeInt = 7;
-		[Range(-10, 58)] public float Slider = 5;
-	}
-
-	public sealed class AnotherTest : Setting
-	{
-		public string String = "I'm a string!!";
-		public KeyCode ThisIsAKey = KeyCode.T;
 	}
 
 	#endregion

@@ -1834,6 +1834,7 @@ MonoBehaviour:
   videoMenu: {fileID: 5804727490355854068}
   advVideoMenu: {fileID: 7494122195287926127}
   otherMenu: {fileID: 4320447942481581013}
+  lightweightRender: {fileID: 11400000, guid: 99988d4fc3bd19a4e95740ceb44fde08, type: 2}
 --- !u!1 &8606007719599353898
 GameObject:
   m_ObjectHideFlags: 0
