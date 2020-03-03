@@ -1,55 +1,69 @@
-﻿using Settings;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Settings;
+using TMPro;
+using UI.Elements.Settings;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI.Panels
 {
 	public class OptionsPanel : MainMenuPanelBase
 	{
-		[SerializeField] private GameObject keyboardMenu;
-		[SerializeField] private GameObject videoMenu;
-		[SerializeField] private GameObject advVideoMenu;
-		[SerializeField] private GameObject otherMenu;
+		private readonly List<GameObject> settingPanels = new List<GameObject>();
 
-		private void Start()
+		[SerializeField] private Transform panelsLocation;
+		[SerializeField] private Transform buttonLocation;
+
+		[SerializeField] private GameObject panelPrefab;
+		[SerializeField] private GameObject settingsTitlePrefab;
+		[SerializeField] private GameObject settingsButtonPrefab;
+
+		public void OpenPanel(string panelName)
 		{
-			OpenKeyboardMenu();
+			foreach (GameObject panel in settingPanels)
+			{
+				panel.SetActive(false);
+			}
+
+			GetMenuPanel(panelName).SetActive(true);
 		}
 
-		public void OpenKeyboardMenu()
+		private GameObject GetMenuPanel(string panelName)
 		{
-			CloseAll();
-			keyboardMenu.SetActive(true);
+			IEnumerable<GameObject> result = from a in settingPanels
+				where a.name == panelName
+				select a;
+
+			return result.FirstOrDefault();
 		}
 
-		public void OpenVideoMenu()
+		public GameObject AddPanel(Menu menu)
 		{
-			CloseAll();
-			videoMenu.SetActive(true);
+			//The panel it self
+			GameObject panel = Instantiate(panelPrefab, panelsLocation, false);
+			panel.name = menu.Name;
+			AddTitleToPanel(panel, menu.Name);
+
+			//Button
+			Button button = Instantiate(settingsButtonPrefab, buttonLocation, false).GetComponent<Button>();
+			button.onClick.AddListener((delegate { OpenPanel(menu.Name); }));
+
+			settingPanels.Add(panel);
+
+			return panel;
 		}
 
-		public void OpenAdvVideoMenu()
+		public GameObject AddTitleToPanel(GameObject panel, string title)
 		{
-			CloseAll();
-			advVideoMenu.SetActive(true);
-		}
-
-		public void OpenOtherMenu()
-		{
-			CloseAll();
-			otherMenu.SetActive(true);
+			GameObject titleObject = Instantiate(settingsTitlePrefab, panel.transform, false);
+			titleObject.GetComponent<TextMeshProUGUI>().text = title;
+			return titleObject;
 		}
 
 		public void SaveSettings()
 		{
 			GameSettings.Save();
-		}
-
-		private void CloseAll()
-		{
-			keyboardMenu.SetActive(false);
-			videoMenu.SetActive(false);
-			advVideoMenu.SetActive(false);
-			otherMenu.SetActive(false);
 		}
 	}
 }

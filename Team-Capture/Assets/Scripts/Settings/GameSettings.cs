@@ -17,6 +17,7 @@ namespace Settings
 	{
 		#region Settings
 
+		[SettingsMenuFormat("Advance Settings")]
 		public static AdvSettingsClass AdvSettings { get; } = new AdvSettingsClass();
 
 		#endregion

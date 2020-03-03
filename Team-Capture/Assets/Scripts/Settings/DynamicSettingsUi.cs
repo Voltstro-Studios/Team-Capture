@@ -2,6 +2,8 @@
 using System.Diagnostics;
 using System.Reflection;
 using Helper.Extensions;
+using UI.Elements.Settings;
+using UI.Panels;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
@@ -10,10 +12,19 @@ namespace Settings
 	//TODO: A lot is gonna change in this... I am gonna have fun rewriting this, thanks Rowan...
 
 	[ExecuteAlways]
+	[RequireComponent(typeof(OptionsPanel))]
 	public class DynamicSettingsUi : MonoBehaviour
 	{
 		[Tooltip("This just updates our UI. ")]
 		public bool update;
+
+		private OptionsPanel optionsPanel;
+
+		private void Start()
+		{
+			optionsPanel = GetComponent<OptionsPanel>();
+			UpdateUi();
+		}
 
 		//We use Update() not OnValidate because you can't destroy objects in OnValidate() while not in play mode (which is where we'll probably be testing)
 		private void Update()
@@ -41,64 +52,68 @@ namespace Settings
 			//TODO: Holy fucking hell this is ugly
 			//Loop over each setting menu and all the sub-settings
 			stopwatch.Restart();
-			foreach (PropertyInfo settingMenuInfo in GameSettings.GetSettingClasses())
+			foreach (PropertyInfo settingInfo in GameSettings.GetSettingClasses())
 			{
-				object menuInstance = settingMenuInfo.GetStaticValue<object>();
-				//Create a menu button
-				//TODO: Make this split words in camel case e.g. "CamelCaseIsGood" => "Camel Case Is Good"
-				Menu settingMenu = new Menu(settingMenuInfo.Name);
+				object menuInstance = settingInfo.GetStaticValue<object>();
+
+				//If it has the SettingsMenuFormatAttribute then use the format name of that
+				string settingMenuName = settingInfo.Name;
+				if(Attribute.GetCustomAttribute(settingInfo, typeof(SettingsMenuFormatAttribute)) is SettingsMenuFormatAttribute attribute)
+					settingMenuName = attribute.MenuNameFormat;
+
+				//Create a menu module
+				Menu settingMenu = new Menu(settingMenuName);
 				CreateSettingMenu(settingMenu);
 
-				FieldInfo[] subSettingInfos =
-					settingMenuInfo.PropertyType.GetFields(BindingFlags.Instance | BindingFlags.Public);
-
-				for (int i = 0; i < subSettingInfos.Length; i++)
+				//Get each property in the settings
+				FieldInfo[] menuFields = settingInfo.PropertyType.GetFields(BindingFlags.Instance | BindingFlags.Public);
+				foreach (FieldInfo settingField in menuFields)
 				{
-					FieldInfo subSettingField = subSettingInfos[i];
+					Type fieldType = settingField.FieldType;
 
-					//TODO: Should we cache the return value of subSetting.FieldType?
 					//TODO: Considering the unity slider uses a float, could we have 1 overload with a bool for int or float mode?
-					if (subSettingField.FieldType == typeof(int))
+					if (fieldType == typeof(int))
 					{
 						//If it's an int or float, we need to check if it has a range attribute
-						RangeAttribute rangeAttribute = subSettingField.GetCustomAttribute<RangeAttribute>();
+						RangeAttribute rangeAttribute = settingField.GetCustomAttribute<RangeAttribute>();
+
 						//If it has a range attribute, create a slider, otherwise use a input field
 						if (rangeAttribute != null)
-							CreateIntSlider(subSettingField.GetValue<int>(menuInstance), (int) rangeAttribute.min,
-								(int) rangeAttribute.max, subSettingField, settingMenu);
+							CreateIntSlider(settingField.GetValue<int>(menuInstance), (int) rangeAttribute.min,
+								(int) rangeAttribute.max, settingField, settingMenu);
 						else
-							CreateIntField(subSettingField.GetValue<int>(menuInstance), subSettingField, settingMenu);
+							CreateIntField(settingField.GetValue<int>(menuInstance), settingField, settingMenu);
 					}
-					else if (subSettingField.FieldType == typeof(float))
+					else if (fieldType == typeof(float))
 					{
-						RangeAttribute rangeAttribute = subSettingField.GetCustomAttribute<RangeAttribute>();
+						RangeAttribute rangeAttribute = settingField.GetCustomAttribute<RangeAttribute>();
 						if (rangeAttribute != null)
-							CreateFloatSlider(subSettingField.GetValue<float>(menuInstance), rangeAttribute.min,
+							CreateFloatSlider(settingField.GetValue<float>(menuInstance), rangeAttribute.min,
 								rangeAttribute.max,
-								subSettingField, settingMenu);
+								settingField, settingMenu);
 						else
-							CreateFloatField(subSettingField.GetValue<float>(menuInstance), subSettingField,
+							CreateFloatField(settingField.GetValue<float>(menuInstance), settingField,
 								settingMenu);
 					}
-					else if (subSettingField.FieldType == typeof(bool))
+					else if (fieldType == typeof(bool))
 					{
-						CreateBoolToggle(subSettingField.GetValue<bool>(menuInstance), subSettingField, settingMenu);
+						CreateBoolToggle(settingField.GetValue<bool>(menuInstance), settingField, settingMenu);
 					}
-					else if (subSettingField.FieldType == typeof(string))
+					else if (fieldType == typeof(string))
 					{
-						CreateStringField(subSettingField.GetValue<string>(menuInstance), subSettingField, settingMenu);
+						CreateStringField(settingField.GetValue<string>(menuInstance), settingField, settingMenu);
 					}
 					//TODO: Finish these
-					else if (subSettingField.FieldType.IsEnum)
+					else if (fieldType.IsEnum)
 					{
-						if (subSettingField.FieldType == typeof(KeyCode))
+						if (fieldType == typeof(KeyCode))
 							//We don't do a dropdown, we create a button and do some complicated shit that i'll steal from one of my other games
-							CreateKeybindButton(subSettingField.GetValue<KeyCode>(menuInstance),
-								subSettingField,
+							CreateKeybindButton(settingField.GetValue<KeyCode>(menuInstance),
+								settingField,
 								settingMenu);
 						//Just a normal enum popup
 						else
-							CreateEnumDropdown(subSettingField.GetValue<int>(menuInstance), subSettingField,
+							CreateEnumDropdown(settingField.GetValue<int>(menuInstance), settingField,
 								settingMenu);
 					}
 				}
@@ -106,18 +121,6 @@ namespace Settings
 
 			stopwatch.Stop();
 			Debug.Log($"Time taken to update UI: {stopwatch.Elapsed.TotalMilliseconds:n} ms");
-		}
-
-		private class Menu
-		{
-			// ReSharper disable once NotAccessedField.Local
-			// ReSharper disable once MemberCanBePrivate.Local
-			internal readonly string Name;
-
-			internal Menu(string name)
-			{
-				Name = name;
-			}
 		}
 
 		#region Graphic designer functions
@@ -128,8 +131,7 @@ namespace Settings
 
 		private void CreateSettingMenu(Menu menu)
 		{
-			Debug.Log($"Found setting menu {menu.Name}");
-//            new GameObject(menu.Name);
+			optionsPanel.AddPanel(menu);
 		}
 
 		//Use onValueChanged.AddListener so that every time one of the graphics gets updated, so does our setting
