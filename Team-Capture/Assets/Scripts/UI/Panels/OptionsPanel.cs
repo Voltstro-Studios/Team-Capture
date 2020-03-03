@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Settings;
 using TMPro;
 using UI.Elements.Settings;
@@ -12,12 +13,15 @@ namespace UI.Panels
 	{
 		private readonly List<GameObject> settingPanels = new List<GameObject>();
 
+		[Header("Object Locations")]
 		[SerializeField] private Transform panelsLocation;
 		[SerializeField] private Transform buttonLocation;
 
+		[Header("Object Prefabs")]
 		[SerializeField] private GameObject panelPrefab;
 		[SerializeField] private GameObject settingsTitlePrefab;
 		[SerializeField] private GameObject settingsButtonPrefab;
+		[SerializeField] private GameObject settingsTogglePrefab;
 
 		public void SaveSettings()
 		{
@@ -53,6 +57,16 @@ namespace UI.Panels
 			GetMenuPanel(panelName).SetActive(true);
 		}
 
+		public void ClearPanels()
+		{
+			foreach (GameObject panel in settingPanels)
+			{
+				Destroy(panel);
+			}
+
+			settingPanels.Clear();
+		}
+
 		private GameObject GetMenuPanel(string panelName)
 		{
 			IEnumerable<GameObject> result = from a in settingPanels
@@ -71,6 +85,14 @@ namespace UI.Panels
 			GameObject titleObject = Instantiate(settingsTitlePrefab, panel.transform, false);
 			titleObject.GetComponent<TextMeshProUGUI>().text = title;
 			return titleObject;
+		}
+
+		public Toggle AddToggleToPanel(GameObject panel, string toggleText)
+		{
+			GameObject toggleObject = Instantiate(settingsTogglePrefab, panel.transform, false);
+			toggleObject.GetComponentInChildren<TextMeshProUGUI>().text = toggleText;
+
+			return toggleObject.GetComponent<Toggle>();
 		}
 		
 		#endregion

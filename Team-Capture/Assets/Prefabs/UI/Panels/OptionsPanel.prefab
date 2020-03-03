@@ -1103,6 +1103,8 @@ MonoBehaviour:
     type: 3}
   settingsButtonPrefab: {fileID: 547953242689226185, guid: bef0647f4e081d24ba1b9e1163cea3d5,
     type: 3}
+  settingsTogglePrefab: {fileID: 8635519228143450053, guid: 7d29ccaf512f78a43bb691c974f76e60,
+    type: 3}
 --- !u!114 &6144019666162036145
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1115,4 +1117,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0581a2155733400da080974ae5de9f3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  update: 0

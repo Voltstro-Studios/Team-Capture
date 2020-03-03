@@ -6,53 +6,32 @@ using Helper.Extensions;
 using UI.Elements.Settings;
 using UI.Panels;
 using UnityEngine;
+using UnityEngine.UI;
 using Debug = UnityEngine.Debug;
 
 namespace Settings
 {
 	//TODO: A lot is gonna change in this... I am gonna have fun rewriting this, thanks Rowan...
 
-	[ExecuteAlways]
 	[RequireComponent(typeof(OptionsPanel))]
 	public class DynamicSettingsUi : MonoBehaviour
 	{
-		[Tooltip("This just updates our UI. ")]
-		public bool update;
-
 		private OptionsPanel optionsPanel;
 
 		private void Start()
 		{
 			optionsPanel = GetComponent<OptionsPanel>();
-			UpdateUi();
+			UpdateUI();
 		}
 
-		//We use Update() not OnValidate because you can't destroy objects in OnValidate() while not in play mode (which is where we'll probably be testing)
-		private void Update()
-		{
-			if (!update) return;
-			update = false;
-			UpdateUi();
-		}
-
-		private void ClearOldUi()
-		{
-			//Do some stuff here
-		}
-
-		private void UpdateUi()
+		private void UpdateUI()
 		{
 			Stopwatch stopwatch = Stopwatch.StartNew();
 
-			ClearOldUi();
-
-			stopwatch.Stop();
-
-			Debug.Log($"Time to clear: {stopwatch.ElapsedMilliseconds:n} ms");
+			optionsPanel.ClearPanels();
 
 			//TODO: Holy fucking hell this is ugly
 			//Loop over each setting menu and all the sub-settings
-			stopwatch.Restart();
 			foreach (PropertyInfo settingInfo in GameSettings.GetSettingClasses())
 			{
 				object menuInstance = settingInfo.GetStaticValue<object>();
@@ -64,7 +43,7 @@ namespace Settings
 
 				//Create a menu module
 				Menu settingMenu = new Menu(settingMenuName);
-				CreateSettingMenu(settingMenu);
+				GameObject panel = optionsPanel.AddPanel(settingMenu);
 
 				//Get each property in the settings
 				FieldInfo[] menuFields = settingInfo.PropertyType.GetFields(BindingFlags.Instance | BindingFlags.Public);
@@ -80,8 +59,7 @@ namespace Settings
 
 						//If it has a range attribute, create a slider, otherwise use a input field
 						if (rangeAttribute != null)
-							CreateIntSlider(settingField.GetValue<int>(menuInstance), (int) rangeAttribute.min,
-								(int) rangeAttribute.max, settingField, settingMenu);
+							CreateIntSlider(settingField.GetValue<int>(menuInstance), (int)rangeAttribute.min, (int)rangeAttribute.max, settingField, settingMenu);
 						else
 							CreateIntField(settingField.GetValue<int>(menuInstance), settingField, settingMenu);
 					}
@@ -98,7 +76,7 @@ namespace Settings
 					}
 					else if (fieldType == typeof(bool))
 					{
-						CreateBoolToggle(settingField.GetValue<bool>(menuInstance), settingField, settingMenu);
+						CreateBoolToggle(settingField.GetValue<bool>(menuInstance), settingField, settingMenu, panel);
 					}
 					else if (fieldType == typeof(string))
 					{
@@ -130,11 +108,6 @@ namespace Settings
 		// ReSharper disable MemberCanBeMadeStatic.Local
 		// ReSharper disable UnusedParameter.Local
 
-		private void CreateSettingMenu(Menu menu)
-		{
-			optionsPanel.AddPanel(menu);
-		}
-
 		//Use onValueChanged.AddListener so that every time one of the graphics gets updated, so does our setting
 		private void CreateFloatSlider(float val, float min, float max, FieldInfo field, Menu menu)
 		{
@@ -162,11 +135,14 @@ namespace Settings
 //            new IntegerField().RegisterValueChangedCallback(c => field.SetValue(null, c.newValue));
 		}
 
-		private void CreateBoolToggle(bool val, FieldInfo field, Menu menu)
+		private void CreateBoolToggle(bool val, FieldInfo field, Menu menu, GameObject panel)
 		{
 			Debug.Log(
 				$"\tCreating bool toggle for {field.Name} in {menu.Name}. Current is {val}");
-//            new Toggle().onValueChanged.AddListener(b => field.SetValue(null, b));
+
+			Toggle toggle = optionsPanel.AddToggleToPanel(panel, field.Name);
+
+            toggle.onValueChanged.AddListener(b => field.SetValue(null, b));
 		}
 
 		private void CreateStringField(string val, FieldInfo field, Menu menu)
