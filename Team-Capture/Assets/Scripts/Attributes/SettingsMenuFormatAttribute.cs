@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Settings
+namespace Attributes
 {
 	[AttributeUsage(AttributeTargets.Property)]
 	public class SettingsMenuFormatAttribute : Attribute

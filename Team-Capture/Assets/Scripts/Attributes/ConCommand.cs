@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Core.Console
+namespace Attributes
 {
 	/// <summary>
 	/// Marks a method to be used as a command for the in-game console.
@@ -24,7 +24,7 @@ namespace Core.Console
 
 			if (minArgs > maxArgs)
 			{
-				Logger.Logger.Log(
+				Core.Logger.Logger.Log(
 					$"Min args cannot be less then max args! Argument requirements have not been set for the command `{name}`.");
 				return;
 			}

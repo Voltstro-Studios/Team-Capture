@@ -19,6 +19,30 @@ namespace UI.Panels
 		[SerializeField] private GameObject settingsTitlePrefab;
 		[SerializeField] private GameObject settingsButtonPrefab;
 
+		public void SaveSettings()
+		{
+			GameSettings.Save();
+		}
+
+		#region Panel Management
+
+		public GameObject AddPanel(Menu menu)
+		{
+			//The panel it self
+			GameObject panel = Instantiate(panelPrefab, panelsLocation, false);
+			panel.name = menu.Name;
+			AddTitleToPanel(panel, menu.Name);
+
+			//Button
+			Button button = Instantiate(settingsButtonPrefab, buttonLocation, false).GetComponent<Button>();
+			button.onClick.AddListener((delegate { OpenPanel(menu.Name); }));
+			button.GetComponentInChildren<TextMeshProUGUI>().text = menu.Name;
+
+			settingPanels.Add(panel);
+
+			return panel;
+		}
+
 		public void OpenPanel(string panelName)
 		{
 			foreach (GameObject panel in settingPanels)
@@ -37,33 +61,18 @@ namespace UI.Panels
 
 			return result.FirstOrDefault();
 		}
+		
+		#endregion
 
-		public GameObject AddPanel(Menu menu)
-		{
-			//The panel it self
-			GameObject panel = Instantiate(panelPrefab, panelsLocation, false);
-			panel.name = menu.Name;
-			AddTitleToPanel(panel, menu.Name);
+		#region Add UI Elemements
 
-			//Button
-			Button button = Instantiate(settingsButtonPrefab, buttonLocation, false).GetComponent<Button>();
-			button.onClick.AddListener((delegate { OpenPanel(menu.Name); }));
-
-			settingPanels.Add(panel);
-
-			return panel;
-		}
-
-		public GameObject AddTitleToPanel(GameObject panel, string title)
+		private GameObject AddTitleToPanel(GameObject panel, string title)
 		{
 			GameObject titleObject = Instantiate(settingsTitlePrefab, panel.transform, false);
 			titleObject.GetComponent<TextMeshProUGUI>().text = title;
 			return titleObject;
 		}
-
-		public void SaveSettings()
-		{
-			GameSettings.Save();
-		}
+		
+		#endregion
 	}
 }
