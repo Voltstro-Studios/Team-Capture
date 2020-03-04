@@ -3,6 +3,8 @@ using System.Diagnostics;
 using System.Reflection;
 using Attributes;
 using Helper.Extensions;
+using Settings.SettingClasses;
+using System.Configuration;
 using UI.Elements.Settings;
 using UI.Panels;
 using UnityEngine;
@@ -142,7 +144,9 @@ namespace Settings
 
 			Toggle toggle = optionsPanel.AddToggleToPanel(panel, field.Name);
 
-            toggle.onValueChanged.AddListener(b => field.SetValue(null, b));
+			object settingInstance = GetSettingObject(field);
+			
+			toggle.onValueChanged.AddListener(b => field.SetValue(settingInstance, b));
 		}
 
 		private void CreateStringField(string val, FieldInfo field, Menu menu)
@@ -162,6 +166,15 @@ namespace Settings
 		{
 			Debug.Log($"\tCreating keybind button for {field.Name} in {menu.Name}. Current is {val}");
 //            new Button().onClick.AddListener(  () => field.SetValue(null, WaitForKeyPressAndReturnKeycode()));
+		}
+		
+		private object GetSettingObject(FieldInfo field){
+			if (field.DeclaringType == typeof(AdvSettingsClass))
+				return GameSettings.AdvSettings;
+			else
+			{
+				throw new InvalidOperationException($"Setting group {field.DeclaringType} has not been");
+			}
 		}
 
 		// ReSharper restore UnusedParameter.Local
