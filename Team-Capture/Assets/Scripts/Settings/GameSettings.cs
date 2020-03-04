@@ -60,8 +60,7 @@ namespace Settings
 
 		//Assemblies aren't always reloaded in the editor, so we have to do it just before the scene is loaded
 #if UNITY_EDITOR
-		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType
-			.BeforeSceneLoad)] //This now gets called before the scene is loaded.
+		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)] //This now gets called before the scene is loaded.
 #else
 		//Otherwise, we're in a build, so we can run once the assemblies are loaded
 	[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)] //This now gets called as soon as the assemblies are loaded

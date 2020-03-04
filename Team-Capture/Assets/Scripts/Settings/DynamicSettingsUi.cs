@@ -5,6 +5,7 @@ using Attributes;
 using Helper.Extensions;
 using Settings.SettingClasses;
 using System.Configuration;
+using System.Linq;
 using UI.Elements.Settings;
 using UI.Panels;
 using UnityEngine;
@@ -168,13 +169,11 @@ namespace Settings
 //            new Button().onClick.AddListener(  () => field.SetValue(null, WaitForKeyPressAndReturnKeycode()));
 		}
 		
-		private object GetSettingObject(FieldInfo field){
-			if (field.DeclaringType == typeof(AdvSettingsClass))
-				return GameSettings.AdvSettings;
-			else
-			{
-				throw new InvalidOperationException($"Setting group {field.DeclaringType} has not been");
-			}
+		private object GetSettingObject(FieldInfo field)
+		{
+			//Find the first setting group where the group type matches that of the field's declaring type
+			PropertyInfo settingGroup = GameSettings.GetSettingClasses().First(p => p.PropertyType == field.DeclaringType);
+			return settingGroup.GetValue(null);
 		}
 
 		// ReSharper restore UnusedParameter.Local
