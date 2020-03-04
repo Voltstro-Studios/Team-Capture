@@ -116,26 +116,26 @@ namespace Settings
 		{
 			Debug.Log(
 				$"\tCreating float slider for {field.Name} in {menu.Name}. Range is {min} to {max}, current is {val}");
-//            new Slider().onValueChanged.AddListener(f => field.SetValue(null, f));
+//            new Slider().onValueChanged.AddListener(f => field.SetValue(GetSettingObject(field), f));
 		}
 
 		private void CreateIntSlider(int val, int min, int max, FieldInfo field, Menu menu)
 		{
 			Debug.Log(
 				$"\tCreating int slider for {field.Name} in {menu.Name}. Range is {min} to {max}, current is {val}");
-//            new Slider().onValueChanged.AddListener(f => field.SetValue(null,(int) f));
+//            new Slider().onValueChanged.AddListener(f => field.SetValue(GetSettingObject(field),(int) f));
 		}
 
 		private void CreateFloatField(float val, FieldInfo field, Menu menu)
 		{
 			Debug.Log($"\tCreating float field for {field.Name} in {menu.Name}. Current is {val}");
-//            new FloatField().RegisterValueChangedCallback(c => field.SetValue(null, c.newValue));
+//            new FloatField().RegisterValueChangedCallback(c => field.SetValue(GetSettingObject(field), c.newValue));
 		}
 
 		private void CreateIntField(int val, FieldInfo field, Menu menu)
 		{
 			Debug.Log($"\tCreating int field for {field.Name} in {menu.Name}. Current is {val}");
-//            new IntegerField().RegisterValueChangedCallback(c => field.SetValue(null, c.newValue));
+//            new IntegerField().RegisterValueChangedCallback(c => field.SetValue(GetSettingObject(field), c.newValue));
 		}
 
 		private void CreateBoolToggle(bool val, FieldInfo field, Menu menu, GameObject panel)
@@ -144,29 +144,29 @@ namespace Settings
 				$"\tCreating bool toggle for {field.Name} in {menu.Name}. Current is {val}");
 
 			Toggle toggle = optionsPanel.AddToggleToPanel(panel, field.Name);
-
-			object settingInstance = GetSettingObject(field);
 			
-			toggle.onValueChanged.AddListener(b => field.SetValue(settingInstance, b));
+			toggle.onValueChanged.AddListener(b => field.SetValue(GetSettingObject(field), b));
 		}
 
 		private void CreateStringField(string val, FieldInfo field, Menu menu)
 		{
 			Debug.Log($"\tCreating string field for {field.Name} in {menu.Name}. Current is {val}");
-//            new TMP_InputField().onValueChanged.AddListener(s => field.SetValue(null, s));
+//            new TMP_InputField().onValueChanged.AddListener(s => field.SetValue(GetSettingObject(field), s));
 		}
 
 		private void CreateEnumDropdown(int val, FieldInfo field, Menu menu)
 		{
 			Debug.Log(
 				$"\tCreating enum dropdown for {field.Name} in {menu.Name}. Current is {val}, options are {string.Join(", ", Enum.GetNames(field.FieldType))}");
-//            new Dropdown().onValueChanged.AddListener(i => field.SetValue(null, i));
+//            new Dropdown().onValueChanged.AddListener(i => field.SetValue(GetSettingObject(field), i));
 		}
 
 		private void CreateKeybindButton(KeyCode val, FieldInfo field, Menu menu)
 		{
 			Debug.Log($"\tCreating keybind button for {field.Name} in {menu.Name}. Current is {val}");
-//            new Button().onClick.AddListener(  () => field.SetValue(null, WaitForKeyPressAndReturnKeycode()));
+			//Sorry future Creepysin in case this freezes the game...
+			//TODO: Need to create this function. Might need to start a coroutine/async void to avoid freezing the screen till a key is pressed
+//            new Button().onClick.AddListener(  () => field.SetValue(GetSettingObject(field), WaitForKeyPressAndReturnKeycode()));
 		}
 		
 		private object GetSettingObject(FieldInfo field)
