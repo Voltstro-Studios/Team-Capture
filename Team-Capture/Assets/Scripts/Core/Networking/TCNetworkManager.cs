@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using Attributes;
-using Core.Console;
 using Core.Logger;
 using Core.Networking.Discovery;
 using Core.Networking.Messages;
