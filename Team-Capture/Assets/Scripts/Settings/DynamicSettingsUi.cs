@@ -1,21 +1,19 @@
-﻿using System;
-using System.Diagnostics;
-using System.Reflection;
-using Attributes;
+﻿using Attributes;
+using Core.Logger;
 using Helper.Extensions;
-using Settings.SettingClasses;
-using System.Configuration;
+using System;
+using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using UI.Elements.Settings;
 using UI.Panels;
 using UnityEngine;
 using UnityEngine.UI;
-using Debug = UnityEngine.Debug;
+using Logger = Core.Logger.Logger;
 
 namespace Settings
 {
 	//TODO: A lot is gonna change in this... I am gonna have fun rewriting this, thanks Rowan...
-
 	[RequireComponent(typeof(OptionsPanel))]
 	public class DynamicSettingsUi : MonoBehaviour
 	{
@@ -27,6 +25,7 @@ namespace Settings
 			UpdateUI();
 		}
 
+		//TODO: The sub-functions need to update the UI element based on the reflected value on startup/settings reload
 		private void UpdateUI()
 		{
 			Stopwatch stopwatch = Stopwatch.StartNew();
@@ -37,15 +36,15 @@ namespace Settings
 			//Loop over each setting menu and all the sub-settings
 			foreach (PropertyInfo settingInfo in GameSettings.GetSettingClasses())
 			{
-				object menuInstance = settingInfo.GetStaticValue<object>();
+				object settingGroupInstance = settingInfo.GetStaticValue<object>();
 
 				//If it has the SettingsMenuFormatAttribute then use the format name of that
-				string settingMenuName = settingInfo.Name;
-				if(Attribute.GetCustomAttribute(settingInfo, typeof(SettingsMenuFormatAttribute)) is SettingsMenuFormatAttribute attribute)
-					settingMenuName = attribute.MenuNameFormat;
+				string settingGroupName = settingInfo.Name;
+				if (Attribute.GetCustomAttribute(settingInfo, typeof(SettingsMenuFormatAttribute)) is SettingsMenuFormatAttribute attribute)
+					settingGroupName = attribute.MenuNameFormat;
 
 				//Create a menu module
-				Menu settingMenu = new Menu(settingMenuName);
+				Menu settingMenu = new Menu(settingGroupName);
 				GameObject panel = optionsPanel.AddPanel(settingMenu);
 
 				//Get each property in the settings
@@ -62,50 +61,55 @@ namespace Settings
 
 						//If it has a range attribute, create a slider, otherwise use a input field
 						if (rangeAttribute != null)
-							CreateIntSlider(settingField.GetValue<int>(menuInstance), (int)rangeAttribute.min, (int)rangeAttribute.max, settingField, settingMenu);
+							CreateIntSlider(settingField.GetValue<int>(settingGroupInstance), (int) rangeAttribute.min, (int) rangeAttribute.max,
+								settingField, settingMenu);
 						else
-							CreateIntField(settingField.GetValue<int>(menuInstance), settingField, settingMenu);
+							CreateIntField(settingField.GetValue<int>(settingGroupInstance), settingField, settingMenu);
 					}
 					else if (fieldType == typeof(float))
 					{
 						RangeAttribute rangeAttribute = settingField.GetCustomAttribute<RangeAttribute>();
 						if (rangeAttribute != null)
-							CreateFloatSlider(settingField.GetValue<float>(menuInstance), rangeAttribute.min,
+							CreateFloatSlider(settingField.GetValue<float>(settingGroupInstance), rangeAttribute.min,
 								rangeAttribute.max,
 								settingField, settingMenu);
 						else
-							CreateFloatField(settingField.GetValue<float>(menuInstance), settingField,
+							CreateFloatField(settingField.GetValue<float>(settingGroupInstance), settingField,
 								settingMenu);
 					}
 					else if (fieldType == typeof(bool))
 					{
-						CreateBoolToggle(settingField.GetValue<bool>(menuInstance), settingField, settingMenu, panel);
+						CreateBoolToggle(settingField.GetValue<bool>(settingGroupInstance), settingField, settingMenu, panel);
 					}
 					else if (fieldType == typeof(string))
 					{
-						CreateStringField(settingField.GetValue<string>(menuInstance), settingField, settingMenu);
+						CreateStringField(settingField.GetValue<string>(settingGroupInstance), settingField, settingMenu);
 					}
 					//TODO: Finish these
 					else if (fieldType.IsEnum)
 					{
 						if (fieldType == typeof(KeyCode))
 							//We don't do a dropdown, we create a button and do some complicated shit that i'll steal from one of my other games
-							CreateKeybindButton(settingField.GetValue<KeyCode>(menuInstance),
+							CreateKeybindButton(settingField.GetValue<KeyCode>(settingGroupInstance),
 								settingField,
 								settingMenu);
 						//Just a normal enum popup
 						else
-							CreateEnumDropdown(settingField.GetValue<int>(menuInstance), settingField,
+							CreateEnumDropdown(settingField.GetValue<int>(settingGroupInstance), settingField,
 								settingMenu);
+					}
+					else
+					{
+						Logger.Log($"UI Element for setting of type {fieldType.FullName} could not be created", LogVerbosity.Error);
 					}
 				}
 			}
 
 			stopwatch.Stop();
-			Debug.Log($"Time taken to update UI: {stopwatch.Elapsed.TotalMilliseconds:n} ms");
+			Logger.Log($"Time taken to update UI: {stopwatch.Elapsed.TotalMilliseconds:n} ms", LogVerbosity.Debug);
 		}
 
-		#region Graphic designer functions
+	#region Graphic designer functions
 
 		// ReSharper disable ParameterHidesMember
 		// ReSharper disable MemberCanBeMadeStatic.Local
@@ -114,61 +118,63 @@ namespace Settings
 		//Use onValueChanged.AddListener so that every time one of the graphics gets updated, so does our setting
 		private void CreateFloatSlider(float val, float min, float max, FieldInfo field, Menu menu)
 		{
-			Debug.Log(
-				$"\tCreating float slider for {field.Name} in {menu.Name}. Range is {min} to {max}, current is {val}");
-//            new Slider().onValueChanged.AddListener(f => field.SetValue(GetSettingObject(field), f));
+			Logger.Log(
+				$"\tCreating float slider for {field.Name} in {menu.Name}. Range is {min} to {max}, current is {val}", LogVerbosity.Debug);
+			// new Slider().onValueChanged.AddListener(f => field.SetValue(GetSettingObject(field), f));
 		}
 
 		private void CreateIntSlider(int val, int min, int max, FieldInfo field, Menu menu)
 		{
-			Debug.Log(
-				$"\tCreating int slider for {field.Name} in {menu.Name}. Range is {min} to {max}, current is {val}");
-//            new Slider().onValueChanged.AddListener(f => field.SetValue(GetSettingObject(field),(int) f));
+			Logger.Log(
+				$"\tCreating int slider for {field.Name} in {menu.Name}. Range is {min} to {max}, current is {val}", LogVerbosity.Debug);
+			// new Slider().onValueChanged.AddListener(f => field.SetValue(GetSettingObject(field),(int) f));
 		}
 
 		private void CreateFloatField(float val, FieldInfo field, Menu menu)
 		{
-			Debug.Log($"\tCreating float field for {field.Name} in {menu.Name}. Current is {val}");
-//            new FloatField().RegisterValueChangedCallback(c => field.SetValue(GetSettingObject(field), c.newValue));
+			Logger.Log($"\tCreating float field for {field.Name} in {menu.Name}. Current is {val}", LogVerbosity.Debug);
+			// new FloatField().RegisterValueChangedCallback(c => field.SetValue(GetSettingObject(field), c.newValue));
 		}
 
 		private void CreateIntField(int val, FieldInfo field, Menu menu)
 		{
-			Debug.Log($"\tCreating int field for {field.Name} in {menu.Name}. Current is {val}");
-//            new IntegerField().RegisterValueChangedCallback(c => field.SetValue(GetSettingObject(field), c.newValue));
+			Logger.Log($"\tCreating int field for {field.Name} in {menu.Name}. Current is {val}", LogVerbosity.Debug);
+			// new IntegerField().RegisterValueChangedCallback(c => field.SetValue(GetSettingObject(field), c.newValue));
 		}
 
 		private void CreateBoolToggle(bool val, FieldInfo field, Menu menu, GameObject panel)
 		{
-			Debug.Log(
-				$"\tCreating bool toggle for {field.Name} in {menu.Name}. Current is {val}");
+			Logger.Log($"\tCreating bool toggle for {field.Name} in {menu.Name}. Current is {val}", LogVerbosity.Debug);
 
 			Toggle toggle = optionsPanel.AddToggleToPanel(panel, field.Name);
-			
+
+			//Ensure we update it to reflect the value from the settings
+			toggle.isOn = val;
 			toggle.onValueChanged.AddListener(b => field.SetValue(GetSettingObject(field), b));
 		}
 
 		private void CreateStringField(string val, FieldInfo field, Menu menu)
 		{
-			Debug.Log($"\tCreating string field for {field.Name} in {menu.Name}. Current is {val}");
-//            new TMP_InputField().onValueChanged.AddListener(s => field.SetValue(GetSettingObject(field), s));
+			Logger.Log($"\tCreating string field for {field.Name} in {menu.Name}. Current is {val}", LogVerbosity.Debug);
+			//            new TMP_InputField().onValueChanged.AddListener(s => field.SetValue(GetSettingObject(field), s));
 		}
 
 		private void CreateEnumDropdown(int val, FieldInfo field, Menu menu)
 		{
-			Debug.Log(
-				$"\tCreating enum dropdown for {field.Name} in {menu.Name}. Current is {val}, options are {string.Join(", ", Enum.GetNames(field.FieldType))}");
-//            new Dropdown().onValueChanged.AddListener(i => field.SetValue(GetSettingObject(field), i));
+			Logger.Log(
+				$"\tCreating enum dropdown for {field.Name} in {menu.Name}. Current is {Enum.GetName(field.FieldType, val)}, options are {string.Join(", ", Enum.GetNames(field.FieldType))}",
+				LogVerbosity.Debug);
+			//            new Dropdown().onValueChanged.AddListener(i => field.SetValue(GetSettingObject(field), i));
 		}
 
 		private void CreateKeybindButton(KeyCode val, FieldInfo field, Menu menu)
 		{
-			Debug.Log($"\tCreating keybind button for {field.Name} in {menu.Name}. Current is {val}");
+			Logger.Log($"\tCreating keybind button for {field.Name} in {menu.Name}. Current is {val}", LogVerbosity.Debug);
 			//Sorry future Creepysin in case this freezes the game...
 			//TODO: Need to create this function. Might need to start a coroutine/async void to avoid freezing the screen till a key is pressed
-//            new Button().onClick.AddListener(  () => field.SetValue(GetSettingObject(field), WaitForKeyPressAndReturnKeycode()));
+			//            new Button().onClick.AddListener(  () => field.SetValue(GetSettingObject(field), WaitForKeyPressAndReturnKeycode()));
 		}
-		
+
 		private object GetSettingObject(FieldInfo field)
 		{
 			//Find the first setting group where the group type matches that of the field's declaring type
@@ -180,6 +186,6 @@ namespace Settings
 		// ReSharper restore MemberCanBeMadeStatic.Local
 		// ReSharper restore ParameterHidesMember
 
-		#endregion
+	#endregion
 	}
 }
