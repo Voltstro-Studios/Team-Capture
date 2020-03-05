@@ -140,10 +140,9 @@ namespace Settings
 
 		private void CreateBoolToggle(bool val, FieldInfo field, Menu menu, GameObject panel)
 		{
-			Debug.Log(
-				$"\tCreating bool toggle for {field.Name} in {menu.Name}. Current is {val}");
+			Debug.Log($"\tCreating bool toggle for {field.Name} in {menu.Name}. Current is {val}");
 
-			Toggle toggle = optionsPanel.AddToggleToPanel(panel, field.Name);
+			Toggle toggle = optionsPanel.AddToggleToPanel(panel, field.Name, val);
 			
 			toggle.onValueChanged.AddListener(b => field.SetValue(GetSettingObject(field), b));
 		}

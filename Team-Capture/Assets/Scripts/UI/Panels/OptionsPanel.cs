@@ -87,12 +87,15 @@ namespace UI.Panels
 			return titleObject;
 		}
 
-		public Toggle AddToggleToPanel(GameObject panel, string toggleText)
+		public Toggle AddToggleToPanel(GameObject panel, string toggleText, bool currentValue)
 		{
 			GameObject toggleObject = Instantiate(settingsTogglePrefab, panel.transform, false);
 			toggleObject.GetComponentInChildren<TextMeshProUGUI>().text = toggleText;
 
-			return toggleObject.GetComponent<Toggle>();
+			Toggle toggle = toggleObject.GetComponent<Toggle>();
+			toggle.isOn = currentValue;
+
+			return toggle;
 		}
 
 		public Slider AddSliderToPanel(GameObject panel, string sideText, float currentValue, bool wholeNumbers = false, float min = 0, float max = 100)
