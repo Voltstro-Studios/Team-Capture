@@ -5,6 +5,7 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using TMPro;
 using UI.Elements.Settings;
 using UI.Panels;
 using UnityEngine;
@@ -95,8 +96,7 @@ namespace Settings
 								settingMenu);
 						//Just a normal enum popup
 						else
-							CreateEnumDropdown(settingField.GetValue<int>(settingGroupInstance), settingField,
-								settingMenu);
+							CreateEnumDropdown(settingField.GetValue<int>(settingGroupInstance), settingField, settingMenu, panel);
 					}
 					else
 					{
@@ -159,12 +159,22 @@ namespace Settings
 			//            new TMP_InputField().onValueChanged.AddListener(s => field.SetValue(GetSettingObject(field), s));
 		}
 
-		private void CreateEnumDropdown(int val, FieldInfo field, Menu menu)
+		private void CreateEnumDropdown(int val, FieldInfo field, Menu menu, GameObject panel)
 		{
 			Logger.Log(
 				$"\tCreating enum dropdown for {field.Name} in {menu.Name}. Current is {Enum.GetName(field.FieldType, val)}, options are {string.Join(", ", Enum.GetNames(field.FieldType))}",
 				LogVerbosity.Debug);
-			//            new Dropdown().onValueChanged.AddListener(i => field.SetValue(GetSettingObject(field), i));
+			string[] names = Enum.GetNames(field.FieldType);
+			val = names.ToList().IndexOf(Enum.GetName(field.FieldType, val));
+			TMP_Dropdown dropdown = optionsPanel.AddDropdownToPanel(panel, names , val);
+			
+			dropdown.onValueChanged.AddListener(index =>
+			{
+				// ReSharper disable once LocalVariableHidesMember
+				string name = dropdown.options[index].text;
+				int value = (int) Enum.Parse(field.FieldType, name);
+				field.SetValue(GetSettingObject(field), value);
+			});
 		}
 
 		private void CreateKeybindButton(KeyCode val, FieldInfo field, Menu menu)

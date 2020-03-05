@@ -1,6 +1,5 @@
 ﻿using SceneManagement;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.Video;
 
 namespace StartUpVideo

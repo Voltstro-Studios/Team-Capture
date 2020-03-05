@@ -21,6 +21,7 @@ namespace UI.Panels
 		[SerializeField] private GameObject settingsTitlePrefab;
 		[SerializeField] private GameObject settingsButtonPrefab;
 		[SerializeField] private GameObject settingsTogglePrefab;
+		[SerializeField] private GameObject settingsDropdownPrefab;
 
 		public void SaveSettings()
 		{
@@ -86,12 +87,27 @@ namespace UI.Panels
 			return titleObject;
 		}
 
-		public Toggle AddToggleToPanel(GameObject panel, string toggleText)
+		public Toggle AddToggleToPanel(GameObject panel, string toggleName)
 		{
 			GameObject toggleObject = Instantiate(settingsTogglePrefab, panel.transform, false);
-			toggleObject.GetComponentInChildren<TextMeshProUGUI>().text = toggleText;
+			toggleObject.GetComponentInChildren<TextMeshProUGUI>().text = toggleName;
 
 			return toggleObject.GetComponent<Toggle>();
+		}
+
+		public TMP_Dropdown AddDropdownToPanel(GameObject panel, string[] options, int currentIndex)
+		{
+			// ReSharper disable once LocalVariableHidesMember
+			GameObject gameObject = Instantiate(settingsDropdownPrefab, panel.transform, false);
+			TMP_Dropdown dropdown = gameObject.GetComponentInChildren<TMP_Dropdown>();
+			List<TMP_Dropdown.OptionData> optionDatas = new List<TMP_Dropdown.OptionData>(options.Length);
+			for (int i = 0; i < options.Length; i++)
+			{
+				optionDatas.Add(new TMP_Dropdown.OptionData(options[i]));
+			}
+			dropdown.options = optionDatas;
+			dropdown.value = currentIndex;
+			return dropdown;
 		}
 		
 		#endregion
