@@ -59,7 +59,7 @@ namespace Settings
 					//TODO: Considering the unity slider uses a float, could we have 1 overload with a bool for int or float mode?
 					if (fieldType == typeof(int))
 					{
-						//If it's an int or float, we need to check if it has a range attribute
+						//If it's an int or a float, we need to check if it has a range attribute
 						RangeAttribute rangeAttribute = settingField.GetCustomAttribute<RangeAttribute>();
 
 						//If it has a range attribute, create a slider, otherwise use a input field
@@ -72,7 +72,10 @@ namespace Settings
 					}
 					else if (fieldType == typeof(float))
 					{
+						//If it's an int or a float, we need to check if it has a range attribute
 						RangeAttribute rangeAttribute = settingField.GetCustomAttribute<RangeAttribute>();
+
+						//If it has a range attribute, create a slider, otherwise use a input field
 						if (rangeAttribute != null)
 							CreateFloatSlider(settingField.GetValue<float>(settingGroupInstance), rangeAttribute.min,
 								rangeAttribute.max,
@@ -122,16 +125,14 @@ namespace Settings
 		// ReSharper disable MemberCanBeMadeStatic.Local
 		// ReSharper disable UnusedParameter.Local
 
-		//Use onValueChanged.AddListener so that every time one of the graphics gets updated, so does our setting
 		private void CreateFloatSlider(float val, float min, float max, FieldInfo field, Menu menu, GameObject panel)
 		{
 			Logger.Log(
 				$"\tCreating float slider for {field.Name} in {menu.Name}. Range is {min} to {max}, current is {val}",
 				LogVerbosity.Debug);
 
-			optionsPanel.AddSliderToPanel(panel, field.Name, val, false, min, max);
-
-			// new Slider().onValueChanged.AddListener(f => field.SetValue(GetSettingObject(field), f));
+			Slider slider = optionsPanel.AddSliderToPanel(panel, field.Name, val, false, min, max);
+			slider.onValueChanged.AddListener(f => field.SetValue(GetSettingObject(field), f));
 		}
 
 		private void CreateIntSlider(int val, int min, int max, FieldInfo field, Menu menu)

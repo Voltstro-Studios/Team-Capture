@@ -13,6 +13,10 @@ namespace Core.Console
 	{
 		private static readonly Dictionary<string, ConsoleCommand> Commands = new Dictionary<string, ConsoleCommand>();
 
+		/// <summary>
+		/// Finds all static methods with the <see cref="ConCommand"/> attribute attached to it
+		/// and adds it to this <see cref="ConsoleInterface"/> list of commands
+		/// </summary>
 		public static void RegisterCommands()
 		{
 			const BindingFlags bindingFlags = BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
@@ -32,6 +36,11 @@ namespace Core.Console
 			configFilesLocation = Game.GetGameExecutePath() + "/Cfg/";
 		}
 
+		/// <summary>
+		/// Adds a command to the list of commands
+		/// </summary>
+		/// <param name="conCommand"></param>
+		/// <param name="method"></param>
 		public static void AddCommand(ConCommand conCommand, MethodDelegate method)
 		{
 			string commandName = conCommand.Name.ToLower();
@@ -55,11 +64,19 @@ namespace Core.Console
 			});
 		}
 
+		/// <summary>
+		/// Get a dictionary containing the command name, and it associated <see cref="ConsoleCommand"/>
+		/// </summary>
+		/// <returns></returns>
 		public static Dictionary<string, ConsoleCommand> GetAllCommands()
 		{
 			return Commands;
 		}
 
+		/// <summary>
+		/// Executes a command
+		/// </summary>
+		/// <param name="command"></param>
 		public static void ExecuteCommand(string command)
 		{
 			List<string> tokens = Tokenize(command);
