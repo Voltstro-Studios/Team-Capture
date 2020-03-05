@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6478734538925863685}
   - component: {fileID: 6420131468699605864}
   m_Layer: 5
-  m_Name: TitleText
+  m_Name: SettingsTitleText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -35,7 +35,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 233.99994, y: -47.699997}
-  m_SizeDelta: {x: 453, y: 94.899994}
+  m_SizeDelta: {x: 453, y: 95}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6478734538925863685
 CanvasRenderer:
