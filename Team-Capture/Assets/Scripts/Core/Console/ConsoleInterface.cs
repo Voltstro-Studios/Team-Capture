@@ -18,16 +18,16 @@ namespace Core.Console
 			const BindingFlags bindingFlags = BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
 
 			foreach (Type type in Assembly.GetExecutingAssembly().GetTypes())
-			foreach (MethodInfo method in type.GetMethods(bindingFlags))
-			{
-				if (!(Attribute.GetCustomAttribute(method, typeof(ConCommand)) is ConCommand attribute))
-					continue;
+				foreach (MethodInfo method in type.GetMethods(bindingFlags))
+				{
+					if (!(Attribute.GetCustomAttribute(method, typeof(ConCommand)) is ConCommand attribute))
+						continue;
 
-				MethodDelegate methodDelegate =
-					(MethodDelegate) Delegate.CreateDelegate(typeof(MethodDelegate), method);
+					MethodDelegate methodDelegate =
+						(MethodDelegate) Delegate.CreateDelegate(typeof(MethodDelegate), method);
 
-				AddCommand(attribute, methodDelegate);
-			}
+					AddCommand(attribute, methodDelegate);
+				}
 
 			configFilesLocation = Game.GetGameExecutePath() + "/Cfg/";
 		}
@@ -94,7 +94,7 @@ namespace Core.Console
 			Logger.Logger.Log($"Unknown command: `{tokens[0]}`.", LogVerbosity.Error);
 		}
 
-		#region Argument Parsing
+	#region Argument Parsing
 
 		private static List<string> Tokenize(string input)
 		{
@@ -154,9 +154,9 @@ namespace Core.Console
 			return input.Substring(startPos);
 		}
 
-		#endregion
+	#endregion
 
-		#region File Executuion
+	#region File Executuion
 
 		private static string configFilesLocation;
 
@@ -185,6 +185,6 @@ namespace Core.Console
 			}
 		}
 
-		#endregion
+	#endregion
 	}
 }

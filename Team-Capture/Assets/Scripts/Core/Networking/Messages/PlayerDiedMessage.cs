@@ -1,5 +1,4 @@
 ﻿using Mirror;
-using UnityEngine;
 
 namespace Core.Networking.Messages
 {
