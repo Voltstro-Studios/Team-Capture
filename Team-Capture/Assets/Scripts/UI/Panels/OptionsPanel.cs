@@ -83,14 +83,14 @@ namespace UI.Panels
 
 		private GameObject AddTitleToPanel(GameObject panel, string title)
 		{
-			GameObject titleObject = Instantiate(settingsTitlePrefab, panel.transform, false);
+			GameObject titleObject = Instantiate(settingsTitlePrefab, GetPanelItemArea(panel), false);
 			titleObject.GetComponent<TextMeshProUGUI>().text = title;
 			return titleObject;
 		}
 
 		public Toggle AddToggleToPanel(GameObject panel, string toggleText, bool currentValue)
 		{
-			GameObject toggleObject = Instantiate(settingsTogglePrefab, panel.transform, false);
+			GameObject toggleObject = Instantiate(settingsTogglePrefab, GetPanelItemArea(panel), false);
 			toggleObject.GetComponentInChildren<TextMeshProUGUI>().text = toggleText;
 
 			Toggle toggle = toggleObject.GetComponent<Toggle>();
@@ -101,7 +101,7 @@ namespace UI.Panels
 
 		public Slider AddSliderToPanel(GameObject panel, string sideText, float currentValue, bool wholeNumbers = false, float min = 0, float max = 100)
 		{
-			GameObject sliderObject = Instantiate(settingsSliderPrefab, panel.transform, false);
+			GameObject sliderObject = Instantiate(settingsSliderPrefab, GetPanelItemArea(panel), false);
 			sliderObject.GetComponentInChildren<TextMeshProUGUI>().text = sideText;
 
 			Slider slider = sliderObject.GetComponentInChildren<Slider>();
@@ -116,7 +116,7 @@ namespace UI.Panels
 		public TMP_Dropdown AddDropdownToPanel(GameObject panel, string[] options, int currentIndex)
 		{
 			// ReSharper disable once LocalVariableHidesMember
-			GameObject gameObject = Instantiate(settingsDropdownPrefab, panel.transform, false);
+			GameObject gameObject = Instantiate(settingsDropdownPrefab, GetPanelItemArea(panel), false);
 			TMP_Dropdown dropdown = gameObject.GetComponentInChildren<TMP_Dropdown>();
 			List<TMP_Dropdown.OptionData> optionDatas = new List<TMP_Dropdown.OptionData>(options.Length);
 			for (int i = 0; i < options.Length; i++)
@@ -129,5 +129,10 @@ namespace UI.Panels
 		}
 		
 		#endregion
+
+		private Transform GetPanelItemArea(GameObject panel)
+		{
+			return panel.GetComponent<SettingsMenuPanel>().GetScrollingArea;
+		}
 	}
 }
