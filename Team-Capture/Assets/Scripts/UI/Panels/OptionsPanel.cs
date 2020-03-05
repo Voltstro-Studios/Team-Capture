@@ -91,7 +91,7 @@ namespace UI.Panels
 		public Toggle AddToggleToPanel(GameObject panel, string toggleText, bool currentValue)
 		{
 			GameObject toggleObject = Instantiate(settingsTogglePrefab, panel.transform, false);
-			toggleObject.GetComponentInChildren<TextMeshProUGUI>().text = toggleName;
+			toggleObject.GetComponentInChildren<TextMeshProUGUI>().text = toggleText;
 
 			Toggle toggle = toggleObject.GetComponent<Toggle>();
 			toggle.isOn = currentValue;

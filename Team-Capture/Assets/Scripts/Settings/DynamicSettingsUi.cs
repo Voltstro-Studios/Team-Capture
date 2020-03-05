@@ -73,7 +73,7 @@ namespace Settings
 						if (rangeAttribute != null)
 							CreateFloatSlider(settingField.GetValue<float>(settingGroupInstance), rangeAttribute.min,
 								rangeAttribute.max,
-								settingField, settingMenu);
+								settingField, settingMenu, panel);
 						else
 							CreateFloatField(settingField.GetValue<float>(settingGroupInstance), settingField,
 								settingMenu);
@@ -109,7 +109,7 @@ namespace Settings
 			Logger.Log($"Time taken to update UI: {stopwatch.Elapsed.TotalMilliseconds:n} ms", LogVerbosity.Debug);
 		}
 
-	#region Graphic designer functions
+		#region Graphic designer functions
 
 		// ReSharper disable ParameterHidesMember
 		// ReSharper disable MemberCanBeMadeStatic.Local
@@ -120,6 +120,9 @@ namespace Settings
 		{
 			Logger.Log(
 				$"\tCreating float slider for {field.Name} in {menu.Name}. Range is {min} to {max}, current is {val}", LogVerbosity.Debug);
+
+			optionsPanel.AddSliderToPanel(panel, field.Name, val, false, min, max);
+
 			// new Slider().onValueChanged.AddListener(f => field.SetValue(GetSettingObject(field), f));
 		}
 
@@ -144,7 +147,7 @@ namespace Settings
 
 		private void CreateBoolToggle(bool val, FieldInfo field, Menu menu, GameObject panel)
 		{
-			Debug.Log($"\tCreating bool toggle for {field.Name} in {menu.Name}. Current is {val}");
+			Logger.Log($"\tCreating bool toggle for {field.Name} in {menu.Name}. Current is {val}");
 
 			Toggle toggle = optionsPanel.AddToggleToPanel(panel, field.Name, val);
 			
