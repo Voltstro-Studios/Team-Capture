@@ -1,10 +1,10 @@
-﻿using Attributes;
-using Core.Logger;
-using Helper.Extensions;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using Attributes;
+using Core.Logger;
+using Helper.Extensions;
 using TMPro;
 using UI.Elements.Settings;
 using UI.Panels;
@@ -41,7 +41,8 @@ namespace Settings
 
 				//If it has the SettingsMenuFormatAttribute then use the format name of that
 				string settingGroupName = settingInfo.Name;
-				if (Attribute.GetCustomAttribute(settingInfo, typeof(SettingsMenuFormatAttribute)) is SettingsMenuFormatAttribute attribute)
+				if (Attribute.GetCustomAttribute(settingInfo, typeof(SettingsMenuFormatAttribute)) is
+					SettingsMenuFormatAttribute attribute)
 					settingGroupName = attribute.MenuNameFormat;
 
 				//Create a menu module
@@ -49,7 +50,8 @@ namespace Settings
 				GameObject panel = optionsPanel.AddPanel(settingMenu);
 
 				//Get each property in the settings
-				FieldInfo[] menuFields = settingInfo.PropertyType.GetFields(BindingFlags.Instance | BindingFlags.Public);
+				FieldInfo[] menuFields =
+					settingInfo.PropertyType.GetFields(BindingFlags.Instance | BindingFlags.Public);
 				foreach (FieldInfo settingField in menuFields)
 				{
 					Type fieldType = settingField.FieldType;
@@ -62,7 +64,8 @@ namespace Settings
 
 						//If it has a range attribute, create a slider, otherwise use a input field
 						if (rangeAttribute != null)
-							CreateIntSlider(settingField.GetValue<int>(settingGroupInstance), (int) rangeAttribute.min, (int) rangeAttribute.max,
+							CreateIntSlider(settingField.GetValue<int>(settingGroupInstance), (int) rangeAttribute.min,
+								(int) rangeAttribute.max,
 								settingField, settingMenu);
 						else
 							CreateIntField(settingField.GetValue<int>(settingGroupInstance), settingField, settingMenu);
@@ -80,11 +83,13 @@ namespace Settings
 					}
 					else if (fieldType == typeof(bool))
 					{
-						CreateBoolToggle(settingField.GetValue<bool>(settingGroupInstance), settingField, settingMenu, panel);
+						CreateBoolToggle(settingField.GetValue<bool>(settingGroupInstance), settingField, settingMenu,
+							panel);
 					}
 					else if (fieldType == typeof(string))
 					{
-						CreateStringField(settingField.GetValue<string>(settingGroupInstance), settingField, settingMenu);
+						CreateStringField(settingField.GetValue<string>(settingGroupInstance), settingField,
+							settingMenu);
 					}
 					//TODO: Finish these
 					else if (fieldType.IsEnum)
@@ -96,11 +101,13 @@ namespace Settings
 								settingMenu);
 						//Just a normal enum popup
 						else
-							CreateEnumDropdown(settingField.GetValue<int>(settingGroupInstance), settingField, settingMenu, panel);
+							CreateEnumDropdown(settingField.GetValue<int>(settingGroupInstance), settingField,
+								settingMenu, panel);
 					}
 					else
 					{
-						Logger.Log($"UI Element for setting of type {fieldType.FullName} could not be created", LogVerbosity.Error);
+						Logger.Log($"UI Element for setting of type {fieldType.FullName} could not be created",
+							LogVerbosity.Error);
 					}
 				}
 			}
@@ -119,7 +126,8 @@ namespace Settings
 		private void CreateFloatSlider(float val, float min, float max, FieldInfo field, Menu menu, GameObject panel)
 		{
 			Logger.Log(
-				$"\tCreating float slider for {field.Name} in {menu.Name}. Range is {min} to {max}, current is {val}", LogVerbosity.Debug);
+				$"\tCreating float slider for {field.Name} in {menu.Name}. Range is {min} to {max}, current is {val}",
+				LogVerbosity.Debug);
 
 			optionsPanel.AddSliderToPanel(panel, field.Name, val, false, min, max);
 
@@ -129,7 +137,8 @@ namespace Settings
 		private void CreateIntSlider(int val, int min, int max, FieldInfo field, Menu menu)
 		{
 			Logger.Log(
-				$"\tCreating int slider for {field.Name} in {menu.Name}. Range is {min} to {max}, current is {val}", LogVerbosity.Debug);
+				$"\tCreating int slider for {field.Name} in {menu.Name}. Range is {min} to {max}, current is {val}",
+				LogVerbosity.Debug);
 			// new Slider().onValueChanged.AddListener(f => field.SetValue(GetSettingObject(field),(int) f));
 		}
 
@@ -150,13 +159,14 @@ namespace Settings
 			Logger.Log($"\tCreating bool toggle for {field.Name} in {menu.Name}. Current is {val}");
 
 			Toggle toggle = optionsPanel.AddToggleToPanel(panel, field.Name, val);
-			
+
 			toggle.onValueChanged.AddListener(b => field.SetValue(GetSettingObject(field), b));
 		}
 
 		private void CreateStringField(string val, FieldInfo field, Menu menu)
 		{
-			Logger.Log($"\tCreating string field for {field.Name} in {menu.Name}. Current is {val}", LogVerbosity.Debug);
+			Logger.Log($"\tCreating string field for {field.Name} in {menu.Name}. Current is {val}",
+				LogVerbosity.Debug);
 			//            new TMP_InputField().onValueChanged.AddListener(s => field.SetValue(GetSettingObject(field), s));
 		}
 
@@ -167,8 +177,8 @@ namespace Settings
 				LogVerbosity.Debug);
 			string[] names = Enum.GetNames(field.FieldType);
 			val = names.ToList().IndexOf(Enum.GetName(field.FieldType, val));
-			TMP_Dropdown dropdown = optionsPanel.AddDropdownToPanel(panel, names , val);
-			
+			TMP_Dropdown dropdown = optionsPanel.AddDropdownToPanel(panel, names, val);
+
 			dropdown.onValueChanged.AddListener(index =>
 			{
 				// ReSharper disable once LocalVariableHidesMember
@@ -180,7 +190,8 @@ namespace Settings
 
 		private void CreateKeybindButton(KeyCode val, FieldInfo field, Menu menu)
 		{
-			Logger.Log($"\tCreating keybind button for {field.Name} in {menu.Name}. Current is {val}", LogVerbosity.Debug);
+			Logger.Log($"\tCreating keybind button for {field.Name} in {menu.Name}. Current is {val}",
+				LogVerbosity.Debug);
 			//Sorry future Creepysin in case this freezes the game...
 			//TODO: Need to create this function. Might need to start a coroutine/async void to avoid freezing the screen till a key is pressed
 			//            new Button().onClick.AddListener(  () => field.SetValue(GetSettingObject(field), WaitForKeyPressAndReturnKeycode()));
@@ -189,7 +200,8 @@ namespace Settings
 		private object GetSettingObject(FieldInfo field)
 		{
 			//Find the first setting group where the group type matches that of the field's declaring type
-			PropertyInfo settingGroup = GameSettings.GetSettingClasses().First(p => p.PropertyType == field.DeclaringType);
+			PropertyInfo settingGroup =
+				GameSettings.GetSettingClasses().First(p => p.PropertyType == field.DeclaringType);
 			return settingGroup.GetValue(null);
 		}
 
@@ -197,6 +209,6 @@ namespace Settings
 		// ReSharper restore MemberCanBeMadeStatic.Local
 		// ReSharper restore ParameterHidesMember
 
-	#endregion
+		#endregion
 	}
 }

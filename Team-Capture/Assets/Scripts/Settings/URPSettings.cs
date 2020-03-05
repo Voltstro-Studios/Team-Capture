@@ -30,6 +30,5 @@ namespace Settings
 
 			Logger.Log("Applied URP settings.");
 		}
-
 	}
 }

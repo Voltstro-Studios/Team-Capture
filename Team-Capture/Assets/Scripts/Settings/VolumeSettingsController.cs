@@ -33,7 +33,7 @@ namespace Settings
 		{
 			ActiveVolume.enabled = GameSettings.AdvSettings.PostProcessing;
 
-			if(ActiveVolume.profile.TryGet(out MotionBlur blur))
+			if (ActiveVolume.profile.TryGet(out MotionBlur blur))
 				blur.active = GameSettings.AdvSettings.MotionBlur;
 
 			if (ActiveVolume.profile.TryGet(out Bloom bloom))

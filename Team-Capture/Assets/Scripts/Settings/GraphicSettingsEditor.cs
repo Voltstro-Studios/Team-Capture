@@ -23,7 +23,7 @@ namespace Settings
 
 		public void SetAntiAliasing(MsaaQuality msaaSampleCount)
 		{
-			urpPipelineAsset.msaaSampleCount = (int)msaaSampleCount;
+			urpPipelineAsset.msaaSampleCount = (int) msaaSampleCount;
 		}
 
 		#endregion
