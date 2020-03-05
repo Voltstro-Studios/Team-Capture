@@ -3,8 +3,6 @@ using System.Diagnostics;
 using System.Reflection;
 using Attributes;
 using Helper.Extensions;
-using Settings.SettingClasses;
-using System.Configuration;
 using System.Linq;
 using UI.Elements.Settings;
 using UI.Panels;
@@ -70,9 +68,7 @@ namespace Settings
 					{
 						RangeAttribute rangeAttribute = settingField.GetCustomAttribute<RangeAttribute>();
 						if (rangeAttribute != null)
-							CreateFloatSlider(settingField.GetValue<float>(menuInstance), rangeAttribute.min,
-								rangeAttribute.max,
-								settingField, settingMenu);
+							CreateFloatSlider(settingField.GetValue<float>(menuInstance), rangeAttribute.min, rangeAttribute.max, settingField, settingMenu, panel);
 						else
 							CreateFloatField(settingField.GetValue<float>(menuInstance), settingField,
 								settingMenu);
@@ -112,10 +108,14 @@ namespace Settings
 		// ReSharper disable UnusedParameter.Local
 
 		//Use onValueChanged.AddListener so that every time one of the graphics gets updated, so does our setting
-		private void CreateFloatSlider(float val, float min, float max, FieldInfo field, Menu menu)
+		private void CreateFloatSlider(float val, float min, float max, FieldInfo field, Menu menu, GameObject panel)
 		{
 			Debug.Log(
 				$"\tCreating float slider for {field.Name} in {menu.Name}. Range is {min} to {max}, current is {val}");
+
+			Slider slider = optionsPanel.AddSliderToPanel(panel, field.Name, val, false, min, max);
+			slider.onValueChanged.AddListener(f => field.SetValue(GetSettingObject(field), f));
+
 //            new Slider().onValueChanged.AddListener(f => field.SetValue(GetSettingObject(field), f));
 		}
 

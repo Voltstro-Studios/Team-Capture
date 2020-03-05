@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using Settings;
 using TMPro;
 using UI.Elements.Settings;
@@ -22,6 +21,7 @@ namespace UI.Panels
 		[SerializeField] private GameObject settingsTitlePrefab;
 		[SerializeField] private GameObject settingsButtonPrefab;
 		[SerializeField] private GameObject settingsTogglePrefab;
+		[SerializeField] private GameObject settingsSliderPrefab;
 
 		public void SaveSettings()
 		{
@@ -93,6 +93,20 @@ namespace UI.Panels
 			toggleObject.GetComponentInChildren<TextMeshProUGUI>().text = toggleText;
 
 			return toggleObject.GetComponent<Toggle>();
+		}
+
+		public Slider AddSliderToPanel(GameObject panel, string sideText, float currentValue, bool wholeNumbers = false, float min = 0, float max = 100)
+		{
+			GameObject sliderObject = Instantiate(settingsSliderPrefab, panel.transform, false);
+			sliderObject.GetComponentInChildren<TextMeshProUGUI>().text = sideText;
+
+			Slider slider = sliderObject.GetComponentInChildren<Slider>();
+			slider.wholeNumbers = wholeNumbers;
+			slider.minValue = min;
+			slider.maxValue = max;
+			slider.value = currentValue;
+
+			return slider;
 		}
 		
 		#endregion

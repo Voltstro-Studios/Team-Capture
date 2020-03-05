@@ -1105,6 +1105,8 @@ MonoBehaviour:
     type: 3}
   settingsTogglePrefab: {fileID: 8635519228143450053, guid: 7d29ccaf512f78a43bb691c974f76e60,
     type: 3}
+  settingsSliderPrefab: {fileID: 4218463323669038990, guid: f0beef11168b96c4dab6fa4fb5c04fc5,
+    type: 3}
 --- !u!114 &6144019666162036145
 MonoBehaviour:
   m_ObjectHideFlags: 0

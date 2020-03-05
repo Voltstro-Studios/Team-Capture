@@ -1,4 +1,5 @@
-﻿using UnityEngine.Rendering.Universal;
+﻿using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 namespace Settings.SettingClasses
 {
@@ -6,7 +7,7 @@ namespace Settings.SettingClasses
 	{
 		public MsaaQuality MsaaQuality = MsaaQuality._8x;
 
-		public float ShadowDistance = 45;
+		[Range(10, 100)] public float ShadowDistance = 45;
 		public ShadowCascadesOption ShadowCascades = ShadowCascadesOption.FourCascades;
 
 		public bool HDR = true;
