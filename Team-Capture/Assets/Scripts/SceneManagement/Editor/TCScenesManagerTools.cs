@@ -1,7 +1,9 @@
-﻿using UnityEditor;
+﻿#if UNITY_EDITOR
+
+using UnityEditor;
 using UnityEngine;
 
-namespace SceneManagement
+namespace SceneManagement.Editor
 {
     public static class TCScenesManagerTools
     {
@@ -22,3 +24,5 @@ namespace SceneManagement
         }
     }
 }
+
+#endif
