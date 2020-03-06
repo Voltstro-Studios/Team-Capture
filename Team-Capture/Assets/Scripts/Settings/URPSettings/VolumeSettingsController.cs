@@ -3,7 +3,7 @@ using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using Logger = Core.Logger.Logger;
 
-namespace Settings
+namespace Settings.URPSettings
 {
 	[RequireComponent(typeof(Volume))]
 	public class VolumeSettingsController : MonoBehaviour

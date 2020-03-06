@@ -1,13 +1,13 @@
 ﻿using UnityEngine.Rendering.Universal;
 
-namespace Settings
+namespace Settings.URPSettings
 {
 	public class GraphicSettingsEditor
 	{
 		private readonly UniversalRenderPipelineAsset urpPipelineAsset;
 
 		/// <summary>
-		/// Allows editing of a UWP assets, but it is easier
+		/// Allows editing of a URP assets, but it is easier
 		/// </summary>
 		public GraphicSettingsEditor(UniversalRenderPipelineAsset pipelineAsset)
 		{
