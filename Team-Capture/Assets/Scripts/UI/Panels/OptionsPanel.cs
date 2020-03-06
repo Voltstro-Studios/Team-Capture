@@ -102,9 +102,12 @@ namespace UI.Panels
 		public Slider AddSliderToPanel(GameObject panel, string sideText, float currentValue, bool wholeNumbers = false, float min = 0, float max = 100)
 		{
 			GameObject sliderObject = Instantiate(settingsSliderPrefab, GetPanelItemArea(panel), false);
-			sliderObject.GetComponentInChildren<TextMeshProUGUI>().text = sideText;
+			SettingsSlider sliderSettings = sliderObject.GetComponent<SettingsSlider>();
+			sliderSettings.Setup(currentValue);
 
-			Slider slider = sliderObject.GetComponentInChildren<Slider>();
+			sliderSettings.propertyText.text = sideText;
+
+			Slider slider = sliderSettings.slider;
 			slider.wholeNumbers = wholeNumbers;
 			slider.minValue = min;
 			slider.maxValue = max;
