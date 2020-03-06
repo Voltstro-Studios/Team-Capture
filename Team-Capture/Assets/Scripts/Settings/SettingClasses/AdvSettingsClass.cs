@@ -1,11 +1,12 @@
-﻿using UnityEngine;
+﻿using Settings.URPSettings;
+using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
 namespace Settings.SettingClasses
 {
 	public sealed class AdvSettingsClass : Setting
 	{
-		public MsaaQuality MsaaQuality = MsaaQuality._8x;
+		public MSAAQuality MsaaQuality = MSAAQuality.X4;
 		public ShadowCascadesOption ShadowCascades = ShadowCascadesOption.FourCascades;
 
 		public bool PostProcessing = true;
