@@ -176,9 +176,10 @@ namespace Settings
 			Logger.Log(
 				$"\tCreating enum dropdown for {field.Name} in {menu.Name}. Current is {Enum.GetName(field.FieldType, val)}, options are {string.Join(", ", Enum.GetNames(field.FieldType))}",
 				LogVerbosity.Debug);
+
 			string[] names = Enum.GetNames(field.FieldType);
 			val = names.ToList().IndexOf(Enum.GetName(field.FieldType, val));
-			TMP_Dropdown dropdown = optionsPanel.AddDropdownToPanel(panel, names, val);
+			TMP_Dropdown dropdown = optionsPanel.AddDropdownToPanel(panel, field.Name, names, val);
 
 			dropdown.onValueChanged.AddListener(index =>
 			{

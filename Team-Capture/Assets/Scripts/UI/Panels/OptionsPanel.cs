@@ -116,19 +116,20 @@ namespace UI.Panels
 			return slider;
 		}
 
-		public TMP_Dropdown AddDropdownToPanel(GameObject panel, string[] options, int currentIndex)
+		public TMP_Dropdown AddDropdownToPanel(GameObject panel, string sideText, string[] options, int currentIndex)
 		{
-			// ReSharper disable once LocalVariableHidesMember
-			GameObject gameObject = Instantiate(settingsDropdownPrefab, GetPanelItemArea(panel), false);
-			TMP_Dropdown dropdown = gameObject.GetComponentInChildren<TMP_Dropdown>();
+			GameObject dropDownObject = Instantiate(settingsDropdownPrefab, GetPanelItemArea(panel), false);
+			SettingDropdown dropdownSettings = dropDownObject.GetComponent<SettingDropdown>();
+			dropdownSettings.settingsName.text = sideText;
+
 			List<TMP_Dropdown.OptionData> optionDatas = new List<TMP_Dropdown.OptionData>(options.Length);
 			for (int i = 0; i < options.Length; i++)
 			{
 				optionDatas.Add(new TMP_Dropdown.OptionData(options[i]));
 			}
-			dropdown.options = optionDatas;
-			dropdown.value = currentIndex;
-			return dropdown;
+			dropdownSettings.dropdown.options = optionDatas;
+			dropdownSettings.dropdown.value = currentIndex;
+			return dropdownSettings.dropdown;
 		}
 		
 		#endregion
