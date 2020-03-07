@@ -102,6 +102,7 @@ namespace Mirror
                 syncVarHookGuard &= ~dirtyBit;
         }
 
+        // Deprecated 04/07/2019
         /// <summary>
         /// Obsolete: Use <see cref="syncObjects"/> instead.
         /// </summary>
@@ -169,7 +170,7 @@ namespace Mirror
 
         #region Commands
 
-        static int GetMethodHash(Type invokeClass, string methodName)
+        internal static int GetMethodHash(Type invokeClass, string methodName)
         {
             // (invokeClass + ":" + cmdName).GetStableHashCode() would cause allocations.
             // so hash1 + hash2 is better.
@@ -391,21 +392,28 @@ namespace Mirror
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        protected static void RegisterCommandDelegate(Type invokeClass, string cmdName, CmdDelegate func)
+        public static void RegisterCommandDelegate(Type invokeClass, string cmdName, CmdDelegate func)
         {
             RegisterDelegate(invokeClass, cmdName, MirrorInvokeType.Command, func);
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        protected static void RegisterRpcDelegate(Type invokeClass, string rpcName, CmdDelegate func)
+        public static void RegisterRpcDelegate(Type invokeClass, string rpcName, CmdDelegate func)
         {
             RegisterDelegate(invokeClass, rpcName, MirrorInvokeType.ClientRpc, func);
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        protected static void RegisterEventDelegate(Type invokeClass, string eventName, CmdDelegate func)
+        public static void RegisterEventDelegate(Type invokeClass, string eventName, CmdDelegate func)
         {
             RegisterDelegate(invokeClass, eventName, MirrorInvokeType.SyncEvent, func);
+        }
+
+        // we need a way to clean up delegates after tests
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        internal static void ClearDelegates()
+        {
+            cmdHandlerDelegates.Clear();
         }
 
         static bool GetInvokerForHash(int cmdHash, MirrorInvokeType invokeType, out Invoker invoker)
@@ -802,7 +810,8 @@ namespace Mirror
             return false;
         }
 
-        [Obsolete("Rename to OnSetHostVisibility instead.")]
+        // Deprecated 11/21/2019
+        [EditorBrowsable(EditorBrowsableState.Never), Obsolete("Rename to OnSetHostVisibility instead.")]
         public virtual void OnSetLocalVisibility(bool visible) { }
 
         /// <summary>

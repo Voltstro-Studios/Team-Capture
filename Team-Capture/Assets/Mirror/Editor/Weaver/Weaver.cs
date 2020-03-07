@@ -53,6 +53,8 @@ namespace Mirror.Weaver
         public static TypeReference SyncSetType;
         public static TypeReference SyncDictionaryType;
 
+        public static MethodReference ScriptableObjectCreateInstanceMethod;
+
         public static MethodReference NetworkBehaviourDirtyBitsReference;
         public static MethodReference GetPooledWriterReference;
         public static MethodReference RecycleWriterReference;
@@ -62,6 +64,7 @@ namespace Mirror.Weaver
         public static TypeReference NetworkReaderType;
 
         public static TypeReference NetworkWriterType;
+        public static TypeReference PooledNetworkWriterType;
 
         public static TypeReference NetworkIdentityType;
         public static TypeReference IEnumeratorType;
@@ -250,6 +253,8 @@ namespace Mirror.Weaver
 
             NetworkReaderType = NetAssembly.MainModule.GetType("Mirror.NetworkReader");
             NetworkWriterType = NetAssembly.MainModule.GetType("Mirror.NetworkWriter");
+            TypeReference pooledNetworkWriterTmp = NetAssembly.MainModule.GetType("Mirror.PooledNetworkWriter");
+            PooledNetworkWriterType = CurrentAssembly.MainModule.ImportReference(pooledNetworkWriterTmp);
 
             NetworkServerGetActive = Resolvers.ResolveMethod(NetworkServerType, CurrentAssembly, "get_active");
             NetworkServerGetLocalClientActive = Resolvers.ResolveMethod(NetworkServerType, CurrentAssembly, "get_localClientActive");
@@ -269,6 +274,10 @@ namespace Mirror.Weaver
 
             MonoBehaviourType = UnityAssembly.MainModule.GetType("UnityEngine.MonoBehaviour");
             ScriptableObjectType = UnityAssembly.MainModule.GetType("UnityEngine.ScriptableObject");
+
+            ScriptableObjectCreateInstanceMethod = Resolvers.ResolveMethod(
+                ScriptableObjectType, CurrentAssembly,
+                md => md.Name == "CreateInstance" && md.HasGenericParameters);
 
             NetworkConnectionType = NetAssembly.MainModule.GetType("Mirror.NetworkConnection");
             NetworkConnectionType = CurrentAssembly.MainModule.ImportReference(NetworkConnectionType);
