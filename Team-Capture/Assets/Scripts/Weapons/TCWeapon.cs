@@ -19,9 +19,8 @@ namespace Weapons
 		public int range;
 		public float reloadTime = 2.0f;
 
-		[Header("Spread")] 
-		public float spreadMin = -1.0f;
-		public float spreadMax = 1.0f;
+		[Header("Spread")]
+		public float spreadFactor = 0.05f;
 
 		public void Reload()
 		{

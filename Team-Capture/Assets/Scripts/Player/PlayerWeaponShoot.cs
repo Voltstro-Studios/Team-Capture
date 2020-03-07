@@ -118,11 +118,11 @@ namespace Player
 			for (int i = 0; i < tcWeapon.bulletsAmount; i++)
 			{
 				//Calculate random spread
-				Vector3 spread = Vector3.zero;
-				spread += playerFacingDirection.up * Random.Range(tcWeapon.spreadMin, tcWeapon.spreadMax);
-				spread += playerFacingDirection.right * Random.Range(tcWeapon.spreadMin, tcWeapon.spreadMax);
-
-				Vector3 direction = playerFacingDirection.forward + spread.normalized * Random.Range(0f, 0.2f);
+				Vector3 direction = playerFacingDirection.forward;
+				direction += playerFacingDirection.TransformDirection(new Vector3(
+					Random.Range(-tcWeapon.spreadFactor, tcWeapon.spreadFactor),
+					Random.Range(-tcWeapon.spreadFactor, tcWeapon.spreadFactor),
+					Random.Range(-tcWeapon.spreadFactor, tcWeapon.spreadFactor)));
 
 				//Was a player hit?
 				bool playerHit = false;

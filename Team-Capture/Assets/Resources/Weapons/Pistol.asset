@@ -24,5 +24,4 @@ MonoBehaviour:
   maxBullets: 18
   range: 30
   reloadTime: 2
-  spreadMin: -0.1
-  spreadMax: 0.1
+  spreadFactor: 0.08

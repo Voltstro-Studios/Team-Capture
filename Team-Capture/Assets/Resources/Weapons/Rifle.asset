@@ -16,7 +16,7 @@ MonoBehaviour:
   weaponFormattedName: Rifle
   baseWeaponPrefab: {fileID: 7149728806574001806, guid: f4d0c2754ceeacc43bdc51d9f4d15d71,
     type: 3}
-  currentBulletsAmount: 13
+  currentBulletsAmount: 60
   damage: 5
   fireRate: 15
   bulletsAmount: 1
@@ -24,3 +24,4 @@ MonoBehaviour:
   maxBullets: 60
   range: 40
   reloadTime: 4
+  spreadFactor: 0.15
