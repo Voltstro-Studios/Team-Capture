@@ -25,3 +25,5 @@ MonoBehaviour:
   range: 30
   reloadTime: 2
   spreadFactor: 0.08
+  bulletHolePrefab: {fileID: 1235035097298946, guid: 13a41486f54c3634fb3e501928c77d9d,
+    type: 3}

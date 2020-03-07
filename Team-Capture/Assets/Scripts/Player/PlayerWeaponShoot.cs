@@ -146,7 +146,7 @@ namespace Player
 						continue;
 
 					//Do impact effect on all clients
-					RpcWeaponImpact(hit.point, hit.normal);
+					RpcWeaponImpact(hit.point, hit.normal, tcWeapon.weapon);
 
 					//So if we hit a player then do damage
 					if (hit.collider.GetComponent<PlayerManager>() == null) continue;
@@ -185,10 +185,17 @@ namespace Player
 		#region Weapon Impact
 
 		[ClientRpc(channel = 2)]
-		private void RpcWeaponImpact(Vector3 pos, Vector3 normal)
+		private void RpcWeaponImpact(Vector3 pos, Vector3 normal, string weapon)
 		{
+			TCWeapon tcWeapon = WeaponsResourceManager.GetWeapon(weapon);
+			if(tcWeapon == null) return;
+
 			GameObject hitEffect =
 				Instantiate(GameManager.GetActiveScene().weaponHit, pos, Quaternion.LookRotation(normal));
+
+			GameObject bulletHoleEffect = Instantiate(tcWeapon.bulletHolePrefab, pos,
+				Quaternion.FromToRotation(Vector3.back, normal));
+
 			Destroy(hitEffect, GameManager.GetActiveScene().hitObjectLastTime);
 		}
 

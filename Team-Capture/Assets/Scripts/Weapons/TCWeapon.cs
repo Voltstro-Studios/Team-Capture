@@ -22,6 +22,9 @@ namespace Weapons
 		[Header("Spread")]
 		public float spreadFactor = 0.05f;
 
+		[Header("Impact Effects")] 
+		public GameObject bulletHolePrefab;
+
 		public void Reload()
 		{
 			currentBulletsAmount = maxBullets;
