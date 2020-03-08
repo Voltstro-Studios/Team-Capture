@@ -27,10 +27,6 @@ namespace SceneManagement
 		
 		public float respawnTime = 4.0f;
 
-		[Header("Temp Stuff")] 
-		public float hitObjectLastTime = 2.0f;
-		public GameObject weaponHit;
-
 		[Header("Discord RPC")] 
 		public bool showStartTime = true;
 

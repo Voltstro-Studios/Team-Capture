@@ -24,6 +24,7 @@ namespace Weapons
 
 		[Header("Impact Effects")] 
 		public GameObject bulletHolePrefab;
+		public GameObject bulletHitEffectPrefab;
 
 		public void Reload()
 		{

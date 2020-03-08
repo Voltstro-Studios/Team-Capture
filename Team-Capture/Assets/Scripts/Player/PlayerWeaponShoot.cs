@@ -190,13 +190,9 @@ namespace Player
 			TCWeapon tcWeapon = WeaponsResourceManager.GetWeapon(weapon);
 			if(tcWeapon == null) return;
 
-			GameObject hitEffect =
-				Instantiate(GameManager.GetActiveScene().weaponHit, pos, Quaternion.LookRotation(normal));
-
-			GameObject bulletHoleEffect = Instantiate(tcWeapon.bulletHolePrefab, pos,
-				Quaternion.FromToRotation(Vector3.back, normal));
-
-			Destroy(hitEffect, GameManager.GetActiveScene().hitObjectLastTime);
+			//Instantiate our bullet effects
+			Instantiate(tcWeapon.bulletHitEffectPrefab, pos, Quaternion.LookRotation(normal));
+			Instantiate(tcWeapon.bulletHolePrefab, pos, Quaternion.FromToRotation(Vector3.back, normal));
 		}
 
 		#endregion
