@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
@@ -94,6 +95,11 @@ namespace Settings
 						CreateStringField(settingField.GetValue<string>(settingGroupInstance), settingField,
 							settingMenu);
 					}
+					else if (fieldType == typeof(Resolution))
+					{
+						//For a resolution property, we will create a dropdown with all available resolutions and select the active on
+						CreateResolutionDropdown(settingField.GetValue<Resolution>(settingGroupInstance), settingField, settingMenu, panel);
+					}
 					//TODO: Finish these
 					else if (fieldType.IsEnum)
 					{
@@ -169,6 +175,28 @@ namespace Settings
 			Logger.Log($"\tCreating string field for {field.Name} in {menu.Name}. Current is {val}",
 				LogVerbosity.Debug);
 			//            new TMP_InputField().onValueChanged.AddListener(s => field.SetValue(GetSettingObject(field), s));
+		}
+
+		private void CreateResolutionDropdown(Resolution currentRes, FieldInfo field, Menu menu, GameObject panel)
+		{
+			Resolution[] resolutions = Screen.resolutions;
+			List<string> resolutionsText = new List<string>();
+			int activeResIndex = 0;
+
+			for (int i = 0; i < resolutions.Length; i++)
+			{
+				if (resolutions[i].width == currentRes.width && resolutions[i].width == currentRes.width)
+					activeResIndex = i;
+
+				resolutionsText.Add(resolutions[i].ToString());
+			}
+
+			TMP_Dropdown dropdown =
+				optionsPanel.AddDropdownToPanel(panel, field.Name, resolutionsText.ToArray(), activeResIndex);
+			dropdown.onValueChanged.AddListener(index =>
+			{
+				field.SetValue(GetSettingObject(field), resolutions[index]);
+			});
 		}
 
 		private void CreateEnumDropdown(int val, FieldInfo field, Menu menu, GameObject panel)
