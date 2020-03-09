@@ -98,7 +98,7 @@ namespace Settings
 					else if (fieldType == typeof(Resolution))
 					{
 						//For a resolution property, we will create a dropdown with all available resolutions and select the active one
-						CreateResolutionDropdown(settingField.GetValue<Resolution>(settingGroupInstance), settingField, settingMenu, panel);
+						CreateResolutionDropdown(settingField.GetValue<Resolution>(settingGroupInstance), settingField, panel);
 					}
 					//TODO: Finish these
 					else if (fieldType.IsEnum)
@@ -177,7 +177,7 @@ namespace Settings
 			//            new TMP_InputField().onValueChanged.AddListener(s => field.SetValue(GetSettingObject(field), s));
 		}
 
-		private void CreateResolutionDropdown(Resolution currentRes, FieldInfo field, Menu menu, GameObject panel)
+		private void CreateResolutionDropdown(Resolution currentRes, FieldInfo field, GameObject panel)
 		{
 			Resolution[] resolutions = Screen.resolutions;
 			List<string> resolutionsText = new List<string>();
