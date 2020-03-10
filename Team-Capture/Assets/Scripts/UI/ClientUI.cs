@@ -12,7 +12,7 @@ namespace UI
 
 		public KillFeed killFeed;
 
-		public GameObject pauseMenuGameObject;
+		public MainMenuController pauseMenu;
 
 		public GameObject scoreBoardObject;
 
@@ -26,7 +26,7 @@ namespace UI
 
 			hud.clientUi = this;
 
-			pauseMenuGameObject.SetActive(false);
+			pauseMenu.gameObject.SetActive(false);
 
 			scoreBoardObject.SetActive(false);
 			scoreBoardObject.GetComponent<ScoreBoard.ScoreBoard>().clientPlayer = playerManager;
@@ -48,7 +48,7 @@ namespace UI
 			Cursor.visible = IsPauseMenuOpen;
 			Cursor.lockState = state ? CursorLockMode.None : CursorLockMode.Locked;
 
-			pauseMenuGameObject.SetActive(state);
+			pauseMenu.gameObject.SetActive(state);
 			killFeed.killFeedItemsHolder.gameObject.SetActive(!state);
 
 			if (player.IsDead) return;

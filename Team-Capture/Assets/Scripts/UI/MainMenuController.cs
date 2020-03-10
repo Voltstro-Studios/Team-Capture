@@ -11,6 +11,8 @@ namespace UI
 {
 	public class MainMenuController : MonoBehaviour
 	{
+		[SerializeField] private KeyCode closeKey = KeyCode.Escape;
+
 		[Header("Black Background")] public Animator blackBackgroundAnimator;
 		public string blackBackgroundCloseTriggerName = "Exit";
 		public float blackBackgroundWaitTime = 0.2f;
@@ -21,7 +23,7 @@ namespace UI
 		public string topBlackBarCloseTriggerName = "Exit";
 		public float topBlackBarWaitTime = 0.2f;
 
-		public void Start()
+		private void Start()
 		{
 			topBlackBarAnimator.gameObject.SetActive(false);
 
@@ -37,6 +39,14 @@ namespace UI
 				{
 					panel.GetComponent<MainMenuPanelBase>().cancelButton.onClick.AddListener(delegate{TogglePanel(menuPanel.name);});
 				}
+			}
+		}
+
+		private void Update()
+		{
+			if (Input.GetKeyDown(closeKey))
+			{
+				CloseActivePanel();
 			}
 		}
 
@@ -92,7 +102,7 @@ namespace UI
 			return result.FirstOrDefault();
 		}
 
-		private TCMainMenuEvent GetActivePanel()
+		public TCMainMenuEvent GetActivePanel()
 		{
 			IEnumerable<TCMainMenuEvent> result = from a in menuPanels
 				where a.isOpen
