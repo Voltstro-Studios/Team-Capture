@@ -43,7 +43,22 @@ namespace Settings
 			}
 
 			Logger.Log("Invalid input!", LogVerbosity.Error);
+		}
 
+		[ConCommand("r_screenmode", "Sets the screen mode", 1, 1)]
+		public static void SetScreenMode(string[] args)
+		{
+			if (int.TryParse(args[0], out int screenModeIndex))
+			{
+				FullScreenMode screenMode = (FullScreenMode) screenModeIndex;
+
+				GameSettings.VideoSettings.ScreenMode = screenMode;
+				GameSettings.Save();
+
+				return;
+			}
+
+			Logger.Log("Invalid input!", LogVerbosity.Error);
 		}
 	}
 }
