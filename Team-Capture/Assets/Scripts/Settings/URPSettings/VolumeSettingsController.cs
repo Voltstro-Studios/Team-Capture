@@ -1,5 +1,6 @@
 ﻿using Attributes;
 using Core.Logger;
+using Settings.SettingClasses;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
@@ -33,22 +34,33 @@ namespace Settings.URPSettings
 
 		private void ApplyVolumeSettings()
 		{
-			ActiveVolume.enabled = GameSettings.AdvSettings.PostProcessing;
+			AdvSettingsClass settings = GameSettings.AdvSettings;
 
+			ActiveVolume.enabled = settings.PostProcessing;
+
+			//Motion Blur
 			if (ActiveVolume.profile.TryGet(out MotionBlur blur))
 			{
-				blur.active = GameSettings.AdvSettings.MotionBlur;
-				blur.intensity.value = GameSettings.AdvSettings.MotionBlurIntensity;
-				blur.clamp.value = GameSettings.AdvSettings.MotionBlurClamp;
+				blur.active = settings.MotionBlur;
+				blur.intensity.value = settings.MotionBlurIntensity;
+				blur.clamp.value = settings.MotionBlurClamp;
 			}
 
+			//Bloom
 			if (ActiveVolume.profile.TryGet(out Bloom bloom))
 			{
-				bloom.active = GameSettings.AdvSettings.Bloom;
-				bloom.threshold.value = GameSettings.AdvSettings.BloomThreshold;
-				bloom.intensity.value = GameSettings.AdvSettings.BloomIntensity;
+				bloom.active = settings.Bloom;
+				bloom.threshold.value = settings.BloomThreshold;
+				bloom.intensity.value = settings.BloomIntensity;
 			}
-				
+
+			//Vignette
+			if (ActiveVolume.profile.TryGet(out Vignette vignette))
+			{
+				vignette.active = settings.Vignette;
+				vignette.intensity.value = settings.VignetteIntensity;
+				vignette.smoothness.value = settings.VignetteSmoothness;
+			}
 
 			Logger.Log("Applied Volume(Post-Processing) Settings");
 		}
@@ -171,6 +183,73 @@ namespace Settings.URPSettings
 			if(float.TryParse(stringAmount, out float amount))
 			{
 				GameSettings.AdvSettings.BloomIntensity = amount;
+				GameSettings.Save();
+
+				return;
+			}
+
+			Logger.Log("Invalid input!", LogVerbosity.Error);
+		}
+
+		#endregion
+
+		#region Vignette
+
+		[ConCommand("r_vignette_enabled", "Enables or disables vignette", 1, 1)]
+		public static void VignetteEnable(string[] args)
+		{
+			string toggle = args[0].ToLower();
+
+			switch (toggle)
+			{
+				case "1":
+				case "true":
+					GameSettings.AdvSettings.Vignette = true;
+					GameSettings.Save();
+					break;
+				case "0":
+				case "false":
+					GameSettings.AdvSettings.Vignette = false;
+					GameSettings.Save();
+					break;
+				default:
+					Logger.Log("Invalid argument!", LogVerbosity.Error);
+					break;
+			}
+		}
+
+		[ConCommand("r_vignette_intensity", "Changes the vignette intensity", 1, 1)]
+		public static void VignetteIntensity(string[] args)
+		{
+			string stringAmount = args[0].ToLower();
+
+			if(float.TryParse(stringAmount, out float amount))
+			{
+				//Vignette intensity doesn't go over 1.0
+				if (amount > 1.0f)
+					amount = 1.0f;
+
+				GameSettings.AdvSettings.VignetteIntensity = amount;
+				GameSettings.Save();
+
+				return;
+			}
+
+			Logger.Log("Invalid input!", LogVerbosity.Error);
+		}
+
+		[ConCommand("r_vignette_smoothness", "Changes the vignette smoothness", 1, 1)]
+		public static void VignetteSmoothness(string[] args)
+		{
+			string stringAmount = args[0].ToLower();
+
+			if(float.TryParse(stringAmount, out float amount))
+			{
+				//Vignette smoothness doesn't go over 1.0
+				if (amount > 1.0f)
+					amount = 1.0f;
+
+				GameSettings.AdvSettings.VignetteSmoothness = amount;
 				GameSettings.Save();
 
 				return;
