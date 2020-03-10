@@ -69,7 +69,7 @@ namespace Settings.URPSettings
 
 		#region Motion Blur
 
-		[ConCommand("r_motionblur_enabled", "Enables or disables motion blur", 1 ,1)]
+		[ConCommand("r_motionblur_enabled", "Enables or disables motion blur", 1, 1)]
 		public static void MotionBlurEnable(string[] args)
 		{
 			string toggle = args[0].ToLower();
@@ -97,7 +97,7 @@ namespace Settings.URPSettings
 		{
 			string stringAmount = args[0].ToLower();
 
-			if(float.TryParse(stringAmount, out float amount))
+			if (float.TryParse(stringAmount, out float amount))
 			{
 				//Motion blur intensity doesn't go over 1.0
 				if (amount > 1.0f)
@@ -117,7 +117,7 @@ namespace Settings.URPSettings
 		{
 			string stringAmount = args[0].ToLower();
 
-			if(float.TryParse(stringAmount, out float amount))
+			if (float.TryParse(stringAmount, out float amount))
 			{
 				//Motion blur clamp doesn't go over 0.2
 				if (amount > 0.2f)
@@ -131,7 +131,7 @@ namespace Settings.URPSettings
 
 			Logger.Log("Invalid input!", LogVerbosity.Error);
 		}
-		
+
 		#endregion
 
 		#region Bloom
@@ -164,7 +164,7 @@ namespace Settings.URPSettings
 		{
 			string stringAmount = args[0].ToLower();
 
-			if(float.TryParse(stringAmount, out float amount))
+			if (float.TryParse(stringAmount, out float amount))
 			{
 				GameSettings.AdvSettings.BloomThreshold = amount;
 				GameSettings.Save();
@@ -180,7 +180,7 @@ namespace Settings.URPSettings
 		{
 			string stringAmount = args[0].ToLower();
 
-			if(float.TryParse(stringAmount, out float amount))
+			if (float.TryParse(stringAmount, out float amount))
 			{
 				GameSettings.AdvSettings.BloomIntensity = amount;
 				GameSettings.Save();
@@ -223,7 +223,7 @@ namespace Settings.URPSettings
 		{
 			string stringAmount = args[0].ToLower();
 
-			if(float.TryParse(stringAmount, out float amount))
+			if (float.TryParse(stringAmount, out float amount))
 			{
 				//Vignette intensity doesn't go over 1.0
 				if (amount > 1.0f)
@@ -243,7 +243,7 @@ namespace Settings.URPSettings
 		{
 			string stringAmount = args[0].ToLower();
 
-			if(float.TryParse(stringAmount, out float amount))
+			if (float.TryParse(stringAmount, out float amount))
 			{
 				//Vignette smoothness doesn't go over 1.0
 				if (amount > 1.0f)
