@@ -36,6 +36,10 @@ namespace Settings
 			//Loop over each setting menu and all the sub-settings
 			foreach (PropertyInfo settingInfo in GameSettings.GetSettingClasses())
 			{
+				//If it has the don't show attribute, then, well... don't show it
+				if(Attribute.GetCustomAttribute(settingInfo, typeof(SettingsDontShowAttribute)) != null)
+					continue;
+
 				object settingGroupInstance = settingInfo.GetStaticValue<object>();
 
 				//If it has the SettingsMenuFormatAttribute then use the format name of that
@@ -53,6 +57,10 @@ namespace Settings
 					settingInfo.PropertyType.GetFields(BindingFlags.Instance | BindingFlags.Public);
 				foreach (FieldInfo settingField in menuFields)
 				{
+					//If it has the don't show attribute, then, well... don't show it
+					if(Attribute.GetCustomAttribute(settingField, typeof(SettingsDontShowAttribute)) != null)
+						continue;
+
 					Type fieldType = settingField.FieldType;
 
 					//TODO: Considering the unity slider uses a float, could we have 1 overload with a bool for int or float mode?
