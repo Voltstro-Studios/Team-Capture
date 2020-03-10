@@ -12,6 +12,7 @@ namespace Settings
 		public static void Load()
 		{
 			GameSettings.SettingsLoaded += ApplySettings;
+			ApplySettings();
 		}
 
 		private static void ApplySettings()
