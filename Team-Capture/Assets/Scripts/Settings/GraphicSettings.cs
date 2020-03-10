@@ -20,7 +20,7 @@ namespace Settings
 			VideoSettingsClass settings = GameSettings.VideoSettings;
 			Screen.SetResolution(settings.Resolution.width, settings.Resolution.height, settings.ScreenMode, settings.Resolution.refreshRate);
 
-			Logger.Log("Applied video settings");
+			Logger.Log("Applied Video settings");
 		}
 
 		#region Video Console Commands

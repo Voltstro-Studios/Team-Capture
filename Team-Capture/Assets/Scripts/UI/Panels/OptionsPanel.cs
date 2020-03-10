@@ -24,6 +24,16 @@ namespace UI.Panels
 		[SerializeField] private GameObject settingsSliderPrefab;
 		[SerializeField] private GameObject settingsDropdownPrefab;
 
+		private void Start()
+		{
+			GetComponent<DynamicSettingsUi>().UpdateUI();
+
+			ClosePanels();
+
+			if(settingPanels.Count != 0)
+				settingPanels[0].SetActive(true);
+		}
+
 		public void SaveSettings()
 		{
 			GameSettings.Save();
@@ -68,6 +78,14 @@ namespace UI.Panels
 			settingPanels.Clear();
 		}
 
+		private void ClosePanels()
+		{
+			foreach (GameObject panel in settingPanels)
+			{
+				panel.SetActive(false);
+			}
+		}
+
 		private GameObject GetMenuPanel(string panelName)
 		{
 			IEnumerable<GameObject> result = from a in settingPanels
@@ -81,11 +99,10 @@ namespace UI.Panels
 
 		#region Add UI Elemements
 
-		private GameObject AddTitleToPanel(GameObject panel, string title)
+		private void AddTitleToPanel(GameObject panel, string title)
 		{
 			GameObject titleObject = Instantiate(settingsTitlePrefab, GetPanelItemArea(panel), false);
 			titleObject.GetComponent<TextMeshProUGUI>().text = title;
-			return titleObject;
 		}
 
 		public Toggle AddToggleToPanel(GameObject panel, string toggleText, bool currentValue)

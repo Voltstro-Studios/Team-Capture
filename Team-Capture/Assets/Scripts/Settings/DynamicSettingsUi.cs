@@ -15,20 +15,18 @@ using Logger = Core.Logger.Logger;
 
 namespace Settings
 {
-	//TODO: A lot is gonna change in this... I am gonna have fun rewriting this, thanks Rowan...
 	[RequireComponent(typeof(OptionsPanel))]
 	public class DynamicSettingsUi : MonoBehaviour
 	{
 		private OptionsPanel optionsPanel;
 
-		private void Start()
+		private void Awake()
 		{
 			optionsPanel = GetComponent<OptionsPanel>();
-			UpdateUI();
 		}
 
 		//TODO: The sub-functions need to update the UI element based on the reflected value on startup/settings reload
-		private void UpdateUI()
+		public void UpdateUI()
 		{
 			Stopwatch stopwatch = Stopwatch.StartNew();
 
