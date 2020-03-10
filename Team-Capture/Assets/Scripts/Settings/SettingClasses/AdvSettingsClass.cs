@@ -8,8 +8,7 @@ namespace Settings.SettingClasses
 	public sealed class AdvSettingsClass : Setting
 	{
 		public MSAAQuality MsaaQuality = MSAAQuality.X4;
-		public ShadowCascadesOption ShadowCascades = ShadowCascadesOption.FourCascades;
-
+		
 		public bool PostProcessing = true;
 		public bool HDR = true;
 
@@ -20,6 +19,10 @@ namespace Settings.SettingClasses
 
 		public bool Bloom = true;
 
+		[SettingsDontShow] public float BloomThreshold = 1.17f;
+		[SettingsDontShow] public float BloomIntensity = 0.02f;
+
 		[Range(10, 100)] public float ShadowDistance = 45;
+		public ShadowCascadesOption ShadowCascades = ShadowCascadesOption.FourCascades;
 	}
 }

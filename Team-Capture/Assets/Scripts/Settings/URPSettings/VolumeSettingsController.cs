@@ -43,14 +43,21 @@ namespace Settings.URPSettings
 			}
 
 			if (ActiveVolume.profile.TryGet(out Bloom bloom))
+			{
 				bloom.active = GameSettings.AdvSettings.Bloom;
+				bloom.threshold.value = GameSettings.AdvSettings.BloomThreshold;
+				bloom.intensity.value = GameSettings.AdvSettings.BloomIntensity;
+			}
+				
 
 			Logger.Log("Applied Volume(Post-Processing) Settings");
 		}
 
 		#region Console Command
 
-		[ConCommand("r_motionblur_enabled", "Enables or disables motion blur")]
+		#region Motion Blur
+
+		[ConCommand("r_motionblur_enabled", "Enables or disables motion blur", 1 ,1)]
 		public static void MotionBlurEnable(string[] args)
 		{
 			string toggle = args[0].ToLower();
@@ -73,7 +80,7 @@ namespace Settings.URPSettings
 			}
 		}
 
-		[ConCommand("r_motionblur_intensity", "Changes the motion blur intensity")]
+		[ConCommand("r_motionblur_intensity", "Changes the motion blur intensity", 1, 1)]
 		public static void MotionBlurIntensity(string[] args)
 		{
 			string stringAmount = args[0].ToLower();
@@ -93,7 +100,7 @@ namespace Settings.URPSettings
 			Logger.Log("Invalid input!", LogVerbosity.Error);
 		}
 
-		[ConCommand("r_motionblur_clamp", "Changes the motion blur clamp")]
+		[ConCommand("r_motionblur_clamp", "Changes the motion blur clamp", 1, 1)]
 		public static void MotionBlurClamp(string[] args)
 		{
 			string stringAmount = args[0].ToLower();
@@ -112,6 +119,67 @@ namespace Settings.URPSettings
 
 			Logger.Log("Invalid input!", LogVerbosity.Error);
 		}
+		
+		#endregion
+
+		#region Bloom
+
+		[ConCommand("r_bloom_enabled", "Enables or disables bloom", 1, 1)]
+		public static void BloomEnable(string[] args)
+		{
+			string toggle = args[0].ToLower();
+
+			switch (toggle)
+			{
+				case "1":
+				case "true":
+					GameSettings.AdvSettings.Bloom = true;
+					GameSettings.Save();
+					break;
+				case "0":
+				case "false":
+					GameSettings.AdvSettings.Bloom = false;
+					GameSettings.Save();
+					break;
+				default:
+					Logger.Log("Invalid argument!", LogVerbosity.Error);
+					break;
+			}
+		}
+
+		[ConCommand("r_bloom_threshold", "Changes the bloom threshold", 1, 1)]
+		public static void BloomThreshold(string[] args)
+		{
+			string stringAmount = args[0].ToLower();
+
+			if(float.TryParse(stringAmount, out float amount))
+			{
+				GameSettings.AdvSettings.BloomThreshold = amount;
+				GameSettings.Save();
+
+				return;
+			}
+
+			Logger.Log("Invalid input!", LogVerbosity.Error);
+		}
+
+		[ConCommand("r_bloom_intensity", "Changes the bloom intensity", 1, 1)]
+		public static void BloomIntensity(string[] args)
+		{
+			string stringAmount = args[0].ToLower();
+
+			if(float.TryParse(stringAmount, out float amount))
+			{
+				GameSettings.AdvSettings.BloomIntensity = amount;
+				GameSettings.Save();
+
+				return;
+			}
+
+			Logger.Log("Invalid input!", LogVerbosity.Error);
+		}
+
+		#endregion
 
 		#endregion
 	}
