@@ -60,7 +60,7 @@ namespace Player
 			//Setup UI
 			ClientUI clientUi = Instantiate(clientUiPrefab).GetComponent<ClientUI>();
 			GetComponent<PlayerManager>().clientUi = clientUi;
-			clientUi.SetupUi(GetComponent<PlayerManager>());
+			clientUi.SetupUI(GetComponent<PlayerManager>());
 
 			//Lock the cursor
 			Cursor.visible = false;

@@ -8,23 +8,20 @@ namespace UI
 	{
 		public static bool IsPauseMenuOpen;
 
-		public Hud hud;
-
-		public KillFeed killFeed;
-
-		public MainMenuController pauseMenu;
-
-		public GameObject scoreBoardObject;
-
 		[HideInInspector] public PlayerManager player;
 
-		public ClientUI SetupUi(PlayerManager playerManager)
+		public Hud hud;
+		public KillFeed killFeed;
+		public MainMenuController pauseMenu;
+		public GameObject scoreBoardObject;
+
+		public ClientUI SetupUI(PlayerManager playerManager)
 		{
 			IsPauseMenuOpen = false;
 
-			player = playerManager;
-
 			hud.clientUi = this;
+
+			player = playerManager;
 
 			pauseMenu.gameObject.SetActive(false);
 
