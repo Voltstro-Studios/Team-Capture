@@ -23,6 +23,8 @@ namespace Settings
 			Logger.Log("Applied video settings");
 		}
 
+		#region Video Console Commands
+
 		[ConCommand("r_resolution", "Set the resolution (width x height)", 2, 2)]
 		public static void SetResolution(string[] args)
 		{
@@ -30,17 +32,27 @@ namespace Settings
 			{
 				if (int.TryParse(args[1], out int heightRes))
 				{
-					GameSettings.VideoSettings.Resolution = new Resolution
-					{
-						height = heightRes,
-						width = widthRes,
-						refreshRate = Screen.currentResolution.refreshRate
-					};
+					GameSettings.VideoSettings.Resolution.width = widthRes;
+					GameSettings.VideoSettings.Resolution.height = heightRes;
 
 					GameSettings.Save();
 
 					return;
 				}
+			}
+
+			Logger.Log("Invalid input!", LogVerbosity.Error);
+		}
+
+		[ConCommand("r_refreshrate", "Sets the refresh rate", 1, 1)]
+		public static void SetRefreshRate(string[] args)
+		{
+			if (int.TryParse(args[0], out int refreshRate))
+			{
+				GameSettings.VideoSettings.Resolution.refreshRate = refreshRate;
+				GameSettings.Save();
+
+				return;
 			}
 
 			Logger.Log("Invalid input!", LogVerbosity.Error);
@@ -61,5 +73,7 @@ namespace Settings
 
 			Logger.Log("Invalid input!", LogVerbosity.Error);
 		}
+
+		#endregion
 	}
 }
