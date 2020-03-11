@@ -31,6 +31,9 @@ namespace Settings.SettingClasses
 		[Range(10, 100)] public float ShadowDistance = 45;
 		public ShadowCascadesOption ShadowCascades = ShadowCascadesOption.FourCascades;
 
-		[Range(50, 100)] public int FOV = 90;
+		//Camera Settings
+		[Range(50, 100)] public int CameraFOV = 90;
+		public AntialiasingMode CameraAntialiasing = AntialiasingMode.SubpixelMorphologicalAntiAliasing;
+		[SettingsDontShow] public AntialiasingQuality CameraAntialiasingQuality = AntialiasingQuality.High;
 	}
 }
