@@ -30,5 +30,7 @@ namespace Settings.SettingClasses
 		//Shadow settings
 		[Range(10, 100)] public float ShadowDistance = 45;
 		public ShadowCascadesOption ShadowCascades = ShadowCascadesOption.FourCascades;
+
+		[Range(50, 100)] public int FOV = 90;
 	}
 }

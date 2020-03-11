@@ -1237,15 +1237,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53f16aed0ae221d45851676ca49f2f28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  blackBackgroundAnimator: {fileID: 1669149775}
-  blackBackgroundCloseTriggerName: Exit
-  blackBackgroundWaitTime: 0.2
   mainMenuPanel: {fileID: 319514907}
   menuPanels:
   - {fileID: 11400000, guid: 28cdc30fea405604d8606f47dce57ea2, type: 2}
   - {fileID: 11400000, guid: f472b36e4e05d0441ae031cff19e576d, type: 2}
   - {fileID: 11400000, guid: 453728d24005aff4a80d5f5bfca1bc91, type: 2}
   - {fileID: 11400000, guid: 501c13d390213f647b2cc936a29e1c40, type: 2}
+  closeKey: 27
+  blackBackgroundAnimator: {fileID: 1669149775}
+  blackBackgroundCloseTriggerName: Exit
+  blackBackgroundWaitTime: 0.2
   topBlackBarAnimator: {fileID: 1843545829}
   topBlackBarCloseTriggerName: Exit
   topBlackBarWaitTime: 0.5
@@ -3615,6 +3616,7 @@ MonoBehaviour:
   m_RequiresDepthTextureOption: 2
   m_RequiresOpaqueTextureOption: 2
   m_CameraType: 0
+  m_CameraOutput: 0
   m_Cameras: []
   m_RendererIndex: -1
   m_VolumeLayerMask:
@@ -3626,7 +3628,6 @@ MonoBehaviour:
   m_AntialiasingQuality: 2
   m_StopNaN: 0
   m_Dithering: 1
-  m_ClearDepth: 1
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_Version: 2

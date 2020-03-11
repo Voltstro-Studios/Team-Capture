@@ -73,7 +73,7 @@ namespace Settings
 						if (rangeAttribute != null)
 							CreateIntSlider(settingField.GetValue<int>(settingGroupInstance), (int) rangeAttribute.min,
 								(int) rangeAttribute.max,
-								settingField, settingMenu);
+								settingField, panel);
 						else
 							CreateIntField(settingField.GetValue<int>(settingGroupInstance), settingField, settingMenu);
 					}
@@ -85,16 +85,14 @@ namespace Settings
 						//If it has a range attribute, create a slider, otherwise use a input field
 						if (rangeAttribute != null)
 							CreateFloatSlider(settingField.GetValue<float>(settingGroupInstance), rangeAttribute.min,
-								rangeAttribute.max,
-								settingField, settingMenu, panel);
+								rangeAttribute.max, settingField, panel);
 						else
 							CreateFloatField(settingField.GetValue<float>(settingGroupInstance), settingField,
 								settingMenu);
 					}
 					else if (fieldType == typeof(bool))
 					{
-						CreateBoolToggle(settingField.GetValue<bool>(settingGroupInstance), settingField, settingMenu,
-							panel);
+						CreateBoolToggle(settingField.GetValue<bool>(settingGroupInstance), settingField, panel);
 					}
 					else if (fieldType == typeof(string))
 					{
@@ -116,8 +114,7 @@ namespace Settings
 								settingMenu);
 						//Just a normal enum popup
 						else
-							CreateEnumDropdown(settingField.GetValue<int>(settingGroupInstance), settingField,
-								settingMenu, panel);
+							CreateEnumDropdown(settingField.GetValue<int>(settingGroupInstance), settingField, panel);
 					}
 					else
 					{
@@ -137,22 +134,16 @@ namespace Settings
 		// ReSharper disable MemberCanBeMadeStatic.Local
 		// ReSharper disable UnusedParameter.Local
 
-		private void CreateFloatSlider(float val, float min, float max, FieldInfo field, Menu menu, GameObject panel)
+		private void CreateFloatSlider(float val, float min, float max, FieldInfo field, GameObject panel)
 		{
-			Logger.Log(
-				$"\tCreating float slider for {field.Name} in {menu.Name}. Range is {min} to {max}, current is {val}",
-				LogVerbosity.Debug);
-
 			Slider slider = optionsPanel.AddSliderToPanel(panel, field.Name, val, false, min, max);
 			slider.onValueChanged.AddListener(f => field.SetValue(GetSettingObject(field), f));
 		}
 
-		private void CreateIntSlider(int val, int min, int max, FieldInfo field, Menu menu)
+		private void CreateIntSlider(int val, int min, int max, FieldInfo field, GameObject panel)
 		{
-			Logger.Log(
-				$"\tCreating int slider for {field.Name} in {menu.Name}. Range is {min} to {max}, current is {val}",
-				LogVerbosity.Debug);
-			// new Slider().onValueChanged.AddListener(f => field.SetValue(GetSettingObject(field),(int) f));
+			Slider slider = optionsPanel.AddSliderToPanel(panel, field.Name, val, true, min, max);
+			slider.onValueChanged.AddListener(f => field.SetValue(GetSettingObject(field), (int)f));
 		}
 
 		private void CreateFloatField(float val, FieldInfo field, Menu menu)
@@ -167,12 +158,9 @@ namespace Settings
 			// new IntegerField().RegisterValueChangedCallback(c => field.SetValue(GetSettingObject(field), c.newValue));
 		}
 
-		private void CreateBoolToggle(bool val, FieldInfo field, Menu menu, GameObject panel)
+		private void CreateBoolToggle(bool val, FieldInfo field, GameObject panel)
 		{
-			Logger.Log($"\tCreating bool toggle for {field.Name} in {menu.Name}. Current is {val}");
-
 			Toggle toggle = optionsPanel.AddToggleToPanel(panel, field.Name, val);
-
 			toggle.onValueChanged.AddListener(b => field.SetValue(GetSettingObject(field), b));
 		}
 
@@ -207,12 +195,8 @@ namespace Settings
 			});
 		}
 
-		private void CreateEnumDropdown(int val, FieldInfo field, Menu menu, GameObject panel)
+		private void CreateEnumDropdown(int val, FieldInfo field, GameObject panel)
 		{
-			Logger.Log(
-				$"\tCreating enum dropdown for {field.Name} in {menu.Name}. Current is {Enum.GetName(field.FieldType, val)}, options are {string.Join(", ", Enum.GetNames(field.FieldType))}",
-				LogVerbosity.Debug);
-
 			string[] names = Enum.GetNames(field.FieldType);
 			val = names.ToList().IndexOf(Enum.GetName(field.FieldType, val));
 			TMP_Dropdown dropdown = optionsPanel.AddDropdownToPanel(panel, field.Name, names, val);
