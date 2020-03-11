@@ -25,7 +25,7 @@ namespace Settings.URPSettings
 		{
 			editor.SetHdr(GameSettings.AdvSettings.HDR);
 			editor.SetShadowDistance(GameSettings.AdvSettings.ShadowDistance);
-			editor.SetAntiAliasing((MsaaQuality) GameSettings.AdvSettings.MsaaQuality);
+			editor.SetMsaaQuality((MsaaQuality) GameSettings.AdvSettings.MsaaQuality);
 			editor.SetShadowCascades(GameSettings.AdvSettings.ShadowCascades);
 
 			Logger.Log("Applied URP settings.");
