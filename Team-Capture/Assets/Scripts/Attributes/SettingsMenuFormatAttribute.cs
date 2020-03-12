@@ -2,7 +2,7 @@
 
 namespace Attributes
 {
-	[AttributeUsage(AttributeTargets.Property)]
+	[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
 	public class SettingsMenuFormatAttribute : Attribute
 	{
 		public SettingsMenuFormatAttribute(string menuFormat)

@@ -7,9 +7,9 @@ namespace Settings.SettingClasses
 {
 	public sealed class AdvSettingsClass : Setting
 	{
-		public MSAAQuality MsaaQuality = MSAAQuality.X4;
+		[SettingsMenuFormat("MSAA")] public MSAAQuality MsaaQuality = MSAAQuality.X4;
 		
-		public bool PostProcessing = true;
+		[SettingsMenuFormat("Post-Processing")] public bool PostProcessing = true;
 		public bool HDR = true;
 
 		//Motion blur settings
@@ -28,12 +28,12 @@ namespace Settings.SettingClasses
 		[SettingsDontShow] public float VignetteSmoothness = 0.2f;
 
 		//Shadow settings
-		[Range(10, 100)] public float ShadowDistance = 45;
-		public ShadowCascadesOption ShadowCascades = ShadowCascadesOption.FourCascades;
+		[SettingsMenuFormat("Shadow Distance")] [Range(10, 100)] public float ShadowDistance = 45;
+		[SettingsMenuFormat("Cascades")] public ShadowCascadesOption ShadowCascades = ShadowCascadesOption.FourCascades;
 
 		//Camera Settings
-		[Range(50, 100)] public int CameraFOV = 90;
-		public AntialiasingMode CameraAntialiasing = AntialiasingMode.SubpixelMorphologicalAntiAliasing;
+		[SettingsMenuFormat("FOV")] [Range(50, 100)] public int CameraFOV = 90;
+		[SettingsMenuFormat("Antialiasing")] public AntialiasingMode CameraAntialiasing = AntialiasingMode.SubpixelMorphologicalAntiAliasing;
 		[SettingsDontShow] public AntialiasingQuality CameraAntialiasingQuality = AntialiasingQuality.High;
 	}
 }

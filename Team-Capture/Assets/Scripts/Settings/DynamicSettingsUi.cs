@@ -136,13 +136,13 @@ namespace Settings
 
 		private void CreateFloatSlider(float val, float min, float max, FieldInfo field, GameObject panel)
 		{
-			Slider slider = optionsPanel.AddSliderToPanel(panel, field.Name, val, false, min, max);
+			Slider slider = optionsPanel.AddSliderToPanel(panel, GetFieldFormatName(field), val, false, min, max);
 			slider.onValueChanged.AddListener(f => field.SetValue(GetSettingObject(field), f));
 		}
 
 		private void CreateIntSlider(int val, int min, int max, FieldInfo field, GameObject panel)
 		{
-			Slider slider = optionsPanel.AddSliderToPanel(panel, field.Name, val, true, min, max);
+			Slider slider = optionsPanel.AddSliderToPanel(panel, GetFieldFormatName(field), val, true, min, max);
 			slider.onValueChanged.AddListener(f => field.SetValue(GetSettingObject(field), (int)f));
 		}
 
@@ -160,7 +160,7 @@ namespace Settings
 
 		private void CreateBoolToggle(bool val, FieldInfo field, GameObject panel)
 		{
-			Toggle toggle = optionsPanel.AddToggleToPanel(panel, field.Name, val);
+			Toggle toggle = optionsPanel.AddToggleToPanel(panel, GetFieldFormatName(field), val);
 			toggle.onValueChanged.AddListener(b => field.SetValue(GetSettingObject(field), b));
 		}
 
@@ -188,7 +188,7 @@ namespace Settings
 
 			//Create the dropdown, with all of our resolutions
 			TMP_Dropdown dropdown =
-				optionsPanel.AddDropdownToPanel(panel, field.Name, resolutionsText.ToArray(), activeResIndex);
+				optionsPanel.AddDropdownToPanel(panel, GetFieldFormatName(field), resolutionsText.ToArray(), activeResIndex);
 			dropdown.onValueChanged.AddListener(index =>
 			{
 				field.SetValue(GetSettingObject(field), resolutions[index]);
@@ -199,7 +199,7 @@ namespace Settings
 		{
 			string[] names = Enum.GetNames(field.FieldType);
 			val = names.ToList().IndexOf(Enum.GetName(field.FieldType, val));
-			TMP_Dropdown dropdown = optionsPanel.AddDropdownToPanel(panel, field.Name, names, val);
+			TMP_Dropdown dropdown = optionsPanel.AddDropdownToPanel(panel, GetFieldFormatName(field), names, val);
 
 			dropdown.onValueChanged.AddListener(index =>
 			{
@@ -225,6 +225,16 @@ namespace Settings
 			PropertyInfo settingGroup =
 				GameSettings.GetSettingClasses().First(p => p.PropertyType == field.DeclaringType);
 			return settingGroup.GetValue(null);
+		}
+
+		private string GetFieldFormatName(MemberInfo field)
+		{
+			string sideName = field.Name;
+			if (Attribute.GetCustomAttribute(field, typeof(SettingsMenuFormatAttribute)) is
+				SettingsMenuFormatAttribute attribute)
+				sideName = attribute.MenuNameFormat;
+
+			return sideName;
 		}
 
 		// ReSharper restore UnusedParameter.Local
