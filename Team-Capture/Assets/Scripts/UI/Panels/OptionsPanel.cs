@@ -12,7 +12,8 @@ namespace UI.Panels
 	{
 		private readonly List<GameObject> settingPanels = new List<GameObject>();
 
-		[Header("Object Locations")]
+		[Header("Object Locations")] 
+		[SerializeField] private GameObject appliedSettingsPanel;
 		[SerializeField] private Transform panelsLocation;
 		[SerializeField] private Transform buttonLocation;
 
@@ -32,11 +33,20 @@ namespace UI.Panels
 
 			if(settingPanels.Count != 0)
 				settingPanels[0].SetActive(true);
+
+			CloseAppliedSettingsPanel();
 		}
 
 		public void SaveSettings()
 		{
 			GameSettings.Save();
+
+			appliedSettingsPanel.SetActive(true);
+		}
+
+		public void CloseAppliedSettingsPanel()
+		{
+			appliedSettingsPanel.SetActive(false);
 		}
 
 		#region Panel Management
