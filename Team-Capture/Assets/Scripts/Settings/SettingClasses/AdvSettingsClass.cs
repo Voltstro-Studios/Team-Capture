@@ -28,7 +28,7 @@ namespace Settings.SettingClasses
 		[SettingsDontShow] public float VignetteSmoothness = 0.2f;
 
 		//Shadow settings
-		[SettingsPropertyFormatName("Shadow Distance")] [Range(10, 100)] public float ShadowDistance = 45;
+		[SettingsPropertyFormatName("Shadow Distance")] [Range(10, 100)] public int ShadowDistance = 45;
 		[SettingsPropertyFormatName("Cascades")] public ShadowCascadesOption ShadowCascades = ShadowCascadesOption.FourCascades;
 
 		//Camera Settings
