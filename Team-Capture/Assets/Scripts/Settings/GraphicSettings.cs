@@ -19,6 +19,8 @@ namespace Settings
 		{
 			VideoSettingsClass settings = GameSettings.VideoSettings;
 			Screen.SetResolution(settings.Resolution.width, settings.Resolution.height, settings.ScreenMode, settings.Resolution.refreshRate);
+			QualitySettings.masterTextureLimit = (int) settings.TextureQuality;
+			QualitySettings.vSyncCount = (int) settings.VSync;
 
 			Logger.Log("Applied Video settings");
 		}
