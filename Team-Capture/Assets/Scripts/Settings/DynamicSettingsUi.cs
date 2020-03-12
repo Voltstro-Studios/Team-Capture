@@ -42,10 +42,10 @@ namespace Settings
 
 				object settingGroupInstance = settingInfo.GetStaticValue<object>();
 
-				//If it has the SettingsMenuFormatAttribute then use the format name of that
+				//If it has the SettingsPropertyFormatNameAttribute then use the format name of that
 				string settingGroupName = settingInfo.Name;
-				if (Attribute.GetCustomAttribute(settingInfo, typeof(SettingsMenuFormatAttribute)) is
-					SettingsMenuFormatAttribute attribute)
+				if (Attribute.GetCustomAttribute(settingInfo, typeof(SettingsPropertyFormatNameAttribute)) is
+					SettingsPropertyFormatNameAttribute attribute)
 					settingGroupName = attribute.MenuNameFormat;
 
 				//Create a menu module
@@ -230,8 +230,8 @@ namespace Settings
 		private string GetFieldFormatName(MemberInfo field)
 		{
 			string sideName = field.Name;
-			if (Attribute.GetCustomAttribute(field, typeof(SettingsMenuFormatAttribute)) is
-				SettingsMenuFormatAttribute attribute)
+			if (Attribute.GetCustomAttribute(field, typeof(SettingsPropertyFormatNameAttribute)) is
+				SettingsPropertyFormatNameAttribute attribute)
 				sideName = attribute.MenuNameFormat;
 
 			return sideName;

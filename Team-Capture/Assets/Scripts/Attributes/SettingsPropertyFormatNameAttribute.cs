@@ -3,9 +3,9 @@
 namespace Attributes
 {
 	[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
-	public class SettingsMenuFormatAttribute : Attribute
+	public class SettingsPropertyFormatNameAttribute : Attribute
 	{
-		public SettingsMenuFormatAttribute(string menuFormat)
+		public SettingsPropertyFormatNameAttribute(string menuFormat)
 		{
 			MenuNameFormat = menuFormat;
 		}

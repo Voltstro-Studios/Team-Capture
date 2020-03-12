@@ -21,10 +21,10 @@ namespace Settings
 
 		#region Settings
 
-		[SettingsMenuFormat("Video Settings")]
+		[SettingsPropertyFormatName("Video Settings")]
 		public static VideoSettingsClass VideoSettings { get; } = new VideoSettingsClass();
 
-		[SettingsMenuFormat("Advance Settings")]
+		[SettingsPropertyFormatName("Advance Settings")]
 		public static AdvSettingsClass AdvSettings { get; } = new AdvSettingsClass();
 
 		#endregion

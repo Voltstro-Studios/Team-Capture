@@ -7,6 +7,6 @@ namespace Settings.SettingClasses
 	{
 		public Resolution Resolution = Screen.currentResolution;
 		
-		[SettingsMenuFormat("Screen Mode")] public FullScreenMode ScreenMode = FullScreenMode.FullScreenWindow;
+		[SettingsPropertyFormatName("Screen Mode")] public FullScreenMode ScreenMode = FullScreenMode.FullScreenWindow;
 	}
 }
