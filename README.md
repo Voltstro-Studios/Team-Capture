@@ -42,9 +42,9 @@ If you think you can help out the team, please don't hesitate to email us at: st
 
 ## Getting the project
 
-We currently don't offer any pre built builds of the project yet.
+We currently don't offer any prebuilt builds of the project yet.
 
-You will need to build the project your self to play!
+You will need to build the project yourself to play!
 
 ### Prerequisites
 
@@ -92,7 +92,7 @@ While working on the project, when you go to test your scene or code, remember t
 
 **Q:** I can't program or make assets, is there any other way I can support the project?
 
-**A:** If you want to support the project, and you can't make assets, then you can help share the project. Tell your friends, family or hell, even your dog about the project and it can massively help us!
+**A:** If you want to support the project, and you can't make assets, then you can help by sharing the project. Tell your friends, family or hell, even your dog about the project, and it can massively help us!
 
 # Special Thanks
 
@@ -102,4 +102,4 @@ While working on the project, when you go to test your scene or code, remember t
 
 - [Newtonsoft.Json](https://www.newtonsoft.com/json)
 
-- Friends, family, and students at school for suggestions, ideas and bug fixes.
+- Friends, family, and students at school for suggestions, ideas and bug hunting.
