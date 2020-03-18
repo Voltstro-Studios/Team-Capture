@@ -1,8 +1,11 @@
-﻿using Core;
+﻿using System;
+using Core;
+using LagCompensation;
 using Mirror;
 using UI;
 using UnityEngine;
 using Weapons;
+using Random = UnityEngine.Random;
 
 namespace Player
 {
@@ -96,8 +99,8 @@ namespace Player
 			PlayerManager player = GameManager.GetPlayer(sourcePlayer);
 			if (player == null) return;
 
-			//SimulationHelper.SimulateCommand(player, () => CmdWeaponRayCast(sourcePlayer));
-			WeaponRayCast(sourcePlayer);
+			SimulationHelper.SimulateCommand(player, () => WeaponRayCast(sourcePlayer));
+			//WeaponRayCast(sourcePlayer);
 		}
 
 		[Server]

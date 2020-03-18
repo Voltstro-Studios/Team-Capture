@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Mirror.LiteNetLib4Mirror
+namespace Mirror.Runtime.Transport.LiteNetLib4Mirror
 {
 	[RequireComponent(typeof(LiteNetLib4MirrorTransport))]
 	public class LiteNetLib4MirrorNetworkManager : NetworkManager
@@ -9,7 +9,7 @@ namespace Mirror.LiteNetLib4Mirror
 		/// Singleton of the modified NetworkManager
 		/// </summary>
 		// ReSharper disable once InconsistentNaming
-		public static new LiteNetLib4MirrorNetworkManager singleton;
+		public new static LiteNetLib4MirrorNetworkManager singleton;
 
 		public override void Awake()
 		{

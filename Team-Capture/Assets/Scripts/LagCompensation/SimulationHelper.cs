@@ -18,15 +18,19 @@ namespace LagCompensation
 			for (int i = 0; i < SimulationObjects.Count; i++) SimulationObjects[i].AddFrame();
 		}
 
-		public static T SimulateCommand<T>(PlayerManager playerExecutedCommand, Func<T> command)
+		public static void SimulateCommand(PlayerManager playerExecutedCommand, Action command)
 		{
-			//TODO: Figure out what frame ID to use
-			int frameId = 1;
+			int frameId = CurrentFrame - (int)Math.Ceiling(playerExecutedCommand.latency);
+			Debug.Log($"Current frame is {CurrentFrame}, using frame {frameId}");
 
-			if (frameId > TCNetworkManager.Instance.maxFrameCount)
-				frameId = TCNetworkManager.Instance.maxFrameCount;
+			//if (frameId > TCNetworkManager.Instance.maxFrameCount)
+			//	frameId = TCNetworkManager.Instance.maxFrameCount;
 
-			return Simulate<T>(frameId, command);
+			Simulate<object>(frameId, () =>
+			{
+				command();
+				return null;
+			});
 		}
 
 		/// <summary>

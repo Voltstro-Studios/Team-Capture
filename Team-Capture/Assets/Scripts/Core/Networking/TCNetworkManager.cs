@@ -5,8 +5,9 @@ using Core.Logger;
 using Core.Networking.Discovery;
 using Core.Networking.Messages;
 using LagCompensation;
+using LiteNetLib;
 using Mirror;
-using Mirror.LiteNetLib4Mirror;
+using Mirror.Runtime.Transport.LiteNetLib4Mirror;
 using Pickups;
 using SceneManagement;
 using UI.Panels;
@@ -16,7 +17,7 @@ using Weapons;
 namespace Core.Networking
 {
 	[RequireComponent(typeof(TCGameDiscovery))]
-	public class TCNetworkManager : NetworkManager
+	public class TCNetworkManager : LiteNetLib4MirrorNetworkManager
 	{
 		/// <summary>
 		/// The active <see cref="TCNetworkManager"/>
@@ -68,7 +69,18 @@ namespace Core.Networking
 
 			//If we are playing, then update our simulation objects
 			if (mode == NetworkManagerMode.Host || mode == NetworkManagerMode.ServerOnly)
+			{
 				SimulationHelper.UpdateSimulationObjectData();
+
+				/*foreach (NetPeer peer in LiteNetLib4MirrorServer.Peers)
+				{
+					if (peer != null)
+					{
+						Logger.Logger.Log(peer.Id.ToString());
+					}
+				}
+				*/
+			}
 		}
 
 		public override void OnServerSceneChanged(string sceneName)
