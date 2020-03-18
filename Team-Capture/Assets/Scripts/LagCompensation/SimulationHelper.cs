@@ -18,7 +18,7 @@ namespace LagCompensation
 			for (int i = 0; i < SimulationObjects.Count; i++) SimulationObjects[i].AddFrame();
 		}
 
-		public static void SimulateCommand(PlayerManager playerExecutedCommand, Action command)
+		public static T SimulateCommand<T>(PlayerManager playerExecutedCommand, Func<T> command)
 		{
 			//TODO: Figure out what frame ID to use
 			int frameId = 1;
@@ -26,34 +26,39 @@ namespace LagCompensation
 			if (frameId > TCNetworkManager.Instance.maxFrameCount)
 				frameId = TCNetworkManager.Instance.maxFrameCount;
 
-			Simulate(frameId, command, playerExecutedCommand);
+			return Simulate<T>(frameId, command);
 		}
 
 		/// <summary>
-		/// Simulates an action at a previous point in time, with each <see cref="SimulationObjects"/>'s
-		/// <see cref="Transform"/> changed back as it was
+		///     Simulates an action at a previous point in time, with each <see cref="SimulationObjects" />'s
+		///     <see cref="Transform" /> changed back as it was
 		/// </summary>
-		/// <param name="frameId">The frame at which to simulate</param>
-		/// <param name="function">The <see cref="Func{T}"/> to run. The value returned by the function is returned</param>
-		/// <param name="playerWhoRanSimulate"></param>
+		/// <param name="frameId">The frame at which to simulate. If negative or zero, will be how many frames to go back from the current one</param>
+		/// <param name="function">The <see cref="Func{T}" /> to run. The value returned by the function is returned</param>
 		/// <param name="clientSubFrameLerp">
-		/// An optional modifier to change how much the position and rotation are interpolated
-		/// with the next frame
+		///     An optional modifier to change how much the position and rotation are interpolated
+		///     with the next frame
 		/// </param>
-		/// <returns>The value returned by the <paramref name="function"/></returns>
-		public static void Simulate(int frameId, Action function, PlayerManager playerWhoRanSimulate,
-			float clientSubFrameLerp = 0)
+		/// <returns>The value returned by the <paramref name="function" /></returns>
+		/// <typeparam name="T">
+		///     A generic type to pass to the <paramref name="function" /> as a return value. An object of this
+		///     type is returned.
+		/// </typeparam>
+		/// <returns></returns>
+		public static T Simulate<T>(int frameId, Func<T> function, float clientSubFrameLerp = 0)
 		{
-			//TODO: No clue why this is there, needs checking if it's useful at all
+			//This is a check to ensure that we don't try to lerp from the current frame into the future one that hasn't been created yet
 			if (frameId == CurrentFrame)
 				frameId--;
 
-			foreach (SimulationObject simulatedObject in SimulationObjects)
-				simulatedObject.SetStateTransform(frameId, clientSubFrameLerp);
+			for (int i = 0; i < SimulationObjects.Count; i++)
+				SimulationObjects[i].SetStateTransform(frameId, clientSubFrameLerp);
 
-			function();
+			T result = function.Invoke();
 
-			foreach (SimulationObject simulatedObject in SimulationObjects) simulatedObject.ResetStateTransform();
+			for (int i = 0; i < SimulationObjects.Count; i++) SimulationObjects[i].ResetStateTransform();
+
+			return result;
 		}
 	}
 }

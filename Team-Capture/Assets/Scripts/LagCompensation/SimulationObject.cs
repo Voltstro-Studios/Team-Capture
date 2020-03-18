@@ -7,14 +7,12 @@ namespace LagCompensation
 {
 	public class SimulationObject : MonoBehaviour
 	{
-		//TODO: For the StoredFrames list, it would probably be a lot more efficient to use a Queue instead of a List
 		/// <summary>
-		/// A <see cref="Dictionary{TKey,TValue}"/> containing the stored <see cref="SimulationFrameData"/>, accessible by frame
-		/// index (stored in
-		/// <see cref="StoredFrames"/>).
+		///     A <see cref="Dictionary{TKey,TValue}" /> containing the stored <see cref="SimulationFrameData" />, accessible by
+		///     frame index (stored in
+		///     <see cref="StoredFrames" />).
 		/// </summary>
-		[NonSerialized]
-		public readonly Dictionary<int, SimulationFrameData> FrameData = new Dictionary<int, SimulationFrameData>();
+		[NonSerialized] public readonly Dictionary<int, SimulationFrameData> FrameData = new Dictionary<int, SimulationFrameData>();
 
 		private readonly SimulationFrameData savedFrameData = new SimulationFrameData();
 
@@ -24,19 +22,8 @@ namespace LagCompensation
 		/// </summary>
 		[NonSerialized] public readonly List<int> StoredFrames = new List<int>();
 
-		[SerializeField] private bool showPreviousPositionsGizmos;
-
-		private void Start()
-		{
-			SimulationHelper.SimulationObjects.Add(this);
-		}
-
-		private void OnDestroy()
-		{
-			SimulationHelper.SimulationObjects.Remove(this);
-		}
-
 #if UNITY_EDITOR
+		[SerializeField] private bool showPreviousPositionsGizmos;
 
 		private void OnDrawGizmos()
 		{
@@ -49,8 +36,17 @@ namespace LagCompensation
 				Gizmos.DrawSphere(FrameData[StoredFrames[i]].Position, 0.5f);
 			}
 		}
-
 #endif
+
+		private void Start()
+		{
+			SimulationHelper.SimulationObjects.Add(this);
+		}
+
+		private void OnDestroy()
+		{
+			SimulationHelper.SimulationObjects.Remove(this);
+		}
 
 		/// <summary>
 		/// Creates and stores a new <see cref="SimulationFrameData"/> using the current position and rotation data
