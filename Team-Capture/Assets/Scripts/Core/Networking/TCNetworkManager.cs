@@ -63,10 +63,8 @@ namespace Core.Networking
 			LiteNetLib4MirrorTransport.Singleton.maxConnections = (ushort)maxConnections;
 		}
 
-		public override void LateUpdate()
+		public void FixedUpdate()
 		{
-			base.LateUpdate();
-
 			//If we are playing, then update our simulation objects
 			if (mode == NetworkManagerMode.Host || mode == NetworkManagerMode.ServerOnly)
 			{

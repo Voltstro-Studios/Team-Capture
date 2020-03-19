@@ -22,14 +22,14 @@ namespace Player
 
 		private bool isConnected;
 
-		/// <summary>
-		/// Is this player the one hosting the game?
-		/// </summary>
-		public bool IsHostPlayer { get; protected set; }
-
 		public int MaxHealth { get; } = 100;
 
 		#region Sync Vars
+
+		/// <summary>
+		/// Is this player the one hosting the game?
+		/// </summary>
+		[field: SyncVar] public bool IsHostPlayer { get; protected set; }
 
 		/// <summary>
 		/// Is this player dead?
@@ -82,21 +82,18 @@ namespace Player
 		
 		#endregion
 
-		private void Start()
-		{
-			if (NetworkManager.singleton.mode != NetworkManagerMode.Host || netId != 1) return;
-
-			IsHostPlayer = true;
-
-			Logger.Log($"Player {netId} is the host.");
-		}
-
 		public override void OnStartServer()
 		{
 			base.OnStartServer();
 
 			Health = MaxHealth;
 			weaponManager = GetComponent<WeaponManager>();
+
+			if (NetworkManager.singleton.mode != NetworkManagerMode.Host || netId != 1) return;
+
+			IsHostPlayer = true;
+
+			Logger.Log($"Player {netId} is the host.");
 		}
 
 		public override void OnStartLocalPlayer()

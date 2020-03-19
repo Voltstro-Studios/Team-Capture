@@ -29,7 +29,7 @@ namespace LagCompensation
 			//Logger.Log($"Player's ping is {playersLatency}", LogVerbosity.Debug);
 
 			int frameId = CurrentFrame - playersLatency;
-			Debug.Log($"Current frame is {CurrentFrame}, using frame {frameId}");
+			//Debug.Log($"Current frame is {CurrentFrame}, using frame {frameId}");
 
 			//if (frameId > TCNetworkManager.Instance.maxFrameCount)
 			//	frameId = TCNetworkManager.Instance.maxFrameCount;
