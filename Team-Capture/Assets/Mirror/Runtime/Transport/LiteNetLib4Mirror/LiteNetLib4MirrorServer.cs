@@ -72,6 +72,8 @@ namespace Mirror.Runtime.Transport.LiteNetLib4Mirror
 			if (peer.Id + 1 > maxId)
 				maxId = peer.Id + 1;
 			LiteNetLib4MirrorTransport.Singleton.OnServerConnected.Invoke(peer.Id + 1);
+
+			Debug.Log($"Added connection {peer.Id + 1}");
 		}
 
 		private static void OnNetworkReceive(NetPeer peer, NetPacketReader reader, DeliveryMethod deliveryMethod)
@@ -100,6 +102,8 @@ namespace Mirror.Runtime.Transport.LiteNetLib4Mirror
 			LiteNetLib4MirrorCore.LastDisconnectError = disconnectInfo.SocketErrorCode;
 			LiteNetLib4MirrorCore.LastDisconnectReason = disconnectInfo.Reason;
 			LiteNetLib4MirrorTransport.Singleton.OnServerDisconnected.Invoke(peer.Id + 1);
+
+			Debug.Log($"Removed connection {peer.Id + 1}");
 		}
 
 		private static void OnConnectionRequest(ConnectionRequest request)

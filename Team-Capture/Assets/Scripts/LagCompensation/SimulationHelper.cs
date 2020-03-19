@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Core.Networking;
+using Mirror.Runtime.Transport.LiteNetLib4Mirror;
 using Player;
 using UnityEngine;
 
@@ -20,7 +20,15 @@ namespace LagCompensation
 
 		public static void SimulateCommand(PlayerManager playerExecutedCommand, Action command)
 		{
-			int frameId = CurrentFrame - (int)Math.Ceiling(playerExecutedCommand.latency);
+			int playersLatency;
+			if (playerExecutedCommand.IsHostPlayer)
+				playersLatency = 0;
+			else
+				playersLatency = LiteNetLib4MirrorServer.GetPing((int)playerExecutedCommand.netId - 1);
+
+			//Logger.Log($"Player's ping is {playersLatency}", LogVerbosity.Debug);
+
+			int frameId = CurrentFrame - playersLatency;
 			Debug.Log($"Current frame is {CurrentFrame}, using frame {frameId}");
 
 			//if (frameId > TCNetworkManager.Instance.maxFrameCount)

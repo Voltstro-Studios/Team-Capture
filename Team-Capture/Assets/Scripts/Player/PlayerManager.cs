@@ -19,9 +19,13 @@ namespace Player
 		[SerializeField] private GameObject[] disableGameObjectsOnDeath;
 
 		[SerializeField] private float invincibilityLastTime = 3.0f;
-		[SerializeField] private float latencyUpdateTime = 2.0f;
 
 		private bool isConnected;
+
+		/// <summary>
+		/// Is this player the one hosting the game?
+		/// </summary>
+		public bool IsHostPlayer { get; protected set; }
 
 		public int MaxHealth { get; } = 100;
 
@@ -56,7 +60,6 @@ namespace Player
 		/// <summary>
 		/// Updated every X amount of seconds and haves this player's latency
 		/// </summary>
-		//TODO: We gotta find a better way of getting a client's latency
 		[SyncVar] public double latency;
 
 		[SyncEvent] public event PlayerKilledDelegate EventPlayerKilled;
@@ -79,6 +82,15 @@ namespace Player
 		
 		#endregion
 
+		private void Start()
+		{
+			if (NetworkManager.singleton.mode != NetworkManagerMode.Host || netId != 1) return;
+
+			IsHostPlayer = true;
+
+			Logger.Log($"Player {netId} is the host.");
+		}
+
 		public override void OnStartServer()
 		{
 			base.OnStartServer();
@@ -92,8 +104,6 @@ namespace Player
 			base.OnStartLocalPlayer();
 
 			isConnected = true;
-
-			StartCoroutine(LatencyUpdateLoop());
 		}
 
 		public override void OnStopAuthority()
@@ -110,15 +120,6 @@ namespace Player
 		public void CmdSuicide()
 		{
 			TakeDamage(Health, transform.name);
-		}
-
-		private IEnumerator LatencyUpdateLoop()
-		{
-			while (isConnected)
-			{
-				latency = NetworkTime.rtt;
-				yield return new WaitForSeconds(latencyUpdateTime);
-			}
 		}
 
 		#region Death, Respawn, Damage
