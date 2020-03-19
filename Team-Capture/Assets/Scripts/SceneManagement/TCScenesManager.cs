@@ -7,10 +7,14 @@ namespace SceneManagement
 {
 	public static class TCScenesManager
 	{
+		private static List<TCScene> scenes = new List<TCScene>();
+
 		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
 		private static void InitTcSceneManager()
 		{
 			SceneManager.sceneLoaded += UnitySceneManagerLoaded;
+
+			scenes = GetAllEnabledTCScenesInfo().ToList();
 		}
 
 		#region Loading Scenes
@@ -102,7 +106,7 @@ namespace SceneManagement
 		/// <returns></returns>
 		public static TCScene FindSceneInfo(string name)
 		{
-			return GetAllEnabledTCScenesInfo().FirstOrDefault(s => s.name == name);
+			return scenes.FirstOrDefault(s => s.name == name);
 		}
 
 		/// <summary>
