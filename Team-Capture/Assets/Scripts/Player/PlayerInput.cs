@@ -39,7 +39,10 @@ namespace Player
 
 			//Pause menu
 			if (Input.GetKeyDown(pauseMenuKey))
-				playerManager.clientUi.TogglePauseMenu();
+			{
+				if(playerManager.clientUi.pauseMenu.GetActivePanel() == null)
+					playerManager.clientUi.TogglePauseMenu();
+			}
 
 			//Make sure mouse lock/visibility is correct
 			HandleMouseLock();

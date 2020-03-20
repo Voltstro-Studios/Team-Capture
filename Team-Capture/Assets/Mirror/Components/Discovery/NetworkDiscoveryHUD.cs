@@ -83,7 +83,7 @@ namespace Mirror.Discovery
 
         void Connect(ServerResponse info)
         {
-	        NetworkManager.singleton.StartClient(info.uri);
+            NetworkManager.singleton.StartClient(info.uri);
         }
 
         public void OnDiscoveredServer(ServerResponse info)

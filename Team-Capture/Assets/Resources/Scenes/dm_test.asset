@@ -16,10 +16,12 @@ MonoBehaviour:
   displayName: Test World
   enabled: 1
   isOnlineScene: 1
+  canLoadTo: 1
+  pickupsParent: /Pickups/
   respawnTime: 4
   hitObjectLastTime: 2
-  weaponHit: {fileID: 8445816577206117301, guid: 70b310801ddf1f7439c40eec488e3fb2,
-    type: 3}
+  weaponHit: {fileID: 1617700753897852, guid: 2fc51477906b5d44b93e53cc25b2d012, type: 3}
   showStartTime: 1
+  isMainMenu: 0
   largeImageKey: tc_icon
   largeImageKeyText: Deathmatch

@@ -12,7 +12,8 @@ namespace UI.Panels
 	{
 		private readonly List<GameObject> settingPanels = new List<GameObject>();
 
-		[Header("Object Locations")]
+		[Header("Object Locations")] 
+		[SerializeField] private GameObject appliedSettingsPanel;
 		[SerializeField] private Transform panelsLocation;
 		[SerializeField] private Transform buttonLocation;
 
@@ -24,9 +25,28 @@ namespace UI.Panels
 		[SerializeField] private GameObject settingsSliderPrefab;
 		[SerializeField] private GameObject settingsDropdownPrefab;
 
+		private void Start()
+		{
+			GetComponent<DynamicSettingsUi>().UpdateUI();
+
+			ClosePanels();
+
+			if(settingPanels.Count != 0)
+				settingPanels[0].SetActive(true);
+
+			CloseAppliedSettingsPanel();
+		}
+
 		public void SaveSettings()
 		{
 			GameSettings.Save();
+
+			appliedSettingsPanel.SetActive(true);
+		}
+
+		public void CloseAppliedSettingsPanel()
+		{
+			appliedSettingsPanel.SetActive(false);
 		}
 
 		#region Panel Management
@@ -68,6 +88,14 @@ namespace UI.Panels
 			settingPanels.Clear();
 		}
 
+		private void ClosePanels()
+		{
+			foreach (GameObject panel in settingPanels)
+			{
+				panel.SetActive(false);
+			}
+		}
+
 		private GameObject GetMenuPanel(string panelName)
 		{
 			IEnumerable<GameObject> result = from a in settingPanels
@@ -81,11 +109,10 @@ namespace UI.Panels
 
 		#region Add UI Elemements
 
-		private GameObject AddTitleToPanel(GameObject panel, string title)
+		private void AddTitleToPanel(GameObject panel, string title)
 		{
 			GameObject titleObject = Instantiate(settingsTitlePrefab, GetPanelItemArea(panel), false);
 			titleObject.GetComponent<TextMeshProUGUI>().text = title;
-			return titleObject;
 		}
 
 		public Toggle AddToggleToPanel(GameObject panel, string toggleText, bool currentValue)
@@ -102,9 +129,12 @@ namespace UI.Panels
 		public Slider AddSliderToPanel(GameObject panel, string sideText, float currentValue, bool wholeNumbers = false, float min = 0, float max = 100)
 		{
 			GameObject sliderObject = Instantiate(settingsSliderPrefab, GetPanelItemArea(panel), false);
-			sliderObject.GetComponentInChildren<TextMeshProUGUI>().text = sideText;
+			SettingsSlider sliderSettings = sliderObject.GetComponent<SettingsSlider>();
+			sliderSettings.Setup(currentValue);
 
-			Slider slider = sliderObject.GetComponentInChildren<Slider>();
+			sliderSettings.propertyText.text = sideText;
+
+			Slider slider = sliderSettings.slider;
 			slider.wholeNumbers = wholeNumbers;
 			slider.minValue = min;
 			slider.maxValue = max;
@@ -113,19 +143,20 @@ namespace UI.Panels
 			return slider;
 		}
 
-		public TMP_Dropdown AddDropdownToPanel(GameObject panel, string[] options, int currentIndex)
+		public TMP_Dropdown AddDropdownToPanel(GameObject panel, string sideText, string[] options, int currentIndex)
 		{
-			// ReSharper disable once LocalVariableHidesMember
-			GameObject gameObject = Instantiate(settingsDropdownPrefab, GetPanelItemArea(panel), false);
-			TMP_Dropdown dropdown = gameObject.GetComponentInChildren<TMP_Dropdown>();
+			GameObject dropDownObject = Instantiate(settingsDropdownPrefab, GetPanelItemArea(panel), false);
+			SettingDropdown dropdownSettings = dropDownObject.GetComponent<SettingDropdown>();
+			dropdownSettings.settingsName.text = sideText;
+
 			List<TMP_Dropdown.OptionData> optionDatas = new List<TMP_Dropdown.OptionData>(options.Length);
 			for (int i = 0; i < options.Length; i++)
 			{
 				optionDatas.Add(new TMP_Dropdown.OptionData(options[i]));
 			}
-			dropdown.options = optionDatas;
-			dropdown.value = currentIndex;
-			return dropdown;
+			dropdownSettings.dropdown.options = optionDatas;
+			dropdownSettings.dropdown.value = currentIndex;
+			return dropdownSettings.dropdown;
 		}
 		
 		#endregion

@@ -11,17 +11,20 @@ namespace UI
 {
 	public class MainMenuController : MonoBehaviour
 	{
+		[Header("Base Settings")]
+		public Transform mainMenuPanel;
+		public TCMainMenuEvent[] menuPanels;
+		[SerializeField] private KeyCode closeKey = KeyCode.Escape;
+
 		[Header("Black Background")] public Animator blackBackgroundAnimator;
 		public string blackBackgroundCloseTriggerName = "Exit";
 		public float blackBackgroundWaitTime = 0.2f;
-		public Transform mainMenuPanel;
-		public TCMainMenuEvent[] menuPanels;
 
 		[Header("Top Black Bar")] public Animator topBlackBarAnimator;
 		public string topBlackBarCloseTriggerName = "Exit";
 		public float topBlackBarWaitTime = 0.2f;
 
-		public void Start()
+		private void Start()
 		{
 			topBlackBarAnimator.gameObject.SetActive(false);
 
@@ -40,9 +43,20 @@ namespace UI
 			}
 		}
 
+		private void Update()
+		{
+			//If the close key is pressed, then close the active panel
+			if (Input.GetKeyDown(closeKey))
+			{
+				CloseActivePanel();
+			}
+		}
+
 		private void OnDestroy()
 		{
 			Logger.Log("Resetting all main menu events...", LogVerbosity.Debug);
+
+			//Reset all the main menu script-able objects
 			foreach (TCMainMenuEvent menu in menuPanels)
 			{
 				menu.isOpen = false;
@@ -92,7 +106,11 @@ namespace UI
 			return result.FirstOrDefault();
 		}
 
-		private TCMainMenuEvent GetActivePanel()
+		/// <summary>
+		/// Returns the active panel's <see cref="TCMainMenuEvent"/>
+		/// </summary>
+		/// <returns></returns>
+		public TCMainMenuEvent GetActivePanel()
 		{
 			IEnumerable<TCMainMenuEvent> result = from a in menuPanels
 				where a.isOpen

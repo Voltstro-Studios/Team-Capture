@@ -11,11 +11,12 @@ using LiteNetLib4Mirror.Open.Nat;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Mirror.LiteNetLib4Mirror
+namespace Mirror.Runtime.Transport.LiteNetLib4Mirror
 {
 	[Serializable] public class UnityEventError : UnityEvent<SocketError> { }
 	[Serializable] public class UnityEventIntError : UnityEvent<int, SocketError> { }
 	[Serializable] public class UnityEventIpEndpointString : UnityEvent<IPEndPoint, string> { }
+
 	public static class LiteNetLib4MirrorUtils
 	{
 		internal static ushort LastForwardedPort;
@@ -40,25 +41,23 @@ namespace Mirror.LiteNetLib4Mirror
 
 		public static NetDataWriter ReusePut(NetDataWriter writer, string text, ref string lastText)
 		{
-			if (text != lastText)
-			{
-				lastText = text;
-				writer.Reset();
-				writer.Put(ToBase64(text));
-			}
+			if (text == lastText) return writer;
+
+			lastText = text;
+			writer.Reset();
+			writer.Put(ToBase64(text));
 
 			return writer;
 		}
 
 		public static NetDataWriter ReusePutDiscovery(NetDataWriter writer, string text, ref string lastText)
 		{
-			if (ApplicationName + text != lastText)
-			{
-				lastText = ApplicationName + text;
-				writer.Reset();
-				writer.Put(ApplicationName);
-				writer.Put(ToBase64(text));
-			}
+			if (ApplicationName + text == lastText) return writer;
+
+			lastText = ApplicationName + text;
+			writer.Reset();
+			writer.Put(ApplicationName);
+			writer.Put(ToBase64(text));
 
 			return writer;
 		}
@@ -105,15 +104,7 @@ namespace Mirror.LiteNetLib4Mirror
 
 		private static IPAddress FirstAddressOfType(IPAddress[] addresses, AddressFamily type)
 		{
-			for (int i = 0; i < addresses.Length; i++)
-			{
-				IPAddress address = addresses[i];
-				if (address.AddressFamily == type)
-				{
-					return address;
-				}
-			}
-			return null;
+			return addresses.FirstOrDefault(address => address.AddressFamily == type);
 		}
 
 		/// <summary>
@@ -124,9 +115,10 @@ namespace Mirror.LiteNetLib4Mirror
 		public static ushort GetFirstFreePort(params ushort[] ports)
 		{
 			if (ports == null || ports.Length == 0) throw new Exception("No ports provided");
-			ushort freeport = ports.Except(Array.ConvertAll(IPGlobalProperties.GetIPGlobalProperties().GetActiveUdpListeners(), p => (ushort)p.Port)).FirstOrDefault();
-			if (freeport == 0) throw new Exception("No free port!");
-			return freeport;
+			ushort freePort = ports.Except(Array.ConvertAll(IPGlobalProperties.GetIPGlobalProperties().GetActiveUdpListeners(), p => (ushort)p.Port)).FirstOrDefault();
+			
+			if (freePort == 0) throw new Exception("No free port!");
+			return freePort;
 		}
 
 #pragma warning disable 4014

@@ -1,7 +1,7 @@
 using System.Net.Sockets;
 using LiteNetLib;
 
-namespace Mirror.LiteNetLib4Mirror
+namespace Mirror.Runtime.Transport.LiteNetLib4Mirror
 {
 	public static class LiteNetLib4MirrorCore
 	{
@@ -62,27 +62,24 @@ namespace Mirror.LiteNetLib4Mirror
 			Host.SimulationMinLatency = LiteNetLib4MirrorTransport.Singleton.simulationMinLatency;
 			Host.SimulationMaxLatency = LiteNetLib4MirrorTransport.Singleton.simulationMaxLatency;
 
-			Host.BroadcastReceiveEnabled = server && LiteNetLib4MirrorDiscovery.Singleton != null;
-
 			Host.ChannelsCount = (byte)LiteNetLib4MirrorTransport.Singleton.channels.Length;
 		}
 
 		internal static void StopTransport()
 		{
-			if (Host != null)
-			{
-				LiteNetLib4MirrorServer.Peers = null;
-				Host.Flush();
-				Host.Stop();
-				Host = null;
-				LiteNetLib4MirrorTransport.Polling = false;
-				State = States.Idle;
-			}
+			if (Host == null) return;
+
+			LiteNetLib4MirrorServer.Peers = null;
+			Host.Flush();
+			Host.Stop();
+			Host = null;
+			LiteNetLib4MirrorTransport.Polling = false;
+			State = States.Idle;
 		}
 
 		internal static int GetMaxPacketSize(DeliveryMethod channel)
 		{
-			int mtu = Host != null && Host.FirstPeer != null ? Host.FirstPeer.Mtu : NetConstants.MaxPacketSize;
+			int mtu = Host?.FirstPeer?.Mtu ?? NetConstants.MaxPacketSize;
 			switch (channel)
 			{
 				case DeliveryMethod.ReliableOrdered:

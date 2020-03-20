@@ -24,5 +24,8 @@ MonoBehaviour:
   maxBullets: 18
   range: 30
   reloadTime: 2
-  spreadMin: -0.1
-  spreadMax: 0.1
+  spreadFactor: 0
+  bulletHolePrefab: {fileID: 1235035097298946, guid: 13a41486f54c3634fb3e501928c77d9d,
+    type: 3}
+  bulletHitEffectPrefab: {fileID: 1617700753897852, guid: 2fc51477906b5d44b93e53cc25b2d012,
+    type: 3}

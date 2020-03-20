@@ -6,8 +6,9 @@ using Core.Networking.Discovery;
 using Core.Networking.Messages;
 using LagCompensation;
 using Mirror;
-using Mirror.LiteNetLib4Mirror;
+using Mirror.Runtime.Transport.LiteNetLib4Mirror;
 using Pickups;
+using Player;
 using SceneManagement;
 using UI.Panels;
 using UnityEngine;
@@ -16,7 +17,7 @@ using Weapons;
 namespace Core.Networking
 {
 	[RequireComponent(typeof(TCGameDiscovery))]
-	public class TCNetworkManager : NetworkManager
+	public class TCNetworkManager : LiteNetLib4MirrorNetworkManager
 	{
 		/// <summary>
 		/// The active <see cref="TCNetworkManager"/>
@@ -62,13 +63,22 @@ namespace Core.Networking
 			LiteNetLib4MirrorTransport.Singleton.maxConnections = (ushort)maxConnections;
 		}
 
-		public override void LateUpdate()
+		public void FixedUpdate()
 		{
-			base.LateUpdate();
-
 			//If we are playing, then update our simulation objects
 			if (mode == NetworkManagerMode.Host || mode == NetworkManagerMode.ServerOnly)
+			{
 				SimulationHelper.UpdateSimulationObjectData();
+
+				/*foreach (NetPeer peer in LiteNetLib4MirrorServer.Peers)
+				{
+					if (peer != null)
+					{
+						Logger.Logger.Log(peer.Id.ToString());
+					}
+				}
+				*/
+			}
 		}
 
 		public override void OnServerSceneChanged(string sceneName)
@@ -128,11 +138,15 @@ namespace Core.Networking
 			//Start advertising the server when the server starts
 			gameDiscovery.AdvertiseServer();
 
+			StartCoroutine(UpdateLatency());
+
 			Logger.Logger.Log("Started server!");
 		}
 
 		public override void OnStopServer()
 		{
+			StopCoroutine(UpdateLatency());
+
 			base.OnStopServer();
 
 			//Stop advertising the server when the server stops
@@ -237,6 +251,27 @@ namespace Core.Networking
 			Logger.Logger.Log("Created game manager object.", LogVerbosity.Debug);
 		}
 
+		private IEnumerator UpdateLatency()
+		{
+			while (mode == NetworkManagerMode.Host || mode == NetworkManagerMode.ServerOnly)
+			{
+				foreach (PlayerManager player in GameManager.GetAllPlayers())
+				{
+					if (mode == NetworkManagerMode.Host && player.netId == 1)
+					{
+						player.latency = NetworkTime.rtt;
+						continue;
+					}
+
+					player.latency = LiteNetLib4MirrorServer.GetPing((int)player.netId - 1);
+				}
+
+				yield return new WaitForSeconds(3.0f);
+			}
+		}
+
+		#region Console Commands
+
 		[ConCommand("connect", "Connects to a server", 1, 1)]
 		public static void ConnectCommand(string[] args)
 		{
@@ -264,5 +299,7 @@ namespace Core.Networking
 
 			singleton.StopHost();
 		}
+		
+		#endregion
 	}
 }

@@ -1,49 +1,36 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using LiteNetLib;
 using LiteNetLib.Utils;
 using LiteNetLib4Mirror.Open.Nat;
 using UnityEngine;
 
-namespace Mirror.LiteNetLib4Mirror
+namespace Mirror.Runtime.Transport.LiteNetLib4Mirror
 {
-	public class LiteNetLib4MirrorTransport : Transport, ISegmentTransport
+	public class LiteNetLib4MirrorTransport : Mirror.Transport, ISegmentTransport
 	{
 		public static LiteNetLib4MirrorTransport Singleton;
 
-#if UNITY_EDITOR
 		[Header("Connection settings")]
-#endif
 		public string clientAddress = "127.0.0.1";
-#if UNITY_EDITOR
-		[Rename("Server IPv4 Bind Address")]
-#endif
+
 		public string serverIPv4BindAddress = "0.0.0.0";
+
 #if !DISABLE_IPV6
-#if UNITY_EDITOR
-		[Rename("Server IPv6 Bind Address")]
-#endif
 		public string serverIPv6BindAddress = "::";
-#endif
-		public ushort port = 7777;
-#if UNITY_EDITOR
-		[Rename("Use UPnP")]
-#endif
-		public bool useUpnP = true;
-		public ushort maxConnections = 20;
-#if !DISABLE_IPV6
-#if UNITY_EDITOR
-		[Rename("IPv6 Enabled")]
-#endif
+
 		public bool ipv6Enabled = true;
 #endif
+		public ushort port = 7777;
+
+		public bool useUpnP = true;
+
+		public ushort maxConnections = 20;
 
 		public const string Scheme = "tcp4";
 
-#if UNITY_EDITOR
-		[ArrayRename("Channel")]
-#endif
 		public DeliveryMethod[] channels =
 		{
 			DeliveryMethod.ReliableOrdered,
@@ -53,73 +40,59 @@ namespace Mirror.LiteNetLib4Mirror
 			DeliveryMethod.ReliableUnordered
 		};
 
-#if UNITY_EDITOR
 		[Header("Connection additional auth code (optional)")]
-#endif
 		public string authCode;
 
 		/// <summary>Library logic update (and send) period in milliseconds</summary>
-#if UNITY_EDITOR
 		[Header("LiteNetLib settings")]
 		[Tooltip("Library logic update (and send) period in milliseconds")]
-#endif
 		public int updateTime = 15;
+
 		/// <summary>Interval for latency detection and checking connection</summary>
-#if UNITY_EDITOR
 		[Tooltip("Interval for latency detection and checking connection")]
-#endif
 		public int pingInterval = 1000;
+
 		/// <summary>If client or server doesn't receive any packet from remote peer during this time then connection will be closed (including library internal keepalive packets)</summary>
-#if UNITY_EDITOR
 		[Tooltip("If client or server doesn't receive any packet from remote peer during this time then connection will be closed (including library internal keepalive packets)")]
-#endif
 		public int disconnectTimeout = 5000;
 		/// <summary>Delay between connection attempts</summary>
-#if UNITY_EDITOR
+
 		[Tooltip("Delay between connection attempts")]
-#endif
 		public int reconnectDelay = 500;
+
 		/// <summary>Maximum connection attempts before client stops and call disconnect event.</summary>
-#if UNITY_EDITOR
 		[Tooltip("Maximum connection attempts before client stops and call disconnect event.")]
-#endif
 		public int maxConnectAttempts = 10;
 
 		/// <summary>Simulate packet loss by dropping random amount of packets. (Works only in DEBUG mode)</summary>
-#if UNITY_EDITOR
 		[Header("Debug connection tests")][Tooltip("Simulate packet loss by dropping random amount of packets. (Works only in DEBUG mode)")]
-#endif
 		public bool simulatePacketLoss;
+
 		/// <summary>Chance of packet loss when simulation enabled. Value in percents.</summary>
-#if UNITY_EDITOR
 		[Range(0, 100)][Tooltip("Chance of packet loss when simulation enabled. Value in percents.")]
-#endif
 		public int simulationPacketLossChance = 10;
+
 		/// <summary>Simulate latency by holding packets for random time. (Works only in DEBUG mode)</summary>
-#if UNITY_EDITOR
 		[Tooltip("Simulate latency by holding packets for random time. (Works only in DEBUG mode)")]
-#endif
 		public bool simulateLatency;
+
 		/// <summary>Minimum simulated latency</summary>
-#if UNITY_EDITOR
 		[Tooltip("Minimum simulated latency")]
-#endif
 		public int simulationMinLatency = 30;
+
 		/// <summary>Maximum simulated latency</summary>
-#if UNITY_EDITOR
 		[Tooltip("Maximum simulated latency")]
-#endif
 		public int simulationMaxLatency = 100;
 
-#if UNITY_EDITOR
 		[Header("Error events")]
-#endif
 		public UnityEventError onClientSocketError;
 		public UnityEventIntError onServerSocketError;
 
 		internal static bool Polling;
 		private static readonly NetDataWriter ConnectWriter = new NetDataWriter();
+
 		#region Overridable methods
+
 		protected internal virtual void GetConnectData(NetDataWriter writer)
 		{
 			writer.Put(GetConnectKey());
@@ -141,15 +114,15 @@ namespace Mirror.LiteNetLib4Mirror
 		{
 
 		}
+
 		#endregion
 
 		internal void InitializeTransport()
 		{
-			if (Singleton == null)
-			{
-				Singleton = this;
-				LiteNetLib4MirrorCore.State = LiteNetLib4MirrorCore.States.Idle;
-			}
+			if (Singleton != null) return;
+
+			Singleton = this;
+			LiteNetLib4MirrorCore.State = LiteNetLib4MirrorCore.States.Idle;
 		}
 
 		private static string GetConnectKey()
@@ -174,11 +147,10 @@ namespace Mirror.LiteNetLib4Mirror
 		private void OnDestroy()
 		{
 			LiteNetLib4MirrorCore.StopTransport();
-			if (LiteNetLib4MirrorUtils.LastForwardedPort != 0)
-			{
-				NatDiscoverer.ReleaseAll();
-				LiteNetLib4MirrorUtils.LastForwardedPort = 0;
-			}
+
+			if (LiteNetLib4MirrorUtils.LastForwardedPort == 0) return;
+			NatDiscoverer.ReleaseAll();
+			LiteNetLib4MirrorUtils.LastForwardedPort = 0;
 		}
 		#endregion
 
@@ -239,12 +211,8 @@ namespace Mirror.LiteNetLib4Mirror
 		public override bool ServerSend(List<int> connectionIds, int channelId, ArraySegment<byte> data)
 		{
 			byte channel = (byte)(channelId < channels.Length ? channelId : 0);
-			bool success = true;
-			foreach (int id in connectionIds)
-			{
-				success &= LiteNetLib4MirrorServer.Send(id, channels[0], data.Array, data.Offset, data.Count, channel);
-			}
-			return success;
+
+			return connectionIds.Aggregate(true, (current, id) => current & LiteNetLib4MirrorServer.Send(id, channels[0], data.Array, data.Offset, data.Count, channel));
 		}
 
 		public bool ServerSend(int connectionId, int channelId, ArraySegment<byte> data)
@@ -282,6 +250,7 @@ namespace Mirror.LiteNetLib4Mirror
 		{
 			return LiteNetLib4MirrorCore.GetState();
 		}
+
 		#endregion
 	}
 }

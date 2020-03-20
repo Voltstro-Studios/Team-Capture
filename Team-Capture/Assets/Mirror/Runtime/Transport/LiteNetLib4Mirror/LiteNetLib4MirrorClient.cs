@@ -5,7 +5,7 @@ using LiteNetLib;
 using LiteNetLib.Utils;
 using UnityEngine;
 
-namespace Mirror.LiteNetLib4Mirror
+namespace Mirror.Runtime.Transport.LiteNetLib4Mirror
 {
 	public static class LiteNetLib4MirrorClient
 	{
@@ -29,9 +29,8 @@ namespace Mirror.LiteNetLib4Mirror
 			try
 			{
 				if (LiteNetLib4MirrorCore.State == LiteNetLib4MirrorCore.States.Discovery)
-				{
 					LiteNetLib4MirrorCore.StopTransport();
-				}
+
 				EventBasedNetListener listener = new EventBasedNetListener();
 				LiteNetLib4MirrorCore.Host = new NetManager(listener);
 				listener.NetworkReceiveEvent += OnNetworkReceive;
@@ -61,39 +60,40 @@ namespace Mirror.LiteNetLib4Mirror
 			LiteNetLib4MirrorTransport.Singleton.OnClientConnected.Invoke();
 		}
 
-		private static void OnPeerDisconnected(NetPeer peer, DisconnectInfo disconnectinfo)
+		private static void OnPeerDisconnected(NetPeer peer, DisconnectInfo disconnectInfo)
 		{
-			switch (disconnectinfo.Reason)
+			switch (disconnectInfo.Reason)
 			{
 				case DisconnectReason.ConnectionRejected:
-					LiteNetLib4MirrorTransport.Singleton.OnConncetionRefused(disconnectinfo);
+					LiteNetLib4MirrorTransport.Singleton.OnConncetionRefused(disconnectInfo);
 					LastDisconnectReason = null;
 					break;
-				case DisconnectReason.DisconnectPeerCalled when disconnectinfo.AdditionalData.TryGetString(out string reason) && !string.IsNullOrWhiteSpace(reason):
+				case DisconnectReason.DisconnectPeerCalled when disconnectInfo.AdditionalData.TryGetString(out string reason) && !string.IsNullOrWhiteSpace(reason):
 					LastDisconnectReason = LiteNetLib4MirrorUtils.FromBase64(reason);
 					break;
 				default:
 					LastDisconnectReason = null;
 					break;
 			}
+
 			LiteNetLib4MirrorCore.State = LiteNetLib4MirrorCore.States.Idle;
-			LiteNetLib4MirrorCore.LastDisconnectError = disconnectinfo.SocketErrorCode;
-			LiteNetLib4MirrorCore.LastDisconnectReason = disconnectinfo.Reason;
+			LiteNetLib4MirrorCore.LastDisconnectError = disconnectInfo.SocketErrorCode;
+			LiteNetLib4MirrorCore.LastDisconnectReason = disconnectInfo.Reason;
 			LiteNetLib4MirrorTransport.Singleton.OnClientDisconnected.Invoke();
 			LiteNetLib4MirrorCore.StopTransport();
 		}
 
-		private static void OnNetworkReceive(NetPeer peer, NetPacketReader reader, DeliveryMethod deliverymethod)
+		private static void OnNetworkReceive(NetPeer peer, NetPacketReader reader, DeliveryMethod deliveryMethod)
 		{
 			LiteNetLib4MirrorTransport.Singleton.OnClientDataReceived.Invoke(reader.GetRemainingBytesSegment(), -1);
 			reader.Recycle();
 		}
 
-		private static void OnNetworkError(IPEndPoint endpoint, SocketError socketerror)
+		private static void OnNetworkError(IPEndPoint endpoint, SocketError socketError)
 		{
-			LiteNetLib4MirrorCore.LastError = socketerror;
-			LiteNetLib4MirrorTransport.Singleton.OnClientError.Invoke(new SocketException((int)socketerror));
-			LiteNetLib4MirrorTransport.Singleton.onClientSocketError.Invoke(socketerror);
+			LiteNetLib4MirrorCore.LastError = socketError;
+			LiteNetLib4MirrorTransport.Singleton.OnClientError.Invoke(new SocketException((int)socketError));
+			LiteNetLib4MirrorTransport.Singleton.onClientSocketError.Invoke(socketError);
 		}
 
 		internal static bool Send(DeliveryMethod method, byte[] data, int start, int length, byte channelNumber)

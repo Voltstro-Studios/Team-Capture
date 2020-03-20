@@ -1,8 +1,11 @@
-﻿using Core;
+﻿using System;
+using Core;
+using LagCompensation;
 using Mirror;
 using UI;
 using UnityEngine;
 using Weapons;
+using Random = UnityEngine.Random;
 
 namespace Player
 {
@@ -96,8 +99,8 @@ namespace Player
 			PlayerManager player = GameManager.GetPlayer(sourcePlayer);
 			if (player == null) return;
 
-			//SimulationHelper.SimulateCommand(player, () => CmdWeaponRayCast(sourcePlayer));
-			WeaponRayCast(sourcePlayer);
+			SimulationHelper.SimulateCommand(player, () => WeaponRayCast(sourcePlayer));
+			//WeaponRayCast(sourcePlayer);
 		}
 
 		[Server]
@@ -118,11 +121,11 @@ namespace Player
 			for (int i = 0; i < tcWeapon.bulletsAmount; i++)
 			{
 				//Calculate random spread
-				Vector3 spread = Vector3.zero;
-				spread += playerFacingDirection.up * Random.Range(tcWeapon.spreadMin, tcWeapon.spreadMax);
-				spread += playerFacingDirection.right * Random.Range(tcWeapon.spreadMin, tcWeapon.spreadMax);
-
-				Vector3 direction = playerFacingDirection.forward + spread.normalized * Random.Range(0f, 0.2f);
+				Vector3 direction = playerFacingDirection.forward;
+				direction += playerFacingDirection.TransformDirection(new Vector3(
+					Random.Range(-tcWeapon.spreadFactor, tcWeapon.spreadFactor),
+					Random.Range(-tcWeapon.spreadFactor, tcWeapon.spreadFactor),
+					Random.Range(-tcWeapon.spreadFactor, tcWeapon.spreadFactor)));
 
 				//Was a player hit?
 				bool playerHit = false;
@@ -146,7 +149,7 @@ namespace Player
 						continue;
 
 					//Do impact effect on all clients
-					RpcWeaponImpact(hit.point, hit.normal);
+					RpcWeaponImpact(hit.point, hit.normal, tcWeapon.weapon);
 
 					//So if we hit a player then do damage
 					if (hit.collider.GetComponent<PlayerManager>() == null) continue;
@@ -185,11 +188,14 @@ namespace Player
 		#region Weapon Impact
 
 		[ClientRpc(channel = 2)]
-		private void RpcWeaponImpact(Vector3 pos, Vector3 normal)
+		private void RpcWeaponImpact(Vector3 pos, Vector3 normal, string weapon)
 		{
-			GameObject hitEffect =
-				Instantiate(GameManager.GetActiveScene().weaponHit, pos, Quaternion.LookRotation(normal));
-			Destroy(hitEffect, GameManager.GetActiveScene().hitObjectLastTime);
+			TCWeapon tcWeapon = WeaponsResourceManager.GetWeapon(weapon);
+			if(tcWeapon == null) return;
+
+			//Instantiate our bullet effects
+			Instantiate(tcWeapon.bulletHitEffectPrefab, pos, Quaternion.LookRotation(normal));
+			Instantiate(tcWeapon.bulletHolePrefab, pos, Quaternion.FromToRotation(Vector3.back, normal));
 		}
 
 		#endregion

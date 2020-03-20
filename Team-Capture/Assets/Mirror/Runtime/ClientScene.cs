@@ -182,10 +182,15 @@ namespace Mirror
 
             if (conn != null)
             {
-                conn.Send(new ReadyMessage());
+                // Set these before sending the ReadyMessage, otherwise host client
+                // will fail in InternalAddPlayer with null readyConnection.
                 ready = true;
                 readyConnection = conn;
                 readyConnection.isReady = true;
+
+                // Tell server we're ready to have a player object spawned
+                conn.Send(new ReadyMessage());
+
                 return true;
             }
             Debug.LogError("Ready() called with invalid connection object: conn=null");
@@ -454,6 +459,7 @@ namespace Mirror
             NetworkIdentity.spawned.Clear();
         }
 
+        // Deprecated 01/15/2019
         /// <summary>
         /// Obsolete: Use <see cref="NetworkIdentity.spawned"/> instead.
         /// </summary>
@@ -493,9 +499,10 @@ namespace Mirror
             // (Count is 0 if there were no components)
             if (msg.payload.Count > 0)
             {
-                NetworkReader payloadReader = NetworkReaderPool.GetReader(msg.payload);
-                identity.OnUpdateVars(payloadReader, true);
-                NetworkReaderPool.Recycle(payloadReader);
+                using (PooledNetworkReader payloadReader = NetworkReaderPool.GetReader(msg.payload))
+                {
+                    identity.OnDeserializeAllSafely(payloadReader, true);
+                }
             }
 
             NetworkIdentity.spawned[msg.netId] = identity;
@@ -689,9 +696,8 @@ namespace Mirror
 
             if (NetworkIdentity.spawned.TryGetValue(msg.netId, out NetworkIdentity localObject) && localObject != null)
             {
-                NetworkReader networkReader = NetworkReaderPool.GetReader(msg.payload);
-                localObject.OnUpdateVars(networkReader, false);
-                NetworkReaderPool.Recycle(networkReader);
+                using (PooledNetworkReader networkReader = NetworkReaderPool.GetReader(msg.payload))
+                    localObject.OnDeserializeAllSafely(networkReader, false);
             }
             else
             {
@@ -705,9 +711,8 @@ namespace Mirror
 
             if (NetworkIdentity.spawned.TryGetValue(msg.netId, out NetworkIdentity identity))
             {
-                NetworkReader networkReader = NetworkReaderPool.GetReader(msg.payload);
-                identity.HandleRPC(msg.componentIndex, msg.functionHash, networkReader);
-                NetworkReaderPool.Recycle(networkReader);
+                using (PooledNetworkReader networkReader = NetworkReaderPool.GetReader(msg.payload))
+                    identity.HandleRPC(msg.componentIndex, msg.functionHash, networkReader);
             }
         }
 
@@ -717,9 +722,8 @@ namespace Mirror
 
             if (NetworkIdentity.spawned.TryGetValue(msg.netId, out NetworkIdentity identity))
             {
-                NetworkReader networkReader = NetworkReaderPool.GetReader(msg.payload);
-                identity.HandleSyncEvent(msg.componentIndex, msg.functionHash, networkReader);
-                NetworkReaderPool.Recycle(networkReader);
+                using (PooledNetworkReader networkReader = NetworkReaderPool.GetReader(msg.payload))
+                    identity.HandleSyncEvent(msg.componentIndex, msg.functionHash, networkReader);
             }
             else
             {

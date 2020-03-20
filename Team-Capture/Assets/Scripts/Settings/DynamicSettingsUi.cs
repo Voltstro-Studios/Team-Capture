@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
@@ -14,20 +15,18 @@ using Logger = Core.Logger.Logger;
 
 namespace Settings
 {
-	//TODO: A lot is gonna change in this... I am gonna have fun rewriting this, thanks Rowan...
 	[RequireComponent(typeof(OptionsPanel))]
 	public class DynamicSettingsUi : MonoBehaviour
 	{
 		private OptionsPanel optionsPanel;
 
-		private void Start()
+		private void Awake()
 		{
 			optionsPanel = GetComponent<OptionsPanel>();
-			UpdateUI();
 		}
 
 		//TODO: The sub-functions need to update the UI element based on the reflected value on startup/settings reload
-		private void UpdateUI()
+		public void UpdateUI()
 		{
 			Stopwatch stopwatch = Stopwatch.StartNew();
 
@@ -37,12 +36,16 @@ namespace Settings
 			//Loop over each setting menu and all the sub-settings
 			foreach (PropertyInfo settingInfo in GameSettings.GetSettingClasses())
 			{
+				//If it has the don't show attribute, then, well... don't show it
+				if(Attribute.GetCustomAttribute(settingInfo, typeof(SettingsDontShowAttribute)) != null)
+					continue;
+
 				object settingGroupInstance = settingInfo.GetStaticValue<object>();
 
-				//If it has the SettingsMenuFormatAttribute then use the format name of that
+				//If it has the SettingsPropertyFormatNameAttribute then use the format name of that
 				string settingGroupName = settingInfo.Name;
-				if (Attribute.GetCustomAttribute(settingInfo, typeof(SettingsMenuFormatAttribute)) is
-					SettingsMenuFormatAttribute attribute)
+				if (Attribute.GetCustomAttribute(settingInfo, typeof(SettingsPropertyFormatNameAttribute)) is
+					SettingsPropertyFormatNameAttribute attribute)
 					settingGroupName = attribute.MenuNameFormat;
 
 				//Create a menu module
@@ -54,6 +57,10 @@ namespace Settings
 					settingInfo.PropertyType.GetFields(BindingFlags.Instance | BindingFlags.Public);
 				foreach (FieldInfo settingField in menuFields)
 				{
+					//If it has the don't show attribute, then, well... don't show it
+					if(Attribute.GetCustomAttribute(settingField, typeof(SettingsDontShowAttribute)) != null)
+						continue;
+
 					Type fieldType = settingField.FieldType;
 
 					//TODO: Considering the unity slider uses a float, could we have 1 overload with a bool for int or float mode?
@@ -66,7 +73,7 @@ namespace Settings
 						if (rangeAttribute != null)
 							CreateIntSlider(settingField.GetValue<int>(settingGroupInstance), (int) rangeAttribute.min,
 								(int) rangeAttribute.max,
-								settingField, settingMenu);
+								settingField, panel);
 						else
 							CreateIntField(settingField.GetValue<int>(settingGroupInstance), settingField, settingMenu);
 					}
@@ -78,21 +85,24 @@ namespace Settings
 						//If it has a range attribute, create a slider, otherwise use a input field
 						if (rangeAttribute != null)
 							CreateFloatSlider(settingField.GetValue<float>(settingGroupInstance), rangeAttribute.min,
-								rangeAttribute.max,
-								settingField, settingMenu, panel);
+								rangeAttribute.max, settingField, panel);
 						else
 							CreateFloatField(settingField.GetValue<float>(settingGroupInstance), settingField,
 								settingMenu);
 					}
 					else if (fieldType == typeof(bool))
 					{
-						CreateBoolToggle(settingField.GetValue<bool>(settingGroupInstance), settingField, settingMenu,
-							panel);
+						CreateBoolToggle(settingField.GetValue<bool>(settingGroupInstance), settingField, panel);
 					}
 					else if (fieldType == typeof(string))
 					{
 						CreateStringField(settingField.GetValue<string>(settingGroupInstance), settingField,
 							settingMenu);
+					}
+					else if (fieldType == typeof(Resolution))
+					{
+						//For a resolution property, we will create a dropdown with all available resolutions and select the active one
+						CreateResolutionDropdown(settingField.GetValue<Resolution>(settingGroupInstance), settingField, panel);
 					}
 					//TODO: Finish these
 					else if (fieldType.IsEnum)
@@ -104,8 +114,7 @@ namespace Settings
 								settingMenu);
 						//Just a normal enum popup
 						else
-							CreateEnumDropdown(settingField.GetValue<int>(settingGroupInstance), settingField,
-								settingMenu, panel);
+							CreateEnumDropdown(settingField.GetValue<int>(settingGroupInstance), settingField, panel);
 					}
 					else
 					{
@@ -125,22 +134,16 @@ namespace Settings
 		// ReSharper disable MemberCanBeMadeStatic.Local
 		// ReSharper disable UnusedParameter.Local
 
-		private void CreateFloatSlider(float val, float min, float max, FieldInfo field, Menu menu, GameObject panel)
+		private void CreateFloatSlider(float val, float min, float max, FieldInfo field, GameObject panel)
 		{
-			Logger.Log(
-				$"\tCreating float slider for {field.Name} in {menu.Name}. Range is {min} to {max}, current is {val}",
-				LogVerbosity.Debug);
-
-			Slider slider = optionsPanel.AddSliderToPanel(panel, field.Name, val, false, min, max);
+			Slider slider = optionsPanel.AddSliderToPanel(panel, GetFieldFormatName(field), val, false, min, max);
 			slider.onValueChanged.AddListener(f => field.SetValue(GetSettingObject(field), f));
 		}
 
-		private void CreateIntSlider(int val, int min, int max, FieldInfo field, Menu menu)
+		private void CreateIntSlider(int val, int min, int max, FieldInfo field, GameObject panel)
 		{
-			Logger.Log(
-				$"\tCreating int slider for {field.Name} in {menu.Name}. Range is {min} to {max}, current is {val}",
-				LogVerbosity.Debug);
-			// new Slider().onValueChanged.AddListener(f => field.SetValue(GetSettingObject(field),(int) f));
+			Slider slider = optionsPanel.AddSliderToPanel(panel, GetFieldFormatName(field), val, true, min, max);
+			slider.onValueChanged.AddListener(f => field.SetValue(GetSettingObject(field), (int)f));
 		}
 
 		private void CreateFloatField(float val, FieldInfo field, Menu menu)
@@ -155,12 +158,9 @@ namespace Settings
 			// new IntegerField().RegisterValueChangedCallback(c => field.SetValue(GetSettingObject(field), c.newValue));
 		}
 
-		private void CreateBoolToggle(bool val, FieldInfo field, Menu menu, GameObject panel)
+		private void CreateBoolToggle(bool val, FieldInfo field, GameObject panel)
 		{
-			Logger.Log($"\tCreating bool toggle for {field.Name} in {menu.Name}. Current is {val}");
-
-			Toggle toggle = optionsPanel.AddToggleToPanel(panel, field.Name, val);
-
+			Toggle toggle = optionsPanel.AddToggleToPanel(panel, GetFieldFormatName(field), val);
 			toggle.onValueChanged.AddListener(b => field.SetValue(GetSettingObject(field), b));
 		}
 
@@ -171,14 +171,35 @@ namespace Settings
 			//            new TMP_InputField().onValueChanged.AddListener(s => field.SetValue(GetSettingObject(field), s));
 		}
 
-		private void CreateEnumDropdown(int val, FieldInfo field, Menu menu, GameObject panel)
+		private void CreateResolutionDropdown(Resolution currentRes, FieldInfo field, GameObject panel)
 		{
-			Logger.Log(
-				$"\tCreating enum dropdown for {field.Name} in {menu.Name}. Current is {Enum.GetName(field.FieldType, val)}, options are {string.Join(", ", Enum.GetNames(field.FieldType))}",
-				LogVerbosity.Debug);
+			Resolution[] resolutions = Screen.resolutions;
+			List<string> resolutionsText = new List<string>();
+			int activeResIndex = 0;
+
+			//Find the active current resolution, as well as add each resolution option to the list of resolutions text
+			for (int i = 0; i < resolutions.Length; i++)
+			{
+				if (resolutions[i].width == currentRes.width && resolutions[i].width == currentRes.width)
+					activeResIndex = i;
+
+				resolutionsText.Add(resolutions[i].ToString());
+			}
+
+			//Create the dropdown, with all of our resolutions
+			TMP_Dropdown dropdown =
+				optionsPanel.AddDropdownToPanel(panel, GetFieldFormatName(field), resolutionsText.ToArray(), activeResIndex);
+			dropdown.onValueChanged.AddListener(index =>
+			{
+				field.SetValue(GetSettingObject(field), resolutions[index]);
+			});
+		}
+
+		private void CreateEnumDropdown(int val, FieldInfo field, GameObject panel)
+		{
 			string[] names = Enum.GetNames(field.FieldType);
 			val = names.ToList().IndexOf(Enum.GetName(field.FieldType, val));
-			TMP_Dropdown dropdown = optionsPanel.AddDropdownToPanel(panel, names, val);
+			TMP_Dropdown dropdown = optionsPanel.AddDropdownToPanel(panel, GetFieldFormatName(field), names, val);
 
 			dropdown.onValueChanged.AddListener(index =>
 			{
@@ -204,6 +225,16 @@ namespace Settings
 			PropertyInfo settingGroup =
 				GameSettings.GetSettingClasses().First(p => p.PropertyType == field.DeclaringType);
 			return settingGroup.GetValue(null);
+		}
+
+		private string GetFieldFormatName(MemberInfo field)
+		{
+			string sideName = field.Name;
+			if (Attribute.GetCustomAttribute(field, typeof(SettingsPropertyFormatNameAttribute)) is
+				SettingsPropertyFormatNameAttribute attribute)
+				sideName = attribute.MenuNameFormat;
+
+			return sideName;
 		}
 
 		// ReSharper restore UnusedParameter.Local

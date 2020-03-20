@@ -22,12 +22,6 @@ public static class UtilCommands
 	[ConCommand("scene", "Loads a scene", 1, 1)]
 	public static void LoadScene(string[] args)
 	{
-		if (args.Length != 1)
-		{
-			Logger.Log("Invalid arguments!");
-			return;
-		}
-
 		if (TCNetworkManager.Instance != null && TCNetworkManager.Instance.mode != NetworkManagerMode.Offline)
 		{
 			Logger.Log("Cannot change the scene while connected to a server!", LogVerbosity.Error);

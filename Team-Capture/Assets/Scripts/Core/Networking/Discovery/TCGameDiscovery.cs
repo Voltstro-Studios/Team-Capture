@@ -45,6 +45,9 @@ namespace Core.Networking.Discovery
 
 			try
 			{
+				if (request.ApplicationVersion != Application.version)
+					return null;
+
 				return new TCServerResponse
 				{
 					GameName = netManager.gameName,
@@ -72,7 +75,10 @@ namespace Core.Networking.Discovery
 			onServerFound.Invoke(response);
 		}
 
-		protected override TCServerRequest GetRequest() => new TCServerRequest();
+		protected override TCServerRequest GetRequest() => new TCServerRequest
+		{
+			ApplicationVersion = Application.version
+		};
 
 		#endregion
 	}
