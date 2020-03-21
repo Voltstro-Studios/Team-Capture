@@ -44,10 +44,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb0acf6f74bc13f48b7601adbebefec9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gfxMesh: {fileID: 3960948910800851186}
-  pickupMaterial: {fileID: 2100000, guid: 6898a46133f8b914ebf8801d7da6d399, type: 2}
-  pickupPickedUpMaterial: {fileID: 2100000, guid: 69ec9223b6215c94b937905309be1cc8,
-    type: 2}
+  pickupMaterials:
+  - meshToChange: {fileID: 3960948910800851186}
+    pickupMaterial: {fileID: 2100000, guid: 6898a46133f8b914ebf8801d7da6d399, type: 2}
+    pickupPickedUpMaterial: {fileID: 2100000, guid: 69ec9223b6215c94b937905309be1cc8,
+      type: 2}
   pickupRespawnTime: 4
   triggerRadius: 1.3
   triggerCenter: {x: 0, y: 0, z: 0}

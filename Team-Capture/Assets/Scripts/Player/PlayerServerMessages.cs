@@ -46,7 +46,10 @@ namespace Player
 
 			Pickup pickupLogic = pickup.GetComponent<Pickup>();
 
-			pickupLogic.gfxMesh.material = status.IsActive ? pickupLogic.pickupMaterial : pickupLogic.pickupPickedUpMaterial;
+			foreach (PickupMaterials pickupMaterial in pickupLogic.pickupMaterials)
+			{
+				pickupMaterial.meshToChange.material = status.IsActive ? pickupMaterial.pickupMaterial : pickupMaterial.pickupPickedUpMaterial;
+			}
 		}
 	}
 }

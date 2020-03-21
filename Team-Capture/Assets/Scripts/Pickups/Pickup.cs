@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using Player;
 using UnityEngine;
 
@@ -6,10 +7,7 @@ namespace Pickups
 {
 	public abstract class Pickup : MonoBehaviour
 	{
-		public MeshRenderer gfxMesh;
-
-		public Material pickupMaterial;
-		public Material pickupPickedUpMaterial;
+		public PickupMaterials[] pickupMaterials;
 
 		public float pickupRespawnTime = 4.0f;
 		[SerializeField] private float triggerRadius = 1.3f;
@@ -65,5 +63,14 @@ namespace Pickups
 			ServerPickupManager.ActivatePickup(this);
 			isPickedUp = false;
 		}
+	}
+
+	[Serializable]
+	public class PickupMaterials
+	{
+		public MeshRenderer meshToChange;
+
+		public Material pickupMaterial;
+		public Material pickupPickedUpMaterial;
 	}
 }
