@@ -14,7 +14,7 @@ namespace Weapons
 		private static void Init()
 		{
 			weapons = GetAllTCWeapons().ToList();
-			Logger.Log("Got all weapons", LogVerbosity.Debug);
+			//Logger.Log("Got all weapons", LogVerbosity.Debug);
 		}
 
 		private static IEnumerable<TCWeapon> GetAllTCWeapons()

@@ -16,6 +16,13 @@ namespace Player
 
 		[SerializeField] private string pickupTag = "Pickup";
 
+		#region Server Variables
+
+		private string lastWeapon;
+		private float nextTimeToFire;
+
+		#endregion
+
 		private void Start()
 		{
 			weaponManager = GetComponent<WeaponManager>();
@@ -31,7 +38,7 @@ namespace Player
 				return;
 
 			//Cache our current weapon
-			TCWeapon weapon = GetCurrentWeapon();
+			TCWeapon weapon = weaponManager.GetActiveWeapon().GetTCWeapon();
 
 			//Looks like the weapon isn't setup yet
 			if (weapon == null)
@@ -39,68 +46,79 @@ namespace Player
 
 			if (playerManager.IsDead)
 			{
-				CancelInvoke(nameof(ShootWeapon));
+				CancelInvoke(nameof(CmdShootWeapon));
 				return;
 			}
 
-			if (weapon.currentBulletsAmount < weapon.maxBullets && !weapon.isReloading)
-				//Do a reload
-				if (Input.GetButtonDown("Reload"))
-				{
-					CancelInvoke(nameof(ShootWeapon));
-					weaponManager.StartCoroutine(weaponManager.ReloadCurrentWeapon());
-					return;
-				}
-
-			//Semi-automatic weapons
-			if (weapon.fireRate <= 0f)
+			if (Input.GetButtonDown("Reload"))
 			{
-				//Only shoot if the player just pressed the button
-				if (Input.GetButtonDown("Fire1") && !weapon.isReloading) ShootWeapon();
+				weaponManager.ClientReloadWeapon();
+				return;
 			}
-			//Full auto weapons
-			else
+
+			switch (weapon.fireMode)
 			{
-				if (Input.GetButtonDown("Fire1") && !weapon.isReloading)
-					InvokeRepeating(nameof(ShootWeapon), 0f, 1f / weapon.fireRate);
-				else if (Input.GetButtonUp("Fire1")) CancelInvoke(nameof(ShootWeapon));
+				case TCWeapon.WeaponFireMode.Semi:
+					if(Input.GetButtonDown("Fire1"))
+						ShootWeapon();
+					break;
+				case TCWeapon.WeaponFireMode.Auto:
+					if(Input.GetButtonDown("Fire1"))
+						InvokeRepeating(nameof(ShootWeapon), 0f, 1f / weapon.fireRate);
+					else if(Input.GetButtonUp("Fire1"))
+						CancelInvoke(nameof(ShootWeapon));
+					break;
+				default:
+					throw new ArgumentOutOfRangeException();
 			}
 		}
 
 		[Client]
 		private void ShootWeapon()
 		{
-			if (!isLocalPlayer)
+			CmdShootWeapon();
+
+			playerManager.clientUi.hud.UpdateAmmoUI();
+		}
+
+		[Command(channel = 1)]
+		private void CmdShootWeapon()
+		{
+			//First, get our active weapon
+			NetworkedWeapon activeWeapon = weaponManager.GetActiveWeapon();
+			TCWeapon tcWeapon = activeWeapon.GetTCWeapon();
+
+			//Reset our nextTimeToFire if we aren't using the same weapon from last time
+			if (lastWeapon != activeWeapon.weapon)
+			{
+				nextTimeToFire = 0;
+				lastWeapon = activeWeapon.weapon;
+			}
+
+			//If our player is dead, or reloading, then return
+			if (activeWeapon.IsReloading || playerManager.IsDead || Time.time < nextTimeToFire)
 				return;
 
-			TCWeapon weapon = GetCurrentWeapon();
-
-			if (weapon.currentBulletsAmount <= 0)
+			if (activeWeapon.currentBulletAmount <= 0)
 			{
-				weaponManager.StartCoroutine(weaponManager.ReloadCurrentWeapon());
-				playerManager.clientUi.hud.UpdateAmmoUi(weaponManager);
+				//Reload
+				StartCoroutine(weaponManager.ServerReloadPlayerWeapon());
 				return;
 			}
 
-			weapon.currentBulletsAmount--;
-
-			//Do a muzzle flash
-			CmdWeaponMuzzleFlash(transform.name);
-
-			//Do the actual weapon shoot logic
-			CmdWeaponShoot(transform.name);
-
-			playerManager.clientUi.hud.UpdateAmmoUi(weaponManager);
+			ServerShootWeapon(activeWeapon, tcWeapon);
 		}
 
-		[Command]
-		private void CmdWeaponShoot(string sourcePlayer)
+		[Server]
+		private void ServerShootWeapon(NetworkedWeapon networkedWeapon, TCWeapon tcWeapon)
 		{
-			PlayerManager player = GameManager.GetPlayer(sourcePlayer);
-			if (player == null) return;
+			nextTimeToFire = Time.time + 1f/tcWeapon.fireRate;
 
-			SimulationHelper.SimulateCommand(player, () => WeaponRayCast(sourcePlayer));
-			//WeaponRayCast(sourcePlayer);
+			networkedWeapon.currentBulletAmount--;
+
+			RpcWeaponMuzzleFlash();
+
+			SimulationHelper.SimulateCommand(playerManager, () => WeaponRayCast(transform.name));
 		}
 
 		[Server]
@@ -111,14 +129,14 @@ namespace Player
 			if (player == null) return;
 
 			//Next, get what weapon the player was using
-			TCWeapon tcWeapon = player.GetComponent<WeaponManager>().GetActiveWeapon();
+			TCWeapon tcWeapon = weaponManager.GetActiveWeapon().GetTCWeapon();
 			if (tcWeapon == null)
 				return;
 
 			//Get the direction the player was facing
 			Transform playerFacingDirection = player.GetComponent<PlayerSetup>().GetPlayerCamera().transform;
 
-			for (int i = 0; i < tcWeapon.bulletsAmount; i++)
+			for (int i = 0; i < tcWeapon.bulletsPerShot; i++)
 			{
 				//Calculate random spread
 				Vector3 direction = playerFacingDirection.forward;
@@ -159,35 +177,21 @@ namespace Player
 			}
 		}
 
-		private TCWeapon GetCurrentWeapon()
-		{
-			return weaponManager.GetActiveWeapon();
-		}
-
 		#region Weapon Effects
 
 		#region Weapon Muzzle
 
-		[Command]
-		private void CmdWeaponMuzzleFlash(string playerId)
+		[ClientRpc(channel = 3)]
+		private void RpcWeaponMuzzleFlash()
 		{
-			RpcWeaponMuzzleFlash(playerId);
-		}
-
-		[ClientRpc]
-		private void RpcWeaponMuzzleFlash(string playerId)
-		{
-			PlayerManager player = GameManager.GetPlayer(playerId);
-			if (player == null) return;
-
-			player.GetComponent<WeaponManager>().GetActiveWeaponGraphics().muzzleFlash.Play(true);
+			weaponManager.GetActiveWeaponGraphics().muzzleFlash.Play(true);
 		}
 
 		#endregion
 
 		#region Weapon Impact
 
-		[ClientRpc(channel = 2)]
+		[ClientRpc(channel = 3)]
 		private void RpcWeaponImpact(Vector3 pos, Vector3 normal, string weapon)
 		{
 			TCWeapon tcWeapon = WeaponsResourceManager.GetWeapon(weapon);

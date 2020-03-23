@@ -1,34 +1,42 @@
-﻿using TMPro;
+﻿using Core.Logger;
+using TMPro;
 using UnityEngine;
 using Weapons;
+using Logger = Core.Logger.Logger;
 
 namespace UI
 {
 	public class Hud : MonoBehaviour
 	{
-		[Header("Ammo")] public TextMeshProUGUI ammoText;
-
-		[HideInInspector] public ClientUI clientUi;
-
-		[Header("Health")] public TextMeshProUGUI healthText;
-
+		public TextMeshProUGUI ammoText;
 		public TextMeshProUGUI maxAmmoText;
 		public GameObject reloadTextGameObject;
 
-		public void UpdateHealthUi()
+		public TextMeshProUGUI healthText;
+
+		private ClientUI clientUI;
+
+		internal void Setup(ClientUI ui)
 		{
-			healthText.text = clientUi.player.Health.ToString();
+			clientUI = ui;
 		}
 
-		public void UpdateAmmoUi(WeaponManager weaponManager)
+		public void UpdateHealthUI()
 		{
-			TCWeapon activeWeapon = weaponManager.GetActiveWeapon();
+			healthText.text = clientUI.PlayerManager.Health.ToString();
+		}
+
+		public void UpdateAmmoUI()
+		{
+			NetworkedWeapon activeWeapon = clientUI.WeaponManager.GetActiveWeapon();
 			if (activeWeapon == null) return;
 
-			ammoText.text = activeWeapon.currentBulletsAmount.ToString();
-			maxAmmoText.text = activeWeapon.maxBullets.ToString();
+			ammoText.text = activeWeapon.currentBulletAmount.ToString();
+			//maxAmmoText.text = activeWeapon.maxBullets.ToString();
 
-			reloadTextGameObject.SetActive(activeWeapon.isReloading);
+			reloadTextGameObject.SetActive(activeWeapon.IsReloading);
+
+			Logger.Log("Updated ammo UI", LogVerbosity.Debug);
 		}
 	}
 }

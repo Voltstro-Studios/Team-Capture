@@ -29,6 +29,11 @@ namespace Player
 		{
 			Logger.Log("Setting up my local player...");
 
+			//Setup UI
+			ClientUI clientUi = Instantiate(clientUiPrefab).GetComponent<ClientUI>();
+			GetComponent<PlayerManager>().clientUi = clientUi;
+			clientUi.SetupUI(GetComponent<PlayerManager>());
+
 			base.OnStartLocalPlayer();
 
 			//Don't need a collider since the charController acts as one
@@ -56,11 +61,6 @@ namespace Player
 			
 			//Player Input
 			gameObject.AddComponent<PlayerInput>();
-
-			//Setup UI
-			ClientUI clientUi = Instantiate(clientUiPrefab).GetComponent<ClientUI>();
-			GetComponent<PlayerManager>().clientUi = clientUi;
-			clientUi.SetupUI(GetComponent<PlayerManager>());
 
 			//Lock the cursor
 			Cursor.visible = false;

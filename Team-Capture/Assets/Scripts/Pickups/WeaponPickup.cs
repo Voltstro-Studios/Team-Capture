@@ -14,7 +14,7 @@ namespace Pickups
 			//Don't want to pickup the same weapon
 			if(weaponManager.GetWeapon(weapon.weapon) != null) return;
 
-			weaponManager.ServerAddWeapon(weapon.weapon);
+			weaponManager.AddWeapon(weapon.weapon);
 
 			base.OnPlayerPickup(player);
 		}

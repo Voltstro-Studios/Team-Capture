@@ -5,17 +5,23 @@ namespace Weapons
 	[CreateAssetMenu(fileName = "New TC Weapon", menuName = "Team Capture/TCWeapon")]
 	public class TCWeapon : ScriptableObject
 	{
+		public enum WeaponFireMode
+		{
+			Auto,
+			Semi
+		}
+
 		[Header("Base Weapon Settings")] public string weapon;
 		public string weaponFormattedName;
 		public GameObject baseWeaponPrefab;
-		public int currentBulletsAmount;
 
-		[Header("Weapon Stats")] public int damage;
-		public int fireRate;
-		public int bulletsAmount = 1;
-		[HideInInspector] public bool isReloading;
-
-		[Header("Weapon Bullets")] public int maxBullets;
+		[Header("Weapon Stats")] 
+		public int damage;
+		public float fireRate;
+		public WeaponFireMode fireMode;
+		public int bulletsPerShot = 1;
+		
+		public int maxBullets;
 		public int range;
 		public float reloadTime = 2.0f;
 
@@ -26,9 +32,6 @@ namespace Weapons
 		public GameObject bulletHolePrefab;
 		public GameObject bulletHitEffectPrefab;
 
-		public void Reload()
-		{
-			currentBulletsAmount = maxBullets;
-		}
+		[HideInInspector] public bool isReloading;
 	}
 }

@@ -16,11 +16,10 @@ MonoBehaviour:
   weaponFormattedName: Pistol
   baseWeaponPrefab: {fileID: 2985817369304730979, guid: 5f5edb97b2388714ca78daa416284087,
     type: 3}
-  currentBulletsAmount: 18
   damage: 25
-  fireRate: 4
-  bulletsAmount: 1
-  isReloading: 0
+  fireRate: 8
+  fireMode: 0
+  bulletsPerShot: 1
   maxBullets: 18
   range: 30
   reloadTime: 2
@@ -29,3 +28,4 @@ MonoBehaviour:
     type: 3}
   bulletHitEffectPrefab: {fileID: 1617700753897852, guid: 2fc51477906b5d44b93e53cc25b2d012,
     type: 3}
+  isReloading: 0

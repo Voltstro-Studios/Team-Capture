@@ -2321,7 +2321,7 @@ MonoBehaviour:
   port: 7777
   useUpnP: 0
   maxConnections: 20
-  channels: 020104
+  channels: 02020104
   authCode: 
   updateTime: 15
   pingInterval: 1000

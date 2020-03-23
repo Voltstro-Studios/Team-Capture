@@ -1,5 +1,6 @@
 ﻿using Player;
 using UnityEngine;
+using Weapons;
 using Logger = Core.Logger.Logger;
 
 namespace UI
@@ -8,7 +9,8 @@ namespace UI
 	{
 		public static bool IsPauseMenuOpen;
 
-		[HideInInspector] public PlayerManager player;
+		internal PlayerManager PlayerManager;
+		internal WeaponManager WeaponManager;
 
 		public Hud hud;
 		public KillFeed killFeed;
@@ -19,9 +21,10 @@ namespace UI
 		{
 			IsPauseMenuOpen = false;
 
-			hud.clientUi = this;
+			hud.Setup(this);
 
-			player = playerManager;
+			PlayerManager = playerManager;
+			WeaponManager = playerManager.GetComponent<WeaponManager>();
 
 			pauseMenu.gameObject.SetActive(false);
 
@@ -48,7 +51,7 @@ namespace UI
 			pauseMenu.gameObject.SetActive(state);
 			killFeed.killFeedItemsHolder.gameObject.SetActive(!state);
 
-			if (player.IsDead) return;
+			if (PlayerManager.IsDead) return;
 			hud.gameObject.SetActive(!state);
 		}
 

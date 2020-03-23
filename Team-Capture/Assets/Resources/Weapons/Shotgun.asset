@@ -16,11 +16,10 @@ MonoBehaviour:
   weaponFormattedName: Shotgun
   baseWeaponPrefab: {fileID: 6483300518943973296, guid: 9c2bb8364aefe81478a0db7da57b20e5,
     type: 3}
-  currentBulletsAmount: 6
   damage: 10
-  fireRate: 3
-  bulletsAmount: 6
-  isReloading: 0
+  fireRate: 2
+  fireMode: 1
+  bulletsPerShot: 6
   maxBullets: 6
   range: 100
   reloadTime: 3.5
@@ -29,3 +28,4 @@ MonoBehaviour:
     type: 3}
   bulletHitEffectPrefab: {fileID: 1617700753897852, guid: 2fc51477906b5d44b93e53cc25b2d012,
     type: 3}
+  isReloading: 0
