@@ -11,14 +11,14 @@ namespace Player
 {
 	public class PlayerServerMessages : MonoBehaviour
 	{
+		/// <summary>
+		/// The <see cref="ClientUI"/> that is associated with this client
+		/// </summary>
 		private ClientUI clientUi;
-
-		private PlayerWeaponShoot playerWeaponShoot;
 
 		private void Awake()
 		{
 			clientUi =  GetComponent<PlayerManager>().clientUi;
-			playerWeaponShoot = GetComponent<PlayerWeaponShoot>();
 
 			//Register all our custom messages
 			NetworkClient.RegisterHandler<SetPickupStatus>(PickupMessage);
@@ -34,11 +34,21 @@ namespace Player
 			NetworkClient.UnregisterHandler<WeaponSyncMessage>();
 		}
 
+		/// <summary>
+		/// Player died message, for killfeed
+		/// </summary>
+		/// <param name="conn"></param>
+		/// <param name="message"></param>
 		private void PlayerDiedMessage(NetworkConnection conn, PlayerDiedMessage message)
 		{
 			clientUi.killFeed.AddFeedBackItem(message);
 		}
 
+		/// <summary>
+		/// When a pickup changes status
+		/// </summary>
+		/// <param name="conn"></param>
+		/// <param name="status"></param>
 		private static void PickupMessage(NetworkConnection conn, SetPickupStatus status)
 		{
 			string pickupDirectory = GameManager.GetActiveScene().pickupsParent + status.PickupName;
@@ -57,6 +67,11 @@ namespace Player
 			}
 		}
 
+		/// <summary>
+		/// Syncs weapons stuff, for UI
+		/// </summary>
+		/// <param name="conn"></param>
+		/// <param name="weaponSync"></param>
 		private void SyncWeapon(NetworkConnection conn, WeaponSyncMessage weaponSync)
 		{
 			clientUi.hud.UpdateAmmoUI(weaponSync);
