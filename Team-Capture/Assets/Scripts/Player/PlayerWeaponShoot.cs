@@ -1,5 +1,6 @@
 ﻿using System;
 using Core;
+using Core.Networking.Messages;
 using LagCompensation;
 using Mirror;
 using UI;
@@ -77,8 +78,6 @@ namespace Player
 		private void ShootWeapon()
 		{
 			CmdShootWeapon();
-
-			playerManager.clientUi.hud.UpdateAmmoUI();
 		}
 
 		[Command(channel = 1)]
@@ -107,6 +106,13 @@ namespace Player
 			}
 
 			ServerShootWeapon(activeWeapon, tcWeapon);
+
+			//Update weapon stats
+			netIdentity.connectionToClient.Send(new WeaponSyncMessage
+			{
+				CurrentBullets = activeWeapon.currentBulletAmount,
+				IsReloading = false
+			});
 		}
 
 		[Server]

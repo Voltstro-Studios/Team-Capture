@@ -1,4 +1,5 @@
 ﻿using Core.Logger;
+using Core.Networking.Messages;
 using TMPro;
 using UnityEngine;
 using Weapons;
@@ -26,17 +27,22 @@ namespace UI
 			healthText.text = clientUI.PlayerManager.Health.ToString();
 		}
 
-		public void UpdateAmmoUI()
+		public void UpdateAmmoUI(WeaponSyncMessage syncMessage)
 		{
-			NetworkedWeapon activeWeapon = clientUI.WeaponManager.GetActiveWeapon();
-			if (activeWeapon == null) return;
+			TCWeapon weapon = clientUI.WeaponManager.GetActiveWeapon().GetTCWeapon();
 
-			ammoText.text = activeWeapon.currentBulletAmount.ToString();
-			//maxAmmoText.text = activeWeapon.maxBullets.ToString();
+			if (syncMessage == null)
+			{
+				ammoText.text = clientUI.WeaponManager.GetActiveWeapon().currentBulletAmount.ToString();
+				maxAmmoText.text = weapon.maxBullets.ToString();
+				reloadTextGameObject.SetActive(clientUI.WeaponManager.GetActiveWeapon().IsReloading);
 
-			reloadTextGameObject.SetActive(activeWeapon.IsReloading);
+				return;
+			}
 
-			Logger.Log("Updated ammo UI", LogVerbosity.Debug);
+			ammoText.text = syncMessage.CurrentBullets.ToString();
+			maxAmmoText.text = weapon.maxBullets.ToString();
+			reloadTextGameObject.SetActive(syncMessage.IsReloading);
 		}
 	}
 }

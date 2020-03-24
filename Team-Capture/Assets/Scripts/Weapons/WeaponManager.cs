@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Core.Logger;
 using Core.Networking;
+using Core.Networking.Messages;
 using Helper;
 using Mirror;
 using Player;
@@ -83,9 +84,19 @@ namespace Weapons
 		{
 			base.OnStartLocalPlayer();
 
+			weapons.Callback += WeaponsOnCallback;
+
 			weaponsHolderSpot.gameObject.AddComponent<WeaponSway>();
 
-			UpdateAmmoUI();
+			playerManager.clientUi.hud.UpdateAmmoUI(null);
+		}
+
+		private void WeaponsOnCallback(SyncList<NetworkedWeapon>.Operation op, int itemindex, NetworkedWeapon olditem, NetworkedWeapon newitem)
+		{
+			if (op == SyncList<NetworkedWeapon>.Operation.OP_SET)
+			{
+				Logger.Log("Weapons got updated!");
+			}
 		}
 
 		#endregion
@@ -139,6 +150,12 @@ namespace Weapons
 		{
 			Logger.Log($"Reloading player `{transform.name}`'s active weapon", LogVerbosity.Debug);
 
+			netIdentity.connectionToClient.Send(new WeaponSyncMessage
+			{
+				CurrentBullets = 0,
+				IsReloading = true
+			});
+
 			//Get our players weapon
 			NetworkedWeapon networkedWeapon = GetActiveWeapon();
 			networkedWeapon.IsReloading = true;
@@ -146,14 +163,18 @@ namespace Weapons
 			TCWeapon weapon = networkedWeapon.GetTCWeapon();
 
 			//Update player's UI
-			TargetUpdateAmmoUI(netIdentity.connectionToClient);
+			//TargetUpdateAmmoUI(netIdentity.connectionToClient);
 			
 			yield return new WaitForSeconds(weapon.reloadTime);
 			networkedWeapon.currentBulletAmount = weapon.maxBullets;
 			networkedWeapon.IsReloading = false;
 
 			//Update player's UI
-			TargetUpdateAmmoUI(netIdentity.connectionToClient);
+			netIdentity.connectionToClient.Send(new WeaponSyncMessage
+			{
+				CurrentBullets = networkedWeapon.currentBulletAmount,
+				IsReloading = false
+			});
 		}
 
 		#endregion
@@ -207,21 +228,16 @@ namespace Weapons
 			Logger.Log($"Added weapon {weapon} for {transform.name} with {tcWeapon.maxBullets} bullets", LogVerbosity.Debug);
 
 			//Setup the new added weapon, and stop any reloading going on with the current weapon
-			TargetUpdateAmmoUI(netIdentity.connectionToClient);
+			netIdentity.connectionToClient.Send(new WeaponSyncMessage
+			{
+				CurrentBullets = tcWeapon.maxBullets,
+				IsReloading = false
+			});
 
 			if (weapons.Count > 1)
 			{
 				SetClientWeaponIndex(weapons.Count - 1);
 			}
-		}
-
-		[TargetRpc]
-#pragma warning disable IDE0060 //We need target, for knowing who to update the UI for
-		// ReSharper disable once UnusedParameter.Local
-		private void TargetUpdateAmmoUI(NetworkConnection target)
-#pragma warning restore IDE0060
-		{
-			UpdateAmmoUI();
 		}
 
 		#endregion
@@ -252,7 +268,7 @@ namespace Weapons
 			if (!isLocalPlayer)
 				return;
 
-			playerManager.clientUi.hud.UpdateAmmoUI();
+			playerManager.clientUi.hud.UpdateAmmoUI(null);
 		}
 
 		/// <summary>
@@ -288,20 +304,6 @@ namespace Weapons
 		{
 			for (int i = 0; i < weaponsHolderSpot.childCount; i++)
 				weaponsHolderSpot.GetChild(i).gameObject.SetActive(i == index);
-		}
-
-		#endregion
-
-		#region Ammo UI Updating
-
-		/// <summary>
-		/// Updates the clients ammo UI
-		/// </summary>
-		private void UpdateAmmoUI()
-		{
-			if(playerManager.clientUi == null) return;
-
-			playerManager.clientUi.hud.UpdateAmmoUI();
 		}
 
 		#endregion

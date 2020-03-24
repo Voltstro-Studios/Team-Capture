@@ -183,7 +183,6 @@ MonoBehaviour:
   - {fileID: 6438375964343202626}
   - {fileID: 6438375964401219431}
   invincibilityLastTime: 3
-  latencyUpdateTime: 2
   username: Not Set
   latency: 0
 --- !u!114 &4790435715656838203
@@ -416,6 +415,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5880ce2b09265cb4e892a1543c703ac0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allowModifyOfFOV: 1
 --- !u!1 &6438375964401219431
 GameObject:
   m_ObjectHideFlags: 0

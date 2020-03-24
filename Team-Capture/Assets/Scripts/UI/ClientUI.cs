@@ -11,6 +11,7 @@ namespace UI
 
 		internal PlayerManager PlayerManager;
 		internal WeaponManager WeaponManager;
+		internal PlayerWeaponShoot PlayerWeaponShoot;
 
 		public Hud hud;
 		public KillFeed killFeed;
@@ -25,6 +26,7 @@ namespace UI
 
 			PlayerManager = playerManager;
 			WeaponManager = playerManager.GetComponent<WeaponManager>();
+			PlayerWeaponShoot = playerManager.GetComponent<PlayerWeaponShoot>();
 
 			pauseMenu.gameObject.SetActive(false);
 

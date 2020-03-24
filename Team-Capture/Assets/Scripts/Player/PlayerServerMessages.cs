@@ -13,13 +13,17 @@ namespace Player
 	{
 		private ClientUI clientUi;
 
-		private void Start()
+		private PlayerWeaponShoot playerWeaponShoot;
+
+		private void Awake()
 		{
-			clientUi = GetComponent<PlayerManager>().clientUi;
+			clientUi =  GetComponent<PlayerManager>().clientUi;
+			playerWeaponShoot = GetComponent<PlayerWeaponShoot>();
 
 			//Register all our custom messages
 			NetworkClient.RegisterHandler<SetPickupStatus>(PickupMessage);
 			NetworkClient.RegisterHandler<PlayerDiedMessage>(PlayerDiedMessage);
+			NetworkClient.RegisterHandler<WeaponSyncMessage>(SyncWeapon);
 		}
 
 		private void OnDestroy()
@@ -27,6 +31,7 @@ namespace Player
 			//Unregister our custom messages on destroy
 			NetworkClient.UnregisterHandler<SetPickupStatus>();
 			NetworkClient.UnregisterHandler<PlayerDiedMessage>();
+			NetworkClient.UnregisterHandler<WeaponSyncMessage>();
 		}
 
 		private void PlayerDiedMessage(NetworkConnection conn, PlayerDiedMessage message)
@@ -50,6 +55,11 @@ namespace Player
 			{
 				pickupMaterial.meshToChange.material = status.IsActive ? pickupMaterial.pickupMaterial : pickupMaterial.pickupPickedUpMaterial;
 			}
+		}
+
+		private void SyncWeapon(NetworkConnection conn, WeaponSyncMessage weaponSync)
+		{
+			clientUi.hud.UpdateAmmoUI(weaponSync);
 		}
 	}
 }
