@@ -28,6 +28,11 @@ namespace Weapons
 		private PlayerManager playerManager;
 
 		/// <summary>
+		/// The active reloading coroutine
+		/// </summary>
+		private Coroutine reloadingCoroutine;
+
+		/// <summary>
 		/// The layer to use when creating our weapons (for local weapons)
 		/// </summary>
 		[SerializeField] private string weaponLayerName = "LocalWeapon";
@@ -187,7 +192,7 @@ namespace Weapons
 		[Command]
 		private void CmdReloadPlayerWeapon()
 		{
-			StartCoroutine(ServerReloadPlayerWeapon());
+			reloadingCoroutine = StartCoroutine(ServerReloadPlayerWeapon());
 		}
 
 		/// <summary>
@@ -209,19 +214,25 @@ namespace Weapons
 			NetworkedWeapon networkedWeapon = GetActiveWeapon();
 			networkedWeapon.IsReloading = true;
 
+			int weaponIndex = SelectedWeaponIndex;
+
 			TCWeapon weapon = networkedWeapon.GetTCWeapon();
 
-			//Update player's UI
-			//TargetUpdateAmmoUI(netIdentity.connectionToClient);
-
 			yield return new WaitForSeconds(weapon.reloadTime);
-			networkedWeapon.currentBulletAmount = weapon.maxBullets;
-			networkedWeapon.IsReloading = false;
+			FinishReload(networkedWeapon, weapon, weaponIndex);
+		}
+
+		[Server]
+		private void FinishReload(NetworkedWeapon weapon, TCWeapon tcWeapon, int weaponIndex)
+		{
+			weapon.currentBulletAmount = tcWeapon.maxBullets;
+			weapon.IsReloading = false;
 
 			//Update player's UI
+			if(SelectedWeaponIndex != weaponIndex) return;
 			netIdentity.connectionToClient.Send(new WeaponSyncMessage
 			{
-				CurrentBullets = networkedWeapon.currentBulletAmount,
+				CurrentBullets = weapon.currentBulletAmount,
 				IsReloading = false
 			});
 		}
@@ -348,7 +359,7 @@ namespace Weapons
 		private void SetClientWeaponIndex(int index)
 		{
 			//Stop reloading
-			StopAllCoroutines();
+			StopCoroutine(reloadingCoroutine);
 
 			//Set the selected weapon index and update the visible gameobject
 			SelectedWeaponIndex = index;
