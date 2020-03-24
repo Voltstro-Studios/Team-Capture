@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Core.Logger;
 using UnityEngine;
-using Logger = Core.Logger.Logger;
 
 namespace Weapons
 {
+	/// <summary>
+	/// Handles getting weapon data
+	/// </summary>
 	public static class WeaponsResourceManager
 	{
 		private static List<TCWeapon> weapons;
