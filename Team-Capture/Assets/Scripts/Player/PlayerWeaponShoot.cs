@@ -67,10 +67,15 @@ namespace Player
 				return;
 
 			//Cache our current weapon
-			TCWeapon weapon = weaponManager.GetActiveWeapon().GetTCWeapon();
+			NetworkedWeapon networkedWeapon = weaponManager.GetActiveWeapon();
 
 			//Looks like the weapon isn't setup yet
-			if (weapon == null)
+			if (networkedWeapon == null)
+				return;
+
+			TCWeapon weapon = networkedWeapon.GetTCWeapon();
+
+			if(weapon == null)
 				return;
 
 			if (playerManager.IsDead)
