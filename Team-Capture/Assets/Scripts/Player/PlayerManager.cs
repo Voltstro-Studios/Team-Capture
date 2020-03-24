@@ -20,8 +20,6 @@ namespace Player
 
 		[SerializeField] private float invincibilityLastTime = 3.0f;
 
-		private bool isConnected;
-
 		public int MaxHealth { get; } = 100;
 
 		#region Sync Vars
@@ -94,20 +92,6 @@ namespace Player
 			IsHostPlayer = true;
 
 			Logger.Log($"Player {netId} is the host.");
-		}
-
-		public override void OnStartLocalPlayer()
-		{
-			base.OnStartLocalPlayer();
-
-			isConnected = true;
-		}
-
-		public override void OnStopAuthority()
-		{
-			base.OnStopAuthority();
-
-			isConnected = false;
 		}
 
 		/// <summary>
