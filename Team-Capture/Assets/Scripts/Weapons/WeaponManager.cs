@@ -12,6 +12,9 @@ using Logger = Core.Logger.Logger;
 
 namespace Weapons
 {
+	/// <summary>
+	/// Weapon management, such as adding, removing and selecting weapons
+	/// </summary>
 	public class WeaponManager : NetworkBehaviour
 	{
 		/// <summary>
@@ -101,6 +104,53 @@ namespace Weapons
 
 		#endregion
 
+		#region Weapon List Management
+
+		/// <summary>
+		/// Get the active weapon
+		/// </summary>
+		/// <returns></returns>
+		internal NetworkedWeapon GetActiveWeapon()
+		{
+			return weapons.Count == 0 ? null : weapons[SelectedWeaponIndex];
+		}
+
+		/// <summary>
+		/// Gets the active weapon's graphics
+		/// </summary>
+		/// <returns></returns>
+		internal WeaponGraphics GetActiveWeaponGraphics()
+		{
+			return weaponsHolderSpot.GetChild(SelectedWeaponIndex).GetComponent<WeaponGraphics>();
+		}
+
+		/// <summary>
+		/// Gets a weapon from the list
+		/// </summary>
+		/// <param name="weapon"></param>
+		/// <returns></returns>
+		internal TCWeapon GetWeapon(string weapon)
+		{
+			IEnumerable<NetworkedWeapon> result = from a in weapons
+				where a.weapon == weapon
+				select a;
+
+			return WeaponsResourceManager.GetWeapon(result.FirstOrDefault()?.weapon);
+		}
+
+		private class SyncListWeapons : SyncList<NetworkedWeapon>
+		{
+		}
+
+		#endregion
+
+		/// <summary>
+		/// Server callback for when <see cref="weapons"/> is modified
+		/// </summary>
+		/// <param name="op"></param>
+		/// <param name="itemIndex"></param>
+		/// <param name="oldWeapon"></param>
+		/// <param name="newWeapon"></param>
 		[Server]
 		private void ServerWeaponCallback(SyncList<NetworkedWeapon>.Operation op, int itemIndex, NetworkedWeapon oldWeapon, NetworkedWeapon newWeapon)
 		{
@@ -119,19 +169,11 @@ namespace Weapons
 			}
 		}
 
-		[ClientRpc]
-		private void RpcInstantiateWeaponOnClients(string weaponName)
-		{
-			if (weaponName == null) return;
-
-			GameObject newWeapon = Instantiate(WeaponsResourceManager.GetWeapon(weaponName).baseWeaponPrefab,
-				weaponsHolderSpot);
-			if (isLocalPlayer)
-				Layers.SetLayerRecursively(newWeapon, LayerMask.NameToLayer(weaponLayerName));
-		}
-
 		#region Weapon Reloading
 
+		/// <summary>
+		/// Requests the server to reload the current weapon
+		/// </summary>
 		[Client]
 		internal void ClientReloadWeapon()
 		{
@@ -139,14 +181,21 @@ namespace Weapons
 			CmdReloadPlayerWeapon();
 		}
 
+		/// <summary>
+		/// Reloads clients current weapon
+		/// </summary>
 		[Command]
 		private void CmdReloadPlayerWeapon()
 		{
 			StartCoroutine(ServerReloadPlayerWeapon());
 		}
 
+		/// <summary>
+		/// Reloads clients current weapon
+		/// </summary>
+		/// <returns></returns>
 		[Server]
-		public IEnumerator ServerReloadPlayerWeapon()
+		internal IEnumerator ServerReloadPlayerWeapon()
 		{
 			Logger.Log($"Reloading player `{transform.name}`'s active weapon", LogVerbosity.Debug);
 
@@ -179,31 +228,11 @@ namespace Weapons
 
 		#endregion
 
-		internal NetworkedWeapon GetActiveWeapon()
-		{
-			return weapons.Count == 0 ? null : weapons[SelectedWeaponIndex];
-		}
-
-		public WeaponGraphics GetActiveWeaponGraphics()
-		{
-			return weaponsHolderSpot.GetChild(SelectedWeaponIndex).GetComponent<WeaponGraphics>();
-		}
-
-		public TCWeapon GetWeapon(string weapon)
-		{
-			IEnumerable<NetworkedWeapon> result = from a in weapons
-				where a.weapon == weapon
-				select a;
-
-			return WeaponsResourceManager.GetWeapon(result.FirstOrDefault()?.weapon);
-		}
-
-		private class SyncListWeapons : SyncList<NetworkedWeapon>
-		{
-		}
-
 		#region Add Weapons
 
+		/// <summary>
+		/// Adds the scene's stock weapons to the client
+		/// </summary>
 		[Server]
 		public void AddStockWeapons()
 		{
@@ -211,6 +240,10 @@ namespace Weapons
 				AddWeapon(weapon.weapon);
 		}
 
+		/// <summary>
+		/// Adds a weapon
+		/// </summary>
+		/// <param name="weapon">The weapon to add</param>
 		[Server]
 		internal void AddWeapon(string weapon)
 		{
@@ -240,10 +273,28 @@ namespace Weapons
 			}
 		}
 
+		/// <summary>
+		/// Instantiates a weapon model in all clients
+		/// </summary>
+		/// <param name="weaponName"></param>
+		[ClientRpc]
+		private void RpcInstantiateWeaponOnClients(string weaponName)
+		{
+			if (weaponName == null) return;
+
+			GameObject newWeapon = Instantiate(WeaponsResourceManager.GetWeapon(weaponName).baseWeaponPrefab,
+				weaponsHolderSpot);
+			if (isLocalPlayer)
+				Layers.SetLayerRecursively(newWeapon, LayerMask.NameToLayer(weaponLayerName));
+		}
+
 		#endregion
 
 		#region Weapon Removal
 
+		/// <summary>
+		/// Removes all weapons this client has
+		/// </summary>
 		[Server]
 		public void RemoveAllWeapons()
 		{
@@ -251,6 +302,9 @@ namespace Weapons
 			weapons.Clear();
 		}
 
+		/// <summary>
+		/// Removes all weapons on the client
+		/// </summary>
 		[ClientRpc]
 		private void RpcRemoveAllActiveWeapons()
 		{
@@ -261,7 +315,12 @@ namespace Weapons
 
 		#region Weapon Selection
 
-#pragma warning disable IDE0060 // RWe need these variable, Mirror stuff
+		/// <summary>
+		/// Hook for when the <see cref="SelectedWeaponIndex"/> changes
+		/// </summary>
+		/// <param name="oldValue"></param>
+		/// <param name="newValue"></param>
+#pragma warning disable IDE0060 //We need these variable, Mirror stuff
 		public void SelectWeapon(int oldValue, int newValue)
 #pragma warning restore IDE0060
 		{
@@ -283,6 +342,10 @@ namespace Weapons
 			SetClientWeaponIndex(index);
 		}
 
+		/// <summary>
+		/// Sets the <see cref="SelectedWeaponIndex"/>
+		/// </summary>
+		/// <param name="index"></param>
 		[Server]
 		private void SetClientWeaponIndex(int index)
 		{
@@ -299,6 +362,10 @@ namespace Weapons
 			RpcSelectWeapon(index);
 		}
 
+		/// <summary>
+		/// Changes the weapons <see cref="GameObject"/> active on this client
+		/// </summary>
+		/// <param name="index"></param>
 		[ClientRpc]
 		private void RpcSelectWeapon(int index)
 		{

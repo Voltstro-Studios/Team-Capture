@@ -10,19 +10,41 @@ using Random = UnityEngine.Random;
 
 namespace Player
 {
+	/// <summary>
+	/// Handles shooting
+	/// </summary>
 	public class PlayerWeaponShoot : NetworkBehaviour
 	{
+		/// <summary>
+		/// The <see cref="PlayerManager"/> associated with this <see cref="PlayerWeaponShoot"/>
+		/// </summary>
 		private PlayerManager playerManager;
+
+		/// <summary>
+		/// The <see cref="weaponManager"/> associated with this <see cref="PlayerWeaponShoot"/>
+		/// </summary>
 		private WeaponManager weaponManager;
 
+		/// <summary>
+		/// The pickup tag
+		/// </summary>
 		[SerializeField] private string pickupTag = "Pickup";
 
 		#region Server Variables
 
+		/// <summary>
+		/// (Server only) The last weapon this client used
+		/// </summary>
 		private string lastWeapon;
+
+		/// <summary>
+		/// (Server only) The next time to fire
+		/// </summary>
 		private float nextTimeToFire;
 
 		#endregion
+
+		#region Unity Event Functions
 
 		private void Start()
 		{
@@ -74,11 +96,15 @@ namespace Player
 			}
 		}
 
+		#endregion
+
 		[Client]
 		private void ShootWeapon()
 		{
 			CmdShootWeapon();
 		}
+
+		#region Server Side Shooting
 
 		[Command(channel = 1)]
 		private void CmdShootWeapon()
@@ -182,6 +208,8 @@ namespace Player
 				}
 			}
 		}
+		
+		#endregion
 
 		#region Weapon Effects
 
