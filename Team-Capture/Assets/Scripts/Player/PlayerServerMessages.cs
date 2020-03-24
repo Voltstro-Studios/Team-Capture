@@ -18,7 +18,7 @@ namespace Player
 
 		private void Awake()
 		{
-			clientUi =  GetComponent<PlayerManager>().clientUi;
+			clientUi =  GetComponent<PlayerManager>().ClientUi;
 
 			//Register all our custom messages
 			NetworkClient.RegisterHandler<SetPickupStatus>(PickupMessage);

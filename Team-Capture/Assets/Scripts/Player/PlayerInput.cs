@@ -40,8 +40,8 @@ namespace Player
 			//Pause menu
 			if (Input.GetKeyDown(pauseMenuKey))
 			{
-				if(playerManager.clientUi.pauseMenu.GetActivePanel() == null)
-					playerManager.clientUi.TogglePauseMenu();
+				if(playerManager.ClientUi.pauseMenu.GetActivePanel() == null)
+					playerManager.ClientUi.TogglePauseMenu();
 			}
 
 			//Make sure mouse lock/visibility is correct
@@ -51,7 +51,7 @@ namespace Player
 			{
 				if (ConsoleGUI.Instance.IsOpen())
 				{
-					playerManager.clientUi.ActivatePauseMenu(true);
+					playerManager.ClientUi.ActivatePauseMenu(true);
 					return;
 				}
 			}
@@ -66,7 +66,7 @@ namespace Player
 
 			//Scoreboard
 			if (Input.GetKeyDown(scoreBoardKey) || Input.GetKeyUp(scoreBoardKey))
-				playerManager.clientUi.ToggleScoreBoard();
+				playerManager.ClientUi.ToggleScoreBoard();
 
 			//Don't want to move if the player is dead
 			if (!playerManager.IsDead)

@@ -123,7 +123,7 @@ namespace Weapons
 
 			weaponsHolderSpot.gameObject.AddComponent<WeaponSway>();
 
-			playerManager.clientUi.hud.UpdateAmmoUI(null);
+			playerManager.ClientUi.hud.UpdateAmmoUI(null);
 		}
 
 		private void WeaponsOnCallback(SyncList<NetworkedWeapon>.Operation op, int itemindex, NetworkedWeapon olditem,
@@ -336,7 +336,7 @@ namespace Weapons
 			if (!isLocalPlayer)
 				return;
 
-			playerManager.clientUi.hud.UpdateAmmoUI(null);
+			playerManager.ClientUi.hud.UpdateAmmoUI(null);
 		}
 
 		/// <summary>
@@ -359,7 +359,8 @@ namespace Weapons
 		private void SetClientWeaponIndex(int index)
 		{
 			//Stop reloading
-			StopCoroutine(reloadingCoroutine);
+			if(reloadingCoroutine != null)
+				StopCoroutine(reloadingCoroutine);
 
 			//Set the selected weapon index and update the visible gameobject
 			SelectedWeaponIndex = index;

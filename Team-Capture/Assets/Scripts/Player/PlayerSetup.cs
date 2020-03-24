@@ -31,7 +31,7 @@ namespace Player
 
 			//Setup UI
 			ClientUI clientUi = Instantiate(clientUiPrefab).GetComponent<ClientUI>();
-			GetComponent<PlayerManager>().clientUi = clientUi;
+			GetComponent<PlayerManager>().ClientUi = clientUi;
 			clientUi.SetupUI(GetComponent<PlayerManager>());
 
 			base.OnStartLocalPlayer();

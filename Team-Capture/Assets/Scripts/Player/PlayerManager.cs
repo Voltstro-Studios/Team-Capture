@@ -11,15 +11,34 @@ using Logger = Core.Logger.Logger;
 
 namespace Player
 {
+	/// <summary>
+	/// Handles player stuff, such as health
+	/// </summary>
 	public class PlayerManager : NetworkBehaviour
 	{
-		[HideInInspector] public ClientUI clientUi;
+		/// <summary>
+		/// The <see cref="ClientUI"/>
+		/// </summary>
+		internal ClientUI ClientUi;
+
+		/// <summary>
+		/// <see cref="Behaviour"/>s to disable/enable on death and respawn
+		/// </summary>
 		[SerializeField] private Behaviour[] disableBehaviourOnDeath;
 
+		/// <summary>
+		/// <see cref="GameObject"/>s to disable/enable on death and respawn
+		/// </summary>
 		[SerializeField] private GameObject[] disableGameObjectsOnDeath;
 
+		/// <summary>
+		/// How long the invincibility lasts on spawn
+		/// </summary>
 		[SerializeField] private float invincibilityLastTime = 3.0f;
 
+		/// <summary>
+		/// The max health
+		/// </summary>
 		public int MaxHealth { get; } = 100;
 
 		#region Sync Vars
@@ -223,7 +242,7 @@ namespace Player
 				GameManager.GetActiveSceneCamera().SetActive(true);
 
 				//Disable the UI
-				clientUi.hud.gameObject.SetActive(false);
+				ClientUi.hud.gameObject.SetActive(false);
 			}
 			else
 			{
@@ -262,7 +281,7 @@ namespace Player
 				GameManager.GetActiveSceneCamera().SetActive(false);
 
 				//Enable our UI
-				clientUi.hud.gameObject.SetActive(true);
+				ClientUi.hud.gameObject.SetActive(true);
 			}
 			else
 			{
@@ -275,8 +294,8 @@ namespace Player
 		private void UpdateHealthUi(int oldHealth, int newHealth)
 			// ReSharper restore UnusedParameter.Local
 		{
-			if (isLocalPlayer && clientUi != null)
-				clientUi.hud.UpdateHealthUI();
+			if (isLocalPlayer && ClientUi != null)
+				ClientUi.hud.UpdateHealthUI();
 		}
 #pragma warning restore IDE0060 // Remove unused parameter
 
