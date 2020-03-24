@@ -80,8 +80,10 @@ namespace Mirror.Weaver
 
         public static bool IsArrayType(this TypeReference tr)
         {
-            if ((tr.IsArray && ((ArrayType)tr).ElementType.IsArray) || // jagged array
-                (tr.IsArray && ((ArrayType)tr).Rank > 1)) // multidimensional array
+            // jagged array
+            if ((tr.IsArray && ((ArrayType)tr).ElementType.IsArray) ||
+                // multidimensional array
+                (tr.IsArray && ((ArrayType)tr).Rank > 1))
                 return false;
             return true;
         }
@@ -120,7 +122,6 @@ namespace Mirror.Weaver
         // Note that calling ArraySegment<T>.get_Count directly gives an invalid IL error
         public static MethodReference MakeHostInstanceGeneric(this MethodReference self, GenericInstanceType instanceType)
         {
-
             MethodReference reference = new MethodReference(self.Name, self.ReturnType, instanceType)
             {
                 CallingConvention = self.CallingConvention,

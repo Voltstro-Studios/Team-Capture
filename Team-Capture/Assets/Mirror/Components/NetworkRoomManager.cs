@@ -31,15 +31,18 @@ namespace Mirror
 
         [FormerlySerializedAs("m_ShowRoomGUI")]
         [SerializeField]
+        [Tooltip("This flag controls whether the default UI is shown for the room")]
         internal bool showRoomGUI = true;
 
         [FormerlySerializedAs("m_MinPlayers")]
         [SerializeField]
+        [Tooltip("Minimum number of players to auto-start the game")]
         int minPlayers = 1;
 
         [FormerlySerializedAs("m_RoomPlayerPrefab")]
         [SerializeField]
-        NetworkRoomPlayer roomPlayerPrefab;
+        [Tooltip("Prefab to use for the Room Player")]
+        protected NetworkRoomPlayer roomPlayerPrefab;
 
         /// <summary>
         /// The scene to use for the room. This is similar to the offlineScene of the NetworkManager.
@@ -59,16 +62,20 @@ namespace Mirror
         [FormerlySerializedAs("m_PendingPlayers")]
         public List<PendingPlayer> pendingPlayers = new List<PendingPlayer>();
 
-        /// <summary>
-        /// These slots track players that enter the room.
-        /// <para>The slotId on players is global to the game - across all players.</para>
-        /// </summary>
-        public List<NetworkRoomPlayer> roomSlots = new List<NetworkRoomPlayer>();
+        [Header("Diagnostics")]
 
         /// <summary>
         /// True when all players have submitted a Ready message
         /// </summary>
+        [Tooltip("Diagnostic flag indicating all players are ready to play")]
         public bool allPlayersReady;
+
+        /// <summary>
+        /// These slots track players that enter the room.
+        /// <para>The slotId on players is global to the game - across all players.</para>
+        /// </summary>
+        [Tooltip("List of Room Player objects")]
+        public List<NetworkRoomPlayer> roomSlots = new List<NetworkRoomPlayer>();
 
         public override void OnValidate()
         {
@@ -169,7 +176,7 @@ namespace Mirror
 
         /// <summary>
         /// CheckReadyToBegin checks all of the players in the room to see if their readyToBegin flag is set.
-        /// <para>If all of the players are ready, then the server switches from the RoomScene to the PlayScene - essentially starting the game. This is called automatically in response to NetworkRoomPlayer.SendReadyToBeginMessage().</para>
+        /// <para>If all of the players are ready, then the server switches from the RoomScene to the PlayScene, essentially starting the game. This is called automatically in response to NetworkRoomPlayer.SendReadyToBeginMessage().</para>
         /// </summary>
         public void CheckReadyToBegin()
         {
@@ -304,10 +311,10 @@ namespace Mirror
         /// This causes the server to switch scenes and sets the networkSceneName.
         /// <para>Clients that connect to this server will automatically switch to this scene. This is called autmatically if onlineScene or offlineScene are set, but it can be called from user code to switch scenes again while the game is in progress. This automatically sets clients to be not-ready. The clients must call NetworkClient.Ready() again to participate in the new scene.</para>
         /// </summary>
-        /// <param name="sceneName"></param>
-        public override void ServerChangeScene(string sceneName)
+        /// <param name="newSceneName"></param>
+        public override void ServerChangeScene(string newSceneName)
         {
-            if (sceneName == RoomScene)
+            if (newSceneName == RoomScene)
             {
                 foreach (NetworkRoomPlayer roomPlayer in roomSlots)
                 {
@@ -331,7 +338,7 @@ namespace Mirror
                 allPlayersReady = false;
             }
 
-            base.ServerChangeScene(sceneName);
+            base.ServerChangeScene(newSceneName);
         }
 
         /// <summary>

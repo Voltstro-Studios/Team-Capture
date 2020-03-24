@@ -4,7 +4,7 @@ using Mono.CecilX.Cil;
 
 namespace Mirror.Weaver
 {
-    public static class CommandProcessor
+    public static class CommandProcessor 
     {
         const string CmdPrefix = "InvokeCmd";
 
@@ -33,20 +33,7 @@ namespace Mirror.Weaver
         */
         public static MethodDefinition ProcessCommandCall(TypeDefinition td, MethodDefinition md, CustomAttribute ca)
         {
-            MethodDefinition cmd = new MethodDefinition("Call" + md.Name,
-                    MethodAttributes.Public | MethodAttributes.HideBySig,
-                    Weaver.voidType);
-
-            // add parameters
-            foreach (ParameterDefinition pd in md.Parameters)
-            {
-                cmd.Parameters.Add(new ParameterDefinition(pd.Name, ParameterAttributes.None, pd.ParameterType));
-            }
-
-            // move the old body to the new function
-            MethodBody newBody = cmd.Body;
-            cmd.Body = md.Body;
-            md.Body = newBody;
+            MethodDefinition cmd = MethodProcessor.SubstituteMethod(md, "Call" + md.Name);
 
             ILProcessor cmdWorker = md.Body.GetILProcessor();
 
@@ -73,11 +60,14 @@ namespace Mirror.Weaver
             }
 
             // invoke internal send and return
-            cmdWorker.Append(cmdWorker.Create(OpCodes.Ldarg_0)); // load 'base.' to call the SendCommand function with
+            // load 'base.' to call the SendCommand function with
+            cmdWorker.Append(cmdWorker.Create(OpCodes.Ldarg_0));
             cmdWorker.Append(cmdWorker.Create(OpCodes.Ldtoken, td));
-            cmdWorker.Append(cmdWorker.Create(OpCodes.Call, Weaver.getTypeFromHandleReference)); // invokerClass
+            // invokerClass
+            cmdWorker.Append(cmdWorker.Create(OpCodes.Call, Weaver.getTypeFromHandleReference));
             cmdWorker.Append(cmdWorker.Create(OpCodes.Ldstr, cmdName));
-            cmdWorker.Append(cmdWorker.Create(OpCodes.Ldloc_0)); // writer
+            // writer
+            cmdWorker.Append(cmdWorker.Create(OpCodes.Ldloc_0));
             cmdWorker.Append(cmdWorker.Create(OpCodes.Ldc_I4, NetworkBehaviourProcessor.GetChannelId(ca)));
             cmdWorker.Append(cmdWorker.Create(OpCodes.Call, Weaver.sendCommandInternal));
 
