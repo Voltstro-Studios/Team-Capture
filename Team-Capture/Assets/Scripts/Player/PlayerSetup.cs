@@ -1,7 +1,9 @@
-﻿using Core;
+﻿using System;
+using Core;
 using Mirror;
 using UI;
 using UnityEngine;
+using Weapons;
 using Logger = Core.Logger.Logger;
 
 namespace Player
@@ -25,21 +27,35 @@ namespace Player
 		[SerializeField] private float charControllerHeight = 2f;
 		[SerializeField] private Vector3 charControllerCenter = Vector3.zero;
 
+		private PlayerManager playerManager;
+
+		private void Awake()
+		{
+			playerManager = GetComponent<PlayerManager>();
+		}
+
+		public override void OnStartServer()
+		{
+			base.OnStartServer();
+
+			//Spawn the player
+			StartCoroutine(playerManager.ServerPlayerRespawn(true));
+		}
+
 		public override void OnStartLocalPlayer()
 		{
-			Logger.Log("Setting up my local player...");
-
 			//Setup UI
 			ClientUI clientUi = Instantiate(clientUiPrefab).GetComponent<ClientUI>();
-			GetComponent<PlayerManager>().ClientUi = clientUi;
-			clientUi.SetupUI(GetComponent<PlayerManager>());
+			playerManager.ClientUi = clientUi;
+			clientUi.SetupUI(playerManager);
+
+			//Allows for custom messages
+			gameObject.AddComponent<PlayerServerMessages>();
 
 			base.OnStartLocalPlayer();
 
 			//Don't need a collider since the charController acts as one
 			Destroy(localCapsuleCollider);
-
-			gameObject.AddComponent<PlayerServerMessages>();
 
 			//Character Controller
 			CharacterController charController = gameObject.AddComponent<CharacterController>();
@@ -65,13 +81,11 @@ namespace Player
 			//Lock the cursor
 			Cursor.visible = false;
 			Cursor.lockState = CursorLockMode.Locked;
-
-			Logger.Log("Local player is ready!");
 		}
 
 		public override void OnStartClient()
 		{
-			GameManager.AddPlayer(GetComponent<NetworkIdentity>().netId.ToString(), GetComponent<PlayerManager>());
+			GameManager.AddPlayer(netId.ToString(), GetComponent<PlayerManager>());
 
 			base.OnStartClient();
 		}

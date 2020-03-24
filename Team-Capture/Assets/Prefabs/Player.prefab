@@ -177,7 +177,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  clientUi: {fileID: 0}
   disableBehaviourOnDeath: []
   disableGameObjectsOnDeath:
   - {fileID: 6438375964343202626}

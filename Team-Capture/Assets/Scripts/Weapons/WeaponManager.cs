@@ -110,9 +110,6 @@ namespace Weapons
 
 			//Setup our add weapon callback
 			weapons.Callback += ServerWeaponCallback;
-
-			//Add stock weapons to client
-			AddStockWeapons();
 		}
 
 		public override void OnStartLocalPlayer()

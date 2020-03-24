@@ -117,11 +117,8 @@ namespace Core.Networking
 				DeactivatedPickups = ServerPickupManager.GetUnActivePickups()
 			});
 
-			//Get a spawn point for the player
-			Transform spawnPoint = singleton.GetStartPosition();
-
 			//Create the player object
-			GameObject player = Instantiate(playerPrefab, spawnPoint.position, spawnPoint.rotation);
+			GameObject player = Instantiate(playerPrefab);
 			player.AddComponent<SimulationObject>();
 
 			//We need to add a rigid body, but we don't want to do physics, so also set kinematic to true

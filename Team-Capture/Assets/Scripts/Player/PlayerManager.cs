@@ -51,7 +51,7 @@ namespace Player
 		/// <summary>
 		/// Is this player dead?
 		/// </summary>
-		[field: SyncVar] public bool IsDead { get; protected set; }
+		[field: SyncVar] public bool IsDead { get; protected set; } = true;
 
 		/// <summary>
 		/// The username of this player
@@ -95,7 +95,7 @@ namespace Player
 		/// Only set on the server!
 		/// <para>Is this player invincible?</para>
 		/// </summary>
-		public bool IsInvincible { get; private set; }
+		public bool IsInvincible { get; private set; } = true;
 		
 		#endregion
 
@@ -206,9 +206,10 @@ namespace Player
 		/// </summary>
 		/// <returns></returns>
 		[Server]
-		private IEnumerator ServerPlayerRespawn()
+		internal IEnumerator ServerPlayerRespawn(bool skipRespawnTime = false)
 		{
-			yield return new WaitForSeconds(GameManager.GetActiveScene().respawnTime);
+			if(!skipRespawnTime)
+				yield return new WaitForSeconds(GameManager.GetActiveScene().respawnTime);
 
 			Health = MaxHealth;
 
