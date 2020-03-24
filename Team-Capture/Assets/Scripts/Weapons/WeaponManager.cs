@@ -23,10 +23,9 @@ namespace Weapons
 		private readonly SyncListWeapons weapons = new SyncListWeapons();
 
 		/// <summary>
-		/// What is the selected weapon
+		/// The <see cref="PlayerManager"/> that this <see cref="WeaponManager"/> is associated with
 		/// </summary>
-		[field: SyncVar(hook = nameof(SelectWeapon))] 
-		public int SelectedWeaponIndex { get; private set; }
+		private PlayerManager playerManager;
 
 		/// <summary>
 		/// The layer to use when creating our weapons (for local weapons)
@@ -39,14 +38,41 @@ namespace Weapons
 		[SerializeField] private Transform weaponsHolderSpot;
 
 		/// <summary>
-		/// The <see cref="PlayerManager"/> that this <see cref="WeaponManager"/> is associated with
+		/// What is the selected weapon
 		/// </summary>
-		private PlayerManager playerManager;
+		[field: SyncVar(hook = nameof(SelectWeapon))]
+		public int SelectedWeaponIndex { get; private set; }
 
 		/// <summary>
 		/// Gets how many weapons are on the weapon holder spot
 		/// </summary>
 		public int WeaponHolderSpotChildCount => weaponsHolderSpot.childCount;
+
+		/// <summary>
+		/// Server callback for when <see cref="weapons"/> is modified
+		/// </summary>
+		/// <param name="op"></param>
+		/// <param name="itemIndex"></param>
+		/// <param name="oldWeapon"></param>
+		/// <param name="newWeapon"></param>
+		[Server]
+		private void ServerWeaponCallback(SyncList<NetworkedWeapon>.Operation op, int itemIndex,
+			NetworkedWeapon oldWeapon, NetworkedWeapon newWeapon)
+		{
+			switch (op)
+			{
+				case SyncList<NetworkedWeapon>.Operation.OP_ADD when newWeapon == null:
+					Logger.Log("Passed in weapon to be added is null!", LogVerbosity.Error);
+					weapons.Remove(weapons[itemIndex]);
+					return;
+				case SyncList<NetworkedWeapon>.Operation.OP_ADD:
+					RpcInstantiateWeaponOnClients(newWeapon.weapon);
+					break;
+				case SyncList<NetworkedWeapon>.Operation.OP_CLEAR:
+					RpcRemoveAllActiveWeapons();
+					break;
+			}
+		}
 
 		#region Unity Event Functions
 
@@ -62,7 +88,8 @@ namespace Weapons
 			for (int i = 0; i < weapons.Count; i++)
 			{
 				GameObject newWeapon =
-					Instantiate(WeaponsResourceManager.GetWeapon(weapons[i].weapon).baseWeaponPrefab, weaponsHolderSpot);
+					Instantiate(WeaponsResourceManager.GetWeapon(weapons[i].weapon).baseWeaponPrefab,
+						weaponsHolderSpot);
 
 				newWeapon.SetActive(SelectedWeaponIndex == i);
 			}
@@ -94,12 +121,10 @@ namespace Weapons
 			playerManager.clientUi.hud.UpdateAmmoUI(null);
 		}
 
-		private void WeaponsOnCallback(SyncList<NetworkedWeapon>.Operation op, int itemindex, NetworkedWeapon olditem, NetworkedWeapon newitem)
+		private void WeaponsOnCallback(SyncList<NetworkedWeapon>.Operation op, int itemindex, NetworkedWeapon olditem,
+			NetworkedWeapon newitem)
 		{
-			if (op == SyncList<NetworkedWeapon>.Operation.OP_SET)
-			{
-				Logger.Log("Weapons got updated!");
-			}
+			if (op == SyncList<NetworkedWeapon>.Operation.OP_SET) Logger.Log("Weapons got updated!");
 		}
 
 		#endregion
@@ -143,31 +168,6 @@ namespace Weapons
 		}
 
 		#endregion
-
-		/// <summary>
-		/// Server callback for when <see cref="weapons"/> is modified
-		/// </summary>
-		/// <param name="op"></param>
-		/// <param name="itemIndex"></param>
-		/// <param name="oldWeapon"></param>
-		/// <param name="newWeapon"></param>
-		[Server]
-		private void ServerWeaponCallback(SyncList<NetworkedWeapon>.Operation op, int itemIndex, NetworkedWeapon oldWeapon, NetworkedWeapon newWeapon)
-		{
-			switch (op)
-			{
-				case SyncList<NetworkedWeapon>.Operation.OP_ADD when newWeapon == null:
-					Logger.Log("Passed in weapon to be added is null!", LogVerbosity.Error);
-					weapons.Remove(weapons[itemIndex]);
-					return;
-				case SyncList<NetworkedWeapon>.Operation.OP_ADD:
-					RpcInstantiateWeaponOnClients(newWeapon.weapon);
-					break;
-				case SyncList<NetworkedWeapon>.Operation.OP_CLEAR:
-					RpcRemoveAllActiveWeapons();
-					break;
-			}
-		}
 
 		#region Weapon Reloading
 
@@ -213,7 +213,7 @@ namespace Weapons
 
 			//Update player's UI
 			//TargetUpdateAmmoUI(netIdentity.connectionToClient);
-			
+
 			yield return new WaitForSeconds(weapon.reloadTime);
 			networkedWeapon.currentBulletAmount = weapon.maxBullets;
 			networkedWeapon.IsReloading = false;
@@ -258,7 +258,8 @@ namespace Weapons
 				currentBulletAmount = tcWeapon.maxBullets
 			});
 
-			Logger.Log($"Added weapon {weapon} for {transform.name} with {tcWeapon.maxBullets} bullets", LogVerbosity.Debug);
+			Logger.Log($"Added weapon {weapon} for {transform.name} with {tcWeapon.maxBullets} bullets",
+				LogVerbosity.Debug);
 
 			//Setup the new added weapon, and stop any reloading going on with the current weapon
 			netIdentity.connectionToClient.Send(new WeaponSyncMessage
@@ -267,10 +268,7 @@ namespace Weapons
 				IsReloading = false
 			});
 
-			if (weapons.Count > 1)
-			{
-				SetClientWeaponIndex(weapons.Count - 1);
-			}
+			if (weapons.Count > 1) SetClientWeaponIndex(weapons.Count - 1);
 		}
 
 		/// <summary>

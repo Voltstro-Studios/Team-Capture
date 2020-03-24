@@ -16,6 +16,11 @@ namespace Player
 	public class PlayerWeaponShoot : NetworkBehaviour
 	{
 		/// <summary>
+		/// The pickup tag
+		/// </summary>
+		[SerializeField] private string pickupTag = "Pickup";
+
+		/// <summary>
 		/// The <see cref="PlayerManager"/> associated with this <see cref="PlayerWeaponShoot"/>
 		/// </summary>
 		private PlayerManager playerManager;
@@ -25,10 +30,11 @@ namespace Player
 		/// </summary>
 		private WeaponManager weaponManager;
 
-		/// <summary>
-		/// The pickup tag
-		/// </summary>
-		[SerializeField] private string pickupTag = "Pickup";
+		[Client]
+		private void ShootWeapon()
+		{
+			CmdShootWeapon();
+		}
 
 		#region Server Variables
 
@@ -82,13 +88,13 @@ namespace Player
 			switch (weapon.fireMode)
 			{
 				case TCWeapon.WeaponFireMode.Semi:
-					if(Input.GetButtonDown("Fire1"))
+					if (Input.GetButtonDown("Fire1"))
 						ShootWeapon();
 					break;
 				case TCWeapon.WeaponFireMode.Auto:
-					if(Input.GetButtonDown("Fire1"))
+					if (Input.GetButtonDown("Fire1"))
 						InvokeRepeating(nameof(ShootWeapon), 0f, 1f / weapon.fireRate);
-					else if(Input.GetButtonUp("Fire1"))
+					else if (Input.GetButtonUp("Fire1"))
 						CancelInvoke(nameof(ShootWeapon));
 					break;
 				default:
@@ -97,12 +103,6 @@ namespace Player
 		}
 
 		#endregion
-
-		[Client]
-		private void ShootWeapon()
-		{
-			CmdShootWeapon();
-		}
 
 		#region Server Side Shooting
 
@@ -144,7 +144,7 @@ namespace Player
 		[Server]
 		private void ServerShootWeapon(NetworkedWeapon networkedWeapon, TCWeapon tcWeapon)
 		{
-			nextTimeToFire = Time.time + 1f/tcWeapon.fireRate;
+			nextTimeToFire = Time.time + 1f / tcWeapon.fireRate;
 
 			networkedWeapon.currentBulletAmount--;
 
@@ -187,7 +187,7 @@ namespace Player
 				foreach (RaycastHit hit in hits)
 				{
 					//If a player was hit then skip through
-					if(playerHit)
+					if (playerHit)
 						continue;
 
 					//If the hit was the sourcePlayer, then ignore it
@@ -195,7 +195,7 @@ namespace Player
 						continue;
 
 					//We want bullets to go through pickups
-					if(hit.collider.CompareTag(pickupTag))
+					if (hit.collider.CompareTag(pickupTag))
 						continue;
 
 					//Do impact effect on all clients
@@ -208,7 +208,7 @@ namespace Player
 				}
 			}
 		}
-		
+
 		#endregion
 
 		#region Weapon Effects
@@ -229,7 +229,7 @@ namespace Player
 		private void RpcWeaponImpact(Vector3 pos, Vector3 normal, string weapon)
 		{
 			TCWeapon tcWeapon = WeaponsResourceManager.GetWeapon(weapon);
-			if(tcWeapon == null) return;
+			if (tcWeapon == null) return;
 
 			//Instantiate our bullet effects
 			Instantiate(tcWeapon.bulletHitEffectPrefab, pos, Quaternion.LookRotation(normal));
