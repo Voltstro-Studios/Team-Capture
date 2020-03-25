@@ -59,6 +59,12 @@ namespace Mirror
         [Tooltip("This will enable verbose debug messages in the Unity Editor console")]
         public bool showDebugMessages;
 
+        /// <summary>
+        /// Server Update frequency, per second. Use around 60Hz for fast paced games like Counter-Strike to minimize latency. Use around 30Hz for games like WoW to minimize computations. Use around 1-10Hz for slow paced games like EVE.
+        /// </summary>
+        [Tooltip("Server Update frequency, per second. Use around 60Hz for fast paced games like Counter-Strike to minimize latency. Use around 30Hz for games like WoW to minimize computations. Use around 1-10Hz for slow paced games like EVE.")]
+        public int serverTickRate = 60;
+
 #if TEAM_CAPTURE
 	    /// <summary>
 	    /// The scene to switch to when offline.
@@ -71,13 +77,8 @@ namespace Mirror
 	    /// <para>Setting this makes the NetworkManager do scene management. This scene will be switched to when a network session is started - such as a client connect, or a server listen.</para>
 	    /// </summary>
 	    public TCScene onlineScene;
-
-	    /// <summary>
-	    /// Server Update frequency, per second. Use around 60Hz for fast paced games like Counter-Strike to minimize latency. Use around 30Hz for games like WoW to minimize computations. Use around 1-10Hz for slow paced games like EVE.
-	    /// </summary>
-	    [Tooltip("Server Update frequency, per second. Use around 60Hz for fast paced games like Counter-Strike to minimize latency. Use around 30Hz for games like WoW to minimize computations. Use around 1-10Hz for slow paced games like EVE.")]
-	    public int serverTickRate = 30;
 #else
+
         /// <summary>
         /// The scene to switch to when offline.
         /// <para>Setting this makes the NetworkManager do scene management. This scene will be switched to when a network session is completed - such as a client disconnect, or a server shutdown.</para>
@@ -488,7 +489,11 @@ namespace Mirror
             {
                 // call FinishStartHost after changing scene.
                 finishStartHostPending = true;
+#if TEAM_CAPTURE
                 ServerChangeScene(onlineScene.scene);
+#else
+                ServerChangeScene(onlineScene);
+#endif
             }
             // otherwise call FinishStartHost directly
             else
