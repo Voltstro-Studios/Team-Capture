@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/dm_test.unity
     guid: 624f60e3694f967468c548fe80ebc66b
+  - enabled: 1
+    path: Assets/Scenes/dm_2fort.unity
+    guid: 62d33e80e73c6f449949f42b84f2b959
   m_configObjects: {}
