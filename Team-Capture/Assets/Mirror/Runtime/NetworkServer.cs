@@ -91,7 +91,9 @@ namespace Mirror
             dontListen = false;
             active = false;
 
+#if !TEAM_CAPTURE && !LITENETLIB4MIRROR
             NetworkIdentity.ResetNextNetworkId();
+#endif
         }
 
         static void Initialize()
