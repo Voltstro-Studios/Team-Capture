@@ -213,8 +213,13 @@ namespace Player
 
 			Health = MaxHealth;
 
+			//TODO: This will fully work once we have server authoritative movement!
 			Transform spawnPoint = NetworkManager.singleton.GetStartPosition();
-			RpcClientRespawn(spawnPoint.position, spawnPoint.rotation);
+			transform.position = spawnPoint.position;
+			// ReSharper disable once Unity.InefficientPropertyAccess
+			transform.rotation = spawnPoint.rotation;
+
+			RpcClientRespawn();
 
 			//Add stock weapons
 			GetComponent<WeaponManager>().AddStockWeapons();
@@ -258,15 +263,9 @@ namespace Player
 		/// <summary>
 		/// Client side method of enabling client side stuff per client
 		/// </summary>
-		/// <param name="spawnPos"></param>
-		/// <param name="spawnRot"></param>
 		[ClientRpc(channel = 2)]
-		private void RpcClientRespawn(Vector3 spawnPos, Quaternion spawnRot)
+		private void RpcClientRespawn()
 		{
-			transform.position = spawnPos;
-			// ReSharper disable once Unity.InefficientPropertyAccess
-			transform.rotation = spawnRot;
-
 			//Enable game objects
 			foreach (GameObject toEnable in disableGameObjectsOnDeath) toEnable.SetActive(true);
 
