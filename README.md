@@ -32,13 +32,13 @@ Please remember that this project is still in early development!
 
 Here is everyone who is currently working on the project:
 
-* [Creepysin](https://github.com/Creepysin) - *Project Lead*
+* [Voltstro](https://github.com/Voltstro) - *Project Lead*
 
-    - [Email](mailto:me@creepysin.com) - [Website](https://creepysin.com)
+    - [Email](mailto:me@voltstro.dev) - [Website](https://voltstro.dev)
 
 * [EternalClickbait](https://github.com/EternalClickbait) - *Programmer*
 
-If you think you can help out the team, please don't hesitate to email us at: studios@creepysin.com
+If you think you can help out the team, please don't hesitate to email me (project lead)
 
 ## Getting the project
 
@@ -64,6 +64,10 @@ Once you have Blender ready:
 1. Fork and clone the project
 
 2. Open the project up in Unity
+
+* When opening the project for the first time, it can take awhile to open!
+
+3. There seems to be an issue with Blender model's default material not working, re-import the models folder if you are having this issue
 
 ### Testing the project
 
