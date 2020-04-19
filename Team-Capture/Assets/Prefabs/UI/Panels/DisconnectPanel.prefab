@@ -312,7 +312,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08afec969a9416f40afda5786a088ca0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  noBtn: {fileID: 6847026528267304487}
+  cancelButton: {fileID: 6847026528267304487}
 --- !u!1 &5618168468738113304
 GameObject:
   m_ObjectHideFlags: 0
