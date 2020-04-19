@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using Attributes;
 using Core.Logger;
 using Core.Networking.Discovery;
 using Core.Networking.Messages;
+using ENet;
 using LagCompensation;
 using Mirror;
-using Mirror.Runtime.Transport.LiteNetLib4Mirror;
 using Pickups;
 using Player;
 using SceneManagement;
@@ -17,7 +19,7 @@ using Weapons;
 namespace Core.Networking
 {
 	[RequireComponent(typeof(TCGameDiscovery))]
-	public class TCNetworkManager : LiteNetLib4MirrorNetworkManager
+	public class TCNetworkManager : NetworkManager
 	{
 		/// <summary>
 		/// The active <see cref="TCNetworkManager"/>
@@ -60,7 +62,7 @@ namespace Core.Networking
 			TCScenesManager.PreparingSceneLoadEvent += OnPreparingSceneLoad;
 			TCScenesManager.StartSceneLoadEvent += StartSceneLoad;
 
-			LiteNetLib4MirrorTransport.Singleton.maxConnections = (ushort)maxConnections;
+			//LiteNetLib4MirrorTransport.Singleton.maxConnections = (ushort)maxConnections;
 		}
 
 		public void FixedUpdate()
@@ -256,19 +258,31 @@ namespace Core.Networking
 		{
 			while (mode == NetworkManagerMode.Host || mode == NetworkManagerMode.ServerOnly)
 			{
+				Logger.Logger.Log("Updating latency");
+
 				foreach (PlayerManager player in GameManager.GetAllPlayers())
 				{
-					if (mode == NetworkManagerMode.Host && player.netId == 1)
-					{
-						player.latency = NetworkTime.rtt;
-						continue;
-					}
-
-					player.latency = LiteNetLib4MirrorServer.GetPing((int)player.netId - 1);
+					player.latency = GetPlayerRtt(player.netId);
 				}
 
 				yield return new WaitForSeconds(3.0f);
 			}
+		}
+
+		public static uint GetPlayerRtt(uint netId)
+		{
+			if (IgnoranceThreaded.ConnectionIDToPeers.TryGetValue((int)netId - 1, out Peer peer))
+			{
+				return peer.RoundTripTime;
+			}
+
+			if (netId == 1 && GameManager.GetPlayer($"Player {netId}").IsHostPlayer)
+			{
+				//Shouldn't be any lag for a host player
+				return 0;
+			}
+			
+			throw new ArgumentException($"No connection with ID {netId}!");
 		}
 
 		#region Console Commands

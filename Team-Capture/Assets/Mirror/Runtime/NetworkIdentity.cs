@@ -5,10 +5,6 @@ using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-#if TEAM_CAPTURE && LITENETLIB4MIRROR
-using Mirror.Runtime.Transport.LiteNetLib4Mirror;
-#endif
-
 #if UNITY_EDITOR
 using UnityEditor;
 #if UNITY_2018_3_OR_NEWER
@@ -214,23 +210,6 @@ namespace Mirror
             connectionToClient = (NetworkConnectionToClient)conn;
         }
 
-#if TEAM_CAPTURE && LITENETLIB4MIRROR
-	    internal static uint GetNextNetworkId()
-	    {
-		    for (int i = 0; i < LiteNetLib4MirrorServer.Peers.Length; i++)
-		    {
-                //Our next ID
-			    if (LiteNetLib4MirrorServer.Peers[i + 1] == null)
-			    {
-				    Debug.Log($"Connection ID is {i + 1}");
-				    return (uint) i + 1;
-			    }
-		    }
-
-            //IDK man, it shouldn't ever hit this
-		    return 0;
-	    }
-#else
         static uint nextNetworkId = 1;
 
         internal static uint GetNextNetworkId() => nextNetworkId++;
@@ -239,9 +218,8 @@ namespace Mirror
         /// Resets nextNetworkId = 1
         /// </summary>
         public static void ResetNextNetworkId() => nextNetworkId = 1;
-#endif
 
-	    /// <summary>
+        /// <summary>
         /// The delegate type for the clientAuthorityCallback.
         /// </summary>
         /// <param name="conn">The network connection that is gaining or losing authority.</param>

@@ -2106,8 +2106,8 @@ GameObject:
   - component: {fileID: 635598617}
   - component: {fileID: 635598615}
   - component: {fileID: 635598618}
-  - component: {fileID: 635598614}
   - component: {fileID: 635598616}
+  - component: {fileID: 635598614}
   m_Layer: 0
   m_Name: _NetworkManager
   m_TagString: Untagged
@@ -2124,7 +2124,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 635598613}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5671dcb80f9d69240b71f5612676a3fd, type: 3}
+  m_Script: {fileID: 11500000, guid: ec862738267237f4d91e6454ff15f4ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   OnClientConnected:
@@ -2151,31 +2151,14 @@ MonoBehaviour:
   OnServerDisconnected:
     m_PersistentCalls:
       m_Calls: []
-  clientAddress: 127.0.0.1
-  serverIPv4BindAddress: 0.0.0.0
-  serverIPv6BindAddress: '::'
-  ipv6Enabled: 0
-  port: 7777
-  useUpnP: 0
-  maxConnections: 20
-  channels: 02020104
-  authCode: 
-  updateTime: 15
-  pingInterval: 1000
-  disconnectTimeout: 5000
-  reconnectDelay: 500
-  maxConnectAttempts: 10
-  simulatePacketLoss: 0
-  simulationPacketLossChance: 10
-  simulateLatency: 0
-  simulationMinLatency: 30
-  simulationMaxLatency: 100
-  onClientSocketError:
-    m_PersistentCalls:
-      m_Calls: []
-  onServerSocketError:
-    m_PersistentCalls:
-      m_Calls: []
+  DebugEnabled: 0
+  ServerBindAll: 1
+  ServerBindAddress: 127.0.0.1
+  CommunicationPort: 7777
+  MaximumPeerCCU: 4095
+  EnetPollTimeout: 1
+  MaxPacketSizeInKb: 64
+  Channels: 01000000020000000000000002000000
 --- !u!114 &635598615
 MonoBehaviour:
   m_ObjectHideFlags: 0

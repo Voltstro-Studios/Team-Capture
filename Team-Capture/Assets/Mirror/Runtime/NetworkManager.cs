@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using Mirror.Runtime.Transport.LiteNetLib4Mirror;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
@@ -210,7 +208,7 @@ namespace Mirror
                 transport = GetComponent<Transport>();
                 if (transport == null)
                 {
-                    transport = gameObject.AddComponent<LiteNetLib4MirrorTransport>();
+                    transport = gameObject.AddComponent<IgnoranceThreaded>();
                     Debug.Log("NetworkManager: added default Transport because there was none yet.");
                 }
 #if UNITY_EDITOR
