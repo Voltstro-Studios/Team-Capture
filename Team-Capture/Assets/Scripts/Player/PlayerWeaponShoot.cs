@@ -1,6 +1,5 @@
 ﻿using System;
 using Core;
-using Core.Networking.Messages;
 using LagCompensation;
 using Mirror;
 using UI;
@@ -111,47 +110,42 @@ namespace Player
 
 		#region Server Side Shooting
 
-		[Command(channel = 1)]
+		[Command(channel = 3)]
 		private void CmdShootWeapon()
 		{
 			//First, get our active weapon
 			NetworkedWeapon activeWeapon = weaponManager.GetActiveWeapon();
-			TCWeapon tcWeapon = activeWeapon.GetTCWeapon();
 
 			//Reset our nextTimeToFire if we aren't using the same weapon from last time
-			if (lastWeapon != activeWeapon.weapon)
+			if (lastWeapon != activeWeapon.Weapon)
 			{
 				nextTimeToFire = 0;
-				lastWeapon = activeWeapon.weapon;
+				lastWeapon = activeWeapon.Weapon;
 			}
 
 			//If our player is dead, or reloading, then return
 			if (activeWeapon.IsReloading || playerManager.IsDead || Time.time < nextTimeToFire)
 				return;
 
-			if (activeWeapon.currentBulletAmount <= 0)
+			if (activeWeapon.CurrentBulletAmount <= 0)
 			{
 				//Reload
 				StartCoroutine(weaponManager.ServerReloadPlayerWeapon());
 				return;
 			}
 
-			ServerShootWeapon(activeWeapon, tcWeapon);
+			ServerShootWeapon(activeWeapon);
 
 			//Update weapon stats
-			netIdentity.connectionToClient.Send(new WeaponSyncMessage
-			{
-				CurrentBullets = activeWeapon.currentBulletAmount,
-				IsReloading = false
-			});
+			weaponManager.TargetSendWeaponStatus(netIdentity.connectionToClient, activeWeapon);
 		}
 
 		[Server]
-		private void ServerShootWeapon(NetworkedWeapon networkedWeapon, TCWeapon tcWeapon)
+		private void ServerShootWeapon(NetworkedWeapon networkedWeapon)
 		{
-			nextTimeToFire = Time.time + 1f / tcWeapon.fireRate;
+			nextTimeToFire = Time.time + 1f / networkedWeapon.GetTCWeapon().fireRate;
 
-			networkedWeapon.currentBulletAmount--;
+			networkedWeapon.CurrentBulletAmount--;
 
 			RpcWeaponMuzzleFlash();
 
@@ -220,7 +214,7 @@ namespace Player
 
 		#region Weapon Muzzle
 
-		[ClientRpc(channel = 3)]
+		[ClientRpc(channel = 4)]
 		private void RpcWeaponMuzzleFlash()
 		{
 			weaponManager.GetActiveWeaponGraphics().muzzleFlash.Play(true);
@@ -230,7 +224,7 @@ namespace Player
 
 		#region Weapon Impact
 
-		[ClientRpc(channel = 3)]
+		[ClientRpc(channel = 4)]
 		private void RpcWeaponImpact(Vector3 pos, Vector3 normal, string weapon)
 		{
 			TCWeapon tcWeapon = WeaponsResourceManager.GetWeapon(weapon);

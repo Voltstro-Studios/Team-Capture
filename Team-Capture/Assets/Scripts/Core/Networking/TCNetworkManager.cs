@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using Attributes;
 using Core.Logger;
 using Core.Networking.Discovery;
@@ -258,8 +256,6 @@ namespace Core.Networking
 		{
 			while (mode == NetworkManagerMode.Host || mode == NetworkManagerMode.ServerOnly)
 			{
-				Logger.Logger.Log("Updating latency");
-
 				foreach (PlayerManager player in GameManager.GetAllPlayers())
 				{
 					player.latency = GetPlayerRtt(player.netId);

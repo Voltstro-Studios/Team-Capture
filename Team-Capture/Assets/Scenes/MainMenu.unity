@@ -2158,7 +2158,7 @@ MonoBehaviour:
   MaximumPeerCCU: 4095
   EnetPollTimeout: 1
   MaxPacketSizeInKb: 64
-  Channels: 01000000020000000000000002000000
+  Channels: 010000000200000011000000110000000000000011000000
 --- !u!114 &635598615
 MonoBehaviour:
   m_ObjectHideFlags: 0

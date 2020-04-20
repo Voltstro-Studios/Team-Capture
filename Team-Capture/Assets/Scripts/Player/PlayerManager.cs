@@ -116,7 +116,7 @@ namespace Player
 		/// <summary>
 		/// Kills the player
 		/// </summary>
-		[Command]
+		[Command(channel = 5)]
 		public void CmdSuicide()
 		{
 			TakeDamage(Health, transform.name);
@@ -181,7 +181,7 @@ namespace Player
 			{
 				PlayerKilled = transform.name,
 				PlayerKiller = sourcePlayerId,
-				WeaponName = weaponManager.GetActiveWeapon().weapon
+				WeaponName = weaponManager.GetActiveWeapon().Weapon
 			}, 3);
 
 			//Remove all the weapons on the player
@@ -235,7 +235,7 @@ namespace Player
 		/// <summary>
 		/// Disables components on each of the clients
 		/// </summary>
-		[ClientRpc(channel = 2)]
+		[ClientRpc(channel = 5)]
 		private void RpcClientPlayerDie()
 		{
 			//Disable the collider, or the Char controller
@@ -263,7 +263,7 @@ namespace Player
 		/// <summary>
 		/// Client side method of enabling client side stuff per client
 		/// </summary>
-		[ClientRpc(channel = 2)]
+		[ClientRpc(channel = 5)]
 		private void RpcClientRespawn()
 		{
 			//Enable game objects

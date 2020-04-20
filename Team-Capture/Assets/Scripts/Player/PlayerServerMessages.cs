@@ -23,7 +23,6 @@ namespace Player
 			//Register all our custom messages
 			NetworkClient.RegisterHandler<SetPickupStatus>(PickupMessage);
 			NetworkClient.RegisterHandler<PlayerDiedMessage>(PlayerDiedMessage);
-			NetworkClient.RegisterHandler<WeaponSyncMessage>(SyncWeapon);
 		}
 
 		private void OnDestroy()
@@ -31,7 +30,6 @@ namespace Player
 			//Unregister our custom messages on destroy
 			NetworkClient.UnregisterHandler<SetPickupStatus>();
 			NetworkClient.UnregisterHandler<PlayerDiedMessage>();
-			NetworkClient.UnregisterHandler<WeaponSyncMessage>();
 		}
 
 		/// <summary>
@@ -65,16 +63,6 @@ namespace Player
 			{
 				pickupMaterial.meshToChange.material = status.IsActive ? pickupMaterial.pickupMaterial : pickupMaterial.pickupPickedUpMaterial;
 			}
-		}
-
-		/// <summary>
-		/// Syncs weapons stuff, for UI
-		/// </summary>
-		/// <param name="conn"></param>
-		/// <param name="weaponSync"></param>
-		private void SyncWeapon(NetworkConnection conn, WeaponSyncMessage weaponSync)
-		{
-			clientUi.hud.UpdateAmmoUI(weaponSync);
 		}
 	}
 }

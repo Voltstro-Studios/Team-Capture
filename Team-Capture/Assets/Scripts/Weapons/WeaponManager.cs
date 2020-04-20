@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Core.Logger;
 using Core.Networking;
-using Core.Networking.Messages;
 using Helper;
 using Mirror;
 using Player;
@@ -71,7 +70,7 @@ namespace Weapons
 					weapons.Remove(weapons[itemIndex]);
 					return;
 				case SyncList<NetworkedWeapon>.Operation.OP_ADD:
-					RpcInstantiateWeaponOnClients(newWeapon.weapon);
+					RpcInstantiateWeaponOnClients(newWeapon.Weapon);
 					break;
 				case SyncList<NetworkedWeapon>.Operation.OP_CLEAR:
 					RpcRemoveAllActiveWeapons();
@@ -93,7 +92,7 @@ namespace Weapons
 			for (int i = 0; i < weapons.Count; i++)
 			{
 				GameObject newWeapon =
-					Instantiate(WeaponsResourceManager.GetWeapon(weapons[i].weapon).baseWeaponPrefab,
+					Instantiate(WeaponsResourceManager.GetWeapon(weapons[i].Weapon).baseWeaponPrefab,
 						weaponsHolderSpot);
 
 				newWeapon.SetActive(SelectedWeaponIndex == i);
@@ -159,10 +158,10 @@ namespace Weapons
 		internal TCWeapon GetWeapon(string weapon)
 		{
 			IEnumerable<NetworkedWeapon> result = from a in weapons
-				where a.weapon == weapon
+				where a.Weapon == weapon
 				select a;
 
-			return WeaponsResourceManager.GetWeapon(result.FirstOrDefault()?.weapon);
+			return WeaponsResourceManager.GetWeapon(result.FirstOrDefault()?.Weapon);
 		}
 
 		private class SyncListWeapons : SyncList<NetworkedWeapon>
@@ -186,7 +185,7 @@ namespace Weapons
 		/// <summary>
 		/// Reloads clients current weapon
 		/// </summary>
-		[Command]
+		[Command(channel = 3)]
 		private void CmdReloadPlayerWeapon()
 		{
 			reloadingCoroutine = StartCoroutine(ServerReloadPlayerWeapon());
@@ -201,37 +200,37 @@ namespace Weapons
 		{
 			Logger.Log($"Reloading player `{transform.name}`'s active weapon", LogVerbosity.Debug);
 
-			netIdentity.connectionToClient.Send(new WeaponSyncMessage
-			{
-				CurrentBullets = 0,
-				IsReloading = true
-			});
-
 			//Get our players weapon
 			NetworkedWeapon networkedWeapon = GetActiveWeapon();
 			networkedWeapon.IsReloading = true;
+			networkedWeapon.CurrentBulletAmount = 0;
+
+			TargetSendWeaponStatus(GetClientConnection, networkedWeapon);
 
 			int weaponIndex = SelectedWeaponIndex;
 
 			TCWeapon weapon = networkedWeapon.GetTCWeapon();
 
 			yield return new WaitForSeconds(weapon.reloadTime);
-			FinishReload(networkedWeapon, weapon, weaponIndex);
+			FinishReload(networkedWeapon, weaponIndex);
 		}
 
 		[Server]
-		private void FinishReload(NetworkedWeapon weapon, TCWeapon tcWeapon, int weaponIndex)
+		private void FinishReload(NetworkedWeapon weapon, int weaponIndex)
 		{
-			weapon.currentBulletAmount = tcWeapon.maxBullets;
-			weapon.IsReloading = false;
+			weapon.Reload();
 
 			//Update player's UI
 			if(SelectedWeaponIndex != weaponIndex) return;
-			netIdentity.connectionToClient.Send(new WeaponSyncMessage
-			{
-				CurrentBullets = weapon.currentBulletAmount,
-				IsReloading = false
-			});
+			TargetSendWeaponStatus(GetClientConnection, weapon);
+		}
+
+		[TargetRpc(channel = 4)]
+		internal void TargetSendWeaponStatus(NetworkConnection conn, NetworkedWeapon weaponStatus)
+		{
+			Logger.Log("Received updated weapon status", LogVerbosity.Debug);
+
+			playerManager.ClientUi.hud.UpdateAmmoUI(weaponStatus);
 		}
 
 		#endregion
@@ -260,21 +259,14 @@ namespace Weapons
 			if (tcWeapon == null)
 				return;
 
-			weapons.Add(new NetworkedWeapon
-			{
-				weapon = tcWeapon.weapon,
-				currentBulletAmount = tcWeapon.maxBullets
-			});
+			NetworkedWeapon netWeapon = new NetworkedWeapon(tcWeapon);
+			weapons.Add(netWeapon);
 
 			Logger.Log($"Added weapon {weapon} for {transform.name} with {tcWeapon.maxBullets} bullets",
 				LogVerbosity.Debug);
 
 			//Setup the new added weapon, and stop any reloading going on with the current weapon
-			netIdentity.connectionToClient.Send(new WeaponSyncMessage
-			{
-				CurrentBullets = tcWeapon.maxBullets,
-				IsReloading = false
-			});
+			TargetSendWeaponStatus(GetClientConnection, netWeapon);
 
 			if (weapons.Count > 1) SetClientWeaponIndex(weapons.Count - 1);
 		}
@@ -283,7 +275,7 @@ namespace Weapons
 		/// Instantiates a weapon model in all clients
 		/// </summary>
 		/// <param name="weaponName"></param>
-		[ClientRpc]
+		[ClientRpc(channel = 3)]
 		private void RpcInstantiateWeaponOnClients(string weaponName)
 		{
 			if (weaponName == null) return;
@@ -311,7 +303,7 @@ namespace Weapons
 		/// <summary>
 		/// Removes all weapons on the client
 		/// </summary>
-		[ClientRpc]
+		[ClientRpc(channel = 4)]
 		private void RpcRemoveAllActiveWeapons()
 		{
 			for (int i = 0; i < weaponsHolderSpot.childCount; i++) Destroy(weaponsHolderSpot.GetChild(i).gameObject);
@@ -340,7 +332,7 @@ namespace Weapons
 		/// Sets the <see cref="SelectedWeaponIndex"/> to your index
 		/// </summary>
 		/// <param name="index"></param>
-		[Command]
+		[Command(channel = 3)]
 		public void CmdSetWeapon(int index)
 		{
 			Logger.Log($"Player `{transform.name}` set their weapon index to `{index}`.", LogVerbosity.Debug);
@@ -373,7 +365,7 @@ namespace Weapons
 		/// Changes the weapons <see cref="GameObject"/> active on this client
 		/// </summary>
 		/// <param name="index"></param>
-		[ClientRpc]
+		[ClientRpc(channel = 3)]
 		private void RpcSelectWeapon(int index)
 		{
 			for (int i = 0; i < weaponsHolderSpot.childCount; i++)
@@ -381,5 +373,10 @@ namespace Weapons
 		}
 
 		#endregion
+
+		/// <summary>
+		/// Gets the server's connection to this client
+		/// </summary>
+		private NetworkConnection GetClientConnection => netIdentity.connectionToClient;
 	}
 }
