@@ -15,9 +15,9 @@ namespace Player
 	public class PlayerWeaponShoot : NetworkBehaviour
 	{
 		/// <summary>
-		/// The pickup tag
+		/// Layers for the raycast
 		/// </summary>
-		[SerializeField] private string pickupTag = "Pickup";
+		[SerializeField] private LayerMask raycastLayerMask;
 
 		/// <summary>
 		/// The <see cref="PlayerManager"/> associated with this <see cref="PlayerWeaponShoot"/>
@@ -182,7 +182,7 @@ namespace Player
 				//Now do our raycast
 				// ReSharper disable once Unity.PreferNonAllocApi
 				RaycastHit[] hits = Physics.RaycastAll(playerFacingDirection.position, direction,
-					tcWeapon.range);
+					tcWeapon.range, raycastLayerMask);
 				foreach (RaycastHit hit in hits)
 				{
 					//If a player was hit then skip through
@@ -191,10 +191,6 @@ namespace Player
 
 					//If the hit was the sourcePlayer, then ignore it
 					if (hit.collider.name == sourcePlayer)
-						continue;
-
-					//We want bullets to go through pickups
-					if (hit.collider.CompareTag(pickupTag))
 						continue;
 
 					//Do impact effect on all clients

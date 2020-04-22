@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 739785285574288705}
   - component: {fileID: 739785285574288704}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Pickup_Rifle
   m_TagString: Pickup
   m_Icon: {fileID: 0}
@@ -143,6 +143,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: GFX
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: 7abf2ee737c8986489f44ebdbd66d4b0,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7abf2ee737c8986489f44ebdbd66d4b0, type: 3}

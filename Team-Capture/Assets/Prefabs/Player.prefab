@@ -223,7 +223,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  pickupTag: Pickup
+  raycastLayerMask:
+    serializedVersion: 2
+    m_Bits: 307
 --- !u!114 &6221254021302100361
 MonoBehaviour:
   m_ObjectHideFlags: 0

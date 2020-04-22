@@ -29,7 +29,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5672168424297345541}
   - component: {fileID: 5672168424297345540}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Pickup_Shotgun
   m_TagString: Pickup
   m_Icon: {fileID: 0}
@@ -162,6 +162,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: GFX
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: a1c3205fb7735474bb492dc5f45e442a,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 326680701022325867, guid: a1c3205fb7735474bb492dc5f45e442a,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5133913965574556032, guid: a1c3205fb7735474bb492dc5f45e442a,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5767974960422501358, guid: a1c3205fb7735474bb492dc5f45e442a,
         type: 3}
