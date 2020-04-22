@@ -53,6 +53,12 @@ namespace Weapons
 		public int WeaponHolderSpotChildCount => weaponsHolderSpot.childCount;
 
 		/// <summary>
+		/// Gets the current status of the weapon we are using
+		/// <para>CLIENT ONLY</para>
+		/// </summary>
+		public NetworkedWeapon CurrentWeaponStatus { get; private set; }
+
+		/// <summary>
 		/// Server callback for when <see cref="weapons"/> is modified
 		/// </summary>
 		/// <param name="op"></param>
@@ -115,17 +121,9 @@ namespace Weapons
 		{
 			base.OnStartLocalPlayer();
 
-			weapons.Callback += WeaponsOnCallback;
-
 			weaponsHolderSpot.gameObject.AddComponent<WeaponSway>();
 
-			playerManager.ClientUi.hud.UpdateAmmoUI(null);
-		}
-
-		private void WeaponsOnCallback(SyncList<NetworkedWeapon>.Operation op, int itemindex, NetworkedWeapon olditem,
-			NetworkedWeapon newitem)
-		{
-			if (op == SyncList<NetworkedWeapon>.Operation.OP_SET) Logger.Log("Weapons got updated!");
+			UpdateAmmoUI();
 		}
 
 		#endregion
@@ -188,6 +186,14 @@ namespace Weapons
 		[Command(channel = 3)]
 		private void CmdReloadPlayerWeapon()
 		{
+			NetworkedWeapon weapon = GetActiveWeapon();
+
+			if(weapon.IsReloading)
+				return;
+
+			if(weapon.CurrentBulletAmount == weapon.GetTCWeapon().maxBullets)
+				return;
+
 			reloadingCoroutine = StartCoroutine(ServerReloadPlayerWeapon());
 		}
 
@@ -223,14 +229,6 @@ namespace Weapons
 			//Update player's UI
 			if(SelectedWeaponIndex != weaponIndex) return;
 			TargetSendWeaponStatus(GetClientConnection, weapon);
-		}
-
-		[TargetRpc(channel = 4)]
-		internal void TargetSendWeaponStatus(NetworkConnection conn, NetworkedWeapon weaponStatus)
-		{
-			Logger.Log("Received updated weapon status", LogVerbosity.Debug);
-
-			playerManager.ClientUi.hud.UpdateAmmoUI(weaponStatus);
 		}
 
 		#endregion
@@ -325,7 +323,7 @@ namespace Weapons
 			if (!isLocalPlayer)
 				return;
 
-			playerManager.ClientUi.hud.UpdateAmmoUI(null);
+			UpdateAmmoUI();
 		}
 
 		/// <summary>
@@ -371,6 +369,25 @@ namespace Weapons
 			for (int i = 0; i < weaponsHolderSpot.childCount; i++)
 				weaponsHolderSpot.GetChild(i).gameObject.SetActive(i == index);
 		}
+
+		#endregion
+
+		#region Client Stuff
+
+		[TargetRpc(channel = 4)]
+		internal void TargetSendWeaponStatus(NetworkConnection conn, NetworkedWeapon weaponStatus)
+		{
+			//Logger.Log("Received updated weapon status", LogVerbosity.Debug);
+
+			CurrentWeaponStatus = weaponStatus;
+
+			UpdateAmmoUI();
+		}
+
+		/// <summary>
+		/// Updates the ammo UI
+		/// </summary>
+		private void UpdateAmmoUI() => playerManager.ClientUi.hud.UpdateAmmoUI();
 
 		#endregion
 

@@ -24,22 +24,14 @@ namespace UI
 			healthText.text = clientUI.PlayerManager.Health.ToString();
 		}
 
-		public void UpdateAmmoUI(NetworkedWeapon syncMessage)
+		public void UpdateAmmoUI()
 		{
-			TCWeapon weapon = clientUI.WeaponManager.GetActiveWeapon().GetTCWeapon();
+			NetworkedWeapon netWeapon = clientUI.WeaponManager.GetActiveWeapon();
+			TCWeapon weapon = netWeapon.GetTCWeapon();
 
-			if (syncMessage == null)
-			{
-				ammoText.text = clientUI.WeaponManager.GetActiveWeapon().CurrentBulletAmount.ToString();
-				maxAmmoText.text = weapon.maxBullets.ToString();
-				reloadTextGameObject.SetActive(clientUI.WeaponManager.GetActiveWeapon().IsReloading);
-
-				return;
-			}
-
-			ammoText.text = syncMessage.CurrentBulletAmount.ToString();
+			ammoText.text = netWeapon.CurrentBulletAmount.ToString();
 			maxAmmoText.text = weapon.maxBullets.ToString();
-			reloadTextGameObject.SetActive(syncMessage.IsReloading);
+			reloadTextGameObject.SetActive(netWeapon.IsReloading);
 		}
 	}
 }
