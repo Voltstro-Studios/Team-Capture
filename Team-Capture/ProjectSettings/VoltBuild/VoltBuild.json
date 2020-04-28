@@ -1,0 +1,17 @@
+{
+  "$type": "VoltBuilder.Config, VoltBuilder",
+  "BuildOptions": {
+    "$type": "VoltBuilder.DefaultBuildConfig, VoltBuilder",
+    "BuildTarget": 19,
+    "DevBuild": false,
+    "CopyPDBFiles": false,
+    "ServerBuild": false,
+    "ZipFiles": false
+  },
+  "ProjectName": "Team-Capture",
+  "Scenes": {
+    "$type": "System.Collections.Generic.List`1[[VoltBuilder.Scene, VoltBuilder]], mscorlib",
+    "$values": []
+  },
+  "BuildDir": "Build/"
+}
