@@ -9,6 +9,9 @@ namespace SceneManagement
 		[Header("Basic Scene Settings")] 
 		[Scene] public string scene;
 
+		//TODO: This shouldn't really be hard coded, as it forces all scenes into the scenes folder (not that its bad for all scenes to be in that folder)
+		public string ScenePath => $"Assets/Scenes/{scene}.unity";
+
 		[Tooltip("Its 'nice' name")] 
 		public string displayName;
 

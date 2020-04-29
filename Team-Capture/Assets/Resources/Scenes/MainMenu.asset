@@ -16,10 +16,9 @@ MonoBehaviour:
   displayName: MainMenu
   enabled: 1
   isOnlineScene: 0
+  canLoadTo: 1
   pickupsParent: 
   respawnTime: 0
-  hitObjectLastTime: 0
-  weaponHit: {fileID: 0}
   showStartTime: 0
   isMainMenu: 1
   largeImageKey: tc_icon

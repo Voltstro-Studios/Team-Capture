@@ -11,7 +11,33 @@
   "ProjectName": "Team-Capture",
   "Scenes": {
     "$type": "System.Collections.Generic.List`1[[VoltBuilder.Scene, VoltBuilder]], mscorlib",
-    "$values": []
+    "$values": [
+      {
+        "$type": "VoltBuilder.Scene, VoltBuilder",
+        "SceneName": "BootStrapper",
+        "SceneLocation": "Assets/Scenes/BootStrapper.unity"
+      },
+      {
+        "$type": "VoltBuilder.Scene, VoltBuilder",
+        "SceneName": "StartVideo",
+        "SceneLocation": "Assets/Scenes/StartVideo.unity"
+      },
+      {
+        "$type": "VoltBuilder.Scene, VoltBuilder",
+        "SceneName": "MainMenu",
+        "SceneLocation": "Assets/Scenes/MainMenu.unity"
+      },
+      {
+        "$type": "VoltBuilder.Scene, VoltBuilder",
+        "SceneName": "2fort (Deathmatch)",
+        "SceneLocation": "Assets/Scenes/dm_2fort.unity"
+      },
+      {
+        "$type": "VoltBuilder.Scene, VoltBuilder",
+        "SceneName": "Test World",
+        "SceneLocation": "Assets/Scenes/dm_test.unity"
+      }
+    ]
   },
-  "BuildDir": "Build/"
+  "BuildDir": "Builds/"
 }

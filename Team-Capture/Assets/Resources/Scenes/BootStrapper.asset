@@ -13,14 +13,12 @@ MonoBehaviour:
   m_Name: BootStrapper
   m_EditorClassIdentifier: 
   scene: BootStrapper
-  displayName: 
+  displayName: BootStrapper
   enabled: 1
   isOnlineScene: 0
   canLoadTo: 0
   pickupsParent: 
   respawnTime: 4
-  hitObjectLastTime: 2
-  weaponHit: {fileID: 0}
   showStartTime: 1
   isMainMenu: 0
   largeImageKey: tc_icon

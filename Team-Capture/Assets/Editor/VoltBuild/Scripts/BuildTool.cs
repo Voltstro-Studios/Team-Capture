@@ -41,7 +41,7 @@ namespace VoltBuilder
 
 		private void OnEnable()
 		{
-			sceneSettings = new DefaultSceneSettings();
+			sceneSettings = new TCSceneSettings();
 			buildSettings = new DefaultBuildSettings();
 			gameBuilder = new DefaultGameBuild();
 

@@ -1,6 +1,8 @@
 {
     "name": "VoltBuilder",
-    "references": [],
+    "references": [
+        "GUID:2cd8cea194c4d5f448eff6afd8b465f5"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [
         "Android",

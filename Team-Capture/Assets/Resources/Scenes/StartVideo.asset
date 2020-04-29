@@ -13,13 +13,12 @@ MonoBehaviour:
   m_Name: StartVideo
   m_EditorClassIdentifier: 
   scene: StartVideo
-  displayName: 
+  displayName: StartVideo
   enabled: 1
   isOnlineScene: 0
+  canLoadTo: 1
   pickupsParent: 
   respawnTime: 0
-  hitObjectLastTime: 0
-  weaponHit: {fileID: 0}
   showStartTime: 0
   isMainMenu: 0
   largeImageKey: tc_icon
