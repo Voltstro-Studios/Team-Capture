@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using System.Collections.Generic;
+using UnityEditor;
 
 namespace VoltBuilder
 {
@@ -26,5 +27,10 @@ namespace VoltBuilder
 		/// Zip files after build
 		/// </summary>
 		public bool ZipFiles { get; set; }
+
+		/// <summary>
+		/// Files to copy on a success build
+		/// </summary>
+		public List<FileToCopy> FilesToCopyOnBuild { get; set; }
 	}
 }

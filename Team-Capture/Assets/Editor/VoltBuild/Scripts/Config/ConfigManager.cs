@@ -85,7 +85,11 @@ namespace VoltBuilder
 				BuildOptions = new DefaultBuildConfig
 				{
 					BuildTarget = EditorUserBuildSettings.activeBuildTarget,
-					ZipFiles = false
+					ZipFiles = false,
+					CopyPDBFiles = false,
+					DevBuild = false,
+					ServerBuild = false,
+					FilesToCopyOnBuild = new List<FileToCopy>()
 				}
 			};
 		}

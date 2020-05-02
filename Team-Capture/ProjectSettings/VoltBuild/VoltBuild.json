@@ -6,7 +6,27 @@
     "DevBuild": false,
     "CopyPDBFiles": false,
     "ServerBuild": false,
-    "ZipFiles": false
+    "ZipFiles": false,
+    "FilesToCopyOnBuild": {
+      "$type": "System.Collections.Generic.List`1[[VoltBuilder.FileToCopy, VoltBuilder]], mscorlib",
+      "$values": [
+        {
+          "$type": "VoltBuilder.FileToCopy, VoltBuilder",
+          "WhatFileToCopy": "../thirdpartylegal.txt",
+          "CopyToWhere": "thirdpartylegal.txt"
+        },
+        {
+          "$type": "VoltBuilder.FileToCopy, VoltBuilder",
+          "WhatFileToCopy": "Game/Cfg/autoexec.cfg",
+          "CopyToWhere": "Cfg/autoexec.cfg"
+        },
+        {
+          "$type": "VoltBuilder.FileToCopy, VoltBuilder",
+          "WhatFileToCopy": "Game/Cfg/example.cfg",
+          "CopyToWhere": "Cfg/example.cfg"
+        }
+      ]
+    }
   },
   "ProjectName": "Team-Capture",
   "Scenes": {

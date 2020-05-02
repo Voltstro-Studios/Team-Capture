@@ -17,6 +17,16 @@ namespace VoltBuilder
 			GetWindow(typeof(BuildTool), false, "Volt Build Tool");
 		}
 
+		private void OnEnable()
+		{
+			//Change these to use the classes you want
+			sceneSettings = new TCSceneSettings();
+			buildSettings = new DefaultBuildSettings();
+			gameBuilder = new DefaultGameBuild();
+
+			projectName = ConfigManager.Config.ProjectName;
+		}
+
 		private void OnGUI()
 		{
 			EditorGUILayout.LabelField("Volt Build Tool", EditorStyles.boldLabel);
@@ -37,15 +47,6 @@ namespace VoltBuilder
 
 			EditorGUILayout.Space();
 			DrawBuildCommands();
-		}
-
-		private void OnEnable()
-		{
-			sceneSettings = new TCSceneSettings();
-			buildSettings = new DefaultBuildSettings();
-			gameBuilder = new DefaultGameBuild();
-
-			projectName = ConfigManager.Config.ProjectName;
 		}
 
 		#region Scene Setting Stuff

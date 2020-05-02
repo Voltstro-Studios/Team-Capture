@@ -145,7 +145,22 @@ namespace VoltBuilder
 
 			Debug.Log("Build was a success!");
 
-			//TODO: Copy extra files
+			if (ConfigManager.GetBuildConfig(out DefaultBuildConfig g))
+			{
+				Debug.Log("Copying files...");
+
+				foreach (FileToCopy file in g.FilesToCopyOnBuild)
+				{
+					if (!File.Exists(file.WhatFileToCopy)) continue;
+
+					string fileDir = Path.GetDirectoryName($"{buildFolder}{folderName}/{file.CopyToWhere}");
+
+					if (!Directory.Exists(fileDir))
+						Directory.CreateDirectory(fileDir);
+
+					File.Copy(file.WhatFileToCopy, $"{buildFolder}{folderName}/{file.CopyToWhere}", true);
+				}
+			}
 
 			//Zip files (if enabled)
 			if (zipFiles)
