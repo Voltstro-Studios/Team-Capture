@@ -118,13 +118,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6438375962803020341}
-  - component: {fileID: 8450580671024409085}
-  - component: {fileID: 3448369259278931532}
+  - component: {fileID: 2723952240922035333}
+  - component: {fileID: 5162927102225130298}
   - component: {fileID: 4790435715656838203}
+  - component: {fileID: 3448369259278931532}
   - component: {fileID: 5871886052252796697}
   - component: {fileID: 6221254021302100361}
-  - component: {fileID: 2372551973129992940}
-  - component: {fileID: 4650911801006421196}
   - component: {fileID: 6438375962803020338}
   m_Layer: 0
   m_Name: Player
@@ -149,8 +148,8 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!136 &8450580671024409085
-CapsuleCollider:
+--- !u!143 &2723952240922035333
+CharacterController:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -159,10 +158,64 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
+  serializedVersion: 2
+  m_Height: 2
   m_Radius: 0.5
-  m_Height: 1
-  m_Direction: 1
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5162927102225130298
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6438375962803020343}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e13942667ba21734bab49808dcd3ef36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  moveSpeed: 11
+  jumpSpeed: 8
+  sideStrafeSpeed: 1
+  airAcceleration: 2
+  airDeacceleration: 2
+  airControl: 5
+  runAcceleration: 14
+  runDeacceleration: 10
+  sideStrafeAcceleration: 50
+  frictionAmount: 6
+  gravityAmount: 20
+--- !u!114 &4790435715656838203
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6438375962803020343}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd67060ceb5c12f44929e84ec8ed4028, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  localCamera: {fileID: 6438375964343202625}
+  localCapsuleCollider: {fileID: 0}
+  clientUiPrefab: {fileID: 2142721828509503496, guid: 8f7e8441a5d36bf47babd28e6be83faf,
+    type: 3}
+  charControllerSlopeLimit: 45
+  charControllerStepOffset: 0.3
+  charControllerSkinWidth: 0.08
+  charControllerMinMoveDistance: 0.001
+  charControllerRadius: 0.5
+  charControllerHeight: 2
+  charControllerCenter: {x: 0, y: 0, z: 0}
 --- !u!114 &3448369259278931532
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -184,31 +237,6 @@ MonoBehaviour:
   invincibilityLastTime: 3
   username: Not Set
   latency: 0
---- !u!114 &4790435715656838203
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6438375962803020343}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd67060ceb5c12f44929e84ec8ed4028, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  localCamera: {fileID: 6438375964343202625}
-  localCapsuleCollider: {fileID: 8450580671024409085}
-  clientUiPrefab: {fileID: 2142721828509503496, guid: 8f7e8441a5d36bf47babd28e6be83faf,
-    type: 3}
-  charControllerSlopeLimit: 45
-  charControllerStepOffset: 0.3
-  charControllerSkinWidth: 0.08
-  charControllerMinMoveDistance: 0.001
-  charControllerRadius: 0.5
-  charControllerHeight: 2
-  charControllerCenter: {x: 0, y: 0, z: 0}
 --- !u!114 &5871886052252796697
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -242,45 +270,6 @@ MonoBehaviour:
   syncInterval: 0
   weaponLayerName: LocalWeapon
   weaponsHolderSpot: {fileID: 8771585192178499609}
---- !u!114 &2372551973129992940
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6438375962803020343}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f74aedd71d9a4f55b3ce499326d45fb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0
-  clientAuthority: 1
-  localPositionSensitivity: 0.001
-  localRotationSensitivity: 0.01
-  localScaleSensitivity: 0.01
-  compressRotation: 1
---- !u!114 &4650911801006421196
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6438375962803020343}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 734b48bea0b204338958ee3d885e11f0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.01
-  clientAuthority: 1
-  localPositionSensitivity: 0.01
-  localRotationSensitivity: 0.01
-  localScaleSensitivity: 0.01
-  compressRotation: 1
-  target: {fileID: 6438375964343202627}
 --- !u!114 &6438375962803020338
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -389,7 +378,6 @@ MonoBehaviour:
   m_RequiresDepthTextureOption: 2
   m_RequiresOpaqueTextureOption: 2
   m_CameraType: 0
-  m_CameraOutput: 0
   m_Cameras: []
   m_RendererIndex: -1
   m_VolumeLayerMask:
@@ -401,6 +389,7 @@ MonoBehaviour:
   m_AntialiasingQuality: 2
   m_StopNaN: 0
   m_Dithering: 1
+  m_ClearDepth: 1
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_Version: 2

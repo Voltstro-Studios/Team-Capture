@@ -1,9 +1,14 @@
-﻿using UI;
+﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
+using Mirror;
+using Player.Movement;
+using UI;
 using UnityEngine;
 
 namespace Player
 {
-	public class PlayerMovement : MonoBehaviour
+	public class PlayerMovement : NetworkBehaviour
 	{
 		[Header("Speed")]
 		[SerializeField] private float moveSpeed = 11.0f;
@@ -24,10 +29,6 @@ namespace Player
 		[SerializeField] private float frictionAmount = 6;
 		[SerializeField] private float gravityAmount = 20.0f;
 
-		[Header("Sensitivity")]
-		[SerializeField] private float xMouseSensitivity = 100.0f;
-		[SerializeField] private float yMouseSensitivity = 100.0f;
-
 		private Vector3 playerVelocity = Vector3.zero;
 
 		private float verticalMove;
@@ -36,10 +37,31 @@ namespace Player
 		private float rotationX;
 		private float rotationY;
 
-		public bool WishToJump { get; private set; }
+		private bool wishToJump;
+
+		/// <summary>
+		/// Correction threshold for both player and camera rotation
+		/// </summary>
+		[SerializeField, Range(0.01f, 5f)] private float rotationCorrectionThreshold = 0.01f;
+
+		[SerializeField] private float correctionThreshold = 0.1f;
 
 		private CharacterController charController;
 		private Transform cameraTransform;
+
+		#region Inputs
+
+		private readonly List<PlayerInputs> clientInputs = new List<PlayerInputs>();
+
+		private readonly ConcurrentQueue<PlayerInputs> serverInputs = new ConcurrentQueue<PlayerInputs>();
+
+		private readonly List<PlayerState> predictedInputs = new List<PlayerState>();
+
+		#endregion
+
+		[SyncVar(hook = nameof(SyncState))] private PlayerState playerState;
+
+		private long clientTick = 0;
 
 		private void Start()
 		{
@@ -49,23 +71,17 @@ namespace Player
 
 		private void Update()
 		{
-			//Clamp the X rotation
-			rotationX = Mathf.Clamp(rotationX, -90, 90);
-
-			if (!ClientUI.IsPauseMenuOpen)
+			if (isServer)
 			{
-				//TODO: The server should handle player velocity and such
-				transform.rotation = Quaternion.Euler(0, rotationY, 0); // Rotates the collider
-				cameraTransform.rotation = Quaternion.Euler(rotationX, rotationY, 0); // Rotates the camera
+				if(serverInputs.TryDequeue(out PlayerInputs result))
+					CharacterDoMove(result);
 			}
+		}
 
-			if (charController.isGrounded)
-				GroundMove();
-			else if (!charController.isGrounded)
-				AirMove();
-
-			//Move the controller
-			charController.Move(playerVelocity * Time.deltaTime);
+		private void FixedUpdate()
+		{
+			if (isLocalPlayer)
+				clientTick++;
 		}
 
 		private void OnDisable()
@@ -78,7 +94,51 @@ namespace Player
 
 			playerVelocity = Vector3.zero;
 
-			WishToJump = false;
+			wishToJump = false;
+		}
+
+		private void CharacterDoMove(PlayerInputs input)
+		{
+			wishToJump = input.WishToJump;
+			verticalMove = input.Vertical;
+			horizontalMove = input.Horizontal;
+			rotationX = input.RotationX;
+			rotationY = input.RotationY;
+
+			//Clamp the X rotation
+			rotationX = Mathf.Clamp(rotationX, -90, 90);
+
+			if (!ClientUI.IsPauseMenuOpen)
+			{
+				transform.rotation = Quaternion.Euler(0, rotationY, 0); // Rotates the collider
+				cameraTransform.rotation = Quaternion.Euler(rotationX, rotationY, 0); // Rotates the camera
+			}
+
+			if (charController.isGrounded)
+				GroundMove();
+			else if (!charController.isGrounded)
+				AirMove();
+
+			//Move the controller
+			charController.Move(playerVelocity * Time.deltaTime);
+
+			PlayerState state = new PlayerState
+			{
+				PlayerTransform = transform.position,
+				RotationX = rotationX,
+				RotationY = rotationY,
+				Timestamp = input.Timestamp
+			};
+
+			if (isServer)
+			{
+				//Send back the state
+				playerState = state;
+
+				return;
+			}
+
+			predictedInputs.Add(state);
 		}
 
 		private void AirMove()
@@ -112,7 +172,6 @@ namespace Player
 			}
 
 			//Apply gravity
-			//TODO: Shouldn't the server handle the gravity?
 			playerVelocity.y -= gravityAmount * Time.deltaTime;
 		}
 
@@ -154,7 +213,7 @@ namespace Player
 		private void GroundMove()
 		{
 			//Do not apply frictionAmount if the player is queueing up the next jump
-			if (!WishToJump)
+			if (!wishToJump)
 				ApplyFriction(1.0f);
 			else
 				ApplyFriction(0);
@@ -171,10 +230,10 @@ namespace Player
 			//Reset the gravity velocity
 			playerVelocity.y = -gravityAmount * Time.deltaTime;
 
-			if (!WishToJump) return;
+			if (!wishToJump) return;
 
 			playerVelocity.y = jumpSpeed;
-			WishToJump = false;
+			wishToJump = false;
 		}
 
 		private void ApplyFriction(float t)
@@ -216,21 +275,68 @@ namespace Player
 			playerVelocity.z += accelerationSpeed * wishDirection.z;
 		}
 
-		public void SetMovementDir(float verticalAxis, float horizontalAxis)
+		private void SyncState(PlayerState oldState, PlayerState newState)
 		{
-			verticalMove = verticalAxis;
-			horizontalMove = horizontalAxis;
+			if(isServer && isLocalPlayer) //We are a host
+				return;
+
+			if (isLocalPlayer)
+			{
+				//Do prediction
+				PlayerState predictedState = predictedInputs.FirstOrDefault(x => x.Timestamp == newState.Timestamp);
+				if(predictedState == null) return;
+
+				//Player Body
+				if (Vector3.Distance(newState.PlayerTransform, predictedState.PlayerTransform) > correctionThreshold)
+					transform.position = newState.PlayerTransform;
+
+				//Body Rotation
+				if(Quaternion.Angle(
+					Quaternion.Euler(0, newState.RotationY, 0),
+					Quaternion.Euler(0, predictedState.RotationY, 0)) > rotationCorrectionThreshold)
+					transform.rotation = Quaternion.Euler(0, newState.RotationY, 0);
+
+				//Camera Rotation
+				if (Quaternion.Angle(Quaternion.Euler(newState.RotationX, newState.RotationY, 0),
+					Quaternion.Euler(predictedState.RotationX, predictedState.RotationY, 0)) > rotationCorrectionThreshold)
+				{
+					cameraTransform.rotation = Quaternion.Euler(newState.RotationX, newState.RotationY, 0);
+				}
+
+				return;
+			}
+
+			transform.position = newState.PlayerTransform;
+			transform.rotation = Quaternion.Euler(0, newState.RotationY, 0); // Rotates the collider
+			cameraTransform.rotation = Quaternion.Euler(newState.RotationX, newState.RotationY, 0); // Rotates the camera
 		}
 
-		public void SetWishJump(bool wishToJump)
+		[Client]
+		public void AddInput(PlayerInputs input)
 		{
-			WishToJump = wishToJump;
+			input.Timestamp = clientTick;
+			clientInputs.Add(input);
+
+			CharacterDoMove(input);
+
+			if (clientInputs.Count < 20) return;
+
+			if (isServer && isLocalPlayer)
+			{
+				serverInputs.Enqueue(input);
+				clientInputs.Clear();
+				return;
+			}
+
+			CmdAddInputs(clientInputs.ToArray());
+			clientInputs.Clear();
 		}
 
-		public void SetMouseRotation(float x, float y)
+		[Command]
+		public void CmdAddInputs(PlayerInputs[] inputs)
 		{
-			rotationX -= x * xMouseSensitivity * 0.02f;
-			rotationY += y * yMouseSensitivity * 0.02f;
+			foreach (PlayerInputs input in inputs)
+				serverInputs.Enqueue(input);
 		}
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using Mirror;
+using Player.Movement;
 using UI;
 using UnityEngine;
 using Weapons;
@@ -22,9 +23,21 @@ namespace Player
 		[SerializeField] private string xMouseAxisName = "Mouse X";
 		[SerializeField] private bool holdJumpToBhop = true;
 
+		[Header("Sensitivity")]
+		[SerializeField] private float xMouseSensitivity = 100.0f;
+		[SerializeField] private float yMouseSensitivity = 100.0f;
+
 		private WeaponManager weaponManager;
 		private PlayerManager playerManager;
 		private PlayerMovement playerMovement;
+
+		private float rotationX;
+		private float rotationY;
+
+		private float vertical;
+		private float horizontal;
+
+		private bool wishToJump;
 
 		private void Start()
 		{
@@ -59,8 +72,14 @@ namespace Player
 			//If the pause menu is open, set player movement direction to 0 and return
 			if (ClientUI.IsPauseMenuOpen)
 			{
-				playerMovement.SetMovementDir(0, 0);
-				playerMovement.SetWishJump(false);
+				playerMovement.AddInput(new PlayerInputs
+				{
+					Horizontal = 0,
+					Vertical = 0,
+					RotationX = 0,
+					RotationY = 0,
+					WishToJump = false
+				});
 				return;
 			}
 
@@ -79,6 +98,16 @@ namespace Player
 
 				//Player movement direction
 				SetPlayerMovementDirection();
+
+				//Send inputs
+				playerMovement.AddInput(new PlayerInputs
+				{
+					Horizontal = horizontal,
+					Vertical = vertical,
+					RotationX = rotationX,
+					RotationY = rotationY,
+					WishToJump = wishToJump
+				});
 
 				//Good ol' suicide button
 				if (Input.GetKeyDown(suicideKey))
@@ -112,9 +141,15 @@ namespace Player
 		private void SetPlayerMouseRotation()
 		{
 			if(rawMouseAxis)
-				playerMovement.SetMouseRotation(Input.GetAxisRaw(yMouseAxisName), Input.GetAxisRaw(xMouseAxisName));
+			{
+				rotationX -= Input.GetAxisRaw(yMouseAxisName) * yMouseSensitivity * 0.02f;
+				rotationY += Input.GetAxisRaw(xMouseAxisName) * xMouseSensitivity * 0.02f;
+			}
 			else
-				playerMovement.SetMouseRotation(Input.GetAxis(yMouseAxisName), Input.GetAxis(xMouseAxisName));
+			{
+				rotationX -= Input.GetAxis(xMouseAxisName) * xMouseSensitivity * 0.02f;
+				rotationY += Input.GetAxis(yMouseAxisName) * yMouseSensitivity * 0.02f;
+			}
 		}
 
 		private void SetPlayerWishToJump()
@@ -124,22 +159,28 @@ namespace Player
 
 			if (holdJumpToBhop)
 			{
-				playerMovement.SetWishJump(Input.GetKey(jumpKey));
+				wishToJump = Input.GetKey(jumpKey);
 				return;
 			}
 
-			if (Input.GetKeyDown(jumpKey) && !playerMovement.WishToJump)
-				playerMovement.SetWishJump(true);
+			if (Input.GetKeyDown(jumpKey) && !wishToJump)
+				wishToJump = true;
 			if (Input.GetKeyUp(jumpKey))
-				playerMovement.SetWishJump(false);
+				wishToJump = false;
 		}
 
 		private void SetPlayerMovementDirection()
 		{
-			if(rawAxis)
-				playerMovement.SetMovementDir(Input.GetAxisRaw(verticalAxisName), Input.GetAxisRaw(horizontalAxisName));
+			if (rawAxis)
+			{
+				vertical = Input.GetAxisRaw(verticalAxisName);
+				horizontal = Input.GetAxisRaw(horizontalAxisName);
+			}
 			else
-				playerMovement.SetMovementDir(Input.GetAxis(verticalAxisName), Input.GetAxis(horizontalAxisName));
+			{
+				vertical = Input.GetAxis(verticalAxisName);
+				horizontal = Input.GetAxis(horizontalAxisName);
+			}
 		}
 
 		private void SetSelectedWeaponIndex()
