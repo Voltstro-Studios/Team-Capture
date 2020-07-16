@@ -49,7 +49,7 @@ You will need to build the project yourself to play!
 ### Prerequisites
 
 ```
-Unity 2019.3.3f1
+Unity 2019.4.3f1
 Blender
 ```
 
