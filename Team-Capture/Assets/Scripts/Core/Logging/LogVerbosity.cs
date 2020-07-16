@@ -1,4 +1,4 @@
-﻿namespace Core.Logger
+﻿namespace Core.Logging
 {
 	public enum LogVerbosity
 	{

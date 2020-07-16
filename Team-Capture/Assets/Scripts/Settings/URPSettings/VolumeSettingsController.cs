@@ -1,10 +1,9 @@
 ﻿using Attributes;
-using Core.Logger;
 using Settings.SettingClasses;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
-using Logger = Core.Logger.Logger;
+using Logger = Core.Logging.Logger;
 
 namespace Settings.URPSettings
 {
@@ -62,7 +61,7 @@ namespace Settings.URPSettings
 				vignette.smoothness.value = settings.VignetteSmoothness;
 			}
 
-			Logger.Log("Applied Volume(Post-Processing) Settings");
+			Logger.Debug("Applied Volume(Post-Processing) Settings");
 		}
 
 		#region Console Command
@@ -87,7 +86,7 @@ namespace Settings.URPSettings
 					GameSettings.Save();
 					break;
 				default:
-					Logger.Log("Invalid argument!", LogVerbosity.Error);
+					Logger.Error("Invalid argument!");
 					break;
 			}
 		}
@@ -109,7 +108,7 @@ namespace Settings.URPSettings
 				return;
 			}
 
-			Logger.Log("Invalid input!", LogVerbosity.Error);
+			Logger.Error("Invalid input!");
 		}
 
 		[ConCommand("r_motionblur_clamp", "Changes the motion blur clamp", 1, 1)]
@@ -129,7 +128,7 @@ namespace Settings.URPSettings
 				return;
 			}
 
-			Logger.Log("Invalid input!", LogVerbosity.Error);
+			Logger.Error("Invalid input!");
 		}
 
 		#endregion
@@ -154,7 +153,7 @@ namespace Settings.URPSettings
 					GameSettings.Save();
 					break;
 				default:
-					Logger.Log("Invalid argument!", LogVerbosity.Error);
+					Logger.Error("Invalid argument!");
 					break;
 			}
 		}
@@ -172,7 +171,7 @@ namespace Settings.URPSettings
 				return;
 			}
 
-			Logger.Log("Invalid input!", LogVerbosity.Error);
+			Logger.Error("Invalid input!");
 		}
 
 		[ConCommand("r_bloom_intensity", "Changes the bloom intensity", 1, 1)]
@@ -188,7 +187,7 @@ namespace Settings.URPSettings
 				return;
 			}
 
-			Logger.Log("Invalid input!", LogVerbosity.Error);
+			Logger.Error("Invalid input!");
 		}
 
 		#endregion
@@ -213,7 +212,7 @@ namespace Settings.URPSettings
 					GameSettings.Save();
 					break;
 				default:
-					Logger.Log("Invalid argument!", LogVerbosity.Error);
+					Logger.Error("Invalid argument!");
 					break;
 			}
 		}
@@ -235,7 +234,7 @@ namespace Settings.URPSettings
 				return;
 			}
 
-			Logger.Log("Invalid input!", LogVerbosity.Error);
+			Logger.Error("Invalid input!");
 		}
 
 		[ConCommand("r_vignette_smoothness", "Changes the vignette smoothness", 1, 1)]
@@ -255,7 +254,7 @@ namespace Settings.URPSettings
 				return;
 			}
 
-			Logger.Log("Invalid input!", LogVerbosity.Error);
+			Logger.Error("Invalid input!");
 		}
 
 		#endregion

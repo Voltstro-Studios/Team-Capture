@@ -1,6 +1,6 @@
 ﻿using Attributes;
 using Core;
-using Core.Logger;
+using Core.Logging;
 using Core.Networking;
 using Mirror;
 using SceneManagement;
@@ -16,7 +16,7 @@ public static class UtilCommands
 	[ConCommand("echo", "Echos back what you type in")]
 	public static void EchoCommand(string[] args)
 	{
-		Logger.Log(string.Join(" ", args));
+		Logger.Info(string.Join(" ", args));
 	}
 
 	[ConCommand("scene", "Loads a scene", 1, 1)]
@@ -24,20 +24,20 @@ public static class UtilCommands
 	{
 		if (TCNetworkManager.Instance != null && TCNetworkManager.Instance.mode != NetworkManagerMode.Offline)
 		{
-			Logger.Log("Cannot change the scene while connected to a server!", LogVerbosity.Error);
+			Logger.Error("Cannot change the scene while connected to a server!");
 			return;
 		}
 
 		TCScene scene = TCScenesManager.FindSceneInfo(args[0]);
 		if (scene == null)
 		{
-			Logger.Log($"The scene '{args[0]}' doesn't exist!");
+			Logger.Error($"The scene '{args[0]}' doesn't exist!");
 			return;
 		}
 
 		if (!scene.canLoadTo)
 		{
-			Logger.Log("You cannot load to this scene!");
+			Logger.Error("You cannot load to this scene!");
 			return;
 		}
 

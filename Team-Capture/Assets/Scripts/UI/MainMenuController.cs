@@ -1,11 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Core.Logger;
 using Mirror;
 using UI.Panels;
 using UnityEngine;
-using Logger = Core.Logger.Logger;
+using Logger = Core.Logging.Logger;
 
 namespace UI
 {
@@ -54,7 +53,7 @@ namespace UI
 
 		private void OnDestroy()
 		{
-			Logger.Log("Resetting all main menu events...", LogVerbosity.Debug);
+			Logger.Debug("Resetting all main menu events...");
 
 			//Reset all the main menu script-able objects
 			foreach (TCMainMenuEvent menu in menuPanels)
@@ -75,7 +74,7 @@ namespace UI
 			//There is a panel that is currently active, so close it
 			if (GetActivePanel() != null && panel != GetActivePanel())
 			{
-				Logger.Log($"{GetActivePanel().name} is currently active, switching...", LogVerbosity.Debug);
+				Logger.Debug($"{GetActivePanel().name} is currently active, switching...");
 
 				ClosePanel(GetActivePanel(), true);
 			}
@@ -159,7 +158,7 @@ namespace UI
 
 		private void ClosePanel(TCMainMenuEvent panel, bool isSwitching = false)
 		{
-			Logger.Log($"Closing {panel.name}", LogVerbosity.Debug);
+			Logger.Debug($"Closing {panel.name}");
 
 			if (!isSwitching)
 			{
@@ -176,7 +175,7 @@ namespace UI
 
 		private void OpenPanel(TCMainMenuEvent panel)
 		{
-			Logger.Log($"Opening {panel.name}", LogVerbosity.Debug);
+			Logger.Debug($"Opening {panel.name}");
 
 			if (panel.showTopBlackBar)
 				ActivateTopBlackBar();

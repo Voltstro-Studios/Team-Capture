@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using Core.Logger;
 using Core.Networking;
 using Core.Networking.Discovery;
 using Mirror;
 using TMPro;
 using UI.Elements;
 using UnityEngine;
+using Logger = Core.Logging.Logger;
 
 namespace UI.Panels
 {
@@ -76,7 +76,7 @@ namespace UI.Panels
 
 			statusText.gameObject.SetActive(false);
 
-			Core.Logger.Logger.Log($"Found server at {server.EndPoint.Address}", LogVerbosity.Debug);
+			Logger.Debug("Found server at {@Address}", server.EndPoint.Address);
 		}
 
 		public void ConnectToServer(IPEndPoint ip)

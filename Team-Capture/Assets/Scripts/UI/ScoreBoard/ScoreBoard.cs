@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Core;
-using Core.Logger;
 using Core.Networking;
 using Player;
 using TMPro;
 using UnityEngine;
-using Logger = Core.Logger.Logger;
+using Logger = Core.Logging.Logger;
 
 namespace UI.ScoreBoard
 {
@@ -103,8 +102,7 @@ namespace UI.ScoreBoard
 			ScoreBoardPlayer playerItemLogic = newPlayerItem.GetComponent<ScoreBoardPlayer>();
 			if (playerItemLogic == null)
 			{
-				Logger.Log("The playerItemPrefab doesn't have a ScoreBoardPlayer behaviour on it!",
-					LogVerbosity.Error);
+				Logger.Error("The playerItemPrefab doesn't have a ScoreBoardPlayer behaviour on it!");
 				return;
 			}
 

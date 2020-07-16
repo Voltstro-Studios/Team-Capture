@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Net;
-using Core.Logger;
 using Mirror.Discovery;
 using SceneManagement;
 using UnityEngine;
@@ -31,17 +30,17 @@ namespace Core.Networking.Discovery
 			//Set the active game discovery to this discovery object
 			netManager.gameDiscovery = this;
 
-			Logger.Logger.Log("Game discovery is ready!");
+			Logging.Logger.Debug("Game discovery is ready!");
 		}
 
 		private void OnDestroy()
 		{
-			Logger.Logger.Log("Game discovery has been destroyed.");
+			Logging.Logger.Debug("Game discovery has been destroyed.");
 		}
 
 		protected override TCServerResponse ProcessRequest(TCServerRequest request, IPEndPoint endpoint)
 		{
-			Logger.Logger.Log($"Processing discovery request from `{endpoint.Address}`...", LogVerbosity.Debug);
+			Logging.Logger.Debug("Processing discovery request from `{@Address}`...", endpoint.Address);
 
 			try
 			{
@@ -58,7 +57,7 @@ namespace Core.Networking.Discovery
 			}
 			catch (NotImplementedException)
 			{
-				Logger.Logger.Log("Current transport does not support network discovery!", LogVerbosity.Error);
+				Logging.Logger.Error("Current transport does not support network discovery!");
 				throw;
 			}
 		}

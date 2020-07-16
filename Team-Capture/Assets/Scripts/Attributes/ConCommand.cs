@@ -1,4 +1,5 @@
 ﻿using System;
+using Core.Logging;
 
 namespace Attributes
 {
@@ -24,8 +25,8 @@ namespace Attributes
 
 			if (minArgs > maxArgs)
 			{
-				Core.Logger.Logger.Log(
-					$"Min args cannot be less then max args! Argument requirements have not been set for the command `{name}`.");
+				Logger.Error(
+					"Min args cannot be less then max args! Argument requirements have not been set for the command `{@Name}`.", name);
 				return;
 			}
 

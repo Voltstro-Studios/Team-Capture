@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Core.Logger;
 using Player;
 using SceneManagement;
 using UnityEngine;
@@ -32,7 +31,7 @@ namespace Core
 		{
 			if (Instance != null)
 			{
-				Logger.Logger.Log("There is already an active GameManager running!", LogVerbosity.Error);
+				Logging.Logger.Error("There is already an active GameManager running!");
 			}
 			else
 			{
@@ -46,14 +45,14 @@ namespace Core
 			scene = TCScenesManager.GetActiveScene();
 			if (scene == null)
 			{
-				Logger.Logger.Log($"The scene '{UnityEngine.SceneManagement.SceneManager.GetActiveScene().name}' doesn't have a TCScene assigned to it!", LogVerbosity.Error);
+				Logging.Logger.Error("The scene '{@Scene}' doesn't have a TCScene assigned to it!", UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
 				return;
 			}
 
 			sceneCamera = GameObject.FindWithTag(SceneCameraTag);
 			if (sceneCamera == null)
 			{
-				Logger.Logger.Log($"The scene {scene.scene} doesn't have a Camera with the tag `{SceneCameraTag}` assigned to it!", LogVerbosity.Error);
+				Logging.Logger.Error("The scene {@Scene} doesn't have a Camera with the tag `{@SceneCameraTag}` assigned to it!", scene.scene, SceneCameraTag);
 			}
 		}
 
@@ -88,7 +87,7 @@ namespace Core
 			playerManager.transform.name = playerId;
 			Players.Add(playerId, playerManager);
 
-			Logger.Logger.Log($"Added player {playerId}.");
+			Logging.Logger.Debug("Added player {@PlayerId}.", playerId);
 		}
 
 		/// <summary>
@@ -98,7 +97,7 @@ namespace Core
 		public static void RemovePlayer(string playerId)
 		{
 			Players.Remove(playerId);
-			Logger.Logger.Log($"Removed player {playerId}");
+			Logging.Logger.Debug("Removed player {@PlayerId}", playerId);
 		}
 
 		/// <summary>

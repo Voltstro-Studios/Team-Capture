@@ -5,12 +5,11 @@ using System.Linq;
 using System.Reflection;
 using Attributes;
 using Core;
-using Core.Logger;
 using Helper;
 using Newtonsoft.Json;
 using Settings.SettingClasses;
 using UnityEngine;
-using Logger = Core.Logger.Logger;
+using Logger = Core.Logging.Logger;
 
 namespace Settings
 {
@@ -54,7 +53,7 @@ namespace Settings
 		{
 			foreach (PropertyInfo settingProp in GetSettingClasses())
 			{
-				Logger.Log($"Saved {settingProp.Name}", LogVerbosity.Debug);
+				Logger.Debug("Saved {@Name}", settingProp.Name);
 				ObjectSerializer.SaveJson(settingProp.GetValue(null), settingsSaveDirectory, settingProp.Name);
 			}
 
@@ -76,7 +75,7 @@ namespace Settings
 			foreach (PropertyInfo settingProp in GetSettingClasses())
 			{
 				string name = settingProp.Name;
-				Logger.Log($"Got settings `{name}`", LogVerbosity.Debug);
+				Logger.Debug("Got settings `{@Name}`", name);
 
 				if (File.Exists(settingsSaveDirectory + name + SettingsFileExtension))
 					//This will enable us to use internal setters on our settings to avoid anyone being able to edit them
@@ -86,7 +85,7 @@ namespace Settings
 			}
 
 			HasBeenLoaded = true;
-			Logger.Log("Loaded settings");
+			Logger.Debug("Loaded settings");
 
 			//Notify other classes that settings have updated
 			SettingsLoaded?.Invoke();

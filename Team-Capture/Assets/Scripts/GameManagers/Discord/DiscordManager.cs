@@ -1,11 +1,10 @@
 ﻿using System;
-using Core.Logger;
 using DiscordRPC;
 using DiscordRPC.Logging;
 using DiscordRPC.Message;
 using SceneManagement;
 using UnityEngine;
-using Logger = Core.Logger.Logger;
+using Logger = Core.Logging.Logger;
 
 namespace GameManagers.Discord
 {
@@ -52,7 +51,7 @@ namespace GameManagers.Discord
 		{
 			if (client != null)
 			{
-				Logger.Log("The discord client is already running!", LogVerbosity.Error);
+				Logger.Error("The discord client is already running!");
 				return;
 			}
 
@@ -77,24 +76,24 @@ namespace GameManagers.Discord
 
 		private void ClientOnClose(object sender, CloseMessage args)
 		{
-			Logger.Log($"Discord RPC was closed: {args.Code}:{args.Reason}");
+			Logger.Info("Discord RPC was closed: {@Code}:{@Reason}", args.Code, args.Reason);
 		}
 
 		private void ClientConnectionFailed(object sender, ConnectionFailedMessage args)
 		{
-			Logger.Log($"Error communicating with Discord: Pipe: `{args.FailedPipe}`. Is Discord running?", LogVerbosity.Error);
+			Logger.Error("Error communicating with Discord: Pipe: `{FailedPipe}`. Is Discord running?", args.FailedPipe);
 
 			client.Deinitialize();
 		}
 
 		private void ClientReady(object sender, ReadyMessage args)
 		{
-			Logger.Log("Client ready: " + args.User.Username);
+			Logger.Info("Client ready: {@Username}", args.User.Username);
 		}
 
 		private void ClientError(object sender, ErrorMessage args)
 		{
-			Logger.Log($"Error with Discord RPC: {args.Code}:{args.Message}");
+			Logger.Error("Error with Discord RPC: {@Code}:{@Message}", args.Code, args.Message);
 		}
 
 		public void UpdatePresence(RichPresence presence)
@@ -148,7 +147,7 @@ namespace GameManagers.Discord
 				else if(!scene.isMainMenu && !scene.isOnlineScene)
 					presence.Details = "Loading...";
 				else
-					Logger.Log("You CANNOT have a online scene and a main menu scene!", LogVerbosity.Error);
+					Logger.Error("You CANNOT have a online scene and a main menu scene!");
 
 				UpdatePresence(presence);
 			}

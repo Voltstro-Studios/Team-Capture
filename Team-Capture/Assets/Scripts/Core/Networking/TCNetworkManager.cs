@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using Attributes;
-using Core.Logger;
 using Core.Networking.Discovery;
 using Core.Networking.Messages;
 using ENet;
@@ -87,11 +86,11 @@ namespace Core.Networking
 
 			ServerPickupManager.ClearUnActivePickupsList();
 
-			Logger.Logger.Log($"Server changed scene to `{sceneName}`.");
+			Logging.Logger.Info("Server changed scene to `{@SceneName}`.", sceneName);
 
 			//Instantiate the new game manager
 			Instantiate(gameMangerPrefab);
-			Logger.Logger.Log("Created GameManager object.", LogVerbosity.Debug);
+			Logging.Logger.Debug("Created GameManager object.");
 
 			//Setup pickups
 			GameObject[] pickups = GameObject.FindGameObjectsWithTag(pickupTagName);
@@ -100,7 +99,7 @@ namespace Core.Networking
 				Pickup pickupLogic = pickup.GetComponent<Pickup>();
 				if(pickupLogic == null)
 				{
-					Logger.Logger.Log($"The pickup with the name of `{pickup.name}` @ {pickup.transform} doesn't have the {typeof(Pickup)} behaviour on it!", LogVerbosity.Error);
+					Logging.Logger.Error("The pickup with the name of `{@PickupName}` @ {@PickupTransform} doesn't have the {@Pickup} behaviour on it!", pickup.name, pickup.transform, typeof(Pickup));
 					continue;
 				}
 
@@ -137,7 +136,7 @@ namespace Core.Networking
 
 			StartCoroutine(UpdateLatency());
 
-			Logger.Logger.Log("Started server!");
+			Logging.Logger.Info("Started server!");
 		}
 
 		public override void OnStopServer()
@@ -156,7 +155,7 @@ namespace Core.Networking
 
 			base.OnClientConnect(conn);
 
-			Logger.Logger.Log($"Connected to server `{conn.address}` with the net ID of {conn.connectionId}.");
+			Logging.Logger.Info("Connected to server `{@Address}` with the net ID of {@ConnectionId}.", conn.address, conn.connectionId);
 
 			if (mode != NetworkManagerMode.Host)
 			{
@@ -174,7 +173,7 @@ namespace Core.Networking
 
 			if (mode != NetworkManagerMode.ClientOnly) return;
 
-			Logger.Logger.Log($"The server has changed the scene to `{newSceneName}`.");
+			Logging.Logger.Info($"The server has changed the scene to `{newSceneName}`.");
 
 			SetupNeededSceneStuffClient();
 		}
@@ -183,7 +182,7 @@ namespace Core.Networking
 		{
 			base.OnClientDisconnect(conn);
 
-			Logger.Logger.Log($"Disconnected from server `{conn.address}`.");
+			Logging.Logger.Info($"Disconnected from server `{conn.address}`.");
 		}
 
 		#region Loading Screen
@@ -227,7 +226,7 @@ namespace Core.Networking
 				GameObject pickup = GameObject.Find(GameManager.GetActiveScene().pickupsParent + unActivePickup);
 				if (pickup == null)
 				{
-					Logger.Logger.Log($"There was a pickup with the name `{pickup}` sent by the server that doesn't exist! Either the server's game is out of date or yours is!", LogVerbosity.Error);
+					Logging.Logger.Error("There was a pickup with the name `{@PickupName}` sent by the server that doesn't exist! Either the server's game is out of date or ours is!", pickup.name);
 					continue;
 				}
 
@@ -249,7 +248,7 @@ namespace Core.Networking
 
 			//Create our own game manager
 			Instantiate(gameMangerPrefab);
-			Logger.Logger.Log("Created game manager object.", LogVerbosity.Debug);
+			Logging.Logger.Debug("Created game manager object.");
 		}
 
 		private IEnumerator UpdateLatency()
@@ -295,7 +294,7 @@ namespace Core.Networking
 			}
 			catch (Exception e)
 			{
-				Logger.Logger.Log(e.Message, LogVerbosity.Error);
+				Logging.Logger.Error("An error occured: {@Error}", e);
 			}
 		}
 
@@ -304,7 +303,7 @@ namespace Core.Networking
 		{
 			if (singleton.mode == NetworkManagerMode.Offline)
 			{
-				Logger.Logger.Log("You are not in a game!");
+				Logging.Logger.Error("You are not in a game!");
 				return;
 			}
 

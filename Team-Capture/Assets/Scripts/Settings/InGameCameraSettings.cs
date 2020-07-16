@@ -1,8 +1,7 @@
 ﻿using Attributes;
-using Core.Logger;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
-using Logger = Core.Logger.Logger;
+using Logger = Core.Logging.Logger;
 
 namespace Settings
 {
@@ -55,7 +54,7 @@ namespace Settings
 				return;
 			}
 
-			Logger.Log("Invalid input!", LogVerbosity.Error);
+			Logger.Error("Invalid input!");
 		}
 
 		[ConCommand("r_antialiasing_quality", "Changes the antialiasing quality", 1, 1)]
@@ -71,7 +70,7 @@ namespace Settings
 				return;
 			}
 
-			Logger.Log("Invalid input!", LogVerbosity.Error);
+			Logger.Error("Invalid input!");
 		}
 
 		#endregion

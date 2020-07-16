@@ -1,13 +1,12 @@
 ﻿using System.Collections;
 using Core;
-using Core.Logger;
 using Core.Networking.Messages;
 using Delegates;
 using Mirror;
 using UI;
 using UnityEngine;
 using Weapons;
-using Logger = Core.Logger.Logger;
+using Logger = Core.Logging.Logger;
 
 namespace Player
 {
@@ -110,7 +109,7 @@ namespace Player
 
 			IsHostPlayer = true;
 
-			Logger.Log($"Player {netId} is the host.");
+			Logger.Debug($"Player {netId} is the host.");
 		}
 
 		/// <summary>
@@ -134,7 +133,7 @@ namespace Player
 		{
 			if (string.IsNullOrWhiteSpace(sourcePlayerId))
 			{
-				Logger.Log("The sourcePlayerId cannot be empty or null!", LogVerbosity.Error);
+				Logger.Error("The sourcePlayerId cannot be empty or null!");
 				return;
 			}
 

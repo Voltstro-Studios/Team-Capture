@@ -1,7 +1,7 @@
 ﻿using Player;
 using UnityEngine;
 using Weapons;
-using Logger = Core.Logger.Logger;
+using Logger = Core.Logging.Logger;
 
 namespace UI
 {
@@ -33,7 +33,7 @@ namespace UI
 			scoreBoardObject.SetActive(false);
 			scoreBoardObject.GetComponent<ScoreBoard.ScoreBoard>().clientPlayer = playerManager;
 
-			Logger.Log("The ClientUI is now ready.");
+			Logger.Debug("The ClientUI is now ready.");
 
 			return this;
 		}

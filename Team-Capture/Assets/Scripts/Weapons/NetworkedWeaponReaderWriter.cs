@@ -1,4 +1,4 @@
-﻿using Core.Logger;
+﻿using Core.Logging;
 using Mirror;
 
 namespace Weapons
@@ -26,7 +26,7 @@ namespace Weapons
 				};
 
 			//Something went wrong
-			Logger.Log("Sent networked weapon doesn't have a TCWeapon!", LogVerbosity.Error);
+			Logger.Error("Sent networked weapon doesn't have a TCWeapon!");
 			return null;
 		}
 	}

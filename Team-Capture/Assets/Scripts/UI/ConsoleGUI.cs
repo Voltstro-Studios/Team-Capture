@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Text;
 using Attributes;
 using Core.Console;
-using Core.Logger;
+using Core.Logging;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Logger = Core.Logger.Logger;
+using Logger = Core.Logging.Logger;
 
 namespace UI
 {
@@ -35,8 +35,6 @@ namespace UI
 				return;
 			}
 
-			Logger.ConsoleLogEvent += LoggerLog;
-
 			Instance = this;
 			DontDestroyOnLoad(gameObject);
 			RegisterCommands();
@@ -50,7 +48,7 @@ namespace UI
 			//Not the greatest idea hard coding this but what ever
 			ExecuteCommand("scene MainMenu");
 #endif
-			Logger.Log("Console ready!");
+			Logger.Debug("Console ready!");
 		}
 
 		private void Update()
@@ -68,7 +66,7 @@ namespace UI
 			}
 		}
 
-		private void LoggerLog(string message, LogVerbosity logVerbosity)
+		internal void LoggerLog(string message, LogVerbosity logVerbosity)
 		{
 			if(consoleTextArea == null) return;
 
@@ -124,7 +122,7 @@ namespace UI
 
 		private static void HandleInput(string value)
 		{
-			Logger.Log($"cmd>: {value}");
+			Logger.Info($"cmd>: {value}");
 
 			if(string.IsNullOrWhiteSpace(value)) return;
 
@@ -146,13 +144,13 @@ namespace UI
 				sb.Append($"`{command.Key}` - {command.Value.CommandSummary}\n");
 			}
 
-			Logger.Log(sb.ToString());
+			Logger.Info(sb.ToString());
 		}
 
 		[ConCommand("version", "Shows Team-Capture's current version")]
 		public static void VersionCommand(string[] args)
 		{
-			Logger.Log($"You are running TC version {Application.version} using Unity {Application.unityVersion}");
+			Logger.Info($"You are running TC version {Application.version} using Unity {Application.unityVersion}");
 		}
 
 		[ConCommand("debug_messages", "Do you want to show debug messages in the console?", 1, 1)]
@@ -165,15 +163,15 @@ namespace UI
 				case "1":
 				case "true":
 					Instance.showDebugMessages = true;
-					Logger.Log("Console will now show debug messages.");
+					Logger.Info("Console will now show debug messages.");
 					break;
 				case "0":
 				case "false":
 					Instance.showDebugMessages = false;
-					Logger.Log("Console will no longer show debug messages.");
+					Logger.Info("Console will no longer show debug messages.");
 					break;
 				default:
-					Logger.Log("Invalid argument!", LogVerbosity.Error);
+					Logger.Error("Invalid argument!");
 					break;
 			}
 		}
@@ -195,7 +193,7 @@ namespace UI
 				return;
 			}
 
-			Logger.Log("The imputed argument isn't a number!", LogVerbosity.Error);
+			Logger.Error("The imputed argument isn't a number!");
 		}
 
 		#endregion

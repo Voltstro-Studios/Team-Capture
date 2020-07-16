@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using Attributes;
-using Core.Logger;
 using Delegates;
 using UnityEngine;
 
@@ -48,11 +47,11 @@ namespace Core.Console
 			//Make sure the command doesn't already exist
 			if (Commands.ContainsKey(commandName))
 			{
-				Logger.Logger.Log($"The command `{commandName}` already exists!", LogVerbosity.Error);
+				Logging.Logger.Error("The command `{@CommandName}` already exists!", commandName);
 				return;
 			}
 
-			Logger.Logger.Log($"Added command `{commandName}`.", LogVerbosity.Debug);
+			Logging.Logger.Debug("Added command `{@CommandName}`.", commandName);
 
 			//Add the command
 			Commands.Add(commandName, new ConsoleCommand
@@ -91,7 +90,7 @@ namespace Core.Console
 				if (conCommand.MinArgs != 0)
 					if (arguments.Length <= conCommand.MinArgs - 1)
 					{
-						Logger.Logger.Log("Invalid arguments: More arguments are required!", LogVerbosity.Error);
+						Logging.Logger.Error("Invalid arguments: More arguments are required!");
 						return;
 					}
 
@@ -99,7 +98,7 @@ namespace Core.Console
 				if (conCommand.MaxArgs != 0)
 					if (arguments.Length > conCommand.MaxArgs)
 					{
-						Logger.Logger.Log("Invalid arguments: Less arguments are required!", LogVerbosity.Error);
+						Logging.Logger.Error("Invalid arguments: Less arguments are required!");
 						return;
 					}
 
@@ -108,7 +107,7 @@ namespace Core.Console
 				return;
 			}
 
-			Logger.Logger.Log($"Unknown command: `{tokens[0]}`.", LogVerbosity.Error);
+			Logging.Logger.Error($"Unknown command: `{tokens[0]}`.");
 		}
 
 		#region Argument Parsing
@@ -182,14 +181,14 @@ namespace Core.Console
 		{
 			if (args.Length != 1)
 			{
-				Logger.Logger.Log("Invalid arguments!", LogVerbosity.Error);
+				Logging.Logger.Error("Invalid arguments!");
 				return;
 			}
 
 			string fileName = args[0] + ".cfg";
 			if (!File.Exists(configFilesLocation + fileName))
 			{
-				Logger.Logger.Log($"`{fileName}` doesn't exist! Not executing.", LogVerbosity.Error);
+				Logging.Logger.Error($"`{fileName}` doesn't exist! Not executing.");
 				return;
 			}
 

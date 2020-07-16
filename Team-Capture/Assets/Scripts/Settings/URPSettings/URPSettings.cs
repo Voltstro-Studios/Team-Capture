@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
-using Logger = Core.Logger.Logger;
+using Logger = Core.Logging.Logger;
 
 namespace Settings.URPSettings
 {
@@ -28,7 +28,7 @@ namespace Settings.URPSettings
 			editor.SetMsaaQuality((MsaaQuality) GameSettings.AdvSettings.MsaaQuality);
 			editor.SetShadowCascades(GameSettings.AdvSettings.ShadowCascades);
 
-			Logger.Log("Applied URP settings.");
+			Logger.Info("Applied URP settings.");
 		}
 	}
 }

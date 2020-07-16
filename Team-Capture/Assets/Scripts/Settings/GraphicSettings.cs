@@ -1,8 +1,7 @@
 ﻿using Attributes;
-using Core.Logger;
 using Settings.SettingClasses;
 using UnityEngine;
-using Logger = Core.Logger.Logger;
+using Logger = Core.Logging.Logger;
 
 namespace Settings
 {
@@ -22,7 +21,7 @@ namespace Settings
 			QualitySettings.masterTextureLimit = (int) settings.TextureQuality;
 			QualitySettings.vSyncCount = (int) settings.VSync;
 
-			Logger.Log("Applied Video settings");
+			Logger.Debug("Applied Video settings");
 		}
 
 		#region Video Console Commands
@@ -43,7 +42,7 @@ namespace Settings
 				}
 			}
 
-			Logger.Log("Invalid input!", LogVerbosity.Error);
+			Logger.Error("Invalid input!");
 		}
 
 		[ConCommand("r_refreshrate", "Sets the refresh rate", 1, 1)]
@@ -57,7 +56,7 @@ namespace Settings
 				return;
 			}
 
-			Logger.Log("Invalid input!", LogVerbosity.Error);
+			Logger.Error("Invalid input!");
 		}
 
 		[ConCommand("r_screenmode", "Sets the screen mode", 1, 1)]
@@ -73,7 +72,7 @@ namespace Settings
 				return;
 			}
 
-			Logger.Log("Invalid input!", LogVerbosity.Error);
+			Logger.Error("Invalid input!");
 		}
 
 		#endregion

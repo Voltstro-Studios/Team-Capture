@@ -1,13 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Core.Logger;
+using Core.Logging;
 using Core.Networking;
 using Helper;
 using Mirror;
 using Player;
 using UnityEngine;
-using Logger = Core.Logger.Logger;
+using Logger = Core.Logging.Logger;
 
 namespace Weapons
 {
@@ -72,7 +72,7 @@ namespace Weapons
 			switch (op)
 			{
 				case SyncList<NetworkedWeapon>.Operation.OP_ADD when newWeapon == null:
-					Logger.Log("Passed in weapon to be added is null!", LogVerbosity.Error);
+					Logger.Error("Passed in weapon to be added is null!");
 					weapons.Remove(weapons[itemIndex]);
 					return;
 				case SyncList<NetworkedWeapon>.Operation.OP_ADD:
@@ -204,7 +204,7 @@ namespace Weapons
 		[Server]
 		internal IEnumerator ServerReloadPlayerWeapon()
 		{
-			Logger.Log($"Reloading player `{transform.name}`'s active weapon", LogVerbosity.Debug);
+			Logger.Debug($"Reloading player `{transform.name}`'s active weapon");
 
 			//Get our players weapon
 			NetworkedWeapon networkedWeapon = GetActiveWeapon();
@@ -260,8 +260,7 @@ namespace Weapons
 			NetworkedWeapon netWeapon = new NetworkedWeapon(tcWeapon);
 			weapons.Add(netWeapon);
 
-			Logger.Log($"Added weapon {weapon} for {transform.name} with {tcWeapon.maxBullets} bullets",
-				LogVerbosity.Debug);
+			Logger.Debug($"Added weapon {weapon} for {transform.name} with {tcWeapon.maxBullets} bullets");
 
 			//Setup the new added weapon, and stop any reloading going on with the current weapon
 			TargetSendWeaponStatus(GetClientConnection, netWeapon);
@@ -333,7 +332,7 @@ namespace Weapons
 		[Command(channel = 3)]
 		public void CmdSetWeapon(int index)
 		{
-			Logger.Log($"Player `{transform.name}` set their weapon index to `{index}`.", LogVerbosity.Debug);
+			Logger.Debug($"Player `{transform.name}` set their weapon index to `{index}`.");
 
 			SetClientWeaponIndex(index);
 		}

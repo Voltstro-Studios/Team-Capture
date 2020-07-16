@@ -4,7 +4,7 @@ using Core.Networking.Messages;
 using Player;
 using UI.Elements;
 using UnityEngine;
-using Logger = Core.Logger.Logger;
+using Logger = Core.Logging.Logger;
 
 namespace UI
 {
@@ -27,7 +27,7 @@ namespace UI
 			newKillFeedItem.GetComponent<KillFeedItem>().SetupItem(killer.username, killed.username);
 			StartCoroutine(DestructInTime(newKillFeedItem));
 
-			Logger.Log($"`{killer.username}` killed `{killed.username}` using `{message.WeaponName}`.");
+			Logger.Info($"`{killer.username}` killed `{killed.username}` using `{message.WeaponName}`.");
 		}
 
 		private IEnumerator DestructInTime(Object killFeedItemToDestroy)

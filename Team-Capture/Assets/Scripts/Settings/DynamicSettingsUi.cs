@@ -4,14 +4,13 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using Attributes;
-using Core.Logger;
 using Helper.Extensions;
 using TMPro;
 using UI.Elements.Settings;
 using UI.Panels;
 using UnityEngine;
 using UnityEngine.UI;
-using Logger = Core.Logger.Logger;
+using Logger = Core.Logging.Logger;
 
 namespace Settings
 {
@@ -118,14 +117,13 @@ namespace Settings
 					}
 					else
 					{
-						Logger.Log($"UI Element for setting of type {fieldType.FullName} could not be created",
-							LogVerbosity.Error);
+						Logger.Error("UI Element for setting of type {@FullName} could not be created", fieldType.FullName);
 					}
 				}
 			}
 
 			stopwatch.Stop();
-			Logger.Log($"Time taken to update UI: {stopwatch.Elapsed.TotalMilliseconds:n} ms", LogVerbosity.Debug);
+			Logger.Debug("Time taken to update UI: {@TotalMilliseconds:n} ms", stopwatch.Elapsed.TotalMilliseconds);
 		}
 
 		#region Graphic designer functions
@@ -148,13 +146,13 @@ namespace Settings
 
 		private void CreateFloatField(float val, FieldInfo field, Menu menu)
 		{
-			Logger.Log($"\tCreating float field for {field.Name} in {menu.Name}. Current is {val}", LogVerbosity.Debug);
+			Logger.Debug($"\tCreating float field for {field.Name} in {menu.Name}. Current is {val}");
 			// new FloatField().RegisterValueChangedCallback(c => field.SetValue(GetSettingObject(field), c.newValue));
 		}
 
 		private void CreateIntField(int val, FieldInfo field, Menu menu)
 		{
-			Logger.Log($"\tCreating int field for {field.Name} in {menu.Name}. Current is {val}", LogVerbosity.Debug);
+			Logger.Debug($"\tCreating int field for {field.Name} in {menu.Name}. Current is {val}");
 			// new IntegerField().RegisterValueChangedCallback(c => field.SetValue(GetSettingObject(field), c.newValue));
 		}
 
@@ -166,8 +164,7 @@ namespace Settings
 
 		private void CreateStringField(string val, FieldInfo field, Menu menu)
 		{
-			Logger.Log($"\tCreating string field for {field.Name} in {menu.Name}. Current is {val}",
-				LogVerbosity.Debug);
+			Logger.Debug($"\tCreating string field for {field.Name} in {menu.Name}. Current is {val}");
 			//            new TMP_InputField().onValueChanged.AddListener(s => field.SetValue(GetSettingObject(field), s));
 		}
 
@@ -212,8 +209,7 @@ namespace Settings
 
 		private void CreateKeybindButton(KeyCode val, FieldInfo field, Menu menu)
 		{
-			Logger.Log($"\tCreating keybind button for {field.Name} in {menu.Name}. Current is {val}",
-				LogVerbosity.Debug);
+			Logger.Debug($"\tCreating keybind button for {field.Name} in {menu.Name}. Current is {val}");
 			//Sorry future Creepysin in case this freezes the game...
 			//TODO: Need to create this function. Might need to start a coroutine/async void to avoid freezing the screen till a key is pressed
 			//            new Button().onClick.AddListener(  () => field.SetValue(GetSettingObject(field), WaitForKeyPressAndReturnKeycode()));

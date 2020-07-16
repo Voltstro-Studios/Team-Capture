@@ -1,4 +1,4 @@
-﻿using Core.Logger;
+﻿using Core.Logging;
 
 namespace Delegates
 {
