@@ -1,22 +1,27 @@
 ﻿using System;
+using System.IO;
 using Serilog.Core;
 using Serilog.Events;
+using Serilog.Formatting;
+using Serilog.Formatting.Display;
 using UnityEngine;
 
 namespace Core.Logging.Unity
 {
     public sealed class Unity3DLogEventSink : ILogEventSink
     {
-        private readonly IFormatProvider formatProvider;
+        private readonly ITextFormatter formatProvider;
 
-        public Unity3DLogEventSink(IFormatProvider formatProvider)
+        public Unity3DLogEventSink(string messageFormat)
         {
-            this.formatProvider = formatProvider;
+	        this.formatProvider = new MessageTemplateTextFormatter(messageFormat);
         }
 
         public void Emit(LogEvent logEvent)
         {
-            string message = logEvent.RenderMessage(formatProvider);
+			StringWriter writer = new StringWriter();
+			formatProvider.Format(logEvent, writer);
+			string message = writer.ToString();
 
             switch (logEvent.Level)
             {
