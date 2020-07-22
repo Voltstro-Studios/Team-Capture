@@ -286,7 +286,6 @@ namespace Player
 
 			if (isLocalPlayer)
 			{
-				/*
 				//Do reconciliation
 				PlayerState predictedState = predictedInputs.FirstOrDefault(x => x.Timestamp == newState.Timestamp);
 				if(predictedState == null) return;
@@ -307,7 +306,6 @@ namespace Player
 				{
 					cameraTransform.rotation = Quaternion.Euler(newState.RotationX, newState.RotationY, 0);
 				}
-				*/
 
 				return;
 			}
