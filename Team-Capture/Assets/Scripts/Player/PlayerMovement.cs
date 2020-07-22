@@ -284,6 +284,20 @@ namespace Player
 			if(isServer && isLocalPlayer) //We are a host
 				return;
 
+			/*
+			 * @Voltstro I have some ideas on how to make this better
+			 * Use delat correction not absolute correction.
+			 * Graphical example
+			 * (0) <-- Last frame the server thinks we were here
+			 * (1) <-- Last frame we (the client) think we were here
+			 *
+			 * (3) <-- This frame we (the client) think we are here
+			 *
+			 * Last frame we were off by 1 metre (according to the server), so we need to change our position
+			 * Instead of moving back to position 0, which would be absolute correction,
+			 * calculate how much we were off by (1 unit too far forward), so we need to move back 1.
+			 * Therefore, instead of miving to 0, changing by 3 units, move to 2, which is only 1 unit
+			 */
 			if (isLocalPlayer)
 			{
 				//Do reconciliation

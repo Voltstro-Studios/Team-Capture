@@ -8,6 +8,7 @@ namespace Player
 {
 	public class PlayerInput : NetworkBehaviour
 	{
+		#region Inspector fields
 		[Header("Keycodes")]
 		[SerializeField] private KeyCode pauseMenuKey = KeyCode.Escape;
 		[SerializeField] private KeyCode scoreBoardKey = KeyCode.Tab;
@@ -27,6 +28,8 @@ namespace Player
 		[SerializeField] private float xMouseSensitivity = 100.0f;
 		[SerializeField] private float yMouseSensitivity = 100.0f;
 
+		#endregion
+		
 		private WeaponManager weaponManager;
 		private PlayerManager playerManager;
 		private PlayerMovement playerMovement;

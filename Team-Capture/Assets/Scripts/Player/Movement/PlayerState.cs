@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Player.Movement
 {
+	/// <summary>
+	/// A message from the server to all the clients, telling them what the other player's positions are
+	/// </summary>
 	public class PlayerState : MessageBase
 	{
 		public Vector3 PlayerTransform;

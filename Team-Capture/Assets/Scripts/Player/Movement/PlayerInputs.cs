@@ -2,6 +2,7 @@
 
 namespace Player.Movement
 {
+	//TODO: Rename to something like 'playerinputrequest'. Also, add docs
 	public class PlayerInputs : MessageBase
 	{
 		public float Vertical;
