@@ -179,7 +179,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   syncMode: 0
-  syncInterval: 0.1
+  syncInterval: 0
   moveSpeed: 11
   jumpSpeed: 8
   sideStrafeSpeed: 1
@@ -191,6 +191,8 @@ MonoBehaviour:
   sideStrafeAcceleration: 50
   frictionAmount: 6
   gravityAmount: 20
+  rotationCorrectionThreshold: 0.3
+  correctionThreshold: 0.3
 --- !u!114 &4790435715656838203
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -206,16 +208,8 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   localCamera: {fileID: 6438375964343202625}
-  localCapsuleCollider: {fileID: 0}
   clientUiPrefab: {fileID: 2142721828509503496, guid: 8f7e8441a5d36bf47babd28e6be83faf,
     type: 3}
-  charControllerSlopeLimit: 45
-  charControllerStepOffset: 0.3
-  charControllerSkinWidth: 0.08
-  charControllerMinMoveDistance: 0.001
-  charControllerRadius: 0.5
-  charControllerHeight: 2
-  charControllerCenter: {x: 0, y: 0, z: 0}
 --- !u!114 &3448369259278931532
 MonoBehaviour:
   m_ObjectHideFlags: 0

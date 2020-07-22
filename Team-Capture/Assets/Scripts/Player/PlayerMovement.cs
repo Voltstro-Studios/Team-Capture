@@ -97,6 +97,8 @@ namespace Player
 			wishToJump = false;
 		}
 
+		#region Movement Functions
+
 		private void CharacterDoMove(PlayerInputs input)
 		{
 			wishToJump = input.WishToJump;
@@ -275,6 +277,8 @@ namespace Player
 			playerVelocity.z += accelerationSpeed * wishDirection.z;
 		}
 
+		#endregion
+
 		private void SyncState(PlayerState oldState, PlayerState newState)
 		{
 			if(isServer && isLocalPlayer) //We are a host
@@ -282,7 +286,8 @@ namespace Player
 
 			if (isLocalPlayer)
 			{
-				//Do prediction
+				/*
+				//Do reconciliation
 				PlayerState predictedState = predictedInputs.FirstOrDefault(x => x.Timestamp == newState.Timestamp);
 				if(predictedState == null) return;
 
@@ -302,6 +307,7 @@ namespace Player
 				{
 					cameraTransform.rotation = Quaternion.Euler(newState.RotationX, newState.RotationY, 0);
 				}
+				*/
 
 				return;
 			}
