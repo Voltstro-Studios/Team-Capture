@@ -8,13 +8,13 @@ namespace Mirror
     {
         static readonly GUIContent syncVarIndicatorContent = new GUIContent("SyncVar", "This variable has been marked with the [SyncVar] attribute.");
 
-        public override void OnGUI(Rect propRect, SerializedProperty property, GUIContent label)
+        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             Vector2 syncVarIndicatorRect = EditorStyles.miniLabel.CalcSize(syncVarIndicatorContent);
-            float valueWidth = propRect.width - syncVarIndicatorRect.x;
+            float valueWidth = position.width - syncVarIndicatorRect.x;
 
-            Rect valueRect = new Rect(propRect.x, propRect.y, valueWidth, propRect.height);
-            Rect labelRect = new Rect(propRect.x + valueWidth, propRect.y, syncVarIndicatorRect.x, propRect.height);
+            Rect valueRect = new Rect(position.x, position.y, valueWidth, position.height);
+            Rect labelRect = new Rect(position.x + valueWidth, position.y, syncVarIndicatorRect.x, position.height);
 
             EditorGUI.PropertyField(valueRect, property, true);
             GUI.Label(labelRect, syncVarIndicatorContent, EditorStyles.miniLabel);

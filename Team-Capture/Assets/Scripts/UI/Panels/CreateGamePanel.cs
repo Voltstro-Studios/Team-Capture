@@ -84,7 +84,7 @@ namespace UI.Panels
 
 		private void StartServer()
 		{
-			netManager.onlineScene = activeTCScenes[mapsDropdown.value];
+			netManager.onlineScene = activeTCScenes[mapsDropdown.value].scene;
 			netManager.gameName = gameNameText.text;
 			netManager.maxConnections = maxPlayers;
 			netManager.StartHost();

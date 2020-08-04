@@ -1,4 +1,4 @@
-﻿using Mirror.Attributes;
+﻿using Mirror;
 using UnityEngine;
 
 namespace SceneManagement

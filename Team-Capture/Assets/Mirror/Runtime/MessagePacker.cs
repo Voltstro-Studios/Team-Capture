@@ -17,6 +17,8 @@ namespace Mirror
     //    (probably even shorter)
     public static class MessagePacker
     {
+        static readonly ILogger logger = LogFactory.GetLogger(typeof(MessagePacker));
+
         public static int GetId<T>() where T : IMessageBase
         {
             // paul: 16 bits is enough to avoid collisions
@@ -39,7 +41,7 @@ namespace Mirror
             // this works because value types cannot be derived
             // if it is a reference type (for example IMessageBase),
             // ask the message for the real type
-            int msgType = GetId(typeof(T).IsValueType ? typeof(T) : message.GetType());
+            int msgType = GetId(default(T) != null ? typeof(T) : message.GetType());
             writer.WriteUInt16((ushort)msgType);
 
             // serialize message into writer
@@ -121,17 +123,19 @@ namespace Mirror
                 if (requireAuthenication && !conn.isAuthenticated)
                 {
                     // message requires authentication, but the connection was not authenticated
-                    Debug.LogWarning($"Closing connection: {conn}. Received message {typeof(T)} that required authentication, but the user has not authenticated yet");
+                    logger.LogWarning($"Closing connection: {conn}. Received message {typeof(T)} that required authentication, but the user has not authenticated yet");
                     conn.Disconnect();
                     return;
                 }
 
-                message = typeof(T).IsValueType ? default(T) : new T();
+                // if it is a value type, just use defult(T)
+                // otherwise allocate a new instance
+                message = default(T) != null ? default(T) : new T();
                 message.Deserialize(reader);
             }
             catch (Exception exception)
             {
-                Debug.LogError("Closed connection: " + conn + ". This can happen if the other side accidentally (or an attacker intentionally) sent invalid data. Reason: " + exception);
+                logger.LogError("Closed connection: " + conn + ". This can happen if the other side accidentally (or an attacker intentionally) sent invalid data. Reason: " + exception);
                 conn.Disconnect();
                 return;
             }

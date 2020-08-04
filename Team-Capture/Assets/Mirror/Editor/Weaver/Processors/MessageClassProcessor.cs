@@ -1,11 +1,12 @@
-// this class generates OnSerialize/OnDeserialize when inheriting from MessageBase
-
 using System.Linq;
 using Mono.CecilX;
 using Mono.CecilX.Cil;
 
 namespace Mirror.Weaver
 {
+    /// <summary>
+    /// generates OnSerialize/OnDeserialize when inheriting from MessageBase
+    /// </summary>
     static class MessageClassProcessor
     {
 
@@ -31,7 +32,7 @@ namespace Mirror.Weaver
         static void GenerateSerialization(TypeDefinition td)
         {
             Weaver.DLog(td, "  GenerateSerialization");
-            MethodDefinition existingMethod = td.Methods.FirstOrDefault(md => md.Name == "Serialize");
+            MethodDefinition existingMethod = td.GetMethod("Serialize");
             if (existingMethod != null && !existingMethod.Body.IsEmptyDefault())
             {
                 return;
@@ -47,7 +48,7 @@ namespace Mirror.Weaver
             {
                 if (field.FieldType.FullName == td.FullName)
                 {
-                    Weaver.Error($"{td} has field ${field} that references itself");
+                    Weaver.Error($"{td.Name} has field {field.Name} that references itself", field);
                     return;
                 }
             }
@@ -61,26 +62,18 @@ namespace Mirror.Weaver
             {
                 serializeFunc.Parameters.Add(new ParameterDefinition("writer", ParameterAttributes.None, Weaver.CurrentAssembly.MainModule.ImportReference(Weaver.NetworkWriterType)));
             }
-            ILProcessor serWorker = serializeFunc.Body.GetILProcessor();
+            ILProcessor worker = serializeFunc.Body.GetILProcessor();
             if (existingMethod != null)
             {
                 //remove default nop&ret from existing empty interface method
-                serWorker.Body.Instructions.Clear();
+                worker.Body.Instructions.Clear();
             }
 
-            //if not struct(IMessageBase), likely same as using else {} here in all cases
+            // if it is not a struct, call base
             if (!td.IsValueType)
             {
                 // call base
-                MethodReference baseSerialize = Resolvers.ResolveMethodInParents(td.BaseType, Weaver.CurrentAssembly, "Serialize");
-                if (baseSerialize != null)
-                {
-                    // base
-                    serWorker.Append(serWorker.Create(OpCodes.Ldarg_0));
-                    // writer
-                    serWorker.Append(serWorker.Create(OpCodes.Ldarg_1));
-                    serWorker.Append(serWorker.Create(OpCodes.Call, baseSerialize));
-                }
+                CallBase(td, worker, "Serialize");
             }
 
             foreach (FieldDefinition field in td.Fields)
@@ -88,21 +81,9 @@ namespace Mirror.Weaver
                 if (field.IsStatic || field.IsPrivate || field.IsSpecialName)
                     continue;
 
-                MethodReference writeFunc = Writers.GetWriteFunc(field.FieldType);
-                if (writeFunc != null)
-                {
-                    serWorker.Append(serWorker.Create(OpCodes.Ldarg_1));
-                    serWorker.Append(serWorker.Create(OpCodes.Ldarg_0));
-                    serWorker.Append(serWorker.Create(OpCodes.Ldfld, field));
-                    serWorker.Append(serWorker.Create(OpCodes.Call, writeFunc));
-                }
-                else
-                {
-                    Weaver.Error($"{field} has unsupported type");
-                    return;
-                }
+                CallWriter(worker, field);
             }
-            serWorker.Append(serWorker.Create(OpCodes.Ret));
+            worker.Append(worker.Create(OpCodes.Ret));
 
             //only add if not just replaced body
             if (existingMethod == null)
@@ -111,10 +92,39 @@ namespace Mirror.Weaver
             }
         }
 
+        static void CallWriter(ILProcessor worker, FieldDefinition field)
+        {
+            MethodReference writeFunc = Writers.GetWriteFunc(field.FieldType);
+            if (writeFunc != null)
+            {
+                worker.Append(worker.Create(OpCodes.Ldarg_1));
+                worker.Append(worker.Create(OpCodes.Ldarg_0));
+                worker.Append(worker.Create(OpCodes.Ldfld, field));
+                worker.Append(worker.Create(OpCodes.Call, writeFunc));
+            }
+            else
+            {
+                Weaver.Error($"{field.Name} has unsupported type", field);
+            }
+        }
+
+        static void CallBase(TypeDefinition td, ILProcessor worker, string name)
+        {
+            MethodReference method = Resolvers.ResolveMethodInParents(td.BaseType, Weaver.CurrentAssembly, name);
+            if (method != null)
+            {
+                // base
+                worker.Append(worker.Create(OpCodes.Ldarg_0));
+                // writer
+                worker.Append(worker.Create(OpCodes.Ldarg_1));
+                worker.Append(worker.Create(OpCodes.Call, method));
+            }
+        }
+
         static void GenerateDeSerialization(TypeDefinition td)
         {
             Weaver.DLog(td, "  GenerateDeserialization");
-            MethodDefinition existingMethod = td.Methods.FirstOrDefault(md => md.Name == "Deserialize");
+            MethodDefinition existingMethod = td.GetMethod("Deserialize");
             if (existingMethod != null && !existingMethod.Body.IsEmptyDefault())
             {
                 return;
@@ -134,26 +144,17 @@ namespace Mirror.Weaver
             {
                 serializeFunc.Parameters.Add(new ParameterDefinition("reader", ParameterAttributes.None, Weaver.CurrentAssembly.MainModule.ImportReference(Weaver.NetworkReaderType)));
             }
-            ILProcessor serWorker = serializeFunc.Body.GetILProcessor();
+            ILProcessor worker = serializeFunc.Body.GetILProcessor();
             if (existingMethod != null)
             {
                 //remove default nop&ret from existing empty interface method
-                serWorker.Body.Instructions.Clear();
+                worker.Body.Instructions.Clear();
             }
 
-            //if not struct(IMessageBase), likely same as using else {} here in all cases
+            // if not value type, call base
             if (!td.IsValueType)
             {
-                // call base
-                MethodReference baseDeserialize = Resolvers.ResolveMethodInParents(td.BaseType, Weaver.CurrentAssembly, "Deserialize");
-                if (baseDeserialize != null)
-                {
-                    // base
-                    serWorker.Append(serWorker.Create(OpCodes.Ldarg_0));
-                    // writer
-                    serWorker.Append(serWorker.Create(OpCodes.Ldarg_1));
-                    serWorker.Append(serWorker.Create(OpCodes.Call, baseDeserialize));
-                }
+                CallBase(td, worker, "Deserialize");
             }
 
             foreach (FieldDefinition field in td.Fields)
@@ -161,26 +162,30 @@ namespace Mirror.Weaver
                 if (field.IsStatic || field.IsPrivate || field.IsSpecialName)
                     continue;
 
-                MethodReference readerFunc = Readers.GetReadFunc(field.FieldType);
-                if (readerFunc != null)
-                {
-                    serWorker.Append(serWorker.Create(OpCodes.Ldarg_0));
-                    serWorker.Append(serWorker.Create(OpCodes.Ldarg_1));
-                    serWorker.Append(serWorker.Create(OpCodes.Call, readerFunc));
-                    serWorker.Append(serWorker.Create(OpCodes.Stfld, field));
-                }
-                else
-                {
-                    Weaver.Error($"{field} has unsupported type");
-                    return;
-                }
+                CallReader(worker, field);
             }
-            serWorker.Append(serWorker.Create(OpCodes.Ret));
+            worker.Append(worker.Create(OpCodes.Ret));
 
             //only add if not just replaced body
             if (existingMethod == null)
             {
                 td.Methods.Add(serializeFunc);
+            }
+        }
+
+        static void CallReader(ILProcessor worker, FieldDefinition field)
+        {
+            MethodReference readerFunc = Readers.GetReadFunc(field.FieldType);
+            if (readerFunc != null)
+            {
+                worker.Append(worker.Create(OpCodes.Ldarg_0));
+                worker.Append(worker.Create(OpCodes.Ldarg_1));
+                worker.Append(worker.Create(OpCodes.Call, readerFunc));
+                worker.Append(worker.Create(OpCodes.Stfld, field));
+            }
+            else
+            {
+                Weaver.Error($"{field.Name} has unsupported type", field);
             }
         }
     }

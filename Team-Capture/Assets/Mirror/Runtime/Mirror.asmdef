@@ -2,16 +2,14 @@
     "name": "Mirror",
     "references": [
         "Mirror.CompilerSymbols",
-        "Mirror.Attributes",
-        "TC.SceneManagement"
+        "Ninja.WebSockets"
     ],
+    "optionalUnityReferences": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,
-    "defineConstraints": [],
-    "versionDefines": [],
-    "noEngineReferences": false
+    "defineConstraints": []
 }

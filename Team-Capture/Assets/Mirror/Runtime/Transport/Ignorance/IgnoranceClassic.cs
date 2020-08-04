@@ -47,7 +47,7 @@ namespace Mirror
         // maximum packet sizes
         [Header("Security")]
         [UnityEngine.Serialization.FormerlySerializedAs("MaxPacketSize")]
-        public int MaxPacketSizeInKb = 64;
+        public int MaxPacketSizeInKb = 16;
         // Channels
         [Header("Channel Definitions")]
         public IgnoranceChannelTypes[] Channels;
@@ -61,11 +61,12 @@ namespace Mirror
         public uint CustomTimeoutMultiplier = 3;
         // ping calculation timer
         [Header("Ping Calculation")]
-        public bool PingCalculationEnabled = true;
-        public int PingCalculationFrameTimer = 120;    // assuming 60 frames per second, 2 second interval.
+        [Tooltip("This value (in seconds) controls how often the client peer ping value will be retrieved from the ENET world. Note that too low values can actually harm performance due to excessive polling. " +
+            "Keep it frequent, but not too frequent. 3 - 5 seconds should be OK. 0 to disable.")]
+        public int PingCalculationInterval = 3;
 
         // version of this transport
-        private readonly string Version = "1.3.6";
+        private readonly string Version = "1.3.7";
         // enet engine related things
         private bool ENETInitialized = false, ServerStarted = false, ClientStarted = false;
         private Host ENETHost = new Host(), ENETClientHost = new Host();                    // Didn't want to have to do this but i don't want to risk crashes.
@@ -76,9 +77,14 @@ namespace Mirror
         private Dictionary<Peer, int> PeersToConnectionIDs = new Dictionary<Peer, int>();
         // mirror related things
         private byte[] PacketCache;
-        private int NextConnectionID = 1;   // DO NOT MODIFY.
-        // used for latency calculation
-        private int PingCalculationFrames = 0, CurrentClientPing = 0;
+        private int NextConnectionID = 1; // DO NOT MODIFY "NextConnectionID"
+        private uint NextPingCalculationTime = 0, CurrentClientPing = 0;
+
+        private void Awake()
+        {
+            // Deprecation warning. Comment it out if desired; better to say it now rather than have a rude awakening.
+            Debug.LogWarning("Ignorance Classic will be REMOVED with the release of Ignorance v1.4. Please migrate to Ignorance Threaded. If for some reason you can't, drop by the Discord and explain why.");    
+        }
 
         #region Client
         public override void ClientConnect(string address)
@@ -209,12 +215,11 @@ namespace Mirror
 
                 if (returnCode == 0)
                 {
-                    if (DebugEnabled) Debug.Log($"[DEBUGGING MODE] Ignorance: Outgoing packet on channel {channelId} to connection id {connectionId} OK");
                     return true;
                 }
                 else
                 {
-                    if (DebugEnabled) Debug.Log($"[DEBUGGING MODE] Ignorance: Outgoing packet on channel {channelId} to connection id {connectionId} FAIL, code {returnCode}");
+                    if (DebugEnabled) Debug.LogWarning($"Ignorance: Failed sending outgoing packet on channel {channelId} to connection id {connectionId}. Code {returnCode}");
                     return false;
                 }
             }
@@ -241,13 +246,6 @@ namespace Mirror
                 }
             }
 
-            // Setup.
-            // Dirty fix that might not work.
-            // #if UNITY_EDITOR_OSX
-            //          ENETAddress.SetHost("::0");
-            //          Debug.Log("Mac OS Unity Editor workaround applied.");
-            // #else
-
             if (!ServerBindAll)
             {
                 if (DebugEnabled) print($"Ignorance: Not binding to all interfaces, checking if supplied info is actually an IP address");
@@ -273,17 +271,6 @@ namespace Mirror
 #endif
             }
 
-            /*
-            if (Application.platform == RuntimePlatform.OSXPlayer)
-            {
-                ENETAddress.SetHost("::0");
-            }
-            else
-            {
-                ENETAddress.SetHost((ServerBindAll ? "0.0.0.0" : ServerBindAddress));
-            }
-            */
-            // #endif
             ENETAddress.Port = (ushort)CommunicationPort;
             if (ENETHost == null || !ENETHost.IsSet) ENETHost = new Host();
 
@@ -326,14 +313,14 @@ namespace Mirror
         {
             // c6: just right at the top of shutdown "Herp I shut down nao". lol... then if thats missing obv problems
             // Debug.Log("Herp I shut down nao");
-
-            if (DebugEnabled) Debug.Log("Ignorance: Cleaning the packet cache...");
-
             ServerStarted = false;
             ClientStarted = false;
 
             ENETInitialized = false;
             Library.Deinitialize();
+
+            // Reset the next ping calculation timer
+            NextPingCalculationTime = 0;
         }
 
         // core
@@ -540,19 +527,23 @@ namespace Mirror
             // Coburn: does the order here really matter? Server then client?
             if (enabled)
             {
-                if (PingCalculationEnabled)
-                {
-                    PingCalculationFrames++;
-                    if (PingCalculationFrames >= PingCalculationFrameTimer)
-                    {
-                        if (!ENETPeer.IsSet || !IsValid(ENETClientHost)) CurrentClientPing = 0;
-                        else CurrentClientPing = (int)ENETPeer.RoundTripTime;
-                        PingCalculationFrames = 0;
-                    }
-                }
-
                 if (ServerStarted) ProcessServerMessages();
-                if (ClientStarted) ProcessClientMessages();
+                if (ClientStarted)
+                {
+                    // Is ping calculation enabled?
+                    if (PingCalculationInterval > 0)
+                    {
+                        // Time to recalculate our ping?
+                        if (NextPingCalculationTime >= Library.Time)
+                        {
+                            // If the peer is set, then poll it. Otherwise it might not be time to do that.
+                            if (ENETPeer.IsSet) CurrentClientPing = ENETPeer.RoundTripTime;
+                            NextPingCalculationTime = (uint)(Library.Time + (PingCalculationInterval * 1000));
+                        }
+                    }
+
+                    ProcessClientMessages();
+                }
             }
         }
 
@@ -571,12 +562,12 @@ namespace Mirror
             // A little complicated if else mess.
             if (ServerActive())
             {
-                if (NetworkClient.active) return $"Ignorance {Version} in HostClient Mode";      // HostClient Mode
-                else return $"Ignorance {Version} in Dedicated Server Mode";                    // Dedicated server masterrace mode
+                if (NetworkClient.active) return $"Ignorance {Version} (HostClient)";      // HostClient Mode
+                else return $"Ignorance {Version} (Dedicated Server)";                    // Dedicated server masterrace mode
             }
             else
             {
-                return $"Ignorance {Version} in Client Mode";                                   // Client mode
+                return $"Ignorance {Version} (ClientOnly)";                                   // Client mode
             }
         }
 
@@ -645,7 +636,6 @@ namespace Mirror
         }
 
         #region Mirror 6.2+ - URI Support
-#if MIRROR_7_0_OR_NEWER
         public override Uri ServerUri()
         {
             UriBuilder builder = new UriBuilder();
@@ -654,7 +644,7 @@ namespace Mirror
             builder.Port = CommunicationPort;
             return builder.Uri;
         }
-#endif
+
         public override void ClientConnect(Uri uri)
         {
             if (uri.Scheme != Scheme)

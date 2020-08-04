@@ -10,7 +10,6 @@
 // lots of detail of what you were doing and the error/stack trace.
 // -----------------
 // Server & Client Threaded Version
-// 
 // -----------------
 using UnityEngine;
 using Debug = UnityEngine.Debug;
@@ -73,10 +72,20 @@ namespace Mirror
 
         [Header("Security")]
         [UnityEngine.Serialization.FormerlySerializedAs("MaxPacketSize")]
-        public int MaxPacketSizeInKb = 64;
+        public int MaxPacketSizeInKb = 16;
 
         [Header("Channel Definitions")]
         public IgnoranceChannelTypes[] Channels;
+
+        // Ping Calculation
+        [Header("Statistics Calculation")]
+        [Tooltip("This value (in seconds) controls how often the client stats will be retrieved from the ENET world. Note that too low values can actually harm performance due to excessive polling. " +
+            "Keep it frequent, but not too frequent. 3 - 5 seconds should be OK. 0 to disable.")]
+        public int StatisticsCalculationInterval = 3;
+        public static volatile PeerStatistics statistics = new PeerStatistics();
+
+        // API related to the Ping Calculations
+        public static volatile uint CurrentClientPing; // Don't try setting this, it will be overwritten by the network thread.
 
         // Standard things
         public void Awake()
@@ -106,6 +115,8 @@ namespace Mirror
             return "Ignorance Threaded";
         }
 
+        // TODO: Don't use LateUpdate, because all network stuff will be 1 frame late.
+        // TODO: Use FixedUpdate and some trickery. But that's for another day.
         public void LateUpdate()
         {
             if (enabled)
@@ -243,7 +254,7 @@ namespace Mirror
             }
 
             OutgoingPacket opkt = default;
-            opkt.commandType = CommandPacketType.ClientDisconnectRequest;
+            opkt.commandType = CommandPacketType.ClientDisconnectionRequest;
             MirrorClientOutgoingQueue.Enqueue(opkt);
 
             // ...
@@ -275,7 +286,9 @@ namespace Mirror
         {
             OutgoingPacket op = default;
             op.connectionId = connectionId;
-            op.commandType = CommandPacketType.BootToTheFace;
+            op.commandType = CommandPacketType.ServerWantsToDisconnectClient;
+
+            MirrorServerOutgoingQueue.Enqueue(op);
             return true;
         }
 
@@ -288,6 +301,7 @@ namespace Mirror
         {
             serverShouldCeaseOperation = true;
             Thread.Sleep(5);    // Allow it to have a micro-sleep
+
             if (serverWorker != null && serverWorker.IsAlive) serverWorker.Join();
 
             // IMPORTANT: Flush the queues. Get rid of the dead bodies.
@@ -329,13 +343,16 @@ namespace Mirror
         #region Client Threading
         private Thread IgnoranceClientThread()
         {
+            statistics = new PeerStatistics();
+
             ThreadBootstrapStruct threadBootstrap = new ThreadBootstrapStruct
             {
                 hostAddress = clientConnectionAddress,
                 port = (ushort)CommunicationPort,
                 maxChannels = Channels.Length,
                 maxPacketSize = MaxPacketSizeInKb * 1024,
-                threadPumpTimeout = EnetPollTimeout
+                threadPumpTimeout = EnetPollTimeout,
+                pingUpdateInterval = StatisticsCalculationInterval,
             };
 
             Thread t = new Thread(() => ClientWorkerThread(threadBootstrap));
@@ -345,6 +362,8 @@ namespace Mirror
         private static void ClientWorkerThread(ThreadBootstrapStruct startupInfo)
         {
             // Setup...
+            uint nextStatsUpdate = 0;
+
             byte[] workerPacketBuffer = new byte[startupInfo.maxPacketSize];
             Address cAddress = new Address();
 
@@ -369,8 +388,8 @@ namespace Mirror
                 }
                 catch (Exception e)
                 {
-                    Debug.LogError("Ignorance encountered a fatal exception. I'm sorry, but I gotta bail - if you believe you found a bug, please report it on the GitHub.\n" +
-                        $"The exception returned was: {e.ToString()}");
+                    Debug.LogError("Ignorance encountered a fatal exception. To help debug the issue, use a Debug DLL of ENET and look for a 'enet_log.txt' file in the root of your " +
+                        $"application folder.\nIf you believe you found a bug, please report it on the GitHub issue tracker. The exception returned was: {e.ToString()}");
                     return;
                 }
 
@@ -382,6 +401,19 @@ namespace Mirror
                 while (!clientShouldCeaseOperation)
                 {
                     bool clientWasPolled = false;
+
+                    if(Library.Time >= nextStatsUpdate)
+                    {
+                        statistics.CurrentPing = cPeer.RoundTripTime;
+                        statistics.BytesReceived = cPeer.BytesReceived;
+                        statistics.BytesSent = cPeer.BytesSent;
+
+                        statistics.PacketsLost = cPeer.PacketsLost;
+                        statistics.PacketsSent = cPeer.PacketsSent;
+
+                        // Library.Time is milliseconds, so we need to do some quick math.
+                        nextStatsUpdate = Library.Time + (uint)(startupInfo.pingUpdateInterval * 1000);
+                    }
 
                     while (!clientWasPolled)
                     {
@@ -455,7 +487,7 @@ namespace Mirror
                     // Outgoing stuff
                     while (MirrorClientOutgoingQueue.TryDequeue(out OutgoingPacket opkt))
                     {
-                        if (opkt.commandType == CommandPacketType.ClientDisconnectRequest)
+                        if (opkt.commandType == CommandPacketType.ClientDisconnectionRequest)
                         {
                             cPeer.DisconnectNow(0);
                             return;
@@ -498,7 +530,11 @@ namespace Mirror
             // Worker buffer.
             byte[] workerPacketBuffer = new byte[startupInformation.maxPacketSize];
             // Connection ID.
+            // TODO: Change the name of this.
             int nextConnectionId = 1;
+            // Return code from the send function
+            int returnCode = 0;
+
             // Server address properties
             Address eAddress = new Address()
             {
@@ -518,7 +554,7 @@ namespace Mirror
                 catch (Exception e)
                 {
                     Debug.LogError("Ignorance encountered a fatal exception. I'm sorry, but I gotta bail - if you believe you found a bug, please report it on the GitHub.\n" +
-                        $"The exception returned was: {e.ToString()}");
+                        $"The exception returned was: {e}");
                     return;
                 }
 
@@ -533,7 +569,7 @@ namespace Mirror
                     {
                         switch (opkt.commandType)
                         {
-                            case CommandPacketType.BootToTheFace:
+                            case CommandPacketType.ServerWantsToDisconnectClient:
                                 if (ConnectionIDToPeers.TryGetValue(opkt.connectionId, out Peer bootedPeer))
                                 {
                                     bootedPeer.DisconnectLater(0);
@@ -543,15 +579,15 @@ namespace Mirror
                             case CommandPacketType.Nothing:
                             default:
                                 if (ConnectionIDToPeers.TryGetValue(opkt.connectionId, out Peer target))
-                                {
-                                    int returnCode = target.SendAndReturnStatusCode(opkt.channelId, ref opkt.payload);
-                                    if (returnCode != 0) print($"Could not send {opkt.payload.Length} bytes to target peer {target.ID} on channel {opkt.channelId}, error code {returnCode}");
+                                {                                    
+                                    returnCode = target.SendAndReturnStatusCode(opkt.channelId, ref opkt.payload);
+                                    if (returnCode != 0) print($"Error code {returnCode} returned trying to send {opkt.payload.Length} bytes to Peer {target.ID} on channel {opkt.channelId}");
                                 }
                                 break;
                         }
                     }
 
-                    // Flush here?
+                    // Get everything out the door.
                     serverWorkerHost.Flush();
 
                     // Incoming stuffs now.
@@ -573,20 +609,28 @@ namespace Mirror
                                 break;
 
                             case EventType.Connect:
-                                int connectionId = nextConnectionId;
-                                nextConnectionId += 1;
+                                // int connectionId = nextConnectionId;
 
                                 // Add to dictionaries.
-                                if (!PeersToConnectionIDs.TryAdd(netEvent.Peer, connectionId)) Debug.LogError($"ERROR: We already know this client in our Connection ID to Peer Mapping?!");
-                                if (!ConnectionIDToPeers.TryAdd(connectionId, netEvent.Peer)) Debug.LogError($"ERROR: We already know this client in our Peer to ConnectionID Mapping?!");
+                                if (!PeersToConnectionIDs.TryAdd(netEvent.Peer, nextConnectionId))
+                                {
+                                    Debug.LogWarning($"It seems we already know this client in our Connection ID to Peer Mapping. Replacing.");
+                                    PeersToConnectionIDs[netEvent.Peer] = nextConnectionId;
+                                }
+                                if (!ConnectionIDToPeers.TryAdd(nextConnectionId, netEvent.Peer))
+                                {
+                                    Debug.LogWarning($"It seems we already know this client in our Peer to ConnectionID Mapping. Replacing.");
+                                    ConnectionIDToPeers[nextConnectionId] = netEvent.Peer;
+                                }
 
                                 // Send a message back to mirror.
                                 IncomingPacket newConnectionPkt = default;
-                                newConnectionPkt.connectionId = connectionId;
+                                newConnectionPkt.connectionId = nextConnectionId;
                                 newConnectionPkt.type = MirrorPacketType.ServerClientConnected;
                                 newConnectionPkt.ipAddress = netEvent.Peer.IP;
 
                                 MirrorServerIncomingQueue.Enqueue(newConnectionPkt);
+                                nextConnectionId++;
                                 break;
 
                             case EventType.Disconnect:
@@ -612,13 +656,13 @@ namespace Mirror
                                 {
                                     if (!netEvent.Packet.IsSet)
                                     {
-                                        print("Ignorance WARNING: A incoming packet is not set correctly - attempting to continue!");
+                                        Debug.LogWarning("Ignorance: A incoming packet is not set correctly - attempting to continue!");
                                         return;
                                     }
 
                                     if (netEvent.Packet.Length > startupInformation.maxPacketSize)
                                     {
-                                        Debug.LogWarning($"Ignorance WARNING: Packet too large for buffer; dropping. Packet {netEvent.Packet.Length} bytes; limit is {startupInformation.maxPacketSize} bytes.");
+                                        Debug.LogWarning($"Ignorance: Packet too large for buffer; dropping. Packet {netEvent.Packet.Length} bytes > {startupInformation.maxPacketSize} byte limit");
                                         netEvent.Packet.Dispose();
                                         return;
                                     }
@@ -680,18 +724,24 @@ namespace Mirror
                 }
 
                 // Disconnect everyone, we're done here.
-                print($"Kicking all connected Peers...");
+                print($"Server thread is now kicking all connected peers...");
                 foreach (KeyValuePair<int, Peer> kv in ConnectionIDToPeers) kv.Value.DisconnectNow(0);
 
-                print("Flushing...");
+                print("Server thread is now flushing and cleaning up...");
                 serverWorkerHost.Flush();
+
+                // BUGFIX issue #59: "Player crash on second server client connection"
+                // https://github.com/SoftwareGuy/Ignorance/issues/59
+                ConnectionIDToPeers.Clear();
+                PeersToConnectionIDs.Clear();
+
+                // Server is no longer started.
                 ServerStarted = false;
             }
         }
         #endregion
 
         #region Mirror 6.2+ - URI Support
-#if MIRROR_7_0_OR_NEWER
         public override Uri ServerUri()
         {
             UriBuilder builder = new UriBuilder();
@@ -699,8 +749,8 @@ namespace Mirror
             builder.Host = ServerBindAddress;
             builder.Port = CommunicationPort;
             return builder.Uri;
-        }
-#endif
+		}
+		
         public override void ClientConnect(Uri uri)
         {
             if (uri.Scheme != Scheme)
@@ -850,8 +900,8 @@ namespace Mirror
         public enum CommandPacketType
         {
             Nothing,
-            BootToTheFace,
-            ClientDisconnectRequest
+            ServerWantsToDisconnectClient,
+            ClientDisconnectionRequest
         }
 
         // -> Moved ChannelTypes enum to it's own file, so it's easier to maintain.
@@ -866,6 +916,9 @@ namespace Mirror
             public int maxPacketSize;
             public int maxChannels;
             public int maxPeers;
+
+            // Client only
+            public int pingUpdateInterval;
         }
         #endregion
     }

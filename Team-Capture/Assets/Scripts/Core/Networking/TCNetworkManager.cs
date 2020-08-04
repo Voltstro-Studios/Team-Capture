@@ -49,7 +49,6 @@ namespace Core.Networking
 			base.Awake();
 
 			Instance = this;
-			singleton = this;
 		}
 
 		public override void Start()

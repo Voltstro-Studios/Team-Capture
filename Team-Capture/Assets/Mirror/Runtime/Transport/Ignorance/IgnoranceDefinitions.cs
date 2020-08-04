@@ -14,5 +14,16 @@ namespace Mirror {
             UnreliableFragmented = PacketFlags.UnreliableFragmented,                // Pure UDP, but fragmented.
             UnreliableSequenced = PacketFlags.None,                                 // Pure UDP, but sequenced.
             UnbundledInstant = PacketFlags.Instant,                                 // Instant packet, will not be bundled with others.
+			Crucial = PacketFlags.Crucial,											// ???			
         }
+		
+		[Serializable]
+		public class PeerStatistics {
+			public ulong CurrentPing;
+			public ulong PacketsSent;
+			public ulong PacketsLost;
+            public ulong BytesSent;
+            public ulong BytesReceived;
+		}
+		
 }
