@@ -58,6 +58,9 @@ namespace Core.Networking
 			//Setup loading events
 			TCScenesManager.PreparingSceneLoadEvent += OnPreparingSceneLoad;
 			TCScenesManager.StartSceneLoadEvent += StartSceneLoad;
+
+			Application.targetFrameRate = 128;
+			Time.fixedDeltaTime = 1 / 60f;
 		}
 
 		public void FixedUpdate()
@@ -113,9 +116,6 @@ namespace Core.Networking
 			//Create the player object
 			GameObject player = Instantiate(playerPrefab);
 			player.AddComponent<SimulationObject>();
-
-			//We need to add a rigid body, but we don't want to do physics, so also set kinematic to true
-			player.AddComponent<Rigidbody>().isKinematic = true;
 
 			//Add the connection for the player
 			NetworkServer.AddPlayerForConnection(conn, player);
@@ -315,6 +315,15 @@ namespace Core.Networking
 			}
 
 			singleton.StopHost();
+		}
+
+		[ConCommand("startserver", "Starts a server", 1, 1)]
+		public static void StartServer(string[] args)
+		{
+			string scene = args[0];
+			singleton.onlineScene = scene;
+
+			singleton.StartServer();
 		}
 		
 		#endregion

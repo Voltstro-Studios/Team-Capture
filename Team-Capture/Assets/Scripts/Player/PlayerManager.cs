@@ -3,6 +3,7 @@ using Core;
 using Core.Networking.Messages;
 using Delegates;
 using Mirror;
+using Networking;
 using UI;
 using UnityEngine;
 using Weapons;
@@ -19,6 +20,16 @@ namespace Player
 		/// The <see cref="ClientUI"/>
 		/// </summary>
 		internal ClientUI ClientUi;
+
+		/// <summary>
+		/// The player's <see cref="AuthoritativeCharacter"/>
+		/// </summary>
+		private AuthoritativeCharacter authoritativeCharacter;
+
+		/// <summary>
+		/// The player's <see cref="CharacterController"/>
+		/// </summary>
+		private CharacterController characterController;
 
 		/// <summary>
 		/// <see cref="Behaviour"/>s to disable/enable on death and respawn
@@ -105,6 +116,8 @@ namespace Player
 			Health = MaxHealth;
 			weaponManager = GetComponent<WeaponManager>();
 
+			StartCoroutine(ServerPlayerRespawn(true));
+
 			if (NetworkManager.singleton.mode != NetworkManagerMode.Host || netId != 1) return;
 
 			IsHostPlayer = true;
@@ -119,6 +132,12 @@ namespace Player
 		public void CmdSuicide()
 		{
 			TakeDamage(Health, transform.name);
+		}
+
+		private void Awake()
+		{
+			authoritativeCharacter = GetComponent<AuthoritativeCharacter>();
+			characterController = GetComponent<CharacterController>();
 		}
 
 		#region Death, Respawn, Damage
@@ -189,6 +208,10 @@ namespace Player
 			//Call the client side code on each player
 			RpcClientPlayerDie();
 
+			//Disable movement
+			authoritativeCharacter.enabled = false;
+			characterController.enabled = false;
+
 			//Update the stats, for both players
 			PlayerManager killer = GameManager.GetPlayer(sourcePlayerId);
 			Deaths++;
@@ -210,18 +233,19 @@ namespace Player
 			if(!skipRespawnTime)
 				yield return new WaitForSeconds(GameManager.GetActiveScene().respawnTime);
 
+			characterController.enabled = true;
+			authoritativeCharacter.enabled = true;
+
 			Health = MaxHealth;
 
-			//TODO: This will fully work once we have server authoritative movement!
 			Transform spawnPoint = NetworkManager.singleton.GetStartPosition();
-			transform.position = spawnPoint.position;
-			// ReSharper disable once Unity.InefficientPropertyAccess
-			transform.rotation = spawnPoint.rotation;
+			Quaternion rotation = spawnPoint.rotation;
+			authoritativeCharacter.SetCharacterPosition(spawnPoint.position, rotation.x, rotation.y, true);
 
 			RpcClientRespawn();
 
 			//Add stock weapons
-			GetComponent<WeaponManager>().AddStockWeapons();
+			weaponManager.AddStockWeapons();
 
 			IsDead = false;
 
@@ -240,9 +264,6 @@ namespace Player
 			//Disable the collider, or the Char controller
 			if (isLocalPlayer)
 			{
-				GetComponent<PlayerMovement>().enabled = false;
-				GetComponent<CharacterController>().enabled = false;
-
 				//Switch cams
 				GameManager.GetActiveSceneCamera().SetActive(true);
 
@@ -253,6 +274,10 @@ namespace Player
 			{
 				GetComponent<CapsuleCollider>().enabled = false;
 			}
+
+			//Disable movement
+			authoritativeCharacter.enabled = false;
+			characterController.enabled = false;
 
 			foreach (GameObject toDisable in disableGameObjectsOnDeath) toDisable.SetActive(false);
 
@@ -270,12 +295,13 @@ namespace Player
 
 			foreach (Behaviour toEnable in disableBehaviourOnDeath) toEnable.enabled = true;
 
+			//Enable movement
+			characterController.enabled = true;
+			authoritativeCharacter.enabled = true;
+
 			//Enable the collider, or the Char controller
 			if (isLocalPlayer)
 			{
-				GetComponent<CharacterController>().enabled = true;
-				GetComponent<PlayerMovement>().enabled = true;
-
 				//Switch cams
 				GameManager.GetActiveSceneCamera().SetActive(false);
 

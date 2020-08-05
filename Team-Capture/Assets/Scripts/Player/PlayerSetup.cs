@@ -19,14 +19,6 @@ namespace Player
 			playerManager = GetComponent<PlayerManager>();
 		}
 
-		public override void OnStartServer()
-		{
-			base.OnStartServer();
-
-			//Spawn the player
-			StartCoroutine(playerManager.ServerPlayerRespawn(true));
-		}
-
 		public override void OnStartLocalPlayer()
 		{
 			//Setup UI

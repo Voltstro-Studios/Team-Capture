@@ -109,6 +109,36 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!1 &1304553426209234475
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6479458552634705644}
+  m_Layer: 0
+  m_Name: GroundCheck
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6479458552634705644
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1304553426209234475}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 6438375962803020341}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6438375962803020343
 GameObject:
   m_ObjectHideFlags: 0
@@ -145,6 +175,7 @@ Transform:
   m_Children:
   - {fileID: 6438375964343202627}
   - {fileID: 6438375964401219428}
+  - {fileID: 6479458552634705644}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -162,7 +193,7 @@ CharacterController:
   m_Height: 2
   m_Radius: 0.5
   m_SlopeLimit: 45
-  m_StepOffset: 0.3
+  m_StepOffset: 0.7
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
@@ -175,24 +206,29 @@ MonoBehaviour:
   m_GameObject: {fileID: 6438375962803020343}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e13942667ba21734bab49808dcd3ef36, type: 3}
+  m_Script: {fileID: 11500000, guid: 78022dc55c3b49144ad482b012cd0238, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0
+  groundCheck: {fileID: 6479458552634705644}
+  groundDistance: 0.7
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
   moveSpeed: 11
-  jumpSpeed: 8
-  sideStrafeSpeed: 1
-  airAcceleration: 2
-  airDeacceleration: 2
-  airControl: 5
-  runAcceleration: 14
-  runDeacceleration: 10
-  sideStrafeAcceleration: 50
-  frictionAmount: 6
-  gravityAmount: 20
-  rotationCorrectionThreshold: 0.3
-  correctionThreshold: 0.3
+  jumpHeight: 3
+  gravityAmount: 9.81
+  cameraTransform: {fileID: 6438375964343202627}
+  interpolationDelay: 12
+  inputUpdateRate: 10
+  state:
+    position: {x: 0, y: 0, z: 0}
+    velocity: {x: 0, y: 0, z: 0}
+    rotationX: 0
+    rotationY: 0
+    moveNum: 0
+    timestamp: 0
 --- !u!114 &4790435715656838203
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -279,6 +315,7 @@ MonoBehaviour:
   sceneId: 0
   serverOnly: 0
   m_AssetId: 
+  hasSpawned: 0
 --- !u!1 &6438375964343202626
 GameObject:
   m_ObjectHideFlags: 0

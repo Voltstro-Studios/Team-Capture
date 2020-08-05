@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Core.Logging;
 using Core.Networking;
 using Helper;
 using Mirror;
@@ -386,7 +385,16 @@ namespace Weapons
 		/// <summary>
 		/// Updates the ammo UI
 		/// </summary>
-		private void UpdateAmmoUI() => playerManager.ClientUi.hud.UpdateAmmoUI();
+		private void UpdateAmmoUI()
+		{
+			if(playerManager == null)
+				return;
+
+			if(playerManager.ClientUi == null)
+				return;
+
+			playerManager.ClientUi.hud.UpdateAmmoUI();
+		}
 
 		#endregion
 

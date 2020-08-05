@@ -26,7 +26,13 @@ namespace UI
 
 		public void UpdateAmmoUI()
 		{
+			if(clientUI == null || clientUI.WeaponManager == null)
+				return;
+
 			NetworkedWeapon netWeapon = clientUI.WeaponManager.GetActiveWeapon();
+			if(netWeapon == null)
+				return;
+
 			TCWeapon weapon = netWeapon.GetTCWeapon();
 
 			ammoText.text = netWeapon.CurrentBulletAmount.ToString();
