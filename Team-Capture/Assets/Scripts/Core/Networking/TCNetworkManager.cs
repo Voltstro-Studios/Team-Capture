@@ -55,10 +55,9 @@ namespace Core.Networking
 		{
 			base.Start();
 
+			//Setup loading events
 			TCScenesManager.PreparingSceneLoadEvent += OnPreparingSceneLoad;
 			TCScenesManager.StartSceneLoadEvent += StartSceneLoad;
-
-			//LiteNetLib4MirrorTransport.Singleton.maxConnections = (ushort)maxConnections;
 		}
 
 		public void FixedUpdate()
@@ -67,34 +66,28 @@ namespace Core.Networking
 			if (mode == NetworkManagerMode.Host || mode == NetworkManagerMode.ServerOnly)
 			{
 				SimulationHelper.UpdateSimulationObjectData();
-
-				/*foreach (NetPeer peer in LiteNetLib4MirrorServer.Peers)
-				{
-					if (peer != null)
-					{
-						Logger.Logger.Log(peer.Id.ToString());
-					}
-				}
-				*/
 			}
 		}
 
 		public override void OnServerSceneChanged(string sceneName)
 		{
-			base.OnServerSceneChanged(sceneName);
-
+			//Clear the pickup list
 			ServerPickupManager.ClearUnActivePickupsList();
 
-			Logging.Logger.Info("Server changed scene to `{@SceneName}`.", sceneName);
+			Logging.Logger.Info("Server changing scene to {@SceneName}", sceneName);
+
+			base.OnServerSceneChanged(sceneName);
 
 			//Instantiate the new game manager
 			Instantiate(gameMangerPrefab);
-			Logging.Logger.Debug("Created GameManager object.");
+			Logging.Logger.Debug("Created GameManager object");
 
 			//Setup pickups
+			//TODO: We should save all references to pickups to the associated scene file
 			GameObject[] pickups = GameObject.FindGameObjectsWithTag(pickupTagName);
 			foreach (GameObject pickup in pickups)
 			{
+				//Make sure it has the Pickup script on it
 				Pickup pickupLogic = pickup.GetComponent<Pickup>();
 				if(pickupLogic == null)
 				{
@@ -105,6 +98,8 @@ namespace Core.Networking
 				//Setup the trigger
 				pickupLogic.SetupTrigger();
 			}
+
+			Logging.Logger.Info("Loaded scene to {@SceneName}", sceneName);
 		}
 
 		public override void OnServerAddPlayer(NetworkConnection conn)
@@ -124,10 +119,14 @@ namespace Core.Networking
 
 			//Add the connection for the player
 			NetworkServer.AddPlayerForConnection(conn, player);
+
+			Logging.Logger.Info("Player from {@Address} connected with the net ID of {@NetID}", conn.address, conn.connectionId);
 		}
 
 		public override void OnStartServer()
 		{
+			Logging.Logger.Info("Starting server...");
+
 			base.OnStartServer();
 
 			//Start advertising the server when the server starts
@@ -135,27 +134,33 @@ namespace Core.Networking
 
 			StartCoroutine(UpdateLatency());
 
-			Logging.Logger.Info("Started server!");
+			Logging.Logger.Info("Server has started and is running on {@Address} with max connections of {@MaxPlayers}!", singleton.networkAddress, singleton.maxConnections);
 		}
 
 		public override void OnStopServer()
 		{
+			Logging.Logger.Info("Stopping server...");
+
 			StopCoroutine(UpdateLatency());
 
 			base.OnStopServer();
 
 			//Stop advertising the server when the server stops
 			gameDiscovery.StopDiscovery();
+
+			Logging.Logger.Info("Server stopped!");
 		}
 
 		public override void OnClientConnect(NetworkConnection conn)
 		{
+			//We register for InitialClientJoinMessage, so we get server info
 			NetworkClient.RegisterHandler<InitialClientJoinMessage>(OnServerJoinMessage);
 
 			base.OnClientConnect(conn);
 
-			Logging.Logger.Info("Connected to server `{@Address}` with the net ID of {@ConnectionId}.", conn.address, conn.connectionId);
+			Logging.Logger.Info("Connected to server {@Address} with the net ID of {@ConnectionId}.", conn.address, conn.connectionId);
 
+			//TODO: We won't have host mode in the future
 			if (mode != NetworkManagerMode.Host)
 			{
 				//Stop searching for servers
@@ -172,7 +177,7 @@ namespace Core.Networking
 
 			if (mode != NetworkManagerMode.ClientOnly) return;
 
-			Logging.Logger.Info($"The server has changed the scene to `{newSceneName}`.");
+			Logging.Logger.Info($"The server has requested to change the scene to {newSceneName}");
 
 			SetupNeededSceneStuffClient();
 		}
@@ -181,7 +186,7 @@ namespace Core.Networking
 		{
 			base.OnClientDisconnect(conn);
 
-			Logging.Logger.Info($"Disconnected from server `{conn.address}`.");
+			Logging.Logger.Info($"Disconnected from server {conn.address}");
 		}
 
 		#region Loading Screen
@@ -242,6 +247,7 @@ namespace Core.Networking
 
 		private void SetupNeededSceneStuffClient()
 		{
+			//TODO: We won't have host mode in the future
 			//Don't want to do this stuff in host mode, since we are also the server
 			if (mode == NetworkManagerMode.Host) return;
 
@@ -252,6 +258,7 @@ namespace Core.Networking
 
 		private IEnumerator UpdateLatency()
 		{
+			//TODO: We won't have host mode in the future
 			while (mode == NetworkManagerMode.Host || mode == NetworkManagerMode.ServerOnly)
 			{
 				foreach (PlayerManager player in GameManager.GetAllPlayers())
@@ -270,6 +277,7 @@ namespace Core.Networking
 				return peer.RoundTripTime;
 			}
 
+			//TODO: We won't have host mode in the future
 			if (netId == 1 && GameManager.GetPlayer($"Player {netId}").IsHostPlayer)
 			{
 				//Shouldn't be any lag for a host player
