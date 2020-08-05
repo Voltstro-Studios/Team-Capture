@@ -1,6 +1,4 @@
-using Structs;
-
-namespace Interfaces
+namespace Player.Movement
 {
 	public interface IAuthCharStateHandler
 	{

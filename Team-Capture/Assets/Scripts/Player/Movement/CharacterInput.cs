@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Structs
+namespace Player.Movement
 {
 	public struct CharacterInput
 	{

@@ -1,9 +1,7 @@
 using System.Collections.Generic;
-using Interfaces;
-using Structs;
 using UnityEngine;
 
-namespace Networking
+namespace Player.Movement
 {
 	public class AuthCharObserver : MonoBehaviour, IAuthCharStateHandler
 	{

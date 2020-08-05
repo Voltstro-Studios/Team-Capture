@@ -222,13 +222,6 @@ MonoBehaviour:
   cameraTransform: {fileID: 6438375964343202627}
   interpolationDelay: 12
   inputUpdateRate: 10
-  state:
-    position: {x: 0, y: 0, z: 0}
-    velocity: {x: 0, y: 0, z: 0}
-    rotationX: 0
-    rotationY: 0
-    moveNum: 0
-    timestamp: 0
 --- !u!114 &4790435715656838203
 MonoBehaviour:
   m_ObjectHideFlags: 0

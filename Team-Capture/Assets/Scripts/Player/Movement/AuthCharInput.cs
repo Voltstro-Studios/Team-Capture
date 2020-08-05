@@ -1,8 +1,7 @@
 using System.Collections.Generic;
-using Structs;
 using UnityEngine;
 
-namespace Networking
+namespace Player.Movement
 {
 	public class AuthCharInput : MonoBehaviour
 	{

@@ -1,9 +1,7 @@
-using Interfaces;
 using Mirror;
-using Structs;
 using UnityEngine;
 
-namespace Networking
+namespace Player.Movement
 {
 	public class AuthoritativeCharacter : NetworkBehaviour
 	{

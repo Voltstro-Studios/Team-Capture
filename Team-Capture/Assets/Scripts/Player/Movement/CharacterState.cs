@@ -1,8 +1,7 @@
 using UnityEngine;
 
-namespace Structs
+namespace Player.Movement
 {
-	[System.Serializable]
 	public struct CharacterState
 	{
 		public Vector3 position;

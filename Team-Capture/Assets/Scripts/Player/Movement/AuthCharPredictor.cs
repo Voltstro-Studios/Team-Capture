@@ -1,10 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
-using Interfaces;
-using Structs;
 using UnityEngine;
 
-namespace Networking
+namespace Player.Movement
 {
 	public class AuthCharPredictor : MonoBehaviour, IAuthCharStateHandler
 	{
