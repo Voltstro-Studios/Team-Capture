@@ -3,8 +3,12 @@ using UnityEngine;
 
 namespace Player.Movement
 {
+	[RequireComponent(typeof(CharacterController))]
+	[RequireComponent(typeof(PlayerManager))]
 	public class AuthoritativeCharacter : NetworkBehaviour
 	{
+		private PlayerManager playerManager;
+
 		[SerializeField] private Transform groundCheck;
 		[SerializeField] private float groundDistance = 0.7f;
 		[SerializeField] private LayerMask groundMask;
@@ -46,6 +50,7 @@ namespace Player.Movement
 		private void Awake()
 		{
 			InputBufferSize = (int)(1 / Time.fixedDeltaTime) / inputUpdateRate;
+			playerManager = GetComponent<PlayerManager>();
 		}
 
 		private void OnGUI()
@@ -78,6 +83,9 @@ namespace Player.Movement
 
 		public void SyncState(CharacterState overrideState)
 		{
+			if(playerManager.IsDead)
+				return;
+
 			characterController.Move(overrideState.position - transform.position);
 
 			transform.rotation = Quaternion.Euler(0, overrideState.rotationY, 0);

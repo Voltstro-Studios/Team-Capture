@@ -17,6 +17,12 @@ namespace Player.Movement
 			character = GetComponent<AuthoritativeCharacter>();
 		}
 
+		private void OnDisable()
+		{
+			pendingInputs.Clear();
+			predictedState = CharacterState.Zero;
+		}
+
 		public void AddInput(CharacterInput input)
 		{
 			pendingInputs.AddLast(input);

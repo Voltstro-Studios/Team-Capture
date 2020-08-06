@@ -22,16 +22,6 @@ namespace Player
 		internal ClientUI ClientUi;
 
 		/// <summary>
-		/// The player's <see cref="AuthoritativeCharacter"/>
-		/// </summary>
-		private AuthoritativeCharacter authoritativeCharacter;
-
-		/// <summary>
-		/// The player's <see cref="CharacterController"/>
-		/// </summary>
-		private CharacterController characterController;
-
-		/// <summary>
 		/// <see cref="Behaviour"/>s to disable/enable on death and respawn
 		/// </summary>
 		[SerializeField] private Behaviour[] disableBehaviourOnDeath;
@@ -50,6 +40,24 @@ namespace Player
 		/// The max health
 		/// </summary>
 		public int MaxHealth { get; } = 100;
+
+		/// <summary>
+		/// The player's <see cref="AuthoritativeCharacter"/>
+		/// </summary>
+		private AuthoritativeCharacter authoritativeCharacter;
+
+		/// <summary>
+		/// The player's <see cref="CharacterController"/>
+		/// </summary>
+		private CharacterController characterController;
+
+		/// <summary>
+		/// The OBSERVER. Only set on other clients (not local)
+		/// </summary>
+		private AuthCharObserver authCharObserver;
+
+		private AuthCharPredictor authCharPredictor;
+		private AuthCharInput authCharInput;
 
 		#region Sync Vars
 
@@ -138,6 +146,19 @@ namespace Player
 		{
 			authoritativeCharacter = GetComponent<AuthoritativeCharacter>();
 			characterController = GetComponent<CharacterController>();
+		}
+
+		private void Start()
+		{
+			if (isLocalPlayer)
+			{
+				authCharPredictor = GetComponent<AuthCharPredictor>();
+				authCharInput = GetComponent<AuthCharInput>();
+			}
+			else
+			{
+				authCharObserver = GetComponent<AuthCharObserver>();
+			}
 		}
 
 		#region Death, Respawn, Damage
@@ -264,6 +285,10 @@ namespace Player
 			//Disable the collider, or the Char controller
 			if (isLocalPlayer)
 			{
+				//Disable local player movement
+				authCharPredictor.enabled = false;
+				authCharInput.enabled = false;
+
 				//Switch cams
 				GameManager.GetActiveSceneCamera().SetActive(true);
 
@@ -272,7 +297,8 @@ namespace Player
 			}
 			else
 			{
-				GetComponent<CapsuleCollider>().enabled = false;
+				//Disable observer
+				authCharObserver.enabled = false;
 			}
 
 			//Disable movement
@@ -307,10 +333,15 @@ namespace Player
 
 				//Enable our UI
 				ClientUi.hud.gameObject.SetActive(true);
+
+				//Enable local player movement stuff
+				authCharPredictor.enabled = true;
+				authCharInput.enabled = true;
 			}
 			else
 			{
-				GetComponent<CapsuleCollider>().enabled = true;
+				//Enable observer
+				authCharObserver.enabled = true;
 			}
 		}
 

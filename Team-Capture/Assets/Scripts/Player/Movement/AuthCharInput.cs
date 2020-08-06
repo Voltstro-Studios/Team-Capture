@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -30,6 +31,15 @@ namespace Player.Movement
 			predictor.AddInput(charInput);
 
 			inputBuffer.Add(charInput);
+		}
+
+		private void OnDisable()
+		{
+			inputBuffer.Clear();
+
+			directions = Vector2.zero;
+			lookDirections = Vector2.zero;
+			jumping = false;
 		}
 
 		private void FixedUpdate()
