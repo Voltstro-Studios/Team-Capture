@@ -66,7 +66,6 @@ namespace Core.Logging
 
 			log = new LoggerConfiguration()
 				.MinimumLevel.ControlledBy(level)
-				.WriteTo.Console(outputTemplate: outPutTemplate)
 				.WriteTo.Async(a => a.File(logFileName, outputTemplate: outPutTemplate, buffered: loggerConfig.BufferedFileWrite))
 				.WriteTo.Unity3D()
 				.WriteTo.TCConsoleSystem()
