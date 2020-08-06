@@ -387,9 +387,6 @@ namespace Weapons
 		/// </summary>
 		private void UpdateAmmoUI()
 		{
-			if(playerManager == null)
-				return;
-
 			if(playerManager.ClientUi == null)
 				return;
 
