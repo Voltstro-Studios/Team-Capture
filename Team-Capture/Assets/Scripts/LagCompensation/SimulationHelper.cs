@@ -20,7 +20,7 @@ namespace LagCompensation
 
 		public static void SimulateCommand(PlayerManager playerExecutedCommand, Action command)
 		{
-			int playersLatency = (int)TCNetworkManager.GetPlayerRtt(playerExecutedCommand.netId);
+			int playersLatency = (int)TCNetworkManager.GetPlayerRtt(playerExecutedCommand.connectionToClient.connectionId);
 
 			//Logger.Log($"Player's ping is {playersLatency}", LogVerbosity.Debug);
 

@@ -84,7 +84,7 @@ namespace Core
 		public static void AddPlayer(string netId, PlayerManager playerManager)
 		{
 			string playerId = PlayerIdPrefix + netId;
-			playerManager.transform.name = playerId;
+			playerManager.gameObject.name = playerId;
 			Players.Add(playerId, playerManager);
 
 			Logging.Logger.Debug("Added player {@PlayerId}.", playerId);

@@ -263,28 +263,21 @@ namespace Core.Networking
 			{
 				foreach (PlayerManager player in GameManager.GetAllPlayers())
 				{
-					player.latency = GetPlayerRtt(player.netId);
+					player.latency = GetPlayerRtt(player.connectionToClient.connectionId);
 				}
 
 				yield return new WaitForSeconds(3.0f);
 			}
 		}
 
-		public static uint GetPlayerRtt(uint netId)
+		public static uint GetPlayerRtt(int connectionId)
 		{
-			if (IgnoranceThreaded.ConnectionIDToPeers.TryGetValue((int)netId - 1, out Peer peer))
+			if (IgnoranceThreaded.ConnectionIDToPeers.TryGetValue(connectionId, out Peer peer))
 			{
 				return peer.RoundTripTime;
 			}
 
-			//TODO: We won't have host mode in the future
-			if (netId == 1 && GameManager.GetPlayer($"Player {netId}").IsHostPlayer)
-			{
-				//Shouldn't be any lag for a host player
-				return 0;
-			}
-			
-			throw new ArgumentException($"No connection with ID {netId}!");
+			throw new ArgumentException($"No connection with ID {connectionId}!");
 		}
 
 		#region Console Commands

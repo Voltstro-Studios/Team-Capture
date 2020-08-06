@@ -44,11 +44,9 @@ namespace Player
 			Cursor.lockState = CursorLockMode.Locked;
 		}
 
-		public override void OnStartClient()
+		public void Start()
 		{
 			GameManager.AddPlayer(netId.ToString(), GetComponent<PlayerManager>());
-
-			base.OnStartClient();
 		}
 
 		private void OnDisable()
