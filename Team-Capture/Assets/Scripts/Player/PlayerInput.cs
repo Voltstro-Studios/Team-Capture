@@ -1,4 +1,5 @@
-﻿using Mirror;
+﻿using Console;
+using Mirror;
 using Player.Movement;
 using UI;
 using UnityEngine;
@@ -62,9 +63,9 @@ namespace Player
 			//Make sure mouse lock/visibility is correct
 			HandleMouseLock();
 
-			if (ConsoleGUI.Instance != null)
+			if (ConsoleSetup.ConsoleUI != null)
 			{
-				if (ConsoleGUI.Instance.IsOpen())
+				if (ConsoleSetup.ConsoleUI.IsOpen())
 				{
 					playerManager.ClientUi.ActivatePauseMenu(true);
 					return;

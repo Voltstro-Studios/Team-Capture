@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a692c30e14efcc94f80cd287f38164f9, type: 3}
   m_Name: StartVideo
   m_EditorClassIdentifier: 
-  scene: StartVideo
+  scene: Assets/Scenes/StartVideo.unity
   displayName: StartVideo
   enabled: 1
   isOnlineScene: 0

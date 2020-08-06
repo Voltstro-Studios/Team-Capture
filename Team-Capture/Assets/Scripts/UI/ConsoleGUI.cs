@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Attributes;
-using Core.Console;
-using Core.Logging;
+using Console;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,7 +10,7 @@ using Logger = Core.Logging.Logger;
 
 namespace UI
 {
-	public class ConsoleGUI : ConsoleInterface
+	public class ConsoleGUI : MonoBehaviour, IConsoleUI
 	{
 		[SerializeField] private TMP_InputField inputField;
 		[SerializeField] private Text consoleTextArea;
@@ -25,33 +24,21 @@ namespace UI
 
 		private readonly List<string> lines = new List<string>();
 
-		public static ConsoleGUI Instance;
-
-		private void Awake()
+		public void Init()
 		{
-			if (Instance != null)
-			{
-				Destroy(gameObject);
-				return;
-			}
-
-			Instance = this;
-			DontDestroyOnLoad(gameObject);
-			RegisterCommands();
-
 			defaultFontSize = consoleTextArea.resizeTextMaxSize;
 
-#if !UNITY_EDITOR
-			string[] file = {"autoexec"};
-			ExecuteFile(file);
-#else
-			//Not the greatest idea hard coding this but what ever
-			ExecuteCommand("scene MainMenu");
-#endif
-			Logger.Debug("Console ready!");
+			//Disable it
+			ToggleConsole();
+
+			Logger.Info("Console in-game GUI ready!");
 		}
 
-		private void Update()
+		public void Shutdown()
+		{
+		}
+
+		public void UpdateConsole()
 		{
 			if (Input.GetKeyDown(consoleToggleKey))
 			{
@@ -64,33 +51,6 @@ namespace UI
 			{
 				SubmitInput();
 			}
-		}
-
-		internal void LoggerLog(string message, LogVerbosity logVerbosity)
-		{
-			if(consoleTextArea == null) return;
-
-			if(logVerbosity == LogVerbosity.Debug && !showDebugMessages) return;
-
-			switch (logVerbosity)
-			{
-				case LogVerbosity.Debug:
-				case LogVerbosity.Info:
-					lines.Add(message);
-					break;
-				case LogVerbosity.Error:
-					lines.Add($"<color=red>{message}</color>");
-					break;
-				case LogVerbosity.Warn:
-					lines.Add($"<color=yellow>{message}</color>");
-					break;
-				default:
-					throw new ArgumentOutOfRangeException(nameof(logVerbosity), logVerbosity, null);
-			}
-
-			int count = Mathf.Min(100, lines.Count);
-			int start = lines.Count - count;
-			consoleTextArea.text = string.Join("\n", lines.GetRange(start, count).ToArray());
 		}
 
 		#region Console GUI
@@ -126,7 +86,7 @@ namespace UI
 
 			if(string.IsNullOrWhiteSpace(value)) return;
 
-			ExecuteCommand(value);
+			ConsoleBackend.ExecuteCommand(value);
 		}
 		
 		#endregion
@@ -139,7 +99,7 @@ namespace UI
 			StringBuilder sb = new StringBuilder();
 			sb.Append("\n");
 
-			foreach (KeyValuePair<string, ConsoleCommand> command in GetAllCommands())
+			foreach (KeyValuePair<string, ConsoleCommand> command in ConsoleBackend.GetAllCommands())
 			{
 				sb.Append($"`{command.Key}` - {command.Value.CommandSummary}\n");
 			}
@@ -153,33 +113,11 @@ namespace UI
 			Logger.Info($"You are running TC version {Application.version} using Unity {Application.unityVersion}");
 		}
 
-		[ConCommand("debug_messages", "Do you want to show debug messages in the console?", 1, 1)]
-		public static void ShowDebugMessagesCommand(string[] args)
-		{
-			string toggle = args[0].ToLower();
-
-			switch (toggle)
-			{
-				case "1":
-				case "true":
-					Instance.showDebugMessages = true;
-					Logger.Info("Console will now show debug messages.");
-					break;
-				case "0":
-				case "false":
-					Instance.showDebugMessages = false;
-					Logger.Info("Console will no longer show debug messages.");
-					break;
-				default:
-					Logger.Error("Invalid argument!");
-					break;
-			}
-		}
-
 		[ConCommand("console", "Toggles the console")]
 		public static void ToggleConsoleCommand(string[] args)
 		{
-			Instance.ToggleConsole();
+			//This is aids but what ever
+			(ConsoleSetup.ConsoleUI as ConsoleGUI)?.ToggleConsole();
 		}
 
 		[ConCommand("console_scale", "Changes the console's text scale", 1, 1)]
@@ -187,8 +125,12 @@ namespace UI
 		{
 			if (int.TryParse(args[0], out int result))
 			{
-				Instance.consoleTextScale = result;
-				Instance.consoleTextArea.resizeTextMaxSize = Instance.defaultFontSize * Instance.consoleTextScale;
+				//More aids
+				ConsoleGUI gui = ConsoleSetup.ConsoleUI as ConsoleGUI;
+				if(gui == null) return;
+
+				gui.consoleTextScale = result;
+				gui.consoleTextArea.resizeTextMaxSize = gui.defaultFontSize * gui.consoleTextScale;
 
 				return;
 			}
@@ -197,5 +139,33 @@ namespace UI
 		}
 
 		#endregion
+
+		public void LogMessage(string message, LogType logType)
+		{
+			if(consoleTextArea == null) return;
+
+			if(logType == LogType.Assert && !showDebugMessages) return;
+
+			switch (logType)
+			{
+				case LogType.Assert:
+				case LogType.Log:
+					lines.Add(message);
+					break;
+				case LogType.Exception:
+				case LogType.Error:
+					lines.Add($"<color=red>{message}</color>");
+					break;
+				case LogType.Warning:
+					lines.Add($"<color=yellow>{message}</color>");
+					break;
+				default:
+					throw new ArgumentOutOfRangeException(nameof(logType), logType, null);
+			}
+
+			int count = Mathf.Min(100, lines.Count);
+			int start = lines.Count - count;
+			consoleTextArea.text = string.Join("\n", lines.GetRange(start, count).ToArray());
+		}
 	}
 }

@@ -1,10 +1,10 @@
 ﻿using System;
-using Core.Logging;
+using Console;
 using Serilog;
 using Serilog.Configuration;
 using Serilog.Core;
 using Serilog.Events;
-using UI;
+using UnityEngine;
 
 namespace Core.Console
 {
@@ -12,7 +12,6 @@ namespace Core.Console
 	{
 		public static LoggerConfiguration TCConsoleSystem(this LoggerSinkConfiguration loggerSinkConfiguration) =>
 			loggerSinkConfiguration.Sink(new TCConsoleSystem());
-
 	}
 
 	public sealed class TCConsoleSystem : ILogEventSink
@@ -20,29 +19,29 @@ namespace Core.Console
 		public void Emit(LogEvent logEvent)
 		{
 			string message = logEvent.RenderMessage(null);
-			ConsoleGUI console = ConsoleGUI.Instance;
+			IConsoleUI console = ConsoleSetup.ConsoleUI;
 			if(console == null)
 				return;
 
 			switch (logEvent.Level)
 			{
 				case LogEventLevel.Verbose:
-					console.LoggerLog(message, LogVerbosity.Debug);
+					console.LogMessage(message, LogType.Log);
 					break;
 				case LogEventLevel.Debug:
-					console.LoggerLog(message, LogVerbosity.Debug);
+					console.LogMessage(message, LogType.Assert);
 					break;
 				case LogEventLevel.Information:
-					console.LoggerLog(message, LogVerbosity.Info);
+					console.LogMessage(message, LogType.Log);
 					break;
 				case LogEventLevel.Warning:
-					console.LoggerLog(message, LogVerbosity.Warn);
+					console.LogMessage(message, LogType.Warning);
 					break;
 				case LogEventLevel.Error:
-					console.LoggerLog(message, LogVerbosity.Error);
+					console.LogMessage(message, LogType.Error);
 					break;
 				case LogEventLevel.Fatal:
-					console.LoggerLog(message, LogVerbosity.Error);
+					console.LogMessage(message, LogType.Error);
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();

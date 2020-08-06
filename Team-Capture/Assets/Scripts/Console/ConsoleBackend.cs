@@ -3,18 +3,19 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using Attributes;
+using Core;
+using Core.Logging;
 using Delegates;
-using UnityEngine;
 
-namespace Core.Console
+namespace Console
 {
-	public class ConsoleInterface : MonoBehaviour
+	public static class ConsoleBackend
 	{
 		private static readonly Dictionary<string, ConsoleCommand> Commands = new Dictionary<string, ConsoleCommand>();
 
 		/// <summary>
 		/// Finds all static methods with the <see cref="ConCommand"/> attribute attached to it
-		/// and adds it to this <see cref="ConsoleInterface"/> list of commands
+		/// and adds it to the list of commands
 		/// </summary>
 		public static void RegisterCommands()
 		{
@@ -47,11 +48,11 @@ namespace Core.Console
 			//Make sure the command doesn't already exist
 			if (Commands.ContainsKey(commandName))
 			{
-				Logging.Logger.Error("The command `{@CommandName}` already exists!", commandName);
+				Logger.Error("The command {@CommandName} already exists in the command list!", commandName);
 				return;
 			}
 
-			Logging.Logger.Debug("Added command `{@CommandName}`.", commandName);
+			Logger.Debug("Added command {@CommandName}", commandName);
 
 			//Add the command
 			Commands.Add(commandName, new ConsoleCommand
@@ -90,7 +91,7 @@ namespace Core.Console
 				if (conCommand.MinArgs != 0)
 					if (arguments.Length <= conCommand.MinArgs - 1)
 					{
-						Logging.Logger.Error("Invalid arguments: More arguments are required!");
+						Logger.Error("Invalid arguments: More arguments are required!");
 						return;
 					}
 
@@ -98,16 +99,24 @@ namespace Core.Console
 				if (conCommand.MaxArgs != 0)
 					if (arguments.Length > conCommand.MaxArgs)
 					{
-						Logging.Logger.Error("Invalid arguments: Less arguments are required!");
+						Logger.Error("Invalid arguments: Less arguments are required!");
 						return;
 					}
 
 				//Invoke the method
-				conCommand.CommandMethod.Invoke(arguments);
+				try
+				{
+					conCommand.CommandMethod.Invoke(arguments);
+				}
+				catch (Exception ex)
+				{
+					Logger.Error("An error occured! {@Exception}", ex);
+				}
+
 				return;
 			}
 
-			Logging.Logger.Error($"Unknown command: `{tokens[0]}`.");
+			Logger.Error($"Unknown command: `{tokens[0]}`.");
 		}
 
 		#region Argument Parsing
@@ -181,14 +190,14 @@ namespace Core.Console
 		{
 			if (args.Length != 1)
 			{
-				Logging.Logger.Error("Invalid arguments!");
+				Logger.Error("Invalid arguments!");
 				return;
 			}
 
 			string fileName = args[0] + ".cfg";
 			if (!File.Exists(configFilesLocation + fileName))
 			{
-				Logging.Logger.Error($"`{fileName}` doesn't exist! Not executing.");
+				Logger.Error($"`{fileName}` doesn't exist! Not executing.");
 				return;
 			}
 

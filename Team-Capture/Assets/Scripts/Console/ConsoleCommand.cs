@@ -1,6 +1,6 @@
 ﻿using Delegates;
 
-namespace Core.Console
+namespace Console
 {
 	public class ConsoleCommand
 	{
