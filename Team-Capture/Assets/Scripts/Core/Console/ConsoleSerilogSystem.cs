@@ -1,24 +1,38 @@
 ﻿using System;
+using System.IO;
 using Console;
 using Serilog;
 using Serilog.Configuration;
 using Serilog.Core;
 using Serilog.Events;
+using Serilog.Formatting;
+using Serilog.Formatting.Display;
 using UnityEngine;
 
 namespace Core.Console
 {
 	public static class ConsoleSerilogSystem
 	{
-		public static LoggerConfiguration TCConsoleSystem(this LoggerSinkConfiguration loggerSinkConfiguration) =>
-			loggerSinkConfiguration.Sink(new TCConsoleSystem());
+		public static LoggerConfiguration TCConsoleSystem(this LoggerSinkConfiguration loggerSinkConfiguration, string messageFormat) =>
+			loggerSinkConfiguration.Sink(new TCConsoleSystem(messageFormat));
 	}
 
 	public sealed class TCConsoleSystem : ILogEventSink
 	{
+		private readonly ITextFormatter formatter;
+
+		public TCConsoleSystem(string messageFormat)
+		{
+			formatter = new MessageTemplateTextFormatter(messageFormat);
+		}
+
 		public void Emit(LogEvent logEvent)
 		{
-			string message = logEvent.RenderMessage(null);
+			StringWriter writer = new StringWriter();
+			formatter.Format(logEvent, writer);
+			string message = writer.ToString();
+			message = message.Remove(message.Length - 2, 2);
+
 			IConsoleUI console = ConsoleSetup.ConsoleUI;
 			if(console == null)
 				return;

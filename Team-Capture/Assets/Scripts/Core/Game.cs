@@ -2,6 +2,7 @@
 using System.IO;
 using Console;
 using UnityEngine;
+using UnityEngine.Rendering;
 using Logger = Core.Logging.Logger;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -59,5 +60,10 @@ namespace Core
 
 			return documentsFolder;
 		}
+
+		/// <summary>
+		/// Whether or not we are running in headless mode
+		/// </summary>
+		public static bool IsHeadless => SystemInfo.graphicsDeviceType == GraphicsDeviceType.Null;
 	}
 }

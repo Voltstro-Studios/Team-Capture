@@ -1,4 +1,5 @@
-﻿using SceneManagement;
+﻿using Core;
+using SceneManagement;
 using UI;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -29,11 +30,9 @@ namespace Console
 
 			DontDestroyOnLoad(gameObject);
 
-			bool isHeadless = SystemInfo.graphicsDeviceType == GraphicsDeviceType.Null;
-
 			//If we are headless we need to create a console UI using the OS's terminal
 			//I really which Unity would have this included...
-			if (isHeadless)
+			if (Game.IsHeadless)
 			{
 #if UNITY_STANDALONE_WIN
 				ConsoleUI = new ConsoleWindows($"{Application.productName} Server");
@@ -55,7 +54,7 @@ namespace Console
 			//Register commands
 			ConsoleBackend.RegisterCommands();
 
-			TCScenesManager.LoadScene(isHeadless
+			TCScenesManager.LoadScene(Game.IsHeadless
 				? TCScenesManager.FindSceneInfo(sceneToLoadToNextHeadless)
 				: TCScenesManager.FindSceneInfo(sceneToLoadToNext));
 		}

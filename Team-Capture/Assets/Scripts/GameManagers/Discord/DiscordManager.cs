@@ -1,4 +1,5 @@
 ﻿using System;
+using Core;
 using DiscordRPC;
 using DiscordRPC.Logging;
 using DiscordRPC.Message;
@@ -24,7 +25,7 @@ namespace GameManagers.Discord
 
 		private void Start()
 		{
-			if (Instance != null)
+			if (Instance != null || Game.IsHeadless)
 			{
 				Destroy(gameObject);
 				return;
