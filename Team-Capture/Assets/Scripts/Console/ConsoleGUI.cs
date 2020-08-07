@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 using Attributes;
-using Console;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Logger = Core.Logging.Logger;
 
-namespace UI
+namespace Console
 {
 	public class ConsoleGUI : MonoBehaviour, IConsoleUI
 	{
