@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Runtime.InteropServices;
-using Core;
 using UnityEngine;
 using Logger = Core.Logging.Logger;
 
@@ -13,11 +12,6 @@ namespace Console
 	internal class ConsoleWindows : IConsoleUI
 	{
 		private readonly string consoleTitle;
-		private IntPtr foregroundWindow;
-		private float resetWindowTime;
-		private TextWriter previousOut;
-
-		private string prompt;
 		private string currentLine;
 
 		internal ConsoleWindows(string consoleTitle)
@@ -27,25 +21,22 @@ namespace Console
 
 		public void Init()
 		{
-			if (!AttachConsole(0xffffffff))
-			{
-				foregroundWindow = GetForegroundWindow();
-				resetWindowTime = Time.time + 1;
-
-				AllocConsole();
-			}
-			previousOut = System.Console.Out;
+			AllocConsole();
 
 			SetConsoleTitle(consoleTitle);
 			System.Console.BackgroundColor = ConsoleColor.Black;
 			System.Console.Clear();
 			System.Console.SetOut(new StreamWriter(System.Console.OpenStandardOutput()) {AutoFlush = true});
+			System.Console.SetIn(new StreamReader(System.Console.OpenStandardInput()));
+			System.Console.BufferHeight = System.Console.WindowHeight;
+			System.Console.Write("\n");
+			currentLine = "";
 			Logger.Info("Started Windows command line console.");
+			DrawHeader();
 		}
 
 		public void Shutdown()
 		{
-			System.Console.SetOut(previousOut);
 			FreeConsole();
 		}
 
@@ -75,11 +66,28 @@ namespace Console
 
 		public void UpdateConsole()
 		{
-			if (foregroundWindow != IntPtr.Zero && Time.time > resetWindowTime)
+			if(!System.Console.KeyAvailable)
+				return;
+
+			ConsoleKeyInfo keyInfo = System.Console.ReadKey();
+
+			switch (keyInfo.Key)
 			{
-				ShowWindow(foregroundWindow, 9);
-				SetForegroundWindow(foregroundWindow);
-				foregroundWindow = IntPtr.Zero;
+				case ConsoleKey.Enter:
+					DrawInputLine("\n");
+					ConsoleBackend.ExecuteCommand(currentLine);
+					currentLine = "";
+					DrawHeader();
+					break;
+				case ConsoleKey.Backspace:
+					if (currentLine.Length > 0)
+						currentLine = currentLine.Substring(0, currentLine.Length - 1);
+					RemoveLastInput();
+					break;
+				default:
+					currentLine += keyInfo.KeyChar;
+					DrawInputLine(keyInfo.KeyChar.ToString());
+					break;
 			}
 		}
 
@@ -88,8 +96,34 @@ namespace Console
 			return true;
 		}
 
-		[DllImport("Kernel32.dll")]
-		private static extern bool AttachConsole(uint processId);
+		private void DrawInputLine(string value)
+		{
+			System.Console.Write(value);
+
+			DrawHeader();
+		}
+
+		private void DrawHeader()
+		{
+			int cursorLeft = System.Console.CursorLeft;
+			int cursorTop = System.Console.CursorTop;
+			ConsoleColor color = System.Console.BackgroundColor;
+
+			System.Console.SetCursorPosition(0, 0);
+			System.Console.BackgroundColor = ConsoleColor.Blue;
+			string message = "Team-Capture server online.";
+			System.Console.Write(message + new string(' ', System.Console.BufferWidth - message.Length));
+			System.Console.BackgroundColor = color;
+
+			System.Console.SetCursorPosition(cursorLeft, cursorTop);
+		}
+
+		private void RemoveLastInput()
+		{
+			System.Console.Write("\b \b");
+
+			DrawHeader();
+		}
 
 		[DllImport("Kernel32.dll")]
 		private static extern bool AllocConsole();
@@ -99,17 +133,5 @@ namespace Console
 
 		[DllImport("Kernel32.dll")]
 		private static extern bool SetConsoleTitle(string title);
-
-		[DllImport("Kernel32.dll")]
-		private static extern IntPtr GetConsoleWindow();
-
-		[DllImport("user32.dll")]
-		static extern IntPtr GetForegroundWindow();
-
-		[DllImport("user32.dll")]
-		static extern bool SetForegroundWindow(IntPtr hwnd);
-
-		[DllImport("user32.dll")]
-		static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
 	}
 }

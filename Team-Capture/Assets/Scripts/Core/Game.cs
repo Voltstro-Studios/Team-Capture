@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using Console;
 using UnityEngine;
 using Logger = Core.Logging.Logger;
 #if UNITY_EDITOR
@@ -16,6 +17,8 @@ namespace Core
 		public static void QuitGame()
 		{
 			Logger.Info("Goodbye!");
+
+			ConsoleSetup.ConsoleUI?.Shutdown();
 
 #if UNITY_EDITOR
 			EditorApplication.isPlaying = false;

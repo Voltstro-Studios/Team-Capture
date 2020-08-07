@@ -36,7 +36,7 @@ namespace Console
 			if (isHeadless)
 			{
 #if UNITY_STANDALONE_WIN
-				ConsoleUI = new ConsoleWindows(Application.productName);
+				ConsoleUI = new ConsoleWindows($"{Application.productName} Server");
 #elif UNITY_STANDALONE_LINUX
 				//TODO: Add console for Linux
 #elif UNITY_STANDALONE_OSX
