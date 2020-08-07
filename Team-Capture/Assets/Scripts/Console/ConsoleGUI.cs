@@ -9,6 +9,9 @@ using Logger = Core.Logging.Logger;
 
 namespace Console
 {
+	/// <summary>
+	/// A in-game console
+	/// </summary>
 	public class ConsoleGUI : MonoBehaviour, IConsoleUI
 	{
 		[SerializeField] private TMP_InputField inputField;
@@ -54,6 +57,9 @@ namespace Console
 
 		#region Console GUI
 
+		/// <summary>
+		/// Toggles the in-game viewable console
+		/// </summary>
 		public void ToggleConsole()
 		{
 			consolePanel.SetActive(!IsOpen());
