@@ -22,25 +22,40 @@ public static class UtilCommands
 	[ConCommand("scene", "Loads a scene", 1, 1)]
 	public static void LoadScene(string[] args)
 	{
-		if (TCNetworkManager.Instance != null && TCNetworkManager.Instance.mode != NetworkManagerMode.Offline)
-		{
-			Logger.Error("Cannot change the scene while connected to a server!");
-			return;
-		}
+		NetworkManagerMode mode = NetworkManager.singleton.mode;
 
 		TCScene scene = TCScenesManager.FindSceneInfo(args[0]);
+
+		//Scene doesn't exist
 		if (scene == null)
 		{
-			Logger.Error($"The scene '{args[0]}' doesn't exist!");
+			Logger.Error("The scene '{@Scene}' doesn't exist!", args[0]);
 			return;
 		}
 
+		//This scene cannot be loaded to
 		if (!scene.canLoadTo)
 		{
 			Logger.Error("You cannot load to this scene!");
 			return;
 		}
 
-		TCScenesManager.LoadScene(scene);
+		switch (mode)
+		{
+			//We are in client mode
+			case NetworkManagerMode.ClientOnly:
+				//Disconnect from current server
+				NetworkManager.singleton.StopHost();
+				
+				//Load the scene
+				TCScenesManager.LoadScene(scene);
+				break;
+
+			//We are server, so we will tell the server and clients to change scene
+			case NetworkManagerMode.ServerOnly:
+				Logger.Info("Changing scene to {@Scene}...", scene.scene);
+				NetworkManager.singleton.ServerChangeScene(scene.scene);
+				break;
+		}
 	}
 }
