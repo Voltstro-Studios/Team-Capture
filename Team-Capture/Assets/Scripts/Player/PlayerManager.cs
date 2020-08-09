@@ -62,11 +62,6 @@ namespace Player
 		#region Sync Vars
 
 		/// <summary>
-		/// Is this player the one hosting the game?
-		/// </summary>
-		[field: SyncVar] public bool IsHostPlayer { get; protected set; }
-
-		/// <summary>
 		/// Is this player dead?
 		/// </summary>
 		[field: SyncVar] public bool IsDead { get; protected set; } = true;
@@ -125,12 +120,6 @@ namespace Player
 			weaponManager = GetComponent<WeaponManager>();
 
 			StartCoroutine(ServerPlayerRespawn(true));
-
-			if (NetworkManager.singleton.mode != NetworkManagerMode.Host || netId != 1) return;
-
-			IsHostPlayer = true;
-
-			Logger.Debug($"Player {netId} is the host.");
 		}
 
 		/// <summary>

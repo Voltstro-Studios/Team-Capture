@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Core.Networking;
 using SceneManagement;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Debug = UnityEngine.Debug;
 
 namespace UI.Panels
 {
@@ -50,6 +52,12 @@ namespace UI.Panels
 		/// </summary>
 		public void CreateGame()
 		{
+#if UNITY_EDITOR
+			Debug.LogError("You cannot run a game in the editor!");
+			return;
+#endif
+
+#pragma warning disable 162
 			if (string.IsNullOrWhiteSpace(gameNameText.text))
 			{
 				gameNameImage.color = errorColor;
@@ -79,7 +87,23 @@ namespace UI.Panels
 				return;
 			}
 
-			StartServer();
+			Process newTcServer = new Process
+			{
+				StartInfo = new ProcessStartInfo
+				{
+#if UNITY_STANDALONE_WIN
+					FileName = "Team-Capture.exe",
+#else
+					FileName = "Team-Capture"
+#endif
+					Arguments = "-batchmode -nographics"
+				}
+			};
+			newTcServer.Start();
+
+			netManager.StartClient();
+
+#pragma warning restore 162
 		}
 
 		private void StartServer()
