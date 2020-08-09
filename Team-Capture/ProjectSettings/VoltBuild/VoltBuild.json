@@ -29,6 +29,11 @@
           "$type": "VoltBuilder.FileToCopy, VoltBuilder",
           "WhatFileToCopy": "Game/Resources/console-splashscreen.txt",
           "CopyToWhere": "Resources/console-splashscreen.txt"
+        },
+        {
+          "$type": "VoltBuilder.FileToCopy, VoltBuilder",
+          "WhatFileToCopy": "Game/Cfg/server-autoexec.cfg",
+          "CopyToWhere": "Cfg/server-autoexec.cfg"
         }
       ]
     }

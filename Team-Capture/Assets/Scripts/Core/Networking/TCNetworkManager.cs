@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using Attributes;
+using Console;
 using Core.Networking.Discovery;
 using Core.Networking.Messages;
 using ENet;
@@ -12,6 +13,7 @@ using SceneManagement;
 using UI.Panels;
 using UnityEngine;
 using Weapons;
+using Logger = Core.Logging.Logger;
 
 namespace Core.Networking
 {
@@ -53,11 +55,21 @@ namespace Core.Networking
 
 		public override void Start()
 		{
-			base.Start();
+			//We are running in headless mode
+			if (Game.IsHeadless)
+			{
+				//Start the server
+				StartServer();
 
-			//Setup loading events
-			TCScenesManager.PreparingSceneLoadEvent += OnPreparingSceneLoad;
-			TCScenesManager.StartSceneLoadEvent += StartSceneLoad;
+				//Run the server autoexec config
+				ConsoleBackend.ExecuteFile(new []{"server-autoexec"});
+			}
+			else
+			{
+				//Setup loading events
+				TCScenesManager.PreparingSceneLoadEvent += OnPreparingSceneLoad;
+				TCScenesManager.StartSceneLoadEvent += StartSceneLoad;
+			}
 
 			Application.targetFrameRate = 128;
 			Time.fixedDeltaTime = 1 / 60f;
@@ -317,6 +329,13 @@ namespace Core.Networking
 			singleton.onlineScene = scene;
 
 			singleton.StartServer();
+		}
+
+		[ConCommand("gamename", "Sets the game name", 1, 100)]
+		public static void GameName(string[] args)
+		{
+			Instance.gameName = string.Join(" ", args);
+			Logger.Info("Game name was set to {@Name}", Instance.gameName);
 		}
 		
 		#endregion
