@@ -16,16 +16,16 @@ MonoBehaviour:
   weaponFormattedName: Rifle
   baseWeaponPrefab: {fileID: 7149728806574001806, guid: f4d0c2754ceeacc43bdc51d9f4d15d71,
     type: 3}
-  currentBulletsAmount: 60
   damage: 5
   fireRate: 15
-  bulletsAmount: 1
-  isReloading: 0
+  fireMode: 0
+  bulletsPerShot: 1
   maxBullets: 60
   range: 40
   reloadTime: 4
   spreadFactor: 0.15
-  bulletHolePrefab: {fileID: 1235035097298946, guid: 13a41486f54c3634fb3e501928c77d9d,
+  bulletHolePrefab: {fileID: 1323092306309459875, guid: 8741f47e93961d34f81bf7f96e1277ac,
     type: 3}
   bulletHitEffectPrefab: {fileID: 1617700753897852, guid: 2fc51477906b5d44b93e53cc25b2d012,
     type: 3}
+  isReloading: 0
