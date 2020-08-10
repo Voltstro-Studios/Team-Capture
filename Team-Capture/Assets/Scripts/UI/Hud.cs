@@ -29,7 +29,7 @@ namespace UI
 			if(clientUI == null || clientUI.WeaponManager == null)
 				return;
 
-			NetworkedWeapon netWeapon = clientUI.WeaponManager.GetActiveWeapon();
+			NetworkedWeapon netWeapon = clientUI.WeaponManager.CurrentWeaponStatus;
 			if(netWeapon == null)
 				return;
 
