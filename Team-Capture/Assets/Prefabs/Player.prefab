@@ -215,7 +215,7 @@ MonoBehaviour:
   groundDistance: 0.7
   groundMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 17
   moveSpeed: 11
   jumpHeight: 3
   gravityAmount: 9.81

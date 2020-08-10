@@ -22,17 +22,6 @@ namespace Player.Movement
 			predictor = GetComponent<AuthCharPredictor>();
 		}
 
-		private void Update()
-		{
-			//if (inputBuffer.Count == 0 && input == Vector2.zero && !jump && lastInputSent.Directions == Vector2.zero)
-			//	return;
-
-			CharacterInput charInput = new CharacterInput(directions, lookDirections, jumping, currentInput++);
-			predictor.AddInput(charInput);
-
-			inputBuffer.Add(charInput);
-		}
-
 		private void OnDisable()
 		{
 			inputBuffer.Clear();
@@ -44,6 +33,11 @@ namespace Player.Movement
 
 		private void FixedUpdate()
 		{
+			CharacterInput charInput = new CharacterInput(directions, lookDirections, jumping, currentInput++);
+			predictor.AddInput(charInput);
+
+			inputBuffer.Add(charInput);
+
 			if (inputBuffer.Count < character.InputBufferSize)
 				return;
 

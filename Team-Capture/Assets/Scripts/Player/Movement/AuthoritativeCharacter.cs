@@ -57,7 +57,7 @@ namespace Player.Movement
 		{
 			GUI.Label(new Rect(10, 10, 1000, 20), state.velocity.ToString());
 			GUI.Label(new Rect(10, 30, 1000, 20), transform.position.ToString());
-			GUI.Label(new Rect(10, 50, 1000, 20), $"Is Ground: {Physics.CheckSphere(groundCheck.position, groundDistance, groundMask)}");
+			GUI.Label(new Rect(10, 50, 1000, 20), $"Is Ground: {Physics.Raycast(groundCheck.position, Vector3.down, groundDistance, groundMask)}");
 		}
 
 		public override void OnStartServer()
@@ -140,7 +140,7 @@ namespace Player.Movement
 				rotationY = previous.rotationY
 			};
 
-			bool isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+			bool isGrounded = Physics.Raycast(groundCheck.position, Vector3.down, groundDistance, groundMask);
 
 			//Calculate velocity
 			Vector3 inputs = new Vector3(input.Directions.x, 0f, input.Directions.y) * moveSpeed;
