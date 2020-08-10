@@ -256,6 +256,7 @@ namespace Player
 
 			//Add stock weapons
 			weaponManager.AddStockWeapons();
+			weaponManager.TargetSendWeaponStatus(connectionToClient, weaponManager.GetActiveWeapon());
 
 			IsDead = false;
 

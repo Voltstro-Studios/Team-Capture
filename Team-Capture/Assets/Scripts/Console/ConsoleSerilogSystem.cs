@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using Console;
 using Serilog;
 using Serilog.Configuration;
 using Serilog.Core;
@@ -9,7 +8,7 @@ using Serilog.Formatting;
 using Serilog.Formatting.Display;
 using UnityEngine;
 
-namespace Core.Console
+namespace Console
 {
 	public static class ConsoleSerilogSystem
 	{

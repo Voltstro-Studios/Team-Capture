@@ -1,5 +1,5 @@
 ﻿using System;
-using Core.Console;
+using Console;
 using Core.Logging.Unity;
 using Serilog;
 using Serilog.Core;
