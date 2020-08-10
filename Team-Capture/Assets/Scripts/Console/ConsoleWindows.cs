@@ -112,12 +112,21 @@ ___________
 					DrawInputLine("\n");
 					ConsoleBackend.ExecuteCommand(currentLine);
 					currentLine = "";
+
 					DrawHeader();
 					break;
 				case ConsoleKey.Backspace:
 					if (currentLine.Length > 0)
 						currentLine = currentLine.Substring(0, currentLine.Length - 1);
 					RemoveLastInput();
+					break;
+				case ConsoleKey.Tab:
+					System.Console.CursorLeft = 0;
+					currentLine = ConsoleBackend.AutoComplete(currentLine);
+					System.Console.Write(currentLine);
+					System.Console.CursorLeft = currentLine.Length;
+
+					DrawHeader();
 					break;
 				default:
 					currentLine += keyInfo.KeyChar;
