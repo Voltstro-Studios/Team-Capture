@@ -121,10 +121,26 @@ ___________
 					RemoveLastInput();
 					break;
 				case ConsoleKey.Tab:
-					System.Console.CursorLeft = 0;
+					ClearLine();
 					currentLine = ConsoleBackend.AutoComplete(currentLine);
 					System.Console.Write(currentLine);
-					System.Console.CursorLeft = currentLine.Length;
+
+					DrawHeader();
+					break;
+				case ConsoleKey.PageUp:
+				case ConsoleKey.UpArrow:
+					ClearLine();
+					currentLine = ConsoleBackend.HistoryUp(currentLine);
+					System.Console.Write(currentLine);
+
+					DrawHeader();
+					break;
+				case ConsoleKey.PageDown:
+				case ConsoleKey.DownArrow:
+					ClearLine();
+					currentLine = ConsoleBackend.HistoryDown();
+					System.Console.Write(currentLine);
+
 
 					DrawHeader();
 					break;
@@ -167,6 +183,13 @@ ___________
 			System.Console.Write("\b \b");
 
 			DrawHeader();
+		}
+
+		private void ClearLine()
+		{
+			System.Console.CursorLeft = 0;
+			System.Console.Write(new string(' ', System.Console.WindowWidth - 1));
+			System.Console.CursorLeft = 0;
 		}
 
 		[DllImport("Kernel32.dll")]
