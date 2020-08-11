@@ -149,7 +149,7 @@ namespace Player.Movement
 
 			//Gravity
 			if(!isGrounded)
-				characterState.velocity.y -= gravityAmount;
+				characterState.velocity.y -= gravityAmount * Time.deltaTime;
 			else
 				characterState.velocity.y = -2f;
 
