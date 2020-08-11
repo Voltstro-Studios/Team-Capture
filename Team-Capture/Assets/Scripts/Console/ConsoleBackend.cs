@@ -14,6 +14,11 @@ namespace Console
 	{
 		private static readonly Dictionary<string, ConsoleCommand> Commands = new Dictionary<string, ConsoleCommand>();
 
+		private const int historyCount = 50;
+		private static string[] history = new string[historyCount];
+		private static int historyNextIndex = 0;
+		private static int historyIndex = 0;
+
 		/// <summary>
 		/// Finds all static methods with the <see cref="ConCommand"/> attribute attached to it
 		/// and adds it to the list of commands
@@ -108,6 +113,9 @@ namespace Console
 				try
 				{
 					conCommand.CommandMethod.Invoke(arguments);
+					history[historyNextIndex % historyCount] = command;
+					historyNextIndex++;
+					historyIndex = historyNextIndex;
 				}
 				catch (Exception ex)
 				{
@@ -158,7 +166,33 @@ namespace Console
 			{
 				prefix += " ";
 			}
+
 			return prefix;
+		}
+
+		public static string HistoryUp(string current)
+		{
+			if (historyIndex == 0 || historyNextIndex - historyIndex >= historyCount - 1)
+				return "";
+
+			if (historyIndex == historyNextIndex)
+			{
+				history[historyIndex % historyCount] = current;
+			}
+
+			historyIndex--;
+
+			return history[historyIndex % historyCount];
+		}
+
+		public static string HistoryDown()
+		{
+			if (historyIndex == historyNextIndex)
+				return "";
+
+			historyIndex++;
+
+			return history[historyIndex % historyCount];
 		}
 
 		/// <summary>
