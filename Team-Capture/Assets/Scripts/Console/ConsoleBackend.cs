@@ -4,14 +4,20 @@ using System.IO;
 using System.Reflection;
 using Attributes;
 using Core;
-using Core.Logging;
 using Delegates;
+using UnityEngine;
+using Logger = Core.Logging.Logger;
 
 namespace Console
 {
 	public static class ConsoleBackend
 	{
 		private static readonly Dictionary<string, ConsoleCommand> Commands = new Dictionary<string, ConsoleCommand>();
+
+		private const int historyCount = 50;
+		private static string[] history = new string[historyCount];
+		private static int historyNextIndex = 0;
+		private static int historyIndex = 0;
 
 		/// <summary>
 		/// Finds all static methods with the <see cref="ConCommand"/> attribute attached to it
@@ -107,6 +113,9 @@ namespace Console
 				try
 				{
 					conCommand.CommandMethod.Invoke(arguments);
+					history[historyNextIndex % historyCount] = command;
+					historyNextIndex++;
+					historyIndex = historyNextIndex;
 				}
 				catch (Exception ex)
 				{
@@ -117,6 +126,90 @@ namespace Console
 			}
 
 			Logger.Error($"Unknown command: `{tokens[0]}`.");
+		}
+
+		/// <summary>
+		/// Tries to auto complete a prefix
+		/// </summary>
+		/// <param name="prefix"></param>
+		/// <returns></returns>
+		public static string AutoComplete(string prefix)
+		{
+			List<string> possibleMatches = new List<string>();
+
+			foreach (KeyValuePair<string, ConsoleCommand> command in Commands)
+			{
+				string name = command.Key;
+				if(!name.StartsWith(prefix, true, null))
+					continue;
+				possibleMatches.Add(name);
+			}
+
+			if (possibleMatches.Count == 0)
+				return prefix;
+
+			// Look for longest common prefix
+			int lcp = possibleMatches[0].Length;
+			for (int i = 0; i < possibleMatches.Count - 1; i++)
+			{
+				lcp = Mathf.Min(lcp, CommonPrefix(possibleMatches[i], possibleMatches[i + 1]));
+			}
+
+			prefix += possibleMatches[0].Substring(prefix.Length, lcp - prefix.Length);
+			if (possibleMatches.Count > 1)
+			{
+				// write list of possible completions
+				foreach (string t in possibleMatches)
+					Logger.Info(t);
+			}
+			else
+			{
+				prefix += " ";
+			}
+
+			return prefix;
+		}
+
+		public static string HistoryUp(string current)
+		{
+			if (historyIndex == 0 || historyNextIndex - historyIndex >= historyCount - 1)
+				return "";
+
+			if (historyIndex == historyNextIndex)
+			{
+				history[historyIndex % historyCount] = current;
+			}
+
+			historyIndex--;
+
+			return history[historyIndex % historyCount];
+		}
+
+		public static string HistoryDown()
+		{
+			if (historyIndex == historyNextIndex)
+				return "";
+
+			historyIndex++;
+
+			return history[historyIndex % historyCount];
+		}
+
+		/// <summary>
+		/// Returns length of largest common prefix of two strings
+		/// </summary>
+		/// <param name="a"></param>
+		/// <param name="b"></param>
+		/// <returns></returns>
+		static int CommonPrefix(string a, string b)
+		{
+			int minl = Mathf.Min(a.Length, b.Length);
+			for (int i = 1; i <= minl; i++)
+			{
+				if (!a.StartsWith(b.Substring(0, i), true, null))
+					return i - 1;
+			}
+			return minl;
 		}
 
 		#region Argument Parsing

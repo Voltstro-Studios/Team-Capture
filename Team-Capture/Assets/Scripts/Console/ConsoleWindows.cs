@@ -2,6 +2,8 @@
 using System.IO;
 using System.Runtime.InteropServices;
 using Core;
+using Mirror;
+using SceneManagement;
 using UnityEngine;
 using Logger = Core.Logging.Logger;
 using Random = UnityEngine.Random;
@@ -17,6 +19,8 @@ namespace Console
 		private string currentLine;
 
 		private const string SplashScreenResourceFile = "Resources/console-splashscreen.txt";
+
+		private float nextHeaderUpdateTime = 0;
 
 		internal ConsoleWindows(string consoleTitle)
 		{
@@ -68,6 +72,7 @@ ___________
 			Logger.Info("Started Windows command line console.");
 
 			DrawHeader();
+			TCScenesManager.OnSceneLoadedEvent += scene => DrawHeader();
 		}
 
 		public void Shutdown()
@@ -101,6 +106,9 @@ ___________
 
 		public void UpdateConsole()
 		{
+			if (Time.time >= nextHeaderUpdateTime)
+				DrawHeader();
+
 			if(!System.Console.KeyAvailable)
 				return;
 
@@ -112,12 +120,32 @@ ___________
 					DrawInputLine("\n");
 					ConsoleBackend.ExecuteCommand(currentLine);
 					currentLine = "";
-					DrawHeader();
+
 					break;
 				case ConsoleKey.Backspace:
 					if (currentLine.Length > 0)
 						currentLine = currentLine.Substring(0, currentLine.Length - 1);
 					RemoveLastInput();
+					break;
+				case ConsoleKey.Tab:
+					ClearLine();
+					currentLine = ConsoleBackend.AutoComplete(currentLine);
+					System.Console.Write(currentLine);
+
+					break;
+				case ConsoleKey.PageUp:
+				case ConsoleKey.UpArrow:
+					ClearLine();
+					currentLine = ConsoleBackend.HistoryUp(currentLine);
+					System.Console.Write(currentLine);
+
+					break;
+				case ConsoleKey.PageDown:
+				case ConsoleKey.DownArrow:
+					ClearLine();
+					currentLine = ConsoleBackend.HistoryDown();
+					System.Console.Write(currentLine);
+
 					break;
 				default:
 					currentLine += keyInfo.KeyChar;
@@ -131,33 +159,44 @@ ___________
 			return true;
 		}
 
-		private void DrawInputLine(string value)
+		private static void DrawInputLine(string value)
 		{
 			System.Console.Write(value);
-
-			DrawHeader();
 		}
 
 		private void DrawHeader()
 		{
+			nextHeaderUpdateTime = Time.time + 2f;
+
 			int cursorLeft = System.Console.CursorLeft;
 			int cursorTop = System.Console.CursorTop;
 			ConsoleColor color = System.Console.BackgroundColor;
 
 			System.Console.SetCursorPosition(0, 0);
 			System.Console.BackgroundColor = ConsoleColor.Blue;
-			string message = "Team-Capture server online.";
+
+			string serverOnline = "Offline";
+			if(NetworkManager.singleton != null)
+				if (NetworkManager.singleton.mode == NetworkManagerMode.ServerOnly)
+					serverOnline = "Online";
+
+			string message = $"Team-Capture server: {serverOnline} - {TCScenesManager.GetActiveScene().displayName}";
 			System.Console.Write(message + new string(' ', System.Console.BufferWidth - message.Length));
 			System.Console.BackgroundColor = color;
 
 			System.Console.SetCursorPosition(cursorLeft, cursorTop);
 		}
 
-		private void RemoveLastInput()
+		private static void RemoveLastInput()
 		{
 			System.Console.Write("\b \b");
+		}
 
-			DrawHeader();
+		private static void ClearLine()
+		{
+			System.Console.CursorLeft = 0;
+			System.Console.Write(new string(' ', System.Console.WindowWidth - 1));
+			System.Console.CursorLeft = 0;
 		}
 
 		[DllImport("Kernel32.dll")]

@@ -136,7 +136,7 @@ namespace Core.Networking
 			//Add the connection for the player
 			NetworkServer.AddPlayerForConnection(conn, player);
 
-			Logger.Info("Player from {@Address} connected with the net ID of {@NetID}", conn.address, conn.connectionId);
+			Logger.Info("Player from {@Address} connected with the connection ID of {@ConnectionID} and a net ID of {@NetID}", conn.address, conn.connectionId, conn.identity.netId);
 		}
 
 		public override void OnStartServer()
@@ -188,9 +188,24 @@ namespace Core.Networking
 			//TODO fix this stuff when server changes scene
 			base.OnClientChangeScene(newSceneName, sceneOperation, customHandling);
 
+			if (mode == NetworkManagerMode.Offline)
+			{
+				GameManager.ClearAllPlayers();
+				Destroy(GameManager.Instance.gameObject);
+				GameManager.Instance = null;
+				return;
+			}
+
 			Logger.Info($"The server has requested to change the scene to {newSceneName}");
 
 			SetupNeededSceneStuffClient();
+		}
+
+		public override void OnServerDisconnect(NetworkConnection conn)
+		{
+			base.OnServerDisconnect(conn);
+
+			Logger.Info("Player from {@Address} disconnected.", conn.address);
 		}
 
 		public override void OnClientDisconnect(NetworkConnection conn)
@@ -198,6 +213,11 @@ namespace Core.Networking
 			base.OnClientDisconnect(conn);
 
 			Logger.Info($"Disconnected from server {conn.address}");
+		}
+
+		public override void OnStopClient()
+		{
+			Logger.Info("Stopped client");
 		}
 
 		#region Loading Screen

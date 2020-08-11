@@ -49,10 +49,26 @@ namespace Console
 
 			if(!consolePanel.activeSelf) return;
 
-			if (Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.Return))
+			if (Input.GetKeyDown(KeyCode.Tab))
 			{
-				SubmitInput();
+				inputField.text = ConsoleBackend.AutoComplete(inputField.text);
+				inputField.caretPosition = inputField.text.Length;
 			}
+
+			if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.PageUp))
+			{
+				inputField.text = ConsoleBackend.HistoryUp(inputField.text);
+				inputField.caretPosition = inputField.text.Length;
+			}
+
+			if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.PageDown))
+			{
+				inputField.text = ConsoleBackend.HistoryDown();
+				inputField.caretPosition = inputField.text.Length;
+			}
+
+			if (Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.Return))
+				SubmitInput();
 		}
 
 		#region Console GUI

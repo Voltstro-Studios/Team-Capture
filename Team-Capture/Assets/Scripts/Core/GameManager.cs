@@ -119,6 +119,14 @@ namespace Core
 			return Players.Values.ToArray();
 		}
 
+		/// <summary>
+		/// Clears all players from the players list
+		/// </summary>
+		public static void ClearAllPlayers()
+		{
+			Players.Clear();
+		}
+
 		#endregion
 	}
 }

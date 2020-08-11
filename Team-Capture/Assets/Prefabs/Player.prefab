@@ -212,16 +212,16 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   groundCheck: {fileID: 6479458552634705644}
-  groundDistance: 0.7
+  groundDistance: 0.2
   groundMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 17
   moveSpeed: 11
-  jumpHeight: 3
-  gravityAmount: 9.81
+  jumpHeight: 8
+  gravityAmount: 20
   cameraTransform: {fileID: 6438375964343202627}
-  interpolationDelay: 12
-  inputUpdateRate: 10
+  interpolationDelay: 1
+  inputUpdateRate: 20
 --- !u!114 &4790435715656838203
 MonoBehaviour:
   m_ObjectHideFlags: 0

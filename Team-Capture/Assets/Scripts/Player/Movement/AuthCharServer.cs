@@ -18,8 +18,10 @@ namespace Player.Movement
 			character.state = CharacterState.Zero;
 		}
 
-		private void Update()
+		private void FixedUpdate()
 		{
+			serverTick++;
+
 			CharacterState state = character.state;
 
 			if (inputBuffer.Count != 0)
@@ -31,11 +33,6 @@ namespace Player.Movement
 			state.position = transform.position;
 			character.state = state;
 			character.OnServerStateChange(state, state);
-		}
-
-		private void FixedUpdate()
-		{
-			serverTick++;    
 		}
 
 		public void Move(CharacterInput[] inputs)
