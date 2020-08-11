@@ -220,8 +220,8 @@ MonoBehaviour:
   jumpHeight: 3
   gravityAmount: 9.81
   cameraTransform: {fileID: 6438375964343202627}
-  interpolationDelay: 12
-  inputUpdateRate: 10
+  interpolationDelay: 1
+  inputUpdateRate: 20
 --- !u!114 &4790435715656838203
 MonoBehaviour:
   m_ObjectHideFlags: 0
