@@ -20,7 +20,7 @@ namespace Console
 
 		private const string SplashScreenResourceFile = "Resources/console-splashscreen.txt";
 
-		private float nextHeaderUpdateTime = 0;
+		private float nextHeaderUpdateTime;
 
 		internal ConsoleWindows(string consoleTitle)
 		{
@@ -29,8 +29,10 @@ namespace Console
 
 		public void Init()
 		{
+			//Allocate a new console for us
 			AllocConsole();
 
+			//Set the title, color, out, in, buffer
 			SetConsoleTitle(consoleTitle);
 			System.Console.BackgroundColor = ConsoleColor.Black;
 			System.Console.Clear();
@@ -71,8 +73,9 @@ ___________
 
 			Logger.Info("Started Windows command line console.");
 
+			//Draw our header for the first
 			DrawHeader();
-			TCScenesManager.OnSceneLoadedEvent += scene => DrawHeader();
+			TCScenesManager.OnSceneLoadedEvent += scene => DrawHeader(); //Re-draw it if the scene changes
 		}
 
 		public void Shutdown()
@@ -106,33 +109,43 @@ ___________
 
 		public void UpdateConsole()
 		{
+			//If enough time has past since last header draw time, re-draw it
 			if (Time.time >= nextHeaderUpdateTime)
 				DrawHeader();
 
+			//Return if there is no key available
 			if(!System.Console.KeyAvailable)
 				return;
 
+			//Read the key
 			ConsoleKeyInfo keyInfo = System.Console.ReadKey();
-
 			switch (keyInfo.Key)
 			{
+				//Enter in input
 				case ConsoleKey.Enter:
 					DrawInputLine("\n");
 					ConsoleBackend.ExecuteCommand(currentLine);
 					currentLine = "";
 
 					break;
+
+				//Remove last input
 				case ConsoleKey.Backspace:
 					if (currentLine.Length > 0)
 						currentLine = currentLine.Substring(0, currentLine.Length - 1);
 					RemoveLastInput();
+
 					break;
+
+				//Attempt to auto complete
 				case ConsoleKey.Tab:
 					ClearLine();
 					currentLine = ConsoleBackend.AutoComplete(currentLine);
 					System.Console.Write(currentLine);
 
 					break;
+
+				//Go up in history of commands
 				case ConsoleKey.PageUp:
 				case ConsoleKey.UpArrow:
 					ClearLine();
@@ -140,6 +153,8 @@ ___________
 					System.Console.Write(currentLine);
 
 					break;
+
+				//Go back in history of commands
 				case ConsoleKey.PageDown:
 				case ConsoleKey.DownArrow:
 					ClearLine();
@@ -147,6 +162,8 @@ ___________
 					System.Console.Write(currentLine);
 
 					break;
+
+				//Enter in key char
 				default:
 					currentLine += keyInfo.KeyChar;
 					DrawInputLine(keyInfo.KeyChar.ToString());
@@ -166,24 +183,32 @@ ___________
 
 		private void DrawHeader()
 		{
+			//Calculate next header update time
 			nextHeaderUpdateTime = Time.time + 2f;
 
+			//Get current cursor and color
 			int cursorLeft = System.Console.CursorLeft;
 			int cursorTop = System.Console.CursorTop;
 			ConsoleColor color = System.Console.BackgroundColor;
 
+			//Set the cursor position to the top of the console
 			System.Console.SetCursorPosition(0, 0);
+
+			//And set the background color
 			System.Console.BackgroundColor = ConsoleColor.Blue;
 
+			//Get if our server is offline or online
 			string serverOnline = "Offline";
 			if(NetworkManager.singleton != null)
 				if (NetworkManager.singleton.mode == NetworkManagerMode.ServerOnly)
 					serverOnline = "Online";
 
+			//Final message
 			string message = $"Team-Capture server: {serverOnline} - {TCScenesManager.GetActiveScene().displayName}";
 			System.Console.Write(message + new string(' ', System.Console.BufferWidth - message.Length));
-			System.Console.BackgroundColor = color;
 
+			//Reset everything to how it was before
+			System.Console.BackgroundColor = color;
 			System.Console.SetCursorPosition(cursorLeft, cursorTop);
 		}
 
