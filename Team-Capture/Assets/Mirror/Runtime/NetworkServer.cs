@@ -26,9 +26,6 @@ namespace Mirror
         /// <summary>
         /// The connection to the host mode client (if any).
         /// </summary>
-        // original HLAPI has .localConnections list with only m_LocalConnection in it
-        // (for backwards compatibility because they removed the real localConnections list a while ago)
-        // => removed it for easier code. use .localConnection now!
         public static NetworkConnectionToClient localConnection { get; private set; }
 
         /// <summary>
@@ -58,7 +55,7 @@ namespace Mirror
         /// <para>Checks if the server has been started.</para>
         /// <para>This will be true after NetworkServer.Listen() has been called.</para>
         /// </summary>
-        public static bool active { get; private set; }
+        public static bool active { get; internal set; }
 
         /// <summary>
         /// Should the server disconnect remote connections that have gone silent for more than Server Idle Timeout?
@@ -75,12 +72,14 @@ namespace Mirror
         /// </summary>
         public static float disconnectInactiveTimeout = 60f;
 
-        // cache the Send(connectionIds) list to avoid allocating each time
+        /// <summary>
+        /// cache the Send(connectionIds) list to avoid allocating each time 
+        /// </summary>
         static readonly List<int> connectionIdsCache = new List<int>();
 
-        // Deprecated 02/23/2020
         /// <summary>
         /// Reset the NetworkServer singleton.
+        /// <para>Deprecated 02/23/2020</para>
         /// </summary>
         [Obsolete("NetworkServer.Reset was used to reset the singleton, but all it does is set active to false ever since we made NetworkServer static. Use StopServer to stop the server, or Shutdown to fully reset the server.")]
         public static void Reset()
@@ -215,7 +214,10 @@ namespace Mirror
             return connections.Remove(connectionId);
         }
 
-        // called by LocalClient to add itself. dont call directly.
+        /// <summary>
+        /// called by LocalClient to add itself. dont call directly. 
+        /// </summary>
+        /// <param name="conn"></param>
         internal static void SetLocalConnection(ULocalConnectionToClient conn)
         {
             if (localConnection != null)
@@ -251,8 +253,15 @@ namespace Mirror
             }
         }
 
-        // this is like SendToReady - but it doesn't check the ready flag on the connection.
-        // this is used for ObjectDestroy messages.
+
+        /// <summary>
+        /// this is like SendToReady - but it doesn't check the ready flag on the connection.
+        /// this is used for ObjectDestroy messages.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="identity"></param>
+        /// <param name="msg"></param>
+        /// <param name="channelId"></param>
         static void SendToObservers<T>(NetworkIdentity identity, T msg, int channelId = Channels.DefaultReliable) where T : IMessageBase
         {
             if (logger.LogEnabled()) logger.Log("Server.SendToObservers id:" + typeof(T));
@@ -471,7 +480,10 @@ namespace Mirror
             connections.Clear();
         }
 
-        // The user should never need to pump the update loop manually
+        /// <summary>
+        /// Called from NetworkManager in LateUpdate
+        /// <para>The user should never need to pump the update loop manually</para>
+        /// </summary>
         public static void Update()
         {
             if (!active)
@@ -494,9 +506,10 @@ namespace Mirror
             // update all server objects
             foreach (KeyValuePair<uint, NetworkIdentity> kvp in NetworkIdentity.spawned)
             {
-                if (kvp.Value != null && kvp.Value.gameObject != null)
+                NetworkIdentity identity = kvp.Value;
+                if (identity != null)
                 {
-                    kvp.Value.ServerUpdate();
+                    identity.ServerUpdate();
                 }
                 else
                 {
@@ -949,16 +962,20 @@ namespace Mirror
             }
         }
 
-        // default ready handler.
+        /// <summary>
+        /// default ready handler. 
+        /// </summary>
+        /// <param name="conn"></param>
+        /// <param name="msg"></param>
         static void OnClientReadyMessage(NetworkConnection conn, ReadyMessage msg)
         {
             if (logger.LogEnabled()) logger.Log("Default handler for ready message from " + conn);
             SetClientReady(conn);
         }
 
-        // Deprecated 5/2/2020
         /// <summary>
         /// Obsolete: Removed as a security risk. Use <see cref="RemovePlayerForConnection(NetworkConnection, bool)">NetworkServer.RemovePlayerForConnection</see> instead.
+        /// <para>Deprecated 5/2/2020</para>
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never), Obsolete("Removed as a security risk. Use NetworkServer.RemovePlayerForConnection(NetworkConnection conn, bool keepAuthority = false) instead", true)]
         static void OnRemovePlayerMessage(NetworkConnection conn, RemovePlayerMessage msg) { }
@@ -985,7 +1002,11 @@ namespace Mirror
             }
         }
 
-        // Handle command from specific player, this could be one of multiple players on a single client
+        /// <summary>
+        /// Handle command from specific player, this could be one of multiple players on a single client
+        /// </summary>
+        /// <param name="conn"></param>
+        /// <param name="msg"></param>
         static void OnCommandMessage(NetworkConnection conn, CommandMessage msg)
         {
             if (!NetworkIdentity.spawned.TryGetValue(msg.netId, out NetworkIdentity identity))
@@ -1226,9 +1247,15 @@ namespace Mirror
             // when unspawning, dont destroy the server's object
             if (destroyServerObject)
             {
+                identity.destroyCalled = true;
                 UnityEngine.Object.Destroy(identity.gameObject);
             }
-            identity.Reset();
+            // if we are destroying the server object we don't need to reset the identity
+            // reseting it will cause isClient/isServer to be false in the OnDestroy call
+            else
+            {
+                identity.Reset();
+            }
         }
 
         /// <summary>

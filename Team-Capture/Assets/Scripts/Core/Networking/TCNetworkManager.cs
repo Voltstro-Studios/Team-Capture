@@ -4,7 +4,6 @@ using Attributes;
 using Console;
 using Core.Networking.Discovery;
 using Core.Networking.Messages;
-using ENet;
 using LagCompensation;
 using Mirror;
 using Pickups;
@@ -293,21 +292,11 @@ namespace Core.Networking
 			{
 				foreach (PlayerManager player in GameManager.GetAllPlayers())
 				{
-					player.latency = GetPlayerRtt(player.connectionToClient.connectionId);
+					player.latency = Transport.activeTransport.GetConnectionRtt(player.connectionToClient.connectionId);
 				}
 
 				yield return new WaitForSeconds(playerLatencyUpdateTime);
 			}
-		}
-
-		public static uint GetPlayerRtt(int connectionId)
-		{
-			if (IgnoranceThreaded.ConnectionIDToPeers.TryGetValue(connectionId, out Peer peer))
-			{
-				return peer.RoundTripTime;
-			}
-
-			throw new ArgumentException($"No connection with ID {connectionId}!");
 		}
 
 		#region Console Commands

@@ -209,7 +209,7 @@ namespace Mirror
                 transport = GetComponent<Transport>();
                 if (transport == null)
                 {
-                    transport = gameObject.AddComponent<TelepathyTransport>();
+                    transport = gameObject.AddComponent<IgnoranceThreaded>();
                     logger.Log("NetworkManager: added default Transport because there was none yet.");
                 }
 #if UNITY_EDITOR
@@ -1133,7 +1133,7 @@ namespace Mirror
             if (authenticator != null)
             {
                 // we have an authenticator - let it handle authentication
-                authenticator.OnServerAuthenticateInternal(conn);
+                authenticator.OnServerAuthenticate(conn);
             }
             else
             {
@@ -1221,7 +1221,7 @@ namespace Mirror
             if (authenticator != null)
             {
                 // we have an authenticator - let it handle authentication
-                authenticator.OnClientAuthenticateInternal(conn);
+                authenticator.OnClientAuthenticate(conn);
             }
             else
             {

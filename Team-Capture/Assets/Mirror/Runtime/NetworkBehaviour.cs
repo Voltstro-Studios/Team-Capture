@@ -128,10 +128,11 @@ namespace Mirror
                 if (netIdentityCache == null)
                 {
                     netIdentityCache = GetComponent<NetworkIdentity>();
-                }
-                if (netIdentityCache == null)
-                {
-                    logger.LogError("There is no NetworkIdentity on " + name + ". Please add one.");
+                    // do this 2nd check inside first if so that we are not checking == twice on unity Object
+                    if (netIdentityCache == null)
+                    {
+                        logger.LogError("There is no NetworkIdentity on " + name + ". Please add one.");
+                    }
                 }
                 return netIdentityCache;
             }
@@ -176,7 +177,7 @@ namespace Mirror
             //       to avoid Wrapper functions. a lot of people requested this.
             if (!NetworkClient.active)
             {
-                logger.LogError("Command Function " + cmdName + " called on server without an active client.");
+                logger.LogError($"Command Function {cmdName} called without an active client.");
                 return;
             }
             // local players can always send commands, regardless of authority, other objects must have authority.

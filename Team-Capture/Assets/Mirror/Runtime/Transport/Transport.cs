@@ -165,6 +165,12 @@ namespace Mirror
         /// </summary>
         public abstract void ServerStop();
 
+        /// <summary>
+        /// Gets a connection's round trip time (rtt)
+        /// </summary>
+        /// <returns></returns>
+        public abstract uint GetConnectionRtt(int connectionId);
+
         #endregion
 
         /// <summary>

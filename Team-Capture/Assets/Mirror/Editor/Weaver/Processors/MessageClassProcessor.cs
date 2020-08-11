@@ -55,12 +55,12 @@ namespace Mirror.Weaver
 
             MethodDefinition serializeFunc = existingMethod ?? new MethodDefinition("Serialize",
                     MethodAttributes.Public | MethodAttributes.Virtual | MethodAttributes.HideBySig,
-                    Weaver.voidType);
+                    WeaverTypes.voidType);
 
             //only add to new method
             if (existingMethod == null)
             {
-                serializeFunc.Parameters.Add(new ParameterDefinition("writer", ParameterAttributes.None, Weaver.CurrentAssembly.MainModule.ImportReference(Weaver.NetworkWriterType)));
+                serializeFunc.Parameters.Add(new ParameterDefinition("writer", ParameterAttributes.None, Weaver.CurrentAssembly.MainModule.ImportReference(WeaverTypes.NetworkWriterType)));
             }
             ILProcessor worker = serializeFunc.Body.GetILProcessor();
             if (existingMethod != null)
@@ -110,7 +110,7 @@ namespace Mirror.Weaver
 
         static void CallBase(TypeDefinition td, ILProcessor worker, string name)
         {
-            MethodReference method = Resolvers.ResolveMethodInParents(td.BaseType, Weaver.CurrentAssembly, name);
+            MethodReference method = Resolvers.TryResolveMethodInParents(td.BaseType, Weaver.CurrentAssembly, name);
             if (method != null)
             {
                 // base
@@ -137,12 +137,12 @@ namespace Mirror.Weaver
 
             MethodDefinition serializeFunc = existingMethod ?? new MethodDefinition("Deserialize",
                     MethodAttributes.Public | MethodAttributes.Virtual | MethodAttributes.HideBySig,
-                    Weaver.voidType);
+                    WeaverTypes.voidType);
 
             //only add to new method
             if (existingMethod == null)
             {
-                serializeFunc.Parameters.Add(new ParameterDefinition("reader", ParameterAttributes.None, Weaver.CurrentAssembly.MainModule.ImportReference(Weaver.NetworkReaderType)));
+                serializeFunc.Parameters.Add(new ParameterDefinition("reader", ParameterAttributes.None, Weaver.CurrentAssembly.MainModule.ImportReference(WeaverTypes.NetworkReaderType)));
             }
             ILProcessor worker = serializeFunc.Body.GetILProcessor();
             if (existingMethod != null)

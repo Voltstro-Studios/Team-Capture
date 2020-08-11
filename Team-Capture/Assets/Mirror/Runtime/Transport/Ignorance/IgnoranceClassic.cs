@@ -307,6 +307,17 @@ namespace Mirror
             ServerStarted = false;
             OnIgnoranceServerShutdown?.Invoke();
         }
+
+        public override uint GetConnectionRtt(int connectionId)
+        {
+            if (ConnectionIDToPeers.TryGetValue(connectionId, out Peer peer))
+            {
+                return peer.RoundTripTime;
+            }
+
+            throw new NullReferenceException("That connection doesn't exist!");
+        }
+
         #endregion
 
         public override void Shutdown()

@@ -42,7 +42,7 @@ namespace Mirror
         static ConcurrentQueue<OutgoingPacket> MirrorServerOutgoingQueue = new ConcurrentQueue<OutgoingPacket>();    // queue going to clients from Mirror.
 
         // lookup and reverse lookup dictionaries
-        public static ConcurrentDictionary<int, Peer> ConnectionIDToPeers = new ConcurrentDictionary<int, Peer>();
+        static ConcurrentDictionary<int, Peer> ConnectionIDToPeers = new ConcurrentDictionary<int, Peer>();
         static ConcurrentDictionary<Peer, int> PeersToConnectionIDs = new ConcurrentDictionary<Peer, int>();
 
         // Threads
@@ -318,6 +318,16 @@ namespace Mirror
             }
 
             print($"Ignorance Threaded: Server stopped.");
+        }
+
+        public override uint GetConnectionRtt(int connectionId)
+        {
+            if (ConnectionIDToPeers.TryGetValue(connectionId, out Peer peer))
+            {
+                return peer.RoundTripTime;
+            }
+
+            throw new NullReferenceException("That connection doesn't exist!");
         }
 
         public override void Shutdown()
