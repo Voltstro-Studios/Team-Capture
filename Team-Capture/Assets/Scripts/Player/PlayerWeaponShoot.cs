@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Core;
 using LagCompensation;
 using Mirror;
@@ -178,6 +179,7 @@ namespace Player
 			//Get the direction the player was facing
 			Transform playerFacingDirection = player.GetComponent<PlayerSetup>().GetPlayerCamera().transform;
 
+			List<Vector3> targets = new List<Vector3>();
 			for (int i = 0; i < tcWeapon.bulletsPerShot; i++)
 			{
 				//Calculate random spread
@@ -206,6 +208,7 @@ namespace Player
 
 					//Do impact effect on all clients
 					RpcWeaponImpact(hit.point, hit.normal, tcWeapon.weapon);
+					targets.Add(hit.point);
 
 					//So if we hit a player then do damage
 					if (hit.collider.GetComponent<PlayerManager>() == null) continue;
@@ -213,13 +216,13 @@ namespace Player
 					playerHit = true;
 				}
 			}
+
+			RpcWeaponTracerEffect(targets.ToArray());
 		}
 
 		#endregion
 
 		#region Weapon Effects
-
-		#region Weapon Muzzle
 
 		/// <summary>
 		/// Makes the muzzle flash play
@@ -229,10 +232,6 @@ namespace Player
 		{
 			weaponManager.GetActiveWeaponGraphics().muzzleFlash.Play(true);
 		}
-
-		#endregion
-
-		#region Weapon Impact
 
 		/// <summary>
 		/// Makes a bullet hole spawn
@@ -251,7 +250,21 @@ namespace Player
 			Instantiate(tcWeapon.bulletHolePrefab, pos, Quaternion.FromToRotation(Vector3.back, normal));
 		}
 
-		#endregion
+		/// <summary>
+		/// Make a tracer effect go to the target
+		/// </summary>
+		/// <param name="targets"></param>
+		[ClientRpc(channel = 4)]
+		private void RpcWeaponTracerEffect(Vector3[] targets)
+		{
+			TCWeapon weapon = weaponManager.GetActiveWeapon().GetTCWeapon();
+			WeaponGraphics weaponGraphics = weaponManager.GetActiveWeaponGraphics();
+			foreach (Vector3 target in targets)
+			{
+				BulletTracer tracer = Instantiate(weapon.bulletTracerEffect,weaponGraphics.bulletTracerPosition.position, weaponGraphics.bulletTracerPosition.rotation).GetComponent<BulletTracer>();
+				tracer.Play(target);
+			}
+		}
 
 		#endregion
 	}

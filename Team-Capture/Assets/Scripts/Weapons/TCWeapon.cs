@@ -28,9 +28,10 @@ namespace Weapons
 		[Header("Spread")]
 		public float spreadFactor = 0.05f;
 
-		[Header("Impact Effects")] 
+		[Header("Effects")] 
 		public GameObject bulletHolePrefab;
 		public GameObject bulletHitEffectPrefab;
+		public GameObject bulletTracerEffect;
 
 		[HideInInspector] public bool isReloading;
 	}

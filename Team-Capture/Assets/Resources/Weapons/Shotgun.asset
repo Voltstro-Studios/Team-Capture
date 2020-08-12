@@ -28,4 +28,6 @@ MonoBehaviour:
     type: 3}
   bulletHitEffectPrefab: {fileID: 1617700753897852, guid: 2fc51477906b5d44b93e53cc25b2d012,
     type: 3}
+  bulletTracerEffect: {fileID: 5622775260631071782, guid: aeeb5910131c55e4cb505d9f7ebab423,
+    type: 3}
   isReloading: 0
