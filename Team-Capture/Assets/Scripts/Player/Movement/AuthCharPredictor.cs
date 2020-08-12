@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace Player.Movement
 {
+	/// <summary>
+	/// Helps in predicting movement
+	/// </summary>
 	public class AuthCharPredictor : MonoBehaviour, IAuthCharStateHandler
 	{
 		private LinkedList<CharacterInput> pendingInputs;
@@ -32,9 +35,9 @@ namespace Player.Movement
 
 		public void OnStateChange(CharacterState newState)
 		{
-			if (newState.timestamp <= lastServerState.timestamp) return;
+			if (newState.Timestamp <= lastServerState.Timestamp) return;
 
-			while (pendingInputs.Count > 0 && pendingInputs.First().InputNum <= newState.moveNum)
+			while (pendingInputs.Count > 0 && pendingInputs.First().InputNum <= newState.MoveNum)
 			{
 				pendingInputs.RemoveFirst();
 			}

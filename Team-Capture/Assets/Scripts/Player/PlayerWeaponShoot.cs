@@ -110,6 +110,9 @@ namespace Player
 
 		#region Server Side Shooting
 
+		/// <summary>
+		/// Asks the server to shoot this client's weapon
+		/// </summary>
 		[Command(channel = 3)]
 		private void CmdShootWeapon()
 		{
@@ -140,6 +143,10 @@ namespace Player
 			weaponManager.TargetSendWeaponStatus(netIdentity.connectionToClient, activeWeapon);
 		}
 
+		/// <summary>
+		/// Bang bang
+		/// </summary>
+		/// <param name="networkedWeapon"></param>
 		[Server]
 		private void ServerShootWeapon(NetworkedWeapon networkedWeapon)
 		{
@@ -152,6 +159,10 @@ namespace Player
 			SimulationHelper.SimulateCommand(playerManager, () => WeaponRayCast(transform.name));
 		}
 
+		/// <summary>
+		/// Does a ray cast based of the weapon properties
+		/// </summary>
+		/// <param name="sourcePlayer"></param>
 		[Server]
 		private void WeaponRayCast(string sourcePlayer)
 		{
@@ -210,6 +221,9 @@ namespace Player
 
 		#region Weapon Muzzle
 
+		/// <summary>
+		/// Makes the muzzle flash play
+		/// </summary>
 		[ClientRpc(channel = 4)]
 		private void RpcWeaponMuzzleFlash()
 		{
@@ -220,6 +234,12 @@ namespace Player
 
 		#region Weapon Impact
 
+		/// <summary>
+		/// Makes a bullet hole spawn
+		/// </summary>
+		/// <param name="pos"></param>
+		/// <param name="normal"></param>
+		/// <param name="weapon"></param>
 		[ClientRpc(channel = 4)]
 		private void RpcWeaponImpact(Vector3 pos, Vector3 normal, string weapon)
 		{

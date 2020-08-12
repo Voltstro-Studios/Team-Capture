@@ -1,5 +1,8 @@
 ﻿namespace Weapons.Interfaces
 {
+	/// <summary>
+	/// Base for a weapon
+	/// </summary>
 	public interface IWeaponBase
 	{
 		/// <summary>

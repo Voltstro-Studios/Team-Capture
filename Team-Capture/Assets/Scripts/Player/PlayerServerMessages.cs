@@ -8,6 +8,9 @@ using Logger = Core.Logging.Logger;
 
 namespace Player
 {
+	/// <summary>
+	/// Handles messages from the server
+	/// </summary>
 	public class PlayerServerMessages : MonoBehaviour
 	{
 		/// <summary>

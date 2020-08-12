@@ -1,5 +1,7 @@
+using Attributes;
 using Mirror;
 using UnityEngine;
+using Logger = Core.Logging.Logger;
 
 namespace Player.Movement
 {
@@ -25,11 +27,16 @@ namespace Player.Movement
 
 		#endregion
 
-		[Header("Network")]
-		[SerializeField, Range(1, 60), Tooltip("In steps per second")]  
+		/// <summary>
+		/// Delay for interpolation
+		/// </summary>
+		[Header("Network"), SerializeField, Range(1, 60), Tooltip("Delay for interpolation")]
 		public int interpolationDelay = 12;
 
-		[SerializeField, Range(10, 50), Tooltip("In steps per second")]
+		/// <summary>
+		/// The rate for updating inputs
+		/// </summary>
+		[SerializeField, Range(10, 50), Tooltip("The rate for updating inputs")]
 		private int inputUpdateRate = 10;
 
 		/// <summary>
@@ -37,14 +44,25 @@ namespace Player.Movement
 		/// </summary>
 		public int InputBufferSize { get; private set; }
 
+		/// <summary>
+		/// The current state of the player
+		/// </summary>
 		[SyncVar(hook = nameof(OnServerStateChange))]
 		public CharacterState state = CharacterState.Zero;
 
-		private CharacterState workingState;
-    
+		/// <summary>
+		/// The state handler (Observer or predictor)
+		/// </summary>
 		private IAuthCharStateHandler stateHandler;
+
+		/// <summary>
+		/// The <see cref="AuthCharServer"/>, set if we are the server
+		/// </summary>
 		private AuthCharServer server;
 
+		/// <summary>
+		/// The <see cref="CharacterController"/>
+		/// </summary>
 		private CharacterController characterController;
 
 		private void Awake()
@@ -55,9 +73,11 @@ namespace Player.Movement
 
 		private void OnGUI()
 		{
-			GUI.Label(new Rect(10, 10, 1000, 20), state.velocity.ToString());
-			GUI.Label(new Rect(10, 30, 1000, 20), transform.position.ToString());
-			GUI.Label(new Rect(10, 50, 1000, 20), $"Is Ground: {Physics.Raycast(groundCheck.position, Vector3.down, groundDistance, groundMask)}");
+			if(!showPos) return;
+
+			GUI.Label(new Rect(10, 10, 1000, 20), $"Velocity: {characterController.velocity}");
+			GUI.Label(new Rect(10, 30, 1000, 20), $"Position: {transform.position}");
+			GUI.Label(new Rect(10, 50, 1000, 20), $"IsGround: {Physics.Raycast(groundCheck.position, Vector3.down, groundDistance, groundMask)}");
 		}
 
 		public override void OnStartServer()
@@ -86,10 +106,10 @@ namespace Player.Movement
 			if(playerManager.IsDead)
 				return;
 
-			characterController.Move(overrideState.position - transform.position);
+			characterController.Move(overrideState.Position - transform.position);
 
-			transform.rotation = Quaternion.Euler(0, overrideState.rotationY, 0);
-			cameraTransform.rotation = Quaternion.Euler(overrideState.rotationX, overrideState.rotationY, 0);
+			transform.rotation = Quaternion.Euler(0, overrideState.RotationY, 0);
+			cameraTransform.rotation = Quaternion.Euler(overrideState.RotationX, overrideState.RotationY, 0);
 		}
 
 		public void OnServerStateChange(CharacterState oldState, CharacterState newState)
@@ -101,7 +121,7 @@ namespace Player.Movement
 		[Command(channel = 0)]
 		public void CmdMove(CharacterInput[] inputs)
 		{
-			server.Move(inputs);
+			server.AddInputs(inputs);
 		}
 
 		/// <summary>
@@ -118,12 +138,12 @@ namespace Player.Movement
 			transform.rotation = Quaternion.Euler(0, rotationY, 0);
 			cameraTransform.rotation = Quaternion.Euler(rotationX, rotationY, 0);
 
-			state.position = pos;
-			state.rotationX = rotationX;
-			state.rotationY = rotationY;
+			state.Position = pos;
+			state.RotationX = rotationX;
+			state.RotationY = rotationY;
 
 			if (resetVelocity)
-				state.velocity = Vector3.zero;
+				state.Velocity = Vector3.zero;
 		}
 
 		#region Movement Methods
@@ -132,41 +152,60 @@ namespace Player.Movement
 		{
 			CharacterState characterState = new CharacterState
 			{
-				moveNum = previous.moveNum + 1,
-				timestamp = timestamp,
-				position = previous.position,
-				velocity = previous.velocity,
-				rotationX = previous.rotationX,
-				rotationY = previous.rotationY
+				MoveNum = previous.MoveNum + 1,
+				Timestamp = timestamp,
+				Position = previous.Position,
+				Velocity = previous.Velocity,
+				RotationX = previous.RotationX,
+				RotationY = previous.RotationY
 			};
 
 			bool isGrounded = Physics.Raycast(groundCheck.position, Vector3.down, groundDistance, groundMask);
 
 			//Calculate velocity
 			Vector3 inputs = new Vector3(input.Directions.x, 0f, input.Directions.y) * moveSpeed;
-			characterState.velocity = transform.TransformDirection(inputs);
-			characterState.velocity.y = previous.velocity.y;
+			characterState.Velocity = transform.TransformDirection(inputs);
+			characterState.Velocity.y = previous.Velocity.y;
 
 			//Gravity
 			if(!isGrounded)
-				characterState.velocity.y -= gravityAmount * Time.deltaTime;
+				characterState.Velocity.y -= gravityAmount * Time.deltaTime;
 			else
-				characterState.velocity.y = -2f;
+				characterState.Velocity.y = -2f;
 
 			//Jumping
 			if (input.Jump && isGrounded)
-				characterState.velocity.y = jumpHeight;
+				characterState.Velocity.y = jumpHeight;
 
 			//Apply velocity to position
-			characterState.position += characterState.velocity * Time.deltaTime;
+			characterState.Position += characterState.Velocity * Time.deltaTime;
 
 			//Mouse Movement
-			characterState.rotationX -= input.MouseDirections.y * 0.02f;
-			characterState.rotationY += input.MouseDirections.x * 0.02f;
+			characterState.RotationX -= input.MouseDirections.y * 0.02f;
+			characterState.RotationY += input.MouseDirections.x * 0.02f;
 
-			characterState.rotationX = Mathf.Clamp(characterState.rotationX, -90, 90);
+			characterState.RotationX = Mathf.Clamp(characterState.RotationX, -90, 90);
 
 			return characterState;
+		}
+
+		#endregion
+
+		#region Commands
+
+		private static bool showPos;
+
+		[ConCommand("cl_showpos", "Shows info about position data", 1, 1)]
+		public static void ShowPosInfo(string[] args)
+		{
+			string enabled = args[0].ToLower();
+			if (bool.TryParse(enabled, out bool result))
+			{
+				showPos = result;
+				return;
+			}
+
+			Logger.Error("Invalid input! Needs to be either true or false!");
 		}
 
 		#endregion

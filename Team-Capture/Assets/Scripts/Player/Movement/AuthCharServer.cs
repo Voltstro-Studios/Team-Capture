@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Player.Movement
 {
+	/// <summary>
+	/// Handles processing inputs and performing movements on the server
+	/// </summary>
 	public class AuthCharServer : MonoBehaviour
 	{
 		private Queue<CharacterInput> inputBuffer;
@@ -30,12 +33,16 @@ namespace Player.Movement
 			state = character.Move(state, lastInput, serverTick);
 			character.SyncState(state);
 
-			state.position = transform.position;
+			state.Position = transform.position;
 			character.state = state;
 			character.OnServerStateChange(state, state);
 		}
 
-		public void Move(CharacterInput[] inputs)
+		/// <summary>
+		/// Adds all the inputs and moves
+		/// </summary>
+		/// <param name="inputs"></param>
+		public void AddInputs(CharacterInput[] inputs)
 		{
 			foreach (CharacterInput input in inputs)
 				inputBuffer.Enqueue(input);

@@ -5,19 +5,56 @@ using UnityEngine;
 
 namespace Player
 {
+	/// <summary>
+	/// Handles setting up the player
+	/// </summary>
 	public class PlayerSetup : NetworkBehaviour
 	{
+		/// <summary>
+		/// Player's local <see cref="Camera"/>
+		/// </summary>
+		[Tooltip("Player's local Camera")]
 		[SerializeField] private Camera localCamera;
 
-		[Header("Player UI")] 
+		/// <summary>
+		/// The prefab for the client's UI
+		/// </summary>
+		[Header("Player UI")]
+		[Tooltip("The prefab for the client's UI")]
 		[SerializeField] private GameObject clientUiPrefab;
 
+		/// <summary>
+		/// This client's <see cref="PlayerManager"/>
+		/// </summary>
 		private PlayerManager playerManager;
+
+		#region Unity Methods
 
 		private void Awake()
 		{
 			playerManager = GetComponent<PlayerManager>();
 		}
+
+		public void Start()
+		{
+			GameManager.AddPlayer(netId.ToString(), GetComponent<PlayerManager>());
+		}
+
+		private void OnDisable()
+		{
+			//Remove this player from the gamemanger
+			GameManager.RemovePlayer(transform.name);
+
+			if (!isLocalPlayer) return;
+
+			GameManager.GetActiveSceneCamera().SetActive(true);
+
+			//Unlock the cursor
+			Cursor.visible = true;
+			Cursor.lockState = CursorLockMode.None;
+		}
+
+		#endregion
 
 		public override void OnStartLocalPlayer()
 		{
@@ -44,23 +81,10 @@ namespace Player
 			Cursor.lockState = CursorLockMode.Locked;
 		}
 
-		public void Start()
-		{
-			GameManager.AddPlayer(netId.ToString(), GetComponent<PlayerManager>());
-		}
-
-		private void OnDisable()
-		{
-			GameManager.RemovePlayer(transform.name);
-
-			if (!isLocalPlayer) return;
-
-			GameManager.GetActiveSceneCamera().SetActive(true);
-
-			Cursor.visible = true;
-			Cursor.lockState = CursorLockMode.None;
-		}
-
+		/// <summary>
+		/// Gets this player's local <see cref="Camera"/>
+		/// </summary>
+		/// <returns></returns>
 		public Camera GetPlayerCamera()
 		{
 			return localCamera;

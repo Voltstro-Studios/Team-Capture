@@ -7,24 +7,28 @@ using Weapons;
 
 namespace Player
 {
+	/// <summary>
+	/// Handles input
+	/// </summary>
 	public class PlayerInput : NetworkBehaviour
 	{
 		#region Inspector fields
-		[Header("Keycodes")]
+
+		[Header("Inputs")]
 		[SerializeField] private KeyCode pauseMenuKey = KeyCode.Escape;
 		[SerializeField] private KeyCode scoreBoardKey = KeyCode.Tab;
 		[SerializeField] private KeyCode suicideKey = KeyCode.P;
 		[SerializeField] private KeyCode jumpKey = KeyCode.Space;
-
-		[Header("Player Movement")] 
-		[SerializeField] private bool rawAxis = true;
-		[SerializeField] private bool rawMouseAxis = true;
 		[SerializeField] private string verticalAxisName = "Vertical";
 		[SerializeField] private string horizontalAxisName = "Horizontal";
 		[SerializeField] private string yMouseAxisName = "Mouse Y";
 		[SerializeField] private string xMouseAxisName = "Mouse X";
+		[SerializeField] private string mouseScrollWheel = "Mouse ScrollWheel";
 
-		[Header("Sensitivity")]
+		[Header("Player Movement")] 
+		[SerializeField] private bool rawAxis = true;
+		[SerializeField] private bool rawMouseAxis = true;
+
 		[SerializeField] private float xMouseSensitivity = 100.0f;
 		[SerializeField] private float yMouseSensitivity = 100.0f;
 
@@ -34,6 +38,8 @@ namespace Player
 		private PlayerManager playerManager;
 		private AuthCharInput playerInput;
 
+		#region Inputs
+
 		private float rotationX;
 		private float rotationY;
 
@@ -41,6 +47,8 @@ namespace Player
 		private float horizontal;
 
 		private bool wishToJump;
+		
+		#endregion
 
 		private void Start()
 		{
@@ -75,7 +83,7 @@ namespace Player
 			//If the pause menu is open, set player movement direction to 0 and return
 			if (ClientUI.IsPauseMenuOpen)
 			{
-				playerInput.AddInput(0, 0, 0, 0, false);
+				playerInput.SetInput(0, 0, 0, 0, false);
 				return;
 			}
 
@@ -96,7 +104,7 @@ namespace Player
 				SetPlayerMovementDirection();
 
 				//Send inputs
-				playerInput.AddInput(horizontal, vertical, rotationX, rotationY, wishToJump);
+				playerInput.SetInput(horizontal, vertical, rotationX, rotationY, wishToJump);
 
 				//Good ol' suicide button
 				if (Input.GetKeyDown(suicideKey))
@@ -131,8 +139,8 @@ namespace Player
 		{
 			if(rawMouseAxis)
 			{
-				rotationX = Input.GetAxisRaw(xMouseAxisName) * yMouseSensitivity;
-				rotationY = Input.GetAxisRaw(yMouseAxisName) * xMouseSensitivity;
+				rotationX = Input.GetAxisRaw(xMouseAxisName) * xMouseSensitivity;
+				rotationY = Input.GetAxisRaw(yMouseAxisName) * yMouseSensitivity;
 			}
 			else
 			{
@@ -168,7 +176,7 @@ namespace Player
 			int selectedWeaponIndex = weaponManager.SelectedWeaponIndex;
 			int weaponHolderChildCount = weaponManager.WeaponHolderSpotChildCount - 1;
 
-			if (Input.GetAxis("Mouse ScrollWheel") > 0f)
+			if (Input.GetAxis(mouseScrollWheel) > 0f)
 			{
 				if (selectedWeaponIndex >= weaponHolderChildCount)
 					selectedWeaponIndex = 0;
@@ -176,7 +184,7 @@ namespace Player
 					selectedWeaponIndex++;
 			}
 
-			if (Input.GetAxis("Mouse ScrollWheel") < 0f)
+			if (Input.GetAxis(mouseScrollWheel) < 0f)
 			{
 				if (selectedWeaponIndex <= 0)
 					selectedWeaponIndex = weaponHolderChildCount;
@@ -186,7 +194,6 @@ namespace Player
 
 			if (selectedWeaponIndex == weaponManager.SelectedWeaponIndex) return;
 			weaponManager.CmdSetWeapon(selectedWeaponIndex);
-			//playerManager.clientUi.hud.UpdateAmmoUi(weaponManager);
 		}
 	}
 }

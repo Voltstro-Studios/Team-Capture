@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Player.Movement
 {
+	/// <summary>
+	/// Handles observing other players
+	/// </summary>
 	public class AuthCharObserver : MonoBehaviour, IAuthCharStateHandler
 	{
 		private LinkedList<CharacterState> stateBuffer;
@@ -23,7 +26,7 @@ namespace Player.Movement
 			LinkedListNode<CharacterState> fromNode = stateBuffer.First;
 			LinkedListNode<CharacterState> toNode = fromNode.Next;
 
-			while (toNode != null && toNode.Value.timestamp <= pastTick)
+			while (toNode != null && toNode.Value.Timestamp <= pastTick)
 			{
 				fromNode = toNode;
 				toNode = fromNode.Next;
@@ -40,13 +43,13 @@ namespace Player.Movement
 
 		public void OnStateChange(CharacterState newState)
 		{
-			clientTick = newState.timestamp;
+			clientTick = newState.Timestamp;
 			AddState(newState);
 		}
 
 		private void AddState(CharacterState state)
 		{
-			if (stateBuffer.Count > 0 && stateBuffer.Last.Value.timestamp > state.timestamp)
+			if (stateBuffer.Count > 0 && stateBuffer.Last.Value.Timestamp > state.Timestamp)
 				return;
 
 			stateBuffer.AddLast(state);

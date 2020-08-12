@@ -41,6 +41,8 @@ namespace Player
 		/// </summary>
 		public int MaxHealth { get; } = 100;
 
+		#region Movement
+
 		/// <summary>
 		/// The player's <see cref="AuthoritativeCharacter"/>
 		/// </summary>
@@ -56,8 +58,7 @@ namespace Player
 		/// </summary>
 		private AuthCharObserver authCharObserver;
 
-		private AuthCharPredictor authCharPredictor;
-		private AuthCharInput authCharInput;
+		#endregion
 
 		#region Sync Vars
 
@@ -112,24 +113,21 @@ namespace Player
 		
 		#endregion
 
-		public override void OnStartServer()
-		{
-			base.OnStartServer();
-
-			Health = MaxHealth;
-			weaponManager = GetComponent<WeaponManager>();
-
-			StartCoroutine(ServerPlayerRespawn(true));
-		}
+		#region Client Variables
 
 		/// <summary>
-		/// Kills the player
+		/// Handles predicting movements
 		/// </summary>
-		[Command(channel = 5)]
-		public void CmdSuicide()
-		{
-			TakeDamage(Health, transform.name);
-		}
+		private AuthCharPredictor authCharPredictor;
+
+		/// <summary>
+		/// Handles sending inputs to the server
+		/// </summary>
+		private AuthCharInput authCharInput;
+
+		#endregion
+
+		#region Unity Methods
 
 		private void Awake()
 		{
@@ -148,6 +146,27 @@ namespace Player
 			{
 				authCharObserver = GetComponent<AuthCharObserver>();
 			}
+		}
+		
+		#endregion
+
+		public override void OnStartServer()
+		{
+			base.OnStartServer();
+
+			Health = MaxHealth;
+			weaponManager = GetComponent<WeaponManager>();
+
+			StartCoroutine(ServerPlayerRespawn(true));
+		}
+
+		/// <summary>
+		/// Kills the player
+		/// </summary>
+		[Command(channel = 5)]
+		public void CmdSuicide()
+		{
+			TakeDamage(Health, transform.name);
 		}
 
 		#region Death, Respawn, Damage

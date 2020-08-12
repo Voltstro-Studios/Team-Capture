@@ -2,53 +2,56 @@ using UnityEngine;
 
 namespace Player.Movement
 {
+	/// <summary>
+	/// The state of this player
+	/// </summary>
 	public struct CharacterState
 	{
-		public Vector3 position;
-		public Vector3 velocity;
+		public Vector3 Position;
+		public Vector3 Velocity;
 
-		public float rotationX;
-		public float rotationY;
+		public float RotationX;
+		public float RotationY;
 
-		public int moveNum;
-		public int timestamp;
+		public int MoveNum;
+		public int Timestamp;
     
 		public override string ToString()
 		{
 			return 
-				$"CharacterState Pos:{position}|Vel:{velocity}|MoveNum:{moveNum}|Timestamp:{timestamp}";
+				$"CharacterState Pos:{Position}|Vel:{Velocity}|MoveNum:{MoveNum}|Timestamp:{Timestamp}";
 		}
 
 		public static CharacterState Zero =>
 			new CharacterState {
-				position = Vector3.zero,
-				rotationX = 0f,
-				rotationY = 0f,
-				moveNum = 0,
-				timestamp = 0
+				Position = Vector3.zero,
+				RotationX = 0f,
+				RotationY = 0f,
+				MoveNum = 0,
+				Timestamp = 0
 			};
 
 		public static CharacterState Interpolate(CharacterState from, CharacterState to, int clientTick)
 		{
-			float t = ((float)(clientTick - from.timestamp)) / (to.timestamp - from.timestamp);
+			float t = ((float)(clientTick - from.Timestamp)) / (to.Timestamp - from.Timestamp);
 			return new CharacterState
 			{
-				position = Vector3.Lerp(from.position, to.position, t),
-				rotationX = Mathf.Lerp(from.rotationX, to.rotationX, t),
-				rotationY = Mathf.Lerp(from.rotationY, to.rotationY, t),
-				moveNum = 0,
-				timestamp = 0
+				Position = Vector3.Lerp(from.Position, to.Position, t),
+				RotationX = Mathf.Lerp(from.RotationX, to.RotationX, t),
+				RotationY = Mathf.Lerp(from.RotationY, to.RotationY, t),
+				MoveNum = 0,
+				Timestamp = 0
 			};
 		}
 
 		public static CharacterState Extrapolate(CharacterState from, int clientTick)
 		{
-			int t = clientTick - from.timestamp;
+			int t = clientTick - from.Timestamp;
 			return new CharacterState
 			{
-				position = from.position + from.velocity * t,
-				moveNum = from.moveNum,
-				timestamp = from.timestamp
+				Position = from.Position + from.Velocity * t,
+				MoveNum = from.MoveNum,
+				Timestamp = from.Timestamp
 			};
 		}
 	}
