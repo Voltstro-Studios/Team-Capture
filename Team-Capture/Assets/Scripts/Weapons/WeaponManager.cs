@@ -331,6 +331,9 @@ namespace Weapons
 		[Command(channel = 3)]
 		public void CmdSetWeapon(int index)
 		{
+			if(weapons.ElementAt(index) == null)
+				return;
+
 			Logger.Debug($"Player `{transform.name}` set their weapon index to `{index}`.");
 
 			SetClientWeaponIndex(index);
@@ -355,6 +358,8 @@ namespace Weapons
 				StartCoroutine(ServerReloadPlayerWeapon());
 
 			RpcSelectWeapon(index);
+
+			TargetSendWeaponStatus(GetClientConnection, weapons[SelectedWeaponIndex]);
 		}
 
 		/// <summary>
