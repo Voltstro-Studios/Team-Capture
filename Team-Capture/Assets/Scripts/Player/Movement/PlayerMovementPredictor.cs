@@ -13,33 +13,33 @@ namespace Player.Movement
 	/// <summary>
 	/// Helps in predicting movement
 	/// </summary>
-	public class AuthCharPredictor : MonoBehaviour, IAuthCharStateHandler
+	public class PlayerMovementPredictor : MonoBehaviour, IPlayerMovementStateHandler
 	{
-		private LinkedList<CharacterInput> pendingInputs;
-		private AuthoritativeCharacter character;
-		private CharacterState predictedState;
-		private CharacterState lastServerState = CharacterState.Zero;
+		private LinkedList<PlayerInput> pendingInputs;
+		private PlayerMovementManager character;
+		private PlayerState predictedState;
+		private PlayerState lastServerState = PlayerState.Zero;
 
 		private void Awake()
 		{
-			pendingInputs = new LinkedList<CharacterInput>();
-			character = GetComponent<AuthoritativeCharacter>();
+			pendingInputs = new LinkedList<PlayerInput>();
+			character = GetComponent<PlayerMovementManager>();
 		}
 
 		private void OnDisable()
 		{
 			pendingInputs.Clear();
-			predictedState = CharacterState.Zero;
+			predictedState = PlayerState.Zero;
 		}
 
-		public void AddInput(CharacterInput input)
+		public void AddInput(PlayerInput input)
 		{
 			pendingInputs.AddLast(input);
 			ApplyInput(input);    
 			character.SyncState(predictedState);
 		}
 
-		public void OnStateChange(CharacterState newState)
+		public void OnStateChange(PlayerState newState)
 		{
 			if (newState.Timestamp <= lastServerState.Timestamp) return;
 
@@ -55,13 +55,13 @@ namespace Player.Movement
 
 		private void UpdatePredictedState()
 		{
-			foreach (CharacterInput input in pendingInputs)
+			foreach (PlayerInput input in pendingInputs)
 				ApplyInput(input);
 
 			character.SyncState(predictedState);
 		}
 
-		private void ApplyInput(CharacterInput input)
+		private void ApplyInput(PlayerInput input)
 		{
 			predictedState = character.Move(predictedState, input, 0);
 		}

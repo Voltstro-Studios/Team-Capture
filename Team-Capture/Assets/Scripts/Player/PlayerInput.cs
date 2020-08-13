@@ -36,7 +36,7 @@ namespace Player
 		
 		private WeaponManager weaponManager;
 		private PlayerManager playerManager;
-		private AuthCharInput playerInput;
+		private PlayerMovementInput playerInput;
 
 		#region Inputs
 
@@ -54,7 +54,7 @@ namespace Player
 		{
 			weaponManager = GetComponent<WeaponManager>();
 			playerManager = GetComponent<PlayerManager>();
-			playerInput = GetComponent<AuthCharInput>();
+			playerInput = GetComponent<PlayerMovementInput>();
 		}
 
 		private void Update()

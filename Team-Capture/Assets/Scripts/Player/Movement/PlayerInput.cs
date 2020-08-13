@@ -11,9 +11,9 @@ namespace Player.Movement
 	/// <summary>
 	/// The inputs to send to the server
 	/// </summary>
-	public struct CharacterInput
+	public struct PlayerInput
 	{
-		public CharacterInput(Vector2 dirs, Vector2 mouseDirs, bool jump, int inputNum)
+		public PlayerInput(Vector2 dirs, Vector2 mouseDirs, bool jump, int inputNum)
 		{
 			Directions = dirs;
 			MouseDirections = mouseDirs;

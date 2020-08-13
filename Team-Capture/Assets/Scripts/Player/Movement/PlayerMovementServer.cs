@@ -12,26 +12,26 @@ namespace Player.Movement
 	/// <summary>
 	/// Handles processing inputs and performing movements on the server
 	/// </summary>
-	public class AuthCharServer : MonoBehaviour
+	public class PlayerMovementServer : MonoBehaviour
 	{
-		private Queue<CharacterInput> inputBuffer;
-		private AuthoritativeCharacter character;
+		private Queue<PlayerInput> inputBuffer;
+		private PlayerMovementManager character;
 		private int serverTick;
 
-		private CharacterInput lastInput;
+		private PlayerInput lastInput;
 
 		private void Awake()
 		{
-			inputBuffer = new Queue<CharacterInput>();
-			character = GetComponent<AuthoritativeCharacter>();
-			character.state = CharacterState.Zero;
+			inputBuffer = new Queue<PlayerInput>();
+			character = GetComponent<PlayerMovementManager>();
+			character.state = PlayerState.Zero;
 		}
 
 		private void FixedUpdate()
 		{
 			serverTick++;
 
-			CharacterState state = character.state;
+			PlayerState state = character.state;
 
 			if (inputBuffer.Count != 0)
 				lastInput = inputBuffer.Dequeue();
@@ -48,9 +48,9 @@ namespace Player.Movement
 		/// Adds all the inputs and moves
 		/// </summary>
 		/// <param name="inputs"></param>
-		public void AddInputs(CharacterInput[] inputs)
+		public void AddInputs(PlayerInput[] inputs)
 		{
-			foreach (CharacterInput input in inputs)
+			foreach (PlayerInput input in inputs)
 				inputBuffer.Enqueue(input);
 		}
 	}

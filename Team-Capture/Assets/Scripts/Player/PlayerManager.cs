@@ -44,9 +44,9 @@ namespace Player
 		#region Movement
 
 		/// <summary>
-		/// The player's <see cref="AuthoritativeCharacter"/>
+		/// The player's <see cref="PlayerMovementManager"/>
 		/// </summary>
-		private AuthoritativeCharacter authoritativeCharacter;
+		private PlayerMovementManager playerMovementManager;
 
 		/// <summary>
 		/// The player's <see cref="CharacterController"/>
@@ -56,7 +56,7 @@ namespace Player
 		/// <summary>
 		/// The OBSERVER. Only set on other clients (not local)
 		/// </summary>
-		private AuthCharObserver authCharObserver;
+		private PlayerMovementObserver playerMovementObserver;
 
 		#endregion
 
@@ -118,12 +118,12 @@ namespace Player
 		/// <summary>
 		/// Handles predicting movements
 		/// </summary>
-		private AuthCharPredictor authCharPredictor;
+		private PlayerMovementPredictor playerMovementPredictor;
 
 		/// <summary>
 		/// Handles sending inputs to the server
 		/// </summary>
-		private AuthCharInput authCharInput;
+		private PlayerMovementInput playerMovementInput;
 
 		#endregion
 
@@ -131,7 +131,7 @@ namespace Player
 
 		private void Awake()
 		{
-			authoritativeCharacter = GetComponent<AuthoritativeCharacter>();
+			playerMovementManager = GetComponent<PlayerMovementManager>();
 			characterController = GetComponent<CharacterController>();
 		}
 
@@ -139,12 +139,12 @@ namespace Player
 		{
 			if (isLocalPlayer)
 			{
-				authCharPredictor = GetComponent<AuthCharPredictor>();
-				authCharInput = GetComponent<AuthCharInput>();
+				playerMovementPredictor = GetComponent<PlayerMovementPredictor>();
+				playerMovementInput = GetComponent<PlayerMovementInput>();
 			}
 			else
 			{
-				authCharObserver = GetComponent<AuthCharObserver>();
+				playerMovementObserver = GetComponent<PlayerMovementObserver>();
 			}
 		}
 		
@@ -238,7 +238,7 @@ namespace Player
 			RpcClientPlayerDie();
 
 			//Disable movement
-			authoritativeCharacter.enabled = false;
+			playerMovementManager.enabled = false;
 			characterController.enabled = false;
 
 			//Update the stats, for both players
@@ -263,13 +263,13 @@ namespace Player
 				yield return new WaitForSeconds(GameManager.GetActiveScene().respawnTime);
 
 			characterController.enabled = true;
-			authoritativeCharacter.enabled = true;
+			playerMovementManager.enabled = true;
 
 			Health = MaxHealth;
 
 			Transform spawnPoint = NetworkManager.singleton.GetStartPosition();
 			Quaternion rotation = spawnPoint.rotation;
-			authoritativeCharacter.SetCharacterPosition(spawnPoint.position, rotation.x, rotation.y, true);
+			playerMovementManager.SetCharacterPosition(spawnPoint.position, rotation.x, rotation.y, true);
 
 			RpcClientRespawn();
 
@@ -295,8 +295,8 @@ namespace Player
 			if (isLocalPlayer)
 			{
 				//Disable local player movement
-				authCharPredictor.enabled = false;
-				authCharInput.enabled = false;
+				playerMovementPredictor.enabled = false;
+				playerMovementInput.enabled = false;
 
 				//Switch cams
 				GameManager.GetActiveSceneCamera().SetActive(true);
@@ -307,11 +307,11 @@ namespace Player
 			else
 			{
 				//Disable observer
-				authCharObserver.enabled = false;
+				playerMovementObserver.enabled = false;
 			}
 
 			//Disable movement
-			authoritativeCharacter.enabled = false;
+			playerMovementManager.enabled = false;
 			characterController.enabled = false;
 
 			foreach (GameObject toDisable in disableGameObjectsOnDeath) toDisable.SetActive(false);
@@ -332,7 +332,7 @@ namespace Player
 
 			//Enable movement
 			characterController.enabled = true;
-			authoritativeCharacter.enabled = true;
+			playerMovementManager.enabled = true;
 
 			//Enable the collider, or the Char controller
 			if (isLocalPlayer)
@@ -344,13 +344,13 @@ namespace Player
 				ClientUi.hud.gameObject.SetActive(true);
 
 				//Enable local player movement stuff
-				authCharPredictor.enabled = true;
-				authCharInput.enabled = true;
+				playerMovementPredictor.enabled = true;
+				playerMovementInput.enabled = true;
 			}
 			else
 			{
 				//Enable observer
-				authCharObserver.enabled = true;
+				playerMovementObserver.enabled = true;
 			}
 		}
 

@@ -11,7 +11,7 @@ namespace Player.Movement
 	/// <summary>
 	/// The state of this player
 	/// </summary>
-	public struct CharacterState
+	public struct PlayerState
 	{
 		public Vector3 Position;
 		public Vector3 Velocity;
@@ -25,11 +25,11 @@ namespace Player.Movement
 		public override string ToString()
 		{
 			return 
-				$"CharacterState Pos:{Position}|Vel:{Velocity}|MoveNum:{MoveNum}|Timestamp:{Timestamp}";
+				$"PlayerState Pos:{Position}|Vel:{Velocity}|MoveNum:{MoveNum}|Timestamp:{Timestamp}";
 		}
 
-		public static CharacterState Zero =>
-			new CharacterState {
+		public static PlayerState Zero =>
+			new PlayerState {
 				Position = Vector3.zero,
 				RotationX = 0f,
 				RotationY = 0f,
@@ -37,10 +37,10 @@ namespace Player.Movement
 				Timestamp = 0
 			};
 
-		public static CharacterState Interpolate(CharacterState from, CharacterState to, int clientTick)
+		public static PlayerState Interpolate(PlayerState from, PlayerState to, int clientTick)
 		{
 			float t = ((float)(clientTick - from.Timestamp)) / (to.Timestamp - from.Timestamp);
-			return new CharacterState
+			return new PlayerState
 			{
 				Position = Vector3.Lerp(from.Position, to.Position, t),
 				RotationX = Mathf.Lerp(from.RotationX, to.RotationX, t),
@@ -50,10 +50,10 @@ namespace Player.Movement
 			};
 		}
 
-		public static CharacterState Extrapolate(CharacterState from, int clientTick)
+		public static PlayerState Extrapolate(PlayerState from, int clientTick)
 		{
 			int t = clientTick - from.Timestamp;
-			return new CharacterState
+			return new PlayerState
 			{
 				Position = from.Position + from.Velocity * t,
 				MoveNum = from.MoveNum,

@@ -12,16 +12,16 @@ namespace Player.Movement
 	/// <summary>
 	/// Handles observing other players
 	/// </summary>
-	public class AuthCharObserver : MonoBehaviour, IAuthCharStateHandler
+	public class PlayerMovementObserver : MonoBehaviour, IPlayerMovementStateHandler
 	{
-		private LinkedList<CharacterState> stateBuffer;
-		private AuthoritativeCharacter character;
+		private LinkedList<PlayerState> stateBuffer;
+		private PlayerMovementManager character;
 		private int clientTick;
 
 		private void Awake()
 		{
-			character = GetComponent<AuthoritativeCharacter>();
-			stateBuffer = new LinkedList<CharacterState>();
+			character = GetComponent<PlayerMovementManager>();
+			stateBuffer = new LinkedList<PlayerState>();
 			SetObservedState(character.state);
 			AddState(character.state);
 		}
@@ -29,8 +29,8 @@ namespace Player.Movement
 		private void Update()
 		{
 			int pastTick = clientTick - character.interpolationDelay;
-			LinkedListNode<CharacterState> fromNode = stateBuffer.First;
-			LinkedListNode<CharacterState> toNode = fromNode.Next;
+			LinkedListNode<PlayerState> fromNode = stateBuffer.First;
+			LinkedListNode<PlayerState> toNode = fromNode.Next;
 
 			while (toNode != null && toNode.Value.Timestamp <= pastTick)
 			{
@@ -39,7 +39,7 @@ namespace Player.Movement
 				stateBuffer.RemoveFirst();
 			}
 
-			SetObservedState(toNode != null ? CharacterState.Interpolate(fromNode.Value, toNode.Value, pastTick) : fromNode.Value);
+			SetObservedState(toNode != null ? PlayerState.Interpolate(fromNode.Value, toNode.Value, pastTick) : fromNode.Value);
 		}
 
 		private void FixedUpdate()
@@ -47,13 +47,13 @@ namespace Player.Movement
 			clientTick++;
 		}
 
-		public void OnStateChange(CharacterState newState)
+		public void OnStateChange(PlayerState newState)
 		{
 			clientTick = newState.Timestamp;
 			AddState(newState);
 		}
 
-		private void AddState(CharacterState state)
+		private void AddState(PlayerState state)
 		{
 			if (stateBuffer.Count > 0 && stateBuffer.Last.Value.Timestamp > state.Timestamp)
 				return;
@@ -61,7 +61,7 @@ namespace Player.Movement
 			stateBuffer.AddLast(state);
 		}
 
-		private void SetObservedState(CharacterState newState)
+		private void SetObservedState(PlayerState newState)
 		{
 			character.SyncState(newState);
 		}

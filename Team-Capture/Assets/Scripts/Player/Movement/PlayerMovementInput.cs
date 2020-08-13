@@ -12,11 +12,11 @@ namespace Player.Movement
 	/// <summary>
 	/// Handles sending inputs the server for movement
 	/// </summary>
-	public class AuthCharInput : MonoBehaviour
+	public class PlayerMovementInput : MonoBehaviour
 	{
-		private List<CharacterInput> inputBuffer;
-		private AuthoritativeCharacter character;
-		private AuthCharPredictor predictor;
+		private List<PlayerInput> inputBuffer;
+		private PlayerMovementManager character;
+		private PlayerMovementPredictor predictor;
 		private int currentInput;
 
 		private Vector2 directions;
@@ -25,9 +25,9 @@ namespace Player.Movement
 
 		private void Awake()
 		{
-			inputBuffer = new List<CharacterInput>();
-			character = GetComponent<AuthoritativeCharacter>();
-			predictor = GetComponent<AuthCharPredictor>();
+			inputBuffer = new List<PlayerInput>();
+			character = GetComponent<PlayerMovementManager>();
+			predictor = GetComponent<PlayerMovementPredictor>();
 		}
 
 		private void OnDisable()
@@ -41,7 +41,7 @@ namespace Player.Movement
 
 		private void FixedUpdate()
 		{
-			CharacterInput charInput = new CharacterInput(directions, lookDirections, jumping, currentInput++);
+			PlayerInput charInput = new PlayerInput(directions, lookDirections, jumping, currentInput++);
 			predictor.AddInput(charInput);
 
 			inputBuffer.Add(charInput);

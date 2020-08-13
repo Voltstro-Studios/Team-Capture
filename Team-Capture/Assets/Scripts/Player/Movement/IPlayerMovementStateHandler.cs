@@ -9,8 +9,8 @@ namespace Player.Movement
 	/// <summary>
 	/// Handles player's state
 	/// </summary>
-	public interface IAuthCharStateHandler
+	public interface IPlayerMovementStateHandler
 	{
-		void OnStateChange(CharacterState newState);
+		void OnStateChange(PlayerState newState);
 	}
 }

@@ -13,7 +13,7 @@ namespace Player.Movement
 
 	[RequireComponent(typeof(CharacterController))]
 	[RequireComponent(typeof(PlayerManager))]
-	public class AuthoritativeCharacter : NetworkBehaviour
+	public class PlayerMovementManager : NetworkBehaviour
 	{
 		private PlayerManager playerManager;
 
@@ -54,17 +54,17 @@ namespace Player.Movement
 		/// The current state of the player
 		/// </summary>
 		[SyncVar(hook = nameof(OnServerStateChange))]
-		public CharacterState state = CharacterState.Zero;
+		public PlayerState state = PlayerState.Zero;
 
 		/// <summary>
 		/// The state handler (Observer or predictor)
 		/// </summary>
-		private IAuthCharStateHandler stateHandler;
+		private IPlayerMovementStateHandler stateHandler;
 
 		/// <summary>
-		/// The <see cref="AuthCharServer"/>, set if we are the server
+		/// The <see cref="PlayerMovementServer"/>, set if we are the server
 		/// </summary>
-		private AuthCharServer server;
+		private PlayerMovementServer server;
 
 		/// <summary>
 		/// The <see cref="CharacterController"/>
@@ -89,7 +89,7 @@ namespace Player.Movement
 		public override void OnStartServer()
 		{
 			base.OnStartServer();
-			server = gameObject.AddComponent<AuthCharServer>();
+			server = gameObject.AddComponent<PlayerMovementServer>();
 		}
 
 		private void Start()
@@ -97,17 +97,17 @@ namespace Player.Movement
 			characterController = GetComponent<CharacterController>();
 			if (!isLocalPlayer)
 			{
-				stateHandler = gameObject.AddComponent<AuthCharObserver>();
+				stateHandler = gameObject.AddComponent<PlayerMovementObserver>();
 				return;
 			}
 
 			//Setup for local player
 			GetComponentInChildren<Renderer>().material.color = Color.green;
-			stateHandler = gameObject.AddComponent<AuthCharPredictor>();
-			gameObject.AddComponent<AuthCharInput>();
+			stateHandler = gameObject.AddComponent<PlayerMovementPredictor>();
+			gameObject.AddComponent<PlayerMovementInput>();
 		}
 
-		public void SyncState(CharacterState overrideState)
+		public void SyncState(PlayerState overrideState)
 		{
 			if(playerManager.IsDead)
 				return;
@@ -118,14 +118,14 @@ namespace Player.Movement
 			cameraTransform.rotation = Quaternion.Euler(overrideState.RotationX, overrideState.RotationY, 0);
 		}
 
-		public void OnServerStateChange(CharacterState oldState, CharacterState newState)
+		public void OnServerStateChange(PlayerState oldState, PlayerState newState)
 		{
 			state = newState;
 			stateHandler?.OnStateChange(state);
 		}
 
 		[Command(channel = 0)]
-		public void CmdMove(CharacterInput[] inputs)
+		public void CmdMove(PlayerInput[] inputs)
 		{
 			server.AddInputs(inputs);
 		}
@@ -154,9 +154,9 @@ namespace Player.Movement
 
 		#region Movement Methods
 
-		public CharacterState Move(CharacterState previous, CharacterInput input, int timestamp)
+		public PlayerState Move(PlayerState previous, PlayerInput input, int timestamp)
 		{
-			CharacterState characterState = new CharacterState
+			PlayerState playerState = new PlayerState
 			{
 				MoveNum = previous.MoveNum + 1,
 				Timestamp = timestamp,
@@ -170,29 +170,29 @@ namespace Player.Movement
 
 			//Calculate velocity
 			Vector3 inputs = new Vector3(input.Directions.x, 0f, input.Directions.y) * moveSpeed;
-			characterState.Velocity = transform.TransformDirection(inputs);
-			characterState.Velocity.y = previous.Velocity.y;
+			playerState.Velocity = transform.TransformDirection(inputs);
+			playerState.Velocity.y = previous.Velocity.y;
 
 			//Gravity
 			if(!isGrounded)
-				characterState.Velocity.y -= gravityAmount * Time.deltaTime;
+				playerState.Velocity.y -= gravityAmount * Time.deltaTime;
 			else
-				characterState.Velocity.y = -2f;
+				playerState.Velocity.y = -2f;
 
 			//Jumping
 			if (input.Jump && isGrounded)
-				characterState.Velocity.y = jumpHeight;
+				playerState.Velocity.y = jumpHeight;
 
 			//Apply velocity to position
-			characterState.Position += characterState.Velocity * Time.deltaTime;
+			playerState.Position += playerState.Velocity * Time.deltaTime;
 
 			//Mouse Movement
-			characterState.RotationX -= input.MouseDirections.y * 0.02f;
-			characterState.RotationY += input.MouseDirections.x * 0.02f;
+			playerState.RotationX -= input.MouseDirections.y * 0.02f;
+			playerState.RotationY += input.MouseDirections.x * 0.02f;
 
-			characterState.RotationX = Mathf.Clamp(characterState.RotationX, -90, 90);
+			playerState.RotationX = Mathf.Clamp(playerState.RotationX, -90, 90);
 
-			return characterState;
+			return playerState;
 		}
 
 		#endregion
