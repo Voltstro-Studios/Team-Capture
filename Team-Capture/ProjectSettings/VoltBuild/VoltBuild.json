@@ -12,8 +12,8 @@
       "$values": [
         {
           "$type": "VoltBuilder.FileToCopy, VoltBuilder",
-          "WhatFileToCopy": "../thirdpartylegal.txt",
-          "CopyToWhere": "thirdpartylegal.txt"
+          "WhatFileToCopy": "../thirdpartylegalcode.txt",
+          "CopyToWhere": "thirdpartylegalcode.txt"
         },
         {
           "$type": "VoltBuilder.FileToCopy, VoltBuilder",
@@ -34,6 +34,11 @@
           "$type": "VoltBuilder.FileToCopy, VoltBuilder",
           "WhatFileToCopy": "Game/Cfg/server-autoexec.cfg",
           "CopyToWhere": "Cfg/server-autoexec.cfg"
+        },
+        {
+          "$type": "VoltBuilder.FileToCopy, VoltBuilder",
+          "WhatFileToCopy": "../thirdpartylegalassets.txt",
+          "CopyToWhere": "thirdpartylegalassets.txt"
         }
       ]
     }
