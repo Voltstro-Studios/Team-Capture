@@ -13,6 +13,9 @@ using Logger = Core.Logging.Logger;
 
 namespace Settings
 {
+	/// <summary>
+	/// Handles game settings
+	/// </summary>
 	public static class GameSettings
 	{
 		private const string SettingsFileExtension = ".json";
@@ -35,6 +38,10 @@ namespace Settings
 		#region Saving, loading and resetting setting functions
 
 		//We have this as internal so that our dynamic settings ui generator script can access it too
+		/// <summary>
+		/// Gets all settings
+		/// </summary>
+		/// <returns></returns>
 		internal static IEnumerable<PropertyInfo> GetSettingClasses()
 		{
 			//Find all of the setting sub-types, and their instances in out main class
@@ -49,6 +56,9 @@ namespace Settings
 			return foundSettings;
 		}
 
+		/// <summary>
+		/// Saves the settings
+		/// </summary>
 		public static void Save()
 		{
 			foreach (PropertyInfo settingProp in GetSettingClasses())
@@ -60,6 +70,9 @@ namespace Settings
 			SettingsLoaded?.Invoke();
 		}
 
+		/// <summary>
+		/// Loads the settings
+		/// </summary>
 		//Assemblies aren't always reloaded in the editor, so we have to do it just before the scene is loaded
 #if UNITY_EDITOR
 		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType
@@ -91,6 +104,9 @@ namespace Settings
 			SettingsLoaded?.Invoke();
 		}
 
+		/// <summary>
+		/// Resets the settings to their default values
+		/// </summary>
 		public static void Reset()
 		{
 			//Now loop over all the settings we found
