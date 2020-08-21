@@ -39,6 +39,11 @@
           "$type": "VoltBuilder.FileToCopy, VoltBuilder",
           "WhatFileToCopy": "../thirdpartylegalassets.txt",
           "CopyToWhere": "thirdpartylegalassets.txt"
+        },
+        {
+          "$type": "VoltBuilder.FileToCopy, VoltBuilder",
+          "WhatFileToCopy": "Game/Resources/quit-messages.txt",
+          "CopyToWhere": "Resources/quit-messages.txt"
         }
       ]
     }
