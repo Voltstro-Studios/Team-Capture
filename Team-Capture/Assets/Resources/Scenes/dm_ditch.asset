@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a692c30e14efcc94f80cd287f38164f9, type: 3}
-  m_Name: dm_test
+  m_Name: dm_ditch
   m_EditorClassIdentifier: 
-  scene: Assets/Scenes/dm_test.unity
-  displayName: Test World
+  scene: Assets/Scenes/dm_ditch.unity
+  displayName: Ditch
   enabled: 1
   isOnlineScene: 1
   canLoadTo: 1
@@ -22,4 +22,4 @@ MonoBehaviour:
   showStartTime: 1
   isMainMenu: 0
   largeImageKey: tc_icon
-  largeImageKeyText: Deathmatch
+  largeImageKeyText: Team Capture

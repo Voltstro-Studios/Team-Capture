@@ -69,13 +69,18 @@
       },
       {
         "$type": "VoltBuilder.Scene, VoltBuilder",
+        "SceneName": "Test World",
+        "SceneLocation": "Assets/Scenes/dm_test.unity"
+      },
+      {
+        "$type": "VoltBuilder.Scene, VoltBuilder",
         "SceneName": "2fort (Deathmatch)",
         "SceneLocation": "Assets/Scenes/dm_2fort.unity"
       },
       {
         "$type": "VoltBuilder.Scene, VoltBuilder",
-        "SceneName": "Test World",
-        "SceneLocation": "Assets/Scenes/dm_test.unity"
+        "SceneName": "Ditch",
+        "SceneLocation": "Assets/Scenes/dm_ditch.unity"
       }
     ]
   },
