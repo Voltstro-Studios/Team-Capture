@@ -23,7 +23,7 @@ namespace GameManagers.Discord
 
 		public LogLevel logLevel = LogLevel.Warning;
 
-		private void Start()
+		private void Awake()
 		{
 			if (Instance != null || Game.IsHeadless)
 			{
