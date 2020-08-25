@@ -152,7 +152,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 446957956}
-  m_RootOrder: 2
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!154 &68397015
 TerrainCollider:
@@ -1408,9 +1408,10 @@ Transform:
   m_Children:
   - {fileID: 568933079}
   - {fileID: 1905644696}
-  - {fileID: 68397014}
+  - {fileID: 518152960}
   - {fileID: 4905692132732080937}
   - {fileID: 1181261470}
+  - {fileID: 68397014}
   - {fileID: 1889890406}
   - {fileID: 913548172}
   - {fileID: 1673260877}
@@ -1432,7 +1433,7 @@ GameObject:
   - component: {fileID: 518152957}
   - component: {fileID: 518152956}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: CenterTower
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5681,12 +5682,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 518152955}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3, y: 0, z: -14}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 14.230331, y: -6.4363704, z: -29.15506}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_Father: {fileID: 446957956}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!43 &553034535
 Mesh:
@@ -7053,7 +7054,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 446957956}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &958358808
 GameObject:
@@ -7260,7 +7261,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 446957956}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!1001 &1000115973
 PrefabInstance:
@@ -25800,7 +25801,7 @@ Transform:
   m_LocalScale: {x: 2.5228, y: 2.5228, z: 2.5228}
   m_Children: []
   m_Father: {fileID: 446957956}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: -90.00001, y: 0, z: 0}
 --- !u!1001 &1687142473
 PrefabInstance:
@@ -26630,7 +26631,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 446957956}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1893701639
 PrefabInstance:
