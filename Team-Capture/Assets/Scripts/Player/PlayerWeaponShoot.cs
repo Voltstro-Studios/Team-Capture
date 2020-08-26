@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Core;
+using Helper;
 using LagCompensation;
 using Mirror;
 using UI;
@@ -179,7 +180,9 @@ namespace Player
 			//Get the direction the player was facing
 			Transform playerFacingDirection = player.GetComponent<PlayerSetup>().GetPlayerCamera().transform;
 
+			//Create a list here, so we know later where the bullets landed
 			List<Vector3> targets = new List<Vector3>();
+			List<Vector3> targetsNormal = new List<Vector3>();
 			for (int i = 0; i < tcWeapon.bulletsPerShot; i++)
 			{
 				//Calculate random spread
@@ -189,35 +192,29 @@ namespace Player
 					Random.Range(-tcWeapon.spreadFactor, tcWeapon.spreadFactor),
 					Random.Range(-tcWeapon.spreadFactor, tcWeapon.spreadFactor)));
 
-				//Was a player hit?
-				bool playerHit = false;
-
 				//Now do our raycast
 				// ReSharper disable once Unity.PreferNonAllocApi
-				RaycastHit[] hits = Physics.RaycastAll(playerFacingDirection.position, direction,
+				RaycastHit[] hits = RaycastHelper.RaycastAllSorted(playerFacingDirection.position, direction,
 					tcWeapon.range, raycastLayerMask);
 				foreach (RaycastHit hit in hits)
 				{
-					//If a player was hit then skip through
-					if (playerHit)
-						continue;
-
-					//If the hit was the sourcePlayer, then ignore it
-					if (hit.collider.name == sourcePlayer)
+					//Don't count if we hit the shooting player
+					if(hit.collider.name == sourcePlayer)
 						continue;
 
 					//Do impact effect on all clients
-					RpcWeaponImpact(hit.point, hit.normal, tcWeapon.weapon);
 					targets.Add(hit.point);
+					targetsNormal.Add(hit.normal);
 
 					//So if we hit a player then do damage
-					if (hit.collider.GetComponent<PlayerManager>() == null) continue;
+					if (hit.collider.GetComponent<PlayerManager>() == null) break;
 					hit.collider.GetComponent<PlayerManager>().TakeDamage(tcWeapon.damage, sourcePlayer);
-					playerHit = true;
+					break;
 				}
 			}
 
-			RpcWeaponTracerEffect(targets.ToArray());
+			//Send where the bullets hit in one big message
+			RpcDoWeaponShootEffects(targets.ToArray(), targetsNormal.ToArray());
 		}
 
 		#endregion
@@ -234,35 +231,25 @@ namespace Player
 		}
 
 		/// <summary>
-		/// Makes a bullet hole spawn
-		/// </summary>
-		/// <param name="pos"></param>
-		/// <param name="normal"></param>
-		/// <param name="weapon"></param>
-		[ClientRpc(channel = 4)]
-		private void RpcWeaponImpact(Vector3 pos, Vector3 normal, string weapon)
-		{
-			TCWeapon tcWeapon = WeaponsResourceManager.GetWeapon(weapon);
-			if (tcWeapon == null) return;
-
-			//Instantiate our bullet effects
-			Instantiate(tcWeapon.bulletHitEffectPrefab, pos, Quaternion.LookRotation(normal));
-			Instantiate(tcWeapon.bulletHolePrefab, pos, Quaternion.FromToRotation(Vector3.back, normal));
-		}
-
-		/// <summary>
 		/// Make a tracer effect go to the target
 		/// </summary>
 		/// <param name="targets"></param>
+		/// <param name="targetNormals"></param>
 		[ClientRpc(channel = 4)]
-		private void RpcWeaponTracerEffect(Vector3[] targets)
+		private void RpcDoWeaponShootEffects(Vector3[] targets, Vector3[] targetNormals)
 		{
 			TCWeapon weapon = weaponManager.GetActiveWeapon().GetTCWeapon();
 			WeaponGraphics weaponGraphics = weaponManager.GetActiveWeaponGraphics();
-			foreach (Vector3 target in targets)
+
+			for (int i = 0; i < targets.Length; i++)
 			{
+				//Do bullet tracer
 				BulletTracer tracer = Instantiate(weapon.bulletTracerEffect,weaponGraphics.bulletTracerPosition.position, weaponGraphics.bulletTracerPosition.rotation).GetComponent<BulletTracer>();
-				tracer.Play(target);
+				tracer.Play(targets[i]);
+
+				//Do bullet holes
+				Instantiate(weapon.bulletHitEffectPrefab, targets[i], Quaternion.LookRotation(targetNormals[i]));
+				Instantiate(weapon.bulletHolePrefab, targets[i], Quaternion.FromToRotation(Vector3.back, targetNormals[i]));
 			}
 		}
 
