@@ -9,18 +9,46 @@ using Logger = Core.Logging.Logger;
 
 namespace Integrations.Discord
 {
+	/// <summary>
+	/// Handles communicating with Discord's RPC
+	/// </summary>
 	public class DiscordManager : MonoBehaviour
 	{
-		public static DiscordManager Instance;
-
 		private DiscordRpcClient client;
 
-		public string clientId;
+		/// <summary>
+		/// The active running instance
+		/// </summary>
+		public static DiscordManager Instance;
 
+		/// <summary>
+		/// The client ID that we will use
+		/// </summary>
+		[Tooltip("The client ID that we will use"), SerializeField]
+		private string clientId;
+
+		/// <summary>
+		/// The default game detail message
+		/// </summary>
+		[Tooltip("The default game detail message")]
 		public string defaultGameDetail = "Loading...";
+
+		/// <summary>
+		/// The default game state message
+		/// </summary>
+		[Tooltip("The default game state message")]
 		public string defaultGameState = "Loading...";
+
+		/// <summary>
+		/// The default large image to use
+		/// </summary>
+		[Tooltip("The default large image to use")]
 		public string defaultLargeImage = "tc_icon";
 
+		/// <summary>
+		/// The log level to use
+		/// </summary>
+		[Tooltip("The log level to use")]
 		public LogLevel logLevel = LogLevel.Warning;
 
 		private void Awake()
@@ -75,6 +103,17 @@ namespace Integrations.Discord
 			SceneLoaded(TCScenesManager.GetActiveScene());
 		}
 
+		/// <summary>
+		/// Set the rich presence
+		/// </summary>
+		/// <param name="presence"></param>
+		public void UpdatePresence(RichPresence presence)
+		{
+			client.SetPresence(presence);
+		}
+
+		#region Client Events
+
 		private void ClientOnClose(object sender, CloseMessage args)
 		{
 			Logger.Info("Discord RPC was closed: {@Code}:{@Reason}", args.Code, args.Reason);
@@ -97,10 +136,7 @@ namespace Integrations.Discord
 			Logger.Error("Error with Discord RPC: {@Code}:{@Message}", args.Code, args.Message);
 		}
 
-		public void UpdatePresence(RichPresence presence)
-		{
-			client.SetPresence(presence);
-		}
+		#endregion
 
 		#region Scene Discord RPC Stuff
 
