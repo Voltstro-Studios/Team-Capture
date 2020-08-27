@@ -4,7 +4,7 @@ using DiscordRPC.IO;
 using DiscordRPC.Logging;
 using Lachee.IO;
 
-namespace GameManagers.Discord
+namespace Integrations.Discord
 {
 	/// <summary>
 	/// Pipe Client used to communicate with Discord.

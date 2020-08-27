@@ -1,7 +1,7 @@
 ﻿using Core.Logging;
 using DiscordRPC.Logging;
 
-namespace GameManagers.Discord
+namespace Integrations.Discord
 {
 	/// <summary>
 	/// This is the custom <see cref="ILogger"/> for the <see cref="DiscordRPC.DiscordRpcClient"/> using TC's

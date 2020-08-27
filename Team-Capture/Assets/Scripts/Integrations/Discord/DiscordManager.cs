@@ -7,7 +7,7 @@ using SceneManagement;
 using UnityEngine;
 using Logger = Core.Logging.Logger;
 
-namespace GameManagers.Discord
+namespace Integrations.Discord
 {
 	public class DiscordManager : MonoBehaviour
 	{
