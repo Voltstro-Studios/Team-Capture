@@ -177,27 +177,27 @@ namespace Core.Networking
 
 			//Stop searching for servers
 			gameDiscovery.StopDiscovery();
+		}
 
-			//We need to call it here as well, since OnClientChangeScene isn't called when first connecting to a server
+		public override void OnClientSceneChanged(NetworkConnection conn)
+		{
+			base.OnClientSceneChanged(conn);
+
+			Logger.Info("The scene has been loaded to {@Scene}", TCScenesManager.GetActiveScene().scene);
+
 			SetupNeededSceneStuffClient();
 		}
 
 		public override void OnClientChangeScene(string newSceneName, SceneOperation sceneOperation, bool customHandling)
 		{
-			//TODO fix this stuff when server changes scene
 			base.OnClientChangeScene(newSceneName, sceneOperation, customHandling);
 
-			if (mode == NetworkManagerMode.Offline)
-			{
-				GameManager.ClearAllPlayers();
-				Destroy(GameManager.Instance.gameObject);
-				GameManager.Instance = null;
+			if(GameManager.Instance == null)
 				return;
-			}
 
-			Logger.Info($"The server has requested to change the scene to {newSceneName}");
+			Destroy(GameManager.Instance.gameObject);
 
-			SetupNeededSceneStuffClient();
+			Logger.Info("The server has requested to change the scene to {@NewSceneName}", newSceneName);
 		}
 
 		public override void OnServerDisconnect(NetworkConnection conn)

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Player;
 using SceneManagement;
@@ -38,6 +39,12 @@ namespace Core
 				Instance = this;
 				Setup();
 			}
+		}
+
+		private void OnDestroy()
+		{
+			ClearAllPlayers();
+			Instance = null;
 		}
 
 		private void Setup()
