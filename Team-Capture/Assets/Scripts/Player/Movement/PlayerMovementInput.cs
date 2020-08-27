@@ -37,6 +37,7 @@ namespace Player.Movement
 			directions = Vector2.zero;
 			lookDirections = Vector2.zero;
 			jumping = false;
+			currentInput = 0;
 		}
 
 		private void FixedUpdate()

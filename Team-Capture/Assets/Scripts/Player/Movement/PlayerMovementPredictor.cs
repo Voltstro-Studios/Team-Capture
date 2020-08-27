@@ -30,6 +30,7 @@ namespace Player.Movement
 		{
 			pendingInputs.Clear();
 			predictedState = PlayerState.Zero;
+			lastServerState = PlayerState.Zero;
 		}
 
 		public void AddInput(PlayerInput input)

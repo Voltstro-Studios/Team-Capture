@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -42,6 +43,11 @@ namespace Player.Movement
 			state.Position = transform.position;
 			character.state = state;
 			character.OnServerStateChange(state, state);
+		}
+
+		private void OnDisable()
+		{
+			inputBuffer.Clear();
 		}
 
 		/// <summary>

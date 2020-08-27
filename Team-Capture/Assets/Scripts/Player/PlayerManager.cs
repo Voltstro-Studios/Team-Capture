@@ -267,18 +267,18 @@ namespace Player
 
 			Health = MaxHealth;
 
-			Transform spawnPoint = NetworkManager.singleton.GetStartPosition();
-			Quaternion rotation = spawnPoint.rotation;
-			playerMovementManager.SetCharacterPosition(spawnPoint.position, rotation.x, rotation.y, true);
-
 			RpcClientRespawn();
 
 			//Add stock weapons
 			weaponManager.AddStockWeapons();
 			weaponManager.TargetSendWeaponStatus(connectionToClient, weaponManager.GetActiveWeapon());
 
-			IsDead = false;
+			//Set position to spawn
+			Transform spawnPoint = NetworkManager.singleton.GetStartPosition();
+			Quaternion rotation = spawnPoint.rotation;
+			playerMovementManager.SetCharacterPosition(spawnPoint.position, rotation.x, rotation.y, true);
 
+			IsDead = false;
 			IsInvincible = true;
 			yield return new WaitForSeconds(invincibilityLastTime);
 
@@ -295,8 +295,8 @@ namespace Player
 			if (isLocalPlayer)
 			{
 				//Disable local player movement
-				playerMovementPredictor.enabled = false;
 				playerMovementInput.enabled = false;
+				playerMovementPredictor.enabled = false;
 
 				//Switch cams
 				GameManager.GetActiveSceneCamera().SetActive(true);

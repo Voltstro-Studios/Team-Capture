@@ -47,6 +47,11 @@ namespace Player.Movement
 			clientTick++;
 		}
 
+		private void OnDisable()
+		{
+			stateBuffer.Clear();
+		}
+
 		public void OnStateChange(PlayerState newState)
 		{
 			clientTick = newState.Timestamp;

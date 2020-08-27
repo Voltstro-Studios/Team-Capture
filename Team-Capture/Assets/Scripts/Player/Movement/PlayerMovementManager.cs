@@ -140,16 +140,29 @@ namespace Player.Movement
 		[Server]
 		public void SetCharacterPosition(Vector3 pos, float rotationX, float rotationY, bool resetVelocity = false)
 		{
-			transform.position = pos;
-			transform.rotation = Quaternion.Euler(0, rotationY, 0);
-			cameraTransform.rotation = Quaternion.Euler(rotationX, rotationY, 0);
-
-			state.Position = pos;
-			state.RotationX = rotationX;
-			state.RotationY = rotationY;
+			PlayerState newState = new PlayerState
+			{
+				Position = pos,
+				RotationX = rotationX,
+				RotationY = rotationY,
+				Velocity = state.Velocity
+			};
 
 			if (resetVelocity)
-				state.Velocity = Vector3.zero;
+				newState.Velocity = Vector3.zero;
+
+			state = newState;
+			OnServerStateChange(state, newState);
+
+			TargetSetPosition(connectionToClient, state);
+		}
+
+		[TargetRpc]
+		private void TargetSetPosition(NetworkConnection conn, PlayerState newState)
+		{
+			transform.position = newState.Position;
+			transform.rotation = Quaternion.Euler(0, newState.RotationY, 0);
+			cameraTransform.rotation = Quaternion.Euler(newState.RotationX, newState.RotationY, 0);
 		}
 
 		#region Movement Methods
