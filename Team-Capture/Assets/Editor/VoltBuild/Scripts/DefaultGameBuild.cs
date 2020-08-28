@@ -19,10 +19,10 @@ namespace VoltBuilder
 			GUILayout.BeginHorizontal();
 
 			if (GUILayout.Button("Build Bundles"))
-				BuildBundles($"{buildTool.GetBuildFolder()}/Bundles", BuildAssetBundleOptions.UncompressedAssetBundle, false);
+				BuildBundles($"{BuildTool.GetBuildFolder()}/Bundles", BuildAssetBundleOptions.UncompressedAssetBundle, false);
 
 			if (GUILayout.Button("Force Build Bundles"))
-				BuildBundles($"{buildTool.GetBuildFolder()}/Bundles", BuildAssetBundleOptions.UncompressedAssetBundle, true);
+				BuildBundles($"{BuildTool.GetBuildFolder()}/Bundles", BuildAssetBundleOptions.UncompressedAssetBundle, true);
 
 			GUILayout.EndHorizontal();
 		}
@@ -49,24 +49,24 @@ namespace VoltBuilder
 			GUILayout.BeginHorizontal();
 
 			if(GUILayout.Button("Build Game"))
-				DoGameBuild($"{buildTool.GetBuildFolder()}", $"{ConfigManager.Config.ProjectName}-Quick/", $"{ConfigManager.Config.ProjectName}", false);
+				DoGameBuild($"{BuildTool.GetBuildFolder()}", $"{ConfigManager.Config.ProjectName}-Quick/", $"{ConfigManager.Config.ProjectName}", false);
 			if(GUILayout.Button("Scripts only"))
-				DoGameBuild($"{buildTool.GetBuildFolder()}", $"{ConfigManager.Config.ProjectName}-Quick/", $"{ConfigManager.Config.ProjectName}", true);
+				DoGameBuild($"{BuildTool.GetBuildFolder()}", $"{ConfigManager.Config.ProjectName}-Quick/", $"{ConfigManager.Config.ProjectName}", true);
 
 			GUILayout.EndHorizontal();
 
 			//New build commands, as well as open to the build folder (Default `/Build`)
 			GUILayout.BeginHorizontal();
 			if(GUILayout.Button("Full New Build"))
-				FullNewBuild(buildTool.GetBuildFolder(), ConfigManager.Config.ProjectName);
+				FullNewBuild(BuildTool.GetBuildFolder(), ConfigManager.Config.ProjectName);
 
 			if (GUILayout.Button("Open Build Folder"))
 			{
-				if (Directory.Exists(buildTool.GetBuildFolder()))
+				if (Directory.Exists(BuildTool.GetBuildFolder()))
 				{
 					Process p = new Process
 					{
-						StartInfo = new ProcessStartInfo("explorer.exe", buildTool.GetBuildFolder().Replace("/", "\\"))
+						StartInfo = new ProcessStartInfo("explorer.exe", BuildTool.GetBuildFolder().Replace("/", "\\"))
 					};
 					p.Start();
 				}

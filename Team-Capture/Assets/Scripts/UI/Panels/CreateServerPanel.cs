@@ -12,7 +12,7 @@ using Debug = UnityEngine.Debug;
 
 namespace UI.Panels
 {
-	public class CreateGamePanel : MainMenuPanelBase
+	public class CreateServerPanel : MainMenuPanelBase
 	{
 		private List<TCScene> activeTCScenes;
 
@@ -53,11 +53,13 @@ namespace UI.Panels
 		public void CreateGame()
 		{
 #if UNITY_EDITOR
-			Debug.LogError("You cannot run a game in the editor!");
-			return;
+			if (!System.IO.Directory.Exists($"{VoltBuilder.BuildTool.GetBuildFolder()}Team-Capture-Quick/"))
+			{
+				Debug.LogError("There is no pre-existing build of Team-Capture! Build the game using VoltBuild.");
+				return;
+			}
 #endif
 
-#pragma warning disable 162
 			if (string.IsNullOrWhiteSpace(gameNameText.text))
 			{
 				gameNameImage.color = errorColor;
@@ -91,10 +93,12 @@ namespace UI.Panels
 			{
 				StartInfo = new ProcessStartInfo
 				{
-#if UNITY_STANDALONE_WIN
+#if UNITY_EDITOR
+					FileName = $"{VoltBuilder.BuildTool.GetBuildFolder()}Team-Capture-Quick/Team-Capture.exe",
+#elif UNITY_STANDALONE_WIN
 					FileName = "Team-Capture.exe",
 #else
-					FileName = "Team-Capture"
+					FileName = "Team-Capture",
 #endif
 					Arguments = "-batchmode -nographics"
 				}
@@ -102,8 +106,6 @@ namespace UI.Panels
 			newTcServer.Start();
 
 			netManager.StartClient();
-
-#pragma warning restore 162
 		}
 
 		private void StartServer()

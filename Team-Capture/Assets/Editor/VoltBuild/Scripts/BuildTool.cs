@@ -90,7 +90,7 @@ namespace VoltBuilder
 		/// Gets the path where builds go to
 		/// </summary>
 		/// <returns></returns>
-		public string GetBuildFolder()
+		public static string GetBuildFolder()
 		{
 			return $"{Application.dataPath.Replace("Assets", "")}{ConfigManager.Config.BuildDir}";
 		}
