@@ -350,7 +350,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Create Game
+  m_text: Create Server
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8694052606b00514ba3938a1f8e788ae, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: 8bbfd8da85715e945afe06c609a98d54, type: 2}
@@ -419,7 +419,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 2482642441931277640}
-    characterCount: 11
+    characterCount: 13
     spriteCount: 0
     spaceCount: 1
     wordCount: 2
@@ -700,7 +700,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: CreateGamePanel
+          m_StringArgument: CreateServerPanel
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &754408616907094754

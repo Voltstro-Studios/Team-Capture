@@ -434,7 +434,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Create Game
+  m_text: Create Server
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8694052606b00514ba3938a1f8e788ae, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: 0b77145f0e3e599489af7daeb2bee410, type: 2}
@@ -503,7 +503,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 7569088221653916774}
-    characterCount: 11
+    characterCount: 13
     spriteCount: 0
     spaceCount: 1
     wordCount: 2
@@ -3133,7 +3133,7 @@ GameObject:
   - component: {fileID: 505864837285636598}
   - component: {fileID: 3098042470848058873}
   m_Layer: 5
-  m_Name: CreateGame
+  m_Name: CreateServer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3300,8 +3300,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Host mode will require good performance! You need to run a server and a
-    client!
+  m_text: This will start up a new instance of TC in headless server mode.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 40999d3209783ee4084d94044679553f, type: 2}
   m_sharedMaterial: {fileID: -5700818390898886383, guid: 40999d3209783ee4084d94044679553f,
@@ -3371,10 +3370,10 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 2346378884684273839}
-    characterCount: 79
+    characterCount: 64
     spriteCount: 0
-    spaceCount: 14
-    wordCount: 15
+    spaceCount: 12
+    wordCount: 13
     linkCount: 0
     lineCount: 1
     pageCount: 1
