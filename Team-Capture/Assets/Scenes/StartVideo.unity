@@ -221,7 +221,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canSkip: 1
   skipKey: 27
-  startUpVideoClip: {fileID: 32900000, guid: 2245ccb0c857b424ab4c868191114920, type: 3}
+  startUpVideoClip: {fileID: 32900000, guid: 3de3c4af2d3220d4d827b36a70260cb5, type: 3}
   nextScene: {fileID: 11400000, guid: fee6dc6d01051db4c8826c383c58d001, type: 2}
 --- !u!328 &2111282999
 VideoPlayer:
@@ -231,7 +231,7 @@ VideoPlayer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2111282994}
   m_Enabled: 1
-  m_VideoClip: {fileID: 32900000, guid: 2245ccb0c857b424ab4c868191114920, type: 3}
+  m_VideoClip: {fileID: 32900000, guid: 3de3c4af2d3220d4d827b36a70260cb5, type: 3}
   m_TargetCameraAlpha: 1
   m_TargetCamera3DLayout: 0
   m_TargetCamera: {fileID: 2111282996}
