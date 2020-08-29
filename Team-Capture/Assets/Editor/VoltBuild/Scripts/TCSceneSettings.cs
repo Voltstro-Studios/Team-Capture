@@ -47,7 +47,7 @@ namespace VoltBuilder
 			{
 				scenes.Add(new Scene
 				{
-					SceneLocation = scene.ScenePath,
+					SceneLocation = scene.scene,
 					SceneName = scene.displayName
 				});
 			}

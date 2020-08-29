@@ -100,7 +100,7 @@ namespace UI.Panels
 #else
 					FileName = "Team-Capture",
 #endif
-					Arguments = "-batchmode -nographics"
+					Arguments = $"-batchmode -nographics -name \"{gameNameText.text}\" -scene {activeTCScenes[mapsDropdown.value].SceneFileName}"
 				}
 			};
 			newTcServer.Start();
