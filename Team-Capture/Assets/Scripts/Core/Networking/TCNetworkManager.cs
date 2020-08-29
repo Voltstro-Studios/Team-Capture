@@ -56,14 +56,30 @@ namespace Core.Networking
 
 		public override void Start()
 		{
+			//Set scene
+			if (CommandLineParser.Options.TryGetValue("-scene", out string scene))
+			{
+				if (scene != null)
+				{
+					if (TCScenesManager.FindSceneInfo(scene) != null)
+						onlineScene = scene;
+					else
+						Logger.Error("The scene '{@Scene}' doesn't exist!", scene);
+				}
+			}
+
+			//Set server name
+			if (CommandLineParser.Options.TryGetValue("-name", out string serverName))
+			{
+				if (serverName != null)
+					gameName = serverName;
+			}
+
 			//We are running in headless mode
 			if (Game.IsHeadless)
 			{
 				//Start the server
 				StartServer();
-
-				//Run the server autoexec config
-				ConsoleBackend.ExecuteFile(new []{"server-autoexec"});
 			}
 			else
 			{
@@ -148,6 +164,9 @@ namespace Core.Networking
 			gameDiscovery.AdvertiseServer();
 
 			StartCoroutine(UpdateLatency());
+
+			//Run the server autoexec config
+			ConsoleBackend.ExecuteFile(new []{"server-autoexec"});
 
 			Logger.Info("Server has started and is running on {@Address} with max connections of {@MaxPlayers}!", singleton.networkAddress, singleton.maxConnections);
 		}

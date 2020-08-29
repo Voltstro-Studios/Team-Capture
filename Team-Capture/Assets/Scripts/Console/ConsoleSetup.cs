@@ -1,8 +1,8 @@
-﻿using Core;
+﻿using System;
+using System.Collections.Generic;
+using Core;
 using SceneManagement;
-using UI;
 using UnityEngine;
-using UnityEngine.Rendering;
 using Logger = Core.Logging.Logger;
 
 namespace Console
@@ -51,9 +51,13 @@ namespace Console
 			//Init the console
 			ConsoleUI.Init();
 
+			//Parse args
+			CommandLineParser.ParseArgs(Environment.GetCommandLineArgs());
+
 			//Register commands
 			ConsoleBackend.RegisterCommands();
 
+			//Load the scene
 			TCScenesManager.LoadScene(Game.IsHeadless
 				? TCScenesManager.FindSceneInfo(sceneToLoadToNextHeadless)
 				: TCScenesManager.FindSceneInfo(sceneToLoadToNext));
