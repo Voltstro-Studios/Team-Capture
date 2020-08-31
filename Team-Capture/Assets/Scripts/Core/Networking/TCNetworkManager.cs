@@ -75,6 +75,15 @@ namespace Core.Networking
 					gameName = serverName;
 			}
 
+			//Max players
+			if (CommandLineParser.Options.TryGetValue("-maxplayers", out string maxPlayers))
+			{
+				if (int.TryParse(maxPlayers, out int intPlayerPlayers))
+					singleton.maxConnections = intPlayerPlayers;
+				else
+					Logger.Error("The max players argument isn't just a number!");
+			}
+
 			//We are running in headless mode
 			if (Game.IsHeadless)
 			{
