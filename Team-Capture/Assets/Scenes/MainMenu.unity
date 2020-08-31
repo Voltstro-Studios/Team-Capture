@@ -2179,7 +2179,7 @@ MonoBehaviour:
   showDebugMessages: 0
   serverTickRate: 128
   offlineScene: Assets/Scenes/MainMenu.unity
-  onlineScene: Assets/Scenes/dm_2fort.unity
+  onlineScene: Assets/Scenes/dm_ditch.unity
   transport: {fileID: 635598614}
   networkAddress: localhost
   maxConnections: 16
