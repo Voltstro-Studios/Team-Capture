@@ -48,8 +48,8 @@ namespace Settings
 					settingGroupName = attribute.MenuNameFormat;
 
 				//Create a menu module
-				Menu settingMenu = new Menu(settingGroupName);
-				GameObject panel = optionsPanel.AddPanel(settingMenu);
+				OptionsMenu optionOptionsMenu = new OptionsMenu(settingGroupName);
+				GameObject panel = optionsPanel.AddPanel(optionOptionsMenu);
 
 				//Get each property in the settings
 				FieldInfo[] menuFields =
@@ -74,7 +74,7 @@ namespace Settings
 								(int) rangeAttribute.max,
 								settingField, panel);
 						else
-							CreateIntField(settingField.GetValue<int>(settingGroupInstance), settingField, settingMenu);
+							CreateIntField(settingField.GetValue<int>(settingGroupInstance), settingField, optionOptionsMenu);
 					}
 					else if (fieldType == typeof(float))
 					{
@@ -87,7 +87,7 @@ namespace Settings
 								rangeAttribute.max, settingField, panel);
 						else
 							CreateFloatField(settingField.GetValue<float>(settingGroupInstance), settingField,
-								settingMenu);
+								optionOptionsMenu);
 					}
 					else if (fieldType == typeof(bool))
 					{
@@ -96,7 +96,7 @@ namespace Settings
 					else if (fieldType == typeof(string))
 					{
 						CreateStringField(settingField.GetValue<string>(settingGroupInstance), settingField,
-							settingMenu);
+							optionOptionsMenu);
 					}
 					else if (fieldType == typeof(Resolution))
 					{
@@ -110,7 +110,7 @@ namespace Settings
 							//We don't do a dropdown, we create a button and do some complicated shit that i'll steal from one of my other games
 							CreateKeybindButton(settingField.GetValue<KeyCode>(settingGroupInstance),
 								settingField,
-								settingMenu);
+								optionOptionsMenu);
 						//Just a normal enum popup
 						else
 							CreateEnumDropdown(settingField.GetValue<int>(settingGroupInstance), settingField, panel);
@@ -144,15 +144,15 @@ namespace Settings
 			slider.onValueChanged.AddListener(f => field.SetValue(GetSettingObject(field), (int)f));
 		}
 
-		private void CreateFloatField(float val, FieldInfo field, Menu menu)
+		private void CreateFloatField(float val, FieldInfo field, OptionsMenu optionsMenu)
 		{
-			Logger.Debug($"\tCreating float field for {field.Name} in {menu.Name}. Current is {val}");
+			Logger.Debug($"\tCreating float field for {field.Name} in {optionsMenu.Name}. Current is {val}");
 			// new FloatField().RegisterValueChangedCallback(c => field.SetValue(GetSettingObject(field), c.newValue));
 		}
 
-		private void CreateIntField(int val, FieldInfo field, Menu menu)
+		private void CreateIntField(int val, FieldInfo field, OptionsMenu optionsMenu)
 		{
-			Logger.Debug($"\tCreating int field for {field.Name} in {menu.Name}. Current is {val}");
+			Logger.Debug($"\tCreating int field for {field.Name} in {optionsMenu.Name}. Current is {val}");
 			// new IntegerField().RegisterValueChangedCallback(c => field.SetValue(GetSettingObject(field), c.newValue));
 		}
 
@@ -162,9 +162,9 @@ namespace Settings
 			toggle.onValueChanged.AddListener(b => field.SetValue(GetSettingObject(field), b));
 		}
 
-		private void CreateStringField(string val, FieldInfo field, Menu menu)
+		private void CreateStringField(string val, FieldInfo field, OptionsMenu optionsMenu)
 		{
-			Logger.Debug($"\tCreating string field for {field.Name} in {menu.Name}. Current is {val}");
+			Logger.Debug($"\tCreating string field for {field.Name} in {optionsMenu.Name}. Current is {val}");
 			//            new TMP_InputField().onValueChanged.AddListener(s => field.SetValue(GetSettingObject(field), s));
 		}
 
@@ -207,9 +207,9 @@ namespace Settings
 			});
 		}
 
-		private void CreateKeybindButton(KeyCode val, FieldInfo field, Menu menu)
+		private void CreateKeybindButton(KeyCode val, FieldInfo field, OptionsMenu optionsMenu)
 		{
-			Logger.Debug($"\tCreating keybind button for {field.Name} in {menu.Name}. Current is {val}");
+			Logger.Debug($"\tCreating keybind button for {field.Name} in {optionsMenu.Name}. Current is {val}");
 			//Sorry future Creepysin in case this freezes the game...
 			//TODO: Need to create this function. Might need to start a coroutine/async void to avoid freezing the screen till a key is pressed
 			//            new Button().onClick.AddListener(  () => field.SetValue(GetSettingObject(field), WaitForKeyPressAndReturnKeycode()));

@@ -2,10 +2,14 @@
 
 namespace UI.Elements.Settings
 {
+	/// <summary>
+	/// Panel for a menu that contains all the controls
+	/// </summary>
 	public class SettingsMenuPanel : MonoBehaviour
 	{
-		[SerializeField] private Transform scrollingArea;
-
-		public Transform GetScrollingArea => scrollingArea;
+		/// <summary>
+		/// The scrolling area
+		/// </summary>
+		public Transform scrollingArea;
 	}
 }
