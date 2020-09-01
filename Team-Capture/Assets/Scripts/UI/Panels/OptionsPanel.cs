@@ -67,19 +67,19 @@ namespace UI.Panels
 		/// <summary>
 		/// Adds a new panel
 		/// </summary>
-		/// <param name="menu"></param>
+		/// <param name="optionsMenu"></param>
 		/// <returns></returns>
-		public GameObject AddPanel(Menu menu)
+		public GameObject AddPanel(OptionsMenu optionsMenu)
 		{
 			//The panel it self
 			GameObject panel = Instantiate(panelPrefab, panelsLocation, false);
-			panel.name = menu.Name;
-			AddTitleToPanel(panel, menu.Name);
+			panel.name = optionsMenu.Name;
+			AddTitleToPanel(panel, optionsMenu.Name);
 
 			//Button
 			Button button = Instantiate(settingsButtonPrefab, buttonLocation, false).GetComponent<Button>();
-			button.onClick.AddListener((delegate { OpenPanel(menu.Name); }));
-			button.GetComponentInChildren<TextMeshProUGUI>().text = menu.Name;
+			button.onClick.AddListener((delegate { OpenPanel(optionsMenu.Name); }));
+			button.GetComponentInChildren<TextMeshProUGUI>().text = optionsMenu.Name;
 
 			settingPanels.Add(panel);
 
@@ -202,7 +202,7 @@ namespace UI.Panels
 
 		private static Transform GetPanelItemArea(GameObject panel)
 		{
-			return panel.GetComponent<SettingsMenuPanel>().GetScrollingArea;
+			return panel.GetComponent<SettingsMenuPanel>().scrollingArea;
 		}
 	}
 }

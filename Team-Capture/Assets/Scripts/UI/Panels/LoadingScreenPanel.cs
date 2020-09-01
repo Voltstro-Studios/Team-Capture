@@ -3,10 +3,17 @@ using UnityEngine.UI;
 
 namespace UI.Panels
 {
+	/// <summary>
+	/// A panel for a loading screen
+	/// </summary>
 	public class LoadingScreenPanel : MonoBehaviour
 	{
 		[SerializeField] private Slider slider;
 
+		/// <summary>
+		/// Sets the loading bar amount
+		/// </summary>
+		/// <param name="amount"></param>
 		public void SetLoadingBarAmount(float amount)
 		{
 			slider.value = amount;

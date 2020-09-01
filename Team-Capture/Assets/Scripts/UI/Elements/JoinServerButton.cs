@@ -6,6 +6,9 @@ using UnityEngine.UI;
 
 namespace UI.Elements
 {
+	/// <summary>
+	/// A button for joining a server
+	/// </summary>
 	public class JoinServerButton : MonoBehaviour
 	{
 		[SerializeField] private TextMeshProUGUI gameNameText;
