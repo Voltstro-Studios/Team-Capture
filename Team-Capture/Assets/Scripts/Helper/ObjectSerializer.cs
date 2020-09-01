@@ -9,7 +9,9 @@ namespace Helper
 	{
 		#region Serialization
 
-		///<summary>This returns the Json form of the object</summary>
+		/// <summary>
+		/// This returns the Json form of the object
+		/// </summary>
 		public static string SerializeJson(object obj, bool compactJson = false,
 			JsonSerializerSettings jsonSerializerSettings = null)
 		{
@@ -18,7 +20,9 @@ namespace Helper
 				jsonSerializerSettings);
 		}
 
-		///<summary>This saves the Json of the object to a file in plain text format</summary>
+		/// <summary>
+		/// This saves the Json of the object to a file in plain text format
+		/// </summary>
 		public static string SaveJson(object obj, string directory, string fileName = null,
 			string extension = ".json", bool compactJson = false, JsonSerializerSettings jsonSerializerSettings = null)
 		{

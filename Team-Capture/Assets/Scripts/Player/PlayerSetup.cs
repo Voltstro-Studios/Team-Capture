@@ -42,16 +42,20 @@ namespace Player
 
 		private void OnDisable()
 		{
-			//Remove this player from the gamemanger
+			//Remove this player from the GameManger
 			GameManager.RemovePlayer(transform.name);
 
 			if (!isLocalPlayer) return;
 
-			GameManager.GetActiveSceneCamera().SetActive(true);
-
 			//Unlock the cursor
 			Cursor.visible = true;
 			Cursor.lockState = CursorLockMode.None;
+
+			//Go back to the scene camera
+			if(GameManager.Instance == null)
+				return;
+
+			GameManager.GetActiveSceneCamera().SetActive(true);
 		}
 
 		#endregion

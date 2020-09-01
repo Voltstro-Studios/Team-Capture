@@ -2194,6 +2194,7 @@ MonoBehaviour:
   gameMangerPrefab: {fileID: 5023681518765488030, guid: 924fec1313feb8346bd0bf297c02c3fb,
     type: 3}
   pickupTagName: Pickup
+  playerLatencyUpdateTime: 2
   maxFrameCount: 128
   stockWeapons:
   - {fileID: 11400000, guid: da803de1f5f09f247aac351f1c13c59a, type: 2}
@@ -4346,12 +4347,12 @@ PrefabInstance:
     - target: {fileID: 2438872348255706029, guid: 012efb8539a764b41a36eec3a54461dd,
         type: 3}
       propertyPath: m_text
-      value: Create Game
+      value: Create Server
       objectReference: {fileID: 0}
     - target: {fileID: 2438872348255706029, guid: 012efb8539a764b41a36eec3a54461dd,
         type: 3}
       propertyPath: m_textInfo.characterCount
-      value: 11
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 2438872348255706029, guid: 012efb8539a764b41a36eec3a54461dd,
         type: 3}
@@ -4442,7 +4443,7 @@ PrefabInstance:
     - target: {fileID: 2438872349478222782, guid: 012efb8539a764b41a36eec3a54461dd,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
-      value: CreateGamePanel
+      value: CreateServerPanel
       objectReference: {fileID: 0}
     - target: {fileID: 2438872349478222783, guid: 012efb8539a764b41a36eec3a54461dd,
         type: 3}

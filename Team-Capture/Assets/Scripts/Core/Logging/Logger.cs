@@ -1,11 +1,11 @@
 ﻿using System;
 using Console;
 using Core.Logging.Unity;
+using Exceptions;
 using Serilog;
 using Serilog.Core;
 using Serilog.Events;
 using UnityEngine;
-using VoltstroEngine.Exceptions;
 
 namespace Core.Logging
 {

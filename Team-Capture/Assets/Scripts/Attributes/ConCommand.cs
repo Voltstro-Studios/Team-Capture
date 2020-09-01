@@ -1,5 +1,6 @@
 ﻿using System;
 using Core.Logging;
+using UnityEngine.Scripting;
 
 namespace Attributes
 {
@@ -8,7 +9,7 @@ namespace Attributes
 	/// <para>METHOD MUST BE STATIC</para>
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Method)]
-	public class ConCommand : Attribute
+	public class ConCommand : PreserveAttribute
 	{
 		/// <summary>
 		/// Marks a method to be used as a command for the in-game console.

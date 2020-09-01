@@ -56,14 +56,30 @@ namespace Core.Networking
 
 		public override void Start()
 		{
+			//Set scene
+			if (CommandLineParser.Options.TryGetValue("-scene", out string scene))
+			{
+				if (scene != null)
+				{
+					if (TCScenesManager.FindSceneInfo(scene) != null)
+						onlineScene = scene;
+					else
+						Logger.Error("The scene '{@Scene}' doesn't exist!", scene);
+				}
+			}
+
+			//Set server name
+			if (CommandLineParser.Options.TryGetValue("-name", out string serverName))
+			{
+				if (serverName != null)
+					gameName = serverName;
+			}
+
 			//We are running in headless mode
 			if (Game.IsHeadless)
 			{
 				//Start the server
 				StartServer();
-
-				//Run the server autoexec config
-				ConsoleBackend.ExecuteFile(new []{"server-autoexec"});
 			}
 			else
 			{
@@ -149,6 +165,9 @@ namespace Core.Networking
 
 			StartCoroutine(UpdateLatency());
 
+			//Run the server autoexec config
+			ConsoleBackend.ExecuteFile(new []{"server-autoexec"});
+
 			Logger.Info("Server has started and is running on {@Address} with max connections of {@MaxPlayers}!", singleton.networkAddress, singleton.maxConnections);
 		}
 
@@ -177,27 +196,27 @@ namespace Core.Networking
 
 			//Stop searching for servers
 			gameDiscovery.StopDiscovery();
+		}
 
-			//We need to call it here as well, since OnClientChangeScene isn't called when first connecting to a server
+		public override void OnClientSceneChanged(NetworkConnection conn)
+		{
+			base.OnClientSceneChanged(conn);
+
+			Logger.Info("The scene has been loaded to {@Scene}", TCScenesManager.GetActiveScene().scene);
+
 			SetupNeededSceneStuffClient();
 		}
 
 		public override void OnClientChangeScene(string newSceneName, SceneOperation sceneOperation, bool customHandling)
 		{
-			//TODO fix this stuff when server changes scene
 			base.OnClientChangeScene(newSceneName, sceneOperation, customHandling);
 
-			if (mode == NetworkManagerMode.Offline)
-			{
-				GameManager.ClearAllPlayers();
-				Destroy(GameManager.Instance.gameObject);
-				GameManager.Instance = null;
+			if(GameManager.Instance == null)
 				return;
-			}
 
-			Logger.Info($"The server has requested to change the scene to {newSceneName}");
+			Destroy(GameManager.Instance.gameObject);
 
-			SetupNeededSceneStuffClient();
+			Logger.Info("The server has requested to change the scene to {@NewSceneName}", newSceneName);
 		}
 
 		public override void OnServerDisconnect(NetworkConnection conn)

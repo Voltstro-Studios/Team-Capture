@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine.Scripting;
 
 namespace Attributes
 {
@@ -7,7 +8,7 @@ namespace Attributes
 	/// <para>If this isn't applied, the <see cref="Settings.DynamicSettingsUi"/> will just use the field name.</para>
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
-	public class SettingsPropertyFormatNameAttribute : Attribute
+	public class SettingsPropertyFormatNameAttribute : PreserveAttribute
 	{
 		public SettingsPropertyFormatNameAttribute(string menuFormat)
 		{

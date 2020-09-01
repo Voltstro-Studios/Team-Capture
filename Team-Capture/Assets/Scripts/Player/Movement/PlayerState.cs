@@ -1,0 +1,64 @@
+using UnityEngine;
+
+namespace Player.Movement
+{
+	//This code is built on unity-fastpacedmultiplayer
+	//https://github.com/JoaoBorks/unity-fastpacedmultiplayer
+	//
+	//MIT License
+	//Copyright (c) 2015 ultimatematchthree, 2017 Joao Borks [joao.borks@gmail.com]
+
+	/// <summary>
+	/// The state of this player
+	/// </summary>
+	public struct PlayerState
+	{
+		public Vector3 Position;
+		public Vector3 Velocity;
+
+		public float RotationX;
+		public float RotationY;
+
+		public int MoveNum;
+		public int Timestamp;
+    
+		public override string ToString()
+		{
+			return 
+				$"PlayerState Pos:{Position}|Vel:{Velocity}|MoveNum:{MoveNum}|Timestamp:{Timestamp}";
+		}
+
+		public static PlayerState Zero =>
+			new PlayerState {
+				Position = Vector3.zero,
+				RotationX = 0f,
+				RotationY = 0f,
+				MoveNum = 0,
+				Timestamp = 0
+			};
+
+		public static PlayerState Interpolate(PlayerState from, PlayerState to, int clientTick)
+		{
+			float t = ((float)(clientTick - from.Timestamp)) / (to.Timestamp - from.Timestamp);
+			return new PlayerState
+			{
+				Position = Vector3.Lerp(from.Position, to.Position, t),
+				RotationX = Mathf.Lerp(from.RotationX, to.RotationX, t),
+				RotationY = Mathf.Lerp(from.RotationY, to.RotationY, t),
+				MoveNum = 0,
+				Timestamp = 0
+			};
+		}
+
+		public static PlayerState Extrapolate(PlayerState from, int clientTick)
+		{
+			int t = clientTick - from.Timestamp;
+			return new PlayerState
+			{
+				Position = from.Position + from.Velocity * t,
+				MoveNum = from.MoveNum,
+				Timestamp = from.Timestamp
+			};
+		}
+	}
+}

@@ -1,19 +1,33 @@
-﻿using Core;
+﻿using System.IO;
+using Core;
 using Mirror;
 using TMPro;
-using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace UI.Panels
 {
 	public class QuitPanel : MainMenuPanelBase
 	{
-		public string[] quitSentences;
+		private string[] quitSentences;
 
+		public string quitMessagesLocation = "Resources/quit-messages.txt";
 		public TextMeshProUGUI quitSentenceText;
+
+		private void Awake()
+		{
+			if (File.Exists($"{Game.GetGameExecutePath()}/{quitMessagesLocation}"))
+				quitSentences = File.ReadAllLines($"{Game.GetGameExecutePath()}/{quitMessagesLocation}");
+		}
 
 		private void OnEnable()
 		{
-			quitSentenceText.text = quitSentences[Random.Range(0, quitSentences.Length)];
+			if (quitSentences != null)
+			{
+				quitSentenceText.text = quitSentences[Random.Range(0, quitSentences.Length)];
+				return;
+			}
+
+			quitSentenceText.text = $"When you are missing {quitMessagesLocation}";
 		}
 
 		public void Quit()

@@ -7,11 +7,17 @@ using Logger = Core.Logging.Logger;
 
 namespace Settings.URPSettings
 {
+	/// <summary>
+	/// Controller for Unity's <see cref="Volume"/> for URP
+	/// </summary>
 	[RequireComponent(typeof(Volume))]
 	public class VolumeSettingsController : MonoBehaviour
 	{
 		private static VolumeSettingsController instance;
 
+		/// <summary>
+		/// The active <see cref="Volume"/>
+		/// </summary>
 		public static Volume ActiveVolume;
 
 		private void Awake()
@@ -33,9 +39,13 @@ namespace Settings.URPSettings
 
 		private void ApplyVolumeSettings()
 		{
+			//Get the advance settings
 			AdvSettingsClass settings = GameSettings.AdvSettings;
-
 			ActiveVolume.enabled = settings.PostProcessing;
+
+			//No point in apply anything if we aren't using Post-Processing
+			if(!settings.PostProcessing)
+				return;
 
 			//Motion Blur
 			if (ActiveVolume.profile.TryGet(out MotionBlur blur))
@@ -61,7 +71,7 @@ namespace Settings.URPSettings
 				vignette.smoothness.value = settings.VignetteSmoothness;
 			}
 
-			Logger.Debug("Applied Volume(Post-Processing) Settings");
+			Logger.Debug("Applied Volume(Post-Processing) settings");
 		}
 
 		#region Console Command

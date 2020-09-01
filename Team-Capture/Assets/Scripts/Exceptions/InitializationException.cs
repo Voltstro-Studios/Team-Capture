@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace VoltstroEngine.Exceptions
+namespace Exceptions
 {
 	/// <summary>
 	/// An error when something failed while initializing or de-initializing
