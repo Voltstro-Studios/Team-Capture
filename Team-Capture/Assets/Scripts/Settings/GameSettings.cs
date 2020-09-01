@@ -87,14 +87,21 @@ namespace Settings
 
 			foreach (PropertyInfo settingProp in GetSettingClasses())
 			{
-				string name = settingProp.Name;
-				Logger.Debug("Got settings `{@Name}`", name);
+				try
+				{
+					string name = settingProp.Name;
+					Logger.Debug("Got settings `{@Name}`", name);
 
-				if (File.Exists(settingsSaveDirectory + name + SettingsFileExtension))
-					//This will enable us to use internal setters on our settings to avoid anyone being able to edit them
-					ObjectSerializer.LoadJsonOverwrite(settingProp.GetValue(null), settingsSaveDirectory, name,
-						SettingsFileExtension,
-						new JsonSerializerSettings {ContractResolver = new NonPublicPropertiesResolver()});
+					if (File.Exists(settingsSaveDirectory + name + SettingsFileExtension))
+						//This will enable us to use internal setters on our settings to avoid anyone being able to edit them
+						ObjectSerializer.LoadJsonOverwrite(settingProp.GetValue(null), settingsSaveDirectory, name,
+							SettingsFileExtension,
+							new JsonSerializerSettings {ContractResolver = new NonPublicPropertiesResolver()});
+				}
+				catch
+				{
+					// ignored
+				}
 			}
 
 			HasBeenLoaded = true;
