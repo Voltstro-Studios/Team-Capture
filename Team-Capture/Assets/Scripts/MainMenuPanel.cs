@@ -25,6 +25,19 @@ public class MainMenuPanel : ScriptableObject
 	public bool showTopBlackBar;
 
 	/// <summary>
+	/// The text that the button will display to open this menu
+	/// </summary>
+	[Header("Button Options")]
+	[Tooltip("The text that the button will display to open this menu")]
+	public string menuButtonText;
+
+	/// <summary>
+	/// Will this button be placed on the bottom nav bar
+	/// </summary>
+	[Tooltip("Will this button be placed on the bottom nav bar")]
+	public bool bottomNavBarButton;
+
+	/// <summary>
 	/// Is this panel currently open
 	/// </summary>
 	[HideInInspector] public bool isOpen;

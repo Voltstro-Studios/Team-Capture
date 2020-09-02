@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   panelPrefab: {fileID: 8258024782923066859, guid: 835909fb69d86b94ca82180be57ae8bb,
     type: 3}
+  menuButtonText: Options
   darkenScreen: 1
   showTopBlackBar: 1
   isOpen: 0

@@ -1,9 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Mirror;
+using TMPro;
 using UI.Panels;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.UI;
 using Logger = Core.Logging.Logger;
 
 namespace UI
@@ -19,6 +23,30 @@ namespace UI
 		[Header("Base Settings")]
 		[Tooltip("The parent for all main menu panels")]
 		public Transform mainMenuPanel;
+
+		/// <summary>
+		/// The top nav bar, where the buttons will go
+		/// </summary>
+		[Tooltip("The top nav bar, where the buttons will go")]
+		public Transform topNavBar;
+
+		/// <summary>
+		/// The bottom nav bar, where the buttons will go
+		/// </summary>
+		[Tooltip("The bottom nav bar, where the buttons will go")]
+		public Transform bottomNavBar;
+
+		/// <summary>
+		/// Top top button prefab
+		/// </summary>
+		[Tooltip("Top top button prefab")]
+		public GameObject topButtonPrefab;
+
+		/// <summary>
+		/// The bottom button prefab
+		/// </summary>
+		[Tooltip("The bottom button prefab")]
+		public GameObject bottomButtonPrefab;
 
 		/// <summary>
 		/// All the main menu panels that this main menu will have
@@ -74,9 +102,15 @@ namespace UI
 		{
 			topBlackBarAnimator.gameObject.SetActive(false);
 
-			//Pre-create all panels
+			Stopwatch stopwatch = Stopwatch.StartNew();
+
+			//Create home button
+			CreateButton(topButtonPrefab, topNavBar, "Home", CloseActivePanel, 69f, true);
+
+			//Pre-create all panels and button
 			foreach (MainMenuPanel menuPanel in menuPanels)
 			{
+				//Create the panel
 				GameObject panel = Instantiate(menuPanel.panelPrefab, mainMenuPanel);
 				panel.name = menuPanel.name;
 				panel.SetActive(false);
@@ -85,7 +119,20 @@ namespace UI
 				//If it has a MainMenuPanelBase, set it cancel button's onClick event to toggle it self
 				if (panel.GetComponent<MainMenuPanelBase>() != null)
 					panel.GetComponent<MainMenuPanelBase>().cancelButton.onClick.AddListener(delegate{TogglePanel(menuPanel.name);});
+
+				//Create the button for it
+				if (menuPanel.bottomNavBarButton)
+				{
+					CreateButton(bottomButtonPrefab, bottomNavBar, menuPanel.menuButtonText,
+						delegate { TogglePanel(menuPanel.name); });
+				}
+				else
+					CreateButton(topButtonPrefab, topNavBar, menuPanel.menuButtonText,
+						delegate { TogglePanel(menuPanel.name); });
 			}
+
+			stopwatch.Stop();
+			Logger.Info("Create menu panels and buttons in {@Ms}ms", stopwatch.ElapsedMilliseconds);
 		}
 
 		private void Update()
@@ -136,6 +183,18 @@ namespace UI
 		{
 			if (GetActivePanel() != null)
 				ClosePanel(GetActivePanel());
+		}
+
+		private void CreateButton(GameObject buttonPrefab, Transform parent, string text, UnityAction action, float maxSize = 52f, bool bold = false)
+		{
+			GameObject button = Instantiate(buttonPrefab, parent);
+			TextMeshProUGUI tmpText = button.GetComponentInChildren<TextMeshProUGUI>();
+			tmpText.text = text;
+			tmpText.fontSizeMax = maxSize;
+			if(bold)
+				tmpText.fontStyle = FontStyles.Bold;
+			button.GetComponent<Button>().onClick.AddListener(action);
+			button.name = $"{text} Button";
 		}
 
 		#region Panel List Functions
