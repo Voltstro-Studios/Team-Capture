@@ -57,6 +57,9 @@ namespace Console
 			//Register commands
 			ConsoleBackend.RegisterCommands();
 
+			//Exec autoexec
+			ConsoleBackend.ExecuteFile(new []{"autoexec"});
+
 			//Load the scene
 			TCScenesManager.LoadScene(Game.IsHeadless
 				? TCScenesManager.FindSceneInfo(sceneToLoadToNextHeadless)
