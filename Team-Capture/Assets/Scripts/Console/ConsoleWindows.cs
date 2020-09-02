@@ -1,12 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.Runtime.InteropServices;
-using Core;
 using Mirror;
 using SceneManagement;
 using UnityEngine;
 using Logger = Core.Logging.Logger;
-using Random = UnityEngine.Random;
 
 namespace Console
 {
@@ -17,8 +15,6 @@ namespace Console
 	{
 		private readonly string consoleTitle;
 		private string currentLine;
-
-		private const string SplashScreenResourceFile = "Resources/console-splashscreen.txt";
 
 		private float nextHeaderUpdateTime;
 
@@ -41,35 +37,6 @@ namespace Console
 			System.Console.BufferHeight = System.Console.WindowHeight;
 			System.Console.Write("\n");
 			currentLine = "";
-
-			//Ascii art, fuck you
-			const string asciiArt = @"
-___________                    
-\__    ___/___ _____    _____  
-  |    |_/ __ \\__  \  /     \ 
-  |    |\  ___/ / __ \|  Y Y  \
-  |____| \___  >____  /__|_|  /
-             \/     \/      \/ 
-	_________                __                        
-	\_   ___ \_____  _______/  |_ __ _________   ____  
-	/    \  \/\__  \ \____ \   __\  |  \_  __ \_/ __ \ 
-	\     \____/ __ \|  |_> >  | |  |  /|  | \/\  ___/ 
-	 \______  (____  /   __/|__| |____/ |__|    \___  >
-	        \/     \/|__|                           \/ 
-";
-			System.Console.WriteLine(asciiArt);
-
-			//Random splash message
-			string splashMessagesPath = $"{Game.GetGameExecutePath()}/{SplashScreenResourceFile}";
-			if (File.Exists(splashMessagesPath))
-			{
-				string[] lines = File.ReadAllLines(splashMessagesPath);
-
-				//Select random number
-				int index = Random.Range(0, lines.Length);
-				System.Console.WriteLine($"		{lines[index]}");
-				System.Console.WriteLine("");
-			}
 
 			Logger.Info("Started Windows command line console.");
 
