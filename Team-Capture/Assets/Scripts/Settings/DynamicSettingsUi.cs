@@ -123,7 +123,7 @@ namespace Settings
 			}
 
 			stopwatch.Stop();
-			Logger.Debug("Time taken to update UI: {@TotalMilliseconds:n} ms", stopwatch.Elapsed.TotalMilliseconds);
+			Logger.Info("Time taken to update settings UI: {@TotalMilliseconds}ms", stopwatch.Elapsed.TotalMilliseconds);
 		}
 
 		#region Graphic designer functions

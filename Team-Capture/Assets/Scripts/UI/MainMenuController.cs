@@ -136,7 +136,7 @@ namespace UI
 			}
 
 			stopwatch.Stop();
-			Logger.Info("Create menu panels and buttons in {@Ms}ms", stopwatch.ElapsedMilliseconds);
+			Logger.Info("Time taken to update menu UI: {@TotalMilliseconds}ms", stopwatch.ElapsedMilliseconds);
 		}
 
 		private void Update()
