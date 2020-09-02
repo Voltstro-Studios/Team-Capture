@@ -4,7 +4,6 @@ using System.Text;
 using Attributes;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 using Logger = Core.Logging.Logger;
 
 namespace Console
@@ -15,20 +14,20 @@ namespace Console
 	public class ConsoleGUI : MonoBehaviour, IConsoleUI
 	{
 		[SerializeField] private TMP_InputField inputField;
-		[SerializeField] private Text consoleTextArea;
+		[SerializeField] private TextMeshProUGUI consoleTextArea;
 		[SerializeField] private GameObject consolePanel;
 		[SerializeField] private KeyCode consoleToggleKey = KeyCode.F1;
 
 		[SerializeField] private bool showDebugMessages;
 
-		[SerializeField] private int consoleTextScale = 1;
-		private int defaultFontSize;
+		[SerializeField] private float consoleTextScale = 1;
+		private float defaultFontSize;
 
 		private readonly List<string> lines = new List<string>();
 
 		public void Init()
 		{
-			defaultFontSize = consoleTextArea.resizeTextMaxSize;
+			defaultFontSize = consoleTextArea.fontSize;
 
 			//Disable it
 			ToggleConsole();
@@ -144,14 +143,14 @@ namespace Console
 		[ConCommand("console_scale", "Changes the console's text scale", 1, 1)]
 		public static void ConsoleScaleCommand(string[] args)
 		{
-			if (int.TryParse(args[0], out int result))
+			if (float.TryParse(args[0], out float result))
 			{
 				//More aids
 				ConsoleGUI gui = ConsoleSetup.ConsoleUI as ConsoleGUI;
 				if(gui == null) return;
 
 				gui.consoleTextScale = result;
-				gui.consoleTextArea.resizeTextMaxSize = gui.defaultFontSize * gui.consoleTextScale;
+				gui.consoleTextArea.fontSize = gui.defaultFontSize * gui.consoleTextScale;
 
 				return;
 			}
