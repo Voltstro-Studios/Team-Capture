@@ -14,10 +14,10 @@ namespace Console
 	{
 		private static readonly Dictionary<string, ConsoleCommand> Commands = new Dictionary<string, ConsoleCommand>();
 
-		private const int historyCount = 50;
-		private static string[] history = new string[historyCount];
-		private static int historyNextIndex = 0;
-		private static int historyIndex = 0;
+		private const int HistoryCount = 50;
+		private static readonly string[] History = new string[HistoryCount];
+		private static int historyNextIndex;
+		private static int historyIndex;
 
 		/// <summary>
 		/// Finds all static methods with the <see cref="ConCommand"/> attribute attached to it
@@ -113,7 +113,7 @@ namespace Console
 				try
 				{
 					conCommand.CommandMethod.Invoke(arguments);
-					history[historyNextIndex % historyCount] = command;
+					History[historyNextIndex % HistoryCount] = command;
 					historyNextIndex++;
 					historyIndex = historyNextIndex;
 				}
@@ -172,17 +172,17 @@ namespace Console
 
 		public static string HistoryUp(string current)
 		{
-			if (historyIndex == 0 || historyNextIndex - historyIndex >= historyCount - 1)
+			if (historyIndex == 0 || historyNextIndex - historyIndex >= HistoryCount - 1)
 				return "";
 
 			if (historyIndex == historyNextIndex)
 			{
-				history[historyIndex % historyCount] = current;
+				History[historyIndex % HistoryCount] = current;
 			}
 
 			historyIndex--;
 
-			return history[historyIndex % historyCount];
+			return History[historyIndex % HistoryCount];
 		}
 
 		public static string HistoryDown()
@@ -192,7 +192,7 @@ namespace Console
 
 			historyIndex++;
 
-			return history[historyIndex % historyCount];
+			return History[historyIndex % HistoryCount];
 		}
 
 		/// <summary>
@@ -201,7 +201,7 @@ namespace Console
 		/// <param name="a"></param>
 		/// <param name="b"></param>
 		/// <returns></returns>
-		static int CommonPrefix(string a, string b)
+		private static int CommonPrefix(string a, string b)
 		{
 			int minl = Mathf.Min(a.Length, b.Length);
 			for (int i = 1; i <= minl; i++)
