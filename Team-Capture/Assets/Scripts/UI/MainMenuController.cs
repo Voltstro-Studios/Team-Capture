@@ -104,8 +104,12 @@ namespace UI
 
 			Stopwatch stopwatch = Stopwatch.StartNew();
 
-			//Create home button
-			CreateButton(topButtonPrefab, topNavBar, "Home", CloseActivePanel, 69f, true);
+			//Create home/return button
+			string backButtonText = "Home";
+			if(NetworkManager.singleton != null)
+				if (NetworkManager.singleton.isNetworkActive)
+					backButtonText = "Return";
+			CreateButton(topButtonPrefab, topNavBar, backButtonText, CloseActivePanel, 69f);
 
 			//Pre-create all panels and button
 			foreach (MainMenuPanel menuPanel in menuPanels)
