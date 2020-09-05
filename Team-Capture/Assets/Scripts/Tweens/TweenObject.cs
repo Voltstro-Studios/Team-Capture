@@ -19,8 +19,6 @@ namespace Tweens
 
 		public void PlayEvent(string eventName)
 		{
-			Logger.Info("Played event {@Event}", eventName);
-
 			TweenEvent tweenEvent = eventsToPlay.FirstOrDefault(x => x.name == eventName);
 			if (tweenEvent == null)
 			{
@@ -64,6 +62,8 @@ namespace Tweens
 			{
 				Logger.Error("Unsupported tween event type!");
 			}
+
+			Logger.Debug("Played event {@Event}", tweenEvent.name);
 		}
 
 		private void OnEnd(bool activeOnEnd)
