@@ -14,9 +14,5 @@ namespace Tweens
 
 		public float fadeFrom;
 		public float fadeTo;
-
-		public float duration;
-
-		public bool activeOnEnd = true;
 	}
 }
