@@ -133,6 +133,11 @@ namespace UI
 		public void TogglePanel(string panelName)
 		{
 			MainMenuPanel panel = GetMenuPanel(panelName);
+			if (panel == null)
+			{
+				Logger.Error("No such panel with the name of {@PanelName}!", name);
+				return;
+			}
 
 			//There is a panel that is currently active, so close it
 			if (GetActivePanel() != null && panel != GetActivePanel())
@@ -140,6 +145,9 @@ namespace UI
 				Logger.Debug($"{GetActivePanel().name} is currently active, switching...");
 
 				ClosePanel(GetActivePanel(), true);
+				OpenPanel(panel, true);
+
+				return;
 			}
 
 			if (!panel.isOpen)
@@ -246,15 +254,18 @@ namespace UI
 			panel.isOpen = false;
 		}
 
-		private void OpenPanel(MainMenuPanel panel)
+		private void OpenPanel(MainMenuPanel panel, bool isSwitching = false)
 		{
 			Logger.Debug($"Opening {panel.name}");
 
-			if (panel.showTopBlackBar)
-				ActivateTopBlackBar();
+			if (!isSwitching)
+			{
+				if (panel.showTopBlackBar)
+					ActivateTopBlackBar();
 
-			if (panel.darkenScreen)
-				ActivateBlackBackground();
+				if (panel.darkenScreen)
+					ActivateBlackBackground();
+			}
 
 			panel.activePanel.SetActive(true);
 			panel.isOpen = true;
