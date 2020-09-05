@@ -80,31 +80,11 @@ namespace UI
 		[Tooltip("The delay before the blackBackgroundAnimator's GameObject is disabled")]
 		public float blackBackgroundWaitTime = 0.2f;
 
-		/// <summary>
-		/// The <see cref="Animator"/> for the top black bar
-		/// </summary>
-		[Header("Top Black Bar")]
-		[Tooltip("The Animator for the top black bar")]
-		public Animator topBlackBarAnimator;
-
-		/// <summary>
-		/// The trigger to use when to tell the top black bar to close
-		/// </summary>
-		[Tooltip("The trigger to use when to tell the top black bar to close")]
-		public string topBlackBarCloseTriggerName = "Exit";
-
-		/// <summary>
-		/// The delay before the <see cref="topBlackBarAnimator"/>'s <see cref="GameObject"/> is disabled
-		/// </summary>
-		[Tooltip("The delay before the topBlackBarAnimator's GameObject is disabled")]
-		public float topBlackBarWaitTime = 0.2f;
-
 		private TweeningManager tweeningManager;
 
 		private void Start()
 		{
 			tweeningManager = GetComponent<TweeningManager>();
-			topBlackBarAnimator.gameObject.SetActive(false);
 
 			Stopwatch stopwatch = Stopwatch.StartNew();
 
@@ -238,15 +218,12 @@ namespace UI
 
 		private void ActivateTopBlackBar()
 		{
-			topBlackBarAnimator.gameObject.SetActive(true);
+			tweeningManager.GetTweenObject("TopBlackBar").PlayEvent("TopBlackBarDown");
 		}
 
-		private IEnumerator DeactivateTopBlackBar()
+		private void DeactivateTopBlackBar()
 		{
-			//Close the top black bar
-			topBlackBarAnimator.SetTrigger(topBlackBarCloseTriggerName);
-			yield return new WaitForSeconds(topBlackBarWaitTime);
-			topBlackBarAnimator.gameObject.SetActive(false);
+			tweeningManager.GetTweenObject("TopBlackBar").PlayEvent("TopBlackBarUp");
 		}
 
 		private void ActivateBlackBackground()
@@ -281,7 +258,7 @@ namespace UI
 			if (!isSwitching)
 			{
 				if (panel.showTopBlackBar)
-					StartCoroutine(DeactivateTopBlackBar());
+					DeactivateTopBlackBar();
 
 				if (panel.darkenScreen)
 					StartCoroutine(DeactivateBlackBackground());

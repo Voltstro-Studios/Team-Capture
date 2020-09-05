@@ -41,24 +41,31 @@ namespace Tweens
 			//For UI tween event
 			if (tweenEvent is UITweenEvent uiTweenEvent)
 			{
-				switch (uiTweenEvent.tweenStyle)
+				objectToTween.SetActive(true);
+
+				if (uiTweenEvent.moving)
 				{
-					case UITweenStyle.Move:
-						Tween<float> moveTween = objectToTween.TweenAnchoredPositionY(uiTweenEvent.moveTo, uiTweenEvent.duration);
-						moveTween.SetFrom(uiTweenEvent.moveFrom);
-						break;
-					case UITweenStyle.Fade:
-						Tween<float> fadeTween = objectToTween.TweenGraphicAlpha(uiTweenEvent.fadeTo, uiTweenEvent.duration);
-						fadeTween.SetFrom(uiTweenEvent.fadeFrom);
-						break;
-					default:
-						throw new ArgumentOutOfRangeException();
+					Tween<float> moveTween = objectToTween.TweenAnchoredPositionY(uiTweenEvent.moveTo, uiTweenEvent.duration);
+					moveTween.SetFrom(uiTweenEvent.moveFrom);
+					moveTween.SetOnComplete(() => OnEnd(uiTweenEvent.activeOnEnd));
+				}
+
+				if (uiTweenEvent.fading)
+				{
+					Tween<float> fadeTween = objectToTween.TweenGraphicAlpha(uiTweenEvent.fadeTo, uiTweenEvent.duration);
+					fadeTween.SetFrom(uiTweenEvent.fadeFrom);
+					fadeTween.SetOnComplete(() => OnEnd(uiTweenEvent.activeOnEnd));
 				}
 			}
 			else
 			{
 				Logger.Error("Unsupported tween event type!");
 			}
+		}
+
+		private void OnEnd(bool activeOnEnd)
+		{
+			objectToTween.SetActive(activeOnEnd);
 		}
 	}
 }
