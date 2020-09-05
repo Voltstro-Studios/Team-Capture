@@ -3,6 +3,7 @@ using System.Linq;
 using ElRaccoone.Tweens;
 using ElRaccoone.Tweens.Core;
 using UnityEngine;
+using UnityEngine.UI;
 using Logger = Core.Logging.Logger;
 
 namespace Tweens
@@ -52,7 +53,7 @@ namespace Tweens
 
 				if (uiTweenEvent.fading)
 				{
-					Tween<float> fadeTween = objectToTween.TweenGraphicAlpha(uiTweenEvent.fadeTo, uiTweenEvent.duration);
+					Tween<float> fadeTween = objectToTween.GetComponent<Graphic>().TweenGraphicAlpha(uiTweenEvent.fadeTo, uiTweenEvent.duration);
 					fadeTween.SetFrom(uiTweenEvent.fadeFrom);
 					fadeTween.SetOnComplete(() => OnEnd(uiTweenEvent.activeOnEnd));
 				}

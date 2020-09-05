@@ -61,25 +61,6 @@ namespace UI
 		[Tooltip("The key to use to close the current panel")]
 		public KeyCode closeKey = KeyCode.Escape;
 
-		/// <summary>
-		/// The <see cref="Animator"/> for darkening the background
-		/// </summary>
-		[Header("Black Background")]
-		[Tooltip("The Animator for darkening the background")]
-		public Animator blackBackgroundAnimator;
-
-		/// <summary>
-		/// The trigger to use when to tell the background to close (more like go away)
-		/// </summary>
-		[Tooltip("The trigger to use when to tell the background to close (more like go away)")]
-		public string blackBackgroundCloseTriggerName = "Exit";
-
-		/// <summary>
-		/// The delay before the <see cref="blackBackgroundAnimator"/>'s <see cref="GameObject"/> is disabled
-		/// </summary>
-		[Tooltip("The delay before the blackBackgroundAnimator's GameObject is disabled")]
-		public float blackBackgroundWaitTime = 0.2f;
-
 		private TweeningManager tweeningManager;
 
 		private void Start()
@@ -232,19 +213,16 @@ namespace UI
 			if (NetworkManager.singleton.isNetworkActive)
 				return;
 
-			blackBackgroundAnimator.gameObject.SetActive(true);
+			tweeningManager.GetTweenObject("BlackBackground").PlayEvent("BackgroundFadeIn");
 		}
 
-		private IEnumerator DeactivateBlackBackground()
+		private void DeactivateBlackBackground()
 		{
 			//If we are in game we want the black background always active
 			if (NetworkManager.singleton.isNetworkActive)
-				yield break;
+				return;
 
-			//Close the black background
-			blackBackgroundAnimator.SetTrigger(blackBackgroundCloseTriggerName);
-			yield return new WaitForSeconds(blackBackgroundWaitTime);
-			blackBackgroundAnimator.gameObject.SetActive(false);
+			tweeningManager.GetTweenObject("BlackBackground").PlayEvent("BackgroundFadeOut");
 		}
 
 		#endregion
@@ -261,7 +239,7 @@ namespace UI
 					DeactivateTopBlackBar();
 
 				if (panel.darkenScreen)
-					StartCoroutine(DeactivateBlackBackground());
+					DeactivateBlackBackground();
 			}
 
 			panel.activePanel.SetActive(false);
