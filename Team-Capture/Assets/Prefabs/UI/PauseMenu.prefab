@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 8825714251049452996}
   - component: {fileID: 2274807087745284485}
   - component: {fileID: 5630442484452719742}
-  - component: {fileID: 2663404252843937796}
   m_Layer: 5
   m_Name: BlackBackground
   m_TagString: Untagged
@@ -75,25 +74,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!95 &2663404252843937796
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3305235482087609461}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 276f35c320092f74cabdf438b6304ec7, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &4027853813922106785
 GameObject:
   m_ObjectHideFlags: 0
@@ -204,6 +184,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2741456346434555905}
   - component: {fileID: 9181142041104804563}
+  - component: {fileID: 4410629661802022060}
   m_Layer: 5
   m_Name: PauseMenu
   m_TagString: Untagged
@@ -260,12 +241,37 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 501c13d390213f647b2cc936a29e1c40, type: 2}
   - {fileID: 11400000, guid: d89cb19e3e3417f4d934e3bf309dc51e, type: 2}
   closeKey: 27
-  blackBackgroundAnimator: {fileID: 2663404252843937796}
-  blackBackgroundCloseTriggerName: Exit
-  blackBackgroundWaitTime: 0.2
-  topBlackBarAnimator: {fileID: 3178942827251164820}
-  topBlackBarCloseTriggerName: Exit
-  topBlackBarWaitTime: 0.5
+--- !u!114 &4410629661802022060
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4789417548377052757}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d9a971045ca7904f8cc640df8cb4fa4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tweenedObjects:
+  - tweenObjectName: TopNavBar
+    objectToTween: {fileID: 6105876273985751419}
+    eventsToPlay:
+    - {fileID: 11400000, guid: ce03af19dae9d3242a264375988bdd89, type: 2}
+  - tweenObjectName: BottomNavBar
+    objectToTween: {fileID: 4027853813922106785}
+    eventsToPlay:
+    - {fileID: 11400000, guid: 14ba187ddba336b40bb566d3c366321c, type: 2}
+  - tweenObjectName: TopBlackBar
+    objectToTween: {fileID: 8258223144533473644}
+    eventsToPlay:
+    - {fileID: 11400000, guid: 2836037d309599246aa9b9efe5fb57d3, type: 2}
+    - {fileID: 11400000, guid: 6c05bb55d56acec43bf39d9170d7e7b8, type: 2}
+  - tweenObjectName: BlackBackground
+    objectToTween: {fileID: 3305235482087609461}
+    eventsToPlay:
+    - {fileID: 11400000, guid: 2be5f951f9335694daa34200a909effc, type: 2}
+    - {fileID: 11400000, guid: 8b40e60d64ce5f641b03e107e6fc57af, type: 2}
 --- !u!1 &6105876273985751419
 GameObject:
   m_ObjectHideFlags: 0
@@ -278,7 +284,6 @@ GameObject:
   - component: {fileID: 7515579564141993064}
   - component: {fileID: 8969012847018912394}
   - component: {fileID: 1235411424867722101}
-  - component: {fileID: 349297854482460903}
   m_Layer: 5
   m_Name: TopNavBar
   m_TagString: Untagged
@@ -367,25 +372,6 @@ MonoBehaviour:
   m_ChildControlHeight: 1
   m_ChildScaleWidth: 1
   m_ChildScaleHeight: 1
---- !u!95 &349297854482460903
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6105876273985751419}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: beb49b5078a2f3f459ff7906730b2a76, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &8258223144533473644
 GameObject:
   m_ObjectHideFlags: 0
@@ -397,7 +383,6 @@ GameObject:
   - component: {fileID: 2146736481843543660}
   - component: {fileID: 8702964938306484781}
   - component: {fileID: 37945561151641003}
-  - component: {fileID: 3178942827251164820}
   m_Layer: 5
   m_Name: TopBlackBar
   m_TagString: Untagged
@@ -461,22 +446,3 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!95 &3178942827251164820
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8258223144533473644}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: adf8af1e00217924aa08f12503e48012, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0

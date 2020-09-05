@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Mirror;
@@ -63,10 +62,13 @@ namespace UI
 
 		private TweeningManager tweeningManager;
 
-		private void Start()
+		private void Awake()
 		{
 			tweeningManager = GetComponent<TweeningManager>();
+		}
 
+		private void Start()
+		{
 			Stopwatch stopwatch = Stopwatch.StartNew();
 
 			//Create home/return button
@@ -102,9 +104,6 @@ namespace UI
 
 			stopwatch.Stop();
 			Logger.Info("Time taken to update menu UI: {@TotalMilliseconds}ms", stopwatch.ElapsedMilliseconds);
-
-			tweeningManager.GetTweenObject("TopNavBar").PlayAllEvents();
-			tweeningManager.GetTweenObject("BottomNavBar").PlayAllEvents();
 		}
 
 		private void Update()
@@ -112,6 +111,12 @@ namespace UI
 			//If the close key is pressed, then close the active panel
 			if (Input.GetKeyDown(closeKey))
 				CloseActivePanel();
+		}
+
+		private void OnEnable()
+		{
+			tweeningManager.GetTweenObject("TopNavBar").PlayAllEvents();
+			tweeningManager.GetTweenObject("BottomNavBar").PlayAllEvents();
 		}
 
 		private void OnDestroy()
