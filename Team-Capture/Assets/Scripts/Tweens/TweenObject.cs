@@ -19,6 +19,8 @@ namespace Tweens
 
 		public void PlayEvent(string eventName)
 		{
+			Logger.Info("Played event {@Event}", eventName);
+
 			TweenEvent tweenEvent = eventsToPlay.FirstOrDefault(x => x.name == eventName);
 			if (tweenEvent == null)
 			{

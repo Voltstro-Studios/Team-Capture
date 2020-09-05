@@ -41,8 +41,10 @@ namespace UI.Panels
 			gameDiscovery = TCNetworkManager.Instance.gameDiscovery;
 		}
 
-		private void OnEnable()
+		public override void OnEnable()
 		{
+			base.OnEnable();
+
 			if (gameDiscovery == null) return;
 
 			//Add a listener to the game discovery for when a server is found

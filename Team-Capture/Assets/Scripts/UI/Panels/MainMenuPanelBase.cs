@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Tweens;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace UI.Panels
@@ -12,5 +13,12 @@ namespace UI.Panels
 		/// The cancel or close button
 		/// </summary>
 		public Button cancelButton;
+
+		public TweenObject tweenObject;
+
+		public virtual void OnEnable()
+		{
+			tweenObject.PlayEvent("PanelOpen");
+		}
 	}
 }

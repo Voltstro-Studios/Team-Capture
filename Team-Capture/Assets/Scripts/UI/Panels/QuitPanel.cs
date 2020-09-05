@@ -29,8 +29,10 @@ namespace UI.Panels
 				quitSentences = File.ReadAllLines($"{Game.GetGameExecutePath()}/{quitMessagesLocation}");
 		}
 
-		private void OnEnable()
+		public override void OnEnable()
 		{
+			base.OnEnable();
+
 			if (quitSentences != null)
 			{
 				quitSentenceText.text = quitSentences[Random.Range(0, quitSentences.Length)];
