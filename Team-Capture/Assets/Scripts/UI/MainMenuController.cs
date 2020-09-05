@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using Mirror;
 using TMPro;
+using Tweens;
 using UI.Panels;
 using UnityEngine;
 using UnityEngine.Events;
@@ -98,8 +99,11 @@ namespace UI
 		[Tooltip("The delay before the topBlackBarAnimator's GameObject is disabled")]
 		public float topBlackBarWaitTime = 0.2f;
 
+		private TweeningManager tweeningManager;
+
 		private void Start()
 		{
+			tweeningManager = GetComponent<TweeningManager>();
 			topBlackBarAnimator.gameObject.SetActive(false);
 
 			Stopwatch stopwatch = Stopwatch.StartNew();
@@ -137,6 +141,9 @@ namespace UI
 
 			stopwatch.Stop();
 			Logger.Info("Time taken to update menu UI: {@TotalMilliseconds}ms", stopwatch.ElapsedMilliseconds);
+
+			tweeningManager.GetTweenObject("TopNavBar").PlayAllEvents();
+			tweeningManager.GetTweenObject("BottomNavBar").PlayAllEvents();
 		}
 
 		private void Update()

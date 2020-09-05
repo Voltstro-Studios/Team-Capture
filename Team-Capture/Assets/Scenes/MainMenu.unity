@@ -868,6 +868,7 @@ GameObject:
   - component: {fileID: 319514905}
   - component: {fileID: 319514904}
   - component: {fileID: 319514908}
+  - component: {fileID: 319514909}
   m_Layer: 5
   m_Name: MainMenu-UI
   m_TagString: Untagged
@@ -989,6 +990,27 @@ MonoBehaviour:
   topBlackBarAnimator: {fileID: 1843545829}
   topBlackBarCloseTriggerName: Exit
   topBlackBarWaitTime: 0.5
+--- !u!114 &319514909
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 319514903}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d9a971045ca7904f8cc640df8cb4fa4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tweenedObjects:
+  - tweenObjectName: TopNavBar
+    objectToTween: {fileID: 362885667}
+    eventsToPlay:
+    - {fileID: 11400000, guid: ce03af19dae9d3242a264375988bdd89, type: 2}
+  - tweenObjectName: BottomNavBar
+    objectToTween: {fileID: 2081062985}
+    eventsToPlay:
+    - {fileID: 11400000, guid: 14ba187ddba336b40bb566d3c366321c, type: 2}
 --- !u!1 &352522260
 GameObject:
   m_ObjectHideFlags: 0
@@ -1093,7 +1115,6 @@ GameObject:
   - component: {fileID: 362885670}
   - component: {fileID: 362885669}
   - component: {fileID: 362885671}
-  - component: {fileID: 362885672}
   m_Layer: 5
   m_Name: TopNavBar
   m_TagString: Untagged
@@ -1117,7 +1138,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -282.60156, y: -64.99997}
+  m_AnchoredPosition: {x: -282.55, y: -65}
   m_SizeDelta: {x: -565.1, y: 130}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &362885669
@@ -1182,25 +1203,6 @@ MonoBehaviour:
   m_ChildControlHeight: 1
   m_ChildScaleWidth: 1
   m_ChildScaleHeight: 1
---- !u!95 &362885672
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 362885667}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: beb49b5078a2f3f459ff7906730b2a76, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &496601434
 GameObject:
   m_ObjectHideFlags: 0
@@ -3289,7 +3291,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 45}
+  m_AnchoredPosition: {x: 0, y: 44.950012}
   m_SizeDelta: {x: 0, y: 89.900024}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2081062987

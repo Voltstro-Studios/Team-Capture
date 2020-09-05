@@ -360,7 +360,6 @@ ___________
 				//Select random number
 				int index = UnityEngine.Random.Range(0, lines.Length);
 				Logger.Info($"	{lines[index]}");
-
 			}
 		}
 	}
