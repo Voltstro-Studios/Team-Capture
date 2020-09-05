@@ -1,16 +1,18 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using SceneManagement;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
+using VoltBuilder;
 
-namespace VoltBuilder
+namespace Editor.Scripts
 {
-	public class DefaultSceneSettings : ISceneSettings
+	public class TCSceneSettings : ISceneSettings
 	{
 		private ReorderableList sceneList;
 
-		public DefaultSceneSettings()
+		public TCSceneSettings()
 		{
 			sceneList = CreateScenesList();
 		}
@@ -41,16 +43,13 @@ namespace VoltBuilder
 		private Scene[] GetAllEnabledScenes()
 		{
 			List<Scene> scenes = new List<Scene>();
-			foreach (EditorBuildSettingsScene scene in EditorBuildSettings.scenes)
+			foreach (TCScene scene in TCScenesManager.GetAllEnabledTCScenesInfo())
 			{
-				if (scene.enabled)
+				scenes.Add(new Scene
 				{
-					scenes.Add(new Scene
-					{
-						SceneName = scene.path.Substring(scene.path.LastIndexOf('/') + 1).Replace(".unity", ""),
-						SceneLocation = scene.path
-					});
-				}
+					SceneLocation = scene.scene,
+					SceneName = scene.displayName
+				});
 			}
 
 			return scenes.ToArray();
@@ -64,7 +63,7 @@ namespace VoltBuilder
 		}
 
 		/// <inheritdoc/>
-		public void DrawSceneSettings(BuildTool buildTool)
+		public void DrawSceneSettings()
 		{
 			sceneList.DoLayoutList();
 
