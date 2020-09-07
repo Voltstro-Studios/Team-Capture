@@ -8,15 +8,31 @@ using Logger = Core.Logging.Logger;
 
 namespace Tweens
 {
+	/// <summary>
+	/// A class for handling tweening
+	/// </summary>
 	[Serializable]
 	public class TweenObject
 	{
+		/// <summary>
+		/// The name of this tweened object
+		/// </summary>
 		public string tweenObjectName;
 
+		/// <summary>
+		/// The object to tween
+		/// </summary>
 		public GameObject objectToTween;
 
+		/// <summary>
+		/// What events can we play?
+		/// </summary>
 		public TweenEvent[] eventsToPlay;
 
+		/// <summary>
+		/// Plays an event
+		/// </summary>
+		/// <param name="eventName"></param>
 		public void PlayEvent(string eventName)
 		{
 			TweenEvent tweenEvent = eventsToPlay.FirstOrDefault(x => x.name == eventName);
@@ -29,6 +45,9 @@ namespace Tweens
 			PlayTween(tweenEvent);
 		}
 
+		/// <summary>
+		/// Plays all events
+		/// </summary>
 		public void PlayAllEvents()
 		{
 			foreach (TweenEvent tweenEvent in eventsToPlay)
