@@ -12,9 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12e95e080868fc04d9de2f8f4a6c5e2a, type: 3}
   m_Name: BottomNavBarUp
   m_EditorClassIdentifier: 
-  tweenStyle: 1
+  duration: 0.2
+  activeOnEnd: 1
+  moving: 1
   moveFrom: -45
   moveTo: 45
+  fading: 0
   fadeFrom: 0
   fadeTo: 0
-  duration: 0.2
