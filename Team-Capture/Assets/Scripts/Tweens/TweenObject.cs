@@ -51,9 +51,7 @@ namespace Tweens
 		public void PlayAllEvents()
 		{
 			foreach (TweenEvent tweenEvent in eventsToPlay)
-			{
 				PlayTween(tweenEvent);
-			}
 		}
 
 		private void PlayTween(TweenEvent tweenEvent)
@@ -63,6 +61,7 @@ namespace Tweens
 			{
 				objectToTween.SetActive(true);
 
+				//If this is a moving tween event
 				if (uiTweenEvent.moving)
 				{
 					Tween<float> moveTween = objectToTween.TweenAnchoredPositionY(uiTweenEvent.moveTo, uiTweenEvent.duration);
@@ -70,6 +69,7 @@ namespace Tweens
 					moveTween.SetOnComplete(() => OnEnd(uiTweenEvent.activeOnEnd));
 				}
 
+				//This is a fading tween event
 				if (uiTweenEvent.fading)
 				{
 					Tween<float> fadeTween = objectToTween.GetComponent<Graphic>().TweenGraphicAlpha(uiTweenEvent.fadeTo, uiTweenEvent.duration);
