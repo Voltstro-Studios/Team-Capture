@@ -320,7 +320,9 @@ namespace Core.Networking
 			{
 				foreach (PlayerManager player in GameManager.GetAllPlayers())
 				{
-					player.latency = Transport.activeTransport.GetConnectionRtt(player.connectionToClient.connectionId);
+					//TODO: Re-implement
+					//player.latency = Transport.activeTransport.GetConnectionRtt(player.connectionToClient.connectionId);
+					player.latency = 0;
 				}
 
 				yield return new WaitForSeconds(playerLatencyUpdateTime);

@@ -1,5 +1,19 @@
 {
   "dependencies": {
+    "com.mirror-networking.mirror": {
+      "version": "https://github.com/VoltUnityPackages/Mirror.git?path=/Assets/Mirror",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "899a1224e89288b2a131f286314d065d81230346"
+    },
+    "com.mirror-networking.mirror.transport.ignorance": {
+      "version": "https://github.com/VoltUnityPackages/Ignorance.git?path=/Assets/Mirror",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "d65d7b6d93dece87046e624830e36b48260a4428"
+    },
     "com.unity.ext.nunit": {
       "version": "1.0.0",
       "depth": 0,
@@ -119,8 +133,15 @@
         "com.unity.modules.imgui": "1.0.0"
       }
     },
+    "com.vis2k.telepathy": {
+      "version": "https://github.com/VoltUnityPackages/Telepathy.git?path=/src",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "c65283046a817aa688a3d390494bbe5f31fb2fff"
+    },
     "dev.voltstro.voltbuildertool": {
-      "version": "https://github.com/Voltstro/UnityVoltBuilderTool.git?path=/src/VoltBuilder/Assets/Editor/VoltBuild",
+      "version": "https://github.com/VoltUnityPackages/UnityVoltBuilderTool.git?path=/src/VoltBuilder/Assets/Editor/VoltBuild",
       "depth": 0,
       "source": "git",
       "dependencies": {

@@ -93,7 +93,7 @@ namespace Player
 		/// </summary>
 		[SyncVar] public double latency;
 
-		[SyncEvent] public event PlayerKilledDelegate EventPlayerKilled;
+		public event PlayerKilledDelegate EventPlayerKilled;
 
 		#endregion
 
@@ -247,7 +247,7 @@ namespace Player
 			if (sourcePlayerId != transform.name)
 				killer.Kills++;
 
-			EventPlayerKilled?.Invoke(transform.name, sourcePlayerId);
+			RpcKillFeed(transform.name, sourcePlayerId);
 
 			StartCoroutine(ServerPlayerRespawn());
 		}
@@ -353,6 +353,16 @@ namespace Player
 				playerMovementObserver.enabled = true;
 			}
 		}
+
+		#region UI
+
+		[ClientRpc]
+		private void RpcKillFeed(string playerKilledId, string playerKillerId)
+		{
+			EventPlayerKilled?.Invoke(playerKilledId, playerKillerId);
+		}
+
+		#endregion
 
 #pragma warning disable IDE0060 // Remove unused parameter, yes these paramaters HAVE to be here for the hook! And yea we gotta do it for both ReSharper and VS
 		// ReSharper disable UnusedParameter.Local
