@@ -156,12 +156,6 @@
       "dependencies": {},
       "hash": "c6d5bf70a150512d463193bb35ee0a229ba7174d"
     },
-    "com.unity.modules.ai": {
-      "version": "1.0.0",
-      "depth": 0,
-      "source": "builtin",
-      "dependencies": {}
-    },
     "com.unity.modules.animation": {
       "version": "1.0.0",
       "depth": 0,
@@ -268,18 +262,9 @@
       "source": "builtin",
       "dependencies": {}
     },
-    "com.unity.modules.unityanalytics": {
-      "version": "1.0.0",
-      "depth": 0,
-      "source": "builtin",
-      "dependencies": {
-        "com.unity.modules.unitywebrequest": "1.0.0",
-        "com.unity.modules.jsonserialize": "1.0.0"
-      }
-    },
     "com.unity.modules.unitywebrequest": {
       "version": "1.0.0",
-      "depth": 1,
+      "depth": 0,
       "source": "builtin",
       "dependencies": {}
     },
