@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Core;
+using SceneManagement;
 using UnityEngine;
 using Logger = Core.Logging.Logger;
 
@@ -9,6 +11,9 @@ namespace BootManagement
 	public class Bootmanager : MonoBehaviour
 	{
 		public static bool HasBooted;
+
+		public string nextScene = "StartVideo";
+		public string nextHeadlessScene = "MainMenu";
 
 		private void Awake()
 		{
@@ -39,14 +44,28 @@ namespace BootManagement
 			}
 
 			Logger.Info("Bootloader has successfully loaded!");
-
+			
 			HasBooted = true;
+
+			LoadNextScene();
+
 			Destroy();
 		}
 
 		private void Destroy()
 		{
 			Destroy(gameObject);
+		}
+
+		private void LoadNextScene()
+		{
+			if (Game.IsHeadless)
+			{
+				TCScenesManager.LoadScene(TCScenesManager.FindSceneInfo(nextHeadlessScene));
+				return;
+			}
+
+			TCScenesManager.LoadScene(TCScenesManager.FindSceneInfo(nextScene));
 		}
 	}
 }
