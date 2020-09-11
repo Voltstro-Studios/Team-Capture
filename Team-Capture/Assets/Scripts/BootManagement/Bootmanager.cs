@@ -15,7 +15,7 @@ namespace BootManagement
 		public string nextScene = "StartVideo";
 		public string nextHeadlessScene = "MainMenu";
 
-		private void Awake()
+		private void Start()
 		{
 			//No needed to do stuff if this has been booted already
 			if (HasBooted)

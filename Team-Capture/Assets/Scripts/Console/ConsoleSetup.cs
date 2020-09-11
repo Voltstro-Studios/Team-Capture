@@ -1,6 +1,5 @@
 ﻿using System;
 using Core;
-using SceneManagement;
 using UnityEngine;
 using Logger = Core.Logging.Logger;
 
@@ -13,12 +12,9 @@ namespace Console
 	{
 		[SerializeField] private GameObject consoleUiPrefab;
 
-		[SerializeField] private string sceneToLoadToNext = "StartVideo";
-		[SerializeField] private string sceneToLoadToNextHeadless = "MainMenu";
-
 		internal static IConsoleUI ConsoleUI;
 
-		private void Awake()
+		public void Awake()
 		{
 			if (ConsoleUI != null)
 			{
@@ -58,11 +54,6 @@ namespace Console
 
 			//Exec autoexec
 			ConsoleBackend.ExecuteFile(new []{"autoexec"});
-
-			//Load the scene
-			TCScenesManager.LoadScene(Game.IsHeadless
-				? TCScenesManager.FindSceneInfo(sceneToLoadToNextHeadless)
-				: TCScenesManager.FindSceneInfo(sceneToLoadToNext));
 		}
 
 		private void Update()
