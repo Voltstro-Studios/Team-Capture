@@ -31,7 +31,7 @@ namespace Integrations.Discord
 		/// <summary>
 		/// Where to load the settings from
 		/// </summary>
-		public string settingsLocation = "/Resources/DiscordRPC.json";
+		public string settingsLocation = "/Resources/Integrations/DiscordRPC.json";
 
 		/// <summary>
 		/// Settings for the Discord manager to use
