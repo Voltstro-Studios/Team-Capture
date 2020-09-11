@@ -44,6 +44,11 @@
           "$type": "VoltBuilder.FileToCopy, VoltBuilder",
           "WhatFileToCopy": "Game/Resources/quit-messages.txt",
           "CopyToWhere": "Resources/quit-messages.txt"
+        },
+        {
+          "$type": "VoltBuilder.FileToCopy, VoltBuilder",
+          "WhatFileToCopy": "Game/Resources/Integrations/DiscordRPC.json",
+          "CopyToWhere": "Resources/Integrations/DiscordRPC.json"
         }
       ]
     }
