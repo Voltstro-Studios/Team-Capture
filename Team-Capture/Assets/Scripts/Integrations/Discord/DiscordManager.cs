@@ -1,4 +1,5 @@
 ﻿using System;
+using BootManagement;
 using Core;
 using DiscordRPC;
 using DiscordRPC.Logging;
@@ -12,7 +13,7 @@ namespace Integrations.Discord
 	/// <summary>
 	/// Handles communicating with Discord's RPC
 	/// </summary>
-	public class DiscordManager : MonoBehaviour
+	public class DiscordManager : MonoBehaviour, IStartOnBoot
 	{
 		private DiscordRpcClient client;
 
@@ -51,7 +52,7 @@ namespace Integrations.Discord
 		[Tooltip("The log level to use")]
 		public LogLevel logLevel = LogLevel.Warning;
 
-		private void Awake()
+		public void Init()
 		{
 			if (Instance != null || Game.IsHeadless)
 			{
