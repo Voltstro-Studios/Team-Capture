@@ -152,6 +152,7 @@ GameObject:
   - component: {fileID: 5162927102225130298}
   - component: {fileID: 4790435715656838203}
   - component: {fileID: 3448369259278931532}
+  - component: {fileID: 2923261821353597593}
   - component: {fileID: 5871886052252796697}
   - component: {fileID: 6221254021302100361}
   - component: {fileID: 6438375962803020338}
@@ -260,6 +261,18 @@ MonoBehaviour:
   invincibilityLastTime: 3
   username: Not Set
   latency: 0
+--- !u!114 &2923261821353597593
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6438375962803020343}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4c4fb5b1ebe2b1409d7ecc9b6b99c35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &5871886052252796697
 MonoBehaviour:
   m_ObjectHideFlags: 0

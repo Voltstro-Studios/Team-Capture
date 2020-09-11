@@ -24,13 +24,9 @@ namespace UI
 			healthText.text = clientUI.PlayerManager.Health.ToString();
 		}
 
-		public void UpdateAmmoUI()
+		public void UpdateAmmoUI(NetworkedWeapon netWeapon)
 		{
 			if(clientUI == null || clientUI.WeaponManager == null)
-				return;
-
-			NetworkedWeapon netWeapon = clientUI.WeaponManager.CurrentWeaponStatus;
-			if(netWeapon == null)
 				return;
 
 			TCWeapon weapon = netWeapon.GetTCWeapon();

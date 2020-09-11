@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Core.Networking;
+using Delegates;
 using Helper;
 using Mirror;
 using Player;
@@ -43,7 +44,7 @@ namespace Weapons
 		/// <summary>
 		/// What is the selected weapon
 		/// </summary>
-		[field: SyncVar(hook = nameof(SelectWeapon))]
+		[field: SyncVar]
 		public int SelectedWeaponIndex { get; private set; }
 
 		/// <summary>
@@ -51,11 +52,7 @@ namespace Weapons
 		/// </summary>
 		public int WeaponHolderSpotChildCount => weaponsHolderSpot.childCount;
 
-		/// <summary>
-		/// Gets the current status of the weapon we are using
-		/// <para>CLIENT ONLY</para>
-		/// </summary>
-		public NetworkedWeapon CurrentWeaponStatus { get; private set; }
+		public event WeaponUpdated WeaponUpdated;
 
 		/// <summary>
 		/// Server callback for when <see cref="weapons"/> is modified
@@ -121,8 +118,6 @@ namespace Weapons
 			base.OnStartLocalPlayer();
 
 			weaponsHolderSpot.gameObject.AddComponent<WeaponSway>();
-
-			UpdateAmmoUI();
 		}
 
 		#endregion
@@ -310,21 +305,6 @@ namespace Weapons
 		#region Weapon Selection
 
 		/// <summary>
-		/// Hook for when the <see cref="SelectedWeaponIndex"/> changes
-		/// </summary>
-		/// <param name="oldValue"></param>
-		/// <param name="newValue"></param>
-#pragma warning disable IDE0060 //We need these variable, Mirror stuff
-		public void SelectWeapon(int oldValue, int newValue)
-#pragma warning restore IDE0060
-		{
-			if (!isLocalPlayer)
-				return;
-
-			UpdateAmmoUI();
-		}
-
-		/// <summary>
 		/// Sets the <see cref="SelectedWeaponIndex"/> to your index
 		/// </summary>
 		/// <param name="index"></param>
@@ -380,22 +360,7 @@ namespace Weapons
 		[TargetRpc(channel = 4)]
 		internal void TargetSendWeaponStatus(NetworkConnection conn, NetworkedWeapon weaponStatus)
 		{
-			//Logger.Log("Received updated weapon status", LogVerbosity.Debug);
-
-			CurrentWeaponStatus = weaponStatus;
-
-			UpdateAmmoUI();
-		}
-
-		/// <summary>
-		/// Updates the ammo UI
-		/// </summary>
-		private void UpdateAmmoUI()
-		{
-			if(playerManager.ClientUi == null)
-				return;
-
-			playerManager.ClientUi.hud.UpdateAmmoUI();
+			WeaponUpdated?.Invoke(weaponStatus);
 		}
 
 		#endregion

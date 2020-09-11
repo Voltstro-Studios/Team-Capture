@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using Core;
 using Core.Networking.Messages;
 using Delegates;
@@ -93,7 +94,13 @@ namespace Player
 		/// </summary>
 		[SyncVar] public double latency;
 
+		#region Events
+
 		public event PlayerKilledDelegate EventPlayerKilled;
+
+		public event Action PlayerDamaged;
+		
+		#endregion
 
 		#endregion
 
@@ -369,8 +376,8 @@ namespace Player
 		private void UpdateHealthUi(int oldHealth, int newHealth)
 			// ReSharper restore UnusedParameter.Local
 		{
-			if (isLocalPlayer && ClientUi != null)
-				ClientUi.hud.UpdateHealthUI();
+			if (isLocalPlayer)
+				PlayerDamaged?.Invoke();
 		}
 #pragma warning restore IDE0060 // Remove unused parameter
 
