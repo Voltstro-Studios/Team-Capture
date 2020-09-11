@@ -1,9 +1,10 @@
 ﻿using System;
+using System.IO;
 using BootManagement;
 using Core;
 using DiscordRPC;
-using DiscordRPC.Logging;
 using DiscordRPC.Message;
+using Helper;
 using SceneManagement;
 using UnityEngine;
 using Logger = Core.Logging.Logger;
@@ -23,34 +24,19 @@ namespace Integrations.Discord
 		public static DiscordManager Instance;
 
 		/// <summary>
-		/// The client ID that we will use
+		/// Load the settings on start?
 		/// </summary>
-		[Tooltip("The client ID that we will use"), SerializeField]
-		private string clientId;
+		public bool loadSettingsFromFile = true;
 
 		/// <summary>
-		/// The default game detail message
+		/// Where to load the settings from
 		/// </summary>
-		[Tooltip("The default game detail message")]
-		public string defaultGameDetail = "Loading...";
+		public string settingsLocation = "/Resources/DiscordRPC.json";
 
 		/// <summary>
-		/// The default game state message
+		/// Settings for the Discord manager to use
 		/// </summary>
-		[Tooltip("The default game state message")]
-		public string defaultGameState = "Loading...";
-
-		/// <summary>
-		/// The default large image to use
-		/// </summary>
-		[Tooltip("The default large image to use")]
-		public string defaultLargeImage = "tc_icon";
-
-		/// <summary>
-		/// The log level to use
-		/// </summary>
-		[Tooltip("The log level to use")]
-		public LogLevel logLevel = LogLevel.Warning;
+		public DiscordManagerSettings settings;
 
 		public void Init()
 		{
@@ -62,6 +48,9 @@ namespace Integrations.Discord
 
 			Instance = this;
 			DontDestroyOnLoad(this);
+
+			if(loadSettingsFromFile)
+				LoadSettings();
 
 			Initialize();
 		}
@@ -86,10 +75,10 @@ namespace Integrations.Discord
 			}
 
 			//Setup our Discord logger to work with our custom logger
-			TCDiscordLogger logger = new TCDiscordLogger {Level = logLevel};
+			TCDiscordLogger logger = new TCDiscordLogger {Level = settings.logLevel};
 
 			//Setup the Discord client
-			client = new DiscordRpcClient(clientId, -1, logger, false, new UnityNamedPipe());
+			client = new DiscordRpcClient(settings.clientId, -1, logger, false, new UnityNamedPipe());
 
 			client.OnError += ClientError;
 			client.OnReady += ClientReady;
@@ -102,6 +91,15 @@ namespace Integrations.Discord
 			TCScenesManager.OnSceneLoadedEvent += SceneLoaded;
 
 			SceneLoaded(TCScenesManager.GetActiveScene());
+		}
+
+		private void LoadSettings()
+		{
+			if(string.IsNullOrWhiteSpace(settingsLocation))
+				return;
+
+			settings = ObjectSerializer.LoadJson<DiscordManagerSettings>(Path.GetDirectoryName($"{Game.GetGameExecutePath()}{settingsLocation}"),
+				$"/{Path.GetFileNameWithoutExtension(settingsLocation)}");
 		}
 
 		/// <summary>

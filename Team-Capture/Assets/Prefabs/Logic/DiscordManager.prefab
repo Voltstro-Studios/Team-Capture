@@ -43,8 +43,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 264bb09ddca8cb644b7ed4b82b6cce2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  clientId: 552773231472541696
-  defaultGameDetail: Loading...
-  defaultGameState: Loading...
-  defaultLargeImage: tc_icon
-  logLevel: 3
+  settings:
+    clientId: 552773231472541696
+    defaultGameDetail: Loading...
+    defaultGameState: Loading...
+    defaultLargeImage: tc_icon
+    logLevel: 3
