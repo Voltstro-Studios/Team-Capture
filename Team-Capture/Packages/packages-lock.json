@@ -149,6 +149,13 @@
       },
       "hash": "cc2c060d36c84ebf41a428fbf3f2ed77e0450bb1"
     },
+    "dev.voltstro.voltcommandlineparser": {
+      "version": "https://github.com/VoltUnityPackages/VoltUnityCommandLineParser.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "db7133a927a6d509125149813c57f8a58d008d5b"
+    },
     "nl.elraccoone.tweens": {
       "version": "git+https://github.com/elraccoone/unity-tweens",
       "depth": 0,

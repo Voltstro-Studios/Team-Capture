@@ -46,9 +46,6 @@ namespace Console
 			//Init the console
 			ConsoleUI.Init();
 
-			//Parse args
-			CommandLineParser.ParseArgs(Environment.GetCommandLineArgs());
-
 			//Register commands
 			ConsoleBackend.RegisterCommands();
 

@@ -11,6 +11,7 @@ using Player;
 using SceneManagement;
 using UI.Panels;
 using UnityEngine;
+using Voltstro.CommandLineParser;
 using Weapons;
 using Logger = Core.Logging.Logger;
 
@@ -35,7 +36,9 @@ namespace Core.Networking
 		public TCWeapon[] stockWeapons;
 
 		[HideInInspector] public TCGameDiscovery gameDiscovery;
-		public string gameName;
+
+		[CommandLineArgument("game")]
+		public static string gameName = "Team-Capture Game";
 
 		[Header("Loading Screen")]
 		[SerializeField] private GameObject loadingScreenPrefab;
@@ -57,6 +60,7 @@ namespace Core.Networking
 		public override void Start()
 		{
 			//Set scene
+			/*
 			if (CommandLineParser.Options.TryGetValue("-scene", out string scene))
 			{
 				if (scene != null)
@@ -83,6 +87,7 @@ namespace Core.Networking
 				else
 					Logger.Error("The max players argument isn't just a number!");
 			}
+			*/
 
 			//We are running in headless mode
 			if (Game.IsHeadless)
@@ -371,8 +376,8 @@ namespace Core.Networking
 		[ConCommand("gamename", "Sets the game name", 1, 100)]
 		public static void GameName(string[] args)
 		{
-			Instance.gameName = string.Join(" ", args);
-			Logger.Info("Game name was set to {@Name}", Instance.gameName);
+			gameName = string.Join(" ", args);
+			Logger.Info("Game name was set to {@Name}", gameName);
 		}
 		
 		#endregion

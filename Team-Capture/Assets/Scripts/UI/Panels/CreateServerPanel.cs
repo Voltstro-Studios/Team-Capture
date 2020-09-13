@@ -148,10 +148,11 @@ namespace UI.Panels
 			netManager.StartClient();
 		}
 
+		//TODO: Re-do this
 		private void StartServer()
 		{
 			netManager.onlineScene = onlineTCScenes[mapsDropdown.value].scene;
-			netManager.gameName = gameNameText.text;
+			TCNetworkManager.gameName = gameNameText.text;
 			netManager.maxConnections = maxPlayers;
 			netManager.StartHost();
 		}
