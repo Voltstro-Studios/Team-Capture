@@ -37,12 +37,24 @@ namespace Core.Networking
 
 		[HideInInspector] public TCGameDiscovery gameDiscovery;
 
-		[CommandLineArgument("game")]
-		public static string gameName = "Team-Capture Game";
+		public ServerConfig serverConfig = new ServerConfig();
 
 		[Header("Loading Screen")]
 		[SerializeField] private GameObject loadingScreenPrefab;
 		private LoadingScreenPanel loadingScreenPanel;
+
+		#region Console Arguments
+
+		[CommandLineArgument("gamename")]
+		public static string GameName = "Team-Capture Game";
+
+		[CommandLineArgument("maxplayers")] 
+		public static int MaxPlayers = 16;
+
+		[CommandLineArgument("scene")] 
+		public static string Scene = "dm_ditch";
+
+		#endregion
 
 		public override void Awake()
 		{
@@ -59,35 +71,9 @@ namespace Core.Networking
 
 		public override void Start()
 		{
-			//Set scene
-			/*
-			if (CommandLineParser.Options.TryGetValue("-scene", out string scene))
-			{
-				if (scene != null)
-				{
-					if (TCScenesManager.FindSceneInfo(scene) != null)
-						onlineScene = scene;
-					else
-						Logger.Error("The scene '{@Scene}' doesn't exist!", scene);
-				}
-			}
-
-			//Set server name
-			if (CommandLineParser.Options.TryGetValue("-name", out string serverName))
-			{
-				if (serverName != null)
-					gameName = serverName;
-			}
-
-			//Max players
-			if (CommandLineParser.Options.TryGetValue("-maxplayers", out string maxPlayers))
-			{
-				if (int.TryParse(maxPlayers, out int intPlayerPlayers))
-					singleton.maxConnections = intPlayerPlayers;
-				else
-					Logger.Error("The max players argument isn't just a number!");
-			}
-			*/
+			serverConfig.gameName = GameName;
+			singleton.maxConnections = MaxPlayers;
+			singleton.onlineScene = Scene;
 
 			//We are running in headless mode
 			if (Game.IsHeadless)
@@ -154,7 +140,7 @@ namespace Core.Networking
 			//Sent to client info about the server
 			conn.Send(new InitialClientJoinMessage
 			{
-				GameName = gameName,
+				ServerConfig = serverConfig,
 				DeactivatedPickups = ServerPickupManager.GetUnActivePickups()
 			});
 
@@ -287,7 +273,7 @@ namespace Core.Networking
 			NetworkClient.UnregisterHandler<InitialClientJoinMessage>();
 
 			//Set the game name
-			gameName = message.GameName;
+			serverConfig = message.ServerConfig;
 
 			//Deactivate any deactivated pickups
 			//TODO: This stuff should be done in a client pickup manager
@@ -374,10 +360,10 @@ namespace Core.Networking
 		}
 
 		[ConCommand("gamename", "Sets the game name", 1, 100)]
-		public static void GameName(string[] args)
+		public static void SetGameName(string[] args)
 		{
-			gameName = string.Join(" ", args);
-			Logger.Info("Game name was set to {@Name}", gameName);
+			Instance.serverConfig.gameName = string.Join(" ", args);
+			Logger.Info("Game name was set to {@Name}", Instance.serverConfig.gameName);
 		}
 		
 		#endregion

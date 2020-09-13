@@ -49,7 +49,7 @@ namespace Core.Networking.Discovery
 
 				return new TCServerResponse
 				{
-					GameName = TCNetworkManager.gameName,
+					GameName = TCNetworkManager.Instance.serverConfig.gameName,
 					MaxPlayers = netManager.maxConnections,
 					CurrentAmountOfPlayers = netManager.numPlayers,
 					SceneName = TCScenesManager.GetActiveScene().name

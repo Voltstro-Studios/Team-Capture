@@ -35,7 +35,7 @@ namespace UI.ScoreBoard
 		private void Start()
 		{
 			mapNameText.text = GameManager.GetActiveScene().displayName;
-			gameNameText.text = TCNetworkManager.gameName;
+			gameNameText.text = TCNetworkManager.Instance.serverConfig.gameName;
 		}
 
 		private void OnEnable()

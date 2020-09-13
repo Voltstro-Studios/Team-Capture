@@ -4,10 +4,8 @@ namespace Core.Networking.Messages
 {
 	public class InitialClientJoinMessage : MessageBase
 	{
-		/// <summary>
-		/// The name of this game
-		/// </summary>
-		public string GameName;
+		//TODO: We should move this to an authenticator
+		public ServerConfig ServerConfig;
 
 		/// <summary>
 		/// All the current deactivated pickups
