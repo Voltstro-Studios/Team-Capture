@@ -24,6 +24,7 @@ namespace Settings.URPSettings
 		private static void ApplyURPSettings()
 		{
 			editor.SetHdr(GameSettings.AdvSettings.HDR);
+			editor.SetRenderScale(GameSettings.AdvSettings.RenderScale);
 			editor.SetShadowDistance(GameSettings.AdvSettings.ShadowDistance);
 			editor.SetMsaaQuality((MsaaQuality) GameSettings.AdvSettings.MsaaQuality);
 			editor.SetShadowCascades(GameSettings.AdvSettings.ShadowCascades);

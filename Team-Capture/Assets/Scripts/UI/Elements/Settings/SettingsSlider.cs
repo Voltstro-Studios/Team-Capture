@@ -37,8 +37,7 @@ namespace UI.Elements.Settings
 
 		private void SetSliderValueText(float value)
 		{
-			int intValue = (int)Math.Round(value);
-			valueText.text = intValue.ToString();
+			valueText.text = Convert.ToDecimal($"{value:F2}").ToString();
 		}
 	}
 }

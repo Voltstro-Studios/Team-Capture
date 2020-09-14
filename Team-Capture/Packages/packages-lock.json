@@ -5,14 +5,14 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "f0f7da880a95e519708f2cbbff47050050ca5c8b"
+      "hash": "f8d80bb262e84f3570b76d33d3099ed813b3c5f0"
     },
     "com.mirror-networking.mirror.transport.ignorance": {
       "version": "https://github.com/VoltUnityPackages/Ignorance.git?path=/Assets/Mirror",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "d65d7b6d93dece87046e624830e36b48260a4428"
+      "hash": "f98e370ea96ba881ac7c980913e5f0d48edeb7a4"
     },
     "com.unity.ext.nunit": {
       "version": "1.0.0",

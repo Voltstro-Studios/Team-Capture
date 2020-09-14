@@ -7,16 +7,17 @@ using Core.Networking.Messages;
 using LagCompensation;
 using Mirror;
 using Pickups;
-using Player;
 using SceneManagement;
 using UI.Panels;
 using UnityEngine;
 using Voltstro.CommandLineParser;
-using Weapons;
 using Logger = Core.Logging.Logger;
 
 namespace Core.Networking
 {
+	/// <summary>
+	/// The networking manager for Team-Capture
+	/// </summary>
 	[RequireComponent(typeof(TCGameDiscovery))]
 	public class TCNetworkManager : NetworkManager
 	{
@@ -25,22 +26,43 @@ namespace Core.Networking
 		/// </summary>
 		public static TCNetworkManager Instance;
 
+		/// <summary>
+		/// The prefab for the <see cref="GameManager"/>
+		/// </summary>
+		[Tooltip("The prefab for the GameManager")]
 		[Header("Team Capture")] 
 		[SerializeField] private GameObject gameMangerPrefab;
 
+		/// <summary>
+		/// The tag for pickups
+		/// </summary>
+		//TODO: This should be done in a pickup manager
 		[SerializeField] private string pickupTagName = "Pickup";
 
-		[SerializeField] private float playerLatencyUpdateTime = 2.0f;
-
+		/// <summary>
+		/// How many frames to keep
+		/// </summary>
 		public int maxFrameCount = 128;
-		public TCWeapon[] stockWeapons;
 
+		/// <summary>
+		/// The active <see cref="TCGameDiscovery"/>
+		/// </summary>
 		[HideInInspector] public TCGameDiscovery gameDiscovery;
 
+		/// <summary>
+		/// The config for the server
+		/// </summary>
 		public ServerConfig serverConfig = new ServerConfig();
 
+		/// <summary>
+		/// The loading screen prefab
+		/// </summary>
 		[Header("Loading Screen")]
 		[SerializeField] private GameObject loadingScreenPrefab;
+
+		/// <summary>
+		/// The active loading screen panel
+		/// </summary>
 		private LoadingScreenPanel loadingScreenPanel;
 
 		#region Console Arguments
@@ -163,8 +185,6 @@ namespace Core.Networking
 			//Start advertising the server when the server starts
 			gameDiscovery.AdvertiseServer();
 
-			StartCoroutine(UpdateLatency());
-
 			//Run the server autoexec config
 			ConsoleBackend.ExecuteFile(new []{"server-autoexec"});
 
@@ -174,8 +194,6 @@ namespace Core.Networking
 		public override void OnStopServer()
 		{
 			Logger.Info("Stopping server...");
-
-			StopCoroutine(UpdateLatency());
 
 			base.OnStopServer();
 
@@ -302,22 +320,6 @@ namespace Core.Networking
 			//Create our the game manager
 			Instantiate(gameMangerPrefab);
 			Logger.Debug("Created game manager object");
-		}
-
-		private IEnumerator UpdateLatency()
-		{
-			//Update each player's latency from the server's perceptive
-			while (mode == NetworkManagerMode.ServerOnly)
-			{
-				foreach (PlayerManager player in GameManager.GetAllPlayers())
-				{
-					//TODO: Re-implement
-					//player.latency = Transport.activeTransport.GetConnectionRtt(player.connectionToClient.connectionId);
-					player.latency = 0;
-				}
-
-				yield return new WaitForSeconds(playerLatencyUpdateTime);
-			}
 		}
 
 		#region Console Commands

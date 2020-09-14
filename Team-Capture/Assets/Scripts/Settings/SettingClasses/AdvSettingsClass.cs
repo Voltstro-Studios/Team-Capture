@@ -27,6 +27,10 @@ namespace Settings.SettingClasses
 		[SettingsDontShow] public float VignetteIntensity = 0.39f;
 		[SettingsDontShow] public float VignetteSmoothness = 0.2f;
 
+		[SettingsPropertyFormatName("Render Scale")]
+		[Range(0, 2)]
+		public float RenderScale = 1.0f;
+
 		//Shadow settings
 		[SettingsPropertyFormatName("Shadow Distance")] [Range(10, 100)] public int ShadowDistance = 45;
 		[SettingsPropertyFormatName("Cascades")] public ShadowCascadesOption ShadowCascades = ShadowCascadesOption.FourCascades;

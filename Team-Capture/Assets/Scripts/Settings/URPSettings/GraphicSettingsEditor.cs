@@ -26,6 +26,11 @@ namespace Settings.URPSettings
 			urpPipelineAsset.msaaSampleCount = (int) msaaSampleCount;
 		}
 
+		public void SetRenderScale(float renderScale)
+		{
+			urpPipelineAsset.renderScale = renderScale;
+		}
+
 		#endregion
 
 		#region Shadows

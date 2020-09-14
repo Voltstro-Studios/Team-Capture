@@ -38,6 +38,11 @@ namespace Player
 		[SerializeField] private float invincibilityLastTime = 3.0f;
 
 		/// <summary>
+		/// How often to update the latency on the scoreboard
+		/// </summary>
+		[SerializeField] private float playerLatencyUpdateTime = 2.0f;
+
+		/// <summary>
 		/// The max health
 		/// </summary>
 		public int MaxHealth { get; } = 100;
@@ -164,16 +169,15 @@ namespace Player
 			Health = MaxHealth;
 			weaponManager = GetComponent<WeaponManager>();
 
+			StartCoroutine(UpdateLatency());
 			StartCoroutine(ServerPlayerRespawn(true));
 		}
 
-		/// <summary>
-		/// Kills the player
-		/// </summary>
-		[Command(channel = 5)]
-		public void CmdSuicide()
+		public override void OnStopServer()
 		{
-			TakeDamage(Health, transform.name);
+			base.OnStopServer();
+
+			StopAllCoroutines();
 		}
 
 		#region Death, Respawn, Damage
@@ -380,6 +384,28 @@ namespace Player
 				PlayerDamaged?.Invoke();
 		}
 #pragma warning restore IDE0060 // Remove unused parameter
+
+		#endregion
+
+		#region Helper Methods
+
+		/// <summary>
+		/// Kills the player
+		/// </summary>
+		[Command(channel = 5)]
+		public void CmdSuicide()
+		{
+			TakeDamage(Health, transform.name);
+		}
+
+		private IEnumerator UpdateLatency()
+		{
+			while (isServer)
+			{
+				latency = Transport.activeTransport.GetConnectionRtt((uint)connectionToClient.connectionId);
+				yield return new WaitForSeconds(playerLatencyUpdateTime);
+			}
+		}
 
 		#endregion
 	}
