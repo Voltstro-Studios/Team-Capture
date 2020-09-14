@@ -2,6 +2,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Math = System.Math;
 
 namespace UI.Elements.Settings
 {
@@ -37,8 +38,8 @@ namespace UI.Elements.Settings
 
 		private void SetSliderValueText(float value)
 		{
-			int intValue = (int)Math.Round(value);
-			valueText.text = intValue.ToString();
+			//int intValue = (int)Math.Round(value);
+			valueText.text = Convert.ToDecimal($"{value:F2}").ToString();
 		}
 	}
 }
