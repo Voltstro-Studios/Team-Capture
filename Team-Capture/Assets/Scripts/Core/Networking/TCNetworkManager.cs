@@ -123,6 +123,8 @@ namespace Core.Networking
 			}
 		}
 
+		#region Server Events
+
 		public override void OnServerSceneChanged(string sceneName)
 		{
 			//Clear the pickup list
@@ -203,18 +205,16 @@ namespace Core.Networking
 			Logger.Info("Server stopped!");
 		}
 
-		public override void OnClientConnect(NetworkConnection conn)
+		public override void OnServerDisconnect(NetworkConnection conn)
 		{
-			//We register for InitialClientJoinMessage, so we get server info
-			NetworkClient.RegisterHandler<InitialClientJoinMessage>(OnServerJoinMessage);
+			base.OnServerDisconnect(conn);
 
-			base.OnClientConnect(conn);
-
-			Logger.Info("Connected to server {@Address} with the net ID of {@ConnectionId}.", conn.address, conn.connectionId);
-
-			//Stop searching for servers
-			gameDiscovery.StopDiscovery();
+			Logger.Info("Player from {@Address} disconnected.", conn.identity.connectionToClient.address);
 		}
+
+		#endregion
+
+		#region Client Scene Changing
 
 		public override void OnClientSceneChanged(NetworkConnection conn)
 		{
@@ -227,7 +227,7 @@ namespace Core.Networking
 
 		public override void OnClientChangeScene(string newSceneName, SceneOperation sceneOperation, bool customHandling)
 		{
-			base.OnClientChangeScene(newSceneName, sceneOperation, customHandling);
+			base.OnClientChangeScene(newSceneName, sceneOperation, true);
 
 			if(GameManager.Instance == null)
 				return;
@@ -237,11 +237,22 @@ namespace Core.Networking
 			Logger.Info("The server has requested to change the scene to {@NewSceneName}", newSceneName);
 		}
 
-		public override void OnServerDisconnect(NetworkConnection conn)
-		{
-			base.OnServerDisconnect(conn);
+		#endregion
 
-			Logger.Info("Player from {@Address} disconnected.", conn.address);
+		#region Client Events
+
+		public override void OnClientConnect(NetworkConnection conn)
+		{
+			//We register for InitialClientJoinMessage, so we get server info
+			//TODO: Should do this in an authenticator 
+			NetworkClient.RegisterHandler<InitialClientJoinMessage>(OnServerJoinMessage);
+
+			base.OnClientConnect(conn);
+
+			Logger.Info("Connected to server {@Address} with the net ID of {@ConnectionId}.", conn.address, conn.connectionId);
+
+			//Stop searching for servers
+			gameDiscovery.StopDiscovery();
 		}
 
 		public override void OnClientDisconnect(NetworkConnection conn)
@@ -253,8 +264,12 @@ namespace Core.Networking
 
 		public override void OnStopClient()
 		{
+			base.OnStopClient();
+
 			Logger.Info("Stopped client");
 		}
+
+		#endregion
 
 		#region Loading Screen
 
