@@ -13,20 +13,13 @@ Team Capture is built using the [Unity game engine](https://unity.com/) with [ou
 Please remember that this project is still in early development!
 
 - In-Game Console
-
-    - With commands!
-
+    - With commands! 
+- Headless mode
 - Working weapon shooting
-
 - Working pickups (Weapons/Health)
-
-- BHopping
-
-- Per scene Discord RPC
-
-- Dynamic Settings UI
-
-- Settings save system
+- Dynamic settings UI
+- Dynamic settings save system
+- Discord RPC intergration
 
 ## The Team
 
@@ -49,13 +42,14 @@ You will need to build the project yourself to play!
 ### Prerequisites
 
 ```
-Unity 2019.4.3f1
-Blender
+Unity 2019.4.9f1
+Git
+Blender 2.83
 ```
 
 ### Pre Setup
 
-Since within the assets of our game we use straight raw Blender files, you will needed to have downloaded and installed [Blender](https://www.blender.org/), and to make sure `.blend` files are associated with the Blender program.
+Since within the assets of our game we use straight raw Blender files, you will needed to have downloaded and installed [Blender 2.83 LTS](https://www.blender.org/download/lts/), and to make sure `.blend` files are associated with the Blender program.
 
 ### Setup
 
@@ -65,13 +59,25 @@ Once you have Blender ready:
 
 2. Open the project up in Unity
 
-* When opening the project for the first time, it can take awhile to open!
+    - When opening the project for the first time, it can take awhile to open!
+    
+3. There might be some errors and warnings at first, but should be safe to ignore
 
-3. There seems to be an issue with Blender model's default material not working, re-import the models folder if you are having this issue
+4. There seems to be an issue with Blender model's default material not working, re-import the models folder if you are having this issue
+
+5. Build the game, you will need to if you want to test stuff with client and server
 
 ### Testing the project
 
-While working on the project, when you go to test your scene or code, remember to start from either the `MainMenu` scene, or from the `Bootstrapper` scene if you want an in-game console.
+While working on the project, remember that if you alter code that runs on the server you will need to recompile the player build. You will need to also re-build the player build if you alter the scene in any major way.
+
+You can run a server from either the command line with the `startserver` command, start a server from in the in-game 'Create Server' menu, or launch the Team-Capture exe with `-batchmode -nographics`.
+
+Check out the [Command Line Arguments Wiki page](https://github.com/Voltstro/Team-Capture/wiki/Command-Line-Arguments) for more info on the command line arguments in this project.
+
+# License
+
+This project is licensed under the GNU AGPLv3 License - see the [LICENSE](/LICENSE) file for details.
 
 # Q & A
 
@@ -100,10 +106,14 @@ While working on the project, when you go to test your scene or code, remember t
 
 # Special Thanks
 
+To these projects:
 - [Mirror](https://mirror-networking.com/)
+- [Ignorance](https://github.com/SoftwareGuy/Ignorance)
+- [Serilog](https://serilog.net/)
+- [unity-fastpacedmultiplayer](https://github.com/JoaoBorks/unity-fastpacedmultiplayer)
 
-- [Discord RPC CSharp](https://github.com/Lachee/discord-rpc-csharp)
-
-- [Newtonsoft.Json](https://www.newtonsoft.com/json)
-
-- Friends, family, and students at school for suggestions, ideas and bug hunting.
+And to:
+- Family
+- Friends
+- Other fellow students and staff at school for suggestions, ideas and bug hunting.
+- And I suppose Unity, for both making an engine that is good but will drive you insane.
