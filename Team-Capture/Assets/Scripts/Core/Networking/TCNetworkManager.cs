@@ -7,7 +7,6 @@ using Core.Networking.Messages;
 using LagCompensation;
 using Mirror;
 using Pickups;
-using Player;
 using SceneManagement;
 using UI.Panels;
 using UnityEngine;
@@ -39,12 +38,6 @@ namespace Core.Networking
 		/// </summary>
 		//TODO: This should be done in a pickup manager
 		[SerializeField] private string pickupTagName = "Pickup";
-
-		/// <summary>
-		/// How often to update the latency on the scoreboard
-		/// </summary>
-		//TODO: Do this in the player manager
-		[SerializeField] private float playerLatencyUpdateTime = 2.0f;
 
 		/// <summary>
 		/// How many frames to keep
@@ -192,8 +185,6 @@ namespace Core.Networking
 			//Start advertising the server when the server starts
 			gameDiscovery.AdvertiseServer();
 
-			StartCoroutine(UpdateLatency());
-
 			//Run the server autoexec config
 			ConsoleBackend.ExecuteFile(new []{"server-autoexec"});
 
@@ -203,8 +194,6 @@ namespace Core.Networking
 		public override void OnStopServer()
 		{
 			Logger.Info("Stopping server...");
-
-			StopCoroutine(UpdateLatency());
 
 			base.OnStopServer();
 
@@ -331,20 +320,6 @@ namespace Core.Networking
 			//Create our the game manager
 			Instantiate(gameMangerPrefab);
 			Logger.Debug("Created game manager object");
-		}
-
-		private IEnumerator UpdateLatency()
-		{
-			//Update each player's latency from the server's perceptive
-			while (mode == NetworkManagerMode.ServerOnly)
-			{
-				foreach (PlayerManager player in GameManager.GetAllPlayers())
-				{
-					player.latency = Transport.activeTransport.GetConnectionRtt((uint)player.connectionToClient.connectionId);
-				}
-
-				yield return new WaitForSeconds(playerLatencyUpdateTime);
-			}
 		}
 
 		#region Console Commands
