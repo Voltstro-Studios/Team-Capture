@@ -1,11 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Core.Networking;
+using Core;
 using Delegates;
 using Helper;
 using Mirror;
-using Player;
 using UnityEngine;
 using Logger = Core.Logging.Logger;
 
@@ -20,11 +19,6 @@ namespace Weapons
 		/// A synced list of all the weapons this client has
 		/// </summary>
 		private readonly SyncListWeapons weapons = new SyncListWeapons();
-
-		/// <summary>
-		/// The <see cref="PlayerManager"/> that this <see cref="WeaponManager"/> is associated with
-		/// </summary>
-		private PlayerManager playerManager;
 
 		/// <summary>
 		/// The active reloading coroutine
@@ -81,12 +75,6 @@ namespace Weapons
 		}
 
 		#region Unity Event Functions
-
-		private void Awake()
-		{
-			//Assign the player manager, so we can refer to it later
-			playerManager = GetComponent<PlayerManager>();
-		}
 
 		private void Start()
 		{
@@ -235,7 +223,7 @@ namespace Weapons
 		[Server]
 		public void AddStockWeapons()
 		{
-			foreach (TCWeapon weapon in TCNetworkManager.Instance.stockWeapons)
+			foreach (TCWeapon weapon in GameManager.Instance.scene.stockWeapons)
 				AddWeapon(weapon.weapon);
 		}
 

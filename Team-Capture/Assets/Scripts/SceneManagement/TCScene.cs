@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using Mirror;
 using UnityEngine;
+using Weapons;
 
 namespace SceneManagement
 {
@@ -57,6 +58,11 @@ namespace SceneManagement
 		[Header("Game Settings")]
 		[Tooltip("The time until the players respawn")]
 		public float respawnTime = 4.0f;
+
+		/// <summary>
+		/// The stock weapons to add to player
+		/// </summary>
+		public TCWeapon[] stockWeapons;
 
 		/// <summary>
 		/// Do you want to show the start time on Discord RPC

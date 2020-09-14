@@ -19,6 +19,8 @@ MonoBehaviour:
   canLoadTo: 1
   pickupsParent: /Pickups/
   respawnTime: 4
+  stockWeapons:
+  - {fileID: 11400000, guid: da803de1f5f09f247aac351f1c13c59a, type: 2}
   showStartTime: 1
   isMainMenu: 0
   largeImageKey: tc_icon

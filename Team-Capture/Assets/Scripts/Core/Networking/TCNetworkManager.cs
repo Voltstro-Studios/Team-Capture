@@ -12,7 +12,6 @@ using SceneManagement;
 using UI.Panels;
 using UnityEngine;
 using Voltstro.CommandLineParser;
-using Weapons;
 using Logger = Core.Logging.Logger;
 
 namespace Core.Networking
@@ -51,12 +50,6 @@ namespace Core.Networking
 		/// How many frames to keep
 		/// </summary>
 		public int maxFrameCount = 128;
-
-		/// <summary>
-		/// The stock weapons to add to player
-		/// </summary>
-		//TODO: This should be in the associated scene data file
-		public TCWeapon[] stockWeapons;
 
 		/// <summary>
 		/// The active <see cref="TCGameDiscovery"/>
