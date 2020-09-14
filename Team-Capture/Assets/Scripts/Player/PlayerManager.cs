@@ -403,8 +403,6 @@ namespace Player
 			while (isServer)
 			{
 				latency = Transport.activeTransport.GetConnectionRtt((uint)connectionToClient.connectionId);
-				Logger.Info("Updated latency");
-				
 				yield return new WaitForSeconds(playerLatencyUpdateTime);
 			}
 		}

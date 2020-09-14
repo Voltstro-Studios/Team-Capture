@@ -123,10 +123,15 @@ namespace UI.Panels
 
 			if (netManager.isNetworkActive)
 			{
-				StartCoroutine(QuitExistingGame(StartServer));
+				StartCoroutine(QuitExistingGame(CreateServerProcess));
 				return;
 			}
 
+			CreateServerProcess();
+		}
+
+		private void CreateServerProcess()
+		{
 			//Now start the server
 			Process newTcServer = new Process
 			{
@@ -139,22 +144,12 @@ namespace UI.Panels
 #else
 					FileName = "Team-Capture",
 #endif
-					Arguments = $"-batchmode -nographics -name \"{gameNameText.text}\" -scene {onlineTCScenes[mapsDropdown.value].SceneFileName}"
+					Arguments = $"-batchmode -nographics -gamename \"{gameNameText.text}\" -scene {onlineTCScenes[mapsDropdown.value].SceneFileName}"
 				}
 			};
 			newTcServer.Start();
 
-			//And start the client, it should auto connect once the server is up
-			netManager.StartClient();
-		}
-
-		//TODO: Re-do this
-		private void StartServer()
-		{
-			netManager.onlineScene = onlineTCScenes[mapsDropdown.value].scene;
-			TCNetworkManager.Instance.serverConfig.gameName = gameNameText.text;
-			netManager.maxConnections = maxPlayers;
-			netManager.StartHost();
+			StartCoroutine(WaitAndConnectToGame());
 		}
 
 		private IEnumerator QuitExistingGame(Action doLast)
@@ -164,6 +159,13 @@ namespace UI.Panels
 			yield return new WaitForSeconds(0.1f);
 
 			doLast();
+		}
+
+		private IEnumerator WaitAndConnectToGame()
+		{
+			yield return new WaitForSeconds(1.0f);
+
+			netManager.StartClient();
 		}
 
 		public void ResetGameNameTextColor()
