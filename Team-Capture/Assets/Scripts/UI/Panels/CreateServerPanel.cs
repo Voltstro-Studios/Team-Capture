@@ -144,7 +144,7 @@ namespace UI.Panels
 #else
 					FileName = "Team-Capture",
 #endif
-					Arguments = $"-batchmode -nographics -gamename \"{gameNameText.text}\" -scene {onlineTCScenes[mapsDropdown.value].SceneFileName}"
+					Arguments = $"-batchmode -nographics -gamename \"{gameNameText.text}\" -scene {onlineTCScenes[mapsDropdown.value].SceneFileName} -maxplayers {maxPlayers}"
 				}
 			};
 			newTcServer.Start();
