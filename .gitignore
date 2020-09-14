@@ -1,3 +1,4 @@
+#Unity files that shouldn't be included
 [Ll]ibrary/
 [Tt]emp/
 [Oo]bj/
@@ -35,8 +36,13 @@ sysinfo.txt
 *.apk
 *.unitypackage
 
+#Rider
 .idea/
 [Ss]aved/
 
+#Logs related
 [Ll]ogs/
 enet_log.txt
+
+#Blender backup files
+*.blend1
