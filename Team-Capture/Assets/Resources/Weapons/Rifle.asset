@@ -16,7 +16,7 @@ MonoBehaviour:
   weaponFormattedName: Rifle
   baseWeaponPrefab: {fileID: 7149728806574001806, guid: f4d0c2754ceeacc43bdc51d9f4d15d71,
     type: 3}
-  damage: 5
+  damage: 15
   fireRate: 15
   fireMode: 0
   bulletsPerShot: 1
