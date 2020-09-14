@@ -17,6 +17,9 @@ using Logger = Core.Logging.Logger;
 
 namespace Core.Networking
 {
+	/// <summary>
+	/// The networking manager for Team-Capture
+	/// </summary>
 	[RequireComponent(typeof(TCGameDiscovery))]
 	public class TCNetworkManager : NetworkManager
 	{
@@ -25,22 +28,55 @@ namespace Core.Networking
 		/// </summary>
 		public static TCNetworkManager Instance;
 
+		/// <summary>
+		/// The prefab for the <see cref="GameManager"/>
+		/// </summary>
+		[Tooltip("The prefab for the GameManager")]
 		[Header("Team Capture")] 
 		[SerializeField] private GameObject gameMangerPrefab;
 
+		/// <summary>
+		/// The tag for pickups
+		/// </summary>
+		//TODO: This should be done in a pickup manager
 		[SerializeField] private string pickupTagName = "Pickup";
 
+		/// <summary>
+		/// How often to update the latency on the scoreboard
+		/// </summary>
+		//TODO: Do this in the player manager
 		[SerializeField] private float playerLatencyUpdateTime = 2.0f;
 
+		/// <summary>
+		/// How many frames to keep
+		/// </summary>
 		public int maxFrameCount = 128;
+
+		/// <summary>
+		/// The stock weapons to add to player
+		/// </summary>
+		//TODO: This should be in the associated scene data file
 		public TCWeapon[] stockWeapons;
 
+		/// <summary>
+		/// The active <see cref="TCGameDiscovery"/>
+		/// </summary>
 		[HideInInspector] public TCGameDiscovery gameDiscovery;
 
+		/// <summary>
+		/// The config for the server
+		/// </summary>
 		public ServerConfig serverConfig = new ServerConfig();
 
+		/// <summary>
+		/// The loading screen prefab
+		/// </summary>
 		[Header("Loading Screen")]
 		[SerializeField] private GameObject loadingScreenPrefab;
+
+		/// <summary>
+		/// The active loading screen panel
+		/// </summary>
 		private LoadingScreenPanel loadingScreenPanel;
 
 		#region Console Arguments
