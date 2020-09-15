@@ -4,9 +4,9 @@
 
 Team Capture is a multiplayer first person shooter game inspired by [Quake](https://store.steampowered.com/app/2310/QUAKE/), [Half-Life 2: Deathmatch](https://store.steampowered.com/app/320/HalfLife_2_Deathmatch/), [Team Fortress 2](http://www.teamfortress.com/) and a tf2 mod called [Open Fortress](https://www.openfortress.fun/) (yes, very [Quake engine family](https://commons.wikimedia.org/wiki/File:Quake_-_family_tree.svg) based games).
 
-Team Capture is still in very early development and is developed by a very small team!
+Team Capture is still in very early development and is developed by a very small team! Expect bugs and other random stuff to occur while playing.
 
-Team Capture is built using the [Unity game engine](https://unity.com/) with a modified version of [Mirror](https://mirror-networking.com/) networking..
+Team Capture is built using the [Unity game engine](https://unity.com/) with a modified version of [Mirror](https://mirror-networking.com/).
 
 ## Features
 
@@ -17,6 +17,8 @@ Please remember that this project is still in early development!
 - Headless mode
 - Working weapon shooting
 - Working pickups (Weapons/Health)
+- Lag Compensation
+- Auth Movement
 - Dynamic settings UI
 - Dynamic settings save system
 - Discord RPC intergration
