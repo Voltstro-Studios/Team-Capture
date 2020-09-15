@@ -1,4 +1,6 @@
-﻿using System;
+﻿#if UNITY_STANDALONE_WIN
+
+using System;
 using System.IO;
 using System.Runtime.InteropServices;
 using Mirror;
@@ -201,3 +203,5 @@ namespace Console
 		private static extern bool SetConsoleTitle(string title);
 	}
 }
+
+#endif
