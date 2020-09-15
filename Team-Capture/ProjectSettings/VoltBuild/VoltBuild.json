@@ -49,6 +49,11 @@
           "$type": "VoltBuilder.FileToCopy, VoltBuilder",
           "WhatFileToCopy": "Game/Resources/Integrations/DiscordRPC.json",
           "CopyToWhere": "Resources/Integrations/DiscordRPC.json"
+        },
+        {
+          "$type": "VoltBuilder.FileToCopy, VoltBuilder",
+          "WhatFileToCopy": "Assets/License.txt",
+          "CopyToWhere": "License.txt"
         }
       ]
     }
