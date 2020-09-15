@@ -103,12 +103,8 @@ namespace Core.Networking
 				//Start the server
 				StartServer();
 			}
-			else
-			{
-				//Setup loading events
-				TCScenesManager.PreparingSceneLoadEvent += OnPreparingSceneLoad;
-				TCScenesManager.StartSceneLoadEvent += StartSceneLoad;
-			}
+
+			SceneManager.OnBeginSceneLoading += operation => StartCoroutine(OnStartSceneLoadAsync(operation));
 
 			Application.targetFrameRate = 128;
 			Time.fixedDeltaTime = 1 / 60f;
@@ -227,7 +223,7 @@ namespace Core.Networking
 
 		public override void OnClientChangeScene(string newSceneName, SceneOperation sceneOperation, bool customHandling)
 		{
-			base.OnClientChangeScene(newSceneName, sceneOperation, true);
+			base.OnClientChangeScene(newSceneName, sceneOperation, customHandling);
 
 			if(GameManager.Instance == null)
 				return;
@@ -273,21 +269,12 @@ namespace Core.Networking
 
 		#region Loading Screen
 
-		private void OnPreparingSceneLoad(TCScene scene)
+		private IEnumerator OnStartSceneLoadAsync(AsyncOperation sceneLoadOperation)
 		{
-			if (mode == NetworkManagerMode.Offline) return;
+			if (singleton.mode == NetworkManagerMode.ServerOnly) yield return null;
+
 			loadingScreenPanel = Instantiate(loadingScreenPrefab).GetComponent<LoadingScreenPanel>();
-		}
 
-		private void StartSceneLoad(AsyncOperation sceneLoadOperation)
-		{
-			if (mode == NetworkManagerMode.Offline || loadingScreenPanel == null) return;
-
-			StartCoroutine(StartSceneLoadAsync(sceneLoadOperation));
-		}
-
-		private IEnumerator StartSceneLoadAsync(AsyncOperation sceneLoadOperation)
-		{
 			while (!sceneLoadOperation.isDone)
 			{
 				loadingScreenPanel.SetLoadingBarAmount(Mathf.Clamp01(sceneLoadOperation.progress / .9f));
