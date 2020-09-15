@@ -4,6 +4,7 @@ using Attributes;
 using Console;
 using Core.Networking.Discovery;
 using Core.Networking.Messages;
+using Helper;
 using LagCompensation;
 using Mirror;
 using Pickups;
@@ -177,6 +178,8 @@ namespace Core.Networking
 		public override void OnStartServer()
 		{
 			Logger.Info("Starting server...");
+
+			singleton.networkAddress = NetHelper.LocalIpAddress();
 
 			base.OnStartServer();
 

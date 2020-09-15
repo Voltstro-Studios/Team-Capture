@@ -1,0 +1,36 @@
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Net.NetworkInformation;
+using System.Net.Sockets;
+
+namespace Helper
+{
+	public static class NetHelper
+	{
+		public static string LocalIpAddress()
+		{
+			//There is no network available, so IDK
+			if (!NetworkInterface.GetIsNetworkAvailable())
+				return "localhost";
+
+			//Get all the network interfaces
+			NetworkInterface[] networkInterfaces = NetworkInterface.GetAllNetworkInterfaces();
+			List<NetworkInterface> activeNetworkInterfaces = networkInterfaces.Where(networkInterface => networkInterface.OperationalStatus == OperationalStatus.Up && !networkInterface.IsReceiveOnly).ToList();
+
+			//If there is more then one network interface, default to local host
+			if (activeNetworkInterfaces.Count > 1)
+				return "127.0.0.1";
+
+			//Get the address
+			NetworkInterface activeInterface = activeNetworkInterfaces[0];
+			foreach (IPAddressInformation information in activeInterface.GetIPProperties().AnycastAddresses)
+			{
+				if (information.Address.AddressFamily == AddressFamily.InterNetwork)
+					return information.Address.ToString();
+			}
+
+			//Fuck do I know what to do if we hit here
+			return "localhost";
+		}
+	}
+}
