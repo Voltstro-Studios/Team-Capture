@@ -61,11 +61,6 @@ namespace Core.Networking
 		[Header("Loading Screen")]
 		[SerializeField] private GameObject loadingScreenPrefab;
 
-		/// <summary>
-		/// The active loading screen panel
-		/// </summary>
-		private LoadingScreenPanel loadingScreenPanel;
-
 		#region Console Arguments
 
 		[CommandLineArgument("gamename")]
@@ -279,7 +274,7 @@ namespace Core.Networking
 		{
 			if (singleton.mode == NetworkManagerMode.ServerOnly) yield return null;
 
-			loadingScreenPanel = Instantiate(loadingScreenPrefab).GetComponent<LoadingScreenPanel>();
+			LoadingScreenPanel loadingScreenPanel = Instantiate(loadingScreenPrefab).GetComponent<LoadingScreenPanel>();
 
 			while (!sceneLoadOperation.isDone)
 			{
