@@ -6,7 +6,7 @@ Team Capture is a multiplayer first person shooter game inspired by [Quake](http
 
 Team Capture is still in very early development and is developed by a very small team!
 
-Team Capture is built using the [Unity game engine](https://unity.com/) with [our fork](https://github.com/Creepysin-Studios/TC-Mirror) of the [Mirror](https://mirror-networking.com/) networking system.
+Team Capture is built using the [Unity game engine](https://unity.com/) with a modified version of [Mirror](https://mirror-networking.com/) networking..
 
 ## Features
 
