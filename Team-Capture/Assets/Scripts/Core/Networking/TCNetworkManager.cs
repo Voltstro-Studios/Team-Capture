@@ -181,6 +181,9 @@ namespace Core.Networking
 
 			singleton.networkAddress = NetHelper.LocalIpAddress();
 
+			if (Transport.activeTransport is IgnoranceThreaded threaded)
+				threaded.ServerBindAddress = singleton.networkAddress;
+
 			base.OnStartServer();
 
 			//Start advertising the server when the server starts
