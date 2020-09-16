@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using Attributes;
 using Core;
 using Core.Networking.Messages;
 using Delegates;
@@ -7,6 +8,7 @@ using Mirror;
 using Player.Movement;
 using UI;
 using UnityEngine;
+using Voltstro.CommandLineParser;
 using Weapons;
 using Logger = Core.Logging.Logger;
 
@@ -171,6 +173,13 @@ namespace Player
 
 			StartCoroutine(UpdateLatency());
 			StartCoroutine(ServerPlayerRespawn(true));
+		}
+
+		public override void OnStartClient()
+		{
+			base.OnStartClient();
+
+			CmdSetName(StartPlayerName);
 		}
 
 		public override void OnStopServer()
@@ -405,6 +414,25 @@ namespace Player
 				latency = Transport.activeTransport.GetConnectionRtt((uint)connectionToClient.connectionId);
 				yield return new WaitForSeconds(playerLatencyUpdateTime);
 			}
+		}
+
+		#endregion
+
+		#region Naming
+
+		[CommandLineArgument("name")]
+		public static string StartPlayerName = "NotSet";
+
+		[ConCommand("cl_name", "Sets the name to use in game", 1, 1)]
+		public static void SetName(string[] args)
+		{
+			StartPlayerName = string.Join(" ", args);
+		}
+
+		[Command]
+		private void CmdSetName(string newName)
+		{
+			username = newName;
 		}
 
 		#endregion
