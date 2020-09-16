@@ -1695,10 +1695,7 @@ MonoBehaviour:
   gameMangerPrefab: {fileID: 5023681518765488030, guid: 924fec1313feb8346bd0bf297c02c3fb,
     type: 3}
   pickupTagName: Pickup
-  playerLatencyUpdateTime: 2
   maxFrameCount: 128
-  stockWeapons:
-  - {fileID: 11400000, guid: da803de1f5f09f247aac351f1c13c59a, type: 2}
   gameDiscovery: {fileID: 0}
   serverConfig:
     gameName: Team-Capture game
