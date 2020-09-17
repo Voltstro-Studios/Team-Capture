@@ -171,7 +171,23 @@ namespace Core
 			}
 			else
 			{
-				Logger.Error("The inputed damge to do isn't a number!");
+				Logger.Error("The imputed damage to do isn't a number!");
+			}
+		}
+
+		[ConCommand("players", "Gets a list of all the players")]
+		public static void ListPlayers(string[] args)
+		{
+			if (Instance == null)
+			{
+				Logger.Error("A game isn't currently running!");
+				return;
+			}
+
+			Logger.Info("== Connected Players ==");
+			foreach (PlayerManager playerManager in GetAllPlayers())
+			{
+				Logger.Info(" Name: {@PlayerName} - ID: {@PlayerNetID}", playerManager.username, playerManager.netId);
 			}
 		}
 
