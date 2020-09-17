@@ -1,6 +1,8 @@
 ﻿using Console;
 using Mirror;
 using Player.Movement;
+using Settings;
+using Settings.SettingClasses;
 using UI;
 using UnityEngine;
 using Weapons;
@@ -32,13 +34,15 @@ namespace Player
 		[SerializeField] private float xMouseSensitivity = 100.0f;
 		[SerializeField] private float yMouseSensitivity = 100.0f;
 
+		[SerializeField] private bool reverseMouse;
+
 		#endregion
 		
 		private WeaponManager weaponManager;
 		private PlayerManager playerManager;
 		private PlayerMovementInput playerInput;
 
-		#region Inputs
+		#region Inputs to send
 
 		private float rotationX;
 		private float rotationY;
@@ -55,6 +59,10 @@ namespace Player
 			weaponManager = GetComponent<WeaponManager>();
 			playerManager = GetComponent<PlayerManager>();
 			playerInput = GetComponent<PlayerMovementInput>();
+
+			GameSettings.SettingsLoaded += UpdateSettings;
+
+			UpdateSettings();
 		}
 
 		private void Update()
@@ -115,6 +123,8 @@ namespace Player
 			}
 		}
 
+		#region Input Functions
+
 		private static void HandleMouseLock()
 		{
 			if (ClientUI.IsPauseMenuOpen)
@@ -139,13 +149,29 @@ namespace Player
 		{
 			if(rawMouseAxis)
 			{
-				rotationX = Input.GetAxisRaw(xMouseAxisName) * xMouseSensitivity;
-				rotationY = Input.GetAxisRaw(yMouseAxisName) * yMouseSensitivity;
+				if (reverseMouse)
+				{
+					rotationX = Input.GetAxisRaw(yMouseAxisName) * yMouseSensitivity;
+					rotationY = Input.GetAxisRaw(xMouseAxisName) * xMouseSensitivity;
+				}
+				else
+				{
+					rotationX = Input.GetAxisRaw(xMouseAxisName) * xMouseSensitivity;
+					rotationY = Input.GetAxisRaw(yMouseAxisName) * yMouseSensitivity;
+				}
 			}
 			else
 			{
-				rotationX = Input.GetAxis(xMouseAxisName) * xMouseSensitivity;
-				rotationY = Input.GetAxis(yMouseAxisName) * yMouseSensitivity;
+				if (reverseMouse)
+				{
+					rotationX = Input.GetAxis(yMouseAxisName) * yMouseSensitivity;
+					rotationY = Input.GetAxis(xMouseAxisName) * xMouseSensitivity;
+				}
+				else
+				{
+					rotationX = Input.GetAxis(xMouseAxisName) * xMouseSensitivity;
+					rotationY = Input.GetAxis(yMouseAxisName) * yMouseSensitivity;
+				}
 			}
 		}
 
@@ -195,5 +221,20 @@ namespace Player
 			if (selectedWeaponIndex == weaponManager.SelectedWeaponIndex) return;
 			weaponManager.CmdSetWeapon(selectedWeaponIndex);
 		}
+
+		#endregion
+
+		#region Input Settings
+
+		private void UpdateSettings()
+		{
+			MouseSettingsClass mouseSettings = GameSettings.MouseSettings;
+			xMouseSensitivity = mouseSettings.MouseSensitivity;
+			yMouseSensitivity = mouseSettings.MouseSensitivity;
+			rawMouseAxis = mouseSettings.RawAxis;
+			reverseMouse = mouseSettings.ReverseMouse;
+		}
+
+		#endregion
 	}
 }

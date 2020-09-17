@@ -23,6 +23,9 @@ namespace Settings
 
 		#region Settings
 
+		[SettingsPropertyFormatName("Mouse Settings")]
+		public static MouseSettingsClass MouseSettings { get; } = new MouseSettingsClass();
+
 		[SettingsPropertyFormatName("Video Settings")]
 		public static VideoSettingsClass VideoSettings { get; } = new VideoSettingsClass();
 
