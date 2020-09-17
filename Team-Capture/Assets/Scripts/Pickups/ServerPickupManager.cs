@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
 using Core.Networking.Messages;
 using Mirror;
+using SceneManagement;
+using UnityEngine;
+using Logger = Core.Logging.Logger;
 
 namespace Pickups
 {
@@ -9,25 +12,66 @@ namespace Pickups
 	/// </summary>
 	public static class ServerPickupManager
 	{
-		private static readonly List<string> UnActivePickups = new List<string>();
-
-		private static readonly int channelToSendOnId = 1;
-
 		/// <summary>
-		/// Gets all un active pickups
+		/// The tag for pickups
 		/// </summary>
-		/// <returns></returns>
-		public static string[] GetUnActivePickups()
+		private const string PickupTagName = "Pickup";
+
+		private static List<string> unActivePickups = new List<string>();
+		private const int ChannelToSendOnId = 1;
+
+		public static void SetupServerPickupManager()
 		{
-			return UnActivePickups.ToArray();
+			unActivePickups = new List<string>();
+
+			SceneManager.OnBeginSceneLoading += OnBeginSceneLoading;
+			TCScenesManager.OnSceneLoadedEvent += OnSceneLoaded;
+		}
+
+		public static void ShutdownServer()
+		{
+			SceneManager.OnBeginSceneLoading -= OnBeginSceneLoading;
+			TCScenesManager.OnSceneLoadedEvent -= OnSceneLoaded;
+		}
+
+		private static void OnBeginSceneLoading(AsyncOperation loadOperation)
+		{
+			unActivePickups.Clear();
+		}
+
+		private static void OnSceneLoaded(TCScene scene)
+		{
+			//If the scene isn't an online scene then there will be no pickups
+			if(!scene.isOnlineScene) return;
+
+			//Setup pickups
+			//TODO: We should save all references to pickups to the associated scene file
+			GameObject[] pickups = GameObject.FindGameObjectsWithTag(PickupTagName);
+			foreach (GameObject pickup in pickups)
+			{
+				//Make sure it has the Pickup script on it
+				Pickup pickupLogic = pickup.GetComponent<Pickup>();
+				if(pickupLogic == null)
+				{
+					Logger.Error("The pickup with the name of `{@PickupName}` @ {@PickupTransform} doesn't have the {@Pickup} behaviour on it!", pickup.name, pickup.transform, typeof(Pickup));
+					continue;
+				}
+
+				//Setup the trigger
+				pickupLogic.SetupTrigger();
+			}
 		}
 
 		/// <summary>
-		/// Removes all pickups from the list
+		/// Call this when a client joins the game
 		/// </summary>
-		public static void ClearUnActivePickupsList()
+		/// <param name="conn"></param>
+		public static void OnClientJoined(NetworkConnection conn)
 		{
-			UnActivePickups.Clear();
+			conn.Send(new PickupStatusMessage
+			{
+				DisabledPickups = unActivePickups.ToArray()
+			});
 		}
 
 		/// <summary>
@@ -36,13 +80,13 @@ namespace Pickups
 		/// <param name="pickup"></param>
 		public static void DeactivatePickup(Pickup pickup)
 		{
-			UnActivePickups.Add(pickup.name);
+			unActivePickups.Add(pickup.name);
 
 			NetworkServer.SendToAll(new SetPickupStatus
 			{
 				PickupName = pickup.name,
 				IsActive = false
-			}, channelToSendOnId);
+			}, ChannelToSendOnId);
 		}
 
 		/// <summary>
@@ -51,13 +95,13 @@ namespace Pickups
 		/// <param name="pickup"></param>
 		public static void ActivatePickup(Pickup pickup)
 		{
-			UnActivePickups.Remove(pickup.name);
+			unActivePickups.Remove(pickup.name);
 
 			NetworkServer.SendToAll(new SetPickupStatus
 			{
 				PickupName = pickup.name,
 				IsActive = true
-			}, channelToSendOnId);
+			}, ChannelToSendOnId);
 		}
 	}
 }

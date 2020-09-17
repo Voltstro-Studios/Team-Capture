@@ -6,10 +6,5 @@ namespace Core.Networking.Messages
 	{
 		//TODO: We should move this to an authenticator
 		public ServerConfig ServerConfig;
-
-		/// <summary>
-		/// All the current deactivated pickups
-		/// </summary>
-		public string[] DeactivatedPickups;
 	}
 }

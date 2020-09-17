@@ -35,12 +35,6 @@ namespace Core.Networking
 		[SerializeField] private GameObject gameMangerPrefab;
 
 		/// <summary>
-		/// The tag for pickups
-		/// </summary>
-		//TODO: This should be done in a pickup manager
-		[SerializeField] private string pickupTagName = "Pickup";
-
-		/// <summary>
 		/// How many frames to keep
 		/// </summary>
 		public int maxFrameCount = 128;
@@ -119,9 +113,6 @@ namespace Core.Networking
 
 		public override void OnServerSceneChanged(string sceneName)
 		{
-			//Clear the pickup list
-			ServerPickupManager.ClearUnActivePickupsList();
-
 			Logger.Info("Server changing scene to {@SceneName}", sceneName);
 
 			base.OnServerSceneChanged(sceneName);
@@ -130,35 +121,20 @@ namespace Core.Networking
 			Instantiate(gameMangerPrefab);
 			Logger.Debug("Created GameManager object");
 
-			//Setup pickups
-			//TODO: This should be done in the server pickup manager
-			//TODO: We should save all references to pickups to the associated scene file
-			GameObject[] pickups = GameObject.FindGameObjectsWithTag(pickupTagName);
-			foreach (GameObject pickup in pickups)
-			{
-				//Make sure it has the Pickup script on it
-				Pickup pickupLogic = pickup.GetComponent<Pickup>();
-				if(pickupLogic == null)
-				{
-					Logger.Error("The pickup with the name of `{@PickupName}` @ {@PickupTransform} doesn't have the {@Pickup} behaviour on it!", pickup.name, pickup.transform, typeof(Pickup));
-					continue;
-				}
-
-				//Setup the trigger
-				pickupLogic.SetupTrigger();
-			}
-
 			Logger.Info("Loaded scene to {@SceneName}", sceneName);
 		}
 
 		public override void OnServerAddPlayer(NetworkConnection conn)
 		{
 			//Sent to client info about the server
+			//TODO: Do this in an authenticator
 			conn.Send(new InitialClientJoinMessage
 			{
-				ServerConfig = serverConfig,
-				DeactivatedPickups = ServerPickupManager.GetUnActivePickups()
+				ServerConfig = serverConfig
 			});
+
+			//Send pickup's status
+			ServerPickupManager.OnClientJoined(conn);
 
 			//Create the player object
 			GameObject player = Instantiate(playerPrefab);
@@ -174,10 +150,13 @@ namespace Core.Networking
 		{
 			Logger.Info("Starting server...");
 
+			//Set what network address to use, if the computer has multiple adapters then it will default to localhost
 			singleton.networkAddress = NetHelper.LocalIpAddress();
-
 			if (Transport.activeTransport is IgnoranceThreaded threaded)
 				threaded.ServerBindAddress = singleton.networkAddress;
+
+			//Setup the pickup manager
+			ServerPickupManager.SetupServerPickupManager();
 
 			base.OnStartServer();
 
@@ -195,6 +174,8 @@ namespace Core.Networking
 			Logger.Info("Stopping server...");
 
 			base.OnStopServer();
+
+			ServerPickupManager.ShutdownServer();
 
 			//Stop advertising the server when the server stops
 			gameDiscovery.StopDiscovery();
@@ -259,9 +240,18 @@ namespace Core.Networking
 			Logger.Info($"Disconnected from server {conn.address}");
 		}
 
+		public override void OnStartClient()
+		{
+			ClientPickupManager.SetupClientPickupManager();
+
+			base.OnStartClient();
+		}
+
 		public override void OnStopClient()
 		{
 			base.OnStopClient();
+
+			ClientPickupManager.ShutdownClient();
 
 			Logger.Info("Stopped client");
 		}
@@ -295,25 +285,6 @@ namespace Core.Networking
 
 			//Set the game name
 			serverConfig = message.ServerConfig;
-
-			//Deactivate any deactivated pickups
-			//TODO: This stuff should be done in a client pickup manager
-			foreach (string unActivePickup in message.DeactivatedPickups)
-			{
-				GameObject pickup = GameObject.Find(GameManager.GetActiveScene().pickupsParent + unActivePickup);
-				if (pickup == null)
-				{
-					Logger.Error("There was a pickup with the name `{@PickupName}` sent by the server that doesn't exist! Either the server's game is out of date or ours is!", pickup.name);
-					continue;
-				}
-
-				Pickup pickupLogic = pickup.GetComponent<Pickup>();
-
-				foreach (PickupMaterials pickupMaterials in pickupLogic.pickupMaterials)
-				{
-					pickupMaterials.meshToChange.material = pickupMaterials.pickupPickedUpMaterial;
-				}
-			}
 		}
 
 		#endregion
