@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Attributes;
+using Mirror;
 using Player;
 using SceneManagement;
 using UnityEngine;
+using Logger = Core.Logging.Logger;
 
 namespace Core
 {
@@ -32,7 +35,7 @@ namespace Core
 		{
 			if (Instance != null)
 			{
-				Logging.Logger.Error("There is already an active GameManager running!");
+				Logger.Error("There is already an active GameManager running!");
 			}
 			else
 			{
@@ -52,14 +55,14 @@ namespace Core
 			scene = TCScenesManager.GetActiveScene();
 			if (scene == null)
 			{
-				Logging.Logger.Error("The scene '{@Scene}' doesn't have a TCScene assigned to it!", UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+				Logger.Error("The scene '{@Scene}' doesn't have a TCScene assigned to it!", UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
 				return;
 			}
 
 			sceneCamera = GameObject.FindWithTag(SceneCameraTag);
 			if (sceneCamera == null)
 			{
-				Logging.Logger.Error("The scene {@Scene} doesn't have a Camera with the tag `{@SceneCameraTag}` assigned to it!", scene.scene, SceneCameraTag);
+				Logger.Error("The scene {@Scene} doesn't have a Camera with the tag `{@SceneCameraTag}` assigned to it!", scene.scene, SceneCameraTag);
 			}
 		}
 
@@ -94,7 +97,7 @@ namespace Core
 			playerManager.gameObject.name = playerId;
 			Players.Add(playerId, playerManager);
 
-			Logging.Logger.Debug("Added player {@PlayerId}.", playerId);
+			Logger.Debug("Added player {@PlayerId}.", playerId);
 		}
 
 		/// <summary>
@@ -104,7 +107,7 @@ namespace Core
 		public static void RemovePlayer(string playerId)
 		{
 			Players.Remove(playerId);
-			Logging.Logger.Debug("Removed player {@PlayerId}", playerId);
+			Logger.Debug("Removed player {@PlayerId}", playerId);
 		}
 
 		/// <summary>
@@ -132,6 +135,44 @@ namespace Core
 		public static void ClearAllPlayers()
 		{
 			Players.Clear();
+		}
+
+		#endregion
+
+		#region Commands
+
+		[ConCommand("sv_damage", "Damages a player", 2, 2)]
+		public static void DamageCommand(string[] args)
+		{
+			if (Instance == null)
+			{
+				Logger.Error("A game isn't currently running!");
+				return;
+			}
+
+			if (NetworkManager.singleton.mode != NetworkManagerMode.ServerOnly)
+			{
+				Logger.Error("You can only run this command on a server!");
+				return;
+			}
+
+			string playerId = args[0];
+			PlayerManager player = GetPlayer(playerId);
+			if (player == null)
+			{
+				Logger.Error("A player with that ID doesn't exist!");
+				return;
+			}
+
+			string damage = args[1];
+			if (int.TryParse(damage, out int result))
+			{
+				player.TakeDamage(result, playerId);
+			}
+			else
+			{
+				Logger.Error("The inputed damge to do isn't a number!");
+			}
 		}
 
 		#endregion
