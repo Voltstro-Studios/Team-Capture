@@ -6,19 +6,28 @@ using Logger = Core.Logging.Logger;
 
 namespace Pickups
 {
+	/// <summary>
+	/// Handles pickup related task for the client
+	/// </summary>
 	public static class ClientPickupManager
 	{
+		/// <summary>
+		/// Sets up the <see cref="ClientPickupManager"/>
+		/// </summary>
 		public static void SetupClientPickupManager()
 		{
-			NetworkClient.RegisterHandler<PickupStatusMessage>(SetPickupStatus);
+			NetworkClient.RegisterHandler<InitPickupStatusMessage>(SetPickupStatus);
 		}
 
+		/// <summary>
+		/// Shutdown the <see cref="ClientPickupManager"/>
+		/// </summary>
 		public static void ShutdownClient()
 		{
-			NetworkClient.UnregisterHandler<PickupStatusMessage>();
+			NetworkClient.UnregisterHandler<InitPickupStatusMessage>();
 		}
 
-		private static void SetPickupStatus(NetworkConnection conn, PickupStatusMessage message)
+		private static void SetPickupStatus(NetworkConnection conn, InitPickupStatusMessage message)
 		{
 			//Deactivate any deactivated pickups
 			string pickupParent = GameManager.GetActiveScene().pickupsParent;

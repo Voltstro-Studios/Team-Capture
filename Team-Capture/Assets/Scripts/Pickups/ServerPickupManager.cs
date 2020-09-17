@@ -20,6 +20,9 @@ namespace Pickups
 		private static List<string> unActivePickups = new List<string>();
 		private const int ChannelToSendOnId = 1;
 
+		/// <summary>
+		/// Sets up the <see cref="ServerPickupManager"/>
+		/// </summary>
 		public static void SetupServerPickupManager()
 		{
 			unActivePickups = new List<string>();
@@ -28,6 +31,9 @@ namespace Pickups
 			TCScenesManager.OnSceneLoadedEvent += OnSceneLoaded;
 		}
 
+		/// <summary>
+		/// Shutdown the <see cref="ServerPickupManager"/>
+		/// </summary>
 		public static void ShutdownServer()
 		{
 			SceneManager.OnBeginSceneLoading -= OnBeginSceneLoading;
@@ -68,7 +74,7 @@ namespace Pickups
 		/// <param name="conn"></param>
 		public static void OnClientJoined(NetworkConnection conn)
 		{
-			conn.Send(new PickupStatusMessage
+			conn.Send(new InitPickupStatusMessage
 			{
 				DisabledPickups = unActivePickups.ToArray()
 			});
