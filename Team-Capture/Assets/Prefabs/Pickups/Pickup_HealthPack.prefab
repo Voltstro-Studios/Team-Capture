@@ -44,7 +44,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b12913bdd4755834ebdcc946e746eed7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pickupMaterials: []
+  pickupMaterials:
+  - meshToChange: {fileID: 8655345491003728764}
+    pickupMaterial: {fileID: 2100000, guid: 40f1d7055abf0d64e986f588b3c302e7, type: 2}
+    pickupPickedUpMaterial: {fileID: 2100000, guid: eb623b9f79e7c4e4cb3e7a0974a062ed,
+      type: 2}
   pickupRespawnTime: 8
   triggerRadius: 1.3
   triggerCenter: {x: 0, y: 0, z: 0}
@@ -166,6 +170,12 @@ GameObject:
 --- !u!4 &6231426117967455667 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: 7f7a66f08e61a2042b731e21228819ce,
+    type: 3}
+  m_PrefabInstance: {fileID: 1369320543116005033}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &8655345491003728764 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -1504981713932161579, guid: 7f7a66f08e61a2042b731e21228819ce,
     type: 3}
   m_PrefabInstance: {fileID: 1369320543116005033}
   m_PrefabAsset: {fileID: 0}
