@@ -1,26 +1,27 @@
 ﻿using Core;
+using Settings.URPSettings;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using Logger = Core.Logging.Logger;
 
-namespace Settings.URPSettings
+namespace Settings.Controllers
 {
 	/// <summary>
 	/// Handles applying settings to Universal Render Pipeline(URP)
 	/// </summary>
-	public static class URPSettings
+	public static class URPSettingsController
 	{
 		private static UniversalRenderPipelineAsset urpRenderPipeline;
 
-		private static GraphicSettingsEditor editor;
+		private static URPSettingsEditor editor;
 
 		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
 		public static void Load()
 		{
 			urpRenderPipeline = (UniversalRenderPipelineAsset) GraphicsSettings.renderPipelineAsset;
 
-			editor = new GraphicSettingsEditor(urpRenderPipeline);
+			editor = new URPSettingsEditor(urpRenderPipeline);
 			GameSettings.SettingsLoaded += ApplyURPSettings;
 			ApplyURPSettings();
 		}

@@ -4,14 +4,14 @@ using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using Logger = Core.Logging.Logger;
 
-namespace Settings
+namespace Settings.Controllers
 {
 	/// <summary>
 	/// Handles controlling the <see cref="Camera"/>'s settings.
 	/// </summary>
 	[RequireComponent(typeof(UniversalAdditionalCameraData))]
 	[RequireComponent(typeof(Camera))]
-	public class InGameCameraSettings : MonoBehaviour
+	public class CameraSettingsController : MonoBehaviour
 	{
 		private Camera cameraToChange;
 		private UniversalAdditionalCameraData cameraData;

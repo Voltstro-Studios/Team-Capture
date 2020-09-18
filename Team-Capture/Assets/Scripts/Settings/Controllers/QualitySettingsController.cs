@@ -4,12 +4,12 @@ using Settings.SettingClasses;
 using UnityEngine;
 using Logger = Core.Logging.Logger;
 
-namespace Settings
+namespace Settings.Controllers
 {
 	/// <summary>
 	/// Handles controlling Unity's quality settings
 	/// </summary>
-	public static class GraphicSettings
+	public static class QualitySettingsController
 	{
 		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
 		public static void Load()

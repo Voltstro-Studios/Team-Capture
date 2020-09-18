@@ -6,14 +6,14 @@ namespace Settings.URPSettings
 	/// <summary>
 	/// An editor for URP
 	/// </summary>
-	public class GraphicSettingsEditor
+	public class URPSettingsEditor
 	{
 		private readonly UniversalRenderPipelineAsset urpPipelineAsset;
 
 		/// <summary>
 		/// Allows editing of a URP assets, but it is easier
 		/// </summary>
-		public GraphicSettingsEditor(UniversalRenderPipelineAsset pipelineAsset)
+		public URPSettingsEditor(UniversalRenderPipelineAsset pipelineAsset)
 		{
 			urpPipelineAsset = pipelineAsset;
 		}

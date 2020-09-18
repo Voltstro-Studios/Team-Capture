@@ -6,7 +6,7 @@ using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using Logger = Core.Logging.Logger;
 
-namespace Settings.URPSettings
+namespace Settings.Controllers
 {
 	/// <summary>
 	/// Controller for Unity's <see cref="Volume"/> for URP
