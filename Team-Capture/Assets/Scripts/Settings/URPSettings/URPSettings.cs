@@ -6,7 +6,10 @@ using Logger = Core.Logging.Logger;
 
 namespace Settings.URPSettings
 {
-	public class URPSettings
+	/// <summary>
+	/// Handles applying settings to Universal Render Pipeline(URP)
+	/// </summary>
+	public static class URPSettings
 	{
 		private static UniversalRenderPipelineAsset urpRenderPipeline;
 
@@ -26,7 +29,7 @@ namespace Settings.URPSettings
 		{
 			if(Game.IsHeadless) return;
 
-			editor.SetHdr(GameSettings.AdvSettings.HDR);
+			editor.SetHDR(GameSettings.AdvSettings.HDR);
 			editor.SetRenderScale(GameSettings.AdvSettings.RenderScale);
 			editor.SetShadowDistance(GameSettings.AdvSettings.ShadowDistance);
 			editor.SetMsaaQuality((MsaaQuality) GameSettings.AdvSettings.MsaaQuality);

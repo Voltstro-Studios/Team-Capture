@@ -1,5 +1,8 @@
 ﻿namespace Settings.URPSettings
 {
+	/// <summary>
+	/// MSAA Quality
+	/// </summary>
 	public enum MSAAQuality
 	{
 		Disabled = 1,

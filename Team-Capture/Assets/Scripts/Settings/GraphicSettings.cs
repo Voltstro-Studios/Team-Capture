@@ -6,7 +6,10 @@ using Logger = Core.Logging.Logger;
 
 namespace Settings
 {
-	public class GraphicSettings
+	/// <summary>
+	/// Handles controlling Unity's quality settings
+	/// </summary>
+	public static class GraphicSettings
 	{
 		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
 		public static void Load()

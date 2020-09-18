@@ -6,6 +6,9 @@ using Logger = Core.Logging.Logger;
 
 namespace Settings
 {
+	/// <summary>
+	/// Handles controlling the <see cref="Camera"/>'s settings.
+	/// </summary>
 	[RequireComponent(typeof(UniversalAdditionalCameraData))]
 	[RequireComponent(typeof(Camera))]
 	public class InGameCameraSettings : MonoBehaviour
