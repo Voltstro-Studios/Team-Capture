@@ -1,4 +1,5 @@
 ﻿using Attributes;
+using Core;
 using Settings.SettingClasses;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -22,7 +23,7 @@ namespace Settings.URPSettings
 
 		private void Awake()
 		{
-			if (instance != null)
+			if (instance != null || Game.IsHeadless)
 			{
 				Destroy(gameObject);
 				return;

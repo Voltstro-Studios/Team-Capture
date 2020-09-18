@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Core;
+using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using Logger = Core.Logging.Logger;
@@ -23,6 +24,8 @@ namespace Settings.URPSettings
 
 		private static void ApplyURPSettings()
 		{
+			if(Game.IsHeadless) return;
+
 			editor.SetHdr(GameSettings.AdvSettings.HDR);
 			editor.SetRenderScale(GameSettings.AdvSettings.RenderScale);
 			editor.SetShadowDistance(GameSettings.AdvSettings.ShadowDistance);

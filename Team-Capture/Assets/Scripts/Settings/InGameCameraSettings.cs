@@ -1,4 +1,5 @@
 ﻿using Attributes;
+using Core;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using Logger = Core.Logging.Logger;
@@ -31,6 +32,8 @@ namespace Settings
 
 		private void UpdateSettings()
 		{
+			if(Game.IsHeadless) return;
+
 			if(allowModifyOfFOV)
 				cameraToChange.fieldOfView = GameSettings.AdvSettings.CameraFOV;
 

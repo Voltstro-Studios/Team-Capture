@@ -1,4 +1,5 @@
 ﻿using Attributes;
+using Core;
 using Settings.SettingClasses;
 using UnityEngine;
 using Logger = Core.Logging.Logger;
@@ -16,6 +17,8 @@ namespace Settings
 
 		private static void ApplySettings()
 		{
+			if(Game.IsHeadless) return;
+
 			VideoSettingsClass settings = GameSettings.VideoSettings;
 			Screen.SetResolution(settings.Resolution.width, settings.Resolution.height, settings.ScreenMode, settings.Resolution.refreshRate);
 			QualitySettings.masterTextureLimit = (int) settings.TextureQuality;
