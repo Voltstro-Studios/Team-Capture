@@ -37,7 +37,23 @@ namespace Player
 			CmdShootWeapon();
 		}
 
+		#region Mirror Events
+
+		public override void OnStartServer()
+		{
+			base.OnStartServer();
+
+			localPlayerCamera = gameObject.GetComponent<PlayerSetup>().GetPlayerCamera();
+		}
+
+		#endregion
+
 		#region Server Variables
+
+		/// <summary>
+		/// (Server only) The local player's camera
+		/// </summary>
+		private Camera localPlayerCamera;
 
 		/// <summary>
 		/// (Server only) The last weapon this client used
@@ -158,27 +174,22 @@ namespace Player
 
 			RpcWeaponMuzzleFlash();
 
-			SimulationHelper.SimulateCommand(playerManager, () => WeaponRayCast(transform.name));
+			SimulationHelper.SimulateCommand(playerManager, () => WeaponRayCast());
 		}
 
 		/// <summary>
 		/// Does a ray cast based of the weapon properties
 		/// </summary>
-		/// <param name="sourcePlayer"></param>
 		[Server]
-		private void WeaponRayCast(string sourcePlayer)
+		private void WeaponRayCast()
 		{
-			//First, get our player
-			PlayerManager player = GameManager.GetPlayer(sourcePlayer);
-			if (player == null) return;
-
 			//Next, get what weapon the player was using
 			TCWeapon tcWeapon = weaponManager.GetActiveWeapon().GetTCWeapon();
 			if (tcWeapon == null)
 				return;
 
 			//Get the direction the player was facing
-			Transform playerFacingDirection = player.GetComponent<PlayerSetup>().GetPlayerCamera().transform;
+			Transform playerFacingDirection = localPlayerCamera.transform;
 
 			//Create a list here, so we know later where the bullets landed
 			List<Vector3> targets = new List<Vector3>();
@@ -199,7 +210,7 @@ namespace Player
 				foreach (RaycastHit hit in hits)
 				{
 					//Don't count if we hit the shooting player
-					if(hit.collider.name == sourcePlayer)
+					if(hit.collider.name == transform.name)
 						continue;
 
 					//Do impact effect on all clients
@@ -207,8 +218,10 @@ namespace Player
 					targetsNormal.Add(hit.normal);
 
 					//So if we hit a player then do damage
-					if (hit.collider.GetComponent<PlayerManager>() == null) break;
-					hit.collider.GetComponent<PlayerManager>().TakeDamage(tcWeapon.damage, sourcePlayer);
+					PlayerManager hitPlayer = hit.collider.GetComponent<PlayerManager>();
+					if (hitPlayer == null) break;
+
+					hitPlayer.TakeDamage(tcWeapon.damage, transform.name);
 					break;
 				}
 			}
