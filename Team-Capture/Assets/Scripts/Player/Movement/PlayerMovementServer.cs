@@ -15,15 +15,15 @@ namespace Player.Movement
 	/// </summary>
 	public class PlayerMovementServer : MonoBehaviour
 	{
-		private Queue<PlayerInput> inputBuffer;
+		private Queue<PlayerInputs> inputBuffer;
 		private PlayerMovementManager character;
 		private int serverTick;
 
-		private PlayerInput lastInput;
+		private PlayerInputs lastInputs;
 
 		private void Awake()
 		{
-			inputBuffer = new Queue<PlayerInput>();
+			inputBuffer = new Queue<PlayerInputs>();
 			character = GetComponent<PlayerMovementManager>();
 			character.state = PlayerState.Zero;
 		}
@@ -35,9 +35,9 @@ namespace Player.Movement
 			PlayerState state = character.state;
 
 			if (inputBuffer.Count != 0)
-				lastInput = inputBuffer.Dequeue();
+				lastInputs = inputBuffer.Dequeue();
 
-			state = character.Move(state, lastInput, serverTick);
+			state = character.Move(state, lastInputs, serverTick);
 			character.SyncState(state);
 
 			state.Position = transform.position;
@@ -54,9 +54,9 @@ namespace Player.Movement
 		/// Adds all the inputs and moves
 		/// </summary>
 		/// <param name="inputs"></param>
-		public void AddInputs(PlayerInput[] inputs)
+		public void AddInputs(PlayerInputs[] inputs)
 		{
-			foreach (PlayerInput input in inputs)
+			foreach (PlayerInputs input in inputs)
 				inputBuffer.Enqueue(input);
 		}
 	}

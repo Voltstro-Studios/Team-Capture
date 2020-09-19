@@ -125,7 +125,7 @@ namespace Player.Movement
 		}
 
 		[Command(channel = 0)]
-		public void CmdMove(PlayerInput[] inputs)
+		public void CmdMove(PlayerInputs[] inputs)
 		{
 			server.AddInputs(inputs);
 		}
@@ -167,7 +167,7 @@ namespace Player.Movement
 
 		#region Movement Methods
 
-		public PlayerState Move(PlayerState previous, PlayerInput input, int timestamp)
+		public PlayerState Move(PlayerState previous, PlayerInputs input, int timestamp)
 		{
 			PlayerState playerState = new PlayerState
 			{

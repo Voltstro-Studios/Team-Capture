@@ -14,7 +14,7 @@ namespace Player.Movement
 	/// </summary>
 	public class PlayerMovementInput : MonoBehaviour
 	{
-		private List<PlayerInput> inputBuffer;
+		private List<PlayerInputs> inputBuffer;
 		private PlayerMovementManager character;
 		private PlayerMovementPredictor predictor;
 		private int currentInput;
@@ -25,7 +25,7 @@ namespace Player.Movement
 
 		private void Awake()
 		{
-			inputBuffer = new List<PlayerInput>();
+			inputBuffer = new List<PlayerInputs>();
 			character = GetComponent<PlayerMovementManager>();
 			predictor = GetComponent<PlayerMovementPredictor>();
 		}
@@ -42,10 +42,10 @@ namespace Player.Movement
 
 		private void FixedUpdate()
 		{
-			PlayerInput charInput = new PlayerInput(directions, lookDirections, jumping, currentInput++);
-			predictor.AddInput(charInput);
+			PlayerInputs charInputs = new PlayerInputs(directions, lookDirections, jumping, currentInput++);
+			predictor.AddInput(charInputs);
 
-			inputBuffer.Add(charInput);
+			inputBuffer.Add(charInputs);
 
 			//Don't send input until our buffer is big enough
 			if (inputBuffer.Count < character.InputBufferSize)
