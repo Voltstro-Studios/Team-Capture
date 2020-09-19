@@ -200,8 +200,8 @@ namespace Player.Movement
 			playerState.Position += playerState.Velocity * Time.deltaTime;
 
 			//Mouse Movement
-			playerState.RotationX -= input.MouseDirections.y * 0.02f;
-			playerState.RotationY += input.MouseDirections.x * 0.02f;
+			playerState.RotationX -= input.MouseDirections.y * Time.deltaTime * 0.02f;
+			playerState.RotationY += input.MouseDirections.x * Time.deltaTime * 0.02f;
 
 			playerState.RotationX = Mathf.Clamp(playerState.RotationX, -90, 90);
 

@@ -9,7 +9,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: BulletHole
   m_Shader: {fileID: 4800000, guid: d14401467ba8e974a981790848a3f0a0, type: 3}
-  m_ShaderKeywords: _UnityFogEnable
+  m_ShaderKeywords: _MULALPHATORGB_ON _UnityFogEnable
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -60,7 +60,7 @@ Material:
     - _Glossiness: 0
     - _GlossyReflections: 0
     - _Metallic: 0
-    - _MulAlphaToRGB: 0
+    - _MulAlphaToRGB: 1
     - _OcclusionStrength: 1
     - _ProjectionAngleDiscardEnable: 0
     - _ProjectionAngleDiscardThreshold: 0
