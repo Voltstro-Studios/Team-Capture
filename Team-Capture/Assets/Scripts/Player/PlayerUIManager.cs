@@ -8,11 +8,10 @@ namespace Player
 	{
 		private Hud hud;
 
-		public void Start()
+		public void Setup(ClientUI clientUI)
 		{
-			PlayerManager playerManager = GetComponent<PlayerManager>();
-			hud = playerManager.ClientUi.hud;
-			playerManager.PlayerDamaged += OnPlayerDamaged;
+			hud = clientUI.hud;
+			GetComponent<PlayerManager>().PlayerDamaged += OnPlayerDamaged;
 			GetComponent<WeaponManager>().WeaponUpdated += OnWeaponUpdated;
 		}
 

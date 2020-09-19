@@ -66,6 +66,7 @@ namespace Player
 			ClientUI clientUi = Instantiate(clientUiPrefab).GetComponent<ClientUI>();
 			playerManager.ClientUi = clientUi;
 			clientUi.SetupUI(playerManager);
+			gameObject.AddComponent<PlayerUIManager>().Setup(clientUi);
 
 			//Allows for custom messages
 			gameObject.AddComponent<PlayerServerMessages>();
