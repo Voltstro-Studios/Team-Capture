@@ -341,6 +341,15 @@ namespace Core.Networking
 			Instance.serverConfig.gameName = string.Join(" ", args);
 			Logger.Info("Game name was set to {@Name}", Instance.serverConfig.gameName);
 		}
+
+		[ConCommand("sv_address", "Sets the server's address", 1, 1)]
+		public static void SetAddress(string[] args)
+		{
+			if(singleton == null) return;
+
+			singleton.networkAddress = args[0];
+			Logger.Info("Server's address was set to {@Address}", args[0]);
+		}
 		
 		#endregion
 	}
