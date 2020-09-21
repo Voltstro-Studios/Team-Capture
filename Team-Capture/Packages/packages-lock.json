@@ -5,7 +5,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "01392f3cf08ba2ca6c72b836af599c06bb8a56bf"
+      "hash": "4ba5b28ef76c122ee3474fa773142091a0ae2886"
     },
     "com.mirror-networking.mirror.transport.ignorance": {
       "version": "https://github.com/VoltUnityPackages/Ignorance.git?path=/Assets/Mirror",
