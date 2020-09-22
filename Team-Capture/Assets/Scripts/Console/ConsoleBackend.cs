@@ -12,8 +12,6 @@ namespace Console
 {
 	public static class ConsoleBackend
 	{
-		private const string SplashScreenResourceFile = "Resources/console-splashscreen.txt";
-
 		private static readonly Dictionary<string, ConsoleCommand> Commands = new Dictionary<string, ConsoleCommand>();
 
 		private const int HistoryCount = 50;
@@ -49,7 +47,7 @@ namespace Console
 		/// </summary>
 		/// <param name="conCommand"></param>
 		/// <param name="method"></param>
-		public static void AddCommand(ConCommand conCommand, MethodDelegate method)
+		private static void AddCommand(ConCommand conCommand, MethodDelegate method)
 		{
 			string commandName = conCommand.Name.ToLower();
 
@@ -306,61 +304,5 @@ namespace Console
 		}
 
 		#endregion
-
-		#region Additional Commands
-
-		[ConCommand("asciiart", "Shows Team-Capture ascii art")]
-		public static void AsciiArtCmd(string[] args)
-		{
-			ShowAsciiArt();
-		}
-
-		[ConCommand("splashmessage", "Shows a random splash message")]
-		public static void SplashMessage(string[] args)
-		{
-			ShowSplashMessage();
-		}
-
-		#endregion
-
-		/// <summary>
-		/// Shows Team-Capture ascii art
-		/// </summary>
-		public static void ShowAsciiArt()
-		{
-			//Ascii art, fuck you
-			const string asciiArt = @"
-___________                    
-\__    ___/___ _____    _____  
-  |    |_/ __ \\__  \  /     \ 
-  |    |\  ___/ / __ \|  Y Y  \
-  |____| \___  >____  /__|_|  /
-             \/     \/      \/ 
-	_________                __                        
-	\_   ___ \_____  _______/  |_ __ _________   ____  
-	/    \  \/\__  \ \____ \   __\  |  \_  __ \_/ __ \ 
-	\     \____/ __ \|  |_> >  | |  |  /|  | \/\  ___/ 
-	 \______  (____  /   __/|__| |____/ |__|    \___  >
-	        \/     \/|__|                           \/ 
-";
-			Logger.Info(asciiArt);
-		}
-
-		/// <summary>
-		/// Shows a random splash message
-		/// </summary>
-		public static void ShowSplashMessage()
-		{
-			//Random splash message
-			string splashMessagesPath = $"{Game.GetGameExecutePath()}/{SplashScreenResourceFile}";
-			if (File.Exists(splashMessagesPath))
-			{
-				string[] lines = File.ReadAllLines(splashMessagesPath);
-
-				//Select random number
-				int index = UnityEngine.Random.Range(0, lines.Length);
-				Logger.Info($"	{lines[index]}");
-			}
-		}
 	}
 }

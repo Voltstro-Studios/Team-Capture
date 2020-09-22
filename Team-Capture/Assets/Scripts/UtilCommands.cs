@@ -1,12 +1,17 @@
-﻿using Attributes;
+﻿using System.IO;
+using Attributes;
 using Core;
 using Core.Logging;
-using Core.Networking;
 using Mirror;
 using SceneManagement;
 
+/// <summary>
+/// A bunch of util commands
+/// </summary>
 public static class UtilCommands
 {
+	private const string SplashScreenResourceFile = "Resources/console-splashscreen.txt";
+
 	[ConCommand("quit", "Quits the game")]
 	public static void QuitGameCommand(string[] args)
 	{
@@ -56,6 +61,42 @@ public static class UtilCommands
 				Logger.Info("Changing scene to {@Scene}...", scene.scene);
 				NetworkManager.singleton.ServerChangeScene(scene.scene);
 				break;
+		}
+	}
+
+	[ConCommand("asciiart", "Shows Team-Capture ascii art")]
+	public static void AsciiArtCmd(string[] args)
+	{
+		//Ascii art, fuck you
+		const string asciiArt = @"
+___________                    
+\__    ___/___ _____    _____  
+  |    |_/ __ \\__  \  /     \ 
+  |    |\  ___/ / __ \|  Y Y  \
+  |____| \___  >____  /__|_|  /
+             \/     \/      \/ 
+	_________                __                        
+	\_   ___ \_____  _______/  |_ __ _________   ____  
+	/    \  \/\__  \ \____ \   __\  |  \_  __ \_/ __ \ 
+	\     \____/ __ \|  |_> >  | |  |  /|  | \/\  ___/ 
+	 \______  (____  /   __/|__| |____/ |__|    \___  >
+	        \/     \/|__|                           \/ 
+";
+		Logger.Info(asciiArt);
+	}
+
+	[ConCommand("splashmessage", "Shows a random splash message")]
+	public static void SplashMessage(string[] args)
+	{
+		//Random splash message
+		string splashMessagesPath = $"{Game.GetGameExecutePath()}/{SplashScreenResourceFile}";
+		if (File.Exists(splashMessagesPath))
+		{
+			string[] lines = File.ReadAllLines(splashMessagesPath);
+
+			//Select random number
+			int index = UnityEngine.Random.Range(0, lines.Length);
+			Logger.Info($"	{lines[index]}");
 		}
 	}
 }
