@@ -1,7 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Attributes;
+using Mirror;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Logger = Core.Logging.Logger;
+using SceneManager = UnityEngine.SceneManagement.SceneManager;
 
 namespace SceneManagement
 {
@@ -119,5 +123,51 @@ namespace SceneManagement
 		}
 
 		#endregion
+
+		[ConCommand("scene", "Loads a scene", 1, 1)]
+		public static void LoadScene(string[] args)
+		{
+			NetworkManagerMode mode = NetworkManager.singleton.mode;
+
+			TCScene scene = TCScenesManager.FindSceneInfo(args[0]);
+
+			//Scene doesn't exist
+			if (scene == null)
+			{
+				Logger.Error("The scene '{@Scene}' doesn't exist!", args[0]);
+				return;
+			}
+
+			//This scene cannot be loaded to
+			if (!scene.canLoadTo)
+			{
+				Logger.Error("You cannot load to this scene!");
+				return;
+			}
+
+			switch (mode)
+			{
+				//We are in client mode
+				case NetworkManagerMode.ClientOnly:
+					//Disconnect from current server
+					NetworkManager.singleton.StopHost();
+				
+					//Load the scene
+					Logger.Info("Changing scene to {@Scene}...", scene.scene);
+					LoadScene(scene);
+					break;
+
+				//We are server, so we will tell the server and clients to change scene
+				case NetworkManagerMode.ServerOnly:
+					Logger.Info("Changing scene to {@Scene}...", scene.scene);
+					NetworkManager.singleton.ServerChangeScene(scene.scene);
+					break;
+
+				case NetworkManagerMode.Offline:
+					Logger.Info("Changing scene to {@Scene}...", scene.scene);
+					LoadScene(scene);
+					break;
+			}
+		}
 	}
 }
