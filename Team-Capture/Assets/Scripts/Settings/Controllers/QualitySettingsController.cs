@@ -33,7 +33,7 @@ namespace Settings.Controllers
 		#region Video Console Commands
 
 		[ConCommand("r_resolution", "Set the resolution (width x height)", 2, 2)]
-		public static void SetResolution(string[] args)
+		public static void SetResolutionCommand(string[] args)
 		{
 			if (int.TryParse(args[0], out int widthRes))
 			{
@@ -52,7 +52,7 @@ namespace Settings.Controllers
 		}
 
 		[ConCommand("r_refreshrate", "Sets the refresh rate", 1, 1)]
-		public static void SetRefreshRate(string[] args)
+		public static void SetRefreshRateCommand(string[] args)
 		{
 			if (int.TryParse(args[0], out int refreshRate))
 			{
@@ -66,7 +66,7 @@ namespace Settings.Controllers
 		}
 
 		[ConCommand("r_screenmode", "Sets the screen mode", 1, 1)]
-		public static void SetScreenMode(string[] args)
+		public static void SetScreenModeCommand(string[] args)
 		{
 			if (int.TryParse(args[0], out int screenModeIndex))
 			{

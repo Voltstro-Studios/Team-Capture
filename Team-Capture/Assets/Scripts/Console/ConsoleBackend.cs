@@ -279,7 +279,7 @@ namespace Console
 		private static string configFilesLocation;
 
 		[ConCommand("exec", "Executes a file", 1, 1)]
-		public static void ExecuteFile(string[] args)
+		public static void ExecuteFileCommand(string[] args)
 		{
 			if (args.Length != 1)
 			{

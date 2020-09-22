@@ -424,7 +424,7 @@ namespace Player
 		public static string StartPlayerName = "NotSet";
 
 		[ConCommand("cl_name", "Sets the name to use in game")]
-		public static void SetName(string[] args)
+		public static void SetNameCommand(string[] args)
 		{
 			StartPlayerName = string.Join(" ", args);
 		}

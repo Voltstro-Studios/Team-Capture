@@ -164,7 +164,7 @@ namespace Core.Networking
 			gameDiscovery.AdvertiseServer();
 
 			//Run the server autoexec config
-			ConsoleBackend.ExecuteFile(new []{"server-autoexec"});
+			ConsoleBackend.ExecuteFileCommand(new []{"server-autoexec"});
 
 			Logger.Info("Server has started and is running on {@Address} with max connections of {@MaxPlayers}!", singleton.networkAddress, singleton.maxConnections);
 		}
@@ -327,7 +327,7 @@ namespace Core.Networking
 		}
 
 		[ConCommand("startserver", "Starts a server", 1, 1)]
-		public static void StartServer(string[] args)
+		public static void StartServerCommand(string[] args)
 		{
 			string scene = args[0];
 			singleton.onlineScene = scene;
@@ -336,14 +336,14 @@ namespace Core.Networking
 		}
 
 		[ConCommand("gamename", "Sets the game name", 1, 100)]
-		public static void SetGameName(string[] args)
+		public static void SetGameNameCommand(string[] args)
 		{
 			Instance.serverConfig.gameName = string.Join(" ", args);
 			Logger.Info("Game name was set to {@Name}", Instance.serverConfig.gameName);
 		}
 
 		[ConCommand("sv_address", "Sets the server's address", 1, 1)]
-		public static void SetAddress(string[] args)
+		public static void SetAddressCommand(string[] args)
 		{
 			if(singleton == null) return;
 

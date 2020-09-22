@@ -23,7 +23,7 @@ public static class UtilCommands
 	}
 
 	[ConCommand("asciiart", "Shows Team-Capture ascii art")]
-	public static void AsciiArtCmd(string[] args)
+	public static void AsciiArtCommand(string[] args)
 	{
 		//Ascii art, fuck you
 		const string asciiArt = @"
@@ -44,7 +44,7 @@ ___________
 	}
 
 	[ConCommand("splashmessage", "Shows a random splash message")]
-	public static void SplashMessage(string[] args)
+	public static void SplashMessageCommand(string[] args)
 	{
 		//Random splash message
 		string splashMessagesPath = $"{Game.GetGameExecutePath()}/{SplashScreenResourceFile}";

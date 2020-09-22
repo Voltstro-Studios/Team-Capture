@@ -215,7 +215,7 @@ namespace Player.Movement
 		private static bool showPos;
 
 		[ConCommand("cl_showpos", "Shows info about position data", 1, 1)]
-		public static void ShowPosInfo(string[] args)
+		public static void ShowPosInfoCommand(string[] args)
 		{
 			string enabled = args[0].ToLower();
 			if (bool.TryParse(enabled, out bool result))

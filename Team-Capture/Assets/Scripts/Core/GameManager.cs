@@ -141,7 +141,7 @@ namespace Core
 		#region Commands
 
 		[ConCommand("sv_damage", "Damages a player", 2, 2)]
-		public static void DamageCommand(string[] args)
+		public static void DamageCommandCommand(string[] args)
 		{
 			if (Instance == null)
 			{
@@ -175,7 +175,7 @@ namespace Core
 		}
 
 		[ConCommand("players", "Gets a list of all the players")]
-		public static void ListPlayers(string[] args)
+		public static void ListPlayersCommand(string[] args)
 		{
 			if (Instance == null)
 			{

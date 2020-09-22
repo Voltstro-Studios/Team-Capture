@@ -48,7 +48,7 @@ namespace Settings.Controllers
 		#region Console Commands
 
 		[ConCommand("r_antialiasing", "Changes the antialiasing mode", 1, 1)]
-		public static void AntialiasingMode(string[] args)
+		public static void AntialiasingModeCommand(string[] args)
 		{
 			if (int.TryParse(args[0], out int modeIndex))
 			{
@@ -64,7 +64,7 @@ namespace Settings.Controllers
 		}
 
 		[ConCommand("r_antialiasing_quality", "Changes the antialiasing quality", 1, 1)]
-		public static void AntialiasingQuality(string[] args)
+		public static void AntialiasingQualityCommand(string[] args)
 		{
 			if (int.TryParse(args[0], out int qualityIndex))
 			{

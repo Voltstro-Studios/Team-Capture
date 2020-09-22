@@ -49,7 +49,7 @@ namespace Console
 			ConsoleBackend.RegisterCommands();
 
 			//Exec autoexec
-			ConsoleBackend.ExecuteFile(new []{"autoexec"});
+			ConsoleBackend.ExecuteFileCommand(new []{"autoexec"});
 		}
 
 		private void Update()

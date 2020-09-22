@@ -80,7 +80,7 @@ namespace Settings.Controllers
 		#region Motion Blur
 
 		[ConCommand("r_motionblur_enabled", "Enables or disables motion blur", 1, 1)]
-		public static void MotionBlurEnable(string[] args)
+		public static void MotionBlurEnableCommand(string[] args)
 		{
 			string toggle = args[0].ToLower();
 
@@ -103,7 +103,7 @@ namespace Settings.Controllers
 		}
 
 		[ConCommand("r_motionblur_intensity", "Changes the motion blur intensity", 1, 1)]
-		public static void MotionBlurIntensity(string[] args)
+		public static void MotionBlurIntensityCommand(string[] args)
 		{
 			string stringAmount = args[0].ToLower();
 
@@ -123,7 +123,7 @@ namespace Settings.Controllers
 		}
 
 		[ConCommand("r_motionblur_clamp", "Changes the motion blur clamp", 1, 1)]
-		public static void MotionBlurClamp(string[] args)
+		public static void MotionBlurClampCommand(string[] args)
 		{
 			string stringAmount = args[0].ToLower();
 
@@ -147,7 +147,7 @@ namespace Settings.Controllers
 		#region Bloom
 
 		[ConCommand("r_bloom_enabled", "Enables or disables bloom", 1, 1)]
-		public static void BloomEnable(string[] args)
+		public static void BloomEnableCommand(string[] args)
 		{
 			string toggle = args[0].ToLower();
 
@@ -170,7 +170,7 @@ namespace Settings.Controllers
 		}
 
 		[ConCommand("r_bloom_threshold", "Changes the bloom threshold", 1, 1)]
-		public static void BloomThreshold(string[] args)
+		public static void BloomThresholdCommand(string[] args)
 		{
 			string stringAmount = args[0].ToLower();
 
@@ -186,7 +186,7 @@ namespace Settings.Controllers
 		}
 
 		[ConCommand("r_bloom_intensity", "Changes the bloom intensity", 1, 1)]
-		public static void BloomIntensity(string[] args)
+		public static void BloomIntensityCommand(string[] args)
 		{
 			string stringAmount = args[0].ToLower();
 
@@ -206,7 +206,7 @@ namespace Settings.Controllers
 		#region Vignette
 
 		[ConCommand("r_vignette_enabled", "Enables or disables vignette", 1, 1)]
-		public static void VignetteEnable(string[] args)
+		public static void VignetteEnableCommand(string[] args)
 		{
 			string toggle = args[0].ToLower();
 
@@ -229,7 +229,7 @@ namespace Settings.Controllers
 		}
 
 		[ConCommand("r_vignette_intensity", "Changes the vignette intensity", 1, 1)]
-		public static void VignetteIntensity(string[] args)
+		public static void VignetteIntensityCommand(string[] args)
 		{
 			string stringAmount = args[0].ToLower();
 
@@ -249,7 +249,7 @@ namespace Settings.Controllers
 		}
 
 		[ConCommand("r_vignette_smoothness", "Changes the vignette smoothness", 1, 1)]
-		public static void VignetteSmoothness(string[] args)
+		public static void VignetteSmoothnessCommand(string[] args)
 		{
 			string stringAmount = args[0].ToLower();
 

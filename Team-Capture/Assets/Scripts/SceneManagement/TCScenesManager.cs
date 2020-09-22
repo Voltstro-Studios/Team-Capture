@@ -125,11 +125,11 @@ namespace SceneManagement
 		#endregion
 
 		[ConCommand("scene", "Loads a scene", 1, 1)]
-		public static void LoadScene(string[] args)
+		public static void LoadSceneCommand(string[] args)
 		{
 			NetworkManagerMode mode = NetworkManager.singleton.mode;
 
-			TCScene scene = TCScenesManager.FindSceneInfo(args[0]);
+			TCScene scene = FindSceneInfo(args[0]);
 
 			//Scene doesn't exist
 			if (scene == null)
