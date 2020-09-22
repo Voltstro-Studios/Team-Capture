@@ -423,7 +423,7 @@ namespace Player
 		[CommandLineArgument("name")]
 		public static string StartPlayerName = "NotSet";
 
-		[ConCommand("cl_name", "Sets the name to use in game", 1, 1)]
+		[ConCommand("cl_name", "Sets the name to use in game")]
 		public static void SetName(string[] args)
 		{
 			StartPlayerName = string.Join(" ", args);
