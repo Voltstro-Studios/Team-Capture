@@ -2,7 +2,7 @@
 using Core.Logging;
 using UnityEngine.Scripting;
 
-namespace Attributes
+namespace Console
 {
 	/// <summary>
 	/// Marks a method to be used as a command for the in-game console.
