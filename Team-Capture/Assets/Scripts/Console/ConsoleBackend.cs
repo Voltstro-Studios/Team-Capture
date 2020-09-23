@@ -32,6 +32,9 @@ namespace Console
 				if (!(Attribute.GetCustomAttribute(method, typeof(ConCommand)) is ConCommand attribute))
 					continue;
 
+				if(attribute.GraphicsModeOnly && Game.IsHeadless)
+					continue;
+
 				MethodDelegate methodDelegate =
 					(MethodDelegate) Delegate.CreateDelegate(typeof(MethodDelegate), method);
 

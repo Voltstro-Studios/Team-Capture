@@ -79,7 +79,7 @@ namespace Settings.Controllers
 
 		#region Motion Blur
 
-		[ConCommand("r_motionblur_enabled", "Enables or disables motion blur", CommandRunPermission.ClientOnly,1, 1)]
+		[ConCommand("r_motionblur_enabled", "Enables or disables motion blur", CommandRunPermission.ClientOnly,1, 1, true)]
 		public static void MotionBlurEnableCommand(string[] args)
 		{
 			string toggle = args[0].ToLower();
@@ -102,7 +102,7 @@ namespace Settings.Controllers
 			}
 		}
 
-		[ConCommand("r_motionblur_intensity", "Changes the motion blur intensity", CommandRunPermission.ClientOnly, 1, 1)]
+		[ConCommand("r_motionblur_intensity", "Changes the motion blur intensity", CommandRunPermission.ClientOnly, 1, 1, true)]
 		public static void MotionBlurIntensityCommand(string[] args)
 		{
 			string stringAmount = args[0].ToLower();
@@ -122,7 +122,7 @@ namespace Settings.Controllers
 			Logger.Error("Invalid input!");
 		}
 
-		[ConCommand("r_motionblur_clamp", "Changes the motion blur clamp", CommandRunPermission.ClientOnly, 1, 1)]
+		[ConCommand("r_motionblur_clamp", "Changes the motion blur clamp", CommandRunPermission.ClientOnly, 1, 1, true)]
 		public static void MotionBlurClampCommand(string[] args)
 		{
 			string stringAmount = args[0].ToLower();
@@ -146,7 +146,7 @@ namespace Settings.Controllers
 
 		#region Bloom
 
-		[ConCommand("r_bloom_enabled", "Enables or disables bloom", CommandRunPermission.ClientOnly, 1, 1)]
+		[ConCommand("r_bloom_enabled", "Enables or disables bloom", CommandRunPermission.ClientOnly, 1, 1, true)]
 		public static void BloomEnableCommand(string[] args)
 		{
 			string toggle = args[0].ToLower();
@@ -169,7 +169,7 @@ namespace Settings.Controllers
 			}
 		}
 
-		[ConCommand("r_bloom_threshold", "Changes the bloom threshold", CommandRunPermission.ClientOnly, 1, 1)]
+		[ConCommand("r_bloom_threshold", "Changes the bloom threshold", CommandRunPermission.ClientOnly, 1, 1, true)]
 		public static void BloomThresholdCommand(string[] args)
 		{
 			string stringAmount = args[0].ToLower();
@@ -185,7 +185,7 @@ namespace Settings.Controllers
 			Logger.Error("Invalid input!");
 		}
 
-		[ConCommand("r_bloom_intensity", "Changes the bloom intensity", CommandRunPermission.ClientOnly, 1, 1)]
+		[ConCommand("r_bloom_intensity", "Changes the bloom intensity", CommandRunPermission.ClientOnly, 1, 1, true)]
 		public static void BloomIntensityCommand(string[] args)
 		{
 			string stringAmount = args[0].ToLower();
@@ -205,7 +205,7 @@ namespace Settings.Controllers
 
 		#region Vignette
 
-		[ConCommand("r_vignette_enabled", "Enables or disables vignette", CommandRunPermission.ClientOnly, 1, 1)]
+		[ConCommand("r_vignette_enabled", "Enables or disables vignette", CommandRunPermission.ClientOnly, 1, 1, true)]
 		public static void VignetteEnableCommand(string[] args)
 		{
 			string toggle = args[0].ToLower();
@@ -228,7 +228,7 @@ namespace Settings.Controllers
 			}
 		}
 
-		[ConCommand("r_vignette_intensity", "Changes the vignette intensity", CommandRunPermission.ClientOnly, 1, 1)]
+		[ConCommand("r_vignette_intensity", "Changes the vignette intensity", CommandRunPermission.ClientOnly, 1, 1, true)]
 		public static void VignetteIntensityCommand(string[] args)
 		{
 			string stringAmount = args[0].ToLower();
@@ -248,7 +248,7 @@ namespace Settings.Controllers
 			Logger.Error("Invalid input!");
 		}
 
-		[ConCommand("r_vignette_smoothness", "Changes the vignette smoothness", CommandRunPermission.ClientOnly,1, 1)]
+		[ConCommand("r_vignette_smoothness", "Changes the vignette smoothness", CommandRunPermission.ClientOnly,1, 1, true)]
 		public static void VignetteSmoothnessCommand(string[] args)
 		{
 			string stringAmount = args[0].ToLower();
