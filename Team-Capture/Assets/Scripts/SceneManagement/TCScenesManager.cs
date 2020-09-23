@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Attributes;
 using Console;
 using Mirror;
 using UnityEngine;
@@ -125,7 +124,7 @@ namespace SceneManagement
 
 		#endregion
 
-		[ConCommand("scene", "Loads a scene", 1, 1)]
+		[ConCommand("scene", "Loads a scene", CommandRunPermission.Both, 1, 1)]
 		public static void LoadSceneCommand(string[] args)
 		{
 			NetworkManagerMode mode = NetworkManager.singleton.mode;

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Attributes;
 using Console;
 using Mirror;
 using Player;
@@ -141,7 +140,7 @@ namespace Core
 
 		#region Commands
 
-		[ConCommand("sv_damage", "Damages a player", 2, 2)]
+		[ConCommand("sv_damage", "Damages a player", CommandRunPermission.ServerOnly, 2, 2)]
 		public static void DamageCommandCommand(string[] args)
 		{
 			if (Instance == null)

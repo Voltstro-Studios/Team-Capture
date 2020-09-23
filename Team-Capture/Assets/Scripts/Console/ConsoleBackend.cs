@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using Attributes;
 using Core;
 using Delegates;
 using UnityEngine;
@@ -64,9 +63,10 @@ namespace Console
 			Commands.Add(commandName, new ConsoleCommand
 			{
 				CommandSummary = conCommand.Summary,
-				CommandMethod = method,
+				RunPermission = conCommand.RunPermission,
 				MinArgs = conCommand.MinArguments,
-				MaxArgs = conCommand.MaxArguments
+				MaxArgs = conCommand.MaxArguments,
+				CommandMethod = method
 			});
 		}
 
@@ -92,6 +92,27 @@ namespace Console
 			if (Commands.TryGetValue(tokens[0].ToLower(), out ConsoleCommand conCommand))
 			{
 				string[] arguments = tokens.GetRange(1, tokens.Count - 1).ToArray();
+
+				if (conCommand.RunPermission == CommandRunPermission.ServerOnly)
+				{
+					if (Mirror.NetworkManager.singleton == null ||
+					    Mirror.NetworkManager.singleton.mode != Mirror.NetworkManagerMode.ServerOnly)
+					{
+						Logger.Error("The command {@Command} can only be run in server mode!", tokens[0].ToLower());
+						return;
+					}
+				}
+				else if (conCommand.RunPermission == CommandRunPermission.ClientOnly)
+				{
+					if (Mirror.NetworkManager.singleton != null)
+					{
+						if (Mirror.NetworkManager.singleton.mode == Mirror.NetworkManagerMode.ServerOnly)
+						{
+							Logger.Error("The command {@Command} can only be run in client/offline mode!", tokens[0].ToLower());
+							return;
+						}
+					}
+				}
 
 				//Command min arguments
 				if (conCommand.MinArgs != 0)
@@ -119,7 +140,7 @@ namespace Console
 				}
 				catch (Exception ex)
 				{
-					Logger.Error("An error occured! {@Exception}", ex);
+					Logger.Error("An error occurred! {@Exception}", ex);
 				}
 
 				return;
@@ -278,7 +299,7 @@ namespace Console
 
 		private static string configFilesLocation;
 
-		[ConCommand("exec", "Executes a file", 1, 1)]
+		[ConCommand("exec", "Executes a file", CommandRunPermission.Both, 1, 1)]
 		public static void ExecuteFileCommand(string[] args)
 		{
 			if (args.Length != 1)

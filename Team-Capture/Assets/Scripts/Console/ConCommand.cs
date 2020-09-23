@@ -17,9 +17,10 @@ namespace Console
 		/// </summary>
 		/// <param name="name">The command</param>
 		/// <param name="summary">A quick summary on what the command does</param>
+		/// <param name="runPermission">What this command can and cannot run on</param>
 		/// <param name="minArgs">Min amount of args required (optional)</param>
 		/// <param name="maxArgs">Max amount of args required (optional)</param>
-		public ConCommand(string name, string summary, int minArgs = 0, int maxArgs = 0)
+		public ConCommand(string name, string summary, CommandRunPermission runPermission = CommandRunPermission.Both, int minArgs = 0, int maxArgs = 0)
 		{
 			Name = name;
 			Summary = summary;
@@ -33,6 +34,7 @@ namespace Console
 
 			MinArguments = minArgs;
 			MaxArguments = maxArgs;
+			RunPermission = runPermission;
 		}
 
 		/// <summary>
@@ -54,5 +56,10 @@ namespace Console
 		/// Max amount of args required for the command to work
 		/// </summary>
 		public int MaxArguments { get; set; }
+
+		/// <summary>
+		/// What this command can and cannot run on
+		/// </summary>
+		public CommandRunPermission RunPermission { get; }
 	}
 }

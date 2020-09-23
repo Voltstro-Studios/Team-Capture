@@ -1,5 +1,4 @@
-﻿using Attributes;
-using Console;
+﻿using Console;
 using Core;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
@@ -48,7 +47,7 @@ namespace Settings.Controllers
 
 		#region Console Commands
 
-		[ConCommand("r_antialiasing", "Changes the antialiasing mode", 1, 1)]
+		[ConCommand("r_antialiasing", "Changes the antialiasing mode", CommandRunPermission.ClientOnly, 1, 1)]
 		public static void AntialiasingModeCommand(string[] args)
 		{
 			if (int.TryParse(args[0], out int modeIndex))
@@ -64,7 +63,7 @@ namespace Settings.Controllers
 			Logger.Error("Invalid input!");
 		}
 
-		[ConCommand("r_antialiasing_quality", "Changes the antialiasing quality", 1, 1)]
+		[ConCommand("r_antialiasing_quality", "Changes the antialiasing quality", CommandRunPermission.ClientOnly, 1, 1)]
 		public static void AntialiasingQualityCommand(string[] args)
 		{
 			if (int.TryParse(args[0], out int qualityIndex))

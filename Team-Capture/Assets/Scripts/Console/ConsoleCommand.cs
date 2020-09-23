@@ -20,6 +20,11 @@ namespace Console
 		public int MaxArgs { get; set; }
 
 		/// <summary>
+		/// Sets what this command can and cannot run on
+		/// </summary>
+		public CommandRunPermission RunPermission { get; set; }
+
+		/// <summary>
 		/// The method for the command
 		/// </summary>
 		public MethodDelegate CommandMethod { get; set; }

@@ -1,5 +1,4 @@
-﻿using Attributes;
-using Console;
+﻿using Console;
 using Core;
 using Settings.SettingClasses;
 using UnityEngine;
@@ -33,7 +32,7 @@ namespace Settings.Controllers
 
 		#region Video Console Commands
 
-		[ConCommand("r_resolution", "Set the resolution (width x height)", 2, 2)]
+		[ConCommand("r_resolution", "Set the resolution (width x height)", CommandRunPermission.ClientOnly,2, 2)]
 		public static void SetResolutionCommand(string[] args)
 		{
 			if (int.TryParse(args[0], out int widthRes))
@@ -52,7 +51,7 @@ namespace Settings.Controllers
 			Logger.Error("Invalid input!");
 		}
 
-		[ConCommand("r_refreshrate", "Sets the refresh rate", 1, 1)]
+		[ConCommand("r_refreshrate", "Sets the refresh rate", CommandRunPermission.ClientOnly, 1, 1)]
 		public static void SetRefreshRateCommand(string[] args)
 		{
 			if (int.TryParse(args[0], out int refreshRate))
@@ -66,7 +65,7 @@ namespace Settings.Controllers
 			Logger.Error("Invalid input!");
 		}
 
-		[ConCommand("r_screenmode", "Sets the screen mode", 1, 1)]
+		[ConCommand("r_screenmode", "Sets the screen mode", CommandRunPermission.ClientOnly, 1, 1)]
 		public static void SetScreenModeCommand(string[] args)
 		{
 			if (int.TryParse(args[0], out int screenModeIndex))

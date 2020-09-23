@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Attributes;
 using TMPro;
 using UnityEngine;
 using Logger = Core.Logging.Logger;
@@ -140,7 +139,7 @@ namespace Console
 			(ConsoleSetup.ConsoleUI as ConsoleGUI)?.ToggleConsole();
 		}
 
-		[ConCommand("console_scale", "Changes the console's text scale", 1, 1)]
+		[ConCommand("console_scale", "Changes the console's text scale", CommandRunPermission.Both, 1, 1)]
 		public static void ConsoleScaleCommand(string[] args)
 		{
 			if (float.TryParse(args[0], out float result))

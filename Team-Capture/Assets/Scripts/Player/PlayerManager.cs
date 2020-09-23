@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using Attributes;
 using Console;
 using Core;
 using Core.Networking.Messages;
@@ -424,7 +423,7 @@ namespace Player
 		[CommandLineArgument("name")]
 		public static string StartPlayerName = "NotSet";
 
-		[ConCommand("cl_name", "Sets the name to use in game")]
+		[ConCommand("cl_name", "Sets the name to use in game", CommandRunPermission.ClientOnly)]
 		public static void SetNameCommand(string[] args)
 		{
 			StartPlayerName = string.Join(" ", args);

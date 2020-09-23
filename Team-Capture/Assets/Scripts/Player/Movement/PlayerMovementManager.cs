@@ -1,4 +1,3 @@
-using Attributes;
 using Console;
 using Mirror;
 using UnityEngine;
@@ -215,7 +214,7 @@ namespace Player.Movement
 
 		private static bool showPos;
 
-		[ConCommand("cl_showpos", "Shows info about position data", 1, 1)]
+		[ConCommand("cl_showpos", "Shows info about position data", CommandRunPermission.ClientOnly, 1, 1)]
 		public static void ShowPosInfoCommand(string[] args)
 		{
 			string enabled = args[0].ToLower();

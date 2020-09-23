@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using Attributes;
 using Console;
 using Core.Networking.Discovery;
 using Core.Networking.Messages;
@@ -298,7 +297,7 @@ namespace Core.Networking
 
 		#region Console Commands
 
-		[ConCommand("connect", "Connects to a server", 1, 1)]
+		[ConCommand("connect", "Connects to a server", CommandRunPermission.ClientOnly, 1, 1)]
 		public static void ConnectCommand(string[] args)
 		{
 			try
@@ -326,7 +325,7 @@ namespace Core.Networking
 			singleton.StopHost();
 		}
 
-		[ConCommand("startserver", "Starts a server", 1, 1)]
+		[ConCommand("startserver", "Starts a server", CommandRunPermission.ClientOnly, 1, 1)]
 		public static void StartServerCommand(string[] args)
 		{
 			string scene = args[0];
@@ -335,14 +334,14 @@ namespace Core.Networking
 			singleton.StartServer();
 		}
 
-		[ConCommand("gamename", "Sets the game name", 1, 100)]
+		[ConCommand("gamename", "Sets the game name", CommandRunPermission.ServerOnly)]
 		public static void SetGameNameCommand(string[] args)
 		{
 			Instance.serverConfig.gameName = string.Join(" ", args);
 			Logger.Info("Game name was set to {@Name}", Instance.serverConfig.gameName);
 		}
 
-		[ConCommand("sv_address", "Sets the server's address", 1, 1)]
+		[ConCommand("sv_address", "Sets the server's address", CommandRunPermission.ServerOnly, 1, 1)]
 		public static void SetAddressCommand(string[] args)
 		{
 			if(singleton == null) return;
