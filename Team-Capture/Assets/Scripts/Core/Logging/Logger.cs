@@ -69,7 +69,7 @@ namespace Core.Logging
 				.WriteTo.Async(a => a.File(logFileName, outputTemplate: outPutTemplate,
 					buffered: loggerConfig.BufferedFileWrite))
 				.WriteTo.Unity3D()
-				.WriteTo.TCConsoleSystem(outPutTemplate)
+				.WriteTo.Console(outPutTemplate)
 				.CreateLogger();
 
 			log.Debug("Logger initialized at {@Date}", DateTime.Now.ToString("dd/MM/yyyy hh:mm tt"));

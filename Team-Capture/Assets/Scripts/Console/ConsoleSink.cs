@@ -10,17 +10,17 @@ using UnityEngine;
 
 namespace Console
 {
-	public static class ConsoleSerilogSystem
+	public static class ConsoleSink
 	{
-		public static LoggerConfiguration TCConsoleSystem(this LoggerSinkConfiguration loggerSinkConfiguration, string messageFormat) =>
-			loggerSinkConfiguration.Sink(new TCConsoleSystem(messageFormat));
+		public static LoggerConfiguration Console(this LoggerSinkConfiguration loggerSinkConfiguration, string messageFormat) =>
+			loggerSinkConfiguration.Sink(new ConsoleSerilogSink(messageFormat));
 	}
 
-	public sealed class TCConsoleSystem : ILogEventSink
+	public sealed class ConsoleSerilogSink : ILogEventSink
 	{
 		private readonly ITextFormatter formatter;
 
-		public TCConsoleSystem(string messageFormat)
+		public ConsoleSerilogSink(string messageFormat)
 		{
 			formatter = new MessageTemplateTextFormatter(messageFormat);
 		}
