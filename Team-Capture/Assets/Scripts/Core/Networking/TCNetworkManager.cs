@@ -145,7 +145,7 @@ namespace Core.Networking
 			//Add the connection for the player
 			NetworkServer.AddPlayerForConnection(conn, player);
 
-			Logger.Info("Player from {@Address} connected with the connection ID of {@ConnectionID} and a net ID of {@NetID}", conn.address, conn.connectionId, conn.identity.netId);
+			Logger.Info("Player from {@Address} connected with the connection ID of {@ConnectionID} and a net ID of {@NetID}", Transport.activeTransport.ServerGetClientAddress(conn.connectionId), conn.connectionId, conn.identity.netId);
 		}
 
 		public override void OnStartServer()
@@ -187,7 +187,7 @@ namespace Core.Networking
 
 		public override void OnServerDisconnect(NetworkConnection conn)
 		{
-			Logger.Info("Player from {@Address} disconnected.", conn.identity.connectionToClient.address);
+			Logger.Info("Player {@Id} disconnected from the server.", conn.identity.netId);
 
 			base.OnServerDisconnect(conn);
 		}
