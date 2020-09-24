@@ -187,9 +187,9 @@ namespace Core.Networking
 
 		public override void OnServerDisconnect(NetworkConnection conn)
 		{
-			base.OnServerDisconnect(conn);
-
 			Logger.Info("Player from {@Address} disconnected.", conn.identity.connectionToClient.address);
+
+			base.OnServerDisconnect(conn);
 		}
 
 		#endregion
