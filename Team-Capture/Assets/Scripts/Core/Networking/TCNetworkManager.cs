@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using Console;
+using Core.Logging;
 using Core.Networking.Discovery;
 using Core.Networking.Messages;
 using Helper;
@@ -74,6 +75,8 @@ namespace Core.Networking
 				Destroy(gameObject);
 				return;
 			}
+
+			LogFactory.ReplaceLogHandler(new MirrorLogHandler());
 
 			base.Awake();
 
