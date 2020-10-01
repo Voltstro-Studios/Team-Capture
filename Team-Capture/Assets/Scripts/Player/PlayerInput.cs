@@ -151,13 +151,13 @@ namespace Player
 			{
 				if (reverseMouse)
 				{
-					rotationX = Input.GetAxisRaw(yMouseAxisName) * yMouseSensitivity;
-					rotationY = Input.GetAxisRaw(xMouseAxisName) * xMouseSensitivity;
+					rotationX = Input.GetAxisRaw(yMouseAxisName) * yMouseSensitivity * Time.deltaTime;
+					rotationY = Input.GetAxisRaw(xMouseAxisName) * xMouseSensitivity * Time.deltaTime;
 				}
 				else
 				{
-					rotationX = Input.GetAxisRaw(xMouseAxisName) * xMouseSensitivity;
-					rotationY = Input.GetAxisRaw(yMouseAxisName) * yMouseSensitivity;
+					rotationX = Input.GetAxisRaw(xMouseAxisName) * xMouseSensitivity * Time.deltaTime;
+					rotationY = Input.GetAxisRaw(yMouseAxisName) * yMouseSensitivity * Time.deltaTime;
 				}
 			}
 			else

@@ -27,5 +27,8 @@ namespace Player.Movement
 		public bool Jump;
 
 		public int InputNum;
+
+		public static PlayerInputs Zero => 
+			new PlayerInputs(Vector2.zero, Vector2.zero, false, 0);
 	}
 }

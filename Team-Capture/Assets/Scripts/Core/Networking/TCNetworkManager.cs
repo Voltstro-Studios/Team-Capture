@@ -97,9 +97,7 @@ namespace Core.Networking
 			}
 
 			SceneManager.OnBeginSceneLoading += operation => StartCoroutine(OnStartSceneLoadAsync(operation));
-
 			Application.targetFrameRate = 128;
-			Time.fixedDeltaTime = 1 / 60f;
 		}
 
 		public void FixedUpdate()

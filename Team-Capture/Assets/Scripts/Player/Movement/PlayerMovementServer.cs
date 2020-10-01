@@ -28,7 +28,7 @@ namespace Player.Movement
 			character.state = PlayerState.Zero;
 		}
 
-		private void FixedUpdate()
+		private void Update()
 		{
 			serverTick++;
 

@@ -14,38 +14,38 @@ namespace Player.Movement
 	/// </summary>
 	public class PlayerMovementInput : MonoBehaviour
 	{
+		private int currentInput;
+
 		private List<PlayerInputs> inputBuffer;
 		private PlayerMovementManager character;
 		private PlayerMovementPredictor predictor;
-		private int currentInput;
 
-		private Vector2 directions;
-		private Vector2 lookDirections;
-		private bool jumping;
+		private PlayerInputs inputs;
 
 		private void Awake()
 		{
 			inputBuffer = new List<PlayerInputs>();
 			character = GetComponent<PlayerMovementManager>();
 			predictor = GetComponent<PlayerMovementPredictor>();
+			inputs = new PlayerInputs();
 		}
 
 		private void OnDisable()
 		{
 			inputBuffer.Clear();
 
-			directions = Vector2.zero;
-			lookDirections = Vector2.zero;
-			jumping = false;
+			inputs = PlayerInputs.Zero;
 			currentInput = 0;
 		}
 
-		private void FixedUpdate()
+		private void Update()
 		{
-			PlayerInputs charInputs = new PlayerInputs(directions, lookDirections, jumping, currentInput++);
-			predictor.AddInput(charInputs);
+			currentInput++;
+			inputs.InputNum = currentInput;
 
-			inputBuffer.Add(charInputs);
+			predictor.AddInput(inputs);
+
+			inputBuffer.Add(inputs);
 
 			//Don't send input until our buffer is big enough
 			if (inputBuffer.Count < character.InputBufferSize)
@@ -66,9 +66,13 @@ namespace Player.Movement
 		/// <param name="jump"></param>
 		public void SetInput(float x, float y, float mouseX, float mouseY, bool jump)
 		{
-			directions = new Vector2(x, y);
-			lookDirections = new Vector2(mouseX, mouseY);
-			jumping = jump;
+			inputs.Directions.x = x;
+			inputs.Directions.y = y;
+
+			inputs.MouseDirections.x = mouseX;
+			inputs.MouseDirections.y = mouseY;
+
+			inputs.Jump = jump;
 		}
 	}
 }
