@@ -46,3 +46,4 @@ enet_log.txt
 
 #Blender backup files
 *.blend1
+*.blend1.meta
