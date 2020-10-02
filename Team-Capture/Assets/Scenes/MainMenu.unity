@@ -820,6 +820,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f472b36e4e05d0441ae031cff19e576d, type: 2}
   - {fileID: 11400000, guid: 453728d24005aff4a80d5f5bfca1bc91, type: 2}
   - {fileID: 11400000, guid: 501c13d390213f647b2cc936a29e1c40, type: 2}
+  closeKey: 27
 --- !u!114 &319514909
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1612,7 +1613,7 @@ GameObject:
   m_Layer: 0
   m_Name: _NetworkManager
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 2800000, guid: 09ea5c48c2729944ca63069427291c6b, type: 3}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -1693,7 +1694,6 @@ MonoBehaviour:
   spawnPrefabs: []
   gameMangerPrefab: {fileID: 5023681518765488030, guid: 924fec1313feb8346bd0bf297c02c3fb,
     type: 3}
-  pickupTagName: Pickup
   maxFrameCount: 128
   gameDiscovery: {fileID: 0}
   serverConfig:
@@ -1723,7 +1723,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 635598613}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.423326, y: 1.0024457, z: -3.4249108}
+  m_LocalPosition: {x: 0, y: -1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
