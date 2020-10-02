@@ -146,7 +146,7 @@ namespace Integrations
 				if(scene.showStartTime)
 					presence.Timestamps = new ActivityTimestamps
 					{
-						Start = DateTime.UtcNow.Millisecond
+						Start = TimeHelper.UnixTimeNow()
 					};
 
 				if (scene.isOnlineScene)
