@@ -1,0 +1,68 @@
+{
+    "m_Name": "Settings",
+    "m_Path": "ProjectSettings/Packages/dev.voltstro.voltunitybuilder/Settings.json",
+    "m_Dictionary": {
+        "m_DictionaryValues": [
+            {
+                "type": "System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+                "key": "BuildLocation",
+                "value": "{\"m_Value\":\"Builds/\"}"
+            },
+            {
+                "type": "System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+                "key": "BuildFolderNameStyle",
+                "value": "{\"m_Value\":\"yy-MM-dd\"}"
+            },
+            {
+                "type": "UnityEditor.BuildTarget, UnityEditor, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null",
+                "key": "BuildTarget",
+                "value": "{\"m_Value\":19}"
+            },
+            {
+                "type": "System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+                "key": "ServerBuild",
+                "value": "{\"m_Value\":false}"
+            },
+            {
+                "type": "System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+                "key": "CopyPDBFiles",
+                "value": "{\"m_Value\":false}"
+            },
+            {
+                "type": "System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+                "key": "DevelopmentBuild",
+                "value": "{\"m_Value\":false}"
+            },
+            {
+                "type": "System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+                "key": "AutoconnectProfiler",
+                "value": "{\"m_Value\":false}"
+            },
+            {
+                "type": "System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+                "key": "DeepProfiling",
+                "value": "{\"m_Value\":false}"
+            },
+            {
+                "type": "System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+                "key": "ScriptDebugging",
+                "value": "{\"m_Value\":false}"
+            },
+            {
+                "type": "System.Collections.Generic.List`1[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+                "key": "BuildActions",
+                "value": "{\"m_Value\":[\"CopyFilesOnBuild\"]}"
+            },
+            {
+                "type": "System.Collections.Generic.List`1[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+                "key": "FilesToCopy",
+                "value": "{\"m_Value\":[\"Game/Cfg/autoexec.cfg\",\"Game/Cfg/example.cfg\",\"Game/Cfg/server-autoexec.cfg\",\"Game/Resources/console-splashscreen.txt\",\"Game/Resources/quit-messages.txt\",\"Game/Resources/Integrations/DiscordRPC.json\",\"../thirdpartylegalassets.txt\",\"../thirdpartylegalcode.txt\",\"Assets/License.txt\"]}"
+            },
+            {
+                "type": "System.Collections.Generic.List`1[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+                "key": "CopyToWhere",
+                "value": "{\"m_Value\":[\"Cfg/autoexec.cfg\",\"Cfg/example.cfg\",\"Cfg/server-autoexec.cfg\",\"Resources/console-splashscreen.txt\",\"Resources/quit-messages.txt\",\"Resources/Integrations/DiscordRPC.json\",\"thirdpartylegalassets.txt\",\"thirdpartylegalcode.txt\",\"License.txt\"]}"
+            }
+        ]
+    }
+}

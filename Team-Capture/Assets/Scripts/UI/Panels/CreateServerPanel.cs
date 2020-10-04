@@ -86,7 +86,7 @@ namespace UI.Panels
 		{
 #if UNITY_EDITOR
 			//If we are running as the editor, then we to check to see if an existing build already exists and use that instead
-			if (!System.IO.Directory.Exists($"{VoltBuilder.BuildTool.GetBuildFolder()}Team-Capture-Quick/"))
+			if (!System.IO.Directory.Exists($"{Voltstro.UnityBuilder.Build.GameBuilder.GetBuildDirectory()}Team-Capture-Quick/"))
 			{
 				Debug.LogError("There is no pre-existing build of Team-Capture! Build the game using VoltBuild.");
 				return;
@@ -138,7 +138,7 @@ namespace UI.Panels
 				StartInfo = new ProcessStartInfo
 				{
 #if UNITY_EDITOR
-					FileName = $"{VoltBuilder.BuildTool.GetBuildFolder()}Team-Capture-Quick/Team-Capture.exe",
+					FileName = $"{Voltstro.UnityBuilder.Build.GameBuilder.GetBuildDirectory()}Team-Capture-Quick/Team-Capture.exe",
 #elif UNITY_STANDALONE_WIN
 					FileName = "Team-Capture.exe",
 #else

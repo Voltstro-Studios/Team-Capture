@@ -141,13 +141,13 @@
       "hash": "c65283046a817aa688a3d390494bbe5f31fb2fff"
     },
     "dev.voltstro.voltbuildertool": {
-      "version": "https://github.com/VoltUnityPackages/UnityVoltBuilderTool.git?path=/src/VoltBuilder/Assets/Editor/VoltBuild",
+      "version": "https://github.com/VoltUnityPackages/VoltUnityBuilder.git",
       "depth": 0,
       "source": "git",
       "dependencies": {
-        "com.unity.nuget.newtonsoft-json": "2.0.0"
+        "com.unity.settings-manager": "1.0.3"
       },
-      "hash": "cc2c060d36c84ebf41a428fbf3f2ed77e0450bb1"
+      "hash": "10003a79a69cf0a992e6b8c83a78369fc1793496"
     },
     "dev.voltstro.voltcommandlineparser": {
       "version": "https://github.com/VoltUnityPackages/VoltUnityCommandLineParser.git",
