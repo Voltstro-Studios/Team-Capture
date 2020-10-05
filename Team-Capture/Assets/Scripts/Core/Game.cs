@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using Console;
+using Mirror;
 using UnityEngine;
 using UnityEngine.Rendering;
 using Logger = Core.Logging.Logger;
@@ -17,6 +18,9 @@ namespace Core
 		/// </summary>
 		public static void QuitGame()
 		{
+			if(NetworkManager.singleton != null)
+				NetworkManager.singleton.StopHost();
+
 			Logger.Info("Goodbye!");
 
 			ConsoleSetup.ConsoleUI?.Shutdown();
