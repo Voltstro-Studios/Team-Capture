@@ -75,7 +75,7 @@ namespace Integrations
 			}
 
 			client = new Discord.Discord(long.Parse(settings.clientId),
-				(ulong) CreateFlags.Default);
+				(ulong) CreateFlags.NoRequireDiscord);
 			client.SetLogHook(settings.logLevel, (level, message) =>
 			{
 				Logger.Info(message);
