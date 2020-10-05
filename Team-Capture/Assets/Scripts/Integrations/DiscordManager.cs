@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using BootManagement;
 using Core;
 using Helper;
@@ -98,15 +97,17 @@ namespace Integrations
 		}
 
 		/// <summary>
-		/// Set the rich presence
+		/// Updates the active Discord activity that is shown (AkA the Rich Presence)
 		/// </summary>
-		/// <param name="presence"></param>
-		public void UpdatePresence(Activity presence)
+		/// <param name="activity"></param>
+		public static void UpdateActivity(Activity activity)
 		{
-			if(client == null) return;
+			if(Instance == null) return;
+			if(Instance.client == null) return;
 
-			activityManager.UpdateActivity(presence, result =>
+			Instance.activityManager.UpdateActivity(activity, result =>
 			{
+				Logger.Info($"[Discord Presence] Updated activity: {result}");
 			});
 		}
 
@@ -117,7 +118,7 @@ namespace Integrations
 			//Update our RPC to show we are loading
 			if (client != null)
 			{
-				UpdatePresence(new Activity
+				UpdateActivity(new Activity
 				{
 					Assets = new ActivityAssets
 					{
@@ -161,7 +162,7 @@ namespace Integrations
 				else
 					Logger.Error("You CANNOT have a online scene and a main menu scene!");
 
-				UpdatePresence(presence);
+				UpdateActivity(presence);
 			}
 		}
 
