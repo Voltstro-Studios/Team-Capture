@@ -8,7 +8,6 @@ using Mirror;
 using Player.Movement;
 using UI;
 using UnityEngine;
-using Voltstro.CommandLineParser;
 using Weapons;
 using Logger = Core.Logging.Logger;
 
@@ -421,14 +420,7 @@ namespace Player
 		#region Naming
 
 		[ConVar("name", "Sets the name")]
-		[CommandLineArgument("name")]
 		public static string StartPlayerName = "NotSet";
-
-		[ConCommand("cl_name", "Sets the name to use in game", CommandRunPermission.ClientOnly)]
-		public static void SetNameCommand(string[] args)
-		{
-			StartPlayerName = string.Join(" ", args);
-		}
 
 		[Command]
 		private void CmdSetName(string newName)

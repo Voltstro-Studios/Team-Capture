@@ -1,18 +1,16 @@
 ﻿using System;
-using UnityEngine.Scripting;
+using Voltstro.CommandLineParser;
 
 namespace Console
 {
 	[AttributeUsage(AttributeTargets.Field)]
-	public class ConVar : PreserveAttribute
+	public class ConVar : CommandLineArgumentAttribute
 	{
-		public ConVar(string name, string summary)
+		public ConVar(string name, string summary) : base(name)
 		{
-			Name = name;
 			Summary = summary;
 		}
 
-		public string Name { get; }
 		public string Summary { get; }
 	}
 }
