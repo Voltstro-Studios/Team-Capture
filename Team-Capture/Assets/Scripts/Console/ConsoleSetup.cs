@@ -13,6 +13,8 @@ namespace Console
 
 		internal static IConsoleUI ConsoleUI;
 
+		[ConVar("test", "This is a test")] public static string gay;
+
 		public void Awake()
 		{
 			if (ConsoleUI != null)
@@ -46,7 +48,7 @@ namespace Console
 			ConsoleUI.Init();
 
 			//Register commands
-			ConsoleBackend.RegisterCommands();
+			ConsoleBackend.InitConsoleBackend();
 
 			//Exec autoexec
 			ConsoleBackend.ExecuteFileCommand(new []{"autoexec"});

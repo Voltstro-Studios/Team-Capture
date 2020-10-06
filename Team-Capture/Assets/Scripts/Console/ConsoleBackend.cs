@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using Console.TypeReader;
 using Core;
 using Delegates;
 using UnityEngine;
@@ -18,16 +19,33 @@ namespace Console
 		private static int historyNextIndex;
 		private static int historyIndex;
 
+		private const BindingFlags BindingFlags = System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic;
+
+		private static Dictionary<Type, ITypeReader> typeReaders;
+
+		public static void InitConsoleBackend()
+		{
+			configFilesLocation = Game.GetGameExecutePath() + "/Cfg/";
+			typeReaders = new Dictionary<Type, ITypeReader>
+			{
+				[typeof(string)] = new TypeReader.StringReader(),
+				[typeof(bool)] = new BoolReader(),
+				[typeof(int)] = new IntReader(),
+				[typeof(float)] = new FloatReader()
+			};
+
+			RegisterCommands();
+			RegisterConVars();
+		}
+
 		/// <summary>
 		/// Finds all static methods with the <see cref="ConCommand"/> attribute attached to it
 		/// and adds it to the list of commands
 		/// </summary>
-		public static void RegisterCommands()
+		private static void RegisterCommands()
 		{
-			const BindingFlags bindingFlags = BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
-
 			foreach (Type type in Assembly.GetExecutingAssembly().GetTypes())
-			foreach (MethodInfo method in type.GetMethods(bindingFlags))
+			foreach (MethodInfo method in type.GetMethods(BindingFlags))
 			{
 				if (!(Attribute.GetCustomAttribute(method, typeof(ConCommand)) is ConCommand attribute))
 					continue;
@@ -38,21 +56,52 @@ namespace Console
 				MethodDelegate methodDelegate =
 					(MethodDelegate) Delegate.CreateDelegate(typeof(MethodDelegate), method);
 
-				AddCommand(attribute, methodDelegate);
+				AddCommand(new ConsoleCommand
+				{
+					CommandSummary = attribute.Summary,
+					RunPermission = attribute.RunPermission,
+					MinArgs = attribute.MinArguments,
+					MaxArgs = attribute.MaxArguments,
+					CommandMethod = methodDelegate
+				}, attribute.Name);
 			}
+		}
 
-			configFilesLocation = Game.GetGameExecutePath() + "/Cfg/";
+		private static void RegisterConVars()
+		{
+			foreach (Type type in Assembly.GetExecutingAssembly().GetTypes())
+			{
+				foreach (FieldInfo fieldInfo in type.GetFields(BindingFlags))
+				{
+					if(!(Attribute.GetCustomAttribute(fieldInfo, typeof(ConVar)) is ConVar attribute))
+						continue;
+
+					AddCommand(new ConsoleCommand
+					{
+						CommandSummary = attribute.Summary,
+						RunPermission = CommandRunPermission.Both,
+						MinArgs = 1,
+						MaxArgs = 1,
+						CommandMethod = args =>
+						{
+							if (typeReaders.TryGetValue(fieldInfo.FieldType, out ITypeReader reader))
+							{
+								fieldInfo.SetValue(fieldInfo, reader.ReadType(args[0]));
+								Logger.Info("'{@Attribute}' was set to '{@Value}'", attribute.Name, reader.ReadType(args[0]));
+							}
+						}
+					}, attribute.Name);
+				}
+			}
 		}
 
 		/// <summary>
 		/// Adds a command to the list of commands
 		/// </summary>
 		/// <param name="conCommand"></param>
-		/// <param name="method"></param>
-		private static void AddCommand(ConCommand conCommand, MethodDelegate method)
+		/// <param name="commandName"></param>
+		private static void AddCommand(ConsoleCommand conCommand, string commandName)
 		{
-			string commandName = conCommand.Name.ToLower();
-
 			//Make sure the command doesn't already exist
 			if (Commands.ContainsKey(commandName))
 			{
@@ -63,14 +112,7 @@ namespace Console
 			Logger.Debug("Added command {@CommandName}", commandName);
 
 			//Add the command
-			Commands.Add(commandName, new ConsoleCommand
-			{
-				CommandSummary = conCommand.Summary,
-				RunPermission = conCommand.RunPermission,
-				MinArgs = conCommand.MinArguments,
-				MaxArgs = conCommand.MaxArguments,
-				CommandMethod = method
-			});
+			Commands.Add(commandName, conCommand);
 		}
 
 		/// <summary>
