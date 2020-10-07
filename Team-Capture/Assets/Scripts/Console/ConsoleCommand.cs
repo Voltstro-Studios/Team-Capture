@@ -1,5 +1,8 @@
 ﻿namespace Console
 {
+	/// <summary>
+	/// A command that is used in the console
+	/// </summary>
 	public class ConsoleCommand
 	{
 		/// <summary>

@@ -9,6 +9,9 @@ using Logger = Core.Logging.Logger;
 
 namespace Console
 {
+	/// <summary>
+	/// The backend system for the console
+	/// </summary>
 	public static class ConsoleBackend
 	{
 		public delegate void MethodDelegate(string[] args);
