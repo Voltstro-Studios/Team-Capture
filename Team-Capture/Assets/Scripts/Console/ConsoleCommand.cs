@@ -1,6 +1,4 @@
-﻿using Delegates;
-
-namespace Console
+﻿namespace Console
 {
 	public class ConsoleCommand
 	{
@@ -27,6 +25,6 @@ namespace Console
 		/// <summary>
 		/// The method for the command
 		/// </summary>
-		public MethodDelegate CommandMethod { get; set; }
+		public ConsoleBackend.MethodDelegate CommandMethod { get; set; }
 	}
 }

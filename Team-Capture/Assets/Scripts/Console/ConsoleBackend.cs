@@ -4,7 +4,6 @@ using System.IO;
 using System.Reflection;
 using Console.TypeReader;
 using Core;
-using Delegates;
 using UnityEngine;
 using Logger = Core.Logging.Logger;
 
@@ -12,6 +11,8 @@ namespace Console
 {
 	public static class ConsoleBackend
 	{
+		public delegate void MethodDelegate(string[] args);
+
 		private const BindingFlags BindingFlags = System.Reflection.BindingFlags.Static 
 		                                          | System.Reflection.BindingFlags.Public 
 		                                          | System.Reflection.BindingFlags.NonPublic;
