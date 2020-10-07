@@ -1,5 +1,8 @@
 ﻿namespace Console
 {
+	/// <summary>
+	/// What run permission does this console command have
+	/// </summary>
 	public enum CommandRunPermission
 	{
 		/// <summary>

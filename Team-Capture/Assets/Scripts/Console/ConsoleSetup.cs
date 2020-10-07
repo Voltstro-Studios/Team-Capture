@@ -47,7 +47,7 @@ namespace Console
 			//Init the console
 			ConsoleUI.Init();
 
-			//Register commands
+			//Init the backend of the console
 			ConsoleBackend.InitConsoleBackend();
 
 			//Exec autoexec

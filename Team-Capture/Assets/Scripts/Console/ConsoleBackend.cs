@@ -12,17 +12,22 @@ namespace Console
 {
 	public static class ConsoleBackend
 	{
-		private static readonly Dictionary<string, ConsoleCommand> Commands = new Dictionary<string, ConsoleCommand>();
+		private const BindingFlags BindingFlags = System.Reflection.BindingFlags.Static 
+		                                          | System.Reflection.BindingFlags.Public 
+		                                          | System.Reflection.BindingFlags.NonPublic;
 
 		private const int HistoryCount = 50;
 		private static readonly string[] History = new string[HistoryCount];
 		private static int historyNextIndex;
 		private static int historyIndex;
 
-		private const BindingFlags BindingFlags = System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic;
+		private static Dictionary<string, ConsoleCommand> commands;
 
 		private static Dictionary<Type, ITypeReader> typeReaders;
 
+		/// <summary>
+		/// Inits the backend of the console
+		/// </summary>
 		public static void InitConsoleBackend()
 		{
 			configFilesLocation = Game.GetGameExecutePath() + "/Cfg/";
@@ -33,6 +38,7 @@ namespace Console
 				[typeof(int)] = new IntReader(),
 				[typeof(float)] = new FloatReader()
 			};
+			commands = new Dictionary<string, ConsoleCommand>();
 
 			RegisterCommands();
 			RegisterConVars();
@@ -47,15 +53,19 @@ namespace Console
 			foreach (Type type in Assembly.GetExecutingAssembly().GetTypes())
 			foreach (MethodInfo method in type.GetMethods(BindingFlags))
 			{
+				//Ignore if the field doesn't have the ConCommand attribute, but if it does, get it
 				if (!(Attribute.GetCustomAttribute(method, typeof(ConCommand)) is ConCommand attribute))
 					continue;
 
+				//If this ConCommand is graphics only, and the game is headless, then we ignore adding it
 				if(attribute.GraphicsModeOnly && Game.IsHeadless)
 					continue;
 
+				//Create the MethodDelegate from the ConCommand's method
 				MethodDelegate methodDelegate =
 					(MethodDelegate) Delegate.CreateDelegate(typeof(MethodDelegate), method);
 
+				//Add the command
 				AddCommand(new ConsoleCommand
 				{
 					CommandSummary = attribute.Summary,
@@ -67,31 +77,37 @@ namespace Console
 			}
 		}
 
+		/// <summary>
+		/// Adds all fields that have the <see cref="ConVar"/> attribute attached to it
+		/// </summary>
 		private static void RegisterConVars()
 		{
 			foreach (Type type in Assembly.GetExecutingAssembly().GetTypes())
+			foreach (FieldInfo fieldInfo in type.GetFields(BindingFlags))
 			{
-				foreach (FieldInfo fieldInfo in type.GetFields(BindingFlags))
-				{
-					if(!(Attribute.GetCustomAttribute(fieldInfo, typeof(ConVar)) is ConVar attribute))
-						continue;
+				//Ignore if the field doesn't have the ConVar attribute, but if it does, get it
+				if(!(Attribute.GetCustomAttribute(fieldInfo, typeof(ConVar)) is ConVar attribute))
+					continue;
 
-					AddCommand(new ConsoleCommand
+				//We add the ConVar as it was a normal command, but with a custom CommandMethod
+				AddCommand(new ConsoleCommand
+				{
+					CommandSummary = attribute.Summary,
+					RunPermission = CommandRunPermission.Both,
+					MinArgs = 1,
+					MaxArgs = 1,
+					CommandMethod = args =>
 					{
-						CommandSummary = attribute.Summary,
-						RunPermission = CommandRunPermission.Both,
-						MinArgs = 1,
-						MaxArgs = 1,
-						CommandMethod = args =>
+						if (typeReaders.TryGetValue(fieldInfo.FieldType, out ITypeReader reader))
 						{
-							if (typeReaders.TryGetValue(fieldInfo.FieldType, out ITypeReader reader))
-							{
-								fieldInfo.SetValue(fieldInfo, reader.ReadType(args[0]));
-								Logger.Info("'{@Attribute}' was set to '{@Value}'", attribute.Name, reader.ReadType(args[0]));
-							}
+							fieldInfo.SetValue(fieldInfo, reader.ReadType(args[0]));
+							Logger.Info("'{@Attribute}' was set to '{@Value}'", attribute.Name, reader.ReadType(args[0]));
+							return;
 						}
-					}, attribute.Name);
-				}
+
+						Logger.Error("There is no {@TypeReaderNameOf} for the Type {@Type}!", nameof(ITypeReader), fieldInfo.FieldType.FullName);
+					}
+				}, attribute.Name);
 			}
 		}
 
@@ -103,7 +119,7 @@ namespace Console
 		private static void AddCommand(ConsoleCommand conCommand, string commandName)
 		{
 			//Make sure the command doesn't already exist
-			if (Commands.ContainsKey(commandName))
+			if (commands.ContainsKey(commandName))
 			{
 				Logger.Error("The command {@CommandName} already exists in the command list!", commandName);
 				return;
@@ -112,7 +128,7 @@ namespace Console
 			Logger.Debug("Added command {@CommandName}", commandName);
 
 			//Add the command
-			Commands.Add(commandName, conCommand);
+			commands.Add(commandName, conCommand);
 		}
 
 		/// <summary>
@@ -121,7 +137,7 @@ namespace Console
 		/// <returns></returns>
 		public static Dictionary<string, ConsoleCommand> GetAllCommands()
 		{
-			return Commands;
+			return commands;
 		}
 
 		/// <summary>
@@ -134,28 +150,33 @@ namespace Console
 			if (tokens.Count < 1)
 				return;
 
-			if (Commands.TryGetValue(tokens[0].ToLower(), out ConsoleCommand conCommand))
+			if (commands.TryGetValue(tokens[0].ToLower(), out ConsoleCommand conCommand))
 			{
+				//Get the arguments that were inputted
 				string[] arguments = tokens.GetRange(1, tokens.Count - 1).ToArray();
 
-				if (conCommand.RunPermission == CommandRunPermission.ServerOnly)
+				//Make sure run permissions are all good
+				switch (conCommand.RunPermission)
 				{
-					if (Mirror.NetworkManager.singleton == null ||
-					    Mirror.NetworkManager.singleton.mode != Mirror.NetworkManagerMode.ServerOnly)
-					{
+					//The command has a RunPermission of ServerOnly, so this command can only be executed in server mode
+					case CommandRunPermission.ServerOnly when Mirror.NetworkManager.singleton == null ||
+					                                          Mirror.NetworkManager.singleton.mode != Mirror.NetworkManagerMode.ServerOnly:
 						Logger.Error("The command {@Command} can only be run in server mode!", tokens[0].ToLower());
 						return;
-					}
-				}
-				else if (conCommand.RunPermission == CommandRunPermission.ClientOnly)
-				{
-					if (Mirror.NetworkManager.singleton != null)
+
+					//The command has a RunPermission of ClientOnly, so this command can only be executed as a client
+					case CommandRunPermission.ClientOnly:
 					{
-						if (Mirror.NetworkManager.singleton.mode == Mirror.NetworkManagerMode.ServerOnly)
+						if (Mirror.NetworkManager.singleton != null)
 						{
-							Logger.Error("The command {@Command} can only be run in client/offline mode!", tokens[0].ToLower());
-							return;
+							if (Mirror.NetworkManager.singleton.mode == Mirror.NetworkManagerMode.ServerOnly)
+							{
+								Logger.Error("The command {@Command} can only be run in client/offline mode!", tokens[0].ToLower());
+								return;
+							}
 						}
+
+						break;
 					}
 				}
 
@@ -203,7 +224,7 @@ namespace Console
 		{
 			List<string> possibleMatches = new List<string>();
 
-			foreach (KeyValuePair<string, ConsoleCommand> command in Commands)
+			foreach (KeyValuePair<string, ConsoleCommand> command in commands)
 			{
 				string name = command.Key;
 				if(!name.StartsWith(prefix, true, null))
