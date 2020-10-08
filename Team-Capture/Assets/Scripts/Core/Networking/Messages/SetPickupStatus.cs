@@ -2,9 +2,13 @@
 
 namespace Core.Networking.Messages
 {
-	public class SetPickupStatus : MessageBase
+	public struct SetPickupStatus : IMessageBase
 	{
 		public string PickupName;
 		public bool IsActive;
+
+		public void Deserialize(NetworkReader reader) { }
+
+		public void Serialize(NetworkWriter writer) { }
 	}
 }
