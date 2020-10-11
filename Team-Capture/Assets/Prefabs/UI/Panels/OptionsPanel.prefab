@@ -1022,7 +1022,7 @@ MonoBehaviour:
     objectToTween: {fileID: 8258024782923066859}
     eventsToPlay:
     - {fileID: 11400000, guid: 659626b028f42eb40865973821c6f518, type: 2}
-  appliedSettingsPanel: {fileID: 591626738688884657}
+  appliedOptionsPanel: {fileID: 591626738688884657}
   panelsLocation: {fileID: 4615665603743986812}
   buttonLocation: {fileID: 73217598435112204}
   panelPrefab: {fileID: 6315477621964361831, guid: f9ada9bbba3fb3f4ea41c1909346e831,
@@ -1129,7 +1129,7 @@ PrefabInstance:
     - target: {fileID: 6802600301512550928, guid: 751f3e8d33e12eb42a0378dba57c3dd9,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: CloseAppliedSettingsPanel
+      value: CloseAppliedOptionsPanel
       objectReference: {fileID: 0}
     - target: {fileID: 6802600302304968914, guid: 751f3e8d33e12eb42a0378dba57c3dd9,
         type: 3}

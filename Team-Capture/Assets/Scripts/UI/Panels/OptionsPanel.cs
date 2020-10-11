@@ -16,7 +16,7 @@ namespace UI.Panels
 		private readonly Dictionary<Button, GameObject> settingPanels = new Dictionary<Button, GameObject>();
 
 		[Header("Object Locations")] 
-		[SerializeField] private GameObject appliedSettingsPanel;
+		[SerializeField] private GameObject appliedOptionsPanel;
 		[SerializeField] private Transform panelsLocation;
 		[SerializeField] private Transform buttonLocation;
 
@@ -44,7 +44,7 @@ namespace UI.Panels
 			}
 
 			//Close the applied settings panel
-			CloseAppliedSettingsPanel();
+			CloseAppliedOptionsPanel();
 		}
 
 		/// <summary>
@@ -54,15 +54,15 @@ namespace UI.Panels
 		{
 			GameSettings.Save();
 
-			appliedSettingsPanel.SetActive(true);
+			appliedOptionsPanel.SetActive(true);
 		}
 
 		/// <summary>
 		/// Closes the applied settings panel
 		/// </summary>
-		public void CloseAppliedSettingsPanel()
+		public void CloseAppliedOptionsPanel()
 		{
-			appliedSettingsPanel.SetActive(false);
+			appliedOptionsPanel.SetActive(false);
 		}
 
 		#region Panel Management
