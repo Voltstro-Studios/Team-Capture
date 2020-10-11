@@ -1,4 +1,5 @@
-﻿using UI;
+﻿using Console;
+using UI;
 using UnityEngine;
 
 namespace Weapons
@@ -7,27 +8,41 @@ namespace Weapons
 	{
 		private Vector3 localPosition;
 
+		[ConVar("cl_sway_amount", "Sets how much a gun will sway")]
+		public static float SwayAmount = 0.1f;
+
+		[ConVar("cl_sway_enable", "Whether or not weapons will sway")]
+		public static bool SwayEnabled = true;
+
 		public float maxXAmount = 0.35f;
 		public float maxYAmount = 0.2f;
 
 		public float smooth = 3.0f;
-		public float xSwayAmount = 0.1f;
-		public float ySwayAmount = 0.05f;
+
+		private float axisX;
+		private float axisY;
 
 		private void Start()
 		{
 			localPosition = transform.localPosition;
+		}
 
-			//TODO: Setup weapon sway variables based on user settings
+		public void SetInput(float x, float y)
+		{
+			axisX = x;
+			axisY = y;
 		}
 
 		private void Update()
 		{
+			if(!SwayEnabled)
+				return;
+
 			if (ClientUI.IsPauseMenuOpen)
 				return;
 
-			float fx = -Input.GetAxis("Mouse X") * xSwayAmount;
-			float fy = -Input.GetAxis("Mouse Y") * ySwayAmount;
+			float fx = -axisX * SwayAmount;
+			float fy = -axisY * (SwayAmount - 0.05f);
 
 			fx = Mathf.Clamp(fx, -maxXAmount, maxXAmount);
 			fy = Mathf.Clamp(fy, -maxYAmount, maxYAmount);

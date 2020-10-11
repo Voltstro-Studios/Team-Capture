@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Core;
@@ -47,6 +48,8 @@ namespace Weapons
 		public int WeaponHolderSpotChildCount => weaponsHolderSpot.childCount;
 
 		public event WeaponUpdated WeaponUpdated;
+
+		[NonSerialized] public WeaponSway WeaponSway;
 
 		/// <summary>
 		/// Server callback for when <see cref="weapons"/> is modified
@@ -105,7 +108,7 @@ namespace Weapons
 		{
 			base.OnStartLocalPlayer();
 
-			weaponsHolderSpot.gameObject.AddComponent<WeaponSway>();
+			WeaponSway = weaponsHolderSpot.gameObject.AddComponent<WeaponSway>();
 		}
 
 		#endregion

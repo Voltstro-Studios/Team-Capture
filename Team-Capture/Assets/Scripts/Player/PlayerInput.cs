@@ -113,6 +113,7 @@ namespace Player
 
 				//Send inputs
 				playerInput.SetInput(horizontal, vertical, rotationX, rotationY, wishToJump);
+				weaponManager.WeaponSway.SetInput(rotationX, rotationY);
 
 				//Good ol' suicide button
 				if (Input.GetKeyDown(suicideKey))
