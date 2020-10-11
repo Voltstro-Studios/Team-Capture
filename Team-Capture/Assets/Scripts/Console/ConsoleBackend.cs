@@ -17,9 +17,11 @@ namespace Console
 		public delegate void MethodDelegate(string[] args);
 		public delegate void ConVarDelegate();
 
+#pragma warning disable IDE0002 //For what ever reason removing these System.Reflection before the BindingFlags causes errors
 		private const BindingFlags BindingFlags = System.Reflection.BindingFlags.Static 
 		                                          | System.Reflection.BindingFlags.Public 
 		                                          | System.Reflection.BindingFlags.NonPublic;
+#pragma warning restore IDE0002
 
 		private const int HistoryCount = 50;
 		private static readonly string[] History = new string[HistoryCount];
@@ -67,8 +69,16 @@ namespace Console
 					continue;
 
 				//Create the MethodDelegate from the ConCommand's method
-				MethodDelegate methodDelegate =
-					(MethodDelegate) Delegate.CreateDelegate(typeof(MethodDelegate), method);
+				MethodDelegate methodDelegate;
+				try
+				{
+					methodDelegate = (MethodDelegate) Delegate.CreateDelegate(typeof(MethodDelegate), method);
+				}
+				catch (Exception ex)
+				{
+					Logger.Error("An error occurred while adding the command `{@Command}`'s callback method! {@Exception}", attribute.Name, ex);
+					continue;
+				}
 
 				//Add the command
 				AddCommand(new ConsoleCommand
@@ -104,7 +114,7 @@ namespace Console
 				}
 				catch (Exception ex)
 				{
-					Logger.Error("An error occurred while adding the command `{@Command}`'s callback method! {@Exception}", attribute.Name, ex);
+					Logger.Error("An error occurred while adding the con var `{@ConVar}`'s callback method! {@Exception}", attribute.Name, ex);
 					continue;
 				}
 
