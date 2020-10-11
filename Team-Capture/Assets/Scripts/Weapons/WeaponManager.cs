@@ -18,7 +18,7 @@ namespace Weapons
 		/// <summary>
 		/// A synced list of all the weapons this client has
 		/// </summary>
-		private readonly SyncListWeapons weapons = new SyncListWeapons();
+		private readonly SyncList<NetworkedWeapon> weapons = new SyncList<NetworkedWeapon>();
 
 		/// <summary>
 		/// The active reloading coroutine
@@ -142,10 +142,6 @@ namespace Weapons
 				select a;
 
 			return WeaponsResourceManager.GetWeapon(result.FirstOrDefault()?.Weapon);
-		}
-
-		private class SyncListWeapons : SyncList<NetworkedWeapon>
-		{
 		}
 
 		#endregion
