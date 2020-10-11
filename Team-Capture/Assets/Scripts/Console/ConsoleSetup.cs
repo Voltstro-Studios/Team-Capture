@@ -13,8 +13,6 @@ namespace Console
 
 		internal static IConsoleUI ConsoleUI;
 
-		[ConVar("test", "This is a test", nameof(Jiss))] public static string gay;
-
 		public void Awake()
 		{
 			if (ConsoleUI != null)
@@ -52,11 +50,6 @@ namespace Console
 
 			//Exec autoexec
 			ConsoleBackend.ExecuteFileCommand(new []{"autoexec"});
-		}
-
-		public static void Jiss()
-		{
-			Logger.Info("Hi!");
 		}
 
 		private void Update()
