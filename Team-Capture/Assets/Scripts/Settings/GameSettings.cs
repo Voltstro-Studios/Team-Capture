@@ -32,6 +32,9 @@ namespace Settings
 		[SettingsPropertyFormatName("Advance Settings")]
 		public static AdvSettingsClass AdvSettings { get; } = new AdvSettingsClass();
 
+		[SettingsPropertyFormatName("Multiplayer Settings")]
+		public static MultiplayerSettingsClass MultiplayerSettings { get; } = new MultiplayerSettingsClass();
+
 		#endregion
 
 		public static bool HasBeenLoaded { get; private set; }

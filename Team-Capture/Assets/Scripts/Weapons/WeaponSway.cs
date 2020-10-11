@@ -1,4 +1,6 @@
 ﻿using Console;
+using Settings;
+using Settings.SettingClasses;
 using UI;
 using UnityEngine;
 
@@ -22,15 +24,30 @@ namespace Weapons
 		private float axisX;
 		private float axisY;
 
-		private void Start()
-		{
-			localPosition = transform.localPosition;
-		}
-
 		public void SetInput(float x, float y)
 		{
 			axisX = x;
 			axisY = y;
+		}
+
+		private void ApplySettings()
+		{
+			MultiplayerSettingsClass multiplayerSettings = GameSettings.MultiplayerSettings;
+			SwayEnabled = multiplayerSettings.WeaponSwayEnabled;
+			SwayAmount = multiplayerSettings.WeaponSwayAmount;
+		}
+
+		private void Start()
+		{
+			localPosition = transform.localPosition;
+
+			GameSettings.SettingsLoaded += ApplySettings;
+			ApplySettings();
+		}
+
+		private void OnDestroy()
+		{
+			GameSettings.SettingsLoaded -= ApplySettings;
 		}
 
 		private void Update()
