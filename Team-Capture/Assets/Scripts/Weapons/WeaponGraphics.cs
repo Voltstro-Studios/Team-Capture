@@ -1,5 +1,7 @@
 ﻿using System;
 using Console;
+using Settings;
+using Settings.SettingClasses;
 using UnityEngine;
 
 namespace Weapons
@@ -8,6 +10,7 @@ namespace Weapons
 	{
 		[ConVar("cl_muzzleflashlighting", "Whether or not the muzzle flash will have lighting", nameof(InvokeLightingChange))]
 		public static bool MuzzleFlashLighting = true;
+
 		public static event Action LightingChange;
 
 		public static void InvokeLightingChange()
@@ -24,12 +27,22 @@ namespace Weapons
 		public void OnEnable()
 		{
 			LightingChange += ChangeLighting;
+			GameSettings.SettingsLoaded += ApplySettings;
+			ApplySettings();
 			ChangeLighting();
 		}
 
 		public void OnDisable()
 		{
 			LightingChange -= ChangeLighting;
+			GameSettings.SettingsLoaded -= ApplySettings;
+		}
+
+		private void ApplySettings()
+		{
+			MultiplayerSettingsClass multiplayerSettings = GameSettings.MultiplayerSettings;
+			MuzzleFlashLighting = multiplayerSettings.WeaponMuzzleFlashLighting;
+			ChangeLighting();
 		}
 
 		public ParticleSystem muzzleFlash;

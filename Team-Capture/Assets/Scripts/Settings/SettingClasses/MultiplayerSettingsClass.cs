@@ -5,6 +5,9 @@ namespace Settings.SettingClasses
 {
 	public class MultiplayerSettingsClass : Setting
 	{
+		[SettingsPropertyFormatName("Muzzle Flash Lighting")]
+		public bool WeaponMuzzleFlashLighting = true;
+
 		[SettingsPropertyFormatName("Weapon Sway")]
 		public bool WeaponSwayEnabled = true;
 
