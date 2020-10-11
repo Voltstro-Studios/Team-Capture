@@ -1059,7 +1059,7 @@ PrefabInstance:
     - target: {fileID: 3900155338001809271, guid: 751f3e8d33e12eb42a0378dba57c3dd9,
         type: 3}
       propertyPath: m_Name
-      value: SettingsSaved
+      value: OptionsSaved
       objectReference: {fileID: 0}
     - target: {fileID: 6802600300857619773, guid: 751f3e8d33e12eb42a0378dba57c3dd9,
         type: 3}
@@ -1094,12 +1094,12 @@ PrefabInstance:
     - target: {fileID: 6802600301102271682, guid: 751f3e8d33e12eb42a0378dba57c3dd9,
         type: 3}
       propertyPath: m_text
-      value: Settings are now saved and applied!
+      value: Options are now saved and applied!
       objectReference: {fileID: 0}
     - target: {fileID: 6802600301102271682, guid: 751f3e8d33e12eb42a0378dba57c3dd9,
         type: 3}
       propertyPath: m_fontSize
-      value: 45.45
+      value: 46
       objectReference: {fileID: 0}
     - target: {fileID: 6802600301102271682, guid: 751f3e8d33e12eb42a0378dba57c3dd9,
         type: 3}
