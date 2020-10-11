@@ -15,6 +15,7 @@ namespace Console
 	public static class ConsoleBackend
 	{
 		public delegate void MethodDelegate(string[] args);
+		public delegate void ConVarDelegate();
 
 		private const BindingFlags BindingFlags = System.Reflection.BindingFlags.Static 
 		                                          | System.Reflection.BindingFlags.Public 
@@ -93,6 +94,20 @@ namespace Console
 				if(!(Attribute.GetCustomAttribute(fieldInfo, typeof(ConVar)) is ConVar attribute))
 					continue;
 
+				ConVarDelegate action = null;
+				try
+				{
+					//Create an action if the callback string is not null
+					if (attribute.Callback != null)
+						action = (ConVarDelegate) Delegate.CreateDelegate(typeof(ConVarDelegate), fieldInfo.DeclaringType ?? throw new Exception("Field's declaring type was null!"),
+							attribute.Callback);
+				}
+				catch (Exception ex)
+				{
+					Logger.Error("An error occurred while adding the command `{@Command}`'s callback method! {@Exception}", attribute.Name, ex);
+					continue;
+				}
+
 				//We add the ConVar as it was a normal command, but with a custom CommandMethod
 				AddCommand(new ConsoleCommand
 				{
@@ -102,9 +117,13 @@ namespace Console
 					MaxArgs = 1,
 					CommandMethod = args =>
 					{
+						//If we have an ITypeReader for the type, then read the arg using it
 						if (typeReaders.TryGetValue(fieldInfo.FieldType, out ITypeReader reader))
 						{
+							//Set the field and invoke the action (if not null)
 							fieldInfo.SetValue(fieldInfo, reader.ReadType(args[0]));
+							action?.Invoke();
+
 							Logger.Info("'{@Attribute}' was set to '{@Value}'", attribute.Name, reader.ReadType(args[0]));
 							return;
 						}
