@@ -5,7 +5,7 @@ namespace Core.Networking.Messages
 	/// <summary>
 	/// A player has died message
 	/// </summary>
-	public struct PlayerDiedMessage : IMessageBase
+	public struct PlayerDiedMessage : NetworkMessage
 	{
 		/// <summary>
 		/// Who was the victim
@@ -21,9 +21,5 @@ namespace Core.Networking.Messages
 		/// What weapon did they use
 		/// </summary>
 		public string WeaponName;
-
-		public void Deserialize(NetworkReader reader) { }
-
-		public void Serialize(NetworkWriter writer) { }
 	}
 }
