@@ -13,7 +13,7 @@ namespace UI.Panels
 	/// </summary>
 	public class OptionsPanel : MainMenuPanelBase
 	{
-		private readonly List<GameObject> settingPanels = new List<GameObject>();
+		private readonly Dictionary<Button, GameObject> settingPanels = new Dictionary<Button, GameObject>();
 
 		[Header("Object Locations")] 
 		[SerializeField] private GameObject appliedSettingsPanel;
@@ -37,8 +37,11 @@ namespace UI.Panels
 			ClosePanels();
 
 			//Set the first settings panel to open
-			if(settingPanels.Count != 0)
-				settingPanels[0].SetActive(true);
+			if (settingPanels.Count != 0)
+			{
+				settingPanels.Values.ToArray()[0].SetActive(true);
+				settingPanels.Keys.ToArray()[0].interactable = false;
+			}
 
 			//Close the applied settings panel
 			CloseAppliedSettingsPanel();
@@ -81,7 +84,7 @@ namespace UI.Panels
 			button.onClick.AddListener((delegate { OpenPanel(optionsMenu.Name); }));
 			button.GetComponentInChildren<TextMeshProUGUI>().text = optionsMenu.Name;
 
-			settingPanels.Add(panel);
+			settingPanels.Add(button, panel);
 
 			return panel;
 		}
@@ -93,10 +96,15 @@ namespace UI.Panels
 		public void OpenPanel(string panelName)
 		{
 			//Close all other panels
-			foreach (GameObject panel in settingPanels)
-				panel.SetActive(false);
+			foreach (KeyValuePair<Button, GameObject> panel in settingPanels)
+			{
+				panel.Value.SetActive(false);
+				panel.Key.interactable = true;
+			}
 
-			GetMenuPanel(panelName).SetActive(true);
+			KeyValuePair<Button, GameObject> menuPanel = GetMenuPanel(panelName);
+			menuPanel.Value.SetActive(true);
+			menuPanel.Key.interactable = false;
 		}
 
 		/// <summary>
@@ -105,7 +113,7 @@ namespace UI.Panels
 		public void ClearPanels()
 		{
 			//Remove all panels
-			foreach (GameObject panel in settingPanels)
+			foreach (GameObject panel in settingPanels.Values)
 				Destroy(panel);
 
 			settingPanels.Clear();
@@ -117,7 +125,7 @@ namespace UI.Panels
 		private void ClosePanels()
 		{
 			//Close all panels
-			foreach (GameObject panel in settingPanels)
+			foreach (GameObject panel in settingPanels.Values)
 				panel.SetActive(false);
 		}
 
@@ -126,10 +134,10 @@ namespace UI.Panels
 		/// </summary>
 		/// <param name="panelName"></param>
 		/// <returns></returns>
-		private GameObject GetMenuPanel(string panelName)
+		private KeyValuePair<Button, GameObject> GetMenuPanel(string panelName)
 		{
-			IEnumerable<GameObject> result = from a in settingPanels
-				where a.name == panelName
+			IEnumerable<KeyValuePair<Button, GameObject>> result = from a in settingPanels
+				where a.Value.name == panelName
 				select a;
 
 			return result.FirstOrDefault();
