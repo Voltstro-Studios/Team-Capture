@@ -82,7 +82,7 @@ namespace UI.Panels
 			//Button
 			Button button = Instantiate(settingsButtonPrefab, buttonLocation, false).GetComponent<Button>();
 			button.onClick.AddListener((delegate { OpenPanel(optionsMenu.Name); }));
-			button.GetComponentInChildren<TextMeshProUGUI>().text = optionsMenu.Name;
+			button.GetComponentInChildren<TextMeshProUGUI>().text = optionsMenu.Name.Replace(" ", "\n");
 
 			settingPanels.Add(button, panel);
 
