@@ -10,7 +10,7 @@ namespace Editor.Scripts
 {
 	public static class GetCommands
 	{
-		[MenuItem("Team Capture/Console/Command list to markdown")]
+		[MenuItem("Team Capture/Console/ConCommands list to markdown")]
 		public static void ConsoleCommandListToMarkdown()
 		{
 			Dictionary<ConCommand, MethodInfo> commands = ConsoleBackend.GetConCommands();
@@ -29,7 +29,33 @@ namespace Editor.Scripts
 				sb.Append($"|`{command.Name}`|{command.Summary}|{command.RunPermission}|\n");
 			}
 
-			string path = EditorUtility.SaveFilePanel("Save markdown file", "", "command-list", ".md");
+			string path = EditorUtility.SaveFilePanel("Save markdown file", "", "command-list", "md");
+			if(path.Length == 0)
+				return;
+
+			File.WriteAllText(path, sb.ToString());
+		}
+
+		[MenuItem("Team Capture/Console/ConVars list to markdown")]
+		public static void ConsoleConVarListToMarkdown()
+		{
+			Dictionary<ConVar, FieldInfo> conVars = ConsoleBackend.GetConVars();
+			if (conVars == null)
+			{
+				Debug.LogError("Console system doesn't have any commands! Either its not active or something went wrong.");
+				return;
+			}
+
+			StringBuilder sb = new StringBuilder();
+			sb.Append("# ConVar List\n\n");
+			sb.Append("|Command|Summary|\n");
+			sb.Append("|-------|-------|\n");
+			foreach (ConVar command in conVars.Keys)
+			{
+				sb.Append($"|`{command.Name}`|{command.Summary}|\n");
+			}
+
+			string path = EditorUtility.SaveFilePanel("Save markdown file", "", "convar-list", "md");
 			if(path.Length == 0)
 				return;
 
