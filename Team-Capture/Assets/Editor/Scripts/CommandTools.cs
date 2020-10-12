@@ -21,7 +21,7 @@ namespace Editor.Scripts
 			}
 
 			StringBuilder sb = new StringBuilder();
-			sb.Append("# Command List\n\n");
+			sb.Append("## Command List\n\n");
 			sb.Append("|Command|Summary|Run Permission|\n");
 			sb.Append("|-------|-------|--------------|\n");
 			foreach (ConCommand command in commands.Keys)
@@ -34,6 +34,7 @@ namespace Editor.Scripts
 				return;
 
 			File.WriteAllText(path, sb.ToString());
+			Debug.Log($"Saved list to `{path}`.");
 		}
 
 		[MenuItem("Team Capture/Console/ConVars list to markdown")]
@@ -47,7 +48,7 @@ namespace Editor.Scripts
 			}
 
 			StringBuilder sb = new StringBuilder();
-			sb.Append("# ConVar List\n\n");
+			sb.Append("## ConVar List\n\n");
 			sb.Append("|Command|Summary|\n");
 			sb.Append("|-------|-------|\n");
 			foreach (ConVar command in conVars.Keys)
@@ -60,6 +61,7 @@ namespace Editor.Scripts
 				return;
 
 			File.WriteAllText(path, sb.ToString());
+			Debug.Log($"Saved list to `{path}`.");
 		}
 	}
 }
