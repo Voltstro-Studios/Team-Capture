@@ -57,22 +57,15 @@ namespace Console
 		/// </summary>
 		private static void RegisterCommands()
 		{
-			foreach (Type type in Assembly.GetExecutingAssembly().GetTypes())
-			foreach (MethodInfo method in type.GetMethods(BindingFlags))
+			foreach (KeyValuePair<ConCommand, MethodInfo> command in GetConCommands())
 			{
-				//Ignore if the field doesn't have the ConCommand attribute, but if it does, get it
-				if (!(Attribute.GetCustomAttribute(method, typeof(ConCommand)) is ConCommand attribute))
-					continue;
-
-				//If this ConCommand is graphics only, and the game is headless, then we ignore adding it
-				if(attribute.GraphicsModeOnly && Game.IsHeadless)
-					continue;
+				ConCommand attribute = command.Key;
 
 				//Create the MethodDelegate from the ConCommand's method
 				MethodDelegate methodDelegate;
 				try
 				{
-					methodDelegate = (MethodDelegate) Delegate.CreateDelegate(typeof(MethodDelegate), method);
+					methodDelegate = (MethodDelegate) Delegate.CreateDelegate(typeof(MethodDelegate), command.Value);
 				}
 				catch (Exception ex)
 				{
@@ -97,12 +90,10 @@ namespace Console
 		/// </summary>
 		private static void RegisterConVars()
 		{
-			foreach (Type type in Assembly.GetExecutingAssembly().GetTypes())
-			foreach (FieldInfo fieldInfo in type.GetFields(BindingFlags))
+			foreach (KeyValuePair<ConVar, FieldInfo> conVar in GetConVars())
 			{
-				//Ignore if the field doesn't have the ConVar attribute, but if it does, get it
-				if(!(Attribute.GetCustomAttribute(fieldInfo, typeof(ConVar)) is ConVar attribute))
-					continue;
+				ConVar attribute = conVar.Key;
+				FieldInfo fieldInfo = conVar.Value;
 
 				ConVarDelegate action = null;
 				try
@@ -142,6 +133,52 @@ namespace Console
 					}
 				}, attribute.Name);
 			}
+		}
+
+		/// <summary>
+		/// Gets all <see cref="ConCommand"/>s
+		/// </summary>
+		/// <returns></returns>
+		internal static Dictionary<ConCommand, MethodInfo> GetConCommands()
+		{
+			Dictionary<ConCommand, MethodInfo> conCommands = new Dictionary<ConCommand, MethodInfo>();
+
+			foreach (Type type in Assembly.GetExecutingAssembly().GetTypes())
+			foreach (MethodInfo method in type.GetMethods(BindingFlags))
+			{
+				//Ignore if the field doesn't have the ConCommand attribute, but if it does, get it
+				if (!(Attribute.GetCustomAttribute(method, typeof(ConCommand)) is ConCommand attribute))
+					continue;
+
+				//If this ConCommand is graphics only, and the game is headless, then we ignore adding it
+				if (attribute.GraphicsModeOnly && Game.IsHeadless)
+					continue;
+
+				conCommands.Add(attribute, method);
+			}
+
+			return conCommands;
+		}
+
+		/// <summary>
+		/// Gets all <see cref="ConVar"/>s
+		/// </summary>
+		/// <returns></returns>
+		internal static Dictionary<ConVar, FieldInfo> GetConVars()
+		{
+			Dictionary<ConVar, FieldInfo> conVars = new Dictionary<ConVar, FieldInfo>();
+
+			foreach (Type type in Assembly.GetExecutingAssembly().GetTypes())
+			foreach (FieldInfo fieldInfo in type.GetFields(BindingFlags))
+			{
+				//Ignore if the field doesn't have the ConVar attribute, but if it does, get it
+				if (!(Attribute.GetCustomAttribute(fieldInfo, typeof(ConVar)) is ConVar attribute))
+					continue;
+
+				conVars.Add(attribute, fieldInfo);
+			}
+
+			return conVars;
 		}
 
 		/// <summary>
