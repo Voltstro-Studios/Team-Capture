@@ -20,6 +20,10 @@ namespace Editor.Scripts
 				return;
 			}
 
+			string path = EditorUtility.SaveFilePanel("Save markdown file", "", "command-list", "md");
+			if(path.Length == 0)
+				return;
+
 			StringBuilder sb = new StringBuilder();
 			sb.Append("## Command List\n\n");
 			sb.Append("|Command|Summary|Run Permission|\n");
@@ -28,10 +32,6 @@ namespace Editor.Scripts
 			{
 				sb.Append($"|`{command.Name}`|{command.Summary}|{command.RunPermission}|\n");
 			}
-
-			string path = EditorUtility.SaveFilePanel("Save markdown file", "", "command-list", "md");
-			if(path.Length == 0)
-				return;
 
 			File.WriteAllText(path, sb.ToString());
 			Debug.Log($"Saved list to `{path}`.");
@@ -47,6 +47,10 @@ namespace Editor.Scripts
 				return;
 			}
 
+			string path = EditorUtility.SaveFilePanel("Save markdown file", "", "convar-list", "md");
+			if(path.Length == 0)
+				return;
+
 			StringBuilder sb = new StringBuilder();
 			sb.Append("## ConVar List\n\n");
 			sb.Append("|Command|Summary|\n");
@@ -55,10 +59,6 @@ namespace Editor.Scripts
 			{
 				sb.Append($"|`{command.Name}`|{command.Summary}|\n");
 			}
-
-			string path = EditorUtility.SaveFilePanel("Save markdown file", "", "convar-list", "md");
-			if(path.Length == 0)
-				return;
 
 			File.WriteAllText(path, sb.ToString());
 			Debug.Log($"Saved list to `{path}`.");
