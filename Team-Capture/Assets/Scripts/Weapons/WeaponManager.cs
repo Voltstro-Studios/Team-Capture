@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Core;
-using Delegates;
 using Helper;
 using Mirror;
 using UnityEngine;
@@ -47,7 +46,9 @@ namespace Weapons
 		/// </summary>
 		public int WeaponHolderSpotChildCount => weaponsHolderSpot.childCount;
 
-		public event WeaponUpdated WeaponUpdated;
+		public delegate void WeaponUpdatedDelegate(NetworkedWeapon weapon);
+
+		public event WeaponUpdatedDelegate WeaponUpdated;
 
 		[NonSerialized] public WeaponSway WeaponSway;
 
