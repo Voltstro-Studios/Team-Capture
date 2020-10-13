@@ -1,5 +1,4 @@
-﻿using Attributes;
-using Settings.Enums;
+﻿using Settings.Enums;
 using UnityEngine;
 
 namespace Settings.SettingClasses

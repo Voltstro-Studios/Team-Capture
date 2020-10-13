@@ -1,5 +1,4 @@
-﻿using Attributes;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Settings.SettingClasses
 {

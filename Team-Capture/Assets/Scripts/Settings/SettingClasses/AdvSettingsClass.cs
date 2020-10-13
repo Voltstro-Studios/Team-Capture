@@ -1,5 +1,4 @@
-﻿using Attributes;
-using Settings.URPSettings;
+﻿using Settings.URPSettings;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 

@@ -3,17 +3,44 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using Attributes;
 using Helper.Extensions;
 using TMPro;
 using UI.Elements.Settings;
 using UI.Panels;
 using UnityEngine;
+using UnityEngine.Scripting;
 using UnityEngine.UI;
 using Logger = Core.Logging.Logger;
 
 namespace Settings
 {
+	#region Attributes
+
+	/// <summary>
+	/// Tells the <see cref="DynamicSettingsUi"/> what the text should be, instead of the property name.
+	/// <para>If this isn't applied, the <see cref="Settings.DynamicSettingsUi"/> will just use the field name.</para>
+	/// </summary>
+	[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
+	public class SettingsPropertyFormatNameAttribute : PreserveAttribute
+	{
+		public SettingsPropertyFormatNameAttribute(string menuFormat)
+		{
+			MenuNameFormat = menuFormat;
+		}
+
+		public string MenuNameFormat { get; }
+	}
+
+	/// <summary>
+	/// Doesn't show this property or field in the settings menu
+	/// </summary>
+	[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Class)]
+	public class SettingsDontShowAttribute : PreserveAttribute
+	{
+	}
+
+	#endregion
+
 	[RequireComponent(typeof(OptionsPanel))]
 	public class DynamicSettingsUi : MonoBehaviour
 	{
