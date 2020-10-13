@@ -87,6 +87,8 @@ namespace Core.Logging
 			log.Debug("Logger shutting down at {@Date}", DateTime.Now.ToString("dd/MM/yyyy hh:mm tt"));
 			log.Dispose();
 
+			loggerConfig = null;
+
 			Application.quitting -= Shutdown;
 		}
 
@@ -164,7 +166,7 @@ namespace Core.Logging
 		#region Information Logging
 
 		/// <summary>
-		/// Writes a information log
+		/// Writes an information log
 		/// </summary>
 		/// <param name="message"></param>
 		public static void Info(string message)
@@ -176,7 +178,7 @@ namespace Core.Logging
 		}
 
 		/// <summary>
-		/// Writes a information log
+		/// Writes an information log
 		/// </summary>
 		/// <param name="message"></param>
 		/// <param name="value"></param>
@@ -189,7 +191,7 @@ namespace Core.Logging
 		}
 
 		/// <summary>
-		/// Writes a information log
+		/// Writes an information log
 		/// </summary>
 		/// <param name="message"></param>
 		/// <param name="value0"></param>
@@ -203,7 +205,7 @@ namespace Core.Logging
 		}
 
 		/// <summary>
-		/// Writes a information log
+		/// Writes an information log
 		/// </summary>
 		/// <param name="message"></param>
 		/// <param name="value0"></param>
@@ -218,7 +220,7 @@ namespace Core.Logging
 		}
 
 		/// <summary>
-		/// Writes a information log
+		/// Writes an information log
 		/// </summary>
 		/// <param name="message"></param>
 		/// <param name="values"></param>
@@ -303,10 +305,10 @@ namespace Core.Logging
 
 		#endregion
 
-		#region Warning Logging
+		#region Error Logging
 
 		/// <summary>
-		/// Writes a error log
+		/// Writes an error log
 		/// </summary>
 		/// <param name="message"></param>
 		public static void Error(string message)
@@ -318,7 +320,7 @@ namespace Core.Logging
 		}
 
 		/// <summary>
-		/// Writes a error log
+		/// Writes an error log
 		/// </summary>
 		/// <param name="message"></param>
 		/// <param name="value"></param>
@@ -331,7 +333,7 @@ namespace Core.Logging
 		}
 
 		/// <summary>
-		/// Writes a error log
+		/// Writes an error log
 		/// </summary>
 		/// <param name="message"></param>
 		/// <param name="value0"></param>
@@ -345,7 +347,7 @@ namespace Core.Logging
 		}
 
 		/// <summary>
-		/// Writes a error log
+		/// Writes an error log
 		/// </summary>
 		/// <param name="message"></param>
 		/// <param name="value0"></param>
@@ -360,7 +362,7 @@ namespace Core.Logging
 		}
 
 		/// <summary>
-		/// Writes a error log
+		/// Writes an error log
 		/// </summary>
 		/// <param name="message"></param>
 		/// <param name="values"></param>
