@@ -99,6 +99,8 @@ namespace Player
 		/// </summary>
 		[SyncVar] public double latency;
 
+		#endregion
+
 		#region Events
 
 		/// <summary>
@@ -111,12 +113,13 @@ namespace Player
 		/// <summary>
 		/// Triggered when this player is killed
 		/// </summary>
-		public event PlayerKilledDelegate EventPlayerKilled;
+		public event PlayerKilledDelegate PlayerKilled;
 
+		/// <summary>
+		/// Triggered when this player takes damage
+		/// </summary>
 		public event Action PlayerDamaged;
 		
-		#endregion
-
 		#endregion
 
 		#region Server Variables
@@ -387,7 +390,7 @@ namespace Player
 		[ClientRpc]
 		private void RpcKillFeed(string playerKilledId, string playerKillerId)
 		{
-			EventPlayerKilled?.Invoke(playerKilledId, playerKillerId);
+			PlayerKilled?.Invoke(playerKilledId, playerKillerId);
 		}
 
 		#endregion

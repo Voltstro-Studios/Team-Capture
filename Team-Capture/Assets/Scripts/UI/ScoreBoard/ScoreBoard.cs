@@ -66,7 +66,7 @@ namespace UI.ScoreBoard
 			foreach (PlayerManager player in players)
 			{
 				//Unsubscribe from the player killed event
-				player.EventPlayerKilled -= PlayerOnEventPlayerKilled;
+				player.PlayerKilled -= PlayerOnPlayerKilled;
 			}
 
 			playerList.Clear();
@@ -112,12 +112,12 @@ namespace UI.ScoreBoard
 			playerItemLogic.SetupPlayerInfo(player);
 			playerItemLogic.UpdatePlayerStats();
 
-			player.EventPlayerKilled += PlayerOnEventPlayerKilled;
+			player.PlayerKilled += PlayerOnPlayerKilled;
 
 			playerList.Add(player, newPlayerItem);
 		}
 
-		private void PlayerOnEventPlayerKilled(string playerKilledId, string playerKillerId)
+		private void PlayerOnPlayerKilled(string playerKilledId, string playerKillerId)
 		{
 			UpdatePlayerStats();
 
