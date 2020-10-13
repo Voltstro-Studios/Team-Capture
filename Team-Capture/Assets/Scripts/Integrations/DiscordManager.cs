@@ -1,9 +1,9 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using BootManagement;
 using Core;
 using Helper;
 using SceneManagement;
-using UnityEngine;
 using Discord;
 using Logger = Core.Logging.Logger;
 
@@ -12,15 +12,10 @@ namespace Integrations
 	/// <summary>
 	/// Handles communicating with Discord's RPC
 	/// </summary>
-	public class DiscordManager : MonoBehaviour, IStartOnBoot
+	public class DiscordManager : SingletonMonoBehaviour<DiscordManager>, IStartOnBoot
 	{
 		private Discord.Discord client;
 		private ActivityManager activityManager;
-
-		/// <summary>
-		/// The active running instance
-		/// </summary>
-		public static DiscordManager Instance;
 
 		/// <summary>
 		/// Load the settings on start?
@@ -39,30 +34,27 @@ namespace Integrations
 
 		public void Init()
 		{
-			if (Instance != null || Game.IsHeadless)
-			{
-				Destroy(gameObject);
-				return;
-			}
+		}
 
-			Instance = this;
-			DontDestroyOnLoad(this);
+		protected override void SingletonAwakened()
+		{
+		}
 
-			if(loadSettingsFromFile)
-				LoadSettings();
-
+		protected override void SingletonStarted()
+		{
+			LoadSettings();
 			Initialize();
+		}
+
+		protected override void SingletonDestroyed()
+		{
+			Logger.Info("Destroying discord integration...");
+			client?.Dispose();
 		}
 
 		private void Update()
 		{
 			client?.RunCallbacks();
-		}
-
-		private void OnDestroy()
-		{
-			if (Instance == this)
-				client?.Dispose();
 		}
 
 		private void Initialize()
@@ -73,13 +65,22 @@ namespace Integrations
 				return;
 			}
 
-			client = new Discord.Discord(long.Parse(settings.clientId),
-				(ulong) CreateFlags.NoRequireDiscord);
-			client.SetLogHook(settings.logLevel, (level, message) =>
+			try
+			{
+				client = new Discord.Discord(long.Parse(settings.clientId),
+					(ulong) CreateFlags.NoRequireDiscord);
+			}
+			catch (Exception ex)
+			{
+				//TODO: Handle discord failing to connect
+				Logger.Info(ex.Message);
+			}
+			
+			client?.SetLogHook(settings.logLevel, (level, message) =>
 			{
 				Logger.Info(message);
 			});
-			activityManager = client.GetActivityManager();
+			activityManager = client?.GetActivityManager();
 
 			TCScenesManager.PreparingSceneLoadEvent += PreparingSceneLoad;
 			TCScenesManager.OnSceneLoadedEvent += SceneLoaded;

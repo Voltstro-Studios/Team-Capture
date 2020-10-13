@@ -175,6 +175,7 @@ using Logger = Core.Logging.Logger;
 			if (instance == null)
 			{
 				instance = thisInstance;
+				DontDestroyOnLoad(instance.gameObject);
 			}
 
 			else if (thisInstance != instance)
