@@ -15,7 +15,6 @@ namespace Console
 	public static class ConsoleBackend
 	{
 		public delegate void MethodDelegate(string[] args);
-		public delegate void ConVarDelegate();
 
 #pragma warning disable IDE0002 //For what ever reason removing these System.Reflection before the BindingFlags causes errors
 		private const BindingFlags BindingFlags = System.Reflection.BindingFlags.Static 
@@ -69,7 +68,7 @@ namespace Console
 				}
 				catch (Exception ex)
 				{
-					Logger.Error("An error occurred while adding the command `{@Command}`'s callback method! {@Exception}", attribute.Name, ex);
+					Logger.Error("An error occurred while adding the command `{@Command}`'s method! {@Exception}", attribute.Name, ex);
 					continue;
 				}
 
@@ -95,12 +94,12 @@ namespace Console
 				ConVar attribute = conVar.Key;
 				FieldInfo fieldInfo = conVar.Value;
 
-				ConVarDelegate action = null;
+				Action action = null;
 				try
 				{
 					//Create an action if the callback string is not null
 					if (attribute.Callback != null)
-						action = (ConVarDelegate) Delegate.CreateDelegate(typeof(ConVarDelegate), fieldInfo.DeclaringType ?? throw new Exception("Field's declaring type was null!"),
+						action = (Action) Delegate.CreateDelegate(typeof(Action), fieldInfo.DeclaringType ?? throw new Exception("Field's declaring type was null!"),
 							attribute.Callback);
 				}
 				catch (Exception ex)
