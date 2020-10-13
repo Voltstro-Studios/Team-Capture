@@ -62,7 +62,7 @@ namespace Integrations
 		private void OnDestroy()
 		{
 			if (Instance == this)
-				client.Dispose();
+				client?.Dispose();
 		}
 
 		private void Initialize()
