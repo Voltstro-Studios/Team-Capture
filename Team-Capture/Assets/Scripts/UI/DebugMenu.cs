@@ -3,6 +3,7 @@ using BootManagement;
 using Console;
 using Helper;
 using Mirror;
+using Player.Movement;
 using UnityEngine;
 using Voltstro.CommandLineParser;
 
@@ -64,8 +65,20 @@ namespace UI
 
 			GUI.skin.label.fontSize = 20;
 
-			GUI.Label(new Rect(10, 10, 1000, 40), version);
-			GUI.Label(new Rect(10, 30, 1000, 40), spacer);
+			float yOffset = 10;
+
+			if (NetworkManager.singleton != null && NetworkManager.singleton.mode == NetworkManagerMode.ClientOnly)
+			{
+				if (PlayerMovementManager.ShowPos)
+					yOffset = 120;
+			}
+
+			GUI.Box(new Rect(8, yOffset, 475, 310), "");
+
+			GUI.Label(new Rect(10, yOffset, 1000, 40), version);
+			yOffset += 20;
+
+			GUI.Label(new Rect(10, yOffset, 1000, 40), spacer);
 
 			if (Time.unscaledTime > timer)
 			{
@@ -73,19 +86,38 @@ namespace UI
 				timer = Time.unscaledTime + refreshRate;
 			}
 
-			GUI.Label(new Rect(10, 60, 1000, 40), $"FPS: {fps}");
+			yOffset += 30;
+			GUI.Label(new Rect(10, yOffset, 1000, 40), $"FPS: {fps}");
 
-			GUI.Label(new Rect(10, 100, 1000, 40), "Device Info");
-			GUI.Label(new Rect(10, 120, 1000, 40), spacer);
-			GUI.Label(new Rect(10, 140, 1000, 40), cpu);
-			GUI.Label(new Rect(10, 160, 1000, 40), gpu);
-			GUI.Label(new Rect(10, 180, 1000, 40), ram);
-			GUI.Label(new Rect(10, 200, 1000, 40), renderingApi);
+			yOffset += 30;
+			GUI.Label(new Rect(10, yOffset, 1000, 40), "Device Info");
 
-			GUI.Label(new Rect(10, 230, 1000, 40), "Network");
-			GUI.Label(new Rect(10, 250, 1000, 40), spacer);
-			GUI.Label(new Rect(10, 270, 1000, 40), ipAddress);
-			GUI.Label(new Rect(10, 290, 1000, 40), $"Status: {GetNetworkingStatus()}");
+			yOffset += 20;
+			GUI.Label(new Rect(10, yOffset, 1000, 40), spacer);
+
+			yOffset += 20;
+			GUI.Label(new Rect(10, yOffset, 1000, 40), cpu);
+
+			yOffset += 20;
+			GUI.Label(new Rect(10, yOffset, 1000, 40), gpu);
+
+			yOffset += 20;
+			GUI.Label(new Rect(10, yOffset, 1000, 40), ram);
+
+			yOffset += 20;
+			GUI.Label(new Rect(10, yOffset, 1000, 40), renderingApi);
+
+			yOffset += 30;
+			GUI.Label(new Rect(10, yOffset, 1000, 40), "Network");
+
+			yOffset += 20;
+			GUI.Label(new Rect(10, yOffset, 1000, 40), spacer);
+
+			yOffset += 20;
+			GUI.Label(new Rect(10, yOffset, 1000, 40), ipAddress);
+
+			yOffset += 20;
+			GUI.Label(new Rect(10, yOffset, 1000, 40), $"Status: {GetNetworkingStatus()}");
 		}
 
 		private void Update()

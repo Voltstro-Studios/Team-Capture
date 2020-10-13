@@ -79,11 +79,14 @@ namespace Player.Movement
 
 		private void OnGUI()
 		{
-			if(!showPos) return;
+			if(!ShowPos) return;
 
-			GUI.Label(new Rect(10, 10, 1000, 20), $"Velocity: {characterController.velocity}");
-			GUI.Label(new Rect(10, 30, 1000, 20), $"Position: {transform.position}");
-			GUI.Label(new Rect(10, 50, 1000, 20), $"IsGround: {Physics.Raycast(groundCheck.position, Vector3.down, groundDistance, groundMask)}");
+			GUI.skin.label.fontSize = 20;
+
+			GUI.Label(new Rect(10, 10, 1000, 40), $"Velocity: {characterController.velocity}");
+			GUI.Label(new Rect(10, 30, 1000, 40), $"Position: {transform.position}");
+			GUI.Label(new Rect(10, 50, 1000, 40), $"LookingAt: {cameraTransform.rotation}");
+			GUI.Label(new Rect(10, 70, 1000, 40), $"IsGround: {Physics.Raycast(groundCheck.position, Vector3.down, groundDistance, groundMask)}");
 		}
 
 		public override void OnStartServer()
@@ -212,20 +215,9 @@ namespace Player.Movement
 
 		#region Commands
 
-		private static bool showPos;
+		[ConVar("cl_showpos", "Shows the position and other stuff like that of the player")]
+		public static bool ShowPos = false;
 
-		[ConCommand("cl_showpos", "Shows info about position data", CommandRunPermission.ClientOnly, 1, 1)]
-		public static void ShowPosInfoCommand(string[] args)
-		{
-			string enabled = args[0].ToLower();
-			if (bool.TryParse(enabled, out bool result))
-			{
-				showPos = result;
-				return;
-			}
-
-			Logger.Error("Invalid input! Needs to be either true or false!");
-		}
 
 		#endregion
 	}
