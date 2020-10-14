@@ -7,6 +7,7 @@ using Mirror;
 using Player.Movement;
 using UI;
 using UnityEngine;
+using Voltstro.CommandLineParser;
 using Weapons;
 using Logger = Core.Logging.Logger;
 
@@ -431,6 +432,7 @@ namespace Player
 
 		#region Naming
 
+		[CommandLineArgument("name")]
 		[ConVar("name", "Sets the name")]
 		public static string StartPlayerName = "NotSet";
 

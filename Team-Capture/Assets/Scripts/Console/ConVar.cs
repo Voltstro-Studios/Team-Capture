@@ -1,5 +1,4 @@
 ﻿using System;
-using Voltstro.CommandLineParser;
 
 namespace Console
 {
@@ -7,13 +6,19 @@ namespace Console
 	/// An editable variable in both the console and via launch arguments
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Field)]
-	public class ConVar : CommandLineArgumentAttribute
+	public class ConVar : Attribute
 	{
-		public ConVar(string name, string summary, string callback = null) : base(name)
+		public ConVar(string name, string summary, string callback = null)
 		{
+			Name = name;
 			Summary = summary;
 			Callback = callback;
 		}
+
+		/// <summary>
+		/// The name of this ConVar
+		/// </summary>
+		public string Name { get; }
 
 		/// <summary>
 		/// The summary of this ConVar
