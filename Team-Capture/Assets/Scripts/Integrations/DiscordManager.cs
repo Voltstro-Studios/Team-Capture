@@ -73,6 +73,7 @@ namespace Integrations
 			{
 				Logger.Error("Failed to connect with Discord! {@Exception}", ex.Message);
 				Destroy(gameObject);
+				return;
 			}
 			
 			client?.SetLogHook(settings.logLevel, (level, message) =>
