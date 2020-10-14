@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using BootManagement;
 using Core;
 using Helper;
@@ -70,10 +69,10 @@ namespace Integrations
 				client = new Discord.Discord(long.Parse(settings.clientId),
 					(ulong) CreateFlags.NoRequireDiscord);
 			}
-			catch (Exception ex)
+			catch (ResultException ex)
 			{
-				//TODO: Handle discord failing to connect
-				Logger.Info(ex.Message);
+				Logger.Error("Failed to connect with Discord! {@Exception}", ex.Message);
+				Destroy(gameObject);
 			}
 			
 			client?.SetLogHook(settings.logLevel, (level, message) =>
