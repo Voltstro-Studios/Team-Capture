@@ -1,7 +1,6 @@
 using Console;
 using Mirror;
 using UnityEngine;
-using Logger = Core.Logging.Logger;
 
 namespace Player.Movement
 {
@@ -82,6 +81,8 @@ namespace Player.Movement
 			if(!ShowPos) return;
 
 			GUI.skin.label.fontSize = 20;
+
+			GUI.Box(new Rect(8, 10, 300, 90), "");
 
 			GUI.Label(new Rect(10, 10, 1000, 40), $"Velocity: {characterController.velocity}");
 			GUI.Label(new Rect(10, 30, 1000, 40), $"Position: {transform.position}");
