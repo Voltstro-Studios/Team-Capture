@@ -5,8 +5,16 @@ using System.Net.Sockets;
 
 namespace Helper
 {
+	/// <summary>
+	/// Helper for networking
+	/// </summary>
 	public static class NetHelper
 	{
+		/// <summary>
+		/// Gets the local IP address of this computer
+		/// <para>It will return <c>localhost</c> if no networks are available, or <c>127.0.0.1</c> if there are multiple interfaces, otherwise the actual IP address</para>
+		/// </summary>
+		/// <returns></returns>
 		public static string LocalIpAddress()
 		{
 			//There is no network available, so IDK
@@ -29,7 +37,7 @@ namespace Helper
 					return information.Address.ToString();
 			}
 
-			//Fuck do I know what to do if we hit here
+			//Fuck Do I know what to do if we hit here
 			return "localhost";
 		}
 	}

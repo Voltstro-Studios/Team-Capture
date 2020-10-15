@@ -46,6 +46,10 @@ namespace Core
 #endif
 		}
 
+		/// <summary>
+		/// Get the path used for settings
+		/// </summary>
+		/// <returns></returns>
 		public static string GetGameConfigPath()
 		{
 			//Get our initial documents folder

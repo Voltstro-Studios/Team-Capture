@@ -9,13 +9,26 @@ using Voltstro.CommandLineParser;
 
 namespace UI
 {
+	/// <summary>
+	/// A UI used for debugging purposes
+	/// </summary>
 	public class DebugMenu : SingletonMonoBehaviour<DebugMenu>, IStartOnBoot
 	{
+		/// <summary>
+		/// Is the debug menu open?
+		/// </summary>
 		[CommandLineArgument("debugmenu")]
 		[ConVar("cl_debugmenu", "Shows the debug menu")]
 		public static bool DebugMenuOpen;
 
+		/// <summary>
+		/// The key used to open and close the debug menu
+		/// </summary>
 		public KeyCode openDebugMenuKey = KeyCode.F3;
+
+		/// <summary>
+		/// How often to refresh the fps counter
+		/// </summary>
 		public float refreshRate = 1f;
 
 		private float timer;

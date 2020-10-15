@@ -1,10 +1,12 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.IO;
+﻿using System.IO;
 using Newtonsoft.Json;
 
 namespace Helper
 {
-	[SuppressMessage("ReSharper", "ConvertToNullCoalescingCompoundAssignment")]
+	/// <summary>
+	/// Serialization and Deserialization using <see cref="JsonConvert"/>.
+	/// <para>Saves to the config dir</para>
+	/// </summary>
 	public static class ObjectSerializer
 	{
 		#region Serialization
@@ -23,7 +25,7 @@ namespace Helper
 		/// <summary>
 		/// This saves the Json of the object to a file in plain text format
 		/// </summary>
-		public static string SaveJson(object obj, string directory, string fileName = null,
+		public static void SaveJson(object obj, string directory, string fileName = null,
 			string extension = ".json", bool compactJson = false, JsonSerializerSettings jsonSerializerSettings = null)
 		{
 			//If the filename is not given
@@ -39,8 +41,6 @@ namespace Helper
 
 			//Write our json to the file
 			File.WriteAllText(path, json);
-
-			return json;
 		}
 
 		#endregion
