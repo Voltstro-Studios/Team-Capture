@@ -3,16 +3,16 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace StartUpVideo.Editor
+namespace Editor.Scripts
 {
-	[CustomEditor(typeof(StartUpVideo))]
+	[CustomEditor(typeof(StartUpVideo.StartUpVideo))]
 	public class StartUpVideoEditor : UnityEditor.Editor {
 
 		public override void OnInspectorGUI()
 		{
 			base.OnInspectorGUI();
 
-			StartUpVideo vid = (StartUpVideo)target;
+			StartUpVideo.StartUpVideo vid = (StartUpVideo.StartUpVideo)target;
 
 			EditorGUILayout.Space();
 

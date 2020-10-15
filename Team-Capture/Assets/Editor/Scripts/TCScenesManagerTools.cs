@@ -1,9 +1,10 @@
 ﻿#if UNITY_EDITOR
 
+using SceneManagement;
 using UnityEditor;
 using UnityEngine;
 
-namespace SceneManagement.Editor
+namespace Editor.Scripts
 {
     public static class TCScenesManagerTools
     {
