@@ -79,6 +79,20 @@ namespace Settings.Controllers
 			Logger.Error("Invalid input!");
 		}
 
+		[ConCommand("cl_fov", "FOV of the camera", CommandRunPermission.ClientOnly, 1, 1, true)]
+		public static void CameraFovCommand(string[] args)
+		{
+			if (int.TryParse(args[0], out int cameraFov))
+			{
+				GameSettings.AdvSettings.CameraFOV = cameraFov;
+				GameSettings.Save();
+
+				return;
+			}
+
+			Logger.Error("Invalid input!");
+		}
+
 		#endregion
 	}
 }
