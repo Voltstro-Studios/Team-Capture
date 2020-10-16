@@ -26,11 +26,12 @@ namespace Editor.Scripts
 
 			StringBuilder sb = new StringBuilder();
 			sb.Append("## Command List\n\n");
-			sb.Append("|Command|Summary|Run Permission|\n");
-			sb.Append("|-------|-------|--------------|\n");
+			sb.Append("|Command|Summary|Run Permission|Graphics Only|\n");
+			sb.Append("|-------|-------|--------------|-------------|\n");
 			foreach (ConCommand command in commands.Keys)
 			{
-				sb.Append($"|`{command.Name}`|{command.Summary}|{command.RunPermission}|\n");
+				sb.Append($"|`{command.Name}`|{command.Summary}|{command.RunPermission}|");
+				sb.Append(command.GraphicsModeOnly ? "✔|\n" : "❌|\n");
 			}
 
 			File.WriteAllText(path, sb.ToString());
@@ -53,11 +54,12 @@ namespace Editor.Scripts
 
 			StringBuilder sb = new StringBuilder();
 			sb.Append("## ConVar List\n\n");
-			sb.Append("|Command|Summary|\n");
-			sb.Append("|-------|-------|\n");
+			sb.Append("|Command|Summary|Graphics Only|\n");
+			sb.Append("|-------|-------|--------------|\n");
 			foreach (ConVar command in conVars.Keys)
 			{
-				sb.Append($"|`{command.Name}`|{command.Summary}|\n");
+				sb.Append($"|`{command.Name}`|{command.Summary}|");
+				sb.Append(command.GraphicsOnly ? "✔|\n" : "❌|\n");
 			}
 
 			File.WriteAllText(path, sb.ToString());

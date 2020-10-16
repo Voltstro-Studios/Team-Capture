@@ -219,7 +219,6 @@ namespace Player.Movement
 		[ConVar("cl_showpos", "Shows the position and other stuff like that of the player", true)]
 		public static bool ShowPos = false;
 
-
 		#endregion
 	}
 }
