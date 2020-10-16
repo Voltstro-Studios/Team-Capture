@@ -2,8 +2,16 @@
 
 namespace Helper
 {
-	public static class Layers
+	/// <summary>
+	/// Helpers for using Unity's layers
+	/// </summary>
+	public static class LayersHelper
 	{
+		/// <summary>
+		/// Sets a object's and it children object's layer
+		/// </summary>
+		/// <param name="obj"></param>
+		/// <param name="newLayer"></param>
 		public static void SetLayerRecursively(GameObject obj, int newLayer)
 		{
 			if (obj == null)

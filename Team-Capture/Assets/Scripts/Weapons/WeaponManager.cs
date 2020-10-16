@@ -262,7 +262,7 @@ namespace Weapons
 			GameObject newWeapon = Instantiate(WeaponsResourceManager.GetWeapon(weaponName).baseWeaponPrefab,
 				weaponsHolderSpot);
 			if (isLocalPlayer)
-				Layers.SetLayerRecursively(newWeapon, LayerMask.NameToLayer(weaponLayerName));
+				LayersHelper.SetLayerRecursively(newWeapon, LayerMask.NameToLayer(weaponLayerName));
 		}
 
 		#endregion
