@@ -12,7 +12,7 @@ namespace UI
 	public class DebugMenu : SingletonMonoBehaviour<DebugMenu>, IStartOnBoot
 	{
 		[CommandLineArgument("debugmenu")]
-		[ConVar("cl_debugmenu", "Shows the debug menu")]
+		[ConVar("cl_debugmenu", "Shows the debug menu", true)]
 		public static bool DebugMenuOpen;
 
 		public KeyCode openDebugMenuKey = KeyCode.F3;

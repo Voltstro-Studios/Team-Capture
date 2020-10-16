@@ -433,7 +433,7 @@ namespace Player
 		#region Naming
 
 		[CommandLineArgument("name")]
-		[ConVar("name", "Sets the name")]
+		[ConVar("name", "Sets the name", true)]
 		public static string StartPlayerName = "NotSet";
 
 		[Command]

@@ -8,7 +8,7 @@ namespace Weapons
 {
 	public class WeaponGraphics : MonoBehaviour
 	{
-		[ConVar("cl_muzzleflashlighting", "Whether or not the muzzle flash will have lighting", nameof(InvokeLightingChange))]
+		[ConVar("cl_muzzleflashlighting", "Whether or not the muzzle flash will have lighting", nameof(InvokeLightingChange), true)]
 		public static bool MuzzleFlashLighting = true;
 
 		public static event Action LightingChange;

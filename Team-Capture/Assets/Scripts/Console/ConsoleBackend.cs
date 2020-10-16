@@ -94,6 +94,9 @@ namespace Console
 				ConVar attribute = conVar.Key;
 				FieldInfo fieldInfo = conVar.Value;
 
+				if(attribute.GraphicsOnly && Game.IsHeadless)
+					continue;
+
 				Action action = null;
 				try
 				{

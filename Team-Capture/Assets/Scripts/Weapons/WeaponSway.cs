@@ -10,10 +10,10 @@ namespace Weapons
 	{
 		private Vector3 localPosition;
 
-		[ConVar("cl_sway_amount", "Sets how much a gun will sway")]
+		[ConVar("cl_sway_amount", "Sets how much a gun will sway", true)]
 		public static float SwayAmount = 0.1f;
 
-		[ConVar("cl_sway_enable", "Whether or not weapons will sway")]
+		[ConVar("cl_sway_enable", "Whether or not weapons will sway", true)]
 		public static bool SwayEnabled = true;
 
 		public float maxXAmount = 0.35f;

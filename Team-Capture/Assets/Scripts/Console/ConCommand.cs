@@ -20,6 +20,7 @@ namespace Console
 		/// <param name="runPermission">What this command can and cannot run on</param>
 		/// <param name="minArgs">Min amount of args required (optional)</param>
 		/// <param name="maxArgs">Max amount of args required (optional)</param>
+		/// <param name="graphicsModeOnly">Can this command only be used in graphics mode</param>
 		public ConCommand(string name, string summary, CommandRunPermission runPermission = CommandRunPermission.Both, int minArgs = 0, int maxArgs = 0, bool graphicsModeOnly = false)
 		{
 			Name = name;
