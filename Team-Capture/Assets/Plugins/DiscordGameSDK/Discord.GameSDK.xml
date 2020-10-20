@@ -1,0 +1,2470 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Discord.GameSDK</name>
+    </assembly>
+    <members>
+        <member name="T:Discord.GameSDK.Achievements.AchievementManager">
+            <summary>
+                There's no feeling quite like accomplishing a goal that you've set out to achieve.
+                Is killing 1000 zombies in a game as great an achievement as climbing Mt. Everest? Of course it is, and I didn't
+                even have to leave my house.
+                So get off my back, society.
+                <para>Anyway—Discord has achievements! Show your players just how successful they are.</para>
+                <para>
+                    Achievements are managed in the <a href="https://discord.com/developers/applications">Developer Portal</a>.
+                    Head over to your application --> <c>Achievements</c> to create and manage achievements for your game.
+                    You'll give them an icon, a name, and a description; then they'll be assigned an id.
+                </para>
+            </summary>
+        </member>
+        <member name="E:Discord.GameSDK.Achievements.AchievementManager.OnUserAchievementUpdate">
+            <summary>
+                Fires when an achievement is updated for the currently connected user
+            </summary>
+        </member>
+        <member name="M:Discord.GameSDK.Achievements.AchievementManager.SetUserAchievement(System.Int64,System.Byte,Discord.GameSDK.Achievements.AchievementManager.SetUserAchievementHandler)">
+            <summary>
+                Updates the current user's status for a given achievement. If <see cref="!:percentComplete" /> is set to 100, the
+                UnlockedAt field will be automatically updated with the current timestamp.
+            </summary>
+            <param name="achievementId"></param>
+            <param name="percentComplete"></param>
+            <param name="callback"></param>
+        </member>
+        <member name="M:Discord.GameSDK.Achievements.AchievementManager.FetchUserAchievements(Discord.GameSDK.Achievements.AchievementManager.FetchUserAchievementsHandler)">
+            <summary>
+                Loads a stable list of the current user's achievements to iterate over. If the user has any achievements, do your
+                iteration within the callback of this function.
+            </summary>
+            <param name="callback"></param>
+        </member>
+        <member name="M:Discord.GameSDK.Achievements.AchievementManager.CountUserAchievements">
+            <summary>
+                Counts the list of a user's achievements for iteration.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Discord.GameSDK.Achievements.AchievementManager.GetUserAchievement(System.Int64)">
+            <summary>
+                Gets the user achievement for the given achievement id.
+                If you keep a hardcoded mapping of achievement -- id in your codebase, this will be better than iterating over each
+                achievement.
+                Make sure to call <see cref="M:Discord.GameSDK.Achievements.AchievementManager.FetchUserAchievements(Discord.GameSDK.Achievements.AchievementManager.FetchUserAchievementsHandler)" /> first still.
+            </summary>
+            <param name="userAchievementId"></param>
+            <returns></returns>
+            <exception cref="T:Discord.GameSDK.ResultException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Achievements.AchievementManager.GetUserAchievementAt(System.Int32)">
+            <summary>
+                Gets the user's achievement at a given index of their list of achievements.
+            </summary>
+            <param name="index"></param>
+            <returns></returns>
+            <exception cref="T:Discord.GameSDK.ResultException"></exception>
+        </member>
+        <member name="F:Discord.GameSDK.Achievements.UserAchievement.UserId">
+            <summary>
+                The unique id of the user working on the achievement
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Achievements.UserAchievement.AchievementId">
+            <summary>
+                The unique id of the achievement
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Achievements.UserAchievement.PercentComplete">
+            <summary>
+                How far along the user is to completing the achievement (0-100)
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Achievements.UserAchievement.UnlockedAt">
+            <summary>
+                The timestamp at which the user completed the achievement (PercentComplete was set to 100)
+            </summary>
+        </member>
+        <member name="T:Discord.GameSDK.Activities.Activity">
+            <summary>
+                Discord Activity to show on the user's profile
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Activities.Activity.Type">
+            <summary>
+                [No Docs]
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Activities.Activity.ApplicationId">
+            <summary>
+                Your application id - this is a read-only field
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Activities.Activity.Name">
+            <summary>
+                Name of the application - this is a read-only field
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Activities.Activity.State">
+            <summary>
+                The player's current party status
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Activities.Activity.Details">
+            <summary>
+                What the player is currently doing
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Activities.Activity.Timestamps">
+            <summary>
+                Helps create elapsed/remaining timestamps on a player's profile
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Activities.Activity.Assets">
+            <summary>
+                Assets to display on the player's profile
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Activities.Activity.Party">
+            <summary>
+                Information about the player's party
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Activities.Activity.Secrets">
+            <summary>
+                Secret passwords for joining and spectating the player's game
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Activities.Activity.Instance">
+            <summary>
+                Whether this activity is an instanced context, like a match
+            </summary>
+        </member>
+        <member name="T:Discord.GameSDK.Activities.ActivityActionType">
+            <summary>
+                What type is this activity action
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Activities.ActivityActionType.Join">
+            <summary>
+                Join
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Activities.ActivityActionType.Spectate">
+            <summary>
+                Spectate
+            </summary>
+        </member>
+        <member name="T:Discord.GameSDK.Activities.ActivityAssets">
+            <summary>
+                Assets to be used by an activity
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Activities.ActivityAssets.LargeImage">
+            <summary>
+                Keyname of an asset to display
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Activities.ActivityAssets.LargeText">
+            <summary>
+                Hover text for the large image
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Activities.ActivityAssets.SmallImage">
+            <summary>
+                Keyname of an asset to display
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Activities.ActivityAssets.SmallText">
+            <summary>
+                Hover text for the small image
+            </summary>
+        </member>
+        <member name="T:Discord.GameSDK.Activities.ActivityJoinRequestReply">
+            <summary>
+                What to reply with for a join request
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Activities.ActivityJoinRequestReply.No">
+            <summary>
+                Deny the join request
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Activities.ActivityJoinRequestReply.Yes">
+            <summary>
+                Allow the join request
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Activities.ActivityJoinRequestReply.Ignore">
+            <summary>
+                Ignore the join request
+            </summary>
+        </member>
+        <member name="T:Discord.GameSDK.Activities.ActivityManager">
+            <summary>
+                Looking to integrate Rich Presence into your game? No need to manage multiple SDKs—this one does all that awesome
+                stuff, too!.
+                Delight your players with the ability to post game invites in chat and party up directly from Discord.
+                Surface interesting live game data in their profile and on the Games Tab for their friends, encouraging them to
+                group up and play together.
+                <para>
+                    For more detailed information and documentation around the Rich Presence feature set and integration tips,
+                    check out our
+                    <a href="https://discord.com/developers/docs/rich-presence/how-to">Rich Presence Documentation</a>.
+                </para>
+            </summary>
+        </member>
+        <member name="E:Discord.GameSDK.Activities.ActivityManager.OnActivityJoin">
+            <summary>
+                Fires when a user accepts a game chat invite or receives confirmation from Asking to Join.
+            </summary>
+        </member>
+        <member name="E:Discord.GameSDK.Activities.ActivityManager.OnActivitySpectate">
+            <summary>
+                Fires when a user accepts a spectate chat invite or clicks the Spectate button on a user's profile.
+            </summary>
+        </member>
+        <member name="E:Discord.GameSDK.Activities.ActivityManager.OnActivityJoinRequest">
+            <summary>
+                Fires when a user asks to join the current user's game.
+            </summary>
+        </member>
+        <member name="E:Discord.GameSDK.Activities.ActivityManager.OnActivityInvite">
+            <summary>
+                Fires when the user receives a join or spectate invite.
+            </summary>
+        </member>
+        <member name="M:Discord.GameSDK.Activities.ActivityManager.RegisterCommand(System.String)">
+            <summary>
+                Registers a command by which Discord can launch your game.
+                This might be a custom protocol, like <c>my-awesome-game://</c>, or a path to an executable.
+                It also supports any launch parameters that may be needed, like <c>game.exe --full-screen --no-hax</c>.
+                <para>
+                    On macOS, due to the way Discord registers executables, your game needs to be bundled for this command to
+                    work. That means it should be a <c>.app</c>.
+                </para>
+            </summary>
+            <param name="command"></param>
+            <exception cref="T:Discord.GameSDK.ResultException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Activities.ActivityManager.RegisterSteam(System.UInt32)">
+            <summary>
+                Used if you are distributing this SDK on Steam. Registers your game's Steam app id for the protocol
+                <c>steam://run-game-id/id</c>.
+            </summary>
+            <param name="steamId"></param>
+            <exception cref="T:Discord.GameSDK.ResultException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Activities.ActivityManager.UpdateActivity(Discord.GameSDK.Activities.Activity,Discord.GameSDK.Activities.ActivityManager.UpdateActivityHandler)">
+            <summary>
+                Sets a user's presence in Discord to a new activity. This has a rate limit of 5 updates per 20 seconds.
+                <para>
+                    It is possible for users to hide their presence on Discord (User Settings -> Game Activity). Presence set
+                    through this SDK may not be visible when this setting is toggled off.
+                </para>
+            </summary>
+            <param name="activity"></param>
+            <param name="callback"></param>
+        </member>
+        <member name="M:Discord.GameSDK.Activities.ActivityManager.ClearActivity(Discord.GameSDK.Activities.ActivityManager.ClearActivityHandler)">
+            <summary>
+                Clear's a user's presence in Discord to make it show nothing.
+            </summary>
+            <param name="callback"></param>
+        </member>
+        <member name="M:Discord.GameSDK.Activities.ActivityManager.SendRequestReply(System.Int64,Discord.GameSDK.Activities.ActivityJoinRequestReply,Discord.GameSDK.Activities.ActivityManager.SendRequestReplyHandler)">
+            <summary>
+                Sends a reply to an Ask to Join request.
+            </summary>
+            <param name="userId"></param>
+            <param name="reply"></param>
+            <param name="callback"></param>
+        </member>
+        <member name="M:Discord.GameSDK.Activities.ActivityManager.SendInvite(System.Int64,Discord.GameSDK.Activities.ActivityActionType,System.String,Discord.GameSDK.Activities.ActivityManager.SendInviteHandler)">
+            <summary>
+                Sends a game invite to a given user. If you do not have a valid activity with all the required fields, this call
+                will error.
+                See
+                <a href="https://discord.com/developers/docs/game-sdk/activities#activity-action-field-requirements">
+                    Activity
+                    Action Field Requirement
+                </a>
+                for the fields required to have join and spectate invites function properly.
+            </summary>
+            <param name="userId"></param>
+            <param name="type"></param>
+            <param name="content"></param>
+            <param name="callback"></param>
+        </member>
+        <member name="M:Discord.GameSDK.Activities.ActivityManager.AcceptInvite(System.Int64,Discord.GameSDK.Activities.ActivityManager.AcceptInviteHandler)">
+            <summary>
+                Accepts a game invitation from a given userId.
+            </summary>
+            <param name="userId"></param>
+            <param name="callback"></param>
+        </member>
+        <member name="T:Discord.GameSDK.Activities.ActivityParty">
+            <summary>
+                Activity party
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Activities.ActivityParty.Id">
+            <summary>
+                A unique identifier for this party
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Activities.ActivityParty.Size">
+            <summary>
+                Info about the size of the party
+            </summary>
+        </member>
+        <member name="T:Discord.GameSDK.Activities.ActivitySecrets">
+            <summary>
+                Secrets related to an activity
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Activities.ActivitySecrets.Match">
+            <summary>
+                Unique hash for the given match context
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Activities.ActivitySecrets.Join">
+            <summary>
+                Unique hash for chat invites and Ask to Join
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Activities.ActivitySecrets.Spectate">
+            <summary>
+                Unique hash for Spectate button
+            </summary>
+        </member>
+        <member name="T:Discord.GameSDK.Activities.ActivityTimestamps">
+            <summary>
+                Timestamps for an activity
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Activities.ActivityTimestamps.Start">
+            <summary>
+                Unix timestamp - send this to have an "elapsed" timer
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Activities.ActivityTimestamps.End">
+            <summary>
+                Unix timestamp - send this to have a "remaining" timer
+            </summary>
+        </member>
+        <member name="T:Discord.GameSDK.Activities.ActivityType">
+            <summary>
+                [Not a huge amount of stuff on the docs about this]
+            </summary>
+        </member>
+        <member name="T:Discord.GameSDK.Activities.PartySize">
+            <summary>
+                The size of a part
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Activities.PartySize.CurrentSize">
+            <summary>
+                The current size of the party
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Activities.PartySize.MaxSize">
+            <summary>
+                The max possible size of the party
+            </summary>
+        </member>
+        <member name="T:Discord.GameSDK.Applications.ApplicationManager">
+            <summary>
+                Many games run their own backend servers for things like user authentication. If one of those many games is yours,
+                then we've got something for you! This manager gives you access to a bearer token for the currently connected
+                Discord user, which you can send off to your server to do user authentication.
+                <para>
+                    This token is also useful for retrieving information about the connected user's account. Check out our
+                    <a href="https://discord.com/developers/docs/topics/oauth2">OAuth2 documentation</a> for more information.
+                </para>
+                <para>
+                    These bearer tokens are good for seven days, after which they will expire. When a user reconnects to your
+                    game, and is online and connected to the internet, they'll receive a new token that you can grab.
+                </para>
+                <para>
+                    This manager also includes a couple useful helper functions, like getting the locale in which the user has
+                    chosen to use their Discord client, and knowing which game branch the game is running on. More about branches
+                    in the Dispatch CLI tool section of the documentation.
+                </para>
+            </summary>
+        </member>
+        <member name="M:Discord.GameSDK.Applications.ApplicationManager.ValidateOrExit(Discord.GameSDK.Applications.ApplicationManager.ValidateOrExitHandler)">
+            <summary>
+                Checks if the current user has the entitlement to run this game.
+            </summary>
+            <param name="callback"></param>
+        </member>
+        <member name="M:Discord.GameSDK.Applications.ApplicationManager.GetCurrentLocale">
+            <summary>
+                Get's the locale the current user has Discord set to.
+                <para>Value from environment variable <c>DISCORD_CURRENT_LOCALE</c></para>
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Discord.GameSDK.Applications.ApplicationManager.GetCurrentBranch">
+            <summary>
+                Get the name of pushed branch on which the game is running. These are branches that you created and pushed using
+                Dispatch.
+                <para>Value from environment variable <c>DISCORD_CURRENT_BRANCH</c></para>
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Discord.GameSDK.Applications.ApplicationManager.GetOAuth2Token(Discord.GameSDK.Applications.ApplicationManager.GetOAuth2TokenHandler)">
+            <summary>
+                Retrieve an oauth2 bearer token for the current user. If your game was launched from Discord and you call this
+                function, you will automatically receive the token.
+                If the game was not launched from Discord and this method is called, Discord will focus itself and prompt the user
+                for authorization.
+                <para>
+                    Ensure that you have <c>http://127.0.0.1</c> set as a valid redirect URI for your application in the
+                    Developer Portal, or this method will always return an error.
+                </para>
+                <para>Value from environment variable DISCORD_ACCESS_TOKEN</para>
+            </summary>
+            <param name="callback"></param>
+        </member>
+        <member name="M:Discord.GameSDK.Applications.ApplicationManager.GetTicket(Discord.GameSDK.Applications.ApplicationManager.GetTicketHandler)">
+            <summary>
+                Get the signed app ticket for the current user.
+                The structure of the ticket is: <c>version.signature.base64encodedjson</c>, so you should split the string by the
+                <c>.</c> character.
+                Ensure that the <c>version</c> matches the current version. The <c>signature</c> is used to verify the ticket using
+                the libsodium library of your choice,
+                and the <c>base64encodedjson</c> is what you can transform after verification. It contains:
+                <list type="bullet">
+                    <item>the application id tied to the ticket</item>
+                    <item>the user's user id</item>
+                    <item>a timestamp for the ticket</item>
+                    <item>the list of the user's <see cref="T:Discord.GameSDK.Store.Entitlement" />s for the application id</item>
+                </list>
+                These values can be accessed by transforming the string into a
+                <a href="https://discord.com/developers/docs/game-sdk/applications#data-models-signedappticket-struct">SignedAppTicket</a>
+                with your application's private key. The ticket is signed using
+                <a href="https://github.com/jedisct1/libsodium">libsodium</a> which should be available for any programming
+                language. Here's a
+                <a href="https://download.libsodium.org/doc/bindings_for_other_languages">list of available libraries</a>.
+                <para>
+                    Note that both the public key you receive from Discord and the signature within the app ticket from the SDK
+                    are both in hex, and will need to be converted to <see cref="T:System.Byte" />[] before use with libsodium.
+                </para>
+            </summary>
+            <param name="callback"></param>
+        </member>
+        <member name="T:Discord.GameSDK.Applications.OAuth2Token">
+            <summary>
+                Token for OAuth2
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Applications.OAuth2Token.AccessToken">
+            <summary>
+                A bearer token for the current user
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Applications.OAuth2Token.Scopes">
+            <summary>
+                A list of oauth2 scopes as a single string, delineated by spaces like "identify rpc gdm.join"
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Applications.OAuth2Token.Expires">
+            <summary>
+                The timestamp at which the token expires
+            </summary>
+        </member>
+        <member name="T:Discord.GameSDK.CreateFlags">
+            <summary>
+                Flags to use while create the Discord client
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.CreateFlags.Default">
+            <summary>
+                Requires Discord to be running to play the game
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.CreateFlags.NoRequireDiscord">
+            <summary>
+                Does not require Discord to be running, use this on other platforms
+            </summary>
+        </member>
+        <member name="T:Discord.GameSDK.Discord">
+            <summary>
+                An instance of Discord for the SDK.
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Discord.IsInitialized">
+            <summary>
+                Is the Discord game SDK initialized or not
+            </summary>
+        </member>
+        <member name="M:Discord.GameSDK.Discord.#ctor(System.Int64,Discord.GameSDK.CreateFlags)">
+            <summary>
+                Creates an instance of Discord to initialize the SDK. This is the overlord of all things Discord. We like to call
+                her Nelly.
+            </summary>
+            <exception cref="T:Discord.GameSDK.InitializedException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Discord.Dispose">
+            <summary>
+                Destroys the instance. Wave goodbye, Nelly! You monster.
+            </summary>
+            <exception cref="T:Discord.GameSDK.InitializedException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Discord.Init">
+            <summary>
+                Initializes the Discord game SDK
+            </summary>
+            <exception cref="T:Discord.GameSDK.InitializedException"></exception>
+            <exception cref="T:Discord.GameSDK.ResultException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Discord.RunCallbacks">
+            <summary>
+                Runs all pending SDK callbacks. Put this in your game's main event loop, like <c>Update()</c> in Unity.
+                That way, the first thing your game does is check for any new info from Discord.
+                <para>
+                    This function also serves as a way to know that the local Discord client is still connected.
+                    If the user closes Discord while playing your game, <see cref="M:Discord.GameSDK.Discord.RunCallbacks" /> will throw
+                    <see cref="F:Discord.GameSDK.Result.NotRunning" />.
+                </para>
+            </summary>
+            <exception cref="T:Discord.GameSDK.InitializedException"></exception>
+            <exception cref="T:Discord.GameSDK.ResultException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Discord.SetLogHook(Discord.GameSDK.LogLevel,Discord.GameSDK.Discord.SetLogHookHandler)">
+            <summary>
+                Registers a logging callback function with the minimum level of message to receive
+            </summary>
+            <param name="minLevel"></param>
+            <param name="callback"></param>
+            <exception cref="T:Discord.GameSDK.InitializedException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Discord.GetApplicationManager">
+            <summary>
+                Fetches an instance of the manager for interfacing with applications in the SDK.
+            </summary>
+            <returns></returns>
+            <exception cref="T:Discord.GameSDK.InitializedException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Discord.GetUserManager">
+            <summary>
+                Fetches an instance of the manager for interfacing with users in the SDK.
+            </summary>
+            <returns></returns>
+            <exception cref="T:Discord.GameSDK.InitializedException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Discord.GetImageManager">
+            <summary>
+                Fetches an instance of the manager for interfacing with images in the SDK.
+            </summary>
+            <returns></returns>
+            <exception cref="T:Discord.GameSDK.InitializedException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Discord.GetActivityManager">
+            <summary>
+                Fetches an instance of the manager for interfacing with activities in the SDK.
+            </summary>
+            <returns></returns>
+            <exception cref="T:Discord.GameSDK.InitializedException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Discord.GetRelationshipManager">
+            <summary>
+                Fetches an instance of the manager for interfacing with relationships in the SDK.
+            </summary>
+            <returns></returns>
+            <exception cref="T:Discord.GameSDK.InitializedException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Discord.GetLobbyManager">
+            <summary>
+                Fetches an instance of the manager for interfacing with lobbies in the SDK.
+            </summary>
+            <returns></returns>
+            <exception cref="T:Discord.GameSDK.InitializedException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Discord.GetNetworkManager">
+            <summary>
+                Fetches an instance of the manager for interfacing with networking in the SDK.
+            </summary>
+            <returns></returns>
+            <exception cref="T:Discord.GameSDK.InitializedException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Discord.GetOverlayManager">
+            <summary>
+                Fetches an instance of the manager for interfacing with the overlay in the SDK.
+            </summary>
+            <returns></returns>
+            <exception cref="T:Discord.GameSDK.InitializedException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Discord.GetStorageManager">
+            <summary>
+                Fetches an instance of the manager for interfacing with storage in the SDK.
+            </summary>
+            <returns></returns>
+            <exception cref="T:Discord.GameSDK.InitializedException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Discord.GetStoreManager">
+            <summary>
+                Fetches an instance of the manager for interfacing with SKUs and Entitlements in the SDK.
+            </summary>
+            <returns></returns>
+            <exception cref="T:Discord.GameSDK.InitializedException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Discord.GetVoiceManager">
+            <summary>
+                Fetches an instance of the manager for interfacing with voice chat in the SDK.
+            </summary>
+            <returns></returns>
+            <exception cref="T:Discord.GameSDK.InitializedException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Discord.GetAchievementManager">
+            <summary>
+                Fetches an instance of the manager for interfacing with achievements in the SDK.
+            </summary>
+            <returns></returns>
+            <exception cref="T:Discord.GameSDK.InitializedException"></exception>
+        </member>
+        <member name="T:Discord.GameSDK.Images.ImageDimensions">
+            <summary>
+                Dimensions of an image
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Images.ImageDimensions.Width">
+            <summary>
+                The width of the image
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Images.ImageDimensions.Height">
+            <summary>
+                The height of the image
+            </summary>
+        </member>
+        <member name="T:Discord.GameSDK.Images.ImageHandle">
+            <summary>
+                Image handle
+            </summary>
+        </member>
+        <member name="M:Discord.GameSDK.Images.ImageHandle.User(System.Int64,System.UInt32)">
+            <summary>
+                Get's a user's <see cref="T:Discord.GameSDK.Images.ImageHandle" />
+            </summary>
+            <param name="id"></param>
+            <param name="size"></param>
+            <returns></returns>
+        </member>
+        <member name="F:Discord.GameSDK.Images.ImageHandle.Type">
+            <summary>
+                The source of the image
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Images.ImageHandle.Id">
+            <summary>
+                The id of the user whose avatar you want to get
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Images.ImageHandle.Size">
+            <summary>
+                The resolution at which you want the image
+            </summary>
+        </member>
+        <member name="T:Discord.GameSDK.Images.ImageManager">
+            <summary>
+                Discord is like a book; it's better with pictures. The <see cref="T:Discord.GameSDK.Images.ImageManager" /> helps you fetch image data for
+                images in Discord, including user's avatars.
+                They worked hard to pick out those photos and gifs. Show them you care, too.
+            </summary>
+        </member>
+        <member name="M:Discord.GameSDK.Images.ImageManager.Fetch(Discord.GameSDK.Images.ImageHandle,Discord.GameSDK.Images.ImageManager.FetchHandler)">
+            <summary>
+                Prepares an image to later retrieve data about it.
+            </summary>
+            <param name="handle"></param>
+            <param name="callback"></param>
+        </member>
+        <member name="M:Discord.GameSDK.Images.ImageManager.Fetch(Discord.GameSDK.Images.ImageHandle,System.Boolean,Discord.GameSDK.Images.ImageManager.FetchHandler)">
+            <summary>
+                Prepares an image to later retrieve data about it.
+            </summary>
+            <param name="handle"></param>
+            <param name="refresh"></param>
+            <param name="callback"></param>
+        </member>
+        <member name="M:Discord.GameSDK.Images.ImageManager.GetDimensions(Discord.GameSDK.Images.ImageHandle)">
+            <summary>
+                Get's the dimensions for the given user's avatar's source image.
+            </summary>
+            <param name="handle"></param>
+            <returns></returns>
+            <exception cref="T:Discord.GameSDK.ResultException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Images.ImageManager.GetData(Discord.GameSDK.Images.ImageHandle)">
+            <summary>
+                Gets the image data for a given user's avatar.
+            </summary>
+            <param name="handle"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Discord.GameSDK.Images.ImageManager.GetData(Discord.GameSDK.Images.ImageHandle,System.Byte[])">
+            <summary>
+                Gets the image data for a given user's avatar.
+            </summary>
+            <param name="handle"></param>
+            <param name="data"></param>
+            <exception cref="T:Discord.GameSDK.ResultException"></exception>
+        </member>
+        <member name="T:Discord.GameSDK.Images.ImageType">
+            <summary>
+                What type is this image
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Images.ImageType.User">
+            <summary>
+                Image is a user's avatar
+            </summary>
+        </member>
+        <member name="T:Discord.GameSDK.Lobbies.Lobby">
+            <summary>
+                A lobby
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Lobbies.Lobby.Id">
+            <summary>
+                The unique id of the lobby
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Lobbies.Lobby.Type">
+            <summary>
+                If the lobby is public or private
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Lobbies.Lobby.OwnerId">
+            <summary>
+                The userId of the lobby owner
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Lobbies.Lobby.Secret">
+            <summary>
+                The password to the lobby
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Lobbies.Lobby.Capacity">
+            <summary>
+                The max capacity of the lobby
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Lobbies.Lobby.Locked">
+            <summary>
+                Whether or not the lobby can be joined
+            </summary>
+        </member>
+        <member name="T:Discord.GameSDK.Lobbies.LobbyManager">
+            <summary>
+                Looking to integrate multiplayer into your game? Lobbies are a great way to organize players into contexts to play
+                together.
+                This manager works hand in hand with the networking layer of our SDK to make multiplayer integrations a breeze by:
+                <list type="bullet">
+                    <item>
+                        <description>Creating, managing, and joining lobbies</description>
+                    </item>
+                    <item>
+                        <description>Matchmaking users based on lobby metadata, like ELO</description>
+                    </item>
+                    <item>
+                        <description>Getting and setting arbitrary metadata on lobbies and lobby members</description>
+                    </item>
+                </list>
+                <para>
+                    Lobbies in Discord work in one of two ways.
+                    By using calls from the SDK, lobbies are effectively "owned" by the user who's client creates the lobby.
+                    Someone boots up the game, hits your "Create Lobby" button, and their game client calls
+                    <see cref="M:Discord.GameSDK.Lobbies.LobbyManager.CreateLobby(Discord.GameSDK.Lobbies.LobbyTransaction,Discord.GameSDK.Lobbies.LobbyManager.CreateLobbyHandler)" /> from the Discord SDK.
+                </para>
+            </summary>
+        </member>
+        <member name="E:Discord.GameSDK.Lobbies.LobbyManager.OnLobbyUpdate">
+            <summary>
+                Fires when a lobby is updated.
+            </summary>
+        </member>
+        <member name="E:Discord.GameSDK.Lobbies.LobbyManager.OnLobbyDelete">
+            <summary>
+                Fired when a lobby is deleted.
+            </summary>
+        </member>
+        <member name="E:Discord.GameSDK.Lobbies.LobbyManager.OnMemberConnect">
+            <summary>
+                Fires when a new member joins the lobby.
+            </summary>
+        </member>
+        <member name="E:Discord.GameSDK.Lobbies.LobbyManager.OnMemberUpdate">
+            <summary>
+                Fires when data for a lobby member is updated.
+            </summary>
+        </member>
+        <member name="E:Discord.GameSDK.Lobbies.LobbyManager.OnMemberDisconnect">
+            <summary>
+                Fires when a member leaves the lobby.
+            </summary>
+        </member>
+        <member name="E:Discord.GameSDK.Lobbies.LobbyManager.OnLobbyMessage">
+            <summary>
+                Fires when a message is sent to the lobby.
+            </summary>
+        </member>
+        <member name="E:Discord.GameSDK.Lobbies.LobbyManager.OnSpeaking">
+            <summary>
+                Fires when a user connected to voice starts or stops speaking.
+            </summary>
+        </member>
+        <member name="E:Discord.GameSDK.Lobbies.LobbyManager.OnNetworkMessage">
+            <summary>
+                Fires when the user receives a message from the lobby's networking layer.
+            </summary>
+        </member>
+        <member name="M:Discord.GameSDK.Lobbies.LobbyManager.GetLobbyCreateTransaction">
+            <summary>
+                Gets a Lobby transaction used for creating a new lobby
+            </summary>
+            <returns></returns>
+            <exception cref="T:Discord.GameSDK.ResultException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Lobbies.LobbyManager.GetLobbyUpdateTransaction(System.Int64)">
+            <summary>
+                Gets a lobby transaction used for updating an existing lobby.
+            </summary>
+            <param name="lobbyId"></param>
+            <returns></returns>
+            <exception cref="T:Discord.GameSDK.ResultException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Lobbies.LobbyManager.GetMemberUpdateTransaction(System.Int64,System.Int64)">
+            <summary>
+                Gets a new member transaction for a lobby member in a given lobby.
+            </summary>
+            <param name="lobbyId"></param>
+            <param name="userId"></param>
+            <returns></returns>
+            <exception cref="T:Discord.GameSDK.ResultException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Lobbies.LobbyManager.CreateLobby(Discord.GameSDK.Lobbies.LobbyTransaction,Discord.GameSDK.Lobbies.LobbyManager.CreateLobbyHandler)">
+            <summary>
+                Creates a lobby. Creating a lobby auto-joins the connected user to it. Do not call SetOwner() in the transaction
+                for this method.
+            </summary>
+            <param name="transaction"></param>
+            <param name="callback"></param>
+        </member>
+        <member name="M:Discord.GameSDK.Lobbies.LobbyManager.UpdateLobby(System.Int64,Discord.GameSDK.Lobbies.LobbyTransaction,Discord.GameSDK.Lobbies.LobbyManager.UpdateLobbyHandler)">
+            <summary>
+                Updates a lobby with data from the given transaction. You can call SetOwner() in this transaction.
+                <para>
+                    This call has a rate limit of 10 updates per 5 seconds. If you fear you might hit that, it may be a good idea
+                    to batch your lobby updates into transactions.
+                </para>
+            </summary>
+            <param name="lobbyId"></param>
+            <param name="transaction"></param>
+            <param name="callback"></param>
+        </member>
+        <member name="M:Discord.GameSDK.Lobbies.LobbyManager.DeleteLobby(System.Int64,Discord.GameSDK.Lobbies.LobbyManager.DeleteLobbyHandler)">
+            <summary>
+                Deletes a given lobby.
+            </summary>
+            <param name="lobbyId"></param>
+            <param name="callback"></param>
+        </member>
+        <member name="M:Discord.GameSDK.Lobbies.LobbyManager.ConnectLobby(System.Int64,System.String,Discord.GameSDK.Lobbies.LobbyManager.ConnectLobbyHandler)">
+            <summary>
+                Connects the current user to a given lobby. You can be connected to up to five lobbies at a time.
+            </summary>
+            <param name="lobbyId"></param>
+            <param name="secret"></param>
+            <param name="callback"></param>
+        </member>
+        <member name="M:Discord.GameSDK.Lobbies.LobbyManager.ConnectLobbyWithActivitySecret(System.String,Discord.GameSDK.Lobbies.LobbyManager.ConnectLobbyWithActivitySecretHandler)">
+            <summary>
+                Connects the current user to a lobby; requires the special activity secret from the lobby which is a concatenated
+                lobbyId and secret.
+            </summary>
+            <param name="activitySecret"></param>
+            <param name="callback"></param>
+        </member>
+        <member name="M:Discord.GameSDK.Lobbies.LobbyManager.DisconnectLobby(System.Int64,Discord.GameSDK.Lobbies.LobbyManager.DisconnectLobbyHandler)">
+            <summary>
+                Disconnects the current user from a lobby.
+            </summary>
+            <param name="lobbyId"></param>
+            <param name="callback"></param>
+        </member>
+        <member name="M:Discord.GameSDK.Lobbies.LobbyManager.GetLobby(System.Int64)">
+            <summary>
+                Gets the lobby object for a given lobby id.
+                Because of the way that the SDK is architected, you must first call <see cref="M:Discord.GameSDK.Lobbies.LobbyManager.Search(Discord.GameSDK.Lobbies.LobbySearchQuery,Discord.GameSDK.Lobbies.LobbyManager.SearchHandler)" /> to build a stable list of
+                lobbies.
+                This function will then query those lobbies for ones with a matching id.
+            </summary>
+            <param name="lobbyId"></param>
+            <returns></returns>
+            <exception cref="T:Discord.GameSDK.ResultException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Lobbies.LobbyManager.GetLobbyActivitySecret(System.Int64)">
+            <summary>
+                Gets the special activity secret for a given lobby. If you are creating lobbies from game clients, use this to
+                easily interact with Rich Presence invites.
+                Set the returned secret to your activity's <c>JoinSecret</c>.
+            </summary>
+            <param name="lobbyId"></param>
+            <returns></returns>
+            <exception cref="T:Discord.GameSDK.ResultException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Lobbies.LobbyManager.GetLobbyMetadataValue(System.Int64,System.String)">
+            <summary>
+                Returns lobby metadata value for a given key and id. Can be used with iteration, or direct access by keyname.
+            </summary>
+            <param name="lobbyId"></param>
+            <param name="key"></param>
+            <returns></returns>
+            <exception cref="T:Discord.GameSDK.ResultException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Lobbies.LobbyManager.GetLobbyMetadataKey(System.Int64,System.Int32)">
+            <summary>
+                Returns the key for the lobby metadata at the given index.
+            </summary>
+            <param name="lobbyId"></param>
+            <param name="index"></param>
+            <returns></returns>
+            <exception cref="T:Discord.GameSDK.ResultException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Lobbies.LobbyManager.LobbyMetadataCount(System.Int64)">
+            <summary>
+                Returns the number of metadata key/value pairs on a given lobby. Used for accessing metadata by iterating over the
+                list.
+            </summary>
+            <param name="lobbyId"></param>
+            <returns></returns>
+            <exception cref="T:Discord.GameSDK.ResultException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Lobbies.LobbyManager.MemberCount(System.Int64)">
+            <summary>
+                Get the number of members in a lobby.
+            </summary>
+            <param name="lobbyId"></param>
+            <returns></returns>
+            <exception cref="T:Discord.GameSDK.ResultException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Lobbies.LobbyManager.GetMemberUserId(System.Int64,System.Int32)">
+            <summary>
+                Gets the user id of the lobby member at the given index.
+            </summary>
+            <param name="lobbyId"></param>
+            <param name="index"></param>
+            <returns></returns>
+            <exception cref="T:Discord.GameSDK.ResultException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Lobbies.LobbyManager.GetMemberUser(System.Int64,System.Int64)">
+            <summary>
+                Gets the user object for a given user id.
+            </summary>
+            <param name="lobbyId"></param>
+            <param name="userId"></param>
+            <returns></returns>
+            <exception cref="T:Discord.GameSDK.ResultException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Lobbies.LobbyManager.GetMemberUsers(System.Int64)">
+            <summary>
+                Gets all members in a lobby
+            </summary>
+            <param name="lobbyId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Discord.GameSDK.Lobbies.LobbyManager.GetMemberMetadataValue(System.Int64,System.Int64,System.String)">
+            <summary>
+                Returns user metadata for a given key. Can be used in conjunction with the count and get key functions if you're
+                iterating over metadata.
+                Or you can access the metadata directly by keyname.
+            </summary>
+            <param name="lobbyId"></param>
+            <param name="userId"></param>
+            <param name="key"></param>
+            <returns></returns>
+            <exception cref="T:Discord.GameSDK.ResultException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Lobbies.LobbyManager.GetMemberMetadataKey(System.Int64,System.Int64,System.Int32)">
+            <summary>
+                Gets the key for the lobby metadata at the given index on a lobby member.
+            </summary>
+            <param name="lobbyId"></param>
+            <param name="userId"></param>
+            <param name="index"></param>
+            <returns></returns>
+            <exception cref="T:Discord.GameSDK.ResultException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Lobbies.LobbyManager.MemberMetadataCount(System.Int64,System.Int64)">
+            <summary>
+                Gets the number of metadata key/value pairs for the given lobby member. Used for accessing metadata by iterating
+                over a list.
+            </summary>
+            <param name="lobbyId"></param>
+            <param name="userId"></param>
+            <returns></returns>
+            <exception cref="T:Discord.GameSDK.ResultException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Lobbies.LobbyManager.UpdateMember(System.Int64,System.Int64,Discord.GameSDK.Lobbies.LobbyMemberTransaction,Discord.GameSDK.Lobbies.LobbyManager.UpdateMemberHandler)">
+            <summary>
+                Updates lobby member info for a given member of the lobby.
+            </summary>
+            <param name="lobbyId"></param>
+            <param name="userId"></param>
+            <param name="transaction"></param>
+            <param name="callback"></param>
+        </member>
+        <member name="M:Discord.GameSDK.Lobbies.LobbyManager.SendLobbyMessage(System.Int64,System.String,Discord.GameSDK.Lobbies.LobbyManager.SendLobbyMessageHandler)">
+            <summary>
+                Sends a message to the lobby on behalf of the current user. You must be connected to the lobby you are messaging.
+                You should use this function for message sending if you are not using the built in networking layer for the lobby.
+                If you are, you should use <see cref="M:Discord.GameSDK.Lobbies.LobbyManager.SendNetworkMessage(System.Int64,System.Int64,System.Byte,System.Byte[])" /> instead.
+                <para>This method has a rate limit of 10 messages per 5 seconds.</para>
+            </summary>
+            <param name="lobbyId"></param>
+            <param name="data"></param>
+            <param name="handler"></param>
+        </member>
+        <member name="M:Discord.GameSDK.Lobbies.LobbyManager.SendLobbyMessage(System.Int64,System.Byte[],Discord.GameSDK.Lobbies.LobbyManager.SendLobbyMessageHandler)">
+            <summary>
+                Sends a message to the lobby on behalf of the current user. You must be connected to the lobby you are messaging.
+                You should use this function for message sending if you are not using the built in networking layer for the lobby.
+                If you are, you should use <see cref="M:Discord.GameSDK.Lobbies.LobbyManager.SendNetworkMessage(System.Int64,System.Int64,System.Byte,System.Byte[])" /> instead.
+                <para>This method has a rate limit of 10 messages per 5 seconds.</para>
+            </summary>
+            <param name="lobbyId"></param>
+            <param name="data"></param>
+            <param name="callback"></param>
+        </member>
+        <member name="M:Discord.GameSDK.Lobbies.LobbyManager.GetSearchQuery">
+            <summary>
+                Creates a search object to search available lobbies.
+            </summary>
+            <returns></returns>
+            <exception cref="T:Discord.GameSDK.ResultException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Lobbies.LobbyManager.Search(Discord.GameSDK.Lobbies.LobbySearchQuery,Discord.GameSDK.Lobbies.LobbyManager.SearchHandler)">
+            <summary>
+                Searches available lobbies based on the search criteria chosen in the <see cref="T:Discord.GameSDK.Lobbies.LobbySearchQuery" /> member
+                functions.
+                Lobbies that meet the criteria are then globally filtered, and can be accessed via iteration with
+                <see cref="M:Discord.GameSDK.Lobbies.LobbyManager.LobbyCount" /> and <see cref="M:Discord.GameSDK.Lobbies.LobbyManager.GetLobbyId(System.Int32)" />.
+                The callback fires when the list of lobbies is stable and ready for iteration.
+            </summary>
+            <param name="query"></param>
+            <param name="callback"></param>
+        </member>
+        <member name="M:Discord.GameSDK.Lobbies.LobbyManager.LobbyCount">
+            <summary>
+                Get the number of lobbies that match the search.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Discord.GameSDK.Lobbies.LobbyManager.GetLobbyId(System.Int32)">
+            <summary>
+                Returns the id for the lobby at the given index.
+            </summary>
+            <param name="index"></param>
+            <returns></returns>
+            <exception cref="T:Discord.GameSDK.ResultException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Lobbies.LobbyManager.ConnectVoice(System.Int64,Discord.GameSDK.Lobbies.LobbyManager.ConnectVoiceHandler)">
+            <summary>
+                Connects to the voice channel of the current lobby. When connected to voice,
+                the user can open their Discord overlay to see a list of other users with whom they are in voice,
+                allowing them to mute/deafen themselves as well as mute/adjust the volume of other lobby members.
+                <para>
+                    You can also allow users to adjust voice settings for your game with
+                    <a href="https://discord.com/developers/docs/game-sdk/overlay#openvoicesettings">Overlay OpenVoiceSettings</a>.
+                </para>
+                <para>
+                    When integrating lobby voice into your game, be thoughtful about the user's experience. Auto-joining to voice
+                    can be jarring for users who may not be expecting it.
+                    We recommend voice always being opt-in, or at least that you provide an option for a player to choose whether
+                    or not to auto-join the voice channel of lobbies they join.
+                </para>
+            </summary>
+            <param name="lobbyId"></param>
+            <param name="callback"></param>
+        </member>
+        <member name="M:Discord.GameSDK.Lobbies.LobbyManager.DisconnectVoice(System.Int64,Discord.GameSDK.Lobbies.LobbyManager.DisconnectVoiceHandler)">
+            <summary>
+                Disconnects from the voice channel of a given lobby.
+            </summary>
+            <param name="lobbyId"></param>
+            <param name="callback"></param>
+        </member>
+        <member name="M:Discord.GameSDK.Lobbies.LobbyManager.ConnectNetwork(System.Int64)">
+            <summary>
+                Connects to the networking layer for the given lobby ID. Call this when connecting to the lobby.
+            </summary>
+            <param name="lobbyId"></param>
+            <exception cref="T:Discord.GameSDK.ResultException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Lobbies.LobbyManager.DisconnectNetwork(System.Int64)">
+            <summary>
+                Disconnects from the networking layer for the given lobby ID.
+            </summary>
+            <param name="lobbyId"></param>
+            <exception cref="T:Discord.GameSDK.ResultException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Lobbies.LobbyManager.FlushNetwork">
+            <summary>
+                Flushes the network. Call this when you're done sending messages. In Unity, this should be in <c>LateUpdate()</c>.
+            </summary>
+            <exception cref="T:Discord.GameSDK.ResultException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Lobbies.LobbyManager.OpenNetworkChannel(System.Int64,System.Byte,System.Boolean)">
+            <summary>
+                Opens a network channel to all users in a lobby on the given channel number. No need to iterate over everyone!
+            </summary>
+            <param name="lobbyId"></param>
+            <param name="channelId"></param>
+            <param name="reliable"></param>
+            <exception cref="T:Discord.GameSDK.ResultException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Lobbies.LobbyManager.SendNetworkMessage(System.Int64,System.Int64,System.Byte,System.Byte[])">
+            <summary>
+                Sends a network message to the given user ID that is a member of the given lobby ID over the given channel ID.
+            </summary>
+            <param name="lobbyId"></param>
+            <param name="userId"></param>
+            <param name="channelId"></param>
+            <param name="data"></param>
+            <exception cref="T:Discord.GameSDK.ResultException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Lobbies.LobbyMemberTransaction.SetMetadata(System.String,System.String)">
+            <summary>
+                Sets metadata value under a given key name for the current user.
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:Discord.GameSDK.Lobbies.LobbyMemberTransaction.DeleteMetadata(System.String)">
+            <summary>
+                Sets metadata value under a given key name for the current user.
+            </summary>
+            <param name="key"></param>
+        </member>
+        <member name="T:Discord.GameSDK.Lobbies.LobbySearchComparison">
+            <summary>
+                Lobby search comparison
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Lobbies.LobbySearchComparison.LessThanOrEqual">
+            <summary>
+                Less that or equal
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Lobbies.LobbySearchComparison.LessThan">
+            <summary>
+                Less than
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Lobbies.LobbySearchComparison.Equal">
+            <summary>
+                Equal
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Lobbies.LobbySearchComparison.GreaterThan">
+            <summary>
+                Greater than
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Lobbies.LobbySearchComparison.GreaterThanOrEqual">
+            <summary>
+                Greater than or equal
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Lobbies.LobbySearchComparison.NotEqual">
+            <summary>
+                Not equal
+            </summary>
+        </member>
+        <member name="T:Discord.GameSDK.Lobbies.LobbySearchDistance">
+            <summary>
+                Search distance for a lobby
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Lobbies.LobbySearchDistance.Local">
+            <summary>
+                Within the same region
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Lobbies.LobbySearchDistance.Default">
+            <summary>
+                Within the same and adjacent regions
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Lobbies.LobbySearchDistance.Extended">
+            <summary>
+                Far distances, like US to EU
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Lobbies.LobbySearchDistance.Global">
+            <summary>
+                All regions
+            </summary>
+        </member>
+        <member name="M:Discord.GameSDK.Lobbies.LobbySearchQuery.Filter(System.String,Discord.GameSDK.Lobbies.LobbySearchComparison,Discord.GameSDK.Lobbies.LobbySearchCast,System.String)">
+            <summary>
+                Filters lobbies based on metadata comparison. Available filter values are <c>owner_id</c>, <c>capacity</c>,
+                <c>slots</c>, and <c>metadata</c>.
+                If you are filtering based on metadata, make sure you prepend your key with "<c>metadata.</c>". For example,
+                filtering on matchmaking rating would be "<c>metadata.matchmaking_rating</c>".
+            </summary>
+            <param name="key"></param>
+            <param name="comparison"></param>
+            <param name="cast"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:Discord.GameSDK.Lobbies.LobbySearchQuery.Sort(System.String,Discord.GameSDK.Lobbies.LobbySearchCast,System.String)">
+            <summary>
+                Sorts the filtered lobbies based on "near-ness" to a given value.
+            </summary>
+            <param name="key"></param>
+            <param name="cast"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:Discord.GameSDK.Lobbies.LobbySearchQuery.Limit(System.UInt32)">
+            <summary>
+                Limits the number of lobbies returned in a search.
+            </summary>
+            <param name="limit"></param>
+        </member>
+        <member name="M:Discord.GameSDK.Lobbies.LobbySearchQuery.Distance(Discord.GameSDK.Lobbies.LobbySearchDistance)">
+            <summary>
+                Filters lobby results to within certain regions relative to the user's location.
+            </summary>
+            <param name="distance"></param>
+        </member>
+        <member name="M:Discord.GameSDK.Lobbies.LobbyTransaction.SetType(Discord.GameSDK.Lobbies.LobbyType)">
+            <summary>
+                Marks a lobby as private or public.
+            </summary>
+            <param name="type"></param>
+        </member>
+        <member name="M:Discord.GameSDK.Lobbies.LobbyTransaction.SetOwner(System.Int64)">
+            <summary>
+                Sets a new owner for the lobby.
+                <para>
+                    This method is only valid for <c>LobbyUpdateTransactions</c> and may cause issues if you set it on a
+                    <c>LobbyCreateTransaction</c>.
+                </para>
+            </summary>
+            <param name="ownerId"></param>
+        </member>
+        <member name="M:Discord.GameSDK.Lobbies.LobbyTransaction.SetCapacity(System.UInt32)">
+            <summary>
+                Sets a new capacity for the lobby.
+            </summary>
+            <param name="capacity"></param>
+        </member>
+        <member name="M:Discord.GameSDK.Lobbies.LobbyTransaction.SetMetadata(System.String,System.String)">
+            <summary>
+                Sets metadata value under a given key name for the lobby.
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:Discord.GameSDK.Lobbies.LobbyTransaction.DeleteMetadata(System.String)">
+            <summary>
+                Deletes the lobby metadata for a key.
+            </summary>
+            <param name="key"></param>
+        </member>
+        <member name="M:Discord.GameSDK.Lobbies.LobbyTransaction.SetLocked(System.Boolean)">
+            <summary>
+                Sets the lobby to locked or unlocked. When locked, new users cannot join the lobby.
+            </summary>
+            <param name="locked"></param>
+        </member>
+        <member name="T:Discord.GameSDK.Lobbies.LobbyType">
+            <summary>
+                The lobby type
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Lobbies.LobbyType.Private">
+            <summary>
+                Private lobby
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Lobbies.LobbyType.Public">
+            <summary>
+                Public lobby
+            </summary>
+        </member>
+        <member name="T:Discord.GameSDK.LogLevel">
+            <summary>
+                The logging level
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.LogLevel.Error">
+            <summary>
+                Log only errors
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.LogLevel.Warn">
+            <summary>
+                Log warnings and errors
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.LogLevel.Info">
+            <summary>
+                Log info, warnings, and errors
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.LogLevel.Debug">
+            <summary>
+                Log all the things!
+            </summary>
+        </member>
+        <member name="T:Discord.GameSDK.Networking.NetworkManager">
+            <summary>
+                A note before starting: this documentation covers the "low layer" networking level of the Discord GameSDK. What
+                that means is that using the network manager directly affords you the flexibility to update routes, open channels,
+                and handle events directly emitted by the SDK. If you're looking for something a bit easier and faster to
+                integrate, we recommend that you check out the networking wrapper around our lobby documentation:
+                <a href="https://discord.com/developers/docs/game-sdk/lobbies#integrated-networking">Integrated Networking</a>
+                <para>
+                    Need a networking layer? Have a networking layer! This manager handles all things packets so you can get data
+                    from player to player and make your multiplayer...work. It:
+                </para>
+                <list type="bullet">
+                    <item>Functions as a connection-oriented, TCP-like API, but over UDP!</item>
+                    <item>
+                        Supports "reliable" and "unreliable" connections: Packets with loot in them always get there, but player
+                        positioning can be eventually consistent
+                    </item>
+                    <item>
+                        Features P2P-like connections, but routed through Discord's high-end server infrastructure: All the
+                        benefits of direct connections, without the IP leaks!
+                    </item>
+                    <item>Is encrypted!</item>
+                </list>
+            </summary>
+        </member>
+        <member name="E:Discord.GameSDK.Networking.NetworkManager.OnMessage">
+            <summary>
+                Fires when you receive data from another user. This callback will only fire if you already have an open channel
+                with the user sending you data.
+                <para>Make sure you're running <see cref="M:Discord.GameSDK.Discord.RunCallbacks" /> in your game loop, or you'll never get data!</para>
+            </summary>
+        </member>
+        <member name="E:Discord.GameSDK.Networking.NetworkManager.OnRouteUpdate">
+            <summary>
+                Fires when your networking route has changed.
+                You should broadcast to other users to whom you are connected that this has changed, probably by updating your
+                lobby member metadata for others to receive.
+            </summary>
+        </member>
+        <member name="M:Discord.GameSDK.Networking.NetworkManager.GetPeerId">
+            <summary>
+                Get the networking peer ID for the current user, allowing other users to send packets to them.
+            </summary>
+        </member>
+        <member name="M:Discord.GameSDK.Networking.NetworkManager.Flush">
+            <summary>
+                Flushes the network. Run this at the end of your game's loop, once you've finished sending all you need to send. In
+                Unity, for example, stick this in <c>LateUpdate()</c>.
+            </summary>
+            <exception cref="T:Discord.GameSDK.ResultException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Networking.NetworkManager.OpenPeer(System.UInt64,System.String)">
+            <summary>
+                Opens a network connection to another Discord user.
+            </summary>
+            <exception cref="T:Discord.GameSDK.ResultException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Networking.NetworkManager.UpdatePeer(System.UInt64,System.String)">
+            <summary>
+                Updates the network connection to another Discord user.
+                You'll want to call this when notified that the route for a user to which you are connected has changed, most
+                likely from a lobby member update event.
+            </summary>
+            <exception cref="T:Discord.GameSDK.ResultException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Networking.NetworkManager.ClosePeer(System.UInt64)">
+            <summary>
+                Disconnects the network session to another Discord user.
+            </summary>
+            <exception cref="T:Discord.GameSDK.ResultException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Networking.NetworkManager.OpenChannel(System.UInt64,System.Byte,System.Boolean)">
+            <summary>
+                Opens a channel to a user with their given peer ID on the given channel number.
+                <para>
+                    Unreliable channels should be used for loss-tolerant data, like player positioning in the world. Reliable
+                    channels should be used for data that must get to the user, like loot drops!
+                </para>
+            </summary>
+            <exception cref="T:Discord.GameSDK.ResultException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Networking.NetworkManager.CloseChannel(System.UInt64,System.Byte)">
+            <summary>
+                Close the connection to a given user by peerId on the given channel.
+            </summary>
+            <exception cref="T:Discord.GameSDK.ResultException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Networking.NetworkManager.SendMessage(System.UInt64,System.Byte,System.Byte[])">
+            <summary>
+                Sends data to a given peer ID through the given channel.
+            </summary>
+            <exception cref="T:Discord.GameSDK.ResultException"></exception>
+        </member>
+        <member name="T:Discord.GameSDK.Overlay.OverlayManager">
+            <summary>
+                Discord comes with an awesome built-in overlay, and you may want to make use of it for your game. This manager will
+                help you do just that! It:
+                <list type="bullet">
+                    <item>Gives you the current state of the overlay for the user: Locked, enabled, unlocked, open, closed, etc.</item>
+                    <item>Allows you to change that state</item>
+                </list>
+            </summary>
+        </member>
+        <member name="E:Discord.GameSDK.Overlay.OverlayManager.OnToggle">
+            <summary>
+                Fires when the overlay is locked or unlocked (a.k.a. opened or closed)
+            </summary>
+        </member>
+        <member name="M:Discord.GameSDK.Overlay.OverlayManager.IsEnabled">
+            <summary>
+                Check whether the user has the overlay enabled or disabled. If the overlay is disabled, all the functionality in
+                this manager will still work.
+                The calls will instead focus the Discord client and show the modal there instead.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Discord.GameSDK.Overlay.OverlayManager.IsLocked">
+            <summary>
+                Check if the overlay is currently locked or unlocked
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Discord.GameSDK.Overlay.OverlayManager.SetLocked(System.Boolean,Discord.GameSDK.Overlay.OverlayManager.SetLockedHandler)">
+            <summary>
+                Locks or unlocks input in the overlay. Calling SetLocked(true); will also close any modals in the overlay or in-app
+                from things like IAP purchase flows and disallow input.
+            </summary>
+            <param name="locked"></param>
+            <param name="callback"></param>
+        </member>
+        <member name="M:Discord.GameSDK.Overlay.OverlayManager.OpenActivityInvite(Discord.GameSDK.Activities.ActivityActionType,Discord.GameSDK.Overlay.OverlayManager.OpenActivityInviteHandler)">
+            <summary>
+                Opens the overlay modal for sending game invitations to users, channels, and servers. If you do not have a valid
+                activity with all the required fields, this call will error.
+                See
+                <a href="https://discord.com/developers/docs/game-sdk/activities#activity-action-field-requirements">
+                    Activity Action Field Requirements
+                </a>
+                for the fields required to have join and spectate invites function properly.
+            </summary>
+            <param name="type"></param>
+            <param name="callback"></param>
+        </member>
+        <member name="M:Discord.GameSDK.Overlay.OverlayManager.OpenGuildInvite(System.String,Discord.GameSDK.Overlay.OverlayManager.OpenGuildInviteHandler)">
+            <summary>
+                Opens the overlay modal for joining a Discord guild, given its invite code.
+                An invite code for a server may look something like <c>fortnite</c> for a verified server—the full invite being
+                <c>discord.gg/fortnite</c>—or something like
+                <c>rjEeUJq</c> for a non-verified server, the full invite being <c>discord.gg/rjEeUJq</c>.
+                <para>
+                    Note that a successful <see cref="T:Discord.GameSDK.Result" /> response does not necessarily mean that the user has joined the
+                    guild.
+                    If you want more granular control over and knowledge about users joining your guild, you may want to look into
+                    implementing the
+                    <a href="https://discord.com/developers/docs/topics/oauth2#authorization-code-grant">
+                        <c>guilds.join</c> OAuth2
+                        scope in an authorization code grant
+                    </a>
+                    in conjunction with the
+                    <a href="https://discord.com/developers/docs/resources/guild#add-guild-member">Add Guild Members endpoint</a>.
+                </para>
+            </summary>
+            <param name="code"></param>
+            <param name="callback"></param>
+        </member>
+        <member name="M:Discord.GameSDK.Overlay.OverlayManager.OpenVoiceSettings(Discord.GameSDK.Overlay.OverlayManager.OpenVoiceSettingsHandler)">
+            <summary>
+                Opens the overlay widget for voice settings for the currently connected application. These settings are unique to
+                each user within the context of your application.
+                That means that a user can have different favorite voice settings for each of their games!
+            </summary>
+            <param name="callback"></param>
+        </member>
+        <member name="T:Discord.GameSDK.Relationships.Presence">
+            <summary>
+                Presence of a user
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Relationships.Presence.Status">
+            <summary>
+                The user's current online status
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Relationships.Presence.Activity">
+            <summary>
+                The user's current activity
+            </summary>
+        </member>
+        <member name="T:Discord.GameSDK.Relationships.Relationship">
+            <summary>
+                A relationship with a user
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Relationships.Relationship.Type">
+            <summary>
+                What kind of relationship it is
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Relationships.Relationship.User">
+            <summary>
+                The user the relationship is for
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Relationships.Relationship.Presence">
+            <summary>
+                That user's current presence
+            </summary>
+        </member>
+        <member name="T:Discord.GameSDK.Relationships.RelationshipManager">
+            <summary>
+                This manager helps you access the relationships your players have made on Discord. Unfortunately, it won't help
+                them make relationships IRL. They're on their own for that. It lets you:
+                <list type="bullet">
+                    <item>Access a user's relationships</item>
+                    <item>Filter those relationships based on a given criteria</item>
+                    <item>Build a user's friends list</item>
+                </list>
+            </summary>
+        </member>
+        <member name="E:Discord.GameSDK.Relationships.RelationshipManager.OnRefresh">
+            <summary>
+                Fires at initialization when Discord has cached a snapshot of the current status of all your relationships. Wait
+                for this to fire before calling Filter within its callback.
+            </summary>
+        </member>
+        <member name="E:Discord.GameSDK.Relationships.RelationshipManager.OnRelationshipUpdate">
+            <summary>
+                Fires when a relationship in the filtered list changes, like an updated presence or user attribute.
+            </summary>
+        </member>
+        <member name="M:Discord.GameSDK.Relationships.RelationshipManager.Filter(Discord.GameSDK.Relationships.RelationshipManager.FilterHandler)">
+            <summary>
+                Filters a user's relationship list by a boolean condition.
+            </summary>
+            <param name="callback"></param>
+        </member>
+        <member name="M:Discord.GameSDK.Relationships.RelationshipManager.Count">
+            <summary>
+                Get the number of relationships that match your <see cref="M:Discord.GameSDK.Relationships.RelationshipManager.Filter(Discord.GameSDK.Relationships.RelationshipManager.FilterHandler)" />.
+            </summary>
+            <returns></returns>
+            <exception cref="T:Discord.GameSDK.ResultException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Relationships.RelationshipManager.Get(System.Int64)">
+            <summary>
+                Get the relationship between the current user and a given user by id.
+            </summary>
+            <param name="userId"></param>
+            <returns></returns>
+            <exception cref="T:Discord.GameSDK.ResultException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Relationships.RelationshipManager.GetAt(System.UInt32)">
+            <summary>
+                Get the relationship at a given index when iterating over a list of relationships.
+            </summary>
+            <param name="index"></param>
+            <returns></returns>
+            <exception cref="T:Discord.GameSDK.ResultException"></exception>
+        </member>
+        <member name="T:Discord.GameSDK.Relationships.RelationshipType">
+            <summary>
+                The relationship type
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Relationships.RelationshipType.None">
+            <summary>
+                User has no intrinsic relationship
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Relationships.RelationshipType.Friend">
+            <summary>
+                User is a friend
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Relationships.RelationshipType.Blocked">
+            <summary>
+                User is blocked
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Relationships.RelationshipType.PendingIncoming">
+            <summary>
+                User has a pending incoming friend request to connected user
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Relationships.RelationshipType.PendingOutgoing">
+            <summary>
+                Current user has a pending outgoing friend request to user
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Relationships.RelationshipType.Implicit">
+            <summary>
+                User is not friends, but interacts with current user often (frequency + recency)
+            </summary>
+        </member>
+        <member name="T:Discord.GameSDK.Relationships.Status">
+            <summary>
+                The status of a user
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Relationships.Status.Offline">
+            <summary>
+                Offline
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Relationships.Status.Online">
+            <summary>
+                Online
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Relationships.Status.Idle">
+            <summary>
+                Idle
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Relationships.Status.DoNotDisturb">
+            <summary>
+                Do not Disturb
+            </summary>
+        </member>
+        <member name="T:Discord.GameSDK.Result">
+            <summary>
+                The result of a request
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Result.Ok">
+            <summary>
+                Everything is good
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Result.ServiceUnavailable">
+            <summary>
+                Discord isn't working
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Result.InvalidVersion">
+            <summary>
+                The SDK version may be outdated
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Result.LockFailed">
+            <summary>
+                An internal error on transactional operations
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Result.InternalError">
+            <summary>
+                Something on our side went wrong
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Result.InvalidPayload">
+            <summary>
+                The data you sent didn't match what we expect
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Result.InvalidCommand">
+            <summary>
+                That's not a thing you can do
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Result.InvalidPermissions">
+            <summary>
+                You aren't authorized to do that
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Result.NotFetched">
+            <summary>
+                Couldn't fetch what you wanted
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Result.NotFound">
+            <summary>
+                That you're looking for doesn't exist
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Result.Conflict">
+            <summary>
+                User already has a network connection open on that channel
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Result.InvalidSecret">
+            <summary>
+                Activity secrets must be unique and not match party id
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Result.InvalidJoinSecret">
+            <summary>
+                Join request for that user does not exist
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Result.NoEligibleActivity">
+            <summary>
+                You accidentally set an <see cref="F:Discord.GameSDK.Activities.Activity.ApplicationId" /> in your
+                <see cref="M:Discord.GameSDK.Activities.ActivityManager.UpdateActivity(Discord.GameSDK.Activities.Activity,Discord.GameSDK.Activities.ActivityManager.UpdateActivityHandler)" /> payload
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Result.InvalidInvite">
+            <summary>
+                Your game invite is no longer valid
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Result.NotAuthenticated">
+            <summary>
+                The internal auth call failed for the user, and you can't do this
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Result.InvalidAccessToken">
+            <summary>
+                The user's bearer token is invalid
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Result.ApplicationMismatch">
+            <summary>
+                Access token belongs to another application
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Result.InvalidDataUrl">
+            <summary>
+                Something internally went wrong fetching image data
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Result.InvalidBase64">
+            <summary>
+                Not valid Base64 data
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Result.NotFiltered">
+            <summary>
+                You're trying to access the list before creating a stable list with Filter()
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Result.LobbyFull">
+            <summary>
+                The lobby is full
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Result.InvalidLobbySecret">
+            <summary>
+                The secret you're using to connect is wrong
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Result.InvalidFilename">
+            <summary>
+                File name is too long
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Result.InvalidFileSize">
+            <summary>
+                File is too large
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Result.InvalidEntitlement">
+            <summary>
+                The user does not have the right entitlement for this game
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Result.NotInstalled">
+            <summary>
+                Discord is not installed
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Result.NotRunning">
+            <summary>
+                Discord is not running
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Result.InsufficientBuffer">
+            <summary>
+                Insufficient buffer space when trying to write
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Result.PurchaseCanceled">
+            <summary>
+                User cancelled the purchase flow
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Result.InvalidGuild">
+            <summary>
+                Discord guild does not exist
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Result.InvalidEvent">
+            <summary>
+                The event you're trying to subscribe to does not exist
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Result.InvalidChannel">
+            <summary>
+                Discord channel does not exist
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Result.InvalidOrigin">
+            <summary>
+                The origin header on the socket does not match what you've registered (you should not see this)
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Result.RateLimited">
+            <summary>
+                You are calling that method too quickly
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Result.OAuth2Error">
+            <summary>
+                The OAuth2 process failed at some point
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Result.SelectChannelTimeout">
+            <summary>
+                The user took too long selecting a channel for an invite
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Result.GetGuildTimeout">
+            <summary>
+                Took too long trying to fetch the guild
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Result.SelectVoiceForceRequired">
+            <summary>
+                Push to talk is required for this channel
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Result.CaptureShortcutAlreadyListening">
+            <summary>
+                That push to talk shortcut is already registered
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Result.UnauthorizedForAchievement">
+            <summary>
+                Your application cannot update this achievement
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Result.InvalidGiftCode">
+            <summary>
+                The gift code is not valid
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Result.PurchaseError">
+            <summary>
+                Something went wrong during the purchase flow
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Result.TransactionAborted">
+            <summary>
+                Purchase flow aborted because the SDK is being torn down
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Storage.FileStat.Filename">
+            <summary>
+                The name of the file
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Storage.FileStat.Size">
+            <summary>
+                The size of the file
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Storage.FileStat.LastModified">
+            <summary>
+                Timestamp of when the file was last modified
+            </summary>
+        </member>
+        <member name="T:Discord.GameSDK.Storage.StorageManager">
+            <summary>
+                We've been told that people playing games want to save their progress as they go, allowing them to come back where
+                they left off and continue their epic journey of power.
+                <para>Yeah, roguelikes. Even you.</para>
+                <para>
+                    Discord's storage manager lets you save data mapped to a key for easy reading, writing, and deleting both
+                    synchronously and asynchronously.
+                    It's saved to a super special directory, the Holy Grail of file mappings, that's unique per Discord user — no
+                    need to worry about your little brother overwriting your save file.
+                </para>
+                <para>
+                    Creating this manager will also spawn an IO thread for async reads and writes, so unless you really want to
+                    be blocking, you don't need to be!
+                </para>
+            </summary>
+        </member>
+        <member name="M:Discord.GameSDK.Storage.StorageManager.Read(System.String,System.Byte[])">
+            <summary>
+                Reads data synchronously from the game's allocated save file into a buffer. The file is mapped by key value pairs,
+                and this function will read data that exists for the given key name.
+            </summary>
+            <param name="name"></param>
+            <param name="data"></param>
+            <returns></returns>
+            <exception cref="T:Discord.GameSDK.ResultException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Storage.StorageManager.ReadAsync(System.String,Discord.GameSDK.Storage.StorageManager.ReadAsyncHandler)">
+            <summary>
+                Reads data asynchronously from the game's allocated save file into a buffer.
+            </summary>
+            <param name="name"></param>
+            <param name="callback"></param>
+        </member>
+        <member name="M:Discord.GameSDK.Storage.StorageManager.ReadAsyncPartial(System.String,System.UInt64,System.UInt64,Discord.GameSDK.Storage.StorageManager.ReadAsyncPartialHandler)">
+            <summary>
+                Reads data asynchronously from the game's allocated save file into a buffer, starting at a given offset and up to a
+                given length.
+            </summary>
+            <param name="name"></param>
+            <param name="offset"></param>
+            <param name="length"></param>
+            <param name="callback"></param>
+        </member>
+        <member name="M:Discord.GameSDK.Storage.StorageManager.Write(System.String,System.Byte[])">
+            <summary>
+                Writes data synchronously to disk, under the given key name.
+            </summary>
+            <param name="name"></param>
+            <param name="data"></param>
+            <exception cref="T:Discord.GameSDK.ResultException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Storage.StorageManager.WriteAsync(System.String,System.Byte[],Discord.GameSDK.Storage.StorageManager.WriteAsyncHandler)">
+            <summary>
+                Writes data asynchronously to disk under the given keyname.
+            </summary>
+            <param name="name"></param>
+            <param name="data"></param>
+            <param name="callback"></param>
+        </member>
+        <member name="M:Discord.GameSDK.Storage.StorageManager.Delete(System.String)">
+            <summary>
+                Deletes written data for the given key name.
+            </summary>
+            <param name="name"></param>
+            <exception cref="T:Discord.GameSDK.ResultException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Storage.StorageManager.Exists(System.String)">
+            <summary>
+                Checks if data exists for a given key name.
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+            <exception cref="T:Discord.GameSDK.ResultException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Storage.StorageManager.Stat(System.String)">
+            <summary>
+                Returns file info for the given key name.
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+            <exception cref="T:Discord.GameSDK.ResultException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Storage.StorageManager.Count">
+            <summary>
+                Returns the count of files, for iteration.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Discord.GameSDK.Storage.StorageManager.Files">
+            <summary>
+                Gets all files
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Discord.GameSDK.Storage.StorageManager.StatAt(System.Int32)">
+            <summary>
+                Returns file info for the given index when iterating over files.
+            </summary>
+            <param name="index"></param>
+            <returns></returns>
+            <exception cref="T:Discord.GameSDK.ResultException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Storage.StorageManager.GetPath">
+            <summary>
+                Returns the filepath to which Discord saves files if you were to use the SDK's storage manager.
+                Discord has branch-specific, user-specific saves, so you and your little brother will never overwrite each others'
+                save files.
+                If your game already has save file writing logic, you can use this method to get that user-specific path and help
+                users protect their save files.
+                <para>Value from environment variable <c>DISCORD_STORAGE_PATH</c></para>
+            </summary>
+            <returns></returns>
+            <exception cref="T:Discord.GameSDK.ResultException"></exception>
+        </member>
+        <member name="F:Discord.GameSDK.Store.Entitlement.Id">
+            <summary>
+                The unique ID of the entitlement
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Store.Entitlement.Type">
+            <summary>
+                The kind of entitlement it is
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Store.Entitlement.SkuId">
+            <summary>
+                The ID of the SKU to which the user is entitled
+            </summary>
+        </member>
+        <member name="T:Discord.GameSDK.Store.EntitlementType">
+            <summary>
+                The entitlement type
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Store.EntitlementType.Purchase">
+            <summary>
+                Entitlement was purchased
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Store.EntitlementType.PremiumSubscription">
+            <summary>
+                Entitlement for a Discord Nitro subscription
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Store.EntitlementType.DeveloperGift">
+            <summary>
+                Entitlement was gifted by a developer
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Store.EntitlementType.TestModePurchase">
+            <summary>
+                Entitlement was purchased by a dev in application test mode
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Store.EntitlementType.FreePurchase">
+            <summary>
+                Entitlement was granted when the SKU was free
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Store.EntitlementType.UserGift">
+            <summary>
+                Entitlement was gifted by another user
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Store.EntitlementType.PremiumPurchase">
+            <summary>
+                Entitlement was claimed by user for free as a Nitro Subscriber
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Store.Sku.Id">
+            <summary>
+                The unique ID of the SKU
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Store.Sku.Type">
+            <summary>
+                What sort of SKU it is
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Store.Sku.Name">
+            <summary>
+                The name of the SKU
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Store.Sku.Price">
+            <summary>
+                The price of the SKU
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Store.SkuPrice.Amount">
+            <summary>
+                The amount of money the SKU costs
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Store.SkuPrice.Currency">
+            <summary>
+                The currency the amount is in
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Store.SkuType.Application">
+            <summary>
+                SKU is a game
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Store.SkuType.DLC">
+            <summary>
+                SKU is a DLC
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Store.SkuType.Consumable">
+            <summary>
+                SKU is a consumable (in-app purchase)
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Store.SkuType.Bundle">
+            <summary>
+                SKU is a bundle (comprising the other 3 types)
+            </summary>
+        </member>
+        <member name="T:Discord.GameSDK.Store.StoreManager">
+            <summary>
+                If your game has DLC or offers in-app purchases, this manager is for you!
+                The Store Manager allows you to fetch a users' entitlements, as well as being notified when a user is granted an
+                entitlement from a purchase flow for your game.
+            </summary>
+        </member>
+        <member name="E:Discord.GameSDK.Store.StoreManager.OnEntitlementCreate">
+            <summary>
+                Fires when the connected user receives a new entitlement, either through purchase or through a developer grant.
+            </summary>
+        </member>
+        <member name="E:Discord.GameSDK.Store.StoreManager.OnEntitlementDelete">
+            <summary>
+                Fires when the connected user loses an entitlement, either by expiration, revocation, or consumption in the case of
+                consumable entitlements.
+            </summary>
+        </member>
+        <member name="M:Discord.GameSDK.Store.StoreManager.FetchSkus(Discord.GameSDK.Store.StoreManager.FetchSkusHandler)">
+            <summary>
+                Fetches the list of SKUs for the connected application, readying them for iteration.
+                <para>
+                    Only SKUs that have a price set will be fetched. If you aren't seeing any SKUs being returned, make sure they
+                    have a price set!
+                </para>
+            </summary>
+            <param name="callback"></param>
+        </member>
+        <member name="M:Discord.GameSDK.Store.StoreManager.GetSkus">
+            <summary>
+                Gets all <see cref="T:Discord.GameSDK.Store.Sku" />s. You must call <see cref="M:Discord.GameSDK.Store.StoreManager.FetchSkus(Discord.GameSDK.Store.StoreManager.FetchSkusHandler)" /> first before being able to access SKUs in this
+                way.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Discord.GameSDK.Store.StoreManager.CountSkus">
+            <summary>
+                Get the number of SKUs readied by <see cref="M:Discord.GameSDK.Store.StoreManager.FetchSkus(Discord.GameSDK.Store.StoreManager.FetchSkusHandler)" />.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Discord.GameSDK.Store.StoreManager.GetSku(System.Int64)">
+            <summary>
+                Gets a SKU by its ID. You must call <see cref="M:Discord.GameSDK.Store.StoreManager.FetchSkus(Discord.GameSDK.Store.StoreManager.FetchSkusHandler)" /> first before being able to access SKUs in this way.
+            </summary>
+            <param name="skuId"></param>
+            <returns></returns>
+            <exception cref="T:Discord.GameSDK.ResultException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Store.StoreManager.GetSkuAt(System.Int32)">
+            <summary>
+                Gets a SKU by index when iterating over SKUs. You must call <see cref="M:Discord.GameSDK.Store.StoreManager.FetchSkus(Discord.GameSDK.Store.StoreManager.FetchSkusHandler)" /> first before being able to
+                access SKUs in this way.
+            </summary>
+            <param name="index"></param>
+            <returns></returns>
+            <exception cref="T:Discord.GameSDK.ResultException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Store.StoreManager.FetchEntitlements(Discord.GameSDK.Store.StoreManager.FetchEntitlementsHandler)">
+            <summary>
+                Fetches a list of entitlements to which the user is entitled. Applications, DLC, and Bundles will always be
+                returned.
+                Consumables will be returned until they are consumed by the application via the HTTP endpoint.
+            </summary>
+            <param name="callback"></param>
+        </member>
+        <member name="M:Discord.GameSDK.Store.StoreManager.GetEntitlements">
+            <summary>
+                Gets all <see cref="T:Discord.GameSDK.Store.Entitlement" />s. You must call <see cref="M:Discord.GameSDK.Store.StoreManager.FetchEntitlements(Discord.GameSDK.Store.StoreManager.FetchEntitlementsHandler)" /> first before being able to
+                access SKUs in this way.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Discord.GameSDK.Store.StoreManager.CountEntitlements">
+            <summary>
+                Get the number of entitlements readied by <see cref="M:Discord.GameSDK.Store.StoreManager.FetchEntitlements(Discord.GameSDK.Store.StoreManager.FetchEntitlementsHandler)" />. You must call
+                <see cref="M:Discord.GameSDK.Store.StoreManager.FetchEntitlements(Discord.GameSDK.Store.StoreManager.FetchEntitlementsHandler)" /> first before being able to access SKUs in this way.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Discord.GameSDK.Store.StoreManager.GetEntitlement(System.Int64)">
+            <summary>
+                Gets an entitlement by its id. You must call <see cref="M:Discord.GameSDK.Store.StoreManager.FetchEntitlements(Discord.GameSDK.Store.StoreManager.FetchEntitlementsHandler)" /> first before being able to access
+                SKUs in this way.
+            </summary>
+            <param name="entitlementId"></param>
+            <returns></returns>
+            <exception cref="T:Discord.GameSDK.ResultException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Store.StoreManager.GetEntitlementAt(System.Int32)">
+            <summary>
+                Gets an entitlement by index when iterating over a user's entitlements. You must call
+                <see cref="M:Discord.GameSDK.Store.StoreManager.FetchEntitlements(Discord.GameSDK.Store.StoreManager.FetchEntitlementsHandler)" /> first before being able to access SKUs in this way.
+            </summary>
+            <param name="index"></param>
+            <returns></returns>
+            <exception cref="T:Discord.GameSDK.ResultException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Store.StoreManager.HasSkuEntitlement(System.Int64)">
+            <summary>
+                Returns whether or not the user is entitled to the given SKU ID. You must call <see cref="M:Discord.GameSDK.Store.StoreManager.FetchEntitlements(Discord.GameSDK.Store.StoreManager.FetchEntitlementsHandler)" />
+                first before being able to access SKUs in this way.
+            </summary>
+            <param name="skuId"></param>
+            <returns></returns>
+            <exception cref="T:Discord.GameSDK.ResultException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Store.StoreManager.StartPurchase(System.Int64,Discord.GameSDK.Store.StoreManager.StartPurchaseHandler)">
+            <summary>
+                Opens the overlay to begin the in-app purchase dialogue for the given SKU ID. You must call
+                <see cref="M:Discord.GameSDK.Store.StoreManager.FetchSkus(Discord.GameSDK.Store.StoreManager.FetchSkusHandler)" /> first before being able to access SKUs in this way.
+                If the user has enabled the overlay for your game, a purchase modal will appear in the overlay. Otherwise, the
+                Discord client will be auto-focused with a purchase modal.
+            </summary>
+            <param name="skuId"></param>
+            <param name="callback"></param>
+        </member>
+        <member name="T:Discord.GameSDK.Users.PremiumType">
+            <summary>
+                What Nitro subscription a user has
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Users.PremiumType.None">
+            <summary>
+                Not a Nitro subscriber
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Users.PremiumType.Tier1">
+            <summary>
+                Nitro Classic subscriber
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Users.PremiumType.Tier2">
+            <summary>
+                Nitro subscriber
+            </summary>
+        </member>
+        <member name="T:Discord.GameSDK.Users.User">
+            <summary>
+                A Discord user
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Users.User.Id">
+            <summary>
+                The user's id
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Users.User.Username">
+            <summary>
+                Their name
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Users.User.Discriminator">
+            <summary>
+                The user's unique discrim
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Users.User.Avatar">
+            <summary>
+                The hash of the user's avatar
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Users.User.Bot">
+            <summary>
+                If the user is a bot user
+            </summary>
+        </member>
+        <member name="T:Discord.GameSDK.Users.UserFlag">
+            <summary>
+                The flags that a user could have
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Users.UserFlag.Partner">
+            <summary>
+                Discord Partner
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Users.UserFlag.HypeSquadEvents">
+            <summary>
+                HypeSquad Events participant
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Users.UserFlag.HypeSquadHouse1">
+            <summary>
+                House Bravery
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Users.UserFlag.HypeSquadHouse2">
+            <summary>
+                House Brilliance
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Users.UserFlag.HypeSquadHouse3">
+            <summary>
+                House Balance
+            </summary>
+        </member>
+        <member name="T:Discord.GameSDK.Users.UserManager">
+            <summary>
+                This manager helps retrieve basic user information for any user on Discord.
+            </summary>
+        </member>
+        <member name="E:Discord.GameSDK.Users.UserManager.OnCurrentUserUpdate">
+            <summary>
+                Fires when the <see cref="T:Discord.GameSDK.Users.User" /> of the currently connected user changes. They may have changed their avatar,
+                username, or something else.
+            </summary>
+        </member>
+        <member name="M:Discord.GameSDK.Users.UserManager.GetCurrentUser">
+            <summary>
+                Fetch information about the currently connected user account.
+                <para>
+                    Before calling this function, you'll need to wait for the <see cref="E:Discord.GameSDK.Users.UserManager.OnCurrentUserUpdate" /> callback to fire
+                    after instantiating the User manager.
+                </para>
+                <para>
+                    If you're interested in getting more detailed information about a user—for example, their email—check out our
+                    <a href="https://discord.com/developers/">GetCurrentUser</a> API endpoint.
+                    You'll want to call this with an authorization header of Bearer <c>token</c>, where <c>token</c> is the token
+                    retrieved from a standard
+                    <a href="https://discord.com/developers/docs/topics/oauth2#authorization-code-grant">
+                        OAuth2 Authorization Code
+                        Grant flow
+                    </a>
+                    .
+                </para>
+            </summary>
+            <returns></returns>
+            <exception cref="T:Discord.GameSDK.ResultException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Users.UserManager.GetUser(System.Int64,Discord.GameSDK.Users.UserManager.GetUserHandler)">
+            <summary>
+                Get user information for a given id.
+            </summary>
+            <param name="userId"></param>
+            <param name="callback"></param>
+        </member>
+        <member name="M:Discord.GameSDK.Users.UserManager.GetCurrentUserPremiumType">
+            <summary>
+                Get the <see cref="T:Discord.GameSDK.Users.PremiumType" /> for the currently connected user.
+            </summary>
+            <returns></returns>
+            <exception cref="T:Discord.GameSDK.ResultException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Users.UserManager.CurrentUserHasFlag(Discord.GameSDK.Users.UserFlag)">
+            <summary>
+                See whether or not the current user has a certain <see cref="T:Discord.GameSDK.Users.UserFlag" /> on their account.
+            </summary>
+            <param name="flag"></param>
+            <returns></returns>
+            <exception cref="T:Discord.GameSDK.ResultException"></exception>
+        </member>
+        <member name="F:Discord.GameSDK.Voice.InputMode.Type">
+            <summary>
+                Set either VAD or PTT as the voice input mode
+            </summary>
+        </member>
+        <member name="F:Discord.GameSDK.Voice.InputMode.Shortcut">
+            <summary>
+                The PTT hotkey for the user
+            </summary>
+        </member>
+        <member name="T:Discord.GameSDK.Voice.VoiceManager">
+            <summary>
+                Discord's pride and joy is its voice chat. Well, ok, also its memes, but mostly the voice chat. Text and video chat
+                are pretty great, too. And have you seen that store? Anyway.
+                <para>
+                    If you want people playing your game to be able to talk with each other, this <see cref="T:Discord.GameSDK.Voice.VoiceManager" /> can
+                    help you out!
+                    Note that the main functionality for voice in this SDK is not only in this manager.
+                    Connecting players to a voice chat happens with <see cref="M:Discord.GameSDK.Lobbies.LobbyManager.ConnectVoice(System.Int64,Discord.GameSDK.Lobbies.LobbyManager.ConnectVoiceHandler)" />, and robust
+                    voice settings work through <see cref="M:Discord.GameSDK.Overlay.OverlayManager.OpenVoiceSettings(Discord.GameSDK.Overlay.OverlayManager.OpenVoiceSettingsHandler)" />.
+                    The Voice manager handles a few fine-grain details like self muting/deafening, swapping between VAD/PTT voice
+                    modes, and setting a PTT key.
+                    It's a subset of the robust settings from the overlay call for those of you that prefer to build UI and control
+                    things from your own game.
+                </para>
+            </summary>
+        </member>
+        <member name="E:Discord.GameSDK.Voice.VoiceManager.OnSettingsUpdate">
+            <summary>
+                [No Docs, but I am gonna assume it invoked when settings are updated]
+            </summary>
+        </member>
+        <member name="M:Discord.GameSDK.Voice.VoiceManager.GetInputMode">
+            <summary>
+                Get the current voice input mode for the user.
+            </summary>
+            <returns></returns>
+            <exception cref="T:Discord.GameSDK.ResultException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Voice.VoiceManager.SetInputMode(Discord.GameSDK.Voice.InputMode,Discord.GameSDK.Voice.VoiceManager.SetInputModeHandler)">
+            <summary>
+                Sets a new voice input mode for the user. Refer to
+                <a href="https://discord.com/developers/docs/game-sdk/discord-voice#data-models-shortcut-keys">Shortcut Keys</a>
+                for a table of valid values for shortcuts.
+            </summary>
+            <param name="inputMode"></param>
+            <param name="callback"></param>
+        </member>
+        <member name="M:Discord.GameSDK.Voice.VoiceManager.IsSelfMute">
+            <summary>
+                Whether the connected user is currently muted.
+            </summary>
+            <returns></returns>
+            <exception cref="T:Discord.GameSDK.ResultException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Voice.VoiceManager.SetSelfMute(System.Boolean)">
+            <summary>
+                Mutes or unmutes the currently connected user.
+            </summary>
+            <param name="mute"></param>
+            <exception cref="T:Discord.GameSDK.ResultException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Voice.VoiceManager.IsSelfDeaf">
+            <summary>
+                Whether the connected user is currently deafened.
+            </summary>
+            <returns></returns>
+            <exception cref="T:Discord.GameSDK.ResultException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Voice.VoiceManager.SetSelfDeaf(System.Boolean)">
+            <summary>
+                Deafens or undefeans the currently connected user.
+            </summary>
+            <param name="deaf"></param>
+            <exception cref="T:Discord.GameSDK.ResultException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Voice.VoiceManager.IsLocalMute(System.Int64)">
+            <summary>
+                Whether the given user is currently muted by the connected user.
+            </summary>
+            <param name="userId"></param>
+            <returns></returns>
+            <exception cref="T:Discord.GameSDK.ResultException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Voice.VoiceManager.SetLocalMute(System.Int64,System.Boolean)">
+            <summary>
+                Mutes or unmutes the given user for the currently connected user.
+            </summary>
+            <param name="userId"></param>
+            <param name="mute"></param>
+            <exception cref="T:Discord.GameSDK.ResultException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Voice.VoiceManager.GetLocalVolume(System.Int64)">
+            <summary>
+                Gets the local volume for a given user. This is the volume level at which the currently connected users hears the
+                given user speak.
+            </summary>
+            <param name="userId"></param>
+            <returns></returns>
+            <exception cref="T:Discord.GameSDK.ResultException"></exception>
+        </member>
+        <member name="M:Discord.GameSDK.Voice.VoiceManager.SetLocalVolume(System.Int64,System.Byte)">
+            <summary>
+                Sets the local volume for a given user. This is the volume level at which the currently connected users hears the
+                given user speak.
+                Valid volume values are from 0 to 200, with 100 being the default. Lower than 100 will be a reduced volume level
+                from default, whereas over 100 will be a boosted volume level from default.
+            </summary>
+            <param name="userId"></param>
+            <param name="volume"></param>
+            <exception cref="T:Discord.GameSDK.ResultException"></exception>
+        </member>
+    </members>
+</doc>

@@ -1,4 +1,4 @@
-﻿using Discord;
+﻿using Discord.GameSDK;
 using UnityEngine;
 
 namespace Integrations

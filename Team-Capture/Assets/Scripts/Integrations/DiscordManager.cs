@@ -1,19 +1,21 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using BootManagement;
 using Core;
 using Helper;
 using SceneManagement;
-using Discord;
+using Discord.GameSDK;
+using Discord.GameSDK.Activities;
 using Logger = Core.Logging.Logger;
 
 namespace Integrations
 {
 	/// <summary>
-	/// Handles communicating with Discord's RPC
+	/// Handles communicating with Discord's game SDK
 	/// </summary>
 	public class DiscordManager : SingletonMonoBehaviour<DiscordManager>, IStartOnBoot
 	{
-		private Discord.Discord client;
+		private Discord.GameSDK.Discord client;
 		private ActivityManager activityManager;
 
 		/// <summary>
@@ -66,19 +68,35 @@ namespace Integrations
 
 			try
 			{
-				client = new Discord.Discord(long.Parse(settings.clientId),
-					(ulong) CreateFlags.NoRequireDiscord);
+				client = new Discord.GameSDK.Discord(long.Parse(settings.clientId), CreateFlags.NoRequireDiscord);
+				client.Init();
 			}
 			catch (ResultException ex)
 			{
-				Logger.Error("Failed to connect with Discord! {@Exception}", ex.Message);
+				Logger.Error("Failed to connect with Discord! Result: {@Exception}", ex.Result);
 				Destroy(gameObject);
 				return;
 			}
 			
 			client?.SetLogHook(settings.logLevel, (level, message) =>
 			{
-				Logger.Info(message);
+				switch (level)
+				{
+					case LogLevel.Error:
+						Logger.Error(message);
+						break;
+					case LogLevel.Warn:
+						Logger.Warn(message);
+						break;
+					case LogLevel.Info:
+						Logger.Info(message);
+						break;
+					case LogLevel.Debug:
+						Logger.Debug(message);
+						break;
+					default:
+						throw new ArgumentOutOfRangeException(nameof(level), level, null);
+				}
 			});
 			activityManager = client?.GetActivityManager();
 
