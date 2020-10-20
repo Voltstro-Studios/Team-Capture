@@ -43,6 +43,12 @@ namespace Integrations
 
 		protected override void SingletonStarted()
 		{
+			if (Game.IsHeadless)
+			{
+				Destroy(gameObject);
+				return;
+			}
+
 			LoadSettings();
 			Initialize();
 		}
