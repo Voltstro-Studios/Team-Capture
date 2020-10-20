@@ -6,6 +6,9 @@
 [Bb]uilds/
 Assets/AssetStoreTools*
 
+Team-Capture/MemoryCaptures/*
+debug.log
+
 # Visual Studio cache directory
 .vs/
 
