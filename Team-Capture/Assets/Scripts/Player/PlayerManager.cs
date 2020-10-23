@@ -5,7 +5,6 @@ using Core;
 using Core.Networking.Messages;
 using Mirror;
 using Player.Movement;
-using UI;
 using UnityEngine;
 using Voltstro.CommandLineParser;
 using Weapons;
@@ -18,11 +17,6 @@ namespace Player
 	/// </summary>
 	public class PlayerManager : NetworkBehaviour
 	{
-		/// <summary>
-		/// The <see cref="ClientUI"/>
-		/// </summary>
-		internal ClientUI ClientUi;
-
 		/// <summary>
 		/// <see cref="Behaviour"/>s to disable/enable on death and respawn
 		/// </summary>
@@ -151,6 +145,11 @@ namespace Player
 		/// </summary>
 		private PlayerMovementInput playerMovementInput;
 
+		/// <summary>
+		/// Manages UI
+		/// </summary>
+		private PlayerUIManager uiManager;
+
 		#endregion
 
 		#region Unity Methods
@@ -192,6 +191,13 @@ namespace Player
 			base.OnStartClient();
 
 			CmdSetName(StartPlayerName);
+		}
+
+		public override void OnStartLocalPlayer()
+		{
+			base.OnStartLocalPlayer();
+
+			uiManager = GetComponent<PlayerUIManager>();
 		}
 
 		public override void OnStopServer()
@@ -333,8 +339,8 @@ namespace Player
 				//Switch cams
 				GameManager.GetActiveSceneCamera().SetActive(true);
 
-				//Disable the UI
-				ClientUi.hud.gameObject.SetActive(false);
+				//Disable the HUD
+				uiManager.SetHud(false);
 			}
 			else
 			{
@@ -372,8 +378,8 @@ namespace Player
 				//Switch cams
 				GameManager.GetActiveSceneCamera().SetActive(false);
 
-				//Enable our UI
-				ClientUi.hud.gameObject.SetActive(true);
+				//Enable our HUD
+				uiManager.SetHud(true);
 
 				//Enable local player movement stuff
 				playerMovementPredictor.enabled = true;

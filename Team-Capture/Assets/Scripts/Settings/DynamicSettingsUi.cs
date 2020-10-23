@@ -40,6 +40,9 @@ namespace Settings
 
 	#endregion
 
+	/// <summary>
+	/// Generates a setting menu based on available options
+	/// </summary>
 	[RequireComponent(typeof(OptionsPanel))]
 	public class DynamicSettingsUi : MonoBehaviour
 	{
@@ -50,6 +53,9 @@ namespace Settings
 			optionsPanel = GetComponent<OptionsPanel>();
 		}
 
+		/// <summary>
+		/// Generates the settings menu
+		/// </summary>
 		//TODO: The sub-functions need to update the UI element based on the reflected value on startup/settings reload
 		public void UpdateUI()
 		{

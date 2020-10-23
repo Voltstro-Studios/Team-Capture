@@ -1,13 +1,21 @@
 ﻿using Player;
+using UnityEngine;
 using Weapons;
 
 namespace Pickups
 {
+	/// <summary>
+	/// A pickup for a weapon
+	/// </summary>
 	public class WeaponPickup : Pickup
 	{
+		/// <summary>
+		/// The weapon to give
+		/// </summary>
+		[Tooltip("The weapon to give")]
 		public TCWeapon weapon;
 
-		public override void OnPlayerPickup(PlayerManager player)
+		protected override void OnPlayerPickup(PlayerManager player)
 		{
 			WeaponManager weaponManager = player.GetComponent<WeaponManager>();
 

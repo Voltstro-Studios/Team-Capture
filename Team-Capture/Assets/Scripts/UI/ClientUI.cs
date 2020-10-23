@@ -5,28 +5,30 @@ using Logger = Core.Logging.Logger;
 
 namespace UI
 {
+	/// <summary>
+	/// Controller for the client UI
+	/// </summary>
 	public class ClientUI : MonoBehaviour
 	{
 		public static bool IsPauseMenuOpen;
 
 		internal PlayerManager PlayerManager;
 		internal WeaponManager WeaponManager;
-		internal PlayerWeaponShoot PlayerWeaponShoot;
 
 		public Hud hud;
 		public KillFeed killFeed;
 		public MainMenuController pauseMenu;
 		public GameObject scoreBoardObject;
 
-		public ClientUI SetupUI(PlayerManager playerManager)
+		public void SetupUI(PlayerManager playerManager)
 		{
+			//Reset this
 			IsPauseMenuOpen = false;
 
 			hud.Setup(this);
 
 			PlayerManager = playerManager;
 			WeaponManager = playerManager.GetComponent<WeaponManager>();
-			PlayerWeaponShoot = playerManager.GetComponent<PlayerWeaponShoot>();
 
 			pauseMenu.gameObject.SetActive(false);
 
@@ -34,8 +36,6 @@ namespace UI
 			scoreBoardObject.GetComponent<ScoreBoard.ScoreBoard>().clientPlayer = playerManager;
 
 			Logger.Debug("The ClientUI is now ready.");
-
-			return this;
 		}
 
 		public void TogglePauseMenu()

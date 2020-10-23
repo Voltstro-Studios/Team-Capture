@@ -23,7 +23,7 @@ namespace Settings.Controllers
 			urpRenderPipeline = (UniversalRenderPipelineAsset) GraphicsSettings.renderPipelineAsset;
 
 			editor = new URPSettingsEditor(urpRenderPipeline);
-			GameSettings.SettingsLoaded += ApplyURPSettings;
+			GameSettings.SettingsUpdated += ApplyURPSettings;
 			ApplyURPSettings();
 		}
 

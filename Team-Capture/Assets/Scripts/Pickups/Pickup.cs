@@ -5,12 +5,34 @@ using UnityEngine;
 
 namespace Pickups
 {
+	/// <summary>
+	/// Base class for a something that can picked up, such as a weapon or a health pack
+	/// </summary>
 	public abstract class Pickup : MonoBehaviour
 	{
+		//TODO: We should create picked up variations of materials at runtime
+		/// <summary>
+		/// Version of the picked up version of the materials on the pickup
+		/// </summary>
+		[Tooltip("Version of the picked up version of the materials on the pickup")]
 		public PickupMaterials[] pickupMaterials;
 
+		/// <summary>
+		/// How long this pickup takes to respawn
+		/// </summary>
+		[Tooltip("How long this pickup takes to respawn")]
 		public float pickupRespawnTime = 4.0f;
+
+		/// <summary>
+		/// The radius of the trigger
+		/// </summary>
+		[Tooltip("The radius of the trigger")]
 		[SerializeField] private float triggerRadius = 1.3f;
+
+		/// <summary>
+		/// The centre of the trigger
+		/// </summary>
+		[Tooltip("The centre of the trigger")]
 		[SerializeField] private Vector3 triggerCenter = Vector3.zero;
 
 		private bool isPickedUp;
@@ -43,7 +65,7 @@ namespace Pickups
 		/// Called when a <see cref="PlayerManager"/> interacts with the pickup
 		/// </summary>
 		/// <param name="player"></param>
-		public virtual void OnPlayerPickup(PlayerManager player)
+		protected virtual void OnPlayerPickup(PlayerManager player)
 		{
 			isPickedUp = true;
 

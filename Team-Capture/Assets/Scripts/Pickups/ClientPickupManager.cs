@@ -7,7 +7,7 @@ using Logger = Core.Logging.Logger;
 namespace Pickups
 {
 	/// <summary>
-	/// Handles pickup related task for the client
+	/// Handles pickup related tasks for the client
 	/// </summary>
 	public static class ClientPickupManager
 	{

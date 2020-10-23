@@ -27,7 +27,7 @@ namespace Weapons
 		public void OnEnable()
 		{
 			LightingChange += ChangeLighting;
-			GameSettings.SettingsLoaded += ApplySettings;
+			GameSettings.SettingsUpdated += ApplySettings;
 			ApplySettings();
 			ChangeLighting();
 		}
@@ -35,7 +35,7 @@ namespace Weapons
 		public void OnDisable()
 		{
 			LightingChange -= ChangeLighting;
-			GameSettings.SettingsLoaded -= ApplySettings;
+			GameSettings.SettingsUpdated -= ApplySettings;
 		}
 
 		private void ApplySettings()

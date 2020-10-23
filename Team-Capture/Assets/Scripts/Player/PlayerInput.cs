@@ -41,6 +41,7 @@ namespace Player
 		private WeaponManager weaponManager;
 		private PlayerManager playerManager;
 		private PlayerMovementInput playerInput;
+		private PlayerUIManager uiManager;
 
 		#region Inputs to send
 
@@ -59,8 +60,9 @@ namespace Player
 			weaponManager = GetComponent<WeaponManager>();
 			playerManager = GetComponent<PlayerManager>();
 			playerInput = GetComponent<PlayerMovementInput>();
+			uiManager = GetComponent<PlayerUIManager>();
 
-			GameSettings.SettingsLoaded += UpdateSettings;
+			GameSettings.SettingsUpdated += UpdateSettings;
 
 			UpdateSettings();
 		}
@@ -71,10 +73,7 @@ namespace Player
 
 			//Pause menu
 			if (Input.GetKeyDown(pauseMenuKey))
-			{
-				if(playerManager.ClientUi.pauseMenu.GetActivePanel() == null)
-					playerManager.ClientUi.TogglePauseMenu();
-			}
+				uiManager.TogglePauseMenu();
 
 			//Make sure mouse lock/visibility is correct
 			HandleMouseLock();
@@ -83,7 +82,7 @@ namespace Player
 			{
 				if (ConsoleSetup.ConsoleUI.IsOpen())
 				{
-					playerManager.ClientUi.ActivatePauseMenu(true);
+					uiManager.SetPauseMenu(true);
 					return;
 				}
 			}
@@ -97,7 +96,7 @@ namespace Player
 
 			//Scoreboard
 			if (Input.GetKeyDown(scoreBoardKey) || Input.GetKeyUp(scoreBoardKey))
-				playerManager.ClientUi.ToggleScoreBoard();
+				uiManager.ToggleScoreboard();
 
 			//Don't want to move if the player is dead
 			if (!playerManager.IsDead)

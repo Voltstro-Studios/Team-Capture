@@ -41,13 +41,13 @@ namespace Weapons
 		{
 			localPosition = transform.localPosition;
 
-			GameSettings.SettingsLoaded += ApplySettings;
+			GameSettings.SettingsUpdated += ApplySettings;
 			ApplySettings();
 		}
 
 		private void OnDestroy()
 		{
-			GameSettings.SettingsLoaded -= ApplySettings;
+			GameSettings.SettingsUpdated -= ApplySettings;
 		}
 
 		private void Update()

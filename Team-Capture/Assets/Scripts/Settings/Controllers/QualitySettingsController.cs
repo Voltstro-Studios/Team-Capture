@@ -14,7 +14,7 @@ namespace Settings.Controllers
 		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
 		public static void Load()
 		{
-			GameSettings.SettingsLoaded += ApplySettings;
+			GameSettings.SettingsUpdated += ApplySettings;
 			ApplySettings();
 		}
 

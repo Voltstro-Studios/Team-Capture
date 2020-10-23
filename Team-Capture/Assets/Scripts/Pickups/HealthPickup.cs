@@ -3,11 +3,18 @@ using UnityEngine;
 
 namespace Pickups
 {
+	/// <summary>
+	/// A health pack, if ya don't know what a health pack is then you are officially retarded
+	/// </summary>
 	public class HealthPickup : Pickup
 	{
+		/// <summary>
+		/// The amount of health to give
+		/// </summary>
+		[Tooltip("The amount of health to give")]
 		[SerializeField] private int givenHealthAmount = 30;
 
-		public override void OnPlayerPickup(PlayerManager player)
+		protected override void OnPlayerPickup(PlayerManager player)
 		{
 			//The player is at max health
 			if(player.Health == player.MaxHealth)
