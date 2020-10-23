@@ -9,6 +9,9 @@ using SceneManager = UnityEngine.SceneManagement.SceneManager;
 
 namespace SceneManagement
 {
+	/// <summary>
+	/// Scene Manager for Team-Capture
+	/// </summary>
 	public static class TCScenesManager
 	{
 		private static List<TCScene> scenes = new List<TCScene>();
@@ -81,7 +84,6 @@ namespace SceneManagement
 		//FindObjectsOfType iss around 3x faster than LoadAll<T> (190ms vs 500ms), but might not work in the build
 		public static IEnumerable<TCScene> GetAllTCScenesInfo()
 		{
-//			return Resources.LoadAll("").Where(r => r.GetType() == typeof(TCScene)).Select(t => (TCScene) t);
 			return Resources.LoadAll<TCScene>("");
 		}
 

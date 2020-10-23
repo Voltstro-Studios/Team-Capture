@@ -36,8 +36,14 @@ namespace Settings
 
 		#endregion
 
+		/// <summary>
+		/// True when the settings have been loaded
+		/// </summary>
 		public static bool HasBeenLoaded { get; private set; }
 
+		/// <summary>
+		/// Invoked when the settings are loaded
+		/// </summary>
 		public static event Action SettingsLoaded;
 
 		#region Saving, loading and resetting setting functions
