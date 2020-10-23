@@ -4,6 +4,9 @@ using UnityEngine.Video;
 
 namespace StartUpVideo
 {
+	/// <summary>
+	/// Controller for the start up video
+	/// </summary>
 	[RequireComponent(typeof(VideoPlayer))]
 	[RequireComponent(typeof(Camera))]
 	public class StartUpVideo : MonoBehaviour {
@@ -12,9 +15,22 @@ namespace StartUpVideo
 
 		private Camera mainCamera;
 
+		/// <summary>
+		/// Can we skip the start up video?
+		/// </summary>
+		[Tooltip("Can we skip the start up video?")]
 		public bool canSkip = true;
+
+		/// <summary>
+		/// What key do we use to skip the start up video
+		/// </summary>
+		[Tooltip("What key do we use to skip the start up video")]
 		public KeyCode skipKey = KeyCode.Escape;
     
+		/// <summary>
+		/// Video clip to play
+		/// </summary>
+		[Tooltip("Video clip to play")]
 		public VideoClip startUpVideoClip;
 
 		private bool inPlayMode;
