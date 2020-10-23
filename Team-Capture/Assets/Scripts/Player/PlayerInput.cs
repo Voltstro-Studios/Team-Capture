@@ -60,7 +60,7 @@ namespace Player
 			playerManager = GetComponent<PlayerManager>();
 			playerInput = GetComponent<PlayerMovementInput>();
 
-			GameSettings.SettingsLoaded += UpdateSettings;
+			GameSettings.SettingsUpdated += UpdateSettings;
 
 			UpdateSettings();
 		}

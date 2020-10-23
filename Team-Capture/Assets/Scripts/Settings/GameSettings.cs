@@ -42,9 +42,9 @@ namespace Settings
 		public static bool HasBeenLoaded { get; private set; }
 
 		/// <summary>
-		/// Invoked when the settings are loaded
+		/// Invoked when the settings are altered in some way
 		/// </summary>
-		public static event Action SettingsLoaded;
+		public static event Action SettingsUpdated;
 
 		#region Saving, loading and resetting setting functions
 
@@ -78,7 +78,7 @@ namespace Settings
 				ObjectSerializer.SaveJson(settingProp.GetValue(null), settingsSaveDirectory, settingProp.Name);
 			}
 
-			SettingsLoaded?.Invoke();
+			SettingsUpdated?.Invoke();
 		}
 
 		/// <summary>
@@ -119,7 +119,7 @@ namespace Settings
 			Logger.Debug("Loaded settings");
 
 			//Notify other classes that settings have updated
-			SettingsLoaded?.Invoke();
+			SettingsUpdated?.Invoke();
 		}
 
 		/// <summary>
@@ -135,7 +135,7 @@ namespace Settings
 				settingProp.SetValue(null, Activator.CreateInstance(settingProp.PropertyType, false));
 
 			//Invoke the reload event to ensure everything updates
-			SettingsLoaded?.Invoke();
+			SettingsUpdated?.Invoke();
 		}
 
 		#endregion

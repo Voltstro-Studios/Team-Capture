@@ -23,14 +23,14 @@ namespace Settings.Controllers
 			cameraToChange = GetComponent<Camera>();
 			cameraData = GetComponent<UniversalAdditionalCameraData>();
 
-			GameSettings.SettingsLoaded += UpdateSettings;
+			GameSettings.SettingsUpdated += UpdateSettings;
 
 			UpdateSettings();
 		}
 
 		private void OnDestroy()
 		{
-			GameSettings.SettingsLoaded -= UpdateSettings;
+			GameSettings.SettingsUpdated -= UpdateSettings;
 		}
 
 		private void UpdateSettings()

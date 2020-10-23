@@ -34,7 +34,7 @@ namespace Settings.Controllers
 
 			ActiveVolume = GetComponent<Volume>();
 
-			GameSettings.SettingsLoaded += ApplyVolumeSettings;
+			GameSettings.SettingsUpdated += ApplyVolumeSettings;
 			ApplyVolumeSettings();
 		}
 
