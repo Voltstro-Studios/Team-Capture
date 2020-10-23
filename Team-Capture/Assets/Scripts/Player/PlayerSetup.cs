@@ -64,7 +64,6 @@ namespace Player
 		{
 			//Setup UI
 			ClientUI clientUi = Instantiate(clientUiPrefab).GetComponent<ClientUI>();
-			playerManager.ClientUi = clientUi;
 			clientUi.SetupUI(playerManager);
 			gameObject.AddComponent<PlayerUIManager>().Setup(clientUi);
 

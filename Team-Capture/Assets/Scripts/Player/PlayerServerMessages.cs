@@ -2,7 +2,6 @@
 using Core.Networking.Messages;
 using Mirror;
 using Pickups;
-using UI;
 using UnityEngine;
 using Logger = Core.Logging.Logger;
 
@@ -13,18 +12,15 @@ namespace Player
 	/// </summary>
 	public class PlayerServerMessages : MonoBehaviour
 	{
-		/// <summary>
-		/// The <see cref="ClientUI"/> that is associated with this client
-		/// </summary>
-		private ClientUI clientUi;
+		private PlayerUIManager uiManager;
 
 		private void Awake()
 		{
-			clientUi =  GetComponent<PlayerManager>().ClientUi;
-
 			//Register all our custom messages
 			NetworkClient.RegisterHandler<SetPickupStatus>(PickupMessage);
 			NetworkClient.RegisterHandler<PlayerDiedMessage>(PlayerDiedMessage);
+
+			uiManager = GetComponent<PlayerUIManager>();
 		}
 
 		private void OnDestroy()
@@ -41,7 +37,7 @@ namespace Player
 		/// <param name="message"></param>
 		private void PlayerDiedMessage(NetworkConnection conn, PlayerDiedMessage message)
 		{
-			clientUi.killFeed.AddFeedBackItem(message);
+			uiManager.AddKillfeedItem(message);
 		}
 
 		/// <summary>
