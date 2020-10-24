@@ -5,10 +5,18 @@ using Weapons;
 
 namespace Player
 {
+	/// <summary>
+	/// Provides an easy way of calling methods for related functions in the <see cref="ClientUI"/>
+	/// <para>This is only created on the client side</para>
+	/// </summary>
 	public sealed class PlayerUIManager : MonoBehaviour
 	{
 		private ClientUI ui;
 
+		/// <summary>
+		/// Sets up <see cref="PlayerUIManager"/>
+		/// </summary>
+		/// <param name="clientUI"></param>
 		public void Setup(ClientUI clientUI)
 		{
 			ui = clientUI;
