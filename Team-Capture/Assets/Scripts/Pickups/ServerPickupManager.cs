@@ -23,7 +23,7 @@ namespace Pickups
 		/// <summary>
 		/// Sets up the <see cref="ServerPickupManager"/>
 		/// </summary>
-		public static void SetupServerPickupManager()
+		public static void Setup()
 		{
 			unActivePickups = new List<string>();
 
@@ -34,7 +34,7 @@ namespace Pickups
 		/// <summary>
 		/// Shutdown the <see cref="ServerPickupManager"/>
 		/// </summary>
-		public static void ShutdownServer()
+		public static void Shutdown()
 		{
 			SceneManager.OnBeginSceneLoading -= OnBeginSceneLoading;
 			TCScenesManager.OnSceneLoadedEvent -= OnSceneLoaded;

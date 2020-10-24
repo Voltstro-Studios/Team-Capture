@@ -14,7 +14,7 @@ namespace Pickups
 		/// <summary>
 		/// Sets up the <see cref="ClientPickupManager"/>
 		/// </summary>
-		public static void SetupClientPickupManager()
+		public static void Setup()
 		{
 			NetworkClient.RegisterHandler<InitPickupStatusMessage>(SetPickupStatus);
 		}
@@ -22,7 +22,7 @@ namespace Pickups
 		/// <summary>
 		/// Shutdown the <see cref="ClientPickupManager"/>
 		/// </summary>
-		public static void ShutdownClient()
+		public static void Shutdown()
 		{
 			NetworkClient.UnregisterHandler<InitPickupStatusMessage>();
 		}

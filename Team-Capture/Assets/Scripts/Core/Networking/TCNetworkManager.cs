@@ -156,7 +156,7 @@ namespace Core.Networking
 				threaded.ServerBindAddress = singleton.networkAddress;
 
 			//Setup the pickup manager
-			ServerPickupManager.SetupServerPickupManager();
+			ServerPickupManager.Setup();
 
 			base.OnStartServer();
 
@@ -175,7 +175,7 @@ namespace Core.Networking
 
 			base.OnStopServer();
 
-			ServerPickupManager.ShutdownServer();
+			ServerPickupManager.Shutdown();
 
 			//Stop advertising the server when the server stops
 			gameDiscovery.StopDiscovery();
@@ -242,7 +242,7 @@ namespace Core.Networking
 
 		public override void OnStartClient()
 		{
-			ClientPickupManager.SetupClientPickupManager();
+			ClientPickupManager.Setup();
 
 			base.OnStartClient();
 		}
@@ -251,7 +251,7 @@ namespace Core.Networking
 		{
 			base.OnStopClient();
 
-			ClientPickupManager.ShutdownClient();
+			ClientPickupManager.Shutdown();
 
 			Logger.Info("Stopped client");
 		}
