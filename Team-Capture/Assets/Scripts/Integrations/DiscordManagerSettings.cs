@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Integrations
 {
 	[System.Serializable]
-	public class DiscordManagerSettings
+	internal class DiscordManagerSettings
 	{
 		/// <summary>
 		/// The client ID that we will use

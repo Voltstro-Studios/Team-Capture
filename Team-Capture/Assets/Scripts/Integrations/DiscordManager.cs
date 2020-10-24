@@ -13,7 +13,7 @@ namespace Integrations
 	/// <summary>
 	/// Handles communicating with Discord's game SDK
 	/// </summary>
-	public class DiscordManager : SingletonMonoBehaviour<DiscordManager>, IStartOnBoot
+	internal class DiscordManager : SingletonMonoBehaviour<DiscordManager>, IStartOnBoot
 	{
 		private Discord.GameSDK.Discord client;
 		private ActivityManager activityManager;
