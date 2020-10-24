@@ -13,7 +13,7 @@ namespace Player.Movement
 	/// <summary>
 	/// Helps in predicting movement
 	/// </summary>
-	public class PlayerMovementPredictor : MonoBehaviour, IPlayerMovementStateHandler
+	public sealed class PlayerMovementPredictor : MonoBehaviour, IPlayerMovementStateHandler
 	{
 		private LinkedList<PlayerInputs> pendingInputs;
 		private PlayerMovementManager character;

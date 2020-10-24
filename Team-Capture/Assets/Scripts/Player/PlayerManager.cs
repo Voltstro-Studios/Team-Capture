@@ -15,7 +15,7 @@ namespace Player
 	/// <summary>
 	/// Handles player stuff, such as health
 	/// </summary>
-	public class PlayerManager : NetworkBehaviour
+	public sealed class PlayerManager : NetworkBehaviour
 	{
 		/// <summary>
 		/// <see cref="Behaviour"/>s to disable/enable on death and respawn
@@ -66,7 +66,7 @@ namespace Player
 		/// <summary>
 		/// Is this player dead?
 		/// </summary>
-		[field: SyncVar] public bool IsDead { get; protected set; } = true;
+		[field: SyncVar] public bool IsDead { get; private set; } = true;
 
 		/// <summary>
 		/// The username of this player

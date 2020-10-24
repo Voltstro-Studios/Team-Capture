@@ -12,7 +12,7 @@ namespace Player.Movement
 
 	[RequireComponent(typeof(CharacterController))]
 	[RequireComponent(typeof(PlayerManager))]
-	public class PlayerMovementManager : NetworkBehaviour
+	public sealed class PlayerMovementManager : NetworkBehaviour
 	{
 		private PlayerManager playerManager;
 

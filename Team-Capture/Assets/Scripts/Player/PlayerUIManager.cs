@@ -5,7 +5,7 @@ using Weapons;
 
 namespace Player
 {
-	public class PlayerUIManager : MonoBehaviour
+	public sealed class PlayerUIManager : MonoBehaviour
 	{
 		private ClientUI ui;
 

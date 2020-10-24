@@ -13,7 +13,7 @@ namespace Player
 	/// <summary>
 	/// Handles shooting
 	/// </summary>
-	public class PlayerWeaponShoot : NetworkBehaviour
+	public sealed class PlayerWeaponShoot : NetworkBehaviour
 	{
 		/// <summary>
 		/// Layers for the raycast

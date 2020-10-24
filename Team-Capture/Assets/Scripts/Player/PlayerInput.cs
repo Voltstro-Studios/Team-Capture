@@ -12,7 +12,7 @@ namespace Player
 	/// <summary>
 	/// Handles input
 	/// </summary>
-	public class PlayerInput : NetworkBehaviour
+	public sealed class PlayerInput : NetworkBehaviour
 	{
 		#region Inspector fields
 

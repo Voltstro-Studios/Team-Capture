@@ -13,7 +13,7 @@ namespace Player.Movement
 	/// <summary>
 	/// Handles processing inputs and performing movements on the server
 	/// </summary>
-	public class PlayerMovementServer : MonoBehaviour
+	public sealed class PlayerMovementServer : MonoBehaviour
 	{
 		private Queue<PlayerInputs> inputBuffer;
 		private PlayerMovementManager character;
