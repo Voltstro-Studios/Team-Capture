@@ -8,7 +8,7 @@ using Logger = Core.Logging.Logger;
 namespace Console
 {
 	/// <summary>
-	/// A in-game console
+	/// An in-game console
 	/// </summary>
 	public class ConsoleGUI : MonoBehaviour, IConsoleUI
 	{
