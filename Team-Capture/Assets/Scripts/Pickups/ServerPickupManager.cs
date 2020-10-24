@@ -10,7 +10,7 @@ namespace Pickups
 	/// <summary>
 	/// A static class for the server to manage pickups
 	/// </summary>
-	public static class ServerPickupManager
+	internal static class ServerPickupManager
 	{
 		/// <summary>
 		/// The tag for pickups

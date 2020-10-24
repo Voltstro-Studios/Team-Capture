@@ -12,7 +12,7 @@ namespace UI
 	/// <summary>
 	/// A UI used for debugging purposes
 	/// </summary>
-	public class DebugMenu : SingletonMonoBehaviour<DebugMenu>, IStartOnBoot
+	internal class DebugMenu : SingletonMonoBehaviour<DebugMenu>, IStartOnBoot
 	{
 		/// <summary>
 		/// Is the debug menu open?

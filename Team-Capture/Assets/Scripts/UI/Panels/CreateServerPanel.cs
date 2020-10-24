@@ -16,7 +16,7 @@ namespace UI.Panels
 	/// <summary>
 	/// The code driving the create server panel
 	/// </summary>
-	public class CreateServerPanel : MainMenuPanelBase
+	internal class CreateServerPanel : MainMenuPanelBase
 	{
 		private List<TCScene> onlineTCScenes;
 

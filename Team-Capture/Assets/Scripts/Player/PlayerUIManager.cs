@@ -9,7 +9,7 @@ namespace Player
 	/// Provides an easy way of calling methods for related functions in the <see cref="ClientUI"/>
 	/// <para>This is only created on the client side</para>
 	/// </summary>
-	public sealed class PlayerUIManager : MonoBehaviour
+	internal sealed class PlayerUIManager : MonoBehaviour
 	{
 		private ClientUI ui;
 

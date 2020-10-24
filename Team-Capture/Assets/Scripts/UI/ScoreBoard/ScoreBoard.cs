@@ -12,7 +12,7 @@ namespace UI.ScoreBoard
 	/// <summary>
 	/// The score board
 	/// </summary>
-	public class ScoreBoard : MonoBehaviour
+	internal class ScoreBoard : MonoBehaviour
 	{
 		[HideInInspector] public PlayerManager clientPlayer;
 

@@ -50,7 +50,7 @@ namespace Weapons
 
 		public event WeaponUpdatedDelegate WeaponUpdated;
 
-		[NonSerialized] public WeaponSway WeaponSway;
+		[NonSerialized] internal WeaponSway WeaponSway;
 
 		/// <summary>
 		/// Server callback for when <see cref="weapons"/> is modified

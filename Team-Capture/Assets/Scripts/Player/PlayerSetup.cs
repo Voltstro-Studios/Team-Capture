@@ -8,7 +8,7 @@ namespace Player
 	/// <summary>
 	/// Handles setting up the player
 	/// </summary>
-	public sealed class PlayerSetup : NetworkBehaviour
+	internal sealed class PlayerSetup : NetworkBehaviour
 	{
 		/// <summary>
 		/// Player's local <see cref="Camera"/>

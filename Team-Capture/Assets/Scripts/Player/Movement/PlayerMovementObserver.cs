@@ -12,7 +12,7 @@ namespace Player.Movement
 	/// <summary>
 	/// Handles observing other players
 	/// </summary>
-	public sealed class PlayerMovementObserver : MonoBehaviour, IPlayerMovementStateHandler
+	internal sealed class PlayerMovementObserver : MonoBehaviour, IPlayerMovementStateHandler
 	{
 		private LinkedList<PlayerState> stateBuffer;
 		private PlayerMovementManager character;

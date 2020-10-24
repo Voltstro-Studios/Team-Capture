@@ -9,8 +9,8 @@ namespace StartUpVideo
 	/// </summary>
 	[RequireComponent(typeof(VideoPlayer))]
 	[RequireComponent(typeof(Camera))]
-	public class StartUpVideo : MonoBehaviour {
-
+	internal class StartUpVideo : MonoBehaviour 
+	{
 		private VideoPlayer startUpVideo;
 
 		private Camera mainCamera;

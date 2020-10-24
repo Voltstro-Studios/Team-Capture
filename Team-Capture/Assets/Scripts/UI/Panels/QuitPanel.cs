@@ -7,7 +7,7 @@ using Random = UnityEngine.Random;
 
 namespace UI.Panels
 {
-	public class QuitPanel : MainMenuPanelBase
+	internal class QuitPanel : MainMenuPanelBase
 	{
 		private string[] quitSentences;
 

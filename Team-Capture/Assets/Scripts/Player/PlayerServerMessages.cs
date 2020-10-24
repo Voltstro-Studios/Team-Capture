@@ -10,7 +10,7 @@ namespace Player
 	/// <summary>
 	/// Handles messages from the server
 	/// </summary>
-	public sealed class PlayerServerMessages : MonoBehaviour
+	internal sealed class PlayerServerMessages : MonoBehaviour
 	{
 		private PlayerUIManager uiManager;
 

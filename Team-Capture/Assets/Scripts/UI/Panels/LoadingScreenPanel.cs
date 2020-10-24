@@ -6,7 +6,7 @@ namespace UI.Panels
 	/// <summary>
 	/// A panel for a loading screen
 	/// </summary>
-	public class LoadingScreenPanel : MonoBehaviour
+	internal class LoadingScreenPanel : MonoBehaviour
 	{
 		[SerializeField] private Slider slider;
 

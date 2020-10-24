@@ -4,7 +4,7 @@ using Weapons;
 
 namespace UI
 {
-	public class Hud : MonoBehaviour
+	internal class Hud : MonoBehaviour
 	{
 		public TextMeshProUGUI ammoText;
 		public TextMeshProUGUI maxAmmoText;

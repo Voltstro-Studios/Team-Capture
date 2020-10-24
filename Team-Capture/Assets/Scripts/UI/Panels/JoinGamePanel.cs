@@ -14,7 +14,7 @@ namespace UI.Panels
 	/// <summary>
 	/// A panel for joining games
 	/// </summary>
-	public class JoinGamePanel : MainMenuPanelBase
+	internal class JoinGamePanel : MainMenuPanelBase
 	{
 		private readonly List<TCServerResponse> servers = new List<TCServerResponse>();
 

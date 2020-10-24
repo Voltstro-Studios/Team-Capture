@@ -15,7 +15,7 @@ namespace UI
 	/// <summary>
 	/// Controller for a main menu
 	/// </summary>
-	public class MainMenuController : MonoBehaviour
+	internal class MainMenuController : MonoBehaviour
 	{
 		/// <summary>
 		/// The parent for all main menu panels

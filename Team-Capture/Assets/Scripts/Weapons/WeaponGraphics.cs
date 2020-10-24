@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Weapons
 {
-	public class WeaponGraphics : MonoBehaviour
+	internal class WeaponGraphics : MonoBehaviour
 	{
 		[ConVar("cl_muzzleflashlighting", "Whether or not the muzzle flash will have lighting", nameof(InvokeLightingChange), true)]
 		public static bool MuzzleFlashLighting = true;

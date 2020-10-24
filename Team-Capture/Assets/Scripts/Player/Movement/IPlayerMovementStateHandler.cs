@@ -9,7 +9,7 @@ namespace Player.Movement
 	/// <summary>
 	/// Handles player's state
 	/// </summary>
-	public interface IPlayerMovementStateHandler
+	internal interface IPlayerMovementStateHandler
 	{
 		void OnStateChange(PlayerState newState);
 	}

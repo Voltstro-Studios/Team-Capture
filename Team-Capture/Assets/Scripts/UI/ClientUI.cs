@@ -8,7 +8,7 @@ namespace UI
 	/// <summary>
 	/// Controller for the client UI
 	/// </summary>
-	public class ClientUI : MonoBehaviour
+	internal class ClientUI : MonoBehaviour
 	{
 		public static bool IsPauseMenuOpen;
 

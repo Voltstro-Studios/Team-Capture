@@ -6,7 +6,7 @@ namespace UI
 	/// A panel for a main menu
 	/// </summary>
 	[CreateAssetMenu(fileName = "New TC Main Menu Event", menuName = "Team Capture/MainMenuPanel")]
-	public class MainMenuPanel : ScriptableObject
+	internal class MainMenuPanel : ScriptableObject
 	{
 		/// <summary>
 		/// The base prefab of the panel

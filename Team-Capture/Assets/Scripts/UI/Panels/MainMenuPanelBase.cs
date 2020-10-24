@@ -7,7 +7,7 @@ namespace UI.Panels
 	/// <summary>
 	/// The base for a main menu panel
 	/// </summary>
-	public class MainMenuPanelBase : MonoBehaviour
+	internal class MainMenuPanelBase : MonoBehaviour
 	{
 		/// <summary>
 		/// The cancel or close button

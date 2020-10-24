@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Weapons
 {
-	public class WeaponSway : MonoBehaviour
+	internal class WeaponSway : MonoBehaviour
 	{
 		private Vector3 localPosition;
 

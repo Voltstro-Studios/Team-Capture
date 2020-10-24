@@ -2,7 +2,7 @@
 
 namespace Weapons
 {
-	public class BulletTracer : MonoBehaviour
+	internal class BulletTracer : MonoBehaviour
 	{
 		[SerializeField] private ParticleSystem bulletTracer;
 

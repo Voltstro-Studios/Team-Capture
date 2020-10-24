@@ -11,7 +11,7 @@ namespace UI.Panels
 	/// <summary>
 	/// The panel for options
 	/// </summary>
-	public class OptionsPanel : MainMenuPanelBase
+	internal class OptionsPanel : MainMenuPanelBase
 	{
 		private readonly Dictionary<Button, GameObject> settingPanels = new Dictionary<Button, GameObject>();
 

@@ -7,7 +7,7 @@ namespace Tweens
 	/// <summary>
 	/// A manager for tweening
 	/// </summary>
-	public class TweeningManager : MonoBehaviour
+	internal class TweeningManager : MonoBehaviour
 	{
 		/// <summary>
 		/// What objects can be tweened

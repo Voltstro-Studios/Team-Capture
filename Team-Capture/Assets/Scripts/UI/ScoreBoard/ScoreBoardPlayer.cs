@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace UI.ScoreBoard
 {
-	public class ScoreBoardPlayer : MonoBehaviour
+	internal class ScoreBoardPlayer : MonoBehaviour
 	{
 		[SerializeField] private TextMeshProUGUI playerDeathsText;
 		[SerializeField] private TextMeshProUGUI playerKillsText;

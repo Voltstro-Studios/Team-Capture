@@ -9,7 +9,7 @@ namespace Pickups
 	/// <summary>
 	/// Handles pickup related tasks for the client
 	/// </summary>
-	public static class ClientPickupManager
+	internal static class ClientPickupManager
 	{
 		/// <summary>
 		/// Sets up the <see cref="ClientPickupManager"/>

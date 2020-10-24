@@ -6,7 +6,7 @@ namespace Tweens
 	/// A tween for a UI element
 	/// </summary>
 	[CreateAssetMenu(fileName = "UITweenEvent", menuName = "Tweening/UITweenEvent" )]
-	public class UITweenEvent : TweenEvent
+	internal class UITweenEvent : TweenEvent
 	{
 		/// <summary>
 		/// Is this tween moving?

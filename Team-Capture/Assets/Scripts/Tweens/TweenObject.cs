@@ -12,7 +12,7 @@ namespace Tweens
 	/// A class for handling tweening
 	/// </summary>
 	[Serializable]
-	public class TweenObject
+	internal class TweenObject
 	{
 		/// <summary>
 		/// The name of this tweened object

@@ -12,7 +12,7 @@ namespace Player.Movement
 	/// <summary>
 	/// Handles sending inputs the server for movement
 	/// </summary>
-	public sealed class PlayerMovementInput : MonoBehaviour
+	internal sealed class PlayerMovementInput : MonoBehaviour
 	{
 		private int currentInput;
 

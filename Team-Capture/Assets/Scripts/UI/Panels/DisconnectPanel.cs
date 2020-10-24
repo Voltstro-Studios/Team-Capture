@@ -5,7 +5,7 @@ namespace UI.Panels
 	/// <summary>
 	/// The panel for the disconnect dialog
 	/// </summary>
-	public class DisconnectPanel : MainMenuPanelBase
+	internal class DisconnectPanel : MainMenuPanelBase
 	{
 		/// <summary>
 		/// Disconnects from the current game

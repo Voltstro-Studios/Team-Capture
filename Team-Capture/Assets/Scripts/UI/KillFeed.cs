@@ -8,7 +8,7 @@ using Logger = Core.Logging.Logger;
 
 namespace UI
 {
-	public class KillFeed : MonoBehaviour
+	internal class KillFeed : MonoBehaviour
 	{
 		public Transform killFeedItemsHolder;
 		[SerializeField] private GameObject killFeedItem;
