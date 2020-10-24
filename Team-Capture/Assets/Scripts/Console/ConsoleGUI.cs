@@ -132,21 +132,21 @@ namespace Console
 			Logger.Info($"You are running TC version {Application.version} using Unity {Application.unityVersion}");
 		}
 
-		[ConCommand("console", "Toggles the console")]
+		[ConCommand("console", "Toggles the console", CommandRunPermission.Both, 0, 0, true)]
 		public static void ToggleConsoleCommand(string[] args)
 		{
-			//This is aids but what ever
-			(ConsoleSetup.ConsoleUI as ConsoleGUI)?.ToggleConsole();
+			if (ConsoleSetup.ConsoleUI is ConsoleGUI gui)
+			{
+				gui.ToggleConsole();
+			}
 		}
 
-		[ConCommand("console_scale", "Changes the console's text scale", CommandRunPermission.Both, 1, 1)]
+		[ConCommand("console_scale", "Changes the console's text scale", CommandRunPermission.Both, 1, 1, true)]
 		public static void ConsoleScaleCommand(string[] args)
 		{
 			if (float.TryParse(args[0], out float result))
 			{
-				//More aids
-				ConsoleGUI gui = ConsoleSetup.ConsoleUI as ConsoleGUI;
-				if(gui == null) return;
+				if (!(ConsoleSetup.ConsoleUI is ConsoleGUI gui)) return;
 
 				gui.consoleTextScale = result;
 				gui.consoleTextArea.fontSize = gui.defaultFontSize * gui.consoleTextScale;
