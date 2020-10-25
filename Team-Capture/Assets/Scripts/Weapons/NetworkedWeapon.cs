@@ -1,6 +1,4 @@
-﻿using Weapons.Interfaces;
-
-namespace Weapons
+﻿namespace Weapons
 {
 	/// <summary>
 	/// A simplified version of <see cref="TCWeapon"/>, designed for sending over the network (as the name might implied)

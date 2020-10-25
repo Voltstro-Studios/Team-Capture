@@ -1,4 +1,4 @@
-﻿namespace Weapons.Interfaces
+﻿namespace Weapons
 {
 	/// <summary>
 	/// Base for a weapon
