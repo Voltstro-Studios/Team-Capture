@@ -2,7 +2,7 @@
 
 namespace Core.Networking.Discovery
 {
-	public class TCServerRequest : NetworkMessage
+	internal class TCServerRequest : NetworkMessage
 	{
 		public string ApplicationVersion;
 	}

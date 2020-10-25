@@ -9,7 +9,7 @@ namespace UI.Elements
 	/// <summary>
 	/// A button for joining a server
 	/// </summary>
-	public class JoinServerButton : MonoBehaviour
+	internal class JoinServerButton : MonoBehaviour
 	{
 		[SerializeField] private TextMeshProUGUI gameNameText;
 		[SerializeField] private TextMeshProUGUI mapNameText;
@@ -23,7 +23,7 @@ namespace UI.Elements
 		/// </summary>
 		/// <param name="server">The server details</param>
 		/// <param name="call">The connect action</param>
-		public void SetupConnectButton(TCServerResponse server, Action call)
+		internal void SetupConnectButton(TCServerResponse server, Action call)
 		{
 			baseButton.onClick.AddListener(delegate
 			{

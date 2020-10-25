@@ -4,7 +4,7 @@ using Object = UnityEngine.Object;
 
 namespace Core.Logging
 {
-	public class MirrorLogHandler : ILogHandler
+	internal class MirrorLogHandler : ILogHandler
 	{
 		public void LogFormat(LogType logType, Object context, string format, params object[] args)
 		{

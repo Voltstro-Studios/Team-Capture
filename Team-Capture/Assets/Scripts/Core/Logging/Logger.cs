@@ -21,7 +21,7 @@ namespace Core.Logging
 		/// <summary>
 		/// The logger's config, can only be set while the logger isn't running
 		/// </summary>
-		public static LoggerConfig LoggerConfig 
+		internal static LoggerConfig LoggerConfig 
 		{
 			set
 			{

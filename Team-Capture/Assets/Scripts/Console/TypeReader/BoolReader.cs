@@ -5,7 +5,7 @@ namespace Console.TypeReader
 	/// <summary>
 	/// A default reader for <see cref="bool"/>
 	/// </summary>
-	public sealed class BoolReader : Console.TypeReader.ITypeReader
+	internal sealed class BoolReader : Console.TypeReader.ITypeReader
 	{
 		public object ReadType(string input)
 		{

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Settings.SettingClasses
 {
-	public sealed class VideoSettingsClass : Setting
+	internal sealed class VideoSettingsClass : Setting
 	{
 		public Resolution Resolution = Screen.currentResolution;
 		

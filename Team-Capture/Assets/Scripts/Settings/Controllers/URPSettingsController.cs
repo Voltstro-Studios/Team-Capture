@@ -11,7 +11,7 @@ namespace Settings.Controllers
 	/// <summary>
 	/// Handles applying settings to Universal Render Pipeline(URP)
 	/// </summary>
-	public static class URPSettingsController
+	internal static class URPSettingsController
 	{
 		private static UniversalRenderPipelineAsset urpRenderPipeline;
 

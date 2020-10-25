@@ -3,7 +3,7 @@
 	/// <summary>
 	/// MSAA Quality
 	/// </summary>
-	public enum MSAAQuality
+	internal enum MSAAQuality
 	{
 		Disabled = 1,
 		X2 = 2,

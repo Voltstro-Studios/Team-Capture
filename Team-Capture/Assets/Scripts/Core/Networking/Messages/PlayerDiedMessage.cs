@@ -5,7 +5,7 @@ namespace Core.Networking.Messages
 	/// <summary>
 	/// A player has died message
 	/// </summary>
-	public struct PlayerDiedMessage : NetworkMessage
+	internal struct PlayerDiedMessage : NetworkMessage
 	{
 		/// <summary>
 		/// Who was the victim

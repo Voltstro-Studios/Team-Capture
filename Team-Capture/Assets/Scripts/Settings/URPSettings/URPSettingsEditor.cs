@@ -6,7 +6,7 @@ namespace Settings.URPSettings
 	/// <summary>
 	/// An editor for URP
 	/// </summary>
-	public class URPSettingsEditor
+	internal class URPSettingsEditor
 	{
 		private readonly UniversalRenderPipelineAsset urpPipelineAsset;
 

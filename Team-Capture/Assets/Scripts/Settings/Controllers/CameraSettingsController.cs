@@ -11,7 +11,7 @@ namespace Settings.Controllers
 	/// </summary>
 	[RequireComponent(typeof(UniversalAdditionalCameraData))]
 	[RequireComponent(typeof(Camera))]
-	public class CameraSettingsController : MonoBehaviour
+	internal class CameraSettingsController : MonoBehaviour
 	{
 		private Camera cameraToChange;
 		private UniversalAdditionalCameraData cameraData;

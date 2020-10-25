@@ -8,7 +8,7 @@ using UnityEngine.Events;
 namespace Core.Networking.Discovery
 {
 	[RequireComponent(typeof(TCNetworkManager))]
-	public class TCGameDiscovery : NetworkDiscoveryBase<TCServerRequest, TCServerResponse>
+	internal class TCGameDiscovery : NetworkDiscoveryBase<TCServerRequest, TCServerResponse>
 	{
 		public class ServerFoundUnityEvent : UnityEvent<TCServerResponse> { }
 

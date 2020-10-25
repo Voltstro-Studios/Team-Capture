@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace LagCompensation
 {
-	public class SimulationObject : MonoBehaviour
+	internal class SimulationObject : MonoBehaviour
 	{
 		/// <summary>
 		///     A <see cref="Dictionary{TKey,TValue}" /> containing the stored <see cref="SimulationFrameData" />, accessible by

@@ -3,7 +3,7 @@
 	/// <summary>
 	/// The interface for a type reader
 	/// </summary>
-	public interface ITypeReader
+	internal interface ITypeReader
 	{
 		/// <summary>
 		/// Read the type and return it

@@ -3,7 +3,7 @@
 	/// <summary>
 	/// VSync options
 	/// </summary>
-	public enum VSync
+	internal enum VSync
 	{
 		/// <summary>
 		/// No VSync, this is best in high action games

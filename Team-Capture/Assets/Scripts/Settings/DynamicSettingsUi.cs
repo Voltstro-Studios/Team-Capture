@@ -20,7 +20,7 @@ namespace Settings
 	/// Tells the <see cref="DynamicSettingsUi"/> what the text should say next to the element, instead of just using property name.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
-	public class SettingsPropertyFormatNameAttribute : PreserveAttribute
+	internal class SettingsPropertyFormatNameAttribute : PreserveAttribute
 	{
 		public SettingsPropertyFormatNameAttribute(string menuFormat)
 		{
@@ -34,7 +34,7 @@ namespace Settings
 	/// Tells the <see cref="DynamicSettingsUi"/> not to show this object
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Class)]
-	public class SettingsDontShowAttribute : PreserveAttribute
+	internal class SettingsDontShowAttribute : PreserveAttribute
 	{
 	}
 
@@ -44,7 +44,7 @@ namespace Settings
 	/// Generates a setting menu based on available options
 	/// </summary>
 	[RequireComponent(typeof(OptionsPanel))]
-	public class DynamicSettingsUi : MonoBehaviour
+	internal class DynamicSettingsUi : MonoBehaviour
 	{
 		private OptionsPanel optionsPanel;
 

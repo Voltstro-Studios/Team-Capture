@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace LagCompensation
 {
-	public class SimulationHelper
+	internal static class SimulationHelper
 	{
 		public static readonly List<SimulationObject> SimulationObjects = new List<SimulationObject>();
 		public static int CurrentFrame { get; private set; }

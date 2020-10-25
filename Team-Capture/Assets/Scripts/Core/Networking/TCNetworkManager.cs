@@ -20,7 +20,7 @@ namespace Core.Networking
 	/// The networking manager for Team-Capture
 	/// </summary>
 	[RequireComponent(typeof(TCGameDiscovery))]
-	public class TCNetworkManager : NetworkManager
+	internal class TCNetworkManager : NetworkManager
 	{
 		/// <summary>
 		/// The active <see cref="TCNetworkManager"/>

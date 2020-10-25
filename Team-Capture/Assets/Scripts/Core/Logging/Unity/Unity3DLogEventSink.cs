@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Core.Logging.Unity
 {
-    public sealed class Unity3DLogEventSink : ILogEventSink
+    internal sealed class Unity3DLogEventSink : ILogEventSink
     {
         private readonly ITextFormatter formatProvider;
 

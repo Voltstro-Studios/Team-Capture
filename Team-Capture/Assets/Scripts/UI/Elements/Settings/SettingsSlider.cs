@@ -8,7 +8,7 @@ namespace UI.Elements.Settings
 	/// <summary>
 	/// Slider for the settings menu
 	/// </summary>
-	public class SettingsSlider : MonoBehaviour
+	internal class SettingsSlider : MonoBehaviour
 	{
 		/// <summary>
 		/// The property text

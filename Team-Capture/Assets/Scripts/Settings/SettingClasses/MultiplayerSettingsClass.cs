@@ -2,7 +2,7 @@
 
 namespace Settings.SettingClasses
 {
-	public class MultiplayerSettingsClass : Setting
+	internal class MultiplayerSettingsClass : Setting
 	{
 		[SettingsPropertyFormatName("Muzzle Flash Lighting")]
 		public bool WeaponMuzzleFlashLighting = true;

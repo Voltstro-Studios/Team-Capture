@@ -8,7 +8,7 @@ using Logger = Core.Logging.Logger;
 
 namespace BootManagement
 {
-	public class Bootmanager : MonoBehaviour
+	internal class Bootmanager : MonoBehaviour
 	{
 		public static bool HasBooted;
 

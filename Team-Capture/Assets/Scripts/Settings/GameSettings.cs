@@ -23,16 +23,16 @@ namespace Settings
 		#region Settings
 
 		[SettingsPropertyFormatName("Mouse Settings")]
-		public static MouseSettingsClass MouseSettings { get; } = new MouseSettingsClass();
+		internal static MouseSettingsClass MouseSettings { get; } = new MouseSettingsClass();
 
 		[SettingsPropertyFormatName("Video Settings")]
-		public static VideoSettingsClass VideoSettings { get; } = new VideoSettingsClass();
+		internal static VideoSettingsClass VideoSettings { get; } = new VideoSettingsClass();
 
 		[SettingsPropertyFormatName("Advance Settings")]
-		public static AdvSettingsClass AdvSettings { get; } = new AdvSettingsClass();
+		internal static AdvSettingsClass AdvSettings { get; } = new AdvSettingsClass();
 
 		[SettingsPropertyFormatName("Multiplayer Settings")]
-		public static MultiplayerSettingsClass MultiplayerSettings { get; } = new MultiplayerSettingsClass();
+		internal static MultiplayerSettingsClass MultiplayerSettings { get; } = new MultiplayerSettingsClass();
 
 		#endregion
 

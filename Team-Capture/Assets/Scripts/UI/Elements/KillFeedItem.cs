@@ -6,7 +6,7 @@ namespace UI.Elements
 	/// <summary>
 	/// An item for the kill feed
 	/// </summary>
-	public class KillFeedItem : MonoBehaviour
+	internal class KillFeedItem : MonoBehaviour
 	{
 		[SerializeField] private TMP_Text killFeedText;
 

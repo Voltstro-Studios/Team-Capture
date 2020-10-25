@@ -9,7 +9,7 @@ namespace Settings.Controllers
 	/// <summary>
 	/// Handles controlling Unity's quality settings
 	/// </summary>
-	public static class QualitySettingsController
+	internal static class QualitySettingsController
 	{
 		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
 		public static void Load()

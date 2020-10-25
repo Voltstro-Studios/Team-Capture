@@ -12,7 +12,7 @@ namespace Settings.Controllers
 	/// Controller for Unity's <see cref="Volume"/> for URP
 	/// </summary>
 	[RequireComponent(typeof(Volume))]
-	public class VolumeSettingsController : MonoBehaviour
+	internal class VolumeSettingsController : MonoBehaviour
 	{
 		private static VolumeSettingsController instance;
 

@@ -3,7 +3,7 @@
 	/// <summary>
 	/// The texture quality
 	/// </summary>
-	public enum TextureQuality
+	internal enum TextureQuality
 	{
 		/// <summary>
 		/// Full resolution textures

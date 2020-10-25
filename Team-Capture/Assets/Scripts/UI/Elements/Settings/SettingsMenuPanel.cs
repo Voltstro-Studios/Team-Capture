@@ -5,7 +5,7 @@ namespace UI.Elements.Settings
 	/// <summary>
 	/// Panel for a menu that contains all the controls
 	/// </summary>
-	public class SettingsMenuPanel : MonoBehaviour
+	internal class SettingsMenuPanel : MonoBehaviour
 	{
 		/// <summary>
 		/// The scrolling area

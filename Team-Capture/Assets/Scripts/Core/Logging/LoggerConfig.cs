@@ -3,7 +3,7 @@
 	/// <summary>
 	/// The config for <see cref="Logger"/>
 	/// </summary>
-	public sealed class LoggerConfig
+	internal sealed class LoggerConfig
 	{
 		/// <summary>
 		/// The format the the files will use

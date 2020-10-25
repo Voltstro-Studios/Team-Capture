@@ -4,7 +4,7 @@ using UnityEngine.Rendering.Universal;
 
 namespace Settings.SettingClasses
 {
-	public sealed class AdvSettingsClass : Setting
+	internal sealed class AdvSettingsClass : Setting
 	{
 		[SettingsPropertyFormatName("MSAA")] public MSAAQuality MsaaQuality = MSAAQuality.X4;
 		

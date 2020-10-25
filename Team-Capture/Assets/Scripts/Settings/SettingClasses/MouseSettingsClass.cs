@@ -2,7 +2,7 @@
 
 namespace Settings.SettingClasses
 {
-	public class MouseSettingsClass : Setting
+	internal class MouseSettingsClass : Setting
 	{
 		[Range(50, 200)]
 		[SettingsPropertyFormatName("Mouse Sensitivity")]

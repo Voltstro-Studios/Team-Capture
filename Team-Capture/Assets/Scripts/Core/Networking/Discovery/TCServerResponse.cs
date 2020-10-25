@@ -3,7 +3,7 @@ using Mirror;
 
 namespace Core.Networking.Discovery
 {
-	public class TCServerResponse : NetworkMessage
+	internal class TCServerResponse : NetworkMessage
 	{
 		public IPEndPoint EndPoint { get; set; }
 

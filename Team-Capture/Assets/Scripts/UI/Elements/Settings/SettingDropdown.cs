@@ -6,7 +6,7 @@ namespace UI.Elements.Settings
 	/// <summary>
 	/// A dropdown for the settings menu
 	/// </summary>
-	public class SettingDropdown : MonoBehaviour
+	internal class SettingDropdown : MonoBehaviour
 	{
 		/// <summary>
 		/// The dropdown itself

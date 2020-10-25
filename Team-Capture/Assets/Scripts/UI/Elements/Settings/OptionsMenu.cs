@@ -3,7 +3,7 @@
 	/// <summary>
 	/// Represents a menu for the options
 	/// </summary>
-	public class OptionsMenu
+	internal class OptionsMenu
 	{
 		/// <summary>
 		/// The name of this option menu
