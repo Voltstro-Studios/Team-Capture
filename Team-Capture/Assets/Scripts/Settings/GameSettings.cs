@@ -59,7 +59,7 @@ namespace Settings
 			IEnumerable<Type> settingTypes = ReflectionHelper.GetInheritedTypes<Setting>();
 
 			//Get a list of all of the properties in our settings class
-			PropertyInfo[] settingProps = typeof(GameSettings).GetTypeInfo().GetProperties();
+			PropertyInfo[] settingProps = typeof(GameSettings).GetTypeInfo().GetProperties(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static);
 
 			//Only add properties that are one of our inherited setting types
 			IEnumerable<PropertyInfo> foundSettings = settingProps.Where(p => settingTypes.Contains(p.PropertyType));

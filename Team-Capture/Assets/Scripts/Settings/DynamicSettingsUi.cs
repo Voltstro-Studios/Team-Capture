@@ -85,7 +85,7 @@ namespace Settings
 
 				//Get each property in the settings
 				FieldInfo[] menuFields =
-					settingInfo.PropertyType.GetFields(BindingFlags.Instance | BindingFlags.Public);
+					settingInfo.PropertyType.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 				foreach (FieldInfo settingField in menuFields)
 				{
 					//If it has the don't show attribute, then, well... don't show it
