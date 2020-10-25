@@ -12,7 +12,7 @@ namespace Console
 	/// <summary>
 	/// The backend system for the console
 	/// </summary>
-	public static class ConsoleBackend
+	internal static class ConsoleBackend
 	{
 		public delegate void MethodDelegate(string[] args);
 

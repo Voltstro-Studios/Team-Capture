@@ -10,7 +10,7 @@ namespace Console
 	/// <summary>
 	/// An in-game console
 	/// </summary>
-	public class ConsoleGUI : MonoBehaviour, IConsoleUI
+	internal class ConsoleGUI : MonoBehaviour, IConsoleUI
 	{
 		[SerializeField] private TMP_InputField inputField;
 		[SerializeField] private TextMeshProUGUI consoleTextArea;

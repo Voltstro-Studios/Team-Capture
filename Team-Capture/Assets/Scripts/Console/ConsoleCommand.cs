@@ -28,6 +28,6 @@
 		/// <summary>
 		/// The method for the command
 		/// </summary>
-		public ConsoleBackend.MethodDelegate CommandMethod { get; set; }
+		internal ConsoleBackend.MethodDelegate CommandMethod { get; set; }
 	}
 }

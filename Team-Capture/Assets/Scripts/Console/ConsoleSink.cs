@@ -10,13 +10,13 @@ using UnityEngine;
 
 namespace Console
 {
-	public static class ConsoleSink
+	internal static class ConsoleSink
 	{
 		public static LoggerConfiguration Console(this LoggerSinkConfiguration loggerSinkConfiguration, string messageFormat) =>
 			loggerSinkConfiguration.Sink(new ConsoleSerilogSink(messageFormat));
 	}
 
-	public sealed class ConsoleSerilogSink : ILogEventSink
+	internal sealed class ConsoleSerilogSink : ILogEventSink
 	{
 		private readonly ITextFormatter formatter;
 

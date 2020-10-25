@@ -7,7 +7,7 @@ namespace Console
 	/// <summary>
 	/// A bunch of util commands
 	/// </summary>
-	public static class UtilCommands
+	internal static class UtilCommands
 	{
 		private const string SplashScreenResourceFile = "Resources/console-splashscreen.txt";
 
