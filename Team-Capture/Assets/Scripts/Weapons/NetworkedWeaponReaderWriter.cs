@@ -3,8 +3,16 @@ using Mirror;
 
 namespace Weapons
 {
-	public static class NetworkedWeaponReaderWriter
+	/// <summary>
+	/// A <see cref="NetworkWriter"/> and <see cref="NetworkReader"/> for <see cref="NetworkedWeapon"/>
+	/// </summary>
+	internal static class NetworkedWeaponReaderWriter
 	{
+		/// <summary>
+		/// Writes a <see cref="NetworkedWeapon"/>
+		/// </summary>
+		/// <param name="writer"></param>
+		/// <param name="weapon"></param>
 		public static void WriteNetworkedWeapon(this NetworkWriter writer, NetworkedWeapon weapon)
 		{
 			writer.WriteString(weapon.Weapon);
@@ -12,6 +20,11 @@ namespace Weapons
 			writer.WriteBoolean(weapon.IsReloading);
 		}
 
+		/// <summary>
+		/// Reads a <see cref="NetworkedWeapon"/>
+		/// </summary>
+		/// <param name="reader"></param>
+		/// <returns></returns>
 		public static NetworkedWeapon ReadNetworkedWeapon(this NetworkReader reader)
 		{
 			//First, read the weapon
