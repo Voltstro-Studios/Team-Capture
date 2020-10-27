@@ -49,7 +49,7 @@ namespace UI
 		/// </summary>
 		public void UpdateHealthUI()
 		{
-			healthText.text = clientUI.playerManager.Health.ToString();
+			healthText.text = clientUI.PlayerManager.Health.ToString();
 		}
 
 		/// <summary>
@@ -58,7 +58,7 @@ namespace UI
 		/// <param name="netWeapon"></param>
 		public void UpdateAmmoUI(NetworkedWeapon netWeapon)
 		{
-			if(clientUI == null || clientUI.weaponManager == null)
+			if(clientUI == null || clientUI.WeaponManager == null)
 				return;
 
 			TCWeapon weapon = netWeapon.GetTCWeapon();
