@@ -1,4 +1,5 @@
-﻿using Player;
+﻿using System;
+using Player;
 using UnityEngine;
 using Weapons;
 using Logger = Core.Logging.Logger;
@@ -10,16 +11,49 @@ namespace UI
 	/// </summary>
 	internal class ClientUI : MonoBehaviour
 	{
+		/// <summary>
+		/// Is the pause menu open
+		/// </summary>
 		public static bool IsPauseMenuOpen;
 
-		internal PlayerManager PlayerManager;
-		internal WeaponManager WeaponManager;
+		/// <summary>
+		/// The <see cref="Player.PlayerManager"/>
+		/// </summary>
+		[NonSerialized] public PlayerManager PlayerManager;
 
+		/// <summary>
+		/// The <see cref="Weapons.WeaponManager"/>
+		/// </summary>
+		[NonSerialized] public WeaponManager WeaponManager;
+
+		/// <summary>
+		/// The hud
+		/// </summary>
+		[Tooltip("The hud")]
 		public Hud hud;
+
+		/// <summary>
+		/// The killfeed
+		/// </summary>
+		[Tooltip("The killfeed")]
 		public KillFeed killFeed;
+
+		/// <summary>
+		/// The pause menu
+		/// </summary>
+		[Tooltip("The pause menu")]
 		public MainMenuController pauseMenu;
+
+		/// <summary>
+		/// The scoreboard gameobject
+		/// </summary>
+		[Tooltip("The scoreboard gameobject")]
 		public GameObject scoreBoardObject;
 
+		/// <summary>
+		/// Sets up the UI
+		/// </summary>
+		/// <param name="playerManager"></param>
 		public void SetupUI(PlayerManager playerManager)
 		{
 			//Reset this
@@ -38,11 +72,18 @@ namespace UI
 			Logger.Debug("The ClientUI is now ready.");
 		}
 
+		/// <summary>
+		/// Toggles the pause menu
+		/// </summary>
 		public void TogglePauseMenu()
 		{
 			ActivatePauseMenu(!IsPauseMenuOpen);
 		}
 
+		/// <summary>
+		/// Activate a pause menu
+		/// </summary>
+		/// <param name="state"></param>
 		public void ActivatePauseMenu(bool state)
 		{
 			IsPauseMenuOpen = state;
@@ -57,6 +98,9 @@ namespace UI
 			hud.gameObject.SetActive(!state);
 		}
 
+		/// <summary>
+		/// Toggles the score board
+		/// </summary>
 		public void ToggleScoreBoard()
 		{
 			scoreBoardObject.SetActive(!scoreBoardObject.activeSelf);

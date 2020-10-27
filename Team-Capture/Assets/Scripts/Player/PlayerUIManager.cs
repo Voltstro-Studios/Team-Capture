@@ -65,7 +65,7 @@ namespace Player
 		/// <param name="message"></param>
 		internal void AddKillfeedItem(PlayerDiedMessage message)
 		{
-			ui.killFeed.AddFeedBackItem(message);
+			ui.killFeed.AddKillfeedItem(message);
 		}
 
 		private void OnPlayerDamaged()

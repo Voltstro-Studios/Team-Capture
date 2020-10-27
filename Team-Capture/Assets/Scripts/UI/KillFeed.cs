@@ -8,15 +8,42 @@ using Logger = Core.Logging.Logger;
 
 namespace UI
 {
+	/// <summary>
+	/// Displays a list of kills
+	/// </summary>
 	internal class KillFeed : MonoBehaviour
 	{
+		/// <summary>
+		/// Where the kill feed items go
+		/// </summary>
+		[Tooltip("Where the kill feed items go")]
 		public Transform killFeedItemsHolder;
+
+		/// <summary>
+		/// A kill feed item
+		/// </summary>
+		[Tooltip("A kill feed item")]
 		[SerializeField] private GameObject killFeedItem;
+
+		/// <summary>
+		/// How long a kill feed item should last for
+		/// </summary>
+		[Tooltip("How long a kill feed item should last for")]
 		[SerializeField] private float killFeedItemLastTime = 5.0f;
+
+		/// <summary>
+		/// The max amount of kill feed items that can be displayed
+		/// </summary>
+		[Tooltip("The max amount of kill feed items that can be displayed")]
 		[SerializeField] private int maxAmountOfKillFeedItems = 5;
 
-		public void AddFeedBackItem(PlayerDiedMessage message)
+		/// <summary>
+		/// Adds a kill feed item
+		/// </summary>
+		/// <param name="message"></param>
+		public void AddKillfeedItem(PlayerDiedMessage message)
 		{
+			//Removes the last kill feed item
 			if(killFeedItemsHolder.childCount >= maxAmountOfKillFeedItems)
 				Destroy(killFeedItemsHolder.GetChild(killFeedItemsHolder.childCount - 1));
 
