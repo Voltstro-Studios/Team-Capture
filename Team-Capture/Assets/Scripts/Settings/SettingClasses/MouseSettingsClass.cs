@@ -12,6 +12,6 @@ namespace Settings.SettingClasses
 		public bool RawAxis = true;
 
 		[SettingsPropertyFormatName("Reverse Mouse")]
-		public bool ReverseMouse = false;
+		public bool ReverseMouse;
 	}
 }

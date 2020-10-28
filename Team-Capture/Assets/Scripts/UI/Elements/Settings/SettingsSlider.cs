@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -32,12 +33,12 @@ namespace UI.Elements.Settings
 		public void Setup(float initialValue)
 		{
 			slider.onValueChanged.AddListener(SetSliderValueText);
-			valueText.text = initialValue.ToString();
+			valueText.text = initialValue.ToString(CultureInfo.InvariantCulture);
 		}
 
 		private void SetSliderValueText(float value)
 		{
-			valueText.text = Convert.ToDecimal($"{value:F2}").ToString();
+			valueText.text = Convert.ToDecimal($"{value:F2}").ToString(CultureInfo.InvariantCulture);
 		}
 	}
 }
