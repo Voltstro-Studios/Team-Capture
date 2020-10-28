@@ -15,7 +15,7 @@ namespace Core.Networking.Discovery
 		/// <summary>
 		/// Invoked when a new server was found, if discovering is happening
 		/// </summary>
-		public ServerFoundUnityEvent onServerFound = new ServerFoundUnityEvent();
+		public readonly ServerFoundUnityEvent OnServerFound = new ServerFoundUnityEvent();
 
 		/// <summary>
 		/// The active network manager
@@ -71,7 +71,7 @@ namespace Core.Networking.Discovery
 
 			//So we found a server, invoke the onServerFound event
 			response.EndPoint = endpoint;
-			onServerFound.Invoke(response);
+			OnServerFound.Invoke(response);
 		}
 
 		protected override TCServerRequest GetRequest() => new TCServerRequest

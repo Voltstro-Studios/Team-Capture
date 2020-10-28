@@ -48,7 +48,7 @@ namespace UI.Panels
 			if (gameDiscovery == null) return;
 
 			//Add a listener to the game discovery for when a server is found
-			gameDiscovery.onServerFound.AddListener(AddServer);
+			gameDiscovery.OnServerFound.AddListener(AddServer);
 			gameDiscovery.StartDiscovery();
 		}
 
@@ -57,7 +57,7 @@ namespace UI.Panels
 			if(gameDiscovery == null) return;
 
 			//Remove the game discovery for when a server is found
-			gameDiscovery.onServerFound.RemoveListener(AddServer);
+			gameDiscovery.OnServerFound.RemoveListener(AddServer);
 			gameDiscovery.StopDiscovery();
 			RefreshServerList();
 		}
