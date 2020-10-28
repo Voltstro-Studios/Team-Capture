@@ -55,7 +55,7 @@ namespace Integrations
 
 		protected override void SingletonDestroyed()
 		{
-			Logger.Info("Destroying discord integration...");
+			Logger.Debug("Destroying discord integration...");
 			client?.Dispose();
 		}
 
