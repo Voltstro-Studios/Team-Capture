@@ -5,7 +5,7 @@ namespace Console.TypeReader
 	/// <summary>
 	/// A default reader for <see cref="int"/>
 	/// </summary>
-	internal sealed class IntReader : Console.TypeReader.ITypeReader
+	internal sealed class IntReader : ITypeReader
 	{
 		public object ReadType(string input)
 		{
