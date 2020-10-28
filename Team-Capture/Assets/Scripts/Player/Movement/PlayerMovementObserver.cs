@@ -22,8 +22,8 @@ namespace Player.Movement
 		{
 			character = GetComponent<PlayerMovementManager>();
 			stateBuffer = new LinkedList<PlayerState>();
-			SetObservedState(character.state);
-			AddState(character.state);
+			SetObservedState(character.State);
+			AddState(character.State);
 		}
 
 		private void Update()

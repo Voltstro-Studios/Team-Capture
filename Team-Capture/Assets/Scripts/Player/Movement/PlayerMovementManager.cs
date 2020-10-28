@@ -35,13 +35,17 @@ namespace Player.Movement
 		/// <summary>
 		/// Delay for interpolation
 		/// </summary>
-		[Header("Network"), SerializeField, Range(1, 60), Tooltip("Delay for interpolation")]
+		[Header("Network")]
+		[Range(1, 60)]
+		[Tooltip("Delay for interpolation")]
 		public int interpolationDelay = 12;
 
 		/// <summary>
 		/// The rate for updating inputs
 		/// </summary>
-		[SerializeField, Range(10, 50), Tooltip("The rate for updating inputs")]
+		[SerializeField]
+		[Range(10, 50)]
+		[Tooltip("The rate for updating inputs")]
 		private int inputUpdateRate = 10;
 
 		/// <summary>
@@ -53,7 +57,7 @@ namespace Player.Movement
 		/// The current state of the player
 		/// </summary>
 		[SyncVar(hook = nameof(OnServerStateChange))]
-		public PlayerState state = PlayerState.Zero;
+		public PlayerState State = PlayerState.Zero;
 
 		/// <summary>
 		/// The state handler (Observer or predictor)
@@ -124,8 +128,8 @@ namespace Player.Movement
 
 		public void OnServerStateChange(PlayerState oldState, PlayerState newState)
 		{
-			state = newState;
-			stateHandler?.OnStateChange(state);
+			State = newState;
+			stateHandler?.OnStateChange(State);
 		}
 
 		[Command(channel = 0)]
@@ -149,19 +153,20 @@ namespace Player.Movement
 				Position = pos,
 				RotationX = rotationX,
 				RotationY = rotationY,
-				Velocity = state.Velocity
+				Velocity = State.Velocity
 			};
 
 			if (resetVelocity)
 				newState.Velocity = Vector3.zero;
 
-			state = newState;
-			OnServerStateChange(state, newState);
+			State = newState;
+			OnServerStateChange(State, newState);
 
-			TargetSetPosition(connectionToClient, state);
+			TargetSetPosition(connectionToClient, State);
 		}
 
 		[TargetRpc]
+		// ReSharper disable once UnusedParameter.Local
 		private void TargetSetPosition(NetworkConnection conn, PlayerState newState)
 		{
 			transform.position = newState.Position;

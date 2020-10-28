@@ -24,14 +24,14 @@ namespace Player.Movement
 		{
 			inputBuffer = new Queue<PlayerInputs>();
 			character = GetComponent<PlayerMovementManager>();
-			character.state = PlayerState.Zero;
+			character.State = PlayerState.Zero;
 		}
 
 		private void Update()
 		{
 			serverTick++;
 
-			PlayerState state = character.state;
+			PlayerState state = character.State;
 
 			if (inputBuffer.Count != 0)
 				lastInputs = inputBuffer.Dequeue();
@@ -40,7 +40,7 @@ namespace Player.Movement
 			character.SyncState(state);
 
 			state.Position = transform.position;
-			character.state = state;
+			character.State = state;
 			character.OnServerStateChange(state, state);
 		}
 
