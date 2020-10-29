@@ -37,11 +37,6 @@ namespace Settings
 		#endregion
 
 		/// <summary>
-		/// True when the settings have been loaded
-		/// </summary>
-		public static bool HasBeenLoaded { get; private set; }
-
-		/// <summary>
 		/// Invoked when the settings are altered in some way
 		/// </summary>
 		public static event Action SettingsUpdated;
@@ -115,7 +110,6 @@ namespace Settings
 				}
 			}
 
-			HasBeenLoaded = true;
 			Logger.Debug("Loaded settings");
 
 			//Notify other classes that settings have updated

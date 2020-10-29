@@ -1,3 +1,4 @@
+using System;
 using Console;
 using Mirror;
 using UnityEngine;
@@ -56,6 +57,7 @@ namespace Player.Movement
 		/// <summary>
 		/// The current state of the player
 		/// </summary>
+		[NonSerialized]
 		[SyncVar(hook = nameof(OnServerStateChange))]
 		public PlayerState State = PlayerState.Zero;
 
