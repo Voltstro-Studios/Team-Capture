@@ -170,7 +170,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "db7133a927a6d509125149813c57f8a58d008d5b"
+      "hash": "a5bb0854a1ffa1cbe161ad2a475aa249b498799c"
     },
     "nl.elraccoone.tweens": {
       "version": "git+https://github.com/elraccoone/unity-tweens",
