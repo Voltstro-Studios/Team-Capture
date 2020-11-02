@@ -2,21 +2,21 @@
 using Editor.Scripts;
 using NUnit.Framework;
 
-namespace Tests
+namespace Editor.Tests
 {
-    public class EditorUtilsTest
+    public class MarkdownTableGeneratorTests
     {
 	    #region Header Tests
 
 	    [Test]
-	    public void MarkdownTableGenerator2HeadersTest()
+	    public void MarkdownTableGenerator2Headers()
 	    {
 		    MarkdownTableGenerator generator = new MarkdownTableGenerator("Test", "Header1", "Header2");
 		    StringAssert.AreEqualIgnoringCase("## Test\n\n|Header1|Header2|\n|-------|-------|\n", generator.ToString());
 	    }
 
 	    [Test]
-	    public void MarkdownTableGenerator3HeadersTest()
+	    public void MarkdownTableGenerator3Headers()
 	    {
 		    MarkdownTableGenerator generator = new MarkdownTableGenerator("Test", "Header1", "Header2", "Header3");
 		    StringAssert.AreEqualIgnoringCase("## Test\n\n|Header1|Header2|Header3|\n|-------|-------|-------|\n", generator.ToString());
