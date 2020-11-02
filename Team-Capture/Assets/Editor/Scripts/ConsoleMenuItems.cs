@@ -21,22 +21,11 @@ namespace Editor.Scripts
 				return;
 			}
 
-			string path = EditorUtility.SaveFilePanel("Save markdown file", "", "command-list", "md");
-			if(path.Length == 0)
-				return;
-
-			StringBuilder sb = new StringBuilder();
-			sb.Append("## Command List\n\n");
-			sb.Append("|Command|Summary|Run Permission|Graphics Only|\n");
-			sb.Append("|-------|-------|--------------|-------------|\n");
+			MarkdownTableGenerator generator = new MarkdownTableGenerator("Command List", "Command", "Summary", "Run Permission	", "Graphics Only");
 			foreach (ConCommand command in commands.Keys)
-			{
-				sb.Append($"|`{command.Name}`|{command.Summary}|{command.RunPermission}|");
-				sb.Append(command.GraphicsModeOnly ? "✔|\n" : "❌|\n");
-			}
+				generator.AddOption($"`{command.Name}`", command.Summary, command.RunPermission.ToString(), command.GraphicsModeOnly ? "✔" : "❌");
 
-			File.WriteAllText(path, sb.ToString());
-			Debug.Log($"Saved list to `{path}`.");
+			generator.SaveMarkdown("command-list");
 		}
 
 		[MenuItem("Team Capture/Console/ConVars list to markdown")]
@@ -49,22 +38,11 @@ namespace Editor.Scripts
 				return;
 			}
 
-			string path = EditorUtility.SaveFilePanel("Save markdown file", "", "convar-list", "md");
-			if(path.Length == 0)
-				return;
-
-			StringBuilder sb = new StringBuilder();
-			sb.Append("## ConVar List\n\n");
-			sb.Append("|Command|Summary|Graphics Only|\n");
-			sb.Append("|-------|-------|--------------|\n");
+			MarkdownTableGenerator generator = new MarkdownTableGenerator("ConVar List", "Command", "Summary", "Graphics Only");
 			foreach (ConVar command in conVars.Keys)
-			{
-				sb.Append($"|`{command.Name}`|{command.Summary}|");
-				sb.Append(command.GraphicsOnly ? "✔|\n" : "❌|\n");
-			}
+				generator.AddOption($"`{command.Name}`", command.Summary, command.GraphicsOnly ? "✔" : "❌");
 
-			File.WriteAllText(path, sb.ToString());
-			Debug.Log($"Saved list to `{path}`.");
+			generator.SaveMarkdown("convar-list");
 		}
 
 		[MenuItem("Team Capture/Arguments/Launch Arguments to Markdown")]

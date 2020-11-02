@@ -1,5 +1,8 @@
 ﻿using System;
+using System.IO;
 using System.Text;
+using UnityEditor;
+using UnityEngine;
 
 namespace Editor.Scripts
 {
@@ -14,10 +17,10 @@ namespace Editor.Scripts
 		/// <summary>
 		/// Creates a new markdown table generator instance
 		/// </summary>
-		/// <param name="tile">Whats the title you want added on top</param>
+		/// <param name="title">Whats the title you want added on top</param>
 		/// <param name="headers">What headers are there</param>
 		/// <exception cref="ArgumentOutOfRangeException"></exception>
-		public MarkdownTableGenerator(string tile, params string[] headers)
+		public MarkdownTableGenerator(string title, params string[] headers)
 		{
 			if(headers.Length == 0)
 				throw new ArgumentOutOfRangeException(nameof(headers));
@@ -25,7 +28,7 @@ namespace Editor.Scripts
 			headersCount = headers.Length;
 
 			stringBuilder = new StringBuilder();
-			stringBuilder.Append($"## {tile}\n\n|");
+			stringBuilder.Append($"## {title}\n\n|");
 
 			string headerUnderline = "\n|";
 
@@ -56,6 +59,20 @@ namespace Editor.Scripts
 			}
 
 			stringBuilder.Append("\n");
+		}
+
+		/// <summary>
+		/// Saves the markdown table as a markdown file
+		/// </summary>
+		/// <param name="defaultName"></param>
+		public void SaveMarkdown(string defaultName)
+		{
+			string path = EditorUtility.SaveFilePanel("Save markdown file", "", defaultName, "md");
+			if(path.Length == 0)
+				return;
+
+			File.WriteAllText(path, ToString());
+			Debug.Log($"Saved markdown file to `{path}`.");
 		}
 
 		/// <summary>
