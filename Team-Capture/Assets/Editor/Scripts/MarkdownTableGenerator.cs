@@ -3,11 +3,20 @@ using System.Text;
 
 namespace Editor.Scripts
 {
+	/// <summary>
+	/// Generates a markdown table depending on your options
+	/// </summary>
 	public class MarkdownTableGenerator
 	{
 		private readonly StringBuilder stringBuilder;
 		private readonly int headersCount;
 
+		/// <summary>
+		/// Creates a new markdown table generator instance
+		/// </summary>
+		/// <param name="tile">Whats the title you want added on top</param>
+		/// <param name="headers">What headers are there</param>
+		/// <exception cref="ArgumentOutOfRangeException"></exception>
 		public MarkdownTableGenerator(string tile, params string[] headers)
 		{
 			if(headers.Length == 0)
@@ -29,6 +38,11 @@ namespace Editor.Scripts
 			stringBuilder.Append($"{headerUnderline}\n");
 		}
 
+		/// <summary>
+		/// Adds a new option to the table
+		/// </summary>
+		/// <param name="content"></param>
+		/// <exception cref="ArgumentOutOfRangeException"></exception>
 		public void AddOption(params string[] content)
 		{
 			if(content.Length != headersCount)
@@ -44,6 +58,10 @@ namespace Editor.Scripts
 			stringBuilder.Append("\n");
 		}
 
+		/// <summary>
+		/// Returns a string with the work-in-progress markdown table
+		/// </summary>
+		/// <returns></returns>
 		public override string ToString()
 		{
 			return stringBuilder.ToString();
