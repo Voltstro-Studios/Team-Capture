@@ -5,6 +5,7 @@ using System.Text;
 using Console;
 using UnityEditor;
 using UnityEngine;
+using Voltstro.CommandLineParser;
 
 namespace Editor.Scripts
 {
@@ -60,6 +61,34 @@ namespace Editor.Scripts
 			{
 				sb.Append($"|`{command.Name}`|{command.Summary}|");
 				sb.Append(command.GraphicsOnly ? "✔|\n" : "❌|\n");
+			}
+
+			File.WriteAllText(path, sb.ToString());
+			Debug.Log($"Saved list to `{path}`.");
+		}
+
+		[MenuItem("Team Capture/Arguments/Launch Arguments to Markdown")]
+		public static void LaunchArgumentsToMarkdown()
+		{
+			string path = EditorUtility.SaveFilePanel("Save markdown file", "", "launch-arguments-list", "md");
+			if(path.Length == 0)
+				return;
+
+			Dictionary<FieldInfo, CommandLineArgumentAttribute> launchArguments = CommandLineParser.GetCommandFields();
+
+			if (launchArguments.Count == 0)
+			{
+				Debug.LogError("There are no launch arguments!");
+				return;
+			}
+
+			StringBuilder sb = new StringBuilder();
+			sb.Append("## Launch Arguments List\n\n");
+			sb.Append("|Argument|\n");
+			sb.Append("|--------|\n");
+			foreach (KeyValuePair<FieldInfo, CommandLineArgumentAttribute> argument in launchArguments)
+			{
+				sb.Append($"|`{argument.Value.Name}`|\n");
 			}
 
 			File.WriteAllText(path, sb.ToString());
