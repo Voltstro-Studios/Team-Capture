@@ -1,7 +1,7 @@
 ﻿using Tweens;
 using UnityEditor;
 
-namespace Editor.Scripts
+namespace Editor.Scripts.CustomEditors
 {
 	[CustomEditor(typeof(UITweenEvent))]
 	public class UITweensEditor : UnityEditor.Editor

@@ -3,7 +3,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Editor.Scripts
+namespace Editor.Scripts.CustomEditors
 {
 	[CustomEditor(typeof(StartUpVideo.StartUpVideo))]
 	public class StartUpVideoEditor : UnityEditor.Editor {

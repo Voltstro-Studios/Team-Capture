@@ -1,27 +1,29 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
-using Editor.Scripts;
 using UnityEditor;
 using UnityEngine;
 using Voltstro.CommandLineParser;
 
-public class ArgumentsMenuItems
+namespace Editor.Scripts
 {
-	[MenuItem("Team Capture/Arguments/Launch Arguments to Markdown")]
-	public static void LaunchArgumentsToMarkdown()
+	public static class ArgumentsMenuItems
 	{
-		Dictionary<FieldInfo, CommandLineArgumentAttribute> launchArguments = CommandLineParser.GetCommandFields();
-
-		if (launchArguments.Count == 0)
+		[MenuItem("Team Capture/Arguments/Launch Arguments to Markdown")]
+		public static void LaunchArgumentsToMarkdown()
 		{
-			Debug.LogError("There are no launch arguments!");
-			return;
+			Dictionary<FieldInfo, CommandLineArgumentAttribute> launchArguments = CommandLineParser.GetCommandFields();
+
+			if (launchArguments.Count == 0)
+			{
+				Debug.LogError("There are no launch arguments!");
+				return;
+			}
+
+			MarkdownTableGenerator generator = new MarkdownTableGenerator("Launch Arguments List", "Argument");
+			foreach (KeyValuePair<FieldInfo, CommandLineArgumentAttribute> argument in launchArguments)
+				generator.AddOption($"`{argument.Value.Name}`");
+
+			generator.SaveMarkdown("launch-arguments");
 		}
-
-		MarkdownTableGenerator generator = new MarkdownTableGenerator("Launch Arguments List", "Argument");
-		foreach (KeyValuePair<FieldInfo, CommandLineArgumentAttribute> argument in launchArguments)
-			generator.AddOption($"`{argument.Value.Name}`");
-
-		generator.SaveMarkdown("launch-arguments");
 	}
 }
