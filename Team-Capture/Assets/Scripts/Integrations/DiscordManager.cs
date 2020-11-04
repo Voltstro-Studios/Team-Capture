@@ -83,6 +83,7 @@ namespace Integrations
 			catch (ResultException ex)
 			{
 				Logger.Error("Failed to connect with Discord! Result: {@Exception}", ex.Result);
+				client = null;
 				Destroy(gameObject);
 				return;
 			}
