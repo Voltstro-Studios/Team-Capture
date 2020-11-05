@@ -10,23 +10,54 @@ using Logger = Core.Logging.Logger;
 namespace UI.ScoreBoard
 {
 	/// <summary>
-	/// The score board
+	/// The scoreboard controller
 	/// </summary>
 	internal class ScoreBoard : MonoBehaviour
 	{
 		[HideInInspector] public PlayerManager clientPlayer;
 
-		[Header("Scoreboard Settings")] 
+		/// <summary>
+		/// The map text element
+		/// </summary>
+		[Header("Scoreboard Settings")]
+		[Tooltip("The map text element")]
 		[SerializeField] private TextMeshProUGUI mapNameText;
+
+		/// <summary>
+		/// The game name text element
+		/// </summary>
+		[Tooltip("The game name text element")]
 		[SerializeField] private TextMeshProUGUI gameNameText;
+
+		/// <summary>
+		/// The kill death ratio text element
+		/// </summary>
+		[Tooltip("The kill death ratio text element")]
 		[SerializeField] private TextMeshProUGUI killDeathRatioText;
 
+		/// <summary>
+		/// The prefab used for players on the scoreboard
+		/// </summary>
+		[Tooltip("The prefab used for players on the scoreboard")]
 		[SerializeField] private GameObject playerItemPrefab;
 
+		/// <summary>
+		/// The player name text element
+		/// </summary>
 		[Header("Player List Settings")]
+		[Tooltip("The player name text element")]
 		[SerializeField] private TextMeshProUGUI playerNameText;
+
+		/// <summary>
+		/// The player stats text element
+		/// </summary>
+		[Tooltip("The player stats text element")]
 		[SerializeField] private TextMeshProUGUI playerStatsText;
 
+		/// <summary>
+		/// The player list <see cref="Transform"/>
+		/// </summary>
+		[Tooltip("The player list transform")]
 		[SerializeField] private Transform playerListTransform;
 
 		private readonly Dictionary<PlayerManager, GameObject> playerList = new Dictionary<PlayerManager, GameObject>();
