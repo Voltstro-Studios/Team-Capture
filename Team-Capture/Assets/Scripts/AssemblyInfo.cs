@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Team-Capture")]
 [assembly: AssemblyDescription("The main game code")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Voltstro Studios")]
+[assembly: AssemblyCompany("Voltstro-Studios")]
 [assembly: AssemblyProduct("Team-Capture")]
-[assembly: AssemblyCopyright("Copyright © 2020 Voltstro Studios")]
+[assembly: AssemblyCopyright("Copyright © 2020 Voltstro-Studios")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
