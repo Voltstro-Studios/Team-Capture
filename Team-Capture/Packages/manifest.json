@@ -4,7 +4,7 @@
     "com.mirror-networking.mirror.transport.ignorance": "https://github.com/VoltUnityPackages/Ignorance.git?path=/Assets/Mirror",
     "com.unity.ext.nunit": "1.0.0",
     "com.unity.ide.rider": "1.1.4",
-    "com.unity.ide.vscode": "1.2.2",
+    "com.unity.ide.vscode": "1.2.3",
     "com.unity.memoryprofiler": "0.2.6-preview.1",
     "com.unity.nuget.newtonsoft-json": "2.0.0",
     "com.unity.postprocessing": "2.3.0",
