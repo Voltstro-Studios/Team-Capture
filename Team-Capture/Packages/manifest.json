@@ -2,6 +2,7 @@
   "dependencies": {
     "com.mirror-networking.mirror": "https://github.com/VoltUnityPackages/Mirror.git?path=/Assets/Mirror",
     "com.mirror-networking.mirror.transport.ignorance": "https://github.com/VoltUnityPackages/Ignorance.git?path=/Assets/Mirror",
+    "com.unity.build-report-inspector": "0.2.2-preview",
     "com.unity.ext.nunit": "1.0.5",
     "com.unity.ide.rider": "1.1.4",
     "com.unity.ide.vscode": "1.2.3",

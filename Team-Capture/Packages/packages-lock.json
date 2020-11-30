@@ -14,6 +14,13 @@
       "dependencies": {},
       "hash": "ee18eac621285cb9913ef63eff3ffc9679609a99"
     },
+    "com.unity.build-report-inspector": {
+      "version": "0.2.2-preview",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
     "com.unity.editorcoroutines": {
       "version": "1.0.0",
       "depth": 1,

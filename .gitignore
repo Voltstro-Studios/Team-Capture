@@ -6,8 +6,12 @@
 [Bb]uilds/
 Assets/AssetStoreTools*
 
+# Unity Memory Profiler
 Team-Capture/MemoryCaptures/*
-debug.log
+
+#Unity Build Report Inspector
+Team-Capture/Assets/BuildReports/*
+Team-Capture/Assets/BuildReports.meta
 
 # Visual Studio cache directory
 .vs/
@@ -46,6 +50,7 @@ sysinfo.txt
 #Logs related
 [Ll]ogs/
 enet_log.txt
+debug.log
 
 #Blender backup files
 *.blend1
