@@ -56,12 +56,12 @@
             {
                 "type": "System.Collections.Generic.List`1[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
                 "key": "FilesToCopy",
-                "value": "{\"m_Value\":[\"Game/Cfg/autoexec.cfg\",\"Game/Cfg/example.cfg\",\"Game/Cfg/server-autoexec.cfg\",\"Game/Resources/console-splashscreen.txt\",\"Game/Resources/quit-messages.txt\",\"Game/Resources/Integrations/DiscordRPC.json\",\"../thirdpartylegalassets.txt\",\"../thirdpartylegalcode.txt\",\"Assets/License.txt\"]}"
+                "value": "{\"m_Value\":[\"Game/Cfg/autoexec.cfg\",\"Game/Cfg/example.cfg\",\"Game/Cfg/server-autoexec.cfg\",\"Game/Resources/console-splashscreen.txt\",\"Game/Resources/quit-messages.txt\",\"Game/Resources/Integrations/DiscordRPC.json\",\"../thirdpartylegalassets.txt\",\"../thirdpartylegalcode.txt\",\"Assets/License.txt\",\"Assets/Editor/Scripts/RunServer.ps1\"]}"
             },
             {
                 "type": "System.Collections.Generic.List`1[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
                 "key": "CopyToWhere",
-                "value": "{\"m_Value\":[\"Cfg/autoexec.cfg\",\"Cfg/example.cfg\",\"Cfg/server-autoexec.cfg\",\"Resources/console-splashscreen.txt\",\"Resources/quit-messages.txt\",\"Resources/Integrations/DiscordRPC.json\",\"thirdpartylegalassets.txt\",\"thirdpartylegalcode.txt\",\"License.txt\"]}"
+                "value": "{\"m_Value\":[\"Cfg/autoexec.cfg\",\"Cfg/example.cfg\",\"Cfg/server-autoexec.cfg\",\"Resources/console-splashscreen.txt\",\"Resources/quit-messages.txt\",\"Resources/Integrations/DiscordRPC.json\",\"thirdpartylegalassets.txt\",\"thirdpartylegalcode.txt\",\"License.txt\",\"RunServer.ps1\"]}"
             }
         ]
     }
