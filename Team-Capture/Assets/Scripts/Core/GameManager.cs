@@ -93,6 +93,12 @@ namespace Core
 
 		private static readonly Dictionary<string, PlayerManager> Players = new Dictionary<string, PlayerManager>();
 
+		public delegate void PlayerEvent(string playerId);
+
+		public static event PlayerEvent PlayerAdded;
+		public static event PlayerEvent PlayerRemoved;
+
+
 		/// <summary>
 		///     Adds a <see cref="PlayerManager" />
 		/// </summary>
@@ -104,6 +110,7 @@ namespace Core
 			playerManager.gameObject.name = playerId;
 			Players.Add(playerId, playerManager);
 
+			PlayerAdded?.Invoke(playerId);
 			Logger.Debug("Added player {@PlayerId}.", playerId);
 		}
 
@@ -114,6 +121,8 @@ namespace Core
 		public static void RemovePlayer(string playerId)
 		{
 			Players.Remove(playerId);
+
+			PlayerRemoved?.Invoke(playerId);
 			Logger.Debug("Removed player {@PlayerId}", playerId);
 		}
 
