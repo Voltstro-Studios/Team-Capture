@@ -1,23 +1,23 @@
 ﻿namespace Core.Logging
 {
 	/// <summary>
-	/// The config for <see cref="Logger"/>
+	///     The config for <see cref="Logger" />
 	/// </summary>
 	internal sealed class LoggerConfig
 	{
 		/// <summary>
-		/// The format the the files will use
+		///     The underlying stream will be permit to do buffered writes
 		/// </summary>
-		public string LogFileDateTimeFormat = "yyyy-MM-dd-HH-mm-ss";
+		public bool BufferedFileWrite = true;
 
 		/// <summary>
-		/// The directory to log files to
+		///     The directory to log files to
 		/// </summary>
 		public string LogDirectory = Game.GetGameExecutePath() + "/Logs/";
 
 		/// <summary>
-		/// The underlying stream will be permit to do buffered writes
+		///     The format the the files will use
 		/// </summary>
-		public bool BufferedFileWrite = true;
+		public string LogFileDateTimeFormat = "yyyy-MM-dd-HH-mm-ss";
 	}
 }

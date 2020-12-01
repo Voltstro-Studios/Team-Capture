@@ -4,12 +4,12 @@ using Mirror;
 namespace Weapons
 {
 	/// <summary>
-	/// A <see cref="NetworkWriter"/> and <see cref="NetworkReader"/> for <see cref="NetworkedWeapon"/>
+	///     A <see cref="NetworkWriter" /> and <see cref="NetworkReader" /> for <see cref="NetworkedWeapon" />
 	/// </summary>
 	internal static class NetworkedWeaponReaderWriter
 	{
 		/// <summary>
-		/// Writes a <see cref="NetworkedWeapon"/>
+		///     Writes a <see cref="NetworkedWeapon" />
 		/// </summary>
 		/// <param name="writer"></param>
 		/// <param name="weapon"></param>
@@ -21,7 +21,7 @@ namespace Weapons
 		}
 
 		/// <summary>
-		/// Reads a <see cref="NetworkedWeapon"/>
+		///     Reads a <see cref="NetworkedWeapon" />
 		/// </summary>
 		/// <param name="reader"></param>
 		/// <returns></returns>

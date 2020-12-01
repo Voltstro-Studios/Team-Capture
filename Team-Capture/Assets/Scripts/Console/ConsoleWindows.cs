@@ -11,7 +11,7 @@ using Logger = Core.Logging.Logger;
 namespace Console
 {
 	/// <summary>
-	/// Console system for Windows
+	///     Console system for Windows
 	/// </summary>
 	internal class ConsoleWindows : IConsoleUI
 	{
@@ -83,7 +83,7 @@ namespace Console
 				DrawHeader();
 
 			//Return if there is no key available
-			if(!System.Console.KeyAvailable)
+			if (!System.Console.KeyAvailable)
 				return;
 
 			//Read the key
@@ -168,7 +168,7 @@ namespace Console
 
 			//Get if our server is offline or online
 			string serverOnline = "Offline";
-			if(NetworkManager.singleton != null)
+			if (NetworkManager.singleton != null)
 				if (NetworkManager.singleton.mode == NetworkManagerMode.ServerOnly)
 					serverOnline = "Online";
 

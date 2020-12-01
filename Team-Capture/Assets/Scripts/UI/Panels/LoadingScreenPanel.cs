@@ -4,14 +4,14 @@ using UnityEngine.UI;
 namespace UI.Panels
 {
 	/// <summary>
-	/// A panel for a loading screen
+	///     A panel for a loading screen
 	/// </summary>
 	internal class LoadingScreenPanel : MonoBehaviour
 	{
 		[SerializeField] private Slider slider;
 
 		/// <summary>
-		/// Sets the loading bar amount
+		///     Sets the loading bar amount
 		/// </summary>
 		/// <param name="amount"></param>
 		public void SetLoadingBarAmount(float amount)

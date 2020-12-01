@@ -8,20 +8,21 @@ using Logger = Core.Logging.Logger;
 namespace Pickups
 {
 	/// <summary>
-	/// A static class for the server to manage pickups
+	///     A static class for the server to manage pickups
 	/// </summary>
 	internal static class ServerPickupManager
 	{
 		/// <summary>
-		/// The tag for pickups
+		///     The tag for pickups
 		/// </summary>
 		private const string PickupTagName = "Pickup";
 
-		private static List<string> unActivePickups = new List<string>();
 		private const int ChannelToSendOnId = 1;
 
+		private static List<string> unActivePickups = new List<string>();
+
 		/// <summary>
-		/// Sets up the <see cref="ServerPickupManager"/>
+		///     Sets up the <see cref="ServerPickupManager" />
 		/// </summary>
 		public static void Setup()
 		{
@@ -32,7 +33,7 @@ namespace Pickups
 		}
 
 		/// <summary>
-		/// Shutdown the <see cref="ServerPickupManager"/>
+		///     Shutdown the <see cref="ServerPickupManager" />
 		/// </summary>
 		public static void Shutdown()
 		{
@@ -48,7 +49,7 @@ namespace Pickups
 		private static void OnSceneLoaded(TCScene scene)
 		{
 			//If the scene isn't an online scene then there will be no pickups
-			if(!scene.isOnlineScene) return;
+			if (!scene.isOnlineScene) return;
 
 			//Setup pickups
 			//TODO: We should save all references to pickups to the associated scene file
@@ -57,9 +58,11 @@ namespace Pickups
 			{
 				//Make sure it has the Pickup script on it
 				Pickup pickupLogic = pickup.GetComponent<Pickup>();
-				if(pickupLogic == null)
+				if (pickupLogic == null)
 				{
-					Logger.Error("The pickup with the name of `{@PickupName}` @ {@PickupTransform} doesn't have the {@Pickup} behaviour on it!", pickup.name, pickup.transform, typeof(Pickup));
+					Logger.Error(
+						"The pickup with the name of `{@PickupName}` @ {@PickupTransform} doesn't have the {@Pickup} behaviour on it!",
+						pickup.name, pickup.transform, typeof(Pickup));
 					continue;
 				}
 
@@ -69,7 +72,7 @@ namespace Pickups
 		}
 
 		/// <summary>
-		/// Call this when a client joins the game
+		///     Call this when a client joins the game
 		/// </summary>
 		/// <param name="conn"></param>
 		public static void OnClientJoined(NetworkConnection conn)
@@ -81,7 +84,7 @@ namespace Pickups
 		}
 
 		/// <summary>
-		/// Deactivate a pickup
+		///     Deactivate a pickup
 		/// </summary>
 		/// <param name="pickup"></param>
 		public static void DeactivatePickup(Pickup pickup)
@@ -96,7 +99,7 @@ namespace Pickups
 		}
 
 		/// <summary>
-		/// Activate a pickup
+		///     Activate a pickup
 		/// </summary>
 		/// <param name="pickup"></param>
 		public static void ActivatePickup(Pickup pickup)

@@ -1,12 +1,12 @@
 ﻿namespace Weapons
 {
 	/// <summary>
-	/// Base for a weapon
+	///     Base for a weapon
 	/// </summary>
 	public interface IWeaponBase
 	{
 		/// <summary>
-		/// Reloads the current weapon
+		///     Reloads the current weapon
 		/// </summary>
 		void Reload();
 	}

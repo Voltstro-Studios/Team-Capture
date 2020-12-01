@@ -3,7 +3,7 @@
 namespace Console.TypeReader
 {
 	/// <summary>
-	/// A default reader for <see cref="int"/>
+	///     A default reader for <see cref="int" />
 	/// </summary>
 	internal sealed class IntReader : ITypeReader
 	{

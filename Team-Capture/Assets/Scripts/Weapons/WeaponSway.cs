@@ -8,8 +8,6 @@ namespace Weapons
 {
 	internal class WeaponSway : MonoBehaviour
 	{
-		private Vector3 localPosition;
-
 		[ConVar("cl_sway_amount", "Sets how much a gun will sway", true)]
 		public static float SwayAmount = 0.1f;
 
@@ -23,19 +21,7 @@ namespace Weapons
 
 		private float axisX;
 		private float axisY;
-
-		public void SetInput(float x, float y)
-		{
-			axisX = x;
-			axisY = y;
-		}
-
-		private void ApplySettings()
-		{
-			MultiplayerSettingsClass multiplayerSettings = GameSettings.MultiplayerSettings;
-			SwayEnabled = multiplayerSettings.WeaponSwayEnabled;
-			SwayAmount = multiplayerSettings.WeaponSwayAmount;
-		}
+		private Vector3 localPosition;
 
 		private void Start()
 		{
@@ -45,14 +31,9 @@ namespace Weapons
 			ApplySettings();
 		}
 
-		private void OnDestroy()
-		{
-			GameSettings.SettingsUpdated -= ApplySettings;
-		}
-
 		private void Update()
 		{
-			if(!SwayEnabled)
+			if (!SwayEnabled)
 				return;
 
 			if (ClientUI.IsPauseMenuOpen)
@@ -66,6 +47,24 @@ namespace Weapons
 
 			Vector3 detection = new Vector3(localPosition.x + fx, localPosition.y + fy, localPosition.z);
 			transform.localPosition = Vector3.Lerp(transform.localPosition, detection, Time.deltaTime * smooth);
+		}
+
+		private void OnDestroy()
+		{
+			GameSettings.SettingsUpdated -= ApplySettings;
+		}
+
+		public void SetInput(float x, float y)
+		{
+			axisX = x;
+			axisY = y;
+		}
+
+		private void ApplySettings()
+		{
+			MultiplayerSettingsClass multiplayerSettings = GameSettings.MultiplayerSettings;
+			SwayEnabled = multiplayerSettings.WeaponSwayEnabled;
+			SwayAmount = multiplayerSettings.WeaponSwayAmount;
 		}
 	}
 }

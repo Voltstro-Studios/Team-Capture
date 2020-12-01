@@ -4,15 +4,15 @@ using Newtonsoft.Json;
 namespace Helper
 {
 	/// <summary>
-	/// Serialization and Deserialization using <see cref="JsonConvert"/>.
-	/// <para>Saves to the config dir</para>
+	///     Serialization and Deserialization using <see cref="JsonConvert" />.
+	///     <para>Saves to the config dir</para>
 	/// </summary>
 	public static class ObjectSerializer
 	{
 		#region Serialization
 
 		/// <summary>
-		/// This returns the Json form of the object
+		///     This returns the Json form of the object
 		/// </summary>
 		public static string SerializeJson(object obj, bool compactJson = false,
 			JsonSerializerSettings jsonSerializerSettings = null)
@@ -23,7 +23,7 @@ namespace Helper
 		}
 
 		/// <summary>
-		/// This saves the Json of the object to a file in plain text format
+		///     This saves the Json of the object to a file in plain text format
 		/// </summary>
 		public static void SaveJson(object obj, string directory, string fileName = null,
 			string extension = ".json", bool compactJson = false, JsonSerializerSettings jsonSerializerSettings = null)

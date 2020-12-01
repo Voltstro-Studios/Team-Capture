@@ -5,13 +5,12 @@ using Logger = Core.Logging.Logger;
 namespace Console
 {
 	/// <summary>
-	/// Sets up what console to use (if it is in-game GUI, or a terminal)
+	///     Sets up what console to use (if it is in-game GUI, or a terminal)
 	/// </summary>
 	internal class ConsoleSetup : MonoBehaviour
 	{
-		[SerializeField] private GameObject consoleUiPrefab;
-
 		internal static IConsoleUI ConsoleUI;
+		[SerializeField] private GameObject consoleUiPrefab;
 
 		public void Awake()
 		{
@@ -49,7 +48,7 @@ namespace Console
 			ConsoleBackend.InitConsoleBackend();
 
 			//Exec autoexec
-			ConsoleBackend.ExecuteFileCommand(new []{"autoexec"});
+			ConsoleBackend.ExecuteFileCommand(new[] {"autoexec"});
 		}
 
 		private void Update()

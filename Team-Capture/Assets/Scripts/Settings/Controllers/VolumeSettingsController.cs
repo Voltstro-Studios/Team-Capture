@@ -9,7 +9,7 @@ using Logger = Core.Logging.Logger;
 namespace Settings.Controllers
 {
 	/// <summary>
-	/// Controller for Unity's <see cref="Volume"/> for URP
+	///     Controller for Unity's <see cref="Volume" /> for URP
 	/// </summary>
 	[RequireComponent(typeof(Volume))]
 	internal class VolumeSettingsController : MonoBehaviour
@@ -17,7 +17,7 @@ namespace Settings.Controllers
 		private static VolumeSettingsController instance;
 
 		/// <summary>
-		/// The active <see cref="Volume"/>
+		///     The active <see cref="Volume" />
 		/// </summary>
 		public static Volume ActiveVolume;
 
@@ -45,7 +45,7 @@ namespace Settings.Controllers
 			ActiveVolume.enabled = settings.PostProcessing;
 
 			//No point in apply anything if we aren't using Post-Processing
-			if(!settings.PostProcessing)
+			if (!settings.PostProcessing)
 				return;
 
 			//Motion Blur
@@ -79,7 +79,8 @@ namespace Settings.Controllers
 
 		#region Motion Blur
 
-		[ConCommand("r_motionblur_enabled", "Enables or disables motion blur", CommandRunPermission.ClientOnly,1, 1, true)]
+		[ConCommand("r_motionblur_enabled", "Enables or disables motion blur", CommandRunPermission.ClientOnly, 1, 1,
+			true)]
 		public static void MotionBlurEnableCommand(string[] args)
 		{
 			string toggle = args[0].ToLower();
@@ -102,7 +103,8 @@ namespace Settings.Controllers
 			}
 		}
 
-		[ConCommand("r_motionblur_intensity", "Changes the motion blur intensity", CommandRunPermission.ClientOnly, 1, 1, true)]
+		[ConCommand("r_motionblur_intensity", "Changes the motion blur intensity", CommandRunPermission.ClientOnly, 1,
+			1, true)]
 		public static void MotionBlurIntensityCommand(string[] args)
 		{
 			string stringAmount = args[0].ToLower();
@@ -228,7 +230,8 @@ namespace Settings.Controllers
 			}
 		}
 
-		[ConCommand("r_vignette_intensity", "Changes the vignette intensity", CommandRunPermission.ClientOnly, 1, 1, true)]
+		[ConCommand("r_vignette_intensity", "Changes the vignette intensity", CommandRunPermission.ClientOnly, 1, 1,
+			true)]
 		public static void VignetteIntensityCommand(string[] args)
 		{
 			string stringAmount = args[0].ToLower();
@@ -248,7 +251,8 @@ namespace Settings.Controllers
 			Logger.Error("Invalid input!");
 		}
 
-		[ConCommand("r_vignette_smoothness", "Changes the vignette smoothness", CommandRunPermission.ClientOnly,1, 1, true)]
+		[ConCommand("r_vignette_smoothness", "Changes the vignette smoothness", CommandRunPermission.ClientOnly, 1, 1,
+			true)]
 		public static void VignetteSmoothnessCommand(string[] args)
 		{
 			string stringAmount = args[0].ToLower();

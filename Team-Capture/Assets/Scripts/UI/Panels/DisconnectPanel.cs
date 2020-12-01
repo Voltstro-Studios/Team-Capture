@@ -3,12 +3,12 @@
 namespace UI.Panels
 {
 	/// <summary>
-	/// The panel for the disconnect dialog
+	///     The panel for the disconnect dialog
 	/// </summary>
 	internal class DisconnectPanel : MainMenuPanelBase
 	{
 		/// <summary>
-		/// Disconnects from the current game
+		///     Disconnects from the current game
 		/// </summary>
 		public void DisconnectGame()
 		{

@@ -9,28 +9,28 @@ using Logger = Core.Logging.Logger;
 namespace Tweens
 {
 	/// <summary>
-	/// A class for handling tweening
+	///     A class for handling tweening
 	/// </summary>
 	[Serializable]
 	internal class TweenObject
 	{
 		/// <summary>
-		/// The name of this tweened object
+		///     The name of this tweened object
 		/// </summary>
 		public string tweenObjectName;
 
 		/// <summary>
-		/// The object to tween
+		///     The object to tween
 		/// </summary>
 		public GameObject objectToTween;
 
 		/// <summary>
-		/// What events can we play?
+		///     What events can we play?
 		/// </summary>
 		public TweenEvent[] eventsToPlay;
 
 		/// <summary>
-		/// Plays an event
+		///     Plays an event
 		/// </summary>
 		/// <param name="eventName"></param>
 		public void PlayEvent(string eventName)
@@ -38,7 +38,8 @@ namespace Tweens
 			TweenEvent tweenEvent = eventsToPlay.FirstOrDefault(x => x.name == eventName);
 			if (tweenEvent == null)
 			{
-				Logger.Error("THere is no tween event called {@EventName} on tween object {@ObjectName}!", eventName, objectToTween.name);
+				Logger.Error("THere is no tween event called {@EventName} on tween object {@ObjectName}!", eventName,
+					objectToTween.name);
 				return;
 			}
 
@@ -46,7 +47,7 @@ namespace Tweens
 		}
 
 		/// <summary>
-		/// Plays all events
+		///     Plays all events
 		/// </summary>
 		public void PlayAllEvents()
 		{
@@ -64,7 +65,8 @@ namespace Tweens
 				//If this is a moving tween event
 				if (uiTweenEvent.moving)
 				{
-					Tween<float> moveTween = objectToTween.TweenAnchoredPositionY(uiTweenEvent.moveTo, uiTweenEvent.duration);
+					Tween<float> moveTween =
+						objectToTween.TweenAnchoredPositionY(uiTweenEvent.moveTo, uiTweenEvent.duration);
 					moveTween.SetFrom(uiTweenEvent.moveFrom);
 					moveTween.SetOnComplete(() => OnEnd(uiTweenEvent.activeOnEnd));
 				}
@@ -72,7 +74,8 @@ namespace Tweens
 				//This is a fading tween event
 				if (uiTweenEvent.fading)
 				{
-					Tween<float> fadeTween = objectToTween.GetComponent<Graphic>().TweenGraphicAlpha(uiTweenEvent.fadeTo, uiTweenEvent.duration);
+					Tween<float> fadeTween = objectToTween.GetComponent<Graphic>()
+						.TweenGraphicAlpha(uiTweenEvent.fadeTo, uiTweenEvent.duration);
 					fadeTween.SetFrom(uiTweenEvent.fadeFrom);
 					fadeTween.SetOnComplete(() => OnEnd(uiTweenEvent.activeOnEnd));
 				}

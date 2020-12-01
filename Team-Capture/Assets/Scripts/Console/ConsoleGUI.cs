@@ -8,7 +8,7 @@ using Logger = Core.Logging.Logger;
 namespace Console
 {
 	/// <summary>
-	/// An in-game console
+	///     An in-game console
 	/// </summary>
 	internal class ConsoleGUI : MonoBehaviour, IConsoleUI
 	{
@@ -20,9 +20,9 @@ namespace Console
 		[SerializeField] private bool showDebugMessages;
 
 		[SerializeField] private float consoleTextScale = 1;
-		private float defaultFontSize;
 
 		private readonly List<string> lines = new List<string>();
+		private float defaultFontSize;
 
 		public void Init()
 		{
@@ -40,12 +40,9 @@ namespace Console
 
 		public void UpdateConsole()
 		{
-			if (Input.GetKeyDown(consoleToggleKey))
-			{
-				ToggleConsole();
-			}
+			if (Input.GetKeyDown(consoleToggleKey)) ToggleConsole();
 
-			if(!consolePanel.activeSelf) return;
+			if (!consolePanel.activeSelf) return;
 
 			if (Input.GetKeyDown(KeyCode.Tab))
 			{
@@ -69,16 +66,44 @@ namespace Console
 				SubmitInput();
 		}
 
+		public void LogMessage(string message, LogType logType)
+		{
+			if (consoleTextArea == null) return;
+
+			if (logType == LogType.Assert && !showDebugMessages) return;
+
+			switch (logType)
+			{
+				case LogType.Assert:
+				case LogType.Log:
+					lines.Add(message);
+					break;
+				case LogType.Exception:
+				case LogType.Error:
+					lines.Add($"<color=red>{message}</color>");
+					break;
+				case LogType.Warning:
+					lines.Add($"<color=yellow>{message}</color>");
+					break;
+				default:
+					throw new ArgumentOutOfRangeException(nameof(logType), logType, null);
+			}
+
+			int count = Mathf.Min(100, lines.Count);
+			int start = lines.Count - count;
+			consoleTextArea.text = string.Join("\n", lines.GetRange(start, count).ToArray());
+		}
+
 		#region Console GUI
 
 		/// <summary>
-		/// Toggles the in-game viewable console
+		///     Toggles the in-game viewable console
 		/// </summary>
 		public void ToggleConsole()
 		{
 			consolePanel.SetActive(!IsOpen());
 
-			if(IsOpen())
+			if (IsOpen())
 				inputField.ActivateInputField();
 		}
 
@@ -103,11 +128,11 @@ namespace Console
 		{
 			Logger.Info($"cmd>: {value}");
 
-			if(string.IsNullOrWhiteSpace(value)) return;
+			if (string.IsNullOrWhiteSpace(value)) return;
 
 			ConsoleBackend.ExecuteCommand(value);
 		}
-		
+
 		#endregion
 
 		#region Console Commands
@@ -119,9 +144,7 @@ namespace Console
 			sb.Append("\n");
 
 			foreach (KeyValuePair<string, ConsoleCommand> command in ConsoleBackend.GetAllCommands())
-			{
 				sb.Append($"`{command.Key}` - {command.Value.CommandSummary}\n");
-			}
 
 			Logger.Info(sb.ToString());
 		}
@@ -135,10 +158,7 @@ namespace Console
 		[ConCommand("console", "Toggles the console", CommandRunPermission.Both, 0, 0, true)]
 		public static void ToggleConsoleCommand(string[] args)
 		{
-			if (ConsoleSetup.ConsoleUI is ConsoleGUI gui)
-			{
-				gui.ToggleConsole();
-			}
+			if (ConsoleSetup.ConsoleUI is ConsoleGUI gui) gui.ToggleConsole();
 		}
 
 		[ConCommand("console_scale", "Changes the console's text scale", CommandRunPermission.Both, 1, 1, true)]
@@ -158,33 +178,5 @@ namespace Console
 		}
 
 		#endregion
-
-		public void LogMessage(string message, LogType logType)
-		{
-			if(consoleTextArea == null) return;
-
-			if(logType == LogType.Assert && !showDebugMessages) return;
-
-			switch (logType)
-			{
-				case LogType.Assert:
-				case LogType.Log:
-					lines.Add(message);
-					break;
-				case LogType.Exception:
-				case LogType.Error:
-					lines.Add($"<color=red>{message}</color>");
-					break;
-				case LogType.Warning:
-					lines.Add($"<color=yellow>{message}</color>");
-					break;
-				default:
-					throw new ArgumentOutOfRangeException(nameof(logType), logType, null);
-			}
-
-			int count = Mathf.Min(100, lines.Count);
-			int start = lines.Count - count;
-			consoleTextArea.text = string.Join("\n", lines.GetRange(start, count).ToArray());
-		}
 	}
 }

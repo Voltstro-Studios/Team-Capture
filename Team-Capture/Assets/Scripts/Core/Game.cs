@@ -7,6 +7,7 @@ using UnityEngine.Rendering;
 using Logger = Core.Logging.Logger;
 #if UNITY_EDITOR
 using UnityEditor;
+
 #endif
 
 namespace Core
@@ -14,11 +15,16 @@ namespace Core
 	public static class Game
 	{
 		/// <summary>
-		/// Quits the game
+		///     Whether or not we are running in headless mode
+		/// </summary>
+		public static bool IsHeadless => SystemInfo.graphicsDeviceType == GraphicsDeviceType.Null;
+
+		/// <summary>
+		///     Quits the game
 		/// </summary>
 		public static void QuitGame()
 		{
-			if(NetworkManager.singleton != null)
+			if (NetworkManager.singleton != null)
 				NetworkManager.singleton.StopHost();
 
 			Logger.Info("Goodbye!");
@@ -33,8 +39,8 @@ namespace Core
 		}
 
 		/// <summary>
-		/// Gets the path where the game's exe is
-		/// <para>(Or with the editor is is under the `/Game` folder)</para>
+		///     Gets the path where the game's exe is
+		///     <para>(Or with the editor is is under the `/Game` folder)</para>
 		/// </summary>
 		/// <returns></returns>
 		public static string GetGameExecutePath()
@@ -47,7 +53,7 @@ namespace Core
 		}
 
 		/// <summary>
-		/// Get the path used for settings
+		///     Get the path used for settings
 		/// </summary>
 		/// <returns></returns>
 		public static string GetGameConfigPath()
@@ -68,10 +74,5 @@ namespace Core
 
 			return documentsFolder;
 		}
-
-		/// <summary>
-		/// Whether or not we are running in headless mode
-		/// </summary>
-		public static bool IsHeadless => SystemInfo.graphicsDeviceType == GraphicsDeviceType.Null;
 	}
 }

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using Core.Networking;
 using SceneManagement;
@@ -14,45 +15,42 @@ using Logger = Core.Logging.Logger;
 namespace UI.Panels
 {
 	/// <summary>
-	/// The code driving the create server panel
+	///     The code driving the create server panel
 	/// </summary>
 	internal class CreateServerPanel : MainMenuPanelBase
 	{
-		private List<TCScene> onlineTCScenes;
-
-		private Image gameNameImage;
-		private Image maxPlayersImage;
-
-		private Color gameNameImageColor;
-		private Color maxPlayersImageColor;
-
-		private int maxPlayers = 16;
-
-		private TCNetworkManager netManager;
-
 		/// <summary>
-		/// Dropdown for the maps
+		///     Dropdown for the maps
 		/// </summary>
-		[Tooltip("Dropdown for the maps")]
-		public TMP_Dropdown mapsDropdown;
+		[Tooltip("Dropdown for the maps")] public TMP_Dropdown mapsDropdown;
 
 		/// <summary>
-		/// Input for the game name
+		///     Input for the game name
 		/// </summary>
-		[Tooltip("Input for the game name")]
-		public TMP_InputField gameNameText;
+		[Tooltip("Input for the game name")] public TMP_InputField gameNameText;
 
 		/// <summary>
-		/// Input for the max amount of players
+		///     Input for the max amount of players
 		/// </summary>
 		[Tooltip("Input for the max amount of players")]
 		public TMP_InputField maxPlayersText;
 
 		/// <summary>
-		/// The color to use when there is an error
+		///     The color to use when there is an error
 		/// </summary>
 		[Tooltip("The color to use when there is an error")]
 		public Color errorColor = Color.red;
+
+		private Image gameNameImage;
+
+		private Color gameNameImageColor;
+
+		private int maxPlayers = 16;
+		private Image maxPlayersImage;
+		private Color maxPlayersImageColor;
+
+		private TCNetworkManager netManager;
+		private List<TCScene> onlineTCScenes;
 
 		private void Start()
 		{
@@ -80,13 +78,13 @@ namespace UI.Panels
 		}
 
 		/// <summary>
-		/// Starts the server and connects a player
+		///     Starts the server and connects a player
 		/// </summary>
 		public void CreateGame()
 		{
 #if UNITY_EDITOR
 			//If we are running as the editor, then we to check to see if an existing build already exists and use that instead
-			if (!System.IO.Directory.Exists($"{Voltstro.UnityBuilder.Build.GameBuilder.GetBuildDirectory()}Team-Capture-Quick/"))
+			if (!Directory.Exists($"{Voltstro.UnityBuilder.Build.GameBuilder.GetBuildDirectory()}Team-Capture-Quick/"))
 			{
 				Debug.LogError("There is no pre-existing build of Team-Capture! Build the game using VoltBuild.");
 				return;
@@ -144,7 +142,8 @@ namespace UI.Panels
 #else
 					FileName = "Team-Capture",
 #endif
-					Arguments = $"-batchmode -nographics -gamename \"{gameNameText.text}\" -scene {onlineTCScenes[mapsDropdown.value].SceneFileName} -maxplayers {maxPlayers}"
+					Arguments =
+						$"-batchmode -nographics -gamename \"{gameNameText.text}\" -scene {onlineTCScenes[mapsDropdown.value].SceneFileName} -maxplayers {maxPlayers}"
 				}
 			};
 			newTcServer.Start();

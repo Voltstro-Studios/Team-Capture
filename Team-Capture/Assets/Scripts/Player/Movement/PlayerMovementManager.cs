@@ -15,91 +15,61 @@ namespace Player.Movement
 	[RequireComponent(typeof(PlayerManager))]
 	public sealed class PlayerMovementManager : NetworkBehaviour
 	{
-		private PlayerManager playerManager;
+		#region Commands
+
+		[ConVar("cl_showpos", "Shows the position and other stuff like that of the player", true)]
+		public static bool ShowPos = false;
+
+		#endregion
 
 		[SerializeField] private Transform groundCheck;
 		[SerializeField] private float groundDistance = 0.7f;
 		[SerializeField] private LayerMask groundMask;
 
-		#region Movement Controls
-
-		[Header("Movement Settings")]
-		[SerializeField] private float moveSpeed = 11.0f;
-		[SerializeField] private float jumpHeight = 3f;
-
-		[SerializeField] private float gravityAmount = 9.81f;
-
-		[SerializeField] private Transform cameraTransform;
-
-		#endregion
-
 		/// <summary>
-		/// Delay for interpolation
+		///     Delay for interpolation
 		/// </summary>
-		[Header("Network")]
-		[Range(1, 60)]
-		[Tooltip("Delay for interpolation")]
+		[Header("Network")] [Range(1, 60)] [Tooltip("Delay for interpolation")]
 		public int interpolationDelay = 12;
 
 		/// <summary>
-		/// The rate for updating inputs
+		///     The rate for updating inputs
 		/// </summary>
-		[SerializeField]
-		[Range(10, 50)]
-		[Tooltip("The rate for updating inputs")]
+		[SerializeField] [Range(10, 50)] [Tooltip("The rate for updating inputs")]
 		private int inputUpdateRate = 10;
 
 		/// <summary>
-		/// Controls how many inputs are needed before sending update command
+		///     The <see cref="CharacterController" />
 		/// </summary>
-		public int InputBufferSize { get; private set; }
+		private CharacterController characterController;
+
+		private PlayerManager playerManager;
 
 		/// <summary>
-		/// The current state of the player
-		/// </summary>
-		[NonSerialized]
-		[SyncVar(hook = nameof(OnServerStateChange))]
-		public PlayerState State = PlayerState.Zero;
-
-		/// <summary>
-		/// The state handler (Observer or predictor)
-		/// </summary>
-		private IPlayerMovementStateHandler stateHandler;
-
-		/// <summary>
-		/// The <see cref="PlayerMovementServer"/>, set if we are the server
+		///     The <see cref="PlayerMovementServer" />, set if we are the server
 		/// </summary>
 		private PlayerMovementServer server;
 
 		/// <summary>
-		/// The <see cref="CharacterController"/>
+		///     The current state of the player
 		/// </summary>
-		private CharacterController characterController;
+		[NonSerialized] [SyncVar(hook = nameof(OnServerStateChange))]
+		public PlayerState State = PlayerState.Zero;
+
+		/// <summary>
+		///     The state handler (Observer or predictor)
+		/// </summary>
+		private IPlayerMovementStateHandler stateHandler;
+
+		/// <summary>
+		///     Controls how many inputs are needed before sending update command
+		/// </summary>
+		public int InputBufferSize { get; private set; }
 
 		private void Awake()
 		{
-			InputBufferSize = (int)(1 / Time.fixedDeltaTime) / inputUpdateRate;
+			InputBufferSize = (int) (1 / Time.fixedDeltaTime) / inputUpdateRate;
 			playerManager = GetComponent<PlayerManager>();
-		}
-
-		private void OnGUI()
-		{
-			if(!ShowPos) return;
-
-			GUI.skin.label.fontSize = 20;
-
-			GUI.Box(new Rect(8, 10, 300, 90), "");
-
-			GUI.Label(new Rect(10, 10, 1000, 40), $"Velocity: {characterController.velocity}");
-			GUI.Label(new Rect(10, 30, 1000, 40), $"Position: {transform.position}");
-			GUI.Label(new Rect(10, 50, 1000, 40), $"LookingAt: {cameraTransform.rotation}");
-			GUI.Label(new Rect(10, 70, 1000, 40), $"IsGround: {Physics.Raycast(groundCheck.position, Vector3.down, groundDistance, groundMask)}");
-		}
-
-		public override void OnStartServer()
-		{
-			base.OnStartServer();
-			server = gameObject.AddComponent<PlayerMovementServer>();
 		}
 
 		private void Start()
@@ -117,9 +87,30 @@ namespace Player.Movement
 			gameObject.AddComponent<PlayerMovementInput>();
 		}
 
+		private void OnGUI()
+		{
+			if (!ShowPos) return;
+
+			GUI.skin.label.fontSize = 20;
+
+			GUI.Box(new Rect(8, 10, 300, 90), "");
+
+			GUI.Label(new Rect(10, 10, 1000, 40), $"Velocity: {characterController.velocity}");
+			GUI.Label(new Rect(10, 30, 1000, 40), $"Position: {transform.position}");
+			GUI.Label(new Rect(10, 50, 1000, 40), $"LookingAt: {cameraTransform.rotation}");
+			GUI.Label(new Rect(10, 70, 1000, 40),
+				$"IsGround: {Physics.Raycast(groundCheck.position, Vector3.down, groundDistance, groundMask)}");
+		}
+
+		public override void OnStartServer()
+		{
+			base.OnStartServer();
+			server = gameObject.AddComponent<PlayerMovementServer>();
+		}
+
 		public void SyncState(PlayerState overrideState)
 		{
-			if(playerManager.IsDead)
+			if (playerManager.IsDead)
 				return;
 
 			characterController.Move(overrideState.Position - transform.position);
@@ -141,7 +132,7 @@ namespace Player.Movement
 		}
 
 		/// <summary>
-		/// Sets the player's position
+		///     Sets the player's position
 		/// </summary>
 		/// <param name="pos"></param>
 		/// <param name="rotationX"></param>
@@ -198,7 +189,7 @@ namespace Player.Movement
 			playerState.Velocity.y = previous.Velocity.y;
 
 			//Gravity
-			if(!isGrounded)
+			if (!isGrounded)
 				playerState.Velocity.y -= gravityAmount * Time.deltaTime;
 			else
 				playerState.Velocity.y = -2f;
@@ -221,10 +212,16 @@ namespace Player.Movement
 
 		#endregion
 
-		#region Commands
+		#region Movement Controls
 
-		[ConVar("cl_showpos", "Shows the position and other stuff like that of the player", true)]
-		public static bool ShowPos = false;
+		[Header("Movement Settings")] [SerializeField]
+		private float moveSpeed = 11.0f;
+
+		[SerializeField] private float jumpHeight = 3f;
+
+		[SerializeField] private float gravityAmount = 9.81f;
+
+		[SerializeField] private Transform cameraTransform;
 
 		#endregion
 	}

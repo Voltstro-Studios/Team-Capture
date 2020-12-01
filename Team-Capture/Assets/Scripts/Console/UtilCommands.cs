@@ -1,11 +1,12 @@
 ﻿using System.IO;
 using Core;
-using Core.Logging;
+using UnityEngine;
+using Logger = Core.Logging.Logger;
 
 namespace Console
 {
 	/// <summary>
-	/// A bunch of util commands
+	///     A bunch of util commands
 	/// </summary>
 	internal static class UtilCommands
 	{
@@ -54,7 +55,7 @@ ___________
 				string[] lines = File.ReadAllLines(splashMessagesPath);
 
 				//Select random number
-				int index = UnityEngine.Random.Range(0, lines.Length);
+				int index = Random.Range(0, lines.Length);
 				Logger.Info($"	{lines[index]}");
 			}
 		}

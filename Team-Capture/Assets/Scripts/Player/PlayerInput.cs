@@ -10,50 +10,15 @@ using Weapons;
 namespace Player
 {
 	/// <summary>
-	/// Handles input
+	///     Handles input
 	/// </summary>
 	internal sealed class PlayerInput : NetworkBehaviour
 	{
-		#region Inspector fields
-
-		[Header("Inputs")]
-		[SerializeField] private KeyCode pauseMenuKey = KeyCode.Escape;
-		[SerializeField] private KeyCode scoreBoardKey = KeyCode.Tab;
-		[SerializeField] private KeyCode suicideKey = KeyCode.P;
-		[SerializeField] private KeyCode jumpKey = KeyCode.Space;
-		[SerializeField] private string verticalAxisName = "Vertical";
-		[SerializeField] private string horizontalAxisName = "Horizontal";
-		[SerializeField] private string yMouseAxisName = "Mouse Y";
-		[SerializeField] private string xMouseAxisName = "Mouse X";
-		[SerializeField] private string mouseScrollWheel = "Mouse ScrollWheel";
-
-		[Header("Player Movement")] 
-		[SerializeField] private bool rawAxis = true;
-		[SerializeField] private bool rawMouseAxis = true;
-
-		[SerializeField] private float xMouseSensitivity = 100.0f;
-		[SerializeField] private float yMouseSensitivity = 100.0f;
-
-		[SerializeField] private bool reverseMouse;
-
-		#endregion
-		
-		private WeaponManager weaponManager;
-		private PlayerManager playerManager;
 		private PlayerMovementInput playerInput;
+		private PlayerManager playerManager;
 		private PlayerUIManager uiManager;
 
-		#region Inputs to send
-
-		private float rotationX;
-		private float rotationY;
-
-		private float vertical;
-		private float horizontal;
-
-		private bool wishToJump;
-		
-		#endregion
+		private WeaponManager weaponManager;
 
 		private void Start()
 		{
@@ -79,13 +44,11 @@ namespace Player
 			HandleMouseLock();
 
 			if (ConsoleSetup.ConsoleUI != null)
-			{
 				if (ConsoleSetup.ConsoleUI.IsOpen())
 				{
 					uiManager.SetPauseMenu(true);
 					return;
 				}
-			}
 
 			//If the pause menu is open, set player movement direction to 0 and return
 			if (ClientUI.IsPauseMenuOpen)
@@ -123,6 +86,56 @@ namespace Player
 			}
 		}
 
+		#region Input Settings
+
+		private void UpdateSettings()
+		{
+			MouseSettingsClass mouseSettings = GameSettings.MouseSettings;
+			xMouseSensitivity = mouseSettings.MouseSensitivity;
+			yMouseSensitivity = mouseSettings.MouseSensitivity;
+			rawMouseAxis = mouseSettings.RawAxis;
+			reverseMouse = mouseSettings.ReverseMouse;
+		}
+
+		#endregion
+
+		#region Inspector fields
+
+		[Header("Inputs")] [SerializeField] private KeyCode pauseMenuKey = KeyCode.Escape;
+
+		[SerializeField] private KeyCode scoreBoardKey = KeyCode.Tab;
+		[SerializeField] private KeyCode suicideKey = KeyCode.P;
+		[SerializeField] private KeyCode jumpKey = KeyCode.Space;
+		[SerializeField] private string verticalAxisName = "Vertical";
+		[SerializeField] private string horizontalAxisName = "Horizontal";
+		[SerializeField] private string yMouseAxisName = "Mouse Y";
+		[SerializeField] private string xMouseAxisName = "Mouse X";
+		[SerializeField] private string mouseScrollWheel = "Mouse ScrollWheel";
+
+		[Header("Player Movement")] [SerializeField]
+		private bool rawAxis = true;
+
+		[SerializeField] private bool rawMouseAxis = true;
+
+		[SerializeField] private float xMouseSensitivity = 100.0f;
+		[SerializeField] private float yMouseSensitivity = 100.0f;
+
+		[SerializeField] private bool reverseMouse;
+
+		#endregion
+
+		#region Inputs to send
+
+		private float rotationX;
+		private float rotationY;
+
+		private float vertical;
+		private float horizontal;
+
+		private bool wishToJump;
+
+		#endregion
+
 		#region Input Functions
 
 		private static void HandleMouseLock()
@@ -137,7 +150,7 @@ namespace Player
 
 				return;
 			}
-			
+
 			if (Cursor.visible)
 				Cursor.visible = false;
 
@@ -147,7 +160,7 @@ namespace Player
 
 		private void SetPlayerMouseRotation()
 		{
-			if(rawMouseAxis)
+			if (rawMouseAxis)
 			{
 				if (reverseMouse)
 				{
@@ -220,19 +233,6 @@ namespace Player
 
 			if (selectedWeaponIndex == weaponManager.SelectedWeaponIndex) return;
 			weaponManager.CmdSetWeapon(selectedWeaponIndex);
-		}
-
-		#endregion
-
-		#region Input Settings
-
-		private void UpdateSettings()
-		{
-			MouseSettingsClass mouseSettings = GameSettings.MouseSettings;
-			xMouseSensitivity = mouseSettings.MouseSensitivity;
-			yMouseSensitivity = mouseSettings.MouseSensitivity;
-			rawMouseAxis = mouseSettings.RawAxis;
-			reverseMouse = mouseSettings.ReverseMouse;
 		}
 
 		#endregion

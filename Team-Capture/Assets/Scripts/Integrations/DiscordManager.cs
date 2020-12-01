@@ -2,36 +2,41 @@
 using System.IO;
 using BootManagement;
 using Core;
-using Helper;
-using SceneManagement;
+using Core.Logging;
 using Discord.GameSDK;
 using Discord.GameSDK.Activities;
-using Logger = Core.Logging.Logger;
+using Helper;
+using SceneManagement;
 
 namespace Integrations
 {
 	/// <summary>
-	/// Handles communicating with Discord's game SDK
+	///     Handles communicating with Discord's game SDK
 	/// </summary>
 	internal class DiscordManager : SingletonMonoBehaviour<DiscordManager>, IStartOnBoot
 	{
-		private Discord.GameSDK.Discord client;
-		private ActivityManager activityManager;
-
 		/// <summary>
-		/// Load the settings on start?
+		///     Load the settings on start?
 		/// </summary>
 		public bool loadSettingsFromFile = true;
 
 		/// <summary>
-		/// Where to load the settings from
+		///     Where to load the settings from
 		/// </summary>
 		public string settingsLocation = "/Resources/Integrations/DiscordRPC.json";
 
 		/// <summary>
-		/// Settings for the Discord manager to use
+		///     Settings for the Discord manager to use
 		/// </summary>
 		public DiscordManagerSettings settings;
+
+		private ActivityManager activityManager;
+		private Discord.GameSDK.Discord client;
+
+		private void Update()
+		{
+			client?.RunCallbacks();
+		}
 
 		public void Init()
 		{
@@ -58,13 +63,8 @@ namespace Integrations
 			Logger.Debug("Destroying discord integration...");
 			//Using Null Propagation seems to crash Unity...
 			// ReSharper disable once UseNullPropagation
-			if(client != null)
+			if (client != null)
 				client.Dispose();
-		}
-
-		private void Update()
-		{
-			client?.RunCallbacks();
 		}
 
 		private void Initialize()
@@ -87,7 +87,7 @@ namespace Integrations
 				Destroy(gameObject);
 				return;
 			}
-			
+
 			client?.SetLogHook(settings.logLevel, (level, message) =>
 			{
 				switch (level)
@@ -118,26 +118,25 @@ namespace Integrations
 
 		private void LoadSettings()
 		{
-			if(string.IsNullOrWhiteSpace(settingsLocation))
+			if (string.IsNullOrWhiteSpace(settingsLocation))
 				return;
 
-			settings = ObjectSerializer.LoadJson<DiscordManagerSettings>(Path.GetDirectoryName($"{Game.GetGameExecutePath()}{settingsLocation}"),
+			settings = ObjectSerializer.LoadJson<DiscordManagerSettings>(
+				Path.GetDirectoryName($"{Game.GetGameExecutePath()}{settingsLocation}"),
 				$"/{Path.GetFileNameWithoutExtension(settingsLocation)}");
 		}
 
 		/// <summary>
-		/// Updates the active Discord activity that is shown (AkA the Rich Presence)
+		///     Updates the active Discord activity that is shown (AkA the Rich Presence)
 		/// </summary>
 		/// <param name="activity"></param>
 		public static void UpdateActivity(Activity activity)
 		{
-			if(Instance == null) return;
-			if(Instance.client == null) return;
+			if (Instance == null) return;
+			if (Instance.client == null) return;
 
-			Instance.activityManager.UpdateActivity(activity, result =>
-			{
-				Logger.Info($"[Discord Presence] Updated activity: {result}");
-			});
+			Instance.activityManager.UpdateActivity(activity,
+				result => { Logger.Info($"[Discord Presence] Updated activity: {result}"); });
 		}
 
 		#region Scene Discord RPC Stuff
@@ -146,7 +145,6 @@ namespace Integrations
 		{
 			//Update our RPC to show we are loading
 			if (client != null)
-			{
 				UpdateActivity(new Activity
 				{
 					Assets = new ActivityAssets
@@ -157,7 +155,6 @@ namespace Integrations
 					Details = $"Loading into {scene.displayName}",
 					State = "Loading..."
 				});
-			}
 		}
 
 		private void SceneLoaded(TCScene scene)
@@ -166,14 +163,14 @@ namespace Integrations
 			{
 				Activity presence = new Activity
 				{
-					Assets = new ActivityAssets()
+					Assets = new ActivityAssets
 					{
 						LargeImage = scene.largeImageKey,
 						LargeText = scene.largeImageKeyText
 					}
 				};
 
-				if(scene.showStartTime)
+				if (scene.showStartTime)
 					presence.Timestamps = new ActivityTimestamps
 					{
 						Start = TimeHelper.UnixTimeNow()
@@ -185,11 +182,17 @@ namespace Integrations
 					presence.State = "Team Capture";
 				}
 				else if (scene.isMainMenu)
+				{
 					presence.Details = "Main Menu";
-				else if(!scene.isMainMenu && !scene.isOnlineScene)
+				}
+				else if (!scene.isMainMenu && !scene.isOnlineScene)
+				{
 					presence.Details = "Loading...";
+				}
 				else
+				{
 					Logger.Error("You CANNOT have a online scene and a main menu scene!");
+				}
 
 				UpdateActivity(presence);
 			}

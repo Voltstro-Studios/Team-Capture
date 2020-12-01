@@ -3,7 +3,7 @@
 namespace Console.TypeReader
 {
 	/// <summary>
-	/// A default reader for <see cref="float"/>
+	///     A default reader for <see cref="float" />
 	/// </summary>
 	internal sealed class FloatReader : ITypeReader
 	{

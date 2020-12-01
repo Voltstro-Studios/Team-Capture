@@ -5,7 +5,7 @@ using Newtonsoft.Json.Serialization;
 namespace Helper
 {
 	/// <summary>
-	/// Resolver for Newtonsoft.Json
+	///     Resolver for Newtonsoft.Json
 	/// </summary>
 	public class NonPublicPropertiesResolver : DefaultContractResolver
 	{

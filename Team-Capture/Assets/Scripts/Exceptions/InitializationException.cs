@@ -3,7 +3,7 @@
 namespace Exceptions
 {
 	/// <summary>
-	/// An error when something failed while initializing or de-initializing
+	///     An error when something failed while initializing or de-initializing
 	/// </summary>
 	public class InitializationException : Exception
 	{

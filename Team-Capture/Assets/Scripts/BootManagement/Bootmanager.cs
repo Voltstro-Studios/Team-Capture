@@ -29,7 +29,6 @@ namespace BootManagement
 				.Where(x => typeof(IStartOnBoot).IsAssignableFrom(x) && !x.IsInterface);
 
 			foreach (Type type in types)
-			{
 				try
 				{
 					//Create a new game object and add the script to it
@@ -41,10 +40,9 @@ namespace BootManagement
 				{
 					//Ignore
 				}
-			}
 
 			Logger.Info("Bootloader has successfully loaded!");
-			
+
 			HasBooted = true;
 
 			LoadNextScene();

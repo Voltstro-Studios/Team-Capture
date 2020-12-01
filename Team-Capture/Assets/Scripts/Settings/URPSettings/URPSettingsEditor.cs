@@ -4,14 +4,14 @@ using UnityEngine.Rendering.Universal;
 namespace Settings.URPSettings
 {
 	/// <summary>
-	/// An editor for URP
+	///     An editor for URP
 	/// </summary>
 	internal class URPSettingsEditor
 	{
 		private readonly UniversalRenderPipelineAsset urpPipelineAsset;
 
 		/// <summary>
-		/// Allows editing of a URP assets, but it is easier
+		///     Allows editing of a URP assets, but it is easier
 		/// </summary>
 		public URPSettingsEditor(UniversalRenderPipelineAsset pipelineAsset)
 		{
@@ -21,7 +21,7 @@ namespace Settings.URPSettings
 		#region Quality
 
 		/// <summary>
-		/// Enable or disable HDR
+		///     Enable or disable HDR
 		/// </summary>
 		/// <param name="active"></param>
 		public void SetHDR(bool active)
@@ -30,7 +30,7 @@ namespace Settings.URPSettings
 		}
 
 		/// <summary>
-		/// Set what MSAA quality to use
+		///     Set what MSAA quality to use
 		/// </summary>
 		/// <param name="msaaSampleCount"></param>
 		public void SetMsaaQuality(MsaaQuality msaaSampleCount)
@@ -39,15 +39,17 @@ namespace Settings.URPSettings
 		}
 
 		/// <summary>
-		/// Set the render scale
+		///     Set the render scale
 		/// </summary>
 		/// <param name="renderScale"></param>
 		public void SetRenderScale(float renderScale)
 		{
-			if(renderScale < 0)
-				throw new ArgumentOutOfRangeException(nameof(renderScale), "The render scale cannot be smaller then 0!");
-			if(renderScale > 2)
-				throw new ArgumentOutOfRangeException(nameof(renderScale), "The render scale cannot be greater then 2!");
+			if (renderScale < 0)
+				throw new ArgumentOutOfRangeException(nameof(renderScale),
+					"The render scale cannot be smaller then 0!");
+			if (renderScale > 2)
+				throw new ArgumentOutOfRangeException(nameof(renderScale),
+					"The render scale cannot be greater then 2!");
 
 			urpPipelineAsset.renderScale = renderScale;
 		}
@@ -57,7 +59,7 @@ namespace Settings.URPSettings
 		#region Shadows
 
 		/// <summary>
-		/// Sets how far the shadows should draw
+		///     Sets how far the shadows should draw
 		/// </summary>
 		/// <param name="distance"></param>
 		public void SetShadowDistance(float distance)
@@ -66,7 +68,7 @@ namespace Settings.URPSettings
 		}
 
 		/// <summary>
-		/// Set what shadow cascade option to use
+		///     Set what shadow cascade option to use
 		/// </summary>
 		/// <param name="cascadesOption"></param>
 		public void SetShadowCascades(ShadowCascadesOption cascadesOption)

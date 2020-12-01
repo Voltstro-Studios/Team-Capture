@@ -3,12 +3,12 @@
 namespace Misc
 {
 	/// <summary>
-	/// Destroys a particle after <see cref="destroyDelayTime"/> passes
+	///     Destroys a particle after <see cref="destroyDelayTime" /> passes
 	/// </summary>
 	public class ParticleDestroyer : MonoBehaviour
 	{
 		/// <summary>
-		/// What delay to use until destroy
+		///     What delay to use until destroy
 		/// </summary>
 		[SerializeField] private float destroyDelayTime = 2.0f;
 

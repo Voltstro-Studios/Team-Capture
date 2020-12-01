@@ -9,7 +9,7 @@ using Logger = Core.Logging.Logger;
 namespace Settings.Controllers
 {
 	/// <summary>
-	/// Handles applying settings to Universal Render Pipeline(URP)
+	///     Handles applying settings to Universal Render Pipeline(URP)
 	/// </summary>
 	internal static class URPSettingsController
 	{
@@ -29,7 +29,7 @@ namespace Settings.Controllers
 
 		private static void ApplyURPSettings()
 		{
-			if(Game.IsHeadless) return;
+			if (Game.IsHeadless) return;
 
 			editor.SetHDR(GameSettings.AdvSettings.HDR);
 			editor.SetRenderScale(GameSettings.AdvSettings.RenderScale);
@@ -42,7 +42,8 @@ namespace Settings.Controllers
 
 		#region Console Commands
 
-		[ConCommand("r_shadow_distance", "Sets the distance of the shadows", CommandRunPermission.ClientOnly, 1, 1, true)]
+		[ConCommand("r_shadow_distance", "Sets the distance of the shadows", CommandRunPermission.ClientOnly, 1, 1,
+			true)]
 		public static void SetShadowDistanceCommand(string[] args)
 		{
 			if (int.TryParse(args[0], out int result))

@@ -11,22 +11,22 @@ using Random = UnityEngine.Random;
 namespace Player
 {
 	/// <summary>
-	/// Handles shooting
+	///     Handles shooting
 	/// </summary>
 	public sealed class PlayerWeaponShoot : NetworkBehaviour
 	{
 		/// <summary>
-		/// Layers for the raycast
+		///     Layers for the raycast
 		/// </summary>
 		[SerializeField] private LayerMask raycastLayerMask;
 
 		/// <summary>
-		/// The <see cref="PlayerManager"/> associated with this <see cref="PlayerWeaponShoot"/>
+		///     The <see cref="PlayerManager" /> associated with this <see cref="PlayerWeaponShoot" />
 		/// </summary>
 		private PlayerManager playerManager;
 
 		/// <summary>
-		/// The <see cref="weaponManager"/> associated with this <see cref="PlayerWeaponShoot"/>
+		///     The <see cref="weaponManager" /> associated with this <see cref="PlayerWeaponShoot" />
 		/// </summary>
 		private WeaponManager weaponManager;
 
@@ -50,17 +50,17 @@ namespace Player
 		#region Server Variables
 
 		/// <summary>
-		/// (Server only) The local player's camera
+		///     (Server only) The local player's camera
 		/// </summary>
 		private Camera localPlayerCamera;
 
 		/// <summary>
-		/// (Server only) The last weapon this client used
+		///     (Server only) The last weapon this client used
 		/// </summary>
 		private string lastWeapon;
 
 		/// <summary>
-		/// (Server only) The next time to fire
+		///     (Server only) The next time to fire
 		/// </summary>
 		private float nextTimeToFire;
 
@@ -91,7 +91,7 @@ namespace Player
 
 			TCWeapon weapon = networkedWeapon.GetTCWeapon();
 
-			if(weapon == null)
+			if (weapon == null)
 				return;
 
 			if (playerManager.IsDead)
@@ -128,7 +128,7 @@ namespace Player
 		#region Server Side Shooting
 
 		/// <summary>
-		/// Asks the server to shoot this client's weapon
+		///     Asks the server to shoot this client's weapon
 		/// </summary>
 		[Command(channel = 3)]
 		private void CmdShootWeapon()
@@ -161,7 +161,7 @@ namespace Player
 		}
 
 		/// <summary>
-		/// Bang bang
+		///     Bang bang
 		/// </summary>
 		/// <param name="networkedWeapon"></param>
 		[Server]
@@ -177,7 +177,7 @@ namespace Player
 		}
 
 		/// <summary>
-		/// Does a ray cast based of the weapon properties
+		///     Does a ray cast based of the weapon properties
 		/// </summary>
 		[Server]
 		private void WeaponRayCast()
@@ -209,7 +209,7 @@ namespace Player
 				foreach (RaycastHit hit in hits)
 				{
 					//Don't count if we hit the shooting player
-					if(hit.collider.name == transform.name)
+					if (hit.collider.name == transform.name)
 						continue;
 
 					//Do impact effect on all clients
@@ -234,7 +234,7 @@ namespace Player
 		#region Weapon Effects
 
 		/// <summary>
-		/// Makes the muzzle flash play
+		///     Makes the muzzle flash play
 		/// </summary>
 		[ClientRpc(channel = 4)]
 		private void RpcWeaponMuzzleFlash()
@@ -243,7 +243,7 @@ namespace Player
 		}
 
 		/// <summary>
-		/// Make a tracer effect go to the target
+		///     Make a tracer effect go to the target
 		/// </summary>
 		/// <param name="targets"></param>
 		/// <param name="targetNormals"></param>
@@ -256,12 +256,15 @@ namespace Player
 			for (int i = 0; i < targets.Length; i++)
 			{
 				//Do bullet tracer
-				BulletTracer tracer = Instantiate(weapon.bulletTracerEffect,weaponGraphics.bulletTracerPosition.position, weaponGraphics.bulletTracerPosition.rotation).GetComponent<BulletTracer>();
+				BulletTracer tracer =
+					Instantiate(weapon.bulletTracerEffect, weaponGraphics.bulletTracerPosition.position,
+						weaponGraphics.bulletTracerPosition.rotation).GetComponent<BulletTracer>();
 				tracer.Play(targets[i]);
 
 				//Do bullet holes
 				Instantiate(weapon.bulletHitEffectPrefab, targets[i], Quaternion.LookRotation(targetNormals[i]));
-				Instantiate(weapon.bulletHolePrefab, targets[i], Quaternion.FromToRotation(Vector3.back, targetNormals[i]));
+				Instantiate(weapon.bulletHolePrefab, targets[i],
+					Quaternion.FromToRotation(Vector3.back, targetNormals[i]));
 			}
 		}
 

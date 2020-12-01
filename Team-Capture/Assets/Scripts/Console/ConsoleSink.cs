@@ -12,8 +12,11 @@ namespace Console
 {
 	internal static class ConsoleSink
 	{
-		public static LoggerConfiguration Console(this LoggerSinkConfiguration loggerSinkConfiguration, string messageFormat) =>
-			loggerSinkConfiguration.Sink(new ConsoleSerilogSink(messageFormat));
+		public static LoggerConfiguration Console(this LoggerSinkConfiguration loggerSinkConfiguration,
+			string messageFormat)
+		{
+			return loggerSinkConfiguration.Sink(new ConsoleSerilogSink(messageFormat));
+		}
 	}
 
 	internal sealed class ConsoleSerilogSink : ILogEventSink
@@ -33,7 +36,7 @@ namespace Console
 			message = message.Remove(message.Length - 2, 2);
 
 			IConsoleUI console = ConsoleSetup.ConsoleUI;
-			if(console == null)
+			if (console == null)
 				return;
 
 			switch (logEvent.Level)

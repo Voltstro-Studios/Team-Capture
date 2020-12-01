@@ -6,7 +6,7 @@ using System.Reflection;
 namespace Helper
 {
 	/// <summary>
-	/// Helper for reflection
+	///     Helper for reflection
 	/// </summary>
 	public static class ReflectionHelper
 	{
@@ -20,7 +20,7 @@ namespace Helper
 		}
 
 		/// <summary>
-		/// Gets all <see cref="Type"/>s that is a sub class of <see cref="T"/>
+		///     Gets all <see cref="Type" />s that is a sub class of <see cref="T" />
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>

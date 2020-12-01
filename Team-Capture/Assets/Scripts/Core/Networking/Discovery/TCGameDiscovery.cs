@@ -4,21 +4,20 @@ using Mirror.Discovery;
 using SceneManagement;
 using UnityEngine;
 using UnityEngine.Events;
+using Logger = Core.Logging.Logger;
 
 namespace Core.Networking.Discovery
 {
 	[RequireComponent(typeof(TCNetworkManager))]
 	internal class TCGameDiscovery : NetworkDiscoveryBase<TCServerRequest, TCServerResponse>
 	{
-		public class ServerFoundUnityEvent : UnityEvent<TCServerResponse> { }
-
 		/// <summary>
-		/// Invoked when a new server was found, if discovering is happening
+		///     Invoked when a new server was found, if discovering is happening
 		/// </summary>
 		public readonly ServerFoundUnityEvent OnServerFound = new ServerFoundUnityEvent();
 
 		/// <summary>
-		/// The active network manager
+		///     The active network manager
 		/// </summary>
 		private TCNetworkManager netManager;
 
@@ -30,17 +29,17 @@ namespace Core.Networking.Discovery
 			//Set the active game discovery to this discovery object
 			netManager.gameDiscovery = this;
 
-			Logging.Logger.Debug("Game discovery is ready!");
+			Logger.Debug("Game discovery is ready!");
 		}
 
 		private void OnDestroy()
 		{
-			Logging.Logger.Debug("Game discovery has been destroyed.");
+			Logger.Debug("Game discovery has been destroyed.");
 		}
 
 		protected override TCServerResponse ProcessRequest(TCServerRequest request, IPEndPoint endpoint)
 		{
-			Logging.Logger.Debug("Processing discovery request from `{@Address}`...", endpoint.Address);
+			Logger.Debug("Processing discovery request from `{@Address}`...", endpoint.Address);
 
 			try
 			{
@@ -57,16 +56,20 @@ namespace Core.Networking.Discovery
 			}
 			catch (NotImplementedException)
 			{
-				Logging.Logger.Error("Current transport does not support network discovery!");
+				Logger.Error("Current transport does not support network discovery!");
 				throw;
 			}
+		}
+
+		public class ServerFoundUnityEvent : UnityEvent<TCServerResponse>
+		{
 		}
 
 		#region Client
 
 		protected override void ProcessResponse(TCServerResponse response, IPEndPoint endpoint)
 		{
-			if(response == null)
+			if (response == null)
 				return;
 
 			//So we found a server, invoke the onServerFound event
@@ -74,10 +77,13 @@ namespace Core.Networking.Discovery
 			OnServerFound.Invoke(response);
 		}
 
-		protected override TCServerRequest GetRequest() => new TCServerRequest
+		protected override TCServerRequest GetRequest()
 		{
-			ApplicationVersion = Application.version
-		};
+			return new TCServerRequest
+			{
+				ApplicationVersion = Application.version
+			};
+		}
 
 		#endregion
 	}

@@ -7,51 +7,47 @@ using Logger = Core.Logging.Logger;
 namespace UI
 {
 	/// <summary>
-	/// Controller for the client UI
+	///     Controller for the client UI
 	/// </summary>
 	internal class ClientUI : MonoBehaviour
 	{
 		/// <summary>
-		/// Is the pause menu open
+		///     Is the pause menu open
 		/// </summary>
 		public static bool IsPauseMenuOpen;
 
 		/// <summary>
-		/// The <see cref="Player.PlayerManager"/>
+		///     The hud
+		/// </summary>
+		[Tooltip("The hud")] public Hud hud;
+
+		/// <summary>
+		///     The killfeed
+		/// </summary>
+		[Tooltip("The killfeed")] public KillFeed killFeed;
+
+		/// <summary>
+		///     The pause menu
+		/// </summary>
+		[Tooltip("The pause menu")] public MainMenuController pauseMenu;
+
+		/// <summary>
+		///     The scoreboard gameobject
+		/// </summary>
+		[Tooltip("The scoreboard gameobject")] public GameObject scoreBoardObject;
+
+		/// <summary>
+		///     The <see cref="Player.PlayerManager" />
 		/// </summary>
 		[NonSerialized] public PlayerManager PlayerManager;
 
 		/// <summary>
-		/// The <see cref="Weapons.WeaponManager"/>
+		///     The <see cref="Weapons.WeaponManager" />
 		/// </summary>
 		[NonSerialized] public WeaponManager WeaponManager;
 
 		/// <summary>
-		/// The hud
-		/// </summary>
-		[Tooltip("The hud")]
-		public Hud hud;
-
-		/// <summary>
-		/// The killfeed
-		/// </summary>
-		[Tooltip("The killfeed")]
-		public KillFeed killFeed;
-
-		/// <summary>
-		/// The pause menu
-		/// </summary>
-		[Tooltip("The pause menu")]
-		public MainMenuController pauseMenu;
-
-		/// <summary>
-		/// The scoreboard gameobject
-		/// </summary>
-		[Tooltip("The scoreboard gameobject")]
-		public GameObject scoreBoardObject;
-
-		/// <summary>
-		/// Sets up the UI
+		///     Sets up the UI
 		/// </summary>
 		/// <param name="playerManager"></param>
 		public void SetupUI(PlayerManager playerManager)
@@ -73,7 +69,7 @@ namespace UI
 		}
 
 		/// <summary>
-		/// Toggles the pause menu
+		///     Toggles the pause menu
 		/// </summary>
 		public void TogglePauseMenu()
 		{
@@ -81,7 +77,7 @@ namespace UI
 		}
 
 		/// <summary>
-		/// Activate a pause menu
+		///     Activate a pause menu
 		/// </summary>
 		/// <param name="state"></param>
 		public void ActivatePauseMenu(bool state)
@@ -99,7 +95,7 @@ namespace UI
 		}
 
 		/// <summary>
-		/// Toggles the score board
+		///     Toggles the score board
 		/// </summary>
 		public void ToggleScoreBoard()
 		{

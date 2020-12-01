@@ -1,27 +1,27 @@
 ﻿namespace Settings.Enums
 {
 	/// <summary>
-	/// The texture quality
+	///     The texture quality
 	/// </summary>
 	internal enum TextureQuality
 	{
 		/// <summary>
-		/// Full resolution textures
+		///     Full resolution textures
 		/// </summary>
 		FullRes = 1,
 
 		/// <summary>
-		/// Half resolution textures
+		///     Half resolution textures
 		/// </summary>
 		HalfRes = 2,
 
 		/// <summary>
-		/// Quarter resolution textures
+		///     Quarter resolution textures
 		/// </summary>
 		QuarterRes = 3,
 
 		/// <summary>
-		/// Eight resolution textures
+		///     Eight resolution textures
 		/// </summary>
 		EightRes = 4
 	}

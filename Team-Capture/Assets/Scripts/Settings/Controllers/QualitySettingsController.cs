@@ -7,7 +7,7 @@ using Logger = Core.Logging.Logger;
 namespace Settings.Controllers
 {
 	/// <summary>
-	/// Handles controlling Unity's quality settings
+	///     Handles controlling Unity's quality settings
 	/// </summary>
 	internal static class QualitySettingsController
 	{
@@ -20,10 +20,11 @@ namespace Settings.Controllers
 
 		private static void ApplySettings()
 		{
-			if(Game.IsHeadless) return;
+			if (Game.IsHeadless) return;
 
 			VideoSettingsClass settings = GameSettings.VideoSettings;
-			Screen.SetResolution(settings.Resolution.width, settings.Resolution.height, settings.ScreenMode, settings.Resolution.refreshRate);
+			Screen.SetResolution(settings.Resolution.width, settings.Resolution.height, settings.ScreenMode,
+				settings.Resolution.refreshRate);
 			QualitySettings.masterTextureLimit = (int) settings.TextureQuality;
 			QualitySettings.vSyncCount = (int) settings.VSync;
 
@@ -32,11 +33,10 @@ namespace Settings.Controllers
 
 		#region Video Console Commands
 
-		[ConCommand("r_resolution", "Set the resolution (width x height)", CommandRunPermission.ClientOnly,2, 2, true)]
+		[ConCommand("r_resolution", "Set the resolution (width x height)", CommandRunPermission.ClientOnly, 2, 2, true)]
 		public static void SetResolutionCommand(string[] args)
 		{
 			if (int.TryParse(args[0], out int widthRes))
-			{
 				if (int.TryParse(args[1], out int heightRes))
 				{
 					GameSettings.VideoSettings.Resolution.width = widthRes;
@@ -46,7 +46,6 @@ namespace Settings.Controllers
 
 					return;
 				}
-			}
 
 			Logger.Error("Invalid input!");
 		}

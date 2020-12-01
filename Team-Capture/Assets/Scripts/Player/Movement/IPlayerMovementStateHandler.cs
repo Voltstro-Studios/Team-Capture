@@ -7,7 +7,7 @@ namespace Player.Movement
 	//Copyright (c) 2015 ultimatematchthree, 2017 Joao Borks [joao.borks@gmail.com]
 
 	/// <summary>
-	/// Handles player's state
+	///     Handles player's state
 	/// </summary>
 	internal interface IPlayerMovementStateHandler
 	{

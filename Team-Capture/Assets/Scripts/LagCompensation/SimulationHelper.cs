@@ -20,7 +20,9 @@ namespace LagCompensation
 
 		public static void SimulateCommand(PlayerManager playerExecutedCommand, Action command)
 		{
-			int playersLatency = Transport.activeTransport.GetConnectionRtt((uint)playerExecutedCommand.connectionToClient.connectionId);
+			int playersLatency =
+				Transport.activeTransport.GetConnectionRtt((uint) playerExecutedCommand.connectionToClient
+					.connectionId);
 
 			//Logger.Log($"Player's ping is {playersLatency}", LogVerbosity.Debug);
 
@@ -41,7 +43,10 @@ namespace LagCompensation
 		///     Simulates an action at a previous point in time, with each <see cref="SimulationObjects" />'s
 		///     <see cref="Transform" /> changed back as it was
 		/// </summary>
-		/// <param name="frameId">The frame at which to simulate. If negative or zero, will be how many frames to go back from the current one</param>
+		/// <param name="frameId">
+		///     The frame at which to simulate. If negative or zero, will be how many frames to go back from the
+		///     current one
+		/// </param>
 		/// <param name="function">The <see cref="Func{T}" /> to run. The value returned by the function is returned</param>
 		/// <param name="clientSubFrameLerp">
 		///     An optional modifier to change how much the position and rotation are interpolated

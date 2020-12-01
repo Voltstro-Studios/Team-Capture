@@ -3,12 +3,12 @@
 namespace Helper
 {
 	/// <summary>
-	/// Helpers for using Unity's layers
+	///     Helpers for using Unity's layers
 	/// </summary>
 	public static class LayersHelper
 	{
 		/// <summary>
-		/// Sets a object's and it children object's layer
+		///     Sets a object's and it children object's layer
 		/// </summary>
 		/// <param name="obj"></param>
 		/// <param name="newLayer"></param>

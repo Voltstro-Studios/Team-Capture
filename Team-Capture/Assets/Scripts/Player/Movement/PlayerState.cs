@@ -9,7 +9,7 @@ namespace Player.Movement
 	//Copyright (c) 2015 ultimatematchthree, 2017 Joao Borks [joao.borks@gmail.com]
 
 	/// <summary>
-	/// The state of this player
+	///     The state of this player
 	/// </summary>
 	public struct PlayerState
 	{
@@ -21,15 +21,16 @@ namespace Player.Movement
 
 		public int MoveNum;
 		public int Timestamp;
-    
+
 		public override string ToString()
 		{
-			return 
+			return
 				$"PlayerState Pos:{Position}|Vel:{Velocity}|MoveNum:{MoveNum}|Timestamp:{Timestamp}";
 		}
 
 		public static PlayerState Zero =>
-			new PlayerState {
+			new PlayerState
+			{
 				Position = Vector3.zero,
 				RotationX = 0f,
 				RotationY = 0f,
@@ -39,7 +40,7 @@ namespace Player.Movement
 
 		public static PlayerState Interpolate(PlayerState from, PlayerState to, int clientTick)
 		{
-			float t = ((float)(clientTick - from.Timestamp)) / (to.Timestamp - from.Timestamp);
+			float t = (float) (clientTick - from.Timestamp) / (to.Timestamp - from.Timestamp);
 			return new PlayerState
 			{
 				Position = Vector3.Lerp(from.Position, to.Position, t),

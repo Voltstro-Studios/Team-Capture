@@ -6,6 +6,7 @@ using Player;
 using SceneManagement;
 using UnityEngine;
 using Logger = Core.Logging.Logger;
+using SceneManager = UnityEngine.SceneManagement.SceneManager;
 
 namespace Core
 {
@@ -14,17 +15,17 @@ namespace Core
 		private const string SceneCameraTag = "SceneCamera";
 
 		/// <summary>
-		/// The active <see cref="GameManager"/>
+		///     The active <see cref="GameManager" />
 		/// </summary>
 		public static GameManager Instance;
 
 		/// <summary>
-		/// The active <see cref="TCScene"/> that this <see cref="GameManager"/> is running on
+		///     The active <see cref="TCScene" /> that this <see cref="GameManager" /> is running on
 		/// </summary>
 		public TCScene scene;
 
 		/// <summary>
-		/// The primary <see cref="Camera"/> <see cref="GameObject"/> that is in this scene
+		///     The primary <see cref="Camera" /> <see cref="GameObject" /> that is in this scene
 		/// </summary>
 		public GameObject sceneCamera;
 
@@ -54,28 +55,35 @@ namespace Core
 			scene = TCScenesManager.GetActiveScene();
 			if (scene == null)
 			{
-				Logger.Error("The scene '{@Scene}' doesn't have a TCScene assigned to it!", UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+				Logger.Error("The scene '{@Scene}' doesn't have a TCScene assigned to it!",
+					SceneManager.GetActiveScene().name);
 				return;
 			}
 
 			sceneCamera = GameObject.FindWithTag(SceneCameraTag);
 			if (sceneCamera == null)
-			{
-				Logger.Error("The scene {@Scene} doesn't have a Camera with the tag `{@SceneCameraTag}` assigned to it!", scene.scene, SceneCameraTag);
-			}
+				Logger.Error(
+					"The scene {@Scene} doesn't have a Camera with the tag `{@SceneCameraTag}` assigned to it!",
+					scene.scene, SceneCameraTag);
 		}
 
 		/// <summary>
-		/// Gets this scene's main camera
+		///     Gets this scene's main camera
 		/// </summary>
 		/// <returns></returns>
-		public static GameObject GetActiveSceneCamera() => Instance.sceneCamera;
+		public static GameObject GetActiveSceneCamera()
+		{
+			return Instance.sceneCamera;
+		}
 
 		/// <summary>
-		/// Gets the active <see cref="TCScene"/> running on this <see cref="GameManager"/>
+		///     Gets the active <see cref="TCScene" /> running on this <see cref="GameManager" />
 		/// </summary>
 		/// <returns></returns>
-		public static TCScene GetActiveScene() => Instance.scene;
+		public static TCScene GetActiveScene()
+		{
+			return Instance.scene;
+		}
 
 		#endregion
 
@@ -86,7 +94,7 @@ namespace Core
 		private static readonly Dictionary<string, PlayerManager> Players = new Dictionary<string, PlayerManager>();
 
 		/// <summary>
-		/// Adds a <see cref="PlayerManager"/>
+		///     Adds a <see cref="PlayerManager" />
 		/// </summary>
 		/// <param name="netId"></param>
 		/// <param name="playerManager"></param>
@@ -100,7 +108,7 @@ namespace Core
 		}
 
 		/// <summary>
-		/// Removes a <see cref="PlayerManager"/> using their assigned ID
+		///     Removes a <see cref="PlayerManager" /> using their assigned ID
 		/// </summary>
 		/// <param name="playerId"></param>
 		public static void RemovePlayer(string playerId)
@@ -110,7 +118,7 @@ namespace Core
 		}
 
 		/// <summary>
-		/// Returns a <see cref="PlayerManager"/> using their assigned ID
+		///     Returns a <see cref="PlayerManager" /> using their assigned ID
 		/// </summary>
 		/// <param name="playerId"></param>
 		/// <returns></returns>
@@ -120,7 +128,7 @@ namespace Core
 		}
 
 		/// <summary>
-		/// Gets all <see cref="PlayerManager"/>s
+		///     Gets all <see cref="PlayerManager" />s
 		/// </summary>
 		/// <returns></returns>
 		public static PlayerManager[] GetAllPlayers()
@@ -129,7 +137,7 @@ namespace Core
 		}
 
 		/// <summary>
-		/// Clears all players from the players list
+		///     Clears all players from the players list
 		/// </summary>
 		public static void ClearAllPlayers()
 		{
@@ -165,13 +173,9 @@ namespace Core
 
 			string damage = args[1];
 			if (int.TryParse(damage, out int result))
-			{
 				player.TakeDamage(result, playerId);
-			}
 			else
-			{
 				Logger.Error("The imputed damage to do isn't a number!");
-			}
 		}
 
 		[ConCommand("players", "Gets a list of all the players")]
@@ -185,9 +189,7 @@ namespace Core
 
 			Logger.Info("== Connected Players ==");
 			foreach (PlayerManager playerManager in GetAllPlayers())
-			{
 				Logger.Info(" Name: {@PlayerName} - ID: {@PlayerNetID}", playerManager.username, playerManager.netId);
-			}
 		}
 
 		#endregion

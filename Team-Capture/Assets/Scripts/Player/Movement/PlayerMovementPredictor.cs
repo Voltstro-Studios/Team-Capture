@@ -11,14 +11,14 @@ namespace Player.Movement
 	//Copyright (c) 2015 ultimatematchthree, 2017 Joao Borks [joao.borks@gmail.com]
 
 	/// <summary>
-	/// Helps in predicting movement
+	///     Helps in predicting movement
 	/// </summary>
 	internal sealed class PlayerMovementPredictor : MonoBehaviour, IPlayerMovementStateHandler
 	{
-		private LinkedList<PlayerInputs> pendingInputs;
 		private PlayerMovementManager character;
-		private PlayerState predictedState;
 		private PlayerState lastServerState = PlayerState.Zero;
+		private LinkedList<PlayerInputs> pendingInputs;
+		private PlayerState predictedState;
 
 		private void Awake()
 		{
@@ -33,13 +33,6 @@ namespace Player.Movement
 			lastServerState = PlayerState.Zero;
 		}
 
-		public void AddInput(PlayerInputs input)
-		{
-			pendingInputs.AddLast(input);
-			ApplyInput(input);    
-			character.SyncState(predictedState);
-		}
-
 		public void OnStateChange(PlayerState newState)
 		{
 			if (newState.Timestamp <= lastServerState.Timestamp) return;
@@ -48,10 +41,18 @@ namespace Player.Movement
 			{
 				pendingInputs.RemoveFirst();
 			}
+
 			predictedState = newState;
 			lastServerState = newState;
 
 			UpdatePredictedState();
+		}
+
+		public void AddInput(PlayerInputs input)
+		{
+			pendingInputs.AddLast(input);
+			ApplyInput(input);
+			character.SyncState(predictedState);
 		}
 
 		private void UpdatePredictedState()

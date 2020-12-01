@@ -13,49 +13,46 @@ using Logger = Core.Logging.Logger;
 namespace UI
 {
 	/// <summary>
-	/// Controller for a main menu
+	///     Controller for a main menu
 	/// </summary>
 	internal class MainMenuController : MonoBehaviour
 	{
 		/// <summary>
-		/// The parent for all main menu panels
+		///     The parent for all main menu panels
 		/// </summary>
-		[Header("Base Settings")]
-		[Tooltip("The parent for all main menu panels")]
+		[Header("Base Settings")] [Tooltip("The parent for all main menu panels")]
 		public Transform mainMenuPanel;
 
 		/// <summary>
-		/// The top nav bar, where the buttons will go
+		///     The top nav bar, where the buttons will go
 		/// </summary>
 		[Tooltip("The top nav bar, where the buttons will go")]
 		public Transform topNavBar;
 
 		/// <summary>
-		/// The bottom nav bar, where the buttons will go
+		///     The bottom nav bar, where the buttons will go
 		/// </summary>
 		[Tooltip("The bottom nav bar, where the buttons will go")]
 		public Transform bottomNavBar;
 
 		/// <summary>
-		/// Top top button prefab
+		///     Top top button prefab
 		/// </summary>
-		[Tooltip("Top top button prefab")]
-		public GameObject topButtonPrefab;
+		[Tooltip("Top top button prefab")] public GameObject topButtonPrefab;
 
 		/// <summary>
-		/// The bottom button prefab
+		///     The bottom button prefab
 		/// </summary>
-		[Tooltip("The bottom button prefab")]
-		public GameObject bottomButtonPrefab;
+		[Tooltip("The bottom button prefab")] public GameObject bottomButtonPrefab;
 
 		/// <summary>
-		/// All the main menu panels that this main menu will have
+		///     All the main menu panels that this main menu will have
 		/// </summary>
 		[Tooltip("All the main menu panels that this main menu will have")]
 		public MainMenuPanel[] menuPanels;
 
 		/// <summary>
-		/// The key to use to close the current panel
+		///     The key to use to close the current panel
 		/// </summary>
 		[Tooltip("The key to use to close the current panel")]
 		public KeyCode closeKey = KeyCode.Escape;
@@ -73,7 +70,7 @@ namespace UI
 
 			//Create home/return button
 			string backButtonText = "Home";
-			if(NetworkManager.singleton != null)
+			if (NetworkManager.singleton != null)
 				if (NetworkManager.singleton.isNetworkActive)
 					backButtonText = "Return";
 			CreateButton(topButtonPrefab, topNavBar, backButtonText, CloseActivePanel, 69f);
@@ -89,14 +86,13 @@ namespace UI
 
 				//If it has a MainMenuPanelBase, set it cancel button's onClick event to toggle it self
 				if (panel.GetComponent<MainMenuPanelBase>() != null)
-					panel.GetComponent<MainMenuPanelBase>().cancelButton.onClick.AddListener(delegate{TogglePanel(menuPanel.name);});
+					panel.GetComponent<MainMenuPanelBase>().cancelButton.onClick
+						.AddListener(delegate { TogglePanel(menuPanel.name); });
 
 				//Create the button for it
 				if (menuPanel.bottomNavBarButton)
-				{
 					CreateButton(bottomButtonPrefab, bottomNavBar, menuPanel.menuButtonText,
 						delegate { TogglePanel(menuPanel.name); });
-				}
 				else
 					CreateButton(topButtonPrefab, topNavBar, menuPanel.menuButtonText,
 						delegate { TogglePanel(menuPanel.name); });
@@ -132,7 +128,7 @@ namespace UI
 		}
 
 		/// <summary>
-		/// Toggles between panels
+		///     Toggles between panels
 		/// </summary>
 		/// <param name="panelName"></param>
 		public void TogglePanel(string panelName)
@@ -162,7 +158,7 @@ namespace UI
 		}
 
 		/// <summary>
-		/// Closes the active panel
+		///     Closes the active panel
 		/// </summary>
 		public void CloseActivePanel()
 		{
@@ -170,13 +166,14 @@ namespace UI
 				ClosePanel(GetActivePanel());
 		}
 
-		private void CreateButton(GameObject buttonPrefab, Transform parent, string text, UnityAction action, float maxSize = 52f, bool bold = false)
+		private void CreateButton(GameObject buttonPrefab, Transform parent, string text, UnityAction action,
+			float maxSize = 52f, bool bold = false)
 		{
 			GameObject button = Instantiate(buttonPrefab, parent);
 			TextMeshProUGUI tmpText = button.GetComponentInChildren<TextMeshProUGUI>();
 			tmpText.text = text;
 			tmpText.fontSizeMax = maxSize;
-			if(bold)
+			if (bold)
 				tmpText.fontStyle = FontStyles.Bold;
 			button.GetComponent<Button>().onClick.AddListener(action);
 			button.name = $"{text} Button";
@@ -194,7 +191,7 @@ namespace UI
 		}
 
 		/// <summary>
-		/// Returns the active panel's <see cref="MainMenuPanel"/>
+		///     Returns the active panel's <see cref="MainMenuPanel" />
 		/// </summary>
 		/// <returns></returns>
 		public MainMenuPanel GetActivePanel()

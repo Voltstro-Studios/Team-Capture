@@ -8,21 +8,12 @@ namespace Weapons
 {
 	internal class WeaponGraphics : MonoBehaviour
 	{
-		[ConVar("cl_muzzleflashlighting", "Whether or not the muzzle flash will have lighting", nameof(InvokeLightingChange), true)]
+		[ConVar("cl_muzzleflashlighting", "Whether or not the muzzle flash will have lighting",
+			nameof(InvokeLightingChange), true)]
 		public static bool MuzzleFlashLighting = true;
 
-		public static event Action LightingChange;
-
-		public static void InvokeLightingChange()
-		{
-			LightingChange?.Invoke();
-		}
-
-		public void ChangeLighting()
-		{
-			ParticleSystem.LightsModule lighting = muzzleFlash.lights;
-			lighting.enabled = MuzzleFlashLighting;
-		}
+		public ParticleSystem muzzleFlash;
+		public Transform bulletTracerPosition;
 
 		public void OnEnable()
 		{
@@ -38,14 +29,24 @@ namespace Weapons
 			GameSettings.SettingsUpdated -= ApplySettings;
 		}
 
+		public static event Action LightingChange;
+
+		public static void InvokeLightingChange()
+		{
+			LightingChange?.Invoke();
+		}
+
+		public void ChangeLighting()
+		{
+			ParticleSystem.LightsModule lighting = muzzleFlash.lights;
+			lighting.enabled = MuzzleFlashLighting;
+		}
+
 		private void ApplySettings()
 		{
 			MultiplayerSettingsClass multiplayerSettings = GameSettings.MultiplayerSettings;
 			MuzzleFlashLighting = multiplayerSettings.WeaponMuzzleFlashLighting;
 			ChangeLighting();
 		}
-
-		public ParticleSystem muzzleFlash;
-		public Transform bulletTracerPosition;
 	}
 }

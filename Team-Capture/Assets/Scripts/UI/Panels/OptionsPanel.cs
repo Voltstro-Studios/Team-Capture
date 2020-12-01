@@ -9,24 +9,25 @@ using UnityEngine.UI;
 namespace UI.Panels
 {
 	/// <summary>
-	/// The panel for options
+	///     The panel for options
 	/// </summary>
 	internal class OptionsPanel : MainMenuPanelBase
 	{
-		private readonly Dictionary<Button, GameObject> settingPanels = new Dictionary<Button, GameObject>();
+		[Header("Object Locations")] [SerializeField]
+		private GameObject appliedOptionsPanel;
 
-		[Header("Object Locations")] 
-		[SerializeField] private GameObject appliedOptionsPanel;
 		[SerializeField] private Transform panelsLocation;
 		[SerializeField] private Transform buttonLocation;
 
-		[Header("Object Prefabs")]
-		[SerializeField] private GameObject panelPrefab;
+		[Header("Object Prefabs")] [SerializeField]
+		private GameObject panelPrefab;
+
 		[SerializeField] private GameObject settingsTitlePrefab;
 		[SerializeField] private GameObject settingsButtonPrefab;
 		[SerializeField] private GameObject settingsTogglePrefab;
 		[SerializeField] private GameObject settingsSliderPrefab;
 		[SerializeField] private GameObject settingsDropdownPrefab;
+		private readonly Dictionary<Button, GameObject> settingPanels = new Dictionary<Button, GameObject>();
 
 		private void Start()
 		{
@@ -48,7 +49,7 @@ namespace UI.Panels
 		}
 
 		/// <summary>
-		/// Saves the settings
+		///     Saves the settings
 		/// </summary>
 		public void SaveSettings()
 		{
@@ -58,17 +59,22 @@ namespace UI.Panels
 		}
 
 		/// <summary>
-		/// Closes the applied settings panel
+		///     Closes the applied settings panel
 		/// </summary>
 		public void CloseAppliedOptionsPanel()
 		{
 			appliedOptionsPanel.SetActive(false);
 		}
 
+		private static Transform GetPanelItemArea(GameObject panel)
+		{
+			return panel.GetComponent<SettingsMenuPanel>().scrollingArea;
+		}
+
 		#region Panel Management
 
 		/// <summary>
-		/// Adds a new panel
+		///     Adds a new panel
 		/// </summary>
 		/// <param name="optionsMenu"></param>
 		/// <returns></returns>
@@ -81,7 +87,7 @@ namespace UI.Panels
 
 			//Button
 			Button button = Instantiate(settingsButtonPrefab, buttonLocation, false).GetComponent<Button>();
-			button.onClick.AddListener((delegate { OpenPanel(optionsMenu.Name); }));
+			button.onClick.AddListener(delegate { OpenPanel(optionsMenu.Name); });
 			button.GetComponentInChildren<TextMeshProUGUI>().text = optionsMenu.Name.Replace(" ", "\n");
 
 			settingPanels.Add(button, panel);
@@ -90,7 +96,7 @@ namespace UI.Panels
 		}
 
 		/// <summary>
-		/// Opens a panel
+		///     Opens a panel
 		/// </summary>
 		/// <param name="panelName"></param>
 		public void OpenPanel(string panelName)
@@ -108,7 +114,7 @@ namespace UI.Panels
 		}
 
 		/// <summary>
-		/// Removes all panels
+		///     Removes all panels
 		/// </summary>
 		public void ClearPanels()
 		{
@@ -120,7 +126,7 @@ namespace UI.Panels
 		}
 
 		/// <summary>
-		/// Closes all panels
+		///     Closes all panels
 		/// </summary>
 		private void ClosePanels()
 		{
@@ -130,7 +136,7 @@ namespace UI.Panels
 		}
 
 		/// <summary>
-		/// Gets a <see cref="GameObject"/> for a menu
+		///     Gets a <see cref="GameObject" /> for a menu
 		/// </summary>
 		/// <param name="panelName"></param>
 		/// <returns></returns>
@@ -142,7 +148,7 @@ namespace UI.Panels
 
 			return result.FirstOrDefault();
 		}
-		
+
 		#endregion
 
 		#region Add UI Elemements
@@ -167,7 +173,8 @@ namespace UI.Panels
 			return toggle;
 		}
 
-		public Slider AddSliderToPanel(GameObject panel, string sideText, float currentValue, bool wholeNumbers = false, float min = 0, float max = 100)
+		public Slider AddSliderToPanel(GameObject panel, string sideText, float currentValue, bool wholeNumbers = false,
+			float min = 0, float max = 100)
 		{
 			//Create new slider object
 			GameObject sliderObject = Instantiate(settingsSliderPrefab, GetPanelItemArea(panel), false);
@@ -205,12 +212,7 @@ namespace UI.Panels
 			dropdownSettings.dropdown.value = currentIndex;
 			return dropdownSettings.dropdown;
 		}
-		
-		#endregion
 
-		private static Transform GetPanelItemArea(GameObject panel)
-		{
-			return panel.GetComponent<SettingsMenuPanel>().scrollingArea;
-		}
+		#endregion
 	}
 }

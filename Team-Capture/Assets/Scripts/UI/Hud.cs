@@ -5,38 +5,34 @@ using Weapons;
 namespace UI
 {
 	/// <summary>
-	/// Hud, or 'Heads Up Display', it displays your health and ammo as well as other stuff
+	///     Hud, or 'Heads Up Display', it displays your health and ammo as well as other stuff
 	/// </summary>
 	internal class Hud : MonoBehaviour
 	{
 		/// <summary>
-		/// The ammo text
+		///     The ammo text
 		/// </summary>
-		[Tooltip("The ammo text")]
-		public TextMeshProUGUI ammoText;
+		[Tooltip("The ammo text")] public TextMeshProUGUI ammoText;
 
 		/// <summary>
-		/// The max ammo text
+		///     The max ammo text
 		/// </summary>
-		[Tooltip("The max ammo text")]
-		public TextMeshProUGUI maxAmmoText;
+		[Tooltip("The max ammo text")] public TextMeshProUGUI maxAmmoText;
 
 		/// <summary>
-		/// The reload text
+		///     The reload text
 		/// </summary>
-		[Tooltip("The reload text")]
-		public GameObject reloadTextGameObject;
+		[Tooltip("The reload text")] public GameObject reloadTextGameObject;
 
 		/// <summary>
-		/// The health text
+		///     The health text
 		/// </summary>
-		[Tooltip("The health text")]
-		public TextMeshProUGUI healthText;
+		[Tooltip("The health text")] public TextMeshProUGUI healthText;
 
 		private ClientUI clientUI;
 
 		/// <summary>
-		/// Sets up the <see cref="Hud"/>
+		///     Sets up the <see cref="Hud" />
 		/// </summary>
 		/// <param name="ui"></param>
 		public void Setup(ClientUI ui)
@@ -45,7 +41,7 @@ namespace UI
 		}
 
 		/// <summary>
-		/// Updates the health text
+		///     Updates the health text
 		/// </summary>
 		public void UpdateHealthUI()
 		{
@@ -53,12 +49,12 @@ namespace UI
 		}
 
 		/// <summary>
-		/// Updates ammo text
+		///     Updates ammo text
 		/// </summary>
 		/// <param name="netWeapon"></param>
 		public void UpdateAmmoUI(NetworkedWeapon netWeapon)
 		{
-			if(clientUI == null || clientUI.WeaponManager == null)
+			if (clientUI == null || clientUI.WeaponManager == null)
 				return;
 
 			TCWeapon weapon = netWeapon.GetTCWeapon();

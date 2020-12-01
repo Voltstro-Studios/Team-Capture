@@ -12,29 +12,29 @@ using Logger = Core.Logging.Logger;
 namespace UI.Panels
 {
 	/// <summary>
-	/// A panel for joining games
+	///     A panel for joining games
 	/// </summary>
 	internal class JoinGamePanel : MainMenuPanelBase
 	{
-		private readonly List<TCServerResponse> servers = new List<TCServerResponse>();
-
-		private TCGameDiscovery gameDiscovery;
-
 		/// <summary>
-		/// The prefab for a server button
+		///     The prefab for a server button
 		/// </summary>
 		[Tooltip("The prefab for a server button")]
 		public GameObject serverItemPrefab;
 
 		/// <summary>
-		/// The <see cref="Transform"/> for the server list
+		///     The <see cref="Transform" /> for the server list
 		/// </summary>
 		public Transform serverListTransform;
 
 		/// <summary>
-		/// Text for the current status
+		///     Text for the current status
 		/// </summary>
 		public TextMeshProUGUI statusText;
+
+		private readonly List<TCServerResponse> servers = new List<TCServerResponse>();
+
+		private TCGameDiscovery gameDiscovery;
 
 		private void Awake()
 		{
@@ -54,7 +54,7 @@ namespace UI.Panels
 
 		private void OnDisable()
 		{
-			if(gameDiscovery == null) return;
+			if (gameDiscovery == null) return;
 
 			//Remove the game discovery for when a server is found
 			gameDiscovery.OnServerFound.RemoveListener(AddServer);
@@ -63,32 +63,30 @@ namespace UI.Panels
 		}
 
 		/// <summary>
-		/// Refreshes the server by removing all servers
+		///     Refreshes the server by removing all servers
 		/// </summary>
 		public void RefreshServerList()
 		{
 			//Remove all servers
 			servers.Clear();
 			for (int i = 0; i < serverListTransform.childCount; i++)
-			{
 				Destroy(serverListTransform.GetChild(i).gameObject);
-			}
 
 			statusText.text = "Searching for games...";
 			statusText.gameObject.SetActive(true);
 		}
 
 		/// <summary>
-		/// Adds a <see cref="TCServerResponse"/> to the list of servers
+		///     Adds a <see cref="TCServerResponse" /> to the list of servers
 		/// </summary>
 		/// <param name="server"></param>
 		public void AddServer(TCServerResponse server)
 		{
 			//We are connecting to a server...
-			if(NetworkManager.singleton.mode == NetworkManagerMode.ClientOnly) return;
+			if (NetworkManager.singleton.mode == NetworkManagerMode.ClientOnly) return;
 
 			//If the server already exists in the list then ignore it
-			if(servers.Any(x => Equals(x.EndPoint, server.EndPoint)))
+			if (servers.Any(x => Equals(x.EndPoint, server.EndPoint)))
 				return;
 
 			//Add the server to the list
@@ -101,7 +99,7 @@ namespace UI.Panels
 		}
 
 		/// <summary>
-		/// Connects to a server
+		///     Connects to a server
 		/// </summary>
 		/// <param name="ip"></param>
 		public void ConnectToServer(IPEndPoint ip)

@@ -9,7 +9,7 @@ namespace Player.Movement
 	//Copyright (c) 2015 ultimatematchthree, 2017 Joao Borks [joao.borks@gmail.com]
 
 	/// <summary>
-	/// The inputs to send to the server
+	///     The inputs to send to the server
 	/// </summary>
 	public struct PlayerInputs
 	{
@@ -28,7 +28,7 @@ namespace Player.Movement
 
 		public int InputNum;
 
-		public static PlayerInputs Zero => 
+		public static PlayerInputs Zero =>
 			new PlayerInputs(Vector2.zero, Vector2.zero, false, 0);
 	}
 }

@@ -3,25 +3,24 @@ using Core;
 using Mirror;
 using TMPro;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 namespace UI.Panels
 {
 	internal class QuitPanel : MainMenuPanelBase
 	{
-		private string[] quitSentences;
-
 		/// <summary>
-		/// The location of where the quit messages are
+		///     The location of where the quit messages are
 		/// </summary>
 		[Tooltip("The location of where the quit messages are")]
 		public string quitMessagesLocation = "Resources/quit-messages.txt";
 
 		/// <summary>
-		/// The text for where the quit messages will go
+		///     The text for where the quit messages will go
 		/// </summary>
 		[Tooltip("The text for where the quit messages will go")]
 		public TextMeshProUGUI quitSentenceText;
+
+		private string[] quitSentences;
 
 		private void Awake()
 		{
@@ -43,7 +42,7 @@ namespace UI.Panels
 		}
 
 		/// <summary>
-		/// Quits from the game
+		///     Quits from the game
 		/// </summary>
 		public void Quit()
 		{

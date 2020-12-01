@@ -1,7 +1,7 @@
 ﻿namespace Console.TypeReader
 {
 	/// <summary>
-	/// A default reader for <see cref="string"/>
+	///     A default reader for <see cref="string" />
 	/// </summary>
 	internal sealed class StringReader : ITypeReader
 	{

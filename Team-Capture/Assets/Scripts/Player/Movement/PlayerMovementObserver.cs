@@ -10,13 +10,13 @@ namespace Player.Movement
 	//Copyright (c) 2015 ultimatematchthree, 2017 Joao Borks [joao.borks@gmail.com]
 
 	/// <summary>
-	/// Handles observing other players
+	///     Handles observing other players
 	/// </summary>
 	internal sealed class PlayerMovementObserver : MonoBehaviour, IPlayerMovementStateHandler
 	{
-		private LinkedList<PlayerState> stateBuffer;
 		private PlayerMovementManager character;
 		private int clientTick;
+		private LinkedList<PlayerState> stateBuffer;
 
 		private void Awake()
 		{
@@ -39,7 +39,9 @@ namespace Player.Movement
 				stateBuffer.RemoveFirst();
 			}
 
-			SetObservedState(toNode != null ? PlayerState.Interpolate(fromNode.Value, toNode.Value, pastTick) : fromNode.Value);
+			SetObservedState(toNode != null
+				? PlayerState.Interpolate(fromNode.Value, toNode.Value, pastTick)
+				: fromNode.Value);
 		}
 
 		private void FixedUpdate()

@@ -11,49 +11,71 @@ using Logger = Core.Logging.Logger;
 namespace Weapons
 {
 	/// <summary>
-	/// Weapon management, such as adding, removing and selecting weapons
+	///     Weapon management, such as adding, removing and selecting weapons
 	/// </summary>
 	public class WeaponManager : NetworkBehaviour
 	{
-		/// <summary>
-		/// A synced list of all the weapons this client has
-		/// </summary>
-		private readonly SyncList<NetworkedWeapon> weapons = new SyncList<NetworkedWeapon>();
+		public delegate void WeaponUpdatedDelegate(NetworkedWeapon weapon);
 
 		/// <summary>
-		/// The active reloading coroutine
-		/// </summary>
-		private Coroutine reloadingCoroutine;
-
-		/// <summary>
-		/// The layer to use when creating our weapons (for local weapons)
+		///     The layer to use when creating our weapons (for local weapons)
 		/// </summary>
 		[SerializeField] private string weaponLayerName = "LocalWeapon";
 
 		/// <summary>
-		/// Where all the weapons are created
+		///     Where all the weapons are created
 		/// </summary>
 		[SerializeField] private Transform weaponsHolderSpot;
 
 		/// <summary>
-		/// What is the selected weapon
+		///     A synced list of all the weapons this client has
+		/// </summary>
+		private readonly SyncList<NetworkedWeapon> weapons = new SyncList<NetworkedWeapon>();
+
+		/// <summary>
+		///     The active reloading coroutine
+		/// </summary>
+		private Coroutine reloadingCoroutine;
+
+		[NonSerialized] internal WeaponSway WeaponSway;
+
+		/// <summary>
+		///     What is the selected weapon
 		/// </summary>
 		[field: SyncVar]
 		public int SelectedWeaponIndex { get; private set; }
 
 		/// <summary>
-		/// Gets how many weapons are on the weapon holder spot
+		///     Gets how many weapons are on the weapon holder spot
 		/// </summary>
 		public int WeaponHolderSpotChildCount => weaponsHolderSpot.childCount;
 
-		public delegate void WeaponUpdatedDelegate(NetworkedWeapon weapon);
+		/// <summary>
+		///     Gets the server's connection to this client
+		/// </summary>
+		private NetworkConnection GetClientConnection => netIdentity.connectionToClient;
+
+		#region Unity Event Functions
+
+		private void Start()
+		{
+			//Create all existing weapons on start
+			for (int i = 0; i < weapons.Count; i++)
+			{
+				GameObject newWeapon =
+					Instantiate(WeaponsResourceManager.GetWeapon(weapons[i].Weapon).baseWeaponPrefab,
+						weaponsHolderSpot);
+
+				newWeapon.SetActive(SelectedWeaponIndex == i);
+			}
+		}
+
+		#endregion
 
 		public event WeaponUpdatedDelegate WeaponUpdated;
 
-		[NonSerialized] internal WeaponSway WeaponSway;
-
 		/// <summary>
-		/// Server callback for when <see cref="weapons"/> is modified
+		///     Server callback for when <see cref="weapons" /> is modified
 		/// </summary>
 		/// <param name="op"></param>
 		/// <param name="itemIndex"></param>
@@ -78,19 +100,12 @@ namespace Weapons
 			}
 		}
 
-		#region Unity Event Functions
+		#region Client Stuff
 
-		private void Start()
+		[TargetRpc(channel = 4)]
+		internal void TargetSendWeaponStatus(NetworkConnection conn, NetworkedWeapon weaponStatus)
 		{
-			//Create all existing weapons on start
-			for (int i = 0; i < weapons.Count; i++)
-			{
-				GameObject newWeapon =
-					Instantiate(WeaponsResourceManager.GetWeapon(weapons[i].Weapon).baseWeaponPrefab,
-						weaponsHolderSpot);
-
-				newWeapon.SetActive(SelectedWeaponIndex == i);
-			}
+			WeaponUpdated?.Invoke(weaponStatus);
 		}
 
 		#endregion
@@ -117,7 +132,7 @@ namespace Weapons
 		#region Weapon List Management
 
 		/// <summary>
-		/// Get the active weapon
+		///     Get the active weapon
 		/// </summary>
 		/// <returns></returns>
 		internal NetworkedWeapon GetActiveWeapon()
@@ -126,7 +141,7 @@ namespace Weapons
 		}
 
 		/// <summary>
-		/// Gets the active weapon's graphics
+		///     Gets the active weapon's graphics
 		/// </summary>
 		/// <returns></returns>
 		internal WeaponGraphics GetActiveWeaponGraphics()
@@ -135,7 +150,7 @@ namespace Weapons
 		}
 
 		/// <summary>
-		/// Gets a weapon from the list
+		///     Gets a weapon from the list
 		/// </summary>
 		/// <param name="weapon"></param>
 		/// <returns></returns>
@@ -153,7 +168,7 @@ namespace Weapons
 		#region Weapon Reloading
 
 		/// <summary>
-		/// Requests the server to reload the current weapon
+		///     Requests the server to reload the current weapon
 		/// </summary>
 		[Client]
 		internal void ClientReloadWeapon()
@@ -163,24 +178,24 @@ namespace Weapons
 		}
 
 		/// <summary>
-		/// Reloads clients current weapon
+		///     Reloads clients current weapon
 		/// </summary>
 		[Command(channel = 3)]
 		private void CmdReloadPlayerWeapon()
 		{
 			NetworkedWeapon weapon = GetActiveWeapon();
 
-			if(weapon.IsReloading)
+			if (weapon.IsReloading)
 				return;
 
-			if(weapon.CurrentBulletAmount == weapon.GetTCWeapon().maxBullets)
+			if (weapon.CurrentBulletAmount == weapon.GetTCWeapon().maxBullets)
 				return;
 
 			reloadingCoroutine = StartCoroutine(ServerReloadPlayerWeapon());
 		}
 
 		/// <summary>
-		/// Reloads clients current weapon
+		///     Reloads clients current weapon
 		/// </summary>
 		/// <returns></returns>
 		[Server]
@@ -209,7 +224,7 @@ namespace Weapons
 			weapon.Reload();
 
 			//Update player's UI
-			if(SelectedWeaponIndex != weaponIndex) return;
+			if (SelectedWeaponIndex != weaponIndex) return;
 			TargetSendWeaponStatus(GetClientConnection, weapon);
 		}
 
@@ -218,7 +233,7 @@ namespace Weapons
 		#region Add Weapons
 
 		/// <summary>
-		/// Adds the scene's stock weapons to the client
+		///     Adds the scene's stock weapons to the client
 		/// </summary>
 		[Server]
 		public void AddStockWeapons()
@@ -228,7 +243,7 @@ namespace Weapons
 		}
 
 		/// <summary>
-		/// Adds a weapon
+		///     Adds a weapon
 		/// </summary>
 		/// <param name="weapon">The weapon to add</param>
 		[Server]
@@ -251,7 +266,7 @@ namespace Weapons
 		}
 
 		/// <summary>
-		/// Instantiates a weapon model in all clients
+		///     Instantiates a weapon model in all clients
 		/// </summary>
 		/// <param name="weaponName"></param>
 		[ClientRpc(channel = 3)]
@@ -270,7 +285,7 @@ namespace Weapons
 		#region Weapon Removal
 
 		/// <summary>
-		/// Removes all weapons this client has
+		///     Removes all weapons this client has
 		/// </summary>
 		[Server]
 		public void RemoveAllWeapons()
@@ -280,7 +295,7 @@ namespace Weapons
 		}
 
 		/// <summary>
-		/// Removes all weapons on the client
+		///     Removes all weapons on the client
 		/// </summary>
 		[ClientRpc(channel = 4)]
 		private void RpcRemoveAllActiveWeapons()
@@ -293,13 +308,13 @@ namespace Weapons
 		#region Weapon Selection
 
 		/// <summary>
-		/// Sets the <see cref="SelectedWeaponIndex"/> to your index
+		///     Sets the <see cref="SelectedWeaponIndex" /> to your index
 		/// </summary>
 		/// <param name="index"></param>
 		[Command(channel = 3)]
 		public void CmdSetWeapon(int index)
 		{
-			if(weapons.ElementAt(index) == null)
+			if (weapons.ElementAt(index) == null)
 				return;
 
 			Logger.Debug($"Player `{transform.name}` set their weapon index to `{index}`.");
@@ -308,14 +323,14 @@ namespace Weapons
 		}
 
 		/// <summary>
-		/// Sets the <see cref="SelectedWeaponIndex"/>
+		///     Sets the <see cref="SelectedWeaponIndex" />
 		/// </summary>
 		/// <param name="index"></param>
 		[Server]
 		private void SetClientWeaponIndex(int index)
 		{
 			//Stop reloading
-			if(reloadingCoroutine != null)
+			if (reloadingCoroutine != null)
 				StopCoroutine(reloadingCoroutine);
 
 			//Set the selected weapon index and update the visible gameobject
@@ -331,7 +346,7 @@ namespace Weapons
 		}
 
 		/// <summary>
-		/// Changes the weapons <see cref="GameObject"/> active on this client
+		///     Changes the weapons <see cref="GameObject" /> active on this client
 		/// </summary>
 		/// <param name="index"></param>
 		[ClientRpc(channel = 3)]
@@ -342,20 +357,5 @@ namespace Weapons
 		}
 
 		#endregion
-
-		#region Client Stuff
-
-		[TargetRpc(channel = 4)]
-		internal void TargetSendWeaponStatus(NetworkConnection conn, NetworkedWeapon weaponStatus)
-		{
-			WeaponUpdated?.Invoke(weaponStatus);
-		}
-
-		#endregion
-
-		/// <summary>
-		/// Gets the server's connection to this client
-		/// </summary>
-		private NetworkConnection GetClientConnection => netIdentity.connectionToClient;
 	}
 }

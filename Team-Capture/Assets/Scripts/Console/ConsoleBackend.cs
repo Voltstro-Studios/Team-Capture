@@ -4,21 +4,23 @@ using System.IO;
 using System.Reflection;
 using Console.TypeReader;
 using Core;
+using Mirror;
 using UnityEngine;
 using Logger = Core.Logging.Logger;
+using StringReader = Console.TypeReader.StringReader;
 
 namespace Console
 {
 	/// <summary>
-	/// The backend system for the console
+	///     The backend system for the console
 	/// </summary>
 	internal static class ConsoleBackend
 	{
 		public delegate void MethodDelegate(string[] args);
 
 #pragma warning disable IDE0002 //For what ever reason removing these System.Reflection before the BindingFlags causes errors
-		private const BindingFlags BindingFlags = System.Reflection.BindingFlags.Static 
-		                                          | System.Reflection.BindingFlags.Public 
+		private const BindingFlags BindingFlags = System.Reflection.BindingFlags.Static
+		                                          | System.Reflection.BindingFlags.Public
 		                                          | System.Reflection.BindingFlags.NonPublic;
 #pragma warning restore IDE0002
 
@@ -32,14 +34,14 @@ namespace Console
 		private static Dictionary<Type, ITypeReader> typeReaders;
 
 		/// <summary>
-		/// Inits the backend of the console
+		///     Inits the backend of the console
 		/// </summary>
 		public static void InitConsoleBackend()
 		{
 			configFilesLocation = Game.GetGameExecutePath() + "/Cfg/";
 			typeReaders = new Dictionary<Type, ITypeReader>
 			{
-				[typeof(string)] = new TypeReader.StringReader(),
+				[typeof(string)] = new StringReader(),
 				[typeof(bool)] = new BoolReader(),
 				[typeof(int)] = new IntReader(),
 				[typeof(float)] = new FloatReader()
@@ -51,8 +53,8 @@ namespace Console
 		}
 
 		/// <summary>
-		/// Finds all static methods with the <see cref="ConCommand"/> attribute attached to it
-		/// and adds it to the list of commands
+		///     Finds all static methods with the <see cref="ConCommand" /> attribute attached to it
+		///     and adds it to the list of commands
 		/// </summary>
 		private static void RegisterCommands()
 		{
@@ -68,7 +70,8 @@ namespace Console
 				}
 				catch (Exception ex)
 				{
-					Logger.Error("An error occurred while adding the command `{@Command}`'s method! {@Exception}", attribute.Name, ex);
+					Logger.Error("An error occurred while adding the command `{@Command}`'s method! {@Exception}",
+						attribute.Name, ex);
 					continue;
 				}
 
@@ -85,7 +88,7 @@ namespace Console
 		}
 
 		/// <summary>
-		/// Adds all fields that have the <see cref="ConVar"/> attribute attached to it
+		///     Adds all fields that have the <see cref="ConVar" /> attribute attached to it
 		/// </summary>
 		private static void RegisterConVars()
 		{
@@ -94,7 +97,7 @@ namespace Console
 				ConVar attribute = conVar.Key;
 				FieldInfo fieldInfo = conVar.Value;
 
-				if(attribute.GraphicsOnly && Game.IsHeadless)
+				if (attribute.GraphicsOnly && Game.IsHeadless)
 					continue;
 
 				Action action = null;
@@ -102,12 +105,15 @@ namespace Console
 				{
 					//Create an action if the callback string is not null
 					if (attribute.Callback != null)
-						action = (Action) Delegate.CreateDelegate(typeof(Action), fieldInfo.DeclaringType ?? throw new Exception("Field's declaring type was null!"),
+						action = (Action) Delegate.CreateDelegate(typeof(Action),
+							fieldInfo.DeclaringType ?? throw new Exception("Field's declaring type was null!"),
 							attribute.Callback);
 				}
 				catch (Exception ex)
 				{
-					Logger.Error("An error occurred while adding the con var `{@ConVar}`'s callback method! {@Exception}", attribute.Name, ex);
+					Logger.Error(
+						"An error occurred while adding the con var `{@ConVar}`'s callback method! {@Exception}",
+						attribute.Name, ex);
 					continue;
 				}
 
@@ -127,18 +133,20 @@ namespace Console
 							fieldInfo.SetValue(fieldInfo, reader.ReadType(args[0]));
 							action?.Invoke();
 
-							Logger.Info("'{@Attribute}' was set to '{@Value}'", attribute.Name, reader.ReadType(args[0]));
+							Logger.Info("'{@Attribute}' was set to '{@Value}'", attribute.Name,
+								reader.ReadType(args[0]));
 							return;
 						}
 
-						Logger.Error("There is no {@TypeReaderNameOf} for the Type {@Type}!", nameof(ITypeReader), fieldInfo.FieldType.FullName);
+						Logger.Error("There is no {@TypeReaderNameOf} for the Type {@Type}!", nameof(ITypeReader),
+							fieldInfo.FieldType.FullName);
 					}
 				}, attribute.Name);
 			}
 		}
 
 		/// <summary>
-		/// Gets all <see cref="ConCommand"/>s
+		///     Gets all <see cref="ConCommand" />s
 		/// </summary>
 		/// <returns></returns>
 		internal static Dictionary<ConCommand, MethodInfo> GetConCommands()
@@ -163,7 +171,7 @@ namespace Console
 		}
 
 		/// <summary>
-		/// Gets all <see cref="ConVar"/>s
+		///     Gets all <see cref="ConVar" />s
 		/// </summary>
 		/// <returns></returns>
 		internal static Dictionary<ConVar, FieldInfo> GetConVars()
@@ -184,7 +192,7 @@ namespace Console
 		}
 
 		/// <summary>
-		/// Adds a command to the list of commands
+		///     Adds a command to the list of commands
 		/// </summary>
 		/// <param name="conCommand"></param>
 		/// <param name="commandName"></param>
@@ -204,7 +212,7 @@ namespace Console
 		}
 
 		/// <summary>
-		/// Get a dictionary containing the command name, and it associated <see cref="ConsoleCommand"/>
+		///     Get a dictionary containing the command name, and it associated <see cref="ConsoleCommand" />
 		/// </summary>
 		/// <returns></returns>
 		public static Dictionary<string, ConsoleCommand> GetAllCommands()
@@ -213,7 +221,7 @@ namespace Console
 		}
 
 		/// <summary>
-		/// Executes a command
+		///     Executes a command
 		/// </summary>
 		/// <param name="command"></param>
 		public static void ExecuteCommand(string command)
@@ -231,22 +239,22 @@ namespace Console
 				switch (conCommand.RunPermission)
 				{
 					//The command has a RunPermission of ServerOnly, so this command can only be executed in server mode
-					case CommandRunPermission.ServerOnly when Mirror.NetworkManager.singleton == null ||
-					                                          Mirror.NetworkManager.singleton.mode != Mirror.NetworkManagerMode.ServerOnly:
+					case CommandRunPermission.ServerOnly when NetworkManager.singleton == null ||
+					                                          NetworkManager.singleton.mode !=
+					                                          NetworkManagerMode.ServerOnly:
 						Logger.Error("The command {@Command} can only be run in server mode!", tokens[0].ToLower());
 						return;
 
 					//The command has a RunPermission of ClientOnly, so this command can only be executed as a client
 					case CommandRunPermission.ClientOnly:
 					{
-						if (Mirror.NetworkManager.singleton != null)
-						{
-							if (Mirror.NetworkManager.singleton.mode == Mirror.NetworkManagerMode.ServerOnly)
+						if (NetworkManager.singleton != null)
+							if (NetworkManager.singleton.mode == NetworkManagerMode.ServerOnly)
 							{
-								Logger.Error("The command {@Command} can only be run in client/offline mode!", tokens[0].ToLower());
+								Logger.Error("The command {@Command} can only be run in client/offline mode!",
+									tokens[0].ToLower());
 								return;
 							}
-						}
 
 						break;
 					}
@@ -288,7 +296,7 @@ namespace Console
 		}
 
 		/// <summary>
-		/// Tries to auto complete a prefix
+		///     Tries to auto complete a prefix
 		/// </summary>
 		/// <param name="prefix"></param>
 		/// <returns></returns>
@@ -299,7 +307,7 @@ namespace Console
 			foreach (KeyValuePair<string, ConsoleCommand> command in commands)
 			{
 				string name = command.Key;
-				if(!name.StartsWith(prefix, true, null))
+				if (!name.StartsWith(prefix, true, null))
 					continue;
 				possibleMatches.Add(name);
 			}
@@ -310,21 +318,15 @@ namespace Console
 			// Look for longest common prefix
 			int lcp = possibleMatches[0].Length;
 			for (int i = 0; i < possibleMatches.Count - 1; i++)
-			{
 				lcp = Mathf.Min(lcp, CommonPrefix(possibleMatches[i], possibleMatches[i + 1]));
-			}
 
 			prefix += possibleMatches[0].Substring(prefix.Length, lcp - prefix.Length);
 			if (possibleMatches.Count > 1)
-			{
 				// write list of possible completions
 				foreach (string t in possibleMatches)
 					Logger.Info(t);
-			}
 			else
-			{
 				prefix += " ";
-			}
 
 			return prefix;
 		}
@@ -334,10 +336,7 @@ namespace Console
 			if (historyIndex == 0 || historyNextIndex - historyIndex >= HistoryCount - 1)
 				return "";
 
-			if (historyIndex == historyNextIndex)
-			{
-				History[historyIndex % HistoryCount] = current;
-			}
+			if (historyIndex == historyNextIndex) History[historyIndex % HistoryCount] = current;
 
 			historyIndex--;
 
@@ -355,7 +354,7 @@ namespace Console
 		}
 
 		/// <summary>
-		/// Returns length of largest common prefix of two strings
+		///     Returns length of largest common prefix of two strings
 		/// </summary>
 		/// <param name="a"></param>
 		/// <param name="b"></param>
@@ -364,10 +363,8 @@ namespace Console
 		{
 			int minl = Mathf.Min(a.Length, b.Length);
 			for (int i = 1; i <= minl; i++)
-			{
 				if (!a.StartsWith(b.Substring(0, i), true, null))
 					return i - 1;
-			}
 			return minl;
 		}
 

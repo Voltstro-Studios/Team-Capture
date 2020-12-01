@@ -6,15 +6,15 @@ using Weapons;
 namespace Player
 {
 	/// <summary>
-	/// Provides an easy way of calling methods for related functions in the <see cref="ClientUI"/>
-	/// <para>This is only created on the client side</para>
+	///     Provides an easy way of calling methods for related functions in the <see cref="ClientUI" />
+	///     <para>This is only created on the client side</para>
 	/// </summary>
 	internal sealed class PlayerUIManager : MonoBehaviour
 	{
 		private ClientUI ui;
 
 		/// <summary>
-		/// Sets up <see cref="PlayerUIManager"/>
+		///     Sets up <see cref="PlayerUIManager" />
 		/// </summary>
 		/// <param name="clientUI"></param>
 		public void Setup(ClientUI clientUI)
@@ -25,16 +25,16 @@ namespace Player
 		}
 
 		/// <summary>
-		/// Toggles the pause menu
+		///     Toggles the pause menu
 		/// </summary>
 		internal void TogglePauseMenu()
 		{
-			if(ui.pauseMenu.GetActivePanel() == null)
+			if (ui.pauseMenu.GetActivePanel() == null)
 				ui.TogglePauseMenu();
 		}
 
 		/// <summary>
-		/// Opens or closes the pause menu
+		///     Opens or closes the pause menu
 		/// </summary>
 		/// <param name="active"></param>
 		internal void SetPauseMenu(bool active)
@@ -43,7 +43,7 @@ namespace Player
 		}
 
 		/// <summary>
-		/// Toggles the scoreboard
+		///     Toggles the scoreboard
 		/// </summary>
 		internal void ToggleScoreboard()
 		{
@@ -51,7 +51,7 @@ namespace Player
 		}
 
 		/// <summary>
-		/// Set the <see cref="Hud"/>'s <see cref="GameObject"/> active state
+		///     Set the <see cref="Hud" />'s <see cref="GameObject" /> active state
 		/// </summary>
 		/// <param name="active"></param>
 		internal void SetHud(bool active)
@@ -60,7 +60,7 @@ namespace Player
 		}
 
 		/// <summary>
-		/// Adds a killfeed item
+		///     Adds a killfeed item
 		/// </summary>
 		/// <param name="message"></param>
 		internal void AddKillfeedItem(PlayerDiedMessage message)

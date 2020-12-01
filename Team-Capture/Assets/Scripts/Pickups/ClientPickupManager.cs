@@ -7,12 +7,12 @@ using Logger = Core.Logging.Logger;
 namespace Pickups
 {
 	/// <summary>
-	/// Handles pickup related tasks for the client
+	///     Handles pickup related tasks for the client
 	/// </summary>
 	internal static class ClientPickupManager
 	{
 		/// <summary>
-		/// Sets up the <see cref="ClientPickupManager"/>
+		///     Sets up the <see cref="ClientPickupManager" />
 		/// </summary>
 		public static void Setup()
 		{
@@ -20,7 +20,7 @@ namespace Pickups
 		}
 
 		/// <summary>
-		/// Shutdown the <see cref="ClientPickupManager"/>
+		///     Shutdown the <see cref="ClientPickupManager" />
 		/// </summary>
 		public static void Shutdown()
 		{
@@ -36,16 +36,16 @@ namespace Pickups
 				GameObject pickup = GameObject.Find(pickupParent + unActivePickup);
 				if (pickup == null)
 				{
-					Logger.Error("There was a pickup with the name `{@PickupName}` sent by the server that doesn't exist! Either the server's game is out of date or ours is!", pickup.name);
+					Logger.Error(
+						"There was a pickup with the name `{@PickupName}` sent by the server that doesn't exist! Either the server's game is out of date or ours is!",
+						pickup.name);
 					continue;
 				}
 
 				Pickup pickupLogic = pickup.GetComponent<Pickup>();
 
 				foreach (PickupMaterials pickupMaterials in pickupLogic.pickupMaterials)
-				{
 					pickupMaterials.meshToChange.material = pickupMaterials.pickupPickedUpMaterial;
-				}
 			}
 		}
 	}

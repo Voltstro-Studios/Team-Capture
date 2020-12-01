@@ -6,27 +6,60 @@ using UnityEngine;
 namespace Player
 {
 	/// <summary>
-	/// Handles setting up the player
+	///     Handles setting up the player
 	/// </summary>
 	internal sealed class PlayerSetup : NetworkBehaviour
 	{
 		/// <summary>
-		/// Player's local <see cref="Camera"/>
+		///     Player's local <see cref="Camera" />
 		/// </summary>
-		[Tooltip("Player's local Camera")]
-		[SerializeField] private Camera localCamera;
+		[Tooltip("Player's local Camera")] [SerializeField]
+		private Camera localCamera;
 
 		/// <summary>
-		/// The prefab for the client's UI
+		///     The prefab for the client's UI
 		/// </summary>
-		[Header("Player UI")]
-		[Tooltip("The prefab for the client's UI")]
-		[SerializeField] private GameObject clientUiPrefab;
+		[Header("Player UI")] [Tooltip("The prefab for the client's UI")] [SerializeField]
+		private GameObject clientUiPrefab;
 
 		/// <summary>
-		/// This client's <see cref="PlayerManager"/>
+		///     This client's <see cref="PlayerManager" />
 		/// </summary>
 		private PlayerManager playerManager;
+
+		public override void OnStartLocalPlayer()
+		{
+			//Setup UI
+			ClientUI clientUi = Instantiate(clientUiPrefab).GetComponent<ClientUI>();
+			clientUi.SetupUI(playerManager);
+			gameObject.AddComponent<PlayerUIManager>().Setup(clientUi);
+
+			//Allows for custom messages
+			gameObject.AddComponent<PlayerServerMessages>();
+
+			base.OnStartLocalPlayer();
+
+			//Set up scene stuff
+			GameManager.GetActiveSceneCamera().SetActive(false);
+			localCamera.enabled = true;
+			localCamera.gameObject.AddComponent<AudioListener>();
+
+			//Player Input
+			gameObject.AddComponent<PlayerInput>();
+
+			//Lock the cursor
+			Cursor.visible = false;
+			Cursor.lockState = CursorLockMode.Locked;
+		}
+
+		/// <summary>
+		///     Gets this player's local <see cref="Camera" />
+		/// </summary>
+		/// <returns></returns>
+		public Camera GetPlayerCamera()
+		{
+			return localCamera;
+		}
 
 		#region Unity Methods
 
@@ -52,46 +85,12 @@ namespace Player
 			Cursor.lockState = CursorLockMode.None;
 
 			//Go back to the scene camera
-			if(GameManager.Instance == null)
+			if (GameManager.Instance == null)
 				return;
 
 			GameManager.GetActiveSceneCamera().SetActive(true);
 		}
 
 		#endregion
-
-		public override void OnStartLocalPlayer()
-		{
-			//Setup UI
-			ClientUI clientUi = Instantiate(clientUiPrefab).GetComponent<ClientUI>();
-			clientUi.SetupUI(playerManager);
-			gameObject.AddComponent<PlayerUIManager>().Setup(clientUi);
-
-			//Allows for custom messages
-			gameObject.AddComponent<PlayerServerMessages>();
-
-			base.OnStartLocalPlayer();
-
-			//Set up scene stuff
-			GameManager.GetActiveSceneCamera().SetActive(false);
-			localCamera.enabled = true;
-			localCamera.gameObject.AddComponent<AudioListener>();
-			
-			//Player Input
-			gameObject.AddComponent<PlayerInput>();
-
-			//Lock the cursor
-			Cursor.visible = false;
-			Cursor.lockState = CursorLockMode.Locked;
-		}
-
-		/// <summary>
-		/// Gets this player's local <see cref="Camera"/>
-		/// </summary>
-		/// <returns></returns>
-		public Camera GetPlayerCamera()
-		{
-			return localCamera;
-		}
 	}
 }

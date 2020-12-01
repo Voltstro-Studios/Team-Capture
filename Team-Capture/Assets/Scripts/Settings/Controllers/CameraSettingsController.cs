@@ -7,16 +7,15 @@ using Logger = Core.Logging.Logger;
 namespace Settings.Controllers
 {
 	/// <summary>
-	/// Handles controlling the <see cref="Camera"/>'s settings.
+	///     Handles controlling the <see cref="Camera" />'s settings.
 	/// </summary>
 	[RequireComponent(typeof(UniversalAdditionalCameraData))]
 	[RequireComponent(typeof(Camera))]
 	internal class CameraSettingsController : MonoBehaviour
 	{
-		private Camera cameraToChange;
-		private UniversalAdditionalCameraData cameraData;
-
 		[SerializeField] private bool allowModifyOfFOV = true;
+		private UniversalAdditionalCameraData cameraData;
+		private Camera cameraToChange;
 
 		private void Start()
 		{
@@ -35,9 +34,9 @@ namespace Settings.Controllers
 
 		private void UpdateSettings()
 		{
-			if(Game.IsHeadless) return;
+			if (Game.IsHeadless) return;
 
-			if(allowModifyOfFOV)
+			if (allowModifyOfFOV)
 				cameraToChange.fieldOfView = GameSettings.AdvSettings.CameraFOV;
 
 			cameraData.renderPostProcessing = GameSettings.AdvSettings.PostProcessing;
@@ -63,7 +62,8 @@ namespace Settings.Controllers
 			Logger.Error("Invalid input!");
 		}
 
-		[ConCommand("r_antialiasing_quality", "Changes the antialiasing quality", CommandRunPermission.ClientOnly, 1, 1, true)]
+		[ConCommand("r_antialiasing_quality", "Changes the antialiasing quality", CommandRunPermission.ClientOnly, 1, 1,
+			true)]
 		public static void AntialiasingQualityCommand(string[] args)
 		{
 			if (int.TryParse(args[0], out int qualityIndex))

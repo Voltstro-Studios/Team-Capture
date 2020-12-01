@@ -5,17 +5,17 @@ using Logger = Core.Logging.Logger;
 namespace Tweens
 {
 	/// <summary>
-	/// A manager for tweening
+	///     A manager for tweening
 	/// </summary>
 	internal class TweeningManager : MonoBehaviour
 	{
 		/// <summary>
-		/// What objects can be tweened
+		///     What objects can be tweened
 		/// </summary>
 		public TweenObject[] tweenedObjects;
 
 		/// <summary>
-		/// Gets a tweened object
+		///     Gets a tweened object
 		/// </summary>
 		/// <param name="tweenObjectName"></param>
 		/// <returns></returns>

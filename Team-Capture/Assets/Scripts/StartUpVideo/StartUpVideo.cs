@@ -5,33 +5,32 @@ using UnityEngine.Video;
 namespace StartUpVideo
 {
 	/// <summary>
-	/// Controller for the start up video
+	///     Controller for the start up video
 	/// </summary>
 	[RequireComponent(typeof(VideoPlayer))]
 	[RequireComponent(typeof(Camera))]
-	internal class StartUpVideo : MonoBehaviour 
+	internal class StartUpVideo : MonoBehaviour
 	{
 		private VideoPlayer startUpVideo;
 
 		private Camera mainCamera;
 
 		/// <summary>
-		/// Can we skip the start up video?
+		///     Can we skip the start up video?
 		/// </summary>
 		[Tooltip("Can we skip the start up video?")]
 		public bool canSkip = true;
 
 		/// <summary>
-		/// What key do we use to skip the start up video
+		///     What key do we use to skip the start up video
 		/// </summary>
 		[Tooltip("What key do we use to skip the start up video")]
 		public KeyCode skipKey = KeyCode.Escape;
-    
+
 		/// <summary>
-		/// Video clip to play
+		///     Video clip to play
 		/// </summary>
-		[Tooltip("Video clip to play")]
-		public VideoClip startUpVideoClip;
+		[Tooltip("Video clip to play")] public VideoClip startUpVideoClip;
 
 		private bool inPlayMode;
 
@@ -41,7 +40,7 @@ namespace StartUpVideo
 		public string nextSceneName = "MainMenu";
 #endif
 
-		private void Start ()
+		private void Start()
 		{
 			inPlayMode = true;
 			Play();
@@ -89,14 +88,14 @@ namespace StartUpVideo
 			//Setup Video player
 			if (startUpVideo != null)
 			{
-				if(startUpVideoClip == null)
+				if (startUpVideoClip == null)
 				{
 					Debug.LogError("You need to reference a video!");
 					return;
 				}
 
 				startUpVideo.source = VideoSource.VideoClip;
-				startUpVideo.clip = startUpVideoClip;           
+				startUpVideo.clip = startUpVideoClip;
 				startUpVideo.renderMode = VideoRenderMode.CameraNearPlane;
 				startUpVideo.playOnAwake = false;
 				startUpVideo.waitForFirstFrame = true;

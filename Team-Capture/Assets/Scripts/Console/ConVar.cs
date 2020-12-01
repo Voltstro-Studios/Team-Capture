@@ -3,7 +3,7 @@
 namespace Console
 {
 	/// <summary>
-	/// An editable variable in both the console
+	///     An editable variable in both the console
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Field)]
 	public class ConVar : Attribute
@@ -38,22 +38,22 @@ namespace Console
 		}
 
 		/// <summary>
-		/// The name of this ConVar
+		///     The name of this ConVar
 		/// </summary>
 		public string Name { get; }
 
 		/// <summary>
-		/// The summary of this ConVar
+		///     The summary of this ConVar
 		/// </summary>
 		public string Summary { get; }
 
 		/// <summary>
-		/// The function witch will be called when the value gets updated
+		///     The function witch will be called when the value gets updated
 		/// </summary>
 		public string Callback { get; }
 
 		/// <summary>
-		/// This ConVar can only be used in graphics mode
+		///     This ConVar can only be used in graphics mode
 		/// </summary>
 		public bool GraphicsOnly { get; }
 	}

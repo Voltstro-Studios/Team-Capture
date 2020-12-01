@@ -10,55 +10,53 @@ using Logger = Core.Logging.Logger;
 namespace UI.ScoreBoard
 {
 	/// <summary>
-	/// The scoreboard controller
+	///     The scoreboard controller
 	/// </summary>
 	internal class ScoreBoard : MonoBehaviour
 	{
 		[HideInInspector] public PlayerManager clientPlayer;
 
 		/// <summary>
-		/// The map text element
+		///     The map text element
 		/// </summary>
-		[Header("Scoreboard Settings")]
-		[Tooltip("The map text element")]
-		[SerializeField] private TextMeshProUGUI mapNameText;
+		[Header("Scoreboard Settings")] [Tooltip("The map text element")] [SerializeField]
+		private TextMeshProUGUI mapNameText;
 
 		/// <summary>
-		/// The game name text element
+		///     The game name text element
 		/// </summary>
-		[Tooltip("The game name text element")]
-		[SerializeField] private TextMeshProUGUI gameNameText;
+		[Tooltip("The game name text element")] [SerializeField]
+		private TextMeshProUGUI gameNameText;
 
 		/// <summary>
-		/// The kill death ratio text element
+		///     The kill death ratio text element
 		/// </summary>
-		[Tooltip("The kill death ratio text element")]
-		[SerializeField] private TextMeshProUGUI killDeathRatioText;
+		[Tooltip("The kill death ratio text element")] [SerializeField]
+		private TextMeshProUGUI killDeathRatioText;
 
 		/// <summary>
-		/// The prefab used for players on the scoreboard
+		///     The prefab used for players on the scoreboard
 		/// </summary>
-		[Tooltip("The prefab used for players on the scoreboard")]
-		[SerializeField] private GameObject playerItemPrefab;
+		[Tooltip("The prefab used for players on the scoreboard")] [SerializeField]
+		private GameObject playerItemPrefab;
 
 		/// <summary>
-		/// The player name text element
+		///     The player name text element
 		/// </summary>
-		[Header("Player List Settings")]
-		[Tooltip("The player name text element")]
-		[SerializeField] private TextMeshProUGUI playerNameText;
+		[Header("Player List Settings")] [Tooltip("The player name text element")] [SerializeField]
+		private TextMeshProUGUI playerNameText;
 
 		/// <summary>
-		/// The player stats text element
+		///     The player stats text element
 		/// </summary>
-		[Tooltip("The player stats text element")]
-		[SerializeField] private TextMeshProUGUI playerStatsText;
+		[Tooltip("The player stats text element")] [SerializeField]
+		private TextMeshProUGUI playerStatsText;
 
 		/// <summary>
-		/// The player list <see cref="Transform"/>
+		///     The player list <see cref="Transform" />
 		/// </summary>
-		[Tooltip("The player list transform")]
-		[SerializeField] private Transform playerListTransform;
+		[Tooltip("The player list transform")] [SerializeField]
+		private Transform playerListTransform;
 
 		private readonly Dictionary<PlayerManager, GameObject> playerList = new Dictionary<PlayerManager, GameObject>();
 		private List<PlayerManager> players = new List<PlayerManager>();
@@ -75,10 +73,7 @@ namespace UI.ScoreBoard
 
 			//Get all players and create a player item on the scoreboard for them
 			players = GameManager.GetAllPlayers().ToList();
-			foreach (PlayerManager player in players)
-			{
-				CreateNewPlayerItem(player);
-			}
+			foreach (PlayerManager player in players) CreateNewPlayerItem(player);
 
 			UpdatePlayerStats();
 
@@ -95,10 +90,8 @@ namespace UI.ScoreBoard
 				Destroy(playerListTransform.GetChild(i).gameObject);
 
 			foreach (PlayerManager player in players)
-			{
 				//Unsubscribe from the player killed event
 				player.PlayerKilled -= PlayerOnPlayerKilled;
-			}
 
 			playerList.Clear();
 		}

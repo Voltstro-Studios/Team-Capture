@@ -4,19 +4,20 @@ using UnityEngine;
 namespace Helper
 {
 	/// <summary>
-	/// Additional methods to help with ray-casting
+	///     Additional methods to help with ray-casting
 	/// </summary>
 	internal static class RaycastHelper
 	{
 		/// <summary>
-		/// Does a Physics.RaycastAll, but sorted by distance
+		///     Does a Physics.RaycastAll, but sorted by distance
 		/// </summary>
 		/// <param name="origin"></param>
 		/// <param name="direction"></param>
 		/// <param name="maxDirection"></param>
 		/// <param name="layerMask"></param>
 		/// <returns></returns>
-		public static RaycastHit[] RaycastAllSorted(Vector3 origin, Vector3 direction, float maxDirection, int layerMask)
+		public static RaycastHit[] RaycastAllSorted(Vector3 origin, Vector3 direction, float maxDirection,
+			int layerMask)
 		{
 			// ReSharper disable once Unity.PreferNonAllocApi
 			RaycastHit[] rays = Physics.RaycastAll(origin, direction, maxDirection, layerMask);

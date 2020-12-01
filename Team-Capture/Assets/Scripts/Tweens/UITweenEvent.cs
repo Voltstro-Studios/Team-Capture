@@ -3,38 +3,38 @@
 namespace Tweens
 {
 	/// <summary>
-	/// A tween for a UI element
+	///     A tween for a UI element
 	/// </summary>
-	[CreateAssetMenu(fileName = "UITweenEvent", menuName = "Tweening/UITweenEvent" )]
+	[CreateAssetMenu(fileName = "UITweenEvent", menuName = "Tweening/UITweenEvent")]
 	internal class UITweenEvent : TweenEvent
 	{
 		/// <summary>
-		/// Is this tween moving?
+		///     Is this tween moving?
 		/// </summary>
 		public bool moving = true;
 
 		/// <summary>
-		/// Move from what position
+		///     Move from what position
 		/// </summary>
 		public float moveFrom = 1;
 
 		/// <summary>
-		/// Move to what position
+		///     Move to what position
 		/// </summary>
 		public float moveTo;
 
 		/// <summary>
-		/// Is this tween fading
+		///     Is this tween fading
 		/// </summary>
 		public bool fading;
 
 		/// <summary>
-		/// Fade from what value
+		///     Fade from what value
 		/// </summary>
 		public float fadeFrom;
 
 		/// <summary>
-		/// Fade to what value
+		///     Fade to what value
 		/// </summary>
 		public float fadeTo;
 	}

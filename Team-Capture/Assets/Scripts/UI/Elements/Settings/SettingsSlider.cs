@@ -7,27 +7,27 @@ using UnityEngine.UI;
 namespace UI.Elements.Settings
 {
 	/// <summary>
-	/// Slider for the settings menu
+	///     Slider for the settings menu
 	/// </summary>
 	internal class SettingsSlider : MonoBehaviour
 	{
 		/// <summary>
-		/// The property text
+		///     The property text
 		/// </summary>
 		public TextMeshProUGUI propertyText;
 
 		/// <summary>
-		/// Text for the value
+		///     Text for the value
 		/// </summary>
 		public TextMeshProUGUI valueText;
 
 		/// <summary>
-		/// The actual slider
+		///     The actual slider
 		/// </summary>
 		public Slider slider;
 
 		/// <summary>
-		/// Sets up the slider
+		///     Sets up the slider
 		/// </summary>
 		/// <param name="initialValue"></param>
 		public void Setup(float initialValue)

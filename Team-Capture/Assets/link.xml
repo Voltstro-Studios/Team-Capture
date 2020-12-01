@@ -1,3 +1,3 @@
 <linker>
-    <assembly fullname="Discord.GameSDK" preserve="all"/>
+  <assembly fullname="Discord.GameSDK" preserve="all" />
 </linker>

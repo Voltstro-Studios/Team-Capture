@@ -1,7 +1,7 @@
 ﻿namespace Settings.URPSettings
 {
 	/// <summary>
-	/// MSAA Quality
+	///     MSAA Quality
 	/// </summary>
 	internal enum MSAAQuality
 	{

@@ -8,7 +8,7 @@ using Logger = Core.Logging.Logger;
 namespace Player
 {
 	/// <summary>
-	/// Handles messages from the server
+	///     Handles messages from the server
 	/// </summary>
 	internal sealed class PlayerServerMessages : MonoBehaviour
 	{
@@ -31,7 +31,7 @@ namespace Player
 		}
 
 		/// <summary>
-		/// Player died message, for killfeed
+		///     Player died message, for killfeed
 		/// </summary>
 		/// <param name="conn"></param>
 		/// <param name="message"></param>
@@ -41,7 +41,7 @@ namespace Player
 		}
 
 		/// <summary>
-		/// When a pickup changes status
+		///     When a pickup changes status
 		/// </summary>
 		/// <param name="conn"></param>
 		/// <param name="status"></param>
@@ -51,16 +51,17 @@ namespace Player
 			GameObject pickup = GameObject.Find(pickupDirectory);
 			if (pickup == null)
 			{
-				Logger.Error("Was told to change status of a pickup at `{@PickupDirectory}` that doesn't exist!", pickupDirectory);
+				Logger.Error("Was told to change status of a pickup at `{@PickupDirectory}` that doesn't exist!",
+					pickupDirectory);
 				return;
 			}
 
 			Pickup pickupLogic = pickup.GetComponent<Pickup>();
 
 			foreach (PickupMaterials pickupMaterial in pickupLogic.pickupMaterials)
-			{
-				pickupMaterial.meshToChange.material = status.IsActive ? pickupMaterial.pickupMaterial : pickupMaterial.pickupPickedUpMaterial;
-			}
+				pickupMaterial.meshToChange.material = status.IsActive
+					? pickupMaterial.pickupMaterial
+					: pickupMaterial.pickupPickedUpMaterial;
 		}
 	}
 }

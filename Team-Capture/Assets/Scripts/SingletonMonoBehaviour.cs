@@ -7,39 +7,34 @@ using Logger = Core.Logging.Logger;
 
 // ReSharper disable once CommentTypo
 /// <summary>
-///     This is a generic Singleton implementation for <see cref="MonoBehaviour"/>s.
-///     Create a derived class where the type <typeparamref name="T"/> is the script you want to "Singletonize"
-///     Upon loading it will call <see cref="UnityEngine.Object.DontDestroyOnLoad"/> on the <see cref="GameObject"/> where this script is contained
-///     so it persists upon <see cref="UnityEngine.SceneManagement.Scene"/> changes.
+///     This is a generic Singleton implementation for <see cref="MonoBehaviour" />s.
+///     Create a derived class where the type <typeparamref name="T" /> is the script you want to "Singletonize"
+///     Upon loading it will call <see cref="UnityEngine.Object.DontDestroyOnLoad" /> on the <see cref="GameObject" />
+///     where this
+///     script is contained
+///     so it persists upon <see cref="UnityEngine.SceneManagement.Scene" /> changes.
 /// </summary>
 /// <remarks>
-///     DO NOT REDEFINE <see cref="Awake"/>, <see cref="Start"/> or <see cref="OnDestroy"/> in derived classes. EVER.
+///     DO NOT REDEFINE <see cref="Awake" />, <see cref="Start" /> or <see cref="OnDestroy" /> in derived classes. EVER.
 ///     Instead, use protected abstract methods:
-///     <see cref="SingletonAwakened"/>
-///     <see cref="SingletonStarted"/>
-///     <see cref="SingletonDestroyed"/>
+///     <see cref="SingletonAwakened" />
+///     <see cref="SingletonStarted" />
+///     <see cref="SingletonDestroyed" />
 ///     to perform the initialization/cleanup: those methods are guaranteed to only be called once in the
-///     entire lifetime of the <see cref="MonoBehaviour"/>
+///     entire lifetime of the <see cref="MonoBehaviour" />
 /// </remarks>
-[PublicAPI, DisallowMultipleComponent]
+[PublicAPI]
+[DisallowMultipleComponent]
 public abstract class SingletonMonoBehaviour<T> : MonoBehaviour where T : SingletonMonoBehaviour<T>
 {
-	// ReSharper disable StaticMemberInGenericType
-	/// <summary>
-	///     <c>true</c> if this Singleton <see cref="Awake"/> method has already been called by Unity; otherwise, <c>false</c>.
-	/// </summary>
-	public static bool IsAwakened { get; private set; }
+	#region Singleton Implementation
 
 	/// <summary>
-	///     <c>true</c> if this Singleton <see cref="Start"/> method has already been called by Unity; otherwise, <c>false</c>.
+	///     Backing field that holds the unique instance for this class
 	/// </summary>
-	public static bool IsStarted { get; private set; }
+	private static T instance;
 
-	/// <summary>
-	///     <c>true</c> if this Singleton <see cref="OnDestroy"/> method has already been called by Unity; otherwise, <c>false</c>.
-	/// </summary>
-	public static bool IsDestroyed { get; private set; }
-	// ReSharper restore StaticMemberInGenericType
+	#endregion
 
 	/// <summary>
 	///     Global access point to the unique instance of this class.
@@ -57,15 +52,17 @@ public abstract class SingletonMonoBehaviour<T> : MonoBehaviour where T : Single
 			}
 
 			Logger.Info("Singleton Instance of {@Type} not set", typeof(T));
-			
+
 			//Finding an existing instance
 			{
 				T[] instances = FindObjectsOfType<T>();
-				
+
 				// ReSharper disable once ConvertIfStatementToSwitchStatement
 				if (instances.Length == 0)
 				{
-					Logger.Warn("Singleton of type {@SingletonName} not found. Ensure that it is placed on a valid GameObject", typeof(T).Name);
+					Logger.Warn(
+						"Singleton of type {@SingletonName} not found. Ensure that it is placed on a valid GameObject",
+						typeof(T).Name);
 
 					//Create a new instance
 					GameObject go = new GameObject(typeof(T).Name)
@@ -78,20 +75,19 @@ public abstract class SingletonMonoBehaviour<T> : MonoBehaviour where T : Single
 				//Only found one, all's fine
 				if (instances.Length == 1)
 					return instance = instances[0];
-				
+
 				if (instances.Length > 1)
 				{
-					Logger.Warn("More than one singleton of type {@SingletonType} was found ({@InstancesCount}): {@AllInstances}", typeof(T), instances.Length, instances);
+					Logger.Warn(
+						"More than one singleton of type {@SingletonType} was found ({@InstancesCount}): {@AllInstances}",
+						typeof(T), instances.Length, instances);
 
 					//All but the first instance are duplicates
-					for (int i = 1; i < instances.Length; i++)
-					{
-						instances[i].NotifyInstanceRepeated();
-					}
+					for (int i = 1; i < instances.Length; i++) instances[i].NotifyInstanceRepeated();
 					return instance = instances[0];
 				}
 			}
-			
+
 			//Should never get here, but all code paths need to either return or throw
 			const string errorMessage = "Instance count checks";
 			Logger.Error(errorMessage);
@@ -99,24 +95,36 @@ public abstract class SingletonMonoBehaviour<T> : MonoBehaviour where T : Single
 		}
 	}
 
-#region Singleton Implementation
+	// ReSharper disable StaticMemberInGenericType
+	/// <summary>
+	///     <c>true</c> if this Singleton <see cref="Awake" /> method has already been called by Unity; otherwise, <c>false</c>
+	///     .
+	/// </summary>
+	public static bool IsAwakened { get; private set; }
 
 	/// <summary>
-	///     Backing field that holds the unique instance for this class
+	///     <c>true</c> if this Singleton <see cref="Start" /> method has already been called by Unity; otherwise, <c>false</c>
+	///     .
 	/// </summary>
-	private static T instance;
+	public static bool IsStarted { get; private set; }
 
-	#endregion
+	/// <summary>
+	///     <c>true</c> if this Singleton <see cref="OnDestroy" /> method has already been called by Unity; otherwise,
+	///     <c>false</c>.
+	/// </summary>
+	public static bool IsDestroyed { get; private set; }
+	// ReSharper restore StaticMemberInGenericType
 
-#region Singleton Life-time Management
+	#region Singleton Life-time Management
 
 	/// <summary>
 	///     Unity3D Awake method.
 	/// </summary>
 	/// <remarks>
 	///     This method will only be called once even if multiple instances of the
-	///     singleton <see cref="MonoBehaviour"/> exist in the scene.
-	///     You can override this method in derived classes to customize the initialization of your <see cref="MonoBehaviour"/>
+	///     singleton <see cref="MonoBehaviour" /> exist in the scene.
+	///     You can override this method in derived classes to customize the initialization of your
+	///     <see cref="MonoBehaviour" />
 	/// </remarks>
 	protected abstract void SingletonAwakened();
 
@@ -125,8 +133,9 @@ public abstract class SingletonMonoBehaviour<T> : MonoBehaviour where T : Single
 	/// </summary>
 	/// <remarks>
 	///     This method will only be called once even if multiple instances of the
-	///     singleton <see cref="MonoBehaviour"/> exist in the scene.
-	///     You can override this method in derived classes to customize the initialization of your <see cref="MonoBehaviour"/>
+	///     singleton <see cref="MonoBehaviour" /> exist in the scene.
+	///     You can override this method in derived classes to customize the initialization of your
+	///     <see cref="MonoBehaviour" />
 	/// </remarks>
 	protected abstract void SingletonStarted();
 
@@ -135,27 +144,28 @@ public abstract class SingletonMonoBehaviour<T> : MonoBehaviour where T : Single
 	/// </summary>
 	/// <remarks>
 	///     This method will only be called once even if multiple instances of the
-	///     singleton <see cref="MonoBehaviour"/> exist in the scene.
-	///     You can override this method in derived classes to customize the initialization of your <see cref="MonoBehaviour"/>
+	///     singleton <see cref="MonoBehaviour" /> exist in the scene.
+	///     You can override this method in derived classes to customize the initialization of your
+	///     <see cref="MonoBehaviour" />
 	/// </remarks>
 	protected abstract void SingletonDestroyed();
 
 	/// <summary>
-	///     If a duplicated instance of a Singleton <see cref="MonoBehaviour"/> is loaded into the scene
-	///     this method will be called instead of <see cref="SingletonAwakened"/>(). That way you can customize
+	///     If a duplicated instance of a Singleton <see cref="MonoBehaviour" /> is loaded into the scene
+	///     this method will be called instead of <see cref="SingletonAwakened" />(). That way you can customize
 	///     what to do with repeated instances.
 	/// </summary>
 	/// <remarks>
-	///     The default approach is delete the duplicated <see cref="MonoBehaviour"/>
+	///     The default approach is delete the duplicated <see cref="MonoBehaviour" />
 	/// </remarks>
 	protected virtual void NotifyInstanceRepeated()
 	{
 		Destroy(GetComponent<T>());
 	}
 
-#endregion
+	#endregion
 
-#region Unity3d Messages - DO NOT OVERRRIDE / IMPLEMENT THESE METHODS in child classes!
+	#region Unity3d Messages - DO NOT OVERRRIDE / IMPLEMENT THESE METHODS in child classes!
 
 	private void Awake()
 	{
@@ -177,7 +187,7 @@ public abstract class SingletonMonoBehaviour<T> : MonoBehaviour where T : Single
 		}
 
 		if (IsAwakened) return;
-		
+
 		SingletonAwakened();
 		IsAwakened = true;
 	}
@@ -210,5 +220,5 @@ public abstract class SingletonMonoBehaviour<T> : MonoBehaviour where T : Single
 		SingletonDestroyed();
 	}
 
-#endregion
+	#endregion
 }

@@ -10,15 +10,15 @@ namespace Player.Movement
 	//Copyright (c) 2015 ultimatematchthree, 2017 Joao Borks [joao.borks@gmail.com]
 
 	/// <summary>
-	/// Handles processing inputs and performing movements on the server
+	///     Handles processing inputs and performing movements on the server
 	/// </summary>
 	public sealed class PlayerMovementServer : MonoBehaviour
 	{
-		private Queue<PlayerInputs> inputBuffer;
 		private PlayerMovementManager character;
-		private int serverTick;
+		private Queue<PlayerInputs> inputBuffer;
 
 		private PlayerInputs lastInputs;
+		private int serverTick;
 
 		private void Awake()
 		{
@@ -50,7 +50,7 @@ namespace Player.Movement
 		}
 
 		/// <summary>
-		/// Adds all the inputs and moves
+		///     Adds all the inputs and moves
 		/// </summary>
 		/// <param name="inputs"></param>
 		public void AddInputs(PlayerInputs[] inputs)

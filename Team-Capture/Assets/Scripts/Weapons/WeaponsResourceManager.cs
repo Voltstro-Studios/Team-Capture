@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Weapons
 {
 	/// <summary>
-	/// Handles getting weapon data
+	///     Handles getting weapon data
 	/// </summary>
 	public static class WeaponsResourceManager
 	{
@@ -24,7 +24,7 @@ namespace Weapons
 		}
 
 		/// <summary>
-		/// Gets a <see cref="TCWeapon"/>
+		///     Gets a <see cref="TCWeapon" />
 		/// </summary>
 		/// <param name="weaponName"></param>
 		/// <returns></returns>

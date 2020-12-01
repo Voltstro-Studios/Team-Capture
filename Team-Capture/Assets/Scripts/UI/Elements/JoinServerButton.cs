@@ -7,7 +7,7 @@ using UnityEngine.UI;
 namespace UI.Elements
 {
 	/// <summary>
-	/// A button for joining a server
+	///     A button for joining a server
 	/// </summary>
 	internal class JoinServerButton : MonoBehaviour
 	{
@@ -19,16 +19,13 @@ namespace UI.Elements
 		[SerializeField] private Button baseButton;
 
 		/// <summary>
-		/// Sets up this button for connecting to a server
+		///     Sets up this button for connecting to a server
 		/// </summary>
 		/// <param name="server">The server details</param>
 		/// <param name="call">The connect action</param>
 		internal void SetupConnectButton(TCServerResponse server, Action call)
 		{
-			baseButton.onClick.AddListener(delegate
-			{
-				call();
-			});
+			baseButton.onClick.AddListener(delegate { call(); });
 
 			gameNameText.text = server.GameName;
 			mapNameText.text = server.SceneName;

@@ -10,17 +10,17 @@ namespace Player.Movement
 	//Copyright (c) 2015 ultimatematchthree, 2017 Joao Borks [joao.borks@gmail.com]
 
 	/// <summary>
-	/// Handles sending inputs the server for movement
+	///     Handles sending inputs the server for movement
 	/// </summary>
 	internal sealed class PlayerMovementInput : MonoBehaviour
 	{
+		private PlayerMovementManager character;
 		private int currentInput;
 
 		private List<PlayerInputs> inputBuffer;
-		private PlayerMovementManager character;
-		private PlayerMovementPredictor predictor;
 
 		private PlayerInputs inputs;
+		private PlayerMovementPredictor predictor;
 
 		private void Awake()
 		{
@@ -28,14 +28,6 @@ namespace Player.Movement
 			character = GetComponent<PlayerMovementManager>();
 			predictor = GetComponent<PlayerMovementPredictor>();
 			inputs = new PlayerInputs();
-		}
-
-		private void OnDisable()
-		{
-			inputBuffer.Clear();
-
-			inputs = PlayerInputs.Zero;
-			currentInput = 0;
 		}
 
 		private void Update()
@@ -56,8 +48,16 @@ namespace Player.Movement
 			inputBuffer.Clear();
 		}
 
+		private void OnDisable()
+		{
+			inputBuffer.Clear();
+
+			inputs = PlayerInputs.Zero;
+			currentInput = 0;
+		}
+
 		/// <summary>
-		/// Sets the input to send
+		///     Sets the input to send
 		/// </summary>
 		/// <param name="x"></param>
 		/// <param name="y"></param>

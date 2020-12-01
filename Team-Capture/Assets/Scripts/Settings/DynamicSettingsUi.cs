@@ -17,7 +17,9 @@ namespace Settings
 	#region Attributes
 
 	/// <summary>
-	/// Tells the <see cref="DynamicSettingsUi"/> what the text should say next to the element, instead of just using property name.
+	///     Tells the <see cref="DynamicSettingsUi" /> what the text should say next to the element, instead of just using
+	///     property
+	///     name.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
 	internal class SettingsPropertyFormatNameAttribute : PreserveAttribute
@@ -31,7 +33,7 @@ namespace Settings
 	}
 
 	/// <summary>
-	/// Tells the <see cref="DynamicSettingsUi"/> not to show this object
+	///     Tells the <see cref="DynamicSettingsUi" /> not to show this object
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Class)]
 	internal class SettingsDontShowAttribute : PreserveAttribute
@@ -41,7 +43,7 @@ namespace Settings
 	#endregion
 
 	/// <summary>
-	/// Generates a setting menu based on available options
+	///     Generates a setting menu based on available options
 	/// </summary>
 	[RequireComponent(typeof(OptionsPanel))]
 	internal class DynamicSettingsUi : MonoBehaviour
@@ -54,7 +56,7 @@ namespace Settings
 		}
 
 		/// <summary>
-		/// Generates the settings menu
+		///     Generates the settings menu
 		/// </summary>
 		//TODO: The sub-functions need to update the UI element based on the reflected value on startup/settings reload
 		public void UpdateUI()
@@ -68,7 +70,7 @@ namespace Settings
 			foreach (PropertyInfo settingInfo in GameSettings.GetSettingClasses())
 			{
 				//If it has the don't show attribute, then, well... don't show it
-				if(Attribute.GetCustomAttribute(settingInfo, typeof(SettingsDontShowAttribute)) != null)
+				if (Attribute.GetCustomAttribute(settingInfo, typeof(SettingsDontShowAttribute)) != null)
 					continue;
 
 				object settingGroupInstance = settingInfo.GetStaticValue<object>();
@@ -85,11 +87,12 @@ namespace Settings
 
 				//Get each property in the settings
 				FieldInfo[] menuFields =
-					settingInfo.PropertyType.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+					settingInfo.PropertyType.GetFields(BindingFlags.Instance | BindingFlags.Public |
+					                                   BindingFlags.NonPublic);
 				foreach (FieldInfo settingField in menuFields)
 				{
 					//If it has the don't show attribute, then, well... don't show it
-					if(Attribute.GetCustomAttribute(settingField, typeof(SettingsDontShowAttribute)) != null)
+					if (Attribute.GetCustomAttribute(settingField, typeof(SettingsDontShowAttribute)) != null)
 						continue;
 
 					Type fieldType = settingField.FieldType;
@@ -106,7 +109,8 @@ namespace Settings
 								(int) rangeAttribute.max,
 								settingField, panel);
 						else
-							CreateIntField(settingField.GetValue<int>(settingGroupInstance), settingField, optionOptionsMenu);
+							CreateIntField(settingField.GetValue<int>(settingGroupInstance), settingField,
+								optionOptionsMenu);
 					}
 					else if (fieldType == typeof(float))
 					{
@@ -133,7 +137,8 @@ namespace Settings
 					else if (fieldType == typeof(Resolution))
 					{
 						//For a resolution property, we will create a dropdown with all available resolutions and select the active one
-						CreateResolutionDropdown(settingField.GetValue<Resolution>(settingGroupInstance), settingField, panel);
+						CreateResolutionDropdown(settingField.GetValue<Resolution>(settingGroupInstance), settingField,
+							panel);
 					}
 					//TODO: Finish these
 					else if (fieldType.IsEnum)
@@ -149,13 +154,15 @@ namespace Settings
 					}
 					else
 					{
-						Logger.Error("UI Element for setting of type {@FullName} could not be created", fieldType.FullName);
+						Logger.Error("UI Element for setting of type {@FullName} could not be created",
+							fieldType.FullName);
 					}
 				}
 			}
 
 			stopwatch.Stop();
-			Logger.Info("Time taken to update settings UI: {@TotalMilliseconds}ms", stopwatch.Elapsed.TotalMilliseconds);
+			Logger.Info("Time taken to update settings UI: {@TotalMilliseconds}ms",
+				stopwatch.Elapsed.TotalMilliseconds);
 		}
 
 		#region Graphic designer functions
@@ -173,7 +180,7 @@ namespace Settings
 		private void CreateIntSlider(int val, int min, int max, FieldInfo field, GameObject panel)
 		{
 			Slider slider = optionsPanel.AddSliderToPanel(panel, GetFieldFormatName(field), val, true, min, max);
-			slider.onValueChanged.AddListener(f => field.SetValue(GetSettingObject(field), (int)f));
+			slider.onValueChanged.AddListener(f => field.SetValue(GetSettingObject(field), (int) f));
 		}
 
 		private void CreateFloatField(float val, FieldInfo field, OptionsMenu optionsMenu)
@@ -217,7 +224,8 @@ namespace Settings
 
 			//Create the dropdown, with all of our resolutions
 			TMP_Dropdown dropdown =
-				optionsPanel.AddDropdownToPanel(panel, GetFieldFormatName(field), resolutionsText.ToArray(), activeResIndex);
+				optionsPanel.AddDropdownToPanel(panel, GetFieldFormatName(field), resolutionsText.ToArray(),
+					activeResIndex);
 			dropdown.onValueChanged.AddListener(index =>
 			{
 				field.SetValue(GetSettingObject(field), resolutions[index]);

@@ -9,42 +9,42 @@ using Logger = Core.Logging.Logger;
 namespace UI
 {
 	/// <summary>
-	/// Displays a list of kills
+	///     Displays a list of kills
 	/// </summary>
 	internal class KillFeed : MonoBehaviour
 	{
 		/// <summary>
-		/// Where the kill feed items go
+		///     Where the kill feed items go
 		/// </summary>
 		[Tooltip("Where the kill feed items go")]
 		public Transform killFeedItemsHolder;
 
 		/// <summary>
-		/// A kill feed item
+		///     A kill feed item
 		/// </summary>
-		[Tooltip("A kill feed item")]
-		[SerializeField] private GameObject killFeedItem;
+		[Tooltip("A kill feed item")] [SerializeField]
+		private GameObject killFeedItem;
 
 		/// <summary>
-		/// How long a kill feed item should last for
+		///     How long a kill feed item should last for
 		/// </summary>
-		[Tooltip("How long a kill feed item should last for")]
-		[SerializeField] private float killFeedItemLastTime = 5.0f;
+		[Tooltip("How long a kill feed item should last for")] [SerializeField]
+		private float killFeedItemLastTime = 5.0f;
 
 		/// <summary>
-		/// The max amount of kill feed items that can be displayed
+		///     The max amount of kill feed items that can be displayed
 		/// </summary>
-		[Tooltip("The max amount of kill feed items that can be displayed")]
-		[SerializeField] private int maxAmountOfKillFeedItems = 5;
+		[Tooltip("The max amount of kill feed items that can be displayed")] [SerializeField]
+		private int maxAmountOfKillFeedItems = 5;
 
 		/// <summary>
-		/// Adds a kill feed item
+		///     Adds a kill feed item
 		/// </summary>
 		/// <param name="message"></param>
 		public void AddKillfeedItem(PlayerDiedMessage message)
 		{
 			//Removes the last kill feed item
-			if(killFeedItemsHolder.childCount >= maxAmountOfKillFeedItems)
+			if (killFeedItemsHolder.childCount >= maxAmountOfKillFeedItems)
 				Destroy(killFeedItemsHolder.GetChild(killFeedItemsHolder.childCount - 1));
 
 			PlayerManager killer = GameManager.GetPlayer(message.PlayerKiller);

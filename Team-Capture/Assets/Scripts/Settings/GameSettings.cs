@@ -13,12 +13,17 @@ using Logger = Core.Logging.Logger;
 namespace Settings
 {
 	/// <summary>
-	/// Handles game settings
+	///     Handles game settings
 	/// </summary>
 	public static class GameSettings
 	{
 		private const string SettingsFileExtension = ".json";
 		private static string settingsSaveDirectory;
+
+		/// <summary>
+		///     Invoked when the settings are altered in some way
+		/// </summary>
+		public static event Action SettingsUpdated;
 
 		#region Settings
 
@@ -36,16 +41,11 @@ namespace Settings
 
 		#endregion
 
-		/// <summary>
-		/// Invoked when the settings are altered in some way
-		/// </summary>
-		public static event Action SettingsUpdated;
-
 		#region Saving, loading and resetting setting functions
 
 		//We have this as internal so that our dynamic settings ui generator script can access it too
 		/// <summary>
-		/// Gets all settings
+		///     Gets all settings
 		/// </summary>
 		/// <returns></returns>
 		internal static IEnumerable<PropertyInfo> GetSettingClasses()
@@ -54,7 +54,8 @@ namespace Settings
 			IEnumerable<Type> settingTypes = ReflectionHelper.GetInheritedTypes<Setting>();
 
 			//Get a list of all of the properties in our settings class
-			PropertyInfo[] settingProps = typeof(GameSettings).GetTypeInfo().GetProperties(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static);
+			PropertyInfo[] settingProps = typeof(GameSettings).GetTypeInfo()
+				.GetProperties(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static);
 
 			//Only add properties that are one of our inherited setting types
 			IEnumerable<PropertyInfo> foundSettings = settingProps.Where(p => settingTypes.Contains(p.PropertyType));
@@ -63,7 +64,7 @@ namespace Settings
 		}
 
 		/// <summary>
-		/// Saves the settings
+		///     Saves the settings
 		/// </summary>
 		public static void Save()
 		{
@@ -77,7 +78,7 @@ namespace Settings
 		}
 
 		/// <summary>
-		/// Loads the settings
+		///     Loads the settings
 		/// </summary>
 		//Assemblies aren't always reloaded in the editor, so we have to do it just before the scene is loaded
 #if UNITY_EDITOR
@@ -92,7 +93,6 @@ namespace Settings
 			settingsSaveDirectory = Game.GetGameConfigPath();
 
 			foreach (PropertyInfo settingProp in GetSettingClasses())
-			{
 				try
 				{
 					string name = settingProp.Name;
@@ -108,7 +108,6 @@ namespace Settings
 				{
 					// ignored
 				}
-			}
 
 			Logger.Debug("Loaded settings");
 
@@ -117,7 +116,7 @@ namespace Settings
 		}
 
 		/// <summary>
-		/// Resets the settings to their default values
+		///     Resets the settings to their default values
 		/// </summary>
 		public static void Reset()
 		{
@@ -138,7 +137,7 @@ namespace Settings
 	#region Setting classes
 
 	/// <summary>
-	/// A class that all settings must inherit from
+	///     A class that all settings must inherit from
 	/// </summary>
 	public abstract class Setting
 	{

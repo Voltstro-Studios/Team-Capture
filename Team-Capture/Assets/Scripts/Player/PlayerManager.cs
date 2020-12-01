@@ -13,167 +13,34 @@ using Logger = Core.Logging.Logger;
 namespace Player
 {
 	/// <summary>
-	/// Handles player stuff, such as health
+	///     Handles player stuff, such as health
 	/// </summary>
 	public sealed class PlayerManager : NetworkBehaviour
 	{
 		/// <summary>
-		/// <see cref="Behaviour"/>s to disable/enable on death and respawn
+		///     <see cref="Behaviour" />s to disable/enable on death and respawn
 		/// </summary>
 		[SerializeField] private Behaviour[] disableBehaviourOnDeath;
 
 		/// <summary>
-		/// <see cref="GameObject"/>s to disable/enable on death and respawn
+		///     <see cref="GameObject" />s to disable/enable on death and respawn
 		/// </summary>
 		[SerializeField] private GameObject[] disableGameObjectsOnDeath;
 
 		/// <summary>
-		/// How long the invincibility lasts on spawn
+		///     How long the invincibility lasts on spawn
 		/// </summary>
 		[SerializeField] private float invincibilityLastTime = 3.0f;
 
 		/// <summary>
-		/// How often to update the latency on the scoreboard
+		///     How often to update the latency on the scoreboard
 		/// </summary>
 		[SerializeField] private float playerLatencyUpdateTime = 2.0f;
 
 		/// <summary>
-		/// The max health
+		///     The max health
 		/// </summary>
 		public int MaxHealth { get; } = 100;
-
-		#region Movement
-
-		/// <summary>
-		/// The player's <see cref="PlayerMovementManager"/>
-		/// </summary>
-		private PlayerMovementManager playerMovementManager;
-
-		/// <summary>
-		/// The player's <see cref="CharacterController"/>
-		/// </summary>
-		private CharacterController characterController;
-
-		/// <summary>
-		/// The OBSERVER. Only set on other clients (not local)
-		/// </summary>
-		private PlayerMovementObserver playerMovementObserver;
-
-		#endregion
-
-		#region Sync Vars
-
-		/// <summary>
-		/// Is this player dead?
-		/// </summary>
-		[field: SyncVar] public bool IsDead { get; private set; } = true;
-
-		/// <summary>
-		/// The username of this player
-		/// </summary>
-		[SyncVar] public string username = "Not Set";
-
-		/// <summary>
-		/// How much health does this player have?
-		/// </summary>
-		[field: SyncVar(hook = nameof(UpdateHealthUi))]
-		public int Health { get; private set; }
-
-		/// <summary>
-		/// How many kills does this player have in this active game
-		/// </summary>
-		[field: SyncVar] public int Kills { get; private set; }
-
-		/// <summary>
-		/// How many deaths does this player have in this active game
-		/// </summary>
-		[field: SyncVar] public int Deaths { get; private set; }
-
-		/// <summary>
-		/// Updated every X amount of seconds and haves this player's latency
-		/// </summary>
-		[SyncVar] public double latency;
-
-		#endregion
-
-		#region Events
-
-		/// <summary>
-		/// A delegate for when a player is killed
-		/// </summary>
-		/// <param name="playerKilledId">The ID of the player who was killed</param>
-		/// <param name="playerKillerId">The ID of the player who killed the player</param>
-		public delegate void PlayerKilledDelegate(string playerKilledId, string playerKillerId);
-
-		/// <summary>
-		/// Triggered when this player is killed
-		/// </summary>
-		public event PlayerKilledDelegate PlayerKilled;
-
-		/// <summary>
-		/// Triggered when this player takes damage
-		/// </summary>
-		public event Action PlayerDamaged;
-		
-		#endregion
-
-		#region Server Variables
-
-		/// <summary>
-		/// Only set on the server!
-		/// <para>The player's active <see cref="WeaponManager"/></para>
-		/// </summary>
-		private WeaponManager weaponManager;
-
-		/// <summary>
-		/// Only set on the server!
-		/// <para>Is this player invincible?</para>
-		/// </summary>
-		public bool IsInvincible { get; private set; } = true;
-		
-		#endregion
-
-		#region Client Variables
-
-		/// <summary>
-		/// Handles predicting movements
-		/// </summary>
-		private PlayerMovementPredictor playerMovementPredictor;
-
-		/// <summary>
-		/// Handles sending inputs to the server
-		/// </summary>
-		private PlayerMovementInput playerMovementInput;
-
-		/// <summary>
-		/// Manages UI
-		/// </summary>
-		private PlayerUIManager uiManager;
-
-		#endregion
-
-		#region Unity Methods
-
-		private void Awake()
-		{
-			playerMovementManager = GetComponent<PlayerMovementManager>();
-			characterController = GetComponent<CharacterController>();
-		}
-
-		private void Start()
-		{
-			if (isLocalPlayer)
-			{
-				playerMovementPredictor = GetComponent<PlayerMovementPredictor>();
-				playerMovementInput = GetComponent<PlayerMovementInput>();
-			}
-			else
-			{
-				playerMovementObserver = GetComponent<PlayerMovementObserver>();
-			}
-		}
-		
-		#endregion
 
 		public override void OnStartServer()
 		{
@@ -207,10 +74,146 @@ namespace Player
 			StopAllCoroutines();
 		}
 
+		#region Movement
+
+		/// <summary>
+		///     The player's <see cref="PlayerMovementManager" />
+		/// </summary>
+		private PlayerMovementManager playerMovementManager;
+
+		/// <summary>
+		///     The player's <see cref="CharacterController" />
+		/// </summary>
+		private CharacterController characterController;
+
+		/// <summary>
+		///     The OBSERVER. Only set on other clients (not local)
+		/// </summary>
+		private PlayerMovementObserver playerMovementObserver;
+
+		#endregion
+
+		#region Sync Vars
+
+		/// <summary>
+		///     Is this player dead?
+		/// </summary>
+		[field: SyncVar]
+		public bool IsDead { get; private set; } = true;
+
+		/// <summary>
+		///     The username of this player
+		/// </summary>
+		[SyncVar] public string username = "Not Set";
+
+		/// <summary>
+		///     How much health does this player have?
+		/// </summary>
+		[field: SyncVar(hook = nameof(UpdateHealthUi))]
+		public int Health { get; private set; }
+
+		/// <summary>
+		///     How many kills does this player have in this active game
+		/// </summary>
+		[field: SyncVar]
+		public int Kills { get; private set; }
+
+		/// <summary>
+		///     How many deaths does this player have in this active game
+		/// </summary>
+		[field: SyncVar]
+		public int Deaths { get; private set; }
+
+		/// <summary>
+		///     Updated every X amount of seconds and haves this player's latency
+		/// </summary>
+		[SyncVar] public double latency;
+
+		#endregion
+
+		#region Events
+
+		/// <summary>
+		///     A delegate for when a player is killed
+		/// </summary>
+		/// <param name="playerKilledId">The ID of the player who was killed</param>
+		/// <param name="playerKillerId">The ID of the player who killed the player</param>
+		public delegate void PlayerKilledDelegate(string playerKilledId, string playerKillerId);
+
+		/// <summary>
+		///     Triggered when this player is killed
+		/// </summary>
+		public event PlayerKilledDelegate PlayerKilled;
+
+		/// <summary>
+		///     Triggered when this player takes damage
+		/// </summary>
+		public event Action PlayerDamaged;
+
+		#endregion
+
+		#region Server Variables
+
+		/// <summary>
+		///     Only set on the server!
+		///     <para>The player's active <see cref="WeaponManager" /></para>
+		/// </summary>
+		private WeaponManager weaponManager;
+
+		/// <summary>
+		///     Only set on the server!
+		///     <para>Is this player invincible?</para>
+		/// </summary>
+		public bool IsInvincible { get; private set; } = true;
+
+		#endregion
+
+		#region Client Variables
+
+		/// <summary>
+		///     Handles predicting movements
+		/// </summary>
+		private PlayerMovementPredictor playerMovementPredictor;
+
+		/// <summary>
+		///     Handles sending inputs to the server
+		/// </summary>
+		private PlayerMovementInput playerMovementInput;
+
+		/// <summary>
+		///     Manages UI
+		/// </summary>
+		private PlayerUIManager uiManager;
+
+		#endregion
+
+		#region Unity Methods
+
+		private void Awake()
+		{
+			playerMovementManager = GetComponent<PlayerMovementManager>();
+			characterController = GetComponent<CharacterController>();
+		}
+
+		private void Start()
+		{
+			if (isLocalPlayer)
+			{
+				playerMovementPredictor = GetComponent<PlayerMovementPredictor>();
+				playerMovementInput = GetComponent<PlayerMovementInput>();
+			}
+			else
+			{
+				playerMovementObserver = GetComponent<PlayerMovementObserver>();
+			}
+		}
+
+		#endregion
+
 		#region Death, Respawn, Damage
 
 		/// <summary>
-		/// Take damage
+		///     Take damage
 		/// </summary>
 		/// <param name="damageAmount"></param>
 		/// <param name="sourcePlayerId"></param>
@@ -224,7 +227,7 @@ namespace Player
 			}
 
 			//Can't do damage on a player if they are dead or just re-spawned
-			if(IsDead || IsInvincible) return;
+			if (IsDead || IsInvincible) return;
 
 			Health -= damageAmount;
 
@@ -235,13 +238,13 @@ namespace Player
 		}
 
 		/// <summary>
-		/// Adds health to the player
+		///     Adds health to the player
 		/// </summary>
 		/// <param name="amount"></param>
 		[Server]
 		public void AddHealth(int amount)
 		{
-			if(Health == amount)
+			if (Health == amount)
 				return;
 
 			if (Health + amount > MaxHealth)
@@ -254,7 +257,7 @@ namespace Player
 		}
 
 		/// <summary>
-		/// The server side method that handles a player's death
+		///     The server side method that handles a player's death
 		/// </summary>
 		[Server]
 		private void ServerPlayerDie(string sourcePlayerId)
@@ -291,13 +294,13 @@ namespace Player
 		}
 
 		/// <summary>
-		/// Server side method that handles the player's
+		///     Server side method that handles the player's
 		/// </summary>
 		/// <returns></returns>
 		[Server]
 		internal IEnumerator ServerPlayerRespawn(bool skipRespawnTime = false)
 		{
-			if(!skipRespawnTime)
+			if (!skipRespawnTime)
 				yield return new WaitForSeconds(GameManager.GetActiveScene().respawnTime);
 
 			characterController.enabled = true;
@@ -324,7 +327,7 @@ namespace Player
 		}
 
 		/// <summary>
-		/// Disables components on each of the clients
+		///     Disables components on each of the clients
 		/// </summary>
 		[ClientRpc(channel = 5)]
 		private void RpcClientPlayerDie()
@@ -358,7 +361,7 @@ namespace Player
 		}
 
 		/// <summary>
-		/// Client side method of enabling client side stuff per client
+		///     Client side method of enabling client side stuff per client
 		/// </summary>
 		[ClientRpc(channel = 5)]
 		private void RpcClientRespawn()
@@ -417,7 +420,7 @@ namespace Player
 		#region Helper Methods
 
 		/// <summary>
-		/// Kills the player
+		///     Kills the player
 		/// </summary>
 		[Command(channel = 5)]
 		public void CmdSuicide()
@@ -429,7 +432,7 @@ namespace Player
 		{
 			while (isServer)
 			{
-				latency = Transport.activeTransport.GetConnectionRtt((uint)connectionToClient.connectionId);
+				latency = Transport.activeTransport.GetConnectionRtt((uint) connectionToClient.connectionId);
 				yield return new WaitForSeconds(playerLatencyUpdateTime);
 			}
 		}
@@ -438,8 +441,7 @@ namespace Player
 
 		#region Naming
 
-		[CommandLineArgument("name")]
-		[ConVar("name", "Sets the name", true)]
+		[CommandLineArgument("name")] [ConVar("name", "Sets the name", true)]
 		public static string StartPlayerName = "NotSet";
 
 		[Command]
