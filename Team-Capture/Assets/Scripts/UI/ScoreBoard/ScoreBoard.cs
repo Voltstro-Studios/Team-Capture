@@ -76,6 +76,9 @@ namespace UI.ScoreBoard
 
 			GameManager.PlayerAdded += OnPlayerAdded;
 			GameManager.PlayerRemoved += OnPlayerRemoved;
+
+			clientPlayer.PlayerKilled += ClientPlayerUpdateUI;
+			clientPlayer.PlayerDied += ClientPlayerUpdateUI;
 		}
 
 		private void OnDisable()
@@ -85,6 +88,9 @@ namespace UI.ScoreBoard
 
 			GameManager.PlayerAdded -= OnPlayerAdded;
 			GameManager.PlayerRemoved -= OnPlayerRemoved;
+
+			clientPlayer.PlayerKilled -= ClientPlayerUpdateUI;
+			clientPlayer.PlayerDied -= ClientPlayerUpdateUI;
 		}
 
 		#endregion
@@ -161,6 +167,12 @@ namespace UI.ScoreBoard
 
 			foreach (ScoreBoardPlayer scoreBoardPlayer in playerItems)
 				scoreBoardPlayer.UpdatePlayerStats();
+		}
+
+		private void ClientPlayerUpdateUI()
+		{
+			killDeathRatioText.text = $"{clientPlayer.Kills}/{clientPlayer.Deaths}";
+			playerStatsText.text = $"Kills: {clientPlayer.Kills}\nDeaths: {clientPlayer.Deaths}";
 		}
 
 		#region GameManager Callbacks
