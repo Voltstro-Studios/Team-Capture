@@ -79,6 +79,7 @@ namespace UI.ScoreBoard
 
 			clientPlayer.PlayerKilled += ClientPlayerUpdateUI;
 			clientPlayer.PlayerDied += ClientPlayerUpdateUI;
+			ClientPlayerUpdateUI();
 		}
 
 		private void OnDisable()
