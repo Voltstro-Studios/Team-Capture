@@ -115,13 +115,13 @@ namespace Player
 		/// <summary>
 		///     How many kills does this player have in this active game
 		/// </summary>
-		[field: SyncVar]
+		[field: SyncVar(hook = nameof(OnPlayerKilled))]
 		public int Kills { get; private set; }
 
 		/// <summary>
 		///     How many deaths does this player have in this active game
 		/// </summary>
-		[field: SyncVar]
+		[field: SyncVar(hook = nameof(OnPlayerDeath))]
 		public int Deaths { get; private set; }
 
 		/// <summary>
@@ -134,21 +134,19 @@ namespace Player
 		#region Events
 
 		/// <summary>
-		///     A delegate for when a player is killed
-		/// </summary>
-		/// <param name="playerKilledId">The ID of the player who was killed</param>
-		/// <param name="playerKillerId">The ID of the player who killed the player</param>
-		public delegate void PlayerKilledDelegate(string playerKilledId, string playerKillerId);
-
-		/// <summary>
-		///     Triggered when this player is killed
-		/// </summary>
-		public event PlayerKilledDelegate PlayerKilled;
-
-		/// <summary>
 		///     Triggered when this player takes damage
 		/// </summary>
 		public event Action PlayerDamaged;
+
+		/// <summary>
+		///		Invoked when this player dies
+		/// </summary>
+		public event Action PlayerDied;
+
+		/// <summary>
+		///		Invoked when this player gets a kill
+		/// </summary>
+		public event Action PlayerKilled;
 
 		#endregion
 
@@ -288,8 +286,6 @@ namespace Player
 			if (sourcePlayerId != transform.name)
 				killer.Kills++;
 
-			RpcKillFeed(transform.name, sourcePlayerId);
-
 			StartCoroutine(ServerPlayerRespawn());
 		}
 
@@ -397,10 +393,14 @@ namespace Player
 
 		#region UI
 
-		[ClientRpc]
-		private void RpcKillFeed(string playerKilledId, string playerKillerId)
+		private void OnPlayerDeath(int oldValue, int newValue)
 		{
-			PlayerKilled?.Invoke(playerKilledId, playerKillerId);
+			PlayerDied?.Invoke();
+		}
+
+		private void OnPlayerKilled(int oldValue, int newValue)
+		{
+			PlayerKilled?.Invoke();
 		}
 
 		#endregion

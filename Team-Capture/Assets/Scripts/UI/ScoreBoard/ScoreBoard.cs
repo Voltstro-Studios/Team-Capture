@@ -123,7 +123,7 @@ namespace UI.ScoreBoard
 				scoreBoardPlayer.SetupPlayerInfo(player);
 				playerItems.Add(scoreBoardPlayer);
 
-				player.PlayerKilled += PlayerKilled;
+				player.PlayerDied += PlayerKilled;
 			}
 		}
 
@@ -137,7 +137,7 @@ namespace UI.ScoreBoard
 			for (int i = 0; i < playerListTransform.childCount; i++)
 			{
 				GameObject item = playerListTransform.GetChild(i).gameObject;
-				item.GetComponent<ScoreBoardPlayer>().PlayerToTrack.PlayerKilled -= PlayerKilled;
+				item.GetComponent<ScoreBoardPlayer>().PlayerToTrack.PlayerDied -= PlayerKilled;
 
 				Destroy(item);
 			}
@@ -154,7 +154,7 @@ namespace UI.ScoreBoard
 			}
 		}
 
-		private void PlayerKilled(string playerKilledId, string playerKillerId)
+		private void PlayerKilled()
 		{
 			SortPlayerList();
 			UpdateUIPositions();
