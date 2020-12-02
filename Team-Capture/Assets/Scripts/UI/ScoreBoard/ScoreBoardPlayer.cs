@@ -13,22 +13,23 @@ namespace UI.ScoreBoard
 		[SerializeField] private TextMeshProUGUI playerNameText;
 		[SerializeField] private TextMeshProUGUI playerPingText;
 
-		private PlayerManager playerToTrack;
+		internal PlayerManager PlayerToTrack;
 
 		public void SetupPlayerInfo(PlayerManager player)
 		{
-			playerToTrack = player;
+			PlayerToTrack = player;
+			UpdatePlayerStats();
 		}
 
 		public void UpdatePlayerStats()
 		{
 			//Check to see if the player name has changed
-			if (playerNameText.text != playerToTrack.username)
-				playerNameText.text = playerToTrack.username;
+			if (playerNameText.text != PlayerToTrack.username)
+				playerNameText.text = PlayerToTrack.username;
 
-			playerKillsText.text = playerToTrack.Kills.ToString();
-			playerDeathsText.text = playerToTrack.Deaths.ToString();
-			playerPingText.text = Math.Round(playerToTrack.latency).ToString(CultureInfo.InvariantCulture);
+			playerKillsText.text = PlayerToTrack.Kills.ToString();
+			playerDeathsText.text = PlayerToTrack.Deaths.ToString();
+			playerPingText.text = Math.Round(PlayerToTrack.latency).ToString(CultureInfo.InvariantCulture);
 		}
 	}
 }

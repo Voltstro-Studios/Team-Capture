@@ -58,102 +58,124 @@ namespace UI.ScoreBoard
 		[Tooltip("The player list transform")] [SerializeField]
 		private Transform playerListTransform;
 
-		private readonly Dictionary<PlayerManager, GameObject> playerList = new Dictionary<PlayerManager, GameObject>();
-		private List<PlayerManager> players = new List<PlayerManager>();
+		private List<PlayerManager> players;
+		private List<ScoreBoardPlayer> playerItems = new List<ScoreBoardPlayer>();
+
+		#region Unity Callbacks
 
 		private void Start()
 		{
+			playerNameText.text = clientPlayer.username;
 			mapNameText.text = GameManager.GetActiveScene().displayName;
 			gameNameText.text = TCNetworkManager.Instance.serverConfig.gameName;
 		}
 
 		private void OnEnable()
 		{
-			playerNameText.text = clientPlayer.username;
+			SetPlayerList();
 
-			//Get all players and create a player item on the scoreboard for them
-			players = GameManager.GetAllPlayers().ToList();
-			foreach (PlayerManager player in players) CreateNewPlayerItem(player);
-
-			UpdatePlayerStats();
-
-			//Set our stats at the bottom of the screen
-			if (clientPlayer.Kills != 0 && clientPlayer.Deaths != 0)
-				killDeathRatioText.text = "K/D: " + clientPlayer.Kills / clientPlayer.Deaths;
-
-			playerStatsText.text = $"Kills: {clientPlayer.Kills}\nDeaths: {clientPlayer.Deaths}";
+			GameManager.PlayerAdded += OnPlayerAdded;
+			GameManager.PlayerRemoved += OnPlayerRemoved;
 		}
 
 		private void OnDisable()
 		{
-			for (int i = 0; i < playerListTransform.childCount; i++)
-				Destroy(playerListTransform.GetChild(i).gameObject);
+			players.Clear();
+			ClearScoreBoardPlayerItems();
 
-			foreach (PlayerManager player in players)
-				//Unsubscribe from the player killed event
-				player.PlayerKilled -= PlayerOnPlayerKilled;
-
-			playerList.Clear();
+			GameManager.PlayerAdded -= OnPlayerAdded;
+			GameManager.PlayerRemoved -= OnPlayerRemoved;
 		}
 
-		private void UpdatePlayerStats()
+		#endregion
+
+		/// <summary>
+		///		Generate the list from scratch
+		///		<para>Should only need to do this when a player is added or removed, or when the panel is opened</para>
+		/// </summary>
+		private void SetPlayerList()
 		{
-			//Sort the player list
+			players = GameManager.GetAllPlayers().ToList();
+			SortPlayerList();
+			SetScoreBoardPlayerItems();
+			UpdateUIPositions();
+		}
+
+		/// <summary>
+		///		Sorts the <see cref="players"/> list
+		/// </summary>
+		private void SortPlayerList()
+		{
 			players.Sort(new PlayerListComparer());
+		}
 
-			for (int i = 0; i < players.Count; i++)
+		/// <summary>
+		///		Generate the player scoreboard items from scratch
+		/// </summary>
+		private void SetScoreBoardPlayerItems()
+		{
+			ClearScoreBoardPlayerItems();
+			foreach (PlayerManager player in players)
 			{
-				//Get the player in the dictionary
-				GameObject player = playerList[players[i]];
+				GameObject playerItem = Instantiate(playerItemPrefab, playerListTransform, false);
+				ScoreBoardPlayer scoreBoardPlayer = playerItem.GetComponent<ScoreBoardPlayer>();
 
-				//If the player doesn't exist then create a new player item on the scoreboard
-				if (player == null)
-				{
-					CreateNewPlayerItem(players[i]);
+				scoreBoardPlayer.SetupPlayerInfo(player);
+				playerItems.Add(scoreBoardPlayer);
 
-					//Now it defiantly should exist
-					player = playerList[players[i]];
-				}
-
-				//Update its spot
-				player.transform.SetSiblingIndex(i);
-
-				//Update its stats
-				player.GetComponent<ScoreBoardPlayer>().UpdatePlayerStats();
+				player.PlayerKilled += PlayerKilled;
 			}
 		}
 
-		private void CreateNewPlayerItem(PlayerManager player)
+		/// <summary>
+		///		Clears all the player scoreboard items
+		/// </summary>
+		private void ClearScoreBoardPlayerItems()
 		{
-			GameObject newPlayerItem = Instantiate(playerItemPrefab, playerListTransform, false);
-			ScoreBoardPlayer playerItemLogic = newPlayerItem.GetComponent<ScoreBoardPlayer>();
-			if (playerItemLogic == null)
+			playerItems.Clear();
+
+			for (int i = 0; i < playerListTransform.childCount; i++)
 			{
-				Logger.Error("The playerItemPrefab doesn't have a ScoreBoardPlayer behaviour on it!");
-				return;
+				GameObject item = playerListTransform.GetChild(i).gameObject;
+				item.GetComponent<ScoreBoardPlayer>().PlayerToTrack.PlayerKilled -= PlayerKilled;
+
+				Destroy(item);
 			}
-
-			playerItemLogic.SetupPlayerInfo(player);
-			playerItemLogic.UpdatePlayerStats();
-
-			player.PlayerKilled += PlayerOnPlayerKilled;
-
-			playerList.Add(player, newPlayerItem);
 		}
 
-		private void PlayerOnPlayerKilled(string playerKilledId, string playerKillerId)
+		/// <summary>
+		///		Updates the UI positions of the player scoreboard items
+		/// </summary>
+		private void UpdateUIPositions()
 		{
-			UpdatePlayerStats();
-
-			//Update our stats if it was our client
-			if (GameManager.GetPlayer(playerKilledId) != clientPlayer &&
-			    GameManager.GetPlayer(playerKillerId) != clientPlayer) return;
-
-			if (clientPlayer.Kills != 0 && clientPlayer.Deaths != 0)
-				killDeathRatioText.text = "K/D: " + clientPlayer.Kills / clientPlayer.Deaths;
-
-			playerStatsText.text = $"Kills: {clientPlayer.Kills}\nDeaths: {clientPlayer.Deaths}";
+			foreach (ScoreBoardPlayer scoreBoardPlayer in playerItems)
+			{
+				scoreBoardPlayer.transform.SetSiblingIndex(players.IndexOf(scoreBoardPlayer.PlayerToTrack));
+			}
 		}
+
+		private void PlayerKilled(string playerKilledId, string playerKillerId)
+		{
+			SortPlayerList();
+			UpdateUIPositions();
+
+			foreach (ScoreBoardPlayer scoreBoardPlayer in playerItems)
+				scoreBoardPlayer.UpdatePlayerStats();
+		}
+
+		#region GameManager Callbacks
+
+		private void OnPlayerAdded(string playerId)
+		{
+			SetPlayerList();
+		}
+
+		private void OnPlayerRemoved(string playerId)
+		{
+			SetPlayerList();
+		}
+
+		#endregion
 
 		private class PlayerListComparer : IComparer<PlayerManager>
 		{

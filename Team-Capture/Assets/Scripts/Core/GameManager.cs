@@ -98,7 +98,6 @@ namespace Core
 		public static event PlayerEvent PlayerAdded;
 		public static event PlayerEvent PlayerRemoved;
 
-
 		/// <summary>
 		///     Adds a <see cref="PlayerManager" />
 		/// </summary>
