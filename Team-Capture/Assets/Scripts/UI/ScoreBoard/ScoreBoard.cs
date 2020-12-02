@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Core;
 using Core.Networking;
@@ -102,10 +103,15 @@ namespace UI.ScoreBoard
 		/// </summary>
 		private void SetPlayerList()
 		{
+			Stopwatch stopwatch = Stopwatch.StartNew();
+
 			players = GameManager.GetAllPlayers().ToList();
 			SortPlayerList();
 			SetScoreBoardPlayerItems();
 			UpdateUIPositions();
+
+			stopwatch.Stop();
+			Logger.Debug($"Took {stopwatch.Elapsed.TotalMilliseconds}ms to update scoreboard player items.");
 		}
 
 		/// <summary>
@@ -156,9 +162,7 @@ namespace UI.ScoreBoard
 		private void UpdateUIPositions()
 		{
 			foreach (ScoreBoardPlayer scoreBoardPlayer in playerItems)
-			{
 				scoreBoardPlayer.transform.SetSiblingIndex(players.IndexOf(scoreBoardPlayer.PlayerToTrack));
-			}
 		}
 
 		private void PlayerKilled()
