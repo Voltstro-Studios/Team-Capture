@@ -1,6 +1,6 @@
 $ExeName;
 if ($IsWindows) {
-    $ExeName = "./Team-Capture.exe"
+    $ExeName = ".\Team-Capture.exe"
 }
 else { #TODO: Test on Linux and MacOS
     $ExeName = "./Team-Capture"
@@ -8,4 +8,4 @@ else { #TODO: Test on Linux and MacOS
 
 $Arguments = " -batchmode -nographics"
 
-Invoke-Expression ($ExeName + $Arguments)
+Start-Process $ExeName $Arguments
