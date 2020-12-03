@@ -1,6 +1,7 @@
 ﻿using SceneManagement;
 using UnityEngine;
 using UnityEngine.Video;
+using Voltstro.CommandLineParser;
 
 namespace StartUpVideo
 {
@@ -14,6 +15,9 @@ namespace StartUpVideo
 		private VideoPlayer startUpVideo;
 
 		private Camera mainCamera;
+
+		[CommandLineArgument("novid")]
+		public static bool SkipVideo = false;
 
 		/// <summary>
 		///     Can we skip the start up video?
@@ -42,6 +46,12 @@ namespace StartUpVideo
 
 		private void Start()
 		{
+			if (SkipVideo)
+			{
+				ChangeScene();
+				return;
+			}
+
 			inPlayMode = true;
 			Play();
 		}
