@@ -17,9 +17,11 @@ namespace Console
 		[SerializeField] private GameObject consolePanel;
 		[SerializeField] private KeyCode consoleToggleKey = KeyCode.F1;
 
-		[SerializeField] private bool showDebugMessages;
+		[ConVar("console_scale", "Sets the console's scale", nameof(UpdateConsoleScaleCallback), true)]
+		public static float ConsoleTextScale = 1;
 
-		[SerializeField] private float consoleTextScale = 1;
+		[ConVar("console_log_debug", "Shows debug logs in the console", true)]
+		public static bool ShowDebugMessages = false;
 
 		private readonly List<string> lines = new List<string>();
 		private float defaultFontSize;
@@ -70,7 +72,7 @@ namespace Console
 		{
 			if (consoleTextArea == null) return;
 
-			if (logType == LogType.Assert && !showDebugMessages) return;
+			if (logType == LogType.Assert && !ShowDebugMessages) return;
 
 			switch (logType)
 			{
@@ -161,20 +163,11 @@ namespace Console
 			if (ConsoleSetup.ConsoleUI is ConsoleGUI gui) gui.ToggleConsole();
 		}
 
-		[ConCommand("console_scale", "Changes the console's text scale", CommandRunPermission.Both, 1, 1, true)]
-		public static void ConsoleScaleCommand(string[] args)
+		public static void UpdateConsoleScaleCallback()
 		{
-			if (float.TryParse(args[0], out float result))
-			{
-				if (!(ConsoleSetup.ConsoleUI is ConsoleGUI gui)) return;
+			if (!(ConsoleSetup.ConsoleUI is ConsoleGUI gui)) return;
 
-				gui.consoleTextScale = result;
-				gui.consoleTextArea.fontSize = gui.defaultFontSize * gui.consoleTextScale;
-
-				return;
-			}
-
-			Logger.Error("The imputed argument isn't a number!");
+			gui.consoleTextArea.fontSize = gui.defaultFontSize * ConsoleTextScale;
 		}
 
 		#endregion

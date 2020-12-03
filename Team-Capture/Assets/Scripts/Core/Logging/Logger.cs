@@ -18,6 +18,8 @@ namespace Core.Logging
 
 		private static LoggerConfig loggerConfig;
 
+		private static LoggingLevelSwitch level;
+
 		/// <summary>
 		///     The logger's config, can only be set while the logger isn't running
 		/// </summary>
@@ -39,6 +41,13 @@ namespace Core.Logging
 		/// </summary>
 		public static bool IsLoggerInitialized => log != null;
 
+		[ConVar("cl_log_debug", "Logs debug messages", nameof(DebugLogModeCallback))]
+#if UNITY_EDITOR //Default to debug logging in the editor
+		public static bool DebugLogMode = true;
+#else
+		public static bool DebugLogMode = false;
+#endif
+
 		/// <summary>
 		///     Initializes the logger
 		/// </summary>
@@ -54,9 +63,9 @@ namespace Core.Logging
 
 			Application.quitting += Shutdown;
 
-			LoggingLevelSwitch level = new LoggingLevelSwitch
+			level = new LoggingLevelSwitch
 			{
-#if UNITY_EDITOR
+#if UNITY_EDITOR //Default to debug logging in the editor
 				MinimumLevel = LogEventLevel.Debug
 #endif
 			};
@@ -91,6 +100,11 @@ namespace Core.Logging
 			loggerConfig = null;
 
 			Application.quitting -= Shutdown;
+		}
+
+		private static void DebugLogModeCallback()
+		{
+			level.MinimumLevel = DebugLogMode ? LogEventLevel.Debug : LogEventLevel.Information;
 		}
 
 		#region Debug Logging
