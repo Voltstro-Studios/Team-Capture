@@ -1,3 +1,4 @@
 <linker>
   <assembly fullname="Discord.GameSDK" preserve="all" />
+  <assembly fullname="Newtonsoft.Json" preserve="all" />
 </linker>
