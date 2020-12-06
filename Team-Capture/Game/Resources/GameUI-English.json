@@ -1,9 +1,15 @@
 {
+    "Menu_Cancel": "Cancel",
     "Menu_Home": "Home",
     "Menu_Resume": "Resume",
     "Menu_CreateServer": "Create Server",
     "Menu_JoinGame": "Join Game",
     "Menu_Options": "Options",
     "Menu_Quit": "Quit",
-    "Menu_Disconnect": "Disconnect"
+    "Menu_Disconnect": "Disconnect",
+    "Menu_GameNameDefault": "Team-Capture Game",
+    "Menu_GameNamePlaceholder": "Enter Game Name",
+    "Menu_MaxPlayers": "Max Players",
+    "Menu_CreateServerWarning": "This will start up a new instance of TC in headless server mode.",
+    "Menu_Start": "Start"
 }
