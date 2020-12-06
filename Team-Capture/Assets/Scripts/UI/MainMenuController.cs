@@ -73,7 +73,7 @@ namespace UI
 			string backButtonText = "Menu_Home";
 			if (NetworkManager.singleton != null)
 				if (NetworkManager.singleton.isNetworkActive)
-					backButtonText = "Menu_Return";
+					backButtonText = "Menu_Resume";
 			CreateButton(topButtonPrefab, topNavBar, backButtonText, CloseActivePanel, 69f);
 
 			//Pre-create all panels and button
