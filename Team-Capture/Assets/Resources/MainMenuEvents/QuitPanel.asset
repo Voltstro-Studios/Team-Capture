@@ -16,7 +16,7 @@ MonoBehaviour:
     type: 3}
   darkenScreen: 1
   showTopBlackBar: 1
-  menuButtonText: Quit
+  menuButtonText: Menu_Quit
   bottomNavBarButton: 1
   isOpen: 0
   activePanel: {fileID: 0}

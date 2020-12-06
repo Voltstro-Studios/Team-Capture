@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   panelPrefab: {fileID: 7741058342783775882, guid: b6dbb189b8a5596458672dda86230873,
     type: 3}
-  menuButtonText: Create Server
   darkenScreen: 1
   showTopBlackBar: 1
+  menuButtonText: Menu_CreateServer
+  bottomNavBarButton: 0
   isOpen: 0
   activePanel: {fileID: 0}

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Localization;
 using Mirror;
 using TMPro;
 using Tweens;
@@ -69,10 +70,10 @@ namespace UI
 			Stopwatch stopwatch = Stopwatch.StartNew();
 
 			//Create home/return button
-			string backButtonText = "Home";
+			string backButtonText = "Menu_Home";
 			if (NetworkManager.singleton != null)
 				if (NetworkManager.singleton.isNetworkActive)
-					backButtonText = "Return";
+					backButtonText = "Menu_Return";
 			CreateButton(topButtonPrefab, topNavBar, backButtonText, CloseActivePanel, 69f);
 
 			//Pre-create all panels and button
@@ -177,6 +178,7 @@ namespace UI
 				tmpText.fontStyle = FontStyles.Bold;
 			button.GetComponent<Button>().onClick.AddListener(action);
 			button.name = $"{text} Button";
+			tmpText.gameObject.AddComponent<GameUITMPResolver>();
 		}
 
 		#region Panel List Functions

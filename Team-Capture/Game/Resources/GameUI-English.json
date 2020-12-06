@@ -1,0 +1,9 @@
+{
+    "Menu_Home": "Home",
+    "Menu_Resume": "Resume",
+    "Menu_CreateServer": "Create Server",
+    "Menu_JoinGame": "Join Game",
+    "Menu_Options": "Options",
+    "Menu_Quit": "Quit",
+    "Menu_Disconnect": "Disconnect"
+}

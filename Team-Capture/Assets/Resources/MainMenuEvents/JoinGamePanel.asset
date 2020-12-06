@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   panelPrefab: {fileID: 5646500446491200252, guid: 2fa294a4b3b147342b00d1ecf407cdd8,
     type: 3}
-  menuButtonText: Join Game
   darkenScreen: 1
   showTopBlackBar: 1
+  menuButtonText: Menu_JoinGame
+  bottomNavBarButton: 0
   isOpen: 0
   activePanel: {fileID: 0}
