@@ -17,6 +17,7 @@
     "Menu_Options_Saved": "Options Saved",
     "Menu_Options_SavedMessage": "Options are now saved and applied!",
     "Menu_Quit": "Quit",
+    "Menu_QuitMessage": "Are you sure you want to quit?",
     "Menu_Disconnect": "Disconnect",
     "Menu_DisconnectMessage": "Are you sure you want to disconnect?",
     "Menu_GameNameDefault": "Team-Capture Game",
