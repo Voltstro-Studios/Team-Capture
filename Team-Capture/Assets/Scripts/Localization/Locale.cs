@@ -6,8 +6,15 @@ using Logger = Core.Logging.Logger;
 
 namespace Localization
 {
+	/// <summary>
+	///		A locale, handles loading locale files for different language based off user preference or by the system language. 
+	/// </summary>
 	public class Locale
 	{
+		/// <summary>
+		///		Creates a new <see cref="Locale"/> instance
+		/// </summary>
+		/// <param name="fileLocation"></param>
 		public Locale(string fileLocation)
 		{
 			//Try and load the locale for the native system language
@@ -47,8 +54,17 @@ namespace Localization
 			}
 		}
 
+		/// <summary>
+		///		All the available tokens
+		/// </summary>
 		public Dictionary<string, string> Tokens { get; }
 
+		/// <summary>
+		///		Resolves the string
+		///		<para>If the <see cref="id"/> doesn't exist in the <see cref="Tokens"/> dictionary then the <see cref="id"/> will be returned.</para>
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
 		public string ResolveString(string id)
 		{
 			if (!Tokens.ContainsKey(id))
