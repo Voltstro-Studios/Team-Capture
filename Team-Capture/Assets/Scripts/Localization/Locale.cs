@@ -67,13 +67,10 @@ namespace Localization
 		/// <returns></returns>
 		public string ResolveString(string id)
 		{
-			if (!Tokens.ContainsKey(id))
-			{
-				Logger.Warn("No key for {@ID} exists in localization!", id);
-				return id;
-			}
+			if (Tokens.ContainsKey(id)) return Tokens[id];
 
-			return Tokens[id];
+			Logger.Warn("No key for {@ID} exists in localization!", id);
+			return id;
 		}
 	}
 }

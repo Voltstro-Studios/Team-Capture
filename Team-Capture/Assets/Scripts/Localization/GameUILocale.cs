@@ -18,6 +18,7 @@ namespace Localization
 		/// <returns></returns>
 		public static string ResolveString(string id)
 		{
+			//If the GameUI locale doesn't exist, create it
 			if(gameUiLocale == null)
 				gameUiLocale = new Locale(GameUiLocaleLocation);
 
