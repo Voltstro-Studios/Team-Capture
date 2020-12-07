@@ -5,13 +5,13 @@ namespace Settings.SettingClasses
 	internal class MouseSettingsClass : Setting
 	{
 		[Range(50, 200)]
-		[SettingsPropertyFormatName("Mouse Sensitivity")]
+		[SettingsPropertyFormatName("Settings_MouseSensitivity")]
 		public int MouseSensitivity = 100;
 
-		[SettingsPropertyFormatName("Raw Axis")]
+		[SettingsPropertyFormatName("Settings_MouseRawAxis")]
 		public bool RawAxis = true;
 
-		[SettingsPropertyFormatName("Reverse Mouse")]
+		[SettingsPropertyFormatName("Settings_MouseReverse")]
 		public bool ReverseMouse;
 	}
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Localization;
 using Settings;
 using TMPro;
 using UI.Elements.Settings;
@@ -88,7 +89,10 @@ namespace UI.Panels
 			//Button
 			Button button = Instantiate(settingsButtonPrefab, buttonLocation, false).GetComponent<Button>();
 			button.onClick.AddListener(delegate { OpenPanel(optionsMenu.Name); });
-			button.GetComponentInChildren<TextMeshProUGUI>().text = optionsMenu.Name.Replace(" ", "\n");
+			TextMeshProUGUI buttonText = button.GetComponentInChildren<TextMeshProUGUI>();
+			buttonText.text = optionsMenu.Name;
+			buttonText.gameObject.AddComponent<GameUITMPResolver>();
+			buttonText.text = buttonText.text.Replace(" ", "\n");
 
 			settingPanels.Add(button, panel);
 
@@ -158,13 +162,16 @@ namespace UI.Panels
 			//Create new title object
 			GameObject titleObject = Instantiate(settingsTitlePrefab, GetPanelItemArea(panel), false);
 			titleObject.GetComponent<TextMeshProUGUI>().text = title;
+			titleObject.AddComponent<GameUITMPResolver>();
 		}
 
 		public Toggle AddToggleToPanel(GameObject panel, string toggleText, bool currentValue)
 		{
 			//Create new toggle object
 			GameObject toggleObject = Instantiate(settingsTogglePrefab, GetPanelItemArea(panel), false);
-			toggleObject.GetComponentInChildren<TextMeshProUGUI>().text = toggleText;
+			TextMeshProUGUI label = toggleObject.GetComponentInChildren<TextMeshProUGUI>();
+			label.text = toggleText;
+			label.gameObject.AddComponent<GameUITMPResolver>();
 
 			//Set if it is on or off
 			Toggle toggle = toggleObject.GetComponent<Toggle>();
@@ -185,6 +192,7 @@ namespace UI.Panels
 
 			//Set the text
 			sliderSettings.propertyText.text = sideText;
+			sliderSettings.propertyText.gameObject.AddComponent<GameUITMPResolver>();
 
 			//Set up the slider itself
 			Slider slider = sliderSettings.slider;
@@ -202,6 +210,7 @@ namespace UI.Panels
 			GameObject dropDownObject = Instantiate(settingsDropdownPrefab, GetPanelItemArea(panel), false);
 			SettingDropdown dropdownSettings = dropDownObject.GetComponent<SettingDropdown>();
 			dropdownSettings.settingsName.text = sideText;
+			dropdownSettings.settingsName.gameObject.AddComponent<GameUITMPResolver>();
 
 			//Create options
 			List<TMP_Dropdown.OptionData> optionDatas = new List<TMP_Dropdown.OptionData>(options.Length);

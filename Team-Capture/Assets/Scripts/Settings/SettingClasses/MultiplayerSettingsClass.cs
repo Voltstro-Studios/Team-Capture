@@ -4,14 +4,14 @@ namespace Settings.SettingClasses
 {
 	internal class MultiplayerSettingsClass : Setting
 	{
-		[SettingsPropertyFormatName("Muzzle Flash Lighting")]
+		[SettingsPropertyFormatName("Settings_MultiplayerMuzzleFlashLighting")]
 		public bool WeaponMuzzleFlashLighting = true;
 
-		[SettingsPropertyFormatName("Weapon Sway")]
+		[SettingsPropertyFormatName("Settings_MultiplayerWeaponSway")]
 		public bool WeaponSwayEnabled = true;
 
 		[Range(0, 15)]
-		[SettingsPropertyFormatName("Weapon Sway Amount")]
+		[SettingsPropertyFormatName("Settings_MultiplayerWeaponSwayAmount")]
 		public float WeaponSwayAmount = 0.1f;
 	}
 }
