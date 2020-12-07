@@ -49,5 +49,9 @@
     "Settings_Multiplayer": "Multiplayer Settings",
     "Settings_MultiplayerMuzzleFlashLighting": "Muzzle Flash Lighting",
     "Settings_MultiplayerWeaponSway": "Weapon Sway",
-    "Settings_MultiplayerWeaponSwayAmount": "Weapon Sway Amount"
+    "Settings_MultiplayerWeaponSwayAmount": "Weapon Sway Amount",
+    "ScoreBoard_Name": "Name",
+    "ScoreBoard_Kills": "Kills",
+    "ScoreBoard_Deaths": "Deaths",
+    "ScoreBoard_Ping": "Ping"
 }

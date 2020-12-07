@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Core;
 using Core.Networking;
+using Localization;
 using Player;
 using TMPro;
 using UnityEngine;
@@ -62,7 +64,16 @@ namespace UI.ScoreBoard
 		private List<PlayerManager> players;
 		private List<ScoreBoardPlayer> playerItems = new List<ScoreBoardPlayer>();
 
+		private string killsTextLocale;
+		private string deathsTextLocale;
+
 		#region Unity Callbacks
+
+		private void Awake()
+		{
+			killsTextLocale = GameUILocale.ResolveString("ScoreBoard_Kills");
+			deathsTextLocale = GameUILocale.ResolveString("ScoreBoard_Deaths");
+		}
 
 		private void Start()
 		{
@@ -177,7 +188,7 @@ namespace UI.ScoreBoard
 		private void ClientPlayerUpdateUI()
 		{
 			killDeathRatioText.text = $"{clientPlayer.Kills}/{clientPlayer.Deaths}";
-			playerStatsText.text = $"Kills: {clientPlayer.Kills}\nDeaths: {clientPlayer.Deaths}";
+			playerStatsText.text = $"{killsTextLocale}: {clientPlayer.Kills}\n{deathsTextLocale}: {clientPlayer.Deaths}";
 		}
 
 		#region GameManager Callbacks
