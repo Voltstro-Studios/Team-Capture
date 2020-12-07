@@ -10,6 +10,7 @@ namespace Localization
 		{
 			TextMeshProUGUI text = GetComponent<TextMeshProUGUI>();
 			text.text = GameUILocale.ResolveString(text.text);
+			Destroy(this);
 		}
 	}
 }
