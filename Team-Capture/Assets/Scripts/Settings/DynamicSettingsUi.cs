@@ -161,7 +161,7 @@ namespace Settings
 			}
 
 			stopwatch.Stop();
-			Logger.Info("Time taken to update settings UI: {@TotalMilliseconds}ms",
+			Logger.Debug("Time taken to update settings UI: {@TotalMilliseconds}ms",
 				stopwatch.Elapsed.TotalMilliseconds);
 		}
 
@@ -236,6 +236,7 @@ namespace Settings
 		{
 			string[] names = Enum.GetNames(field.FieldType);
 			val = names.ToList().IndexOf(Enum.GetName(field.FieldType, val));
+
 			TMP_Dropdown dropdown = optionsPanel.AddDropdownToPanel(panel, GetFieldFormatName(field), names, val);
 
 			dropdown.onValueChanged.AddListener(index =>

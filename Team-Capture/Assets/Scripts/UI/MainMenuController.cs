@@ -100,7 +100,7 @@ namespace UI
 			}
 
 			stopwatch.Stop();
-			Logger.Info("Time taken to update menu UI: {@TotalMilliseconds}ms", stopwatch.ElapsedMilliseconds);
+			Logger.Debug("Time taken to update menu UI: {@TotalMilliseconds}ms", stopwatch.ElapsedMilliseconds);
 		}
 
 		private void Update()

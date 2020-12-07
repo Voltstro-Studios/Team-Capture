@@ -16,11 +16,6 @@ namespace Integrations
 	internal class DiscordManager : SingletonMonoBehaviour<DiscordManager>, IStartOnBoot
 	{
 		/// <summary>
-		///     Load the settings on start?
-		/// </summary>
-		public bool loadSettingsFromFile = true;
-
-		/// <summary>
 		///     Where to load the settings from
 		/// </summary>
 		public string settingsLocation = "/Resources/Integrations/DiscordRPC.json";
@@ -82,7 +77,7 @@ namespace Integrations
 			}
 			catch (ResultException ex)
 			{
-				Logger.Error("Failed to connect with Discord! Result: {@Exception}", ex.Result);
+				Logger.Error("Failed to connect with Discord! {@Message} {@ResultCode", ex.Message, ex.Result);
 				client = null;
 				Destroy(gameObject);
 				return;
@@ -136,7 +131,7 @@ namespace Integrations
 			if (Instance.client == null) return;
 
 			Instance.activityManager.UpdateActivity(activity,
-				result => { Logger.Info($"[Discord Presence] Updated activity: {result}"); });
+				result => { Logger.Debug($"[Discord Presence] Updated activity: {result}"); });
 		}
 
 		#region Scene Discord RPC Stuff
