@@ -5,7 +5,6 @@ using Localization;
 using Mirror;
 using UnityEngine;
 using Weapons;
-using Logger = Core.Logging.Logger;
 
 namespace SceneManagement
 {

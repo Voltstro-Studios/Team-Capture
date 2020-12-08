@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
+using Core;
+using Localization;
+using UnityEngine;
 
 namespace Weapons
 {
@@ -40,8 +43,13 @@ namespace Weapons
 		/// <summary>
 		///     The formatted name. This is what will show on HUDs
 		/// </summary>
-		[Tooltip("The formatted name. This is what will show on HUDs")]
-		public string weaponFormattedName;
+		[Tooltip("The formatted name. This is what will show on HUDs")] [SerializeField]
+		private string weaponFormattedName;
+
+		/// <summary>
+		///     The formatted name. This is what will show on HUDs
+		/// </summary>
+		public string WeaponFormattedNameLocalized => weaponFormattedName ?? (weaponFormattedName = ResolveWeaponString(weaponFormattedName));
 
 		/// <summary>
 		///     The prefab that this weapon will use
@@ -114,5 +122,21 @@ namespace Weapons
 		/// </summary>
 		[Tooltip("The bullet tracer effect that will be used")]
 		public GameObject bulletTracerEffect;
+
+		#region Locales
+
+		[NonSerialized] private string weaponFormattedNameLocalized;
+
+		private Locale mapLocale;
+
+		public string ResolveWeaponString(string id)
+		{
+			if(mapLocale == null)
+				mapLocale = new Locale($"{Game.GetGameExecutePath()}/Resources/Maps/{weapon}-%LANG%.json");
+
+			return mapLocale.ResolveString(id);
+		}
+
+		#endregion
 	}
 }
