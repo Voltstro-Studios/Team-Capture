@@ -96,6 +96,7 @@ namespace Core.Logging
 
 			log.Debug("Logger shutting down at {@Date}", DateTime.Now.ToString("dd/MM/yyyy hh:mm tt"));
 			log.Dispose();
+			log = null;
 
 			loggerConfig = null;
 
