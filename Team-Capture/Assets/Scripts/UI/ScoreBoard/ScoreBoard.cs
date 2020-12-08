@@ -78,7 +78,7 @@ namespace UI.ScoreBoard
 		private void Start()
 		{
 			playerNameText.text = clientPlayer.username;
-			mapNameText.text = GameManager.GetActiveScene().displayName;
+			mapNameText.text = GameManager.GetActiveScene().DisplayNameLocalized;
 			gameNameText.text = TCNetworkManager.Instance.serverConfig.gameName;
 		}
 

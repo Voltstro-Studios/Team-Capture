@@ -1,7 +1,11 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using Core;
+using Localization;
 using Mirror;
 using UnityEngine;
 using Weapons;
+using Logger = Core.Logging.Logger;
 
 namespace SceneManagement
 {
@@ -14,14 +18,24 @@ namespace SceneManagement
 		/// <summary>
 		///     The actual Unity scene
 		/// </summary>
-		[Header("Basic Scene Settings")] [Scene]
-		public string scene;
+		[Header("Basic Scene Settings")] 
+		[Scene] public string scene;
+
+		/// <summary>
+		///     The scene, but only its name (So no 'Assets/Scenes/*.unity' stuff)
+		/// </summary>
+		public string SceneFileName => Path.GetFileNameWithoutExtension(scene);
 
 		/// <summary>
 		///     The display name, the name that will be shown to the user
 		/// </summary>
-		[Tooltip("The display name, the name that will be shown to the user")]
-		public string displayName;
+		[Tooltip("The display name, the name that will be shown to the user")] [SerializeField]
+		private string displayName = "Map_DisplayName";
+
+		/// <summary>
+		///     The display name, the name that will be shown to the user (Localized)
+		/// </summary>
+		public string DisplayNameLocalized => displayNameLocalized ?? (displayNameLocalized = ResolveMapString(displayName));
 
 		/// <summary>
 		///     Will this scene be included in the build?
@@ -58,6 +72,8 @@ namespace SceneManagement
 		/// </summary>
 		public TCWeapon[] stockWeapons;
 
+		#region Discord RPC
+
 		/// <summary>
 		///     Do you want to show the start time on Discord RPC
 		/// </summary>
@@ -76,12 +92,31 @@ namespace SceneManagement
 		/// <summary>
 		///     What text will the large image have
 		/// </summary>
-		[Tooltip("What text will the large image have")]
-		public string largeImageKeyText = "Team Capture";
+		[Tooltip("What text will the large image have")] [SerializeField]
+		private string largeImageKeyText = "Discord_LargeImageKeyText";
 
 		/// <summary>
-		///     The scene, but only its name (So no 'Assets/Scenes/*.unity' stuff)
+		///		Gets the localized version of <see cref="largeImageKeyText"/>
 		/// </summary>
-		public string SceneFileName => Path.GetFileNameWithoutExtension(scene);
+		public string LargeImageKeyTextLocalized => largeImageKeyTextLocalized ?? (largeImageKeyTextLocalized = ResolveMapString(largeImageKeyText));
+
+		#endregion
+
+		#region Locales
+
+		[NonSerialized] private string largeImageKeyTextLocalized;
+		[NonSerialized] private string displayNameLocalized;
+
+		private Locale sceneLocale;
+
+		public string ResolveMapString(string id)
+		{
+			if(sceneLocale == null)
+				sceneLocale = new Locale($"{Game.GetGameExecutePath()}/Resources/Maps/{SceneFileName}-%LANG%.json");
+
+			return sceneLocale.ResolveString(id);
+		}
+
+		#endregion
 	}
 }

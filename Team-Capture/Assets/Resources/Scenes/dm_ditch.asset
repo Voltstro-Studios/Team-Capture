@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: dm_ditch
   m_EditorClassIdentifier: 
   scene: Assets/Scenes/dm_ditch.unity
-  displayName: Ditch
+  displayName: Map_DisplayName
   enabled: 1
   isOnlineScene: 1
   canLoadTo: 1
@@ -24,4 +24,4 @@ MonoBehaviour:
   showStartTime: 1
   isMainMenu: 0
   largeImageKey: tc_icon
-  largeImageKeyText: Team Capture
+  largeImageKeyText: Discord_LargeImageKeyText

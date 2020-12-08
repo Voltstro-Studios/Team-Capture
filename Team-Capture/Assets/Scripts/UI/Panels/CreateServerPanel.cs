@@ -61,7 +61,7 @@ namespace UI.Panels
 			onlineTCScenes = TCScenesManager.GetAllEnabledOnlineScenesInfo().ToList();
 
 			//And all the scenes to the map dropdown
-			List<string> scenes = onlineTCScenes.Select(scene => scene.displayName).ToList();
+			List<string> scenes = onlineTCScenes.Select(scene => scene.DisplayNameLocalized).ToList();
 			mapsDropdown.AddOptions(scenes);
 			mapsDropdown.RefreshShownValue();
 

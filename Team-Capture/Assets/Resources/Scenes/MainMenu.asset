@@ -13,13 +13,14 @@ MonoBehaviour:
   m_Name: MainMenu
   m_EditorClassIdentifier: 
   scene: Assets/Scenes/MainMenu.unity
-  displayName: MainMenu
+  displayName: Map_DisplayName
   enabled: 1
   isOnlineScene: 0
   canLoadTo: 1
   pickupsParent: 
   respawnTime: 0
+  stockWeapons: []
   showStartTime: 0
   isMainMenu: 1
   largeImageKey: tc_icon
-  largeImageKeyText: Main Menu
+  largeImageKeyText: Discord_LargeImageKeyText

@@ -145,9 +145,9 @@ namespace Integrations
 					Assets = new ActivityAssets
 					{
 						LargeImage = scene.largeImageKey,
-						LargeText = scene.largeImageKeyText
+						LargeText = scene.LargeImageKeyTextLocalized
 					},
-					Details = $"Loading into {scene.displayName}",
+					Details = $"Loading into {scene.DisplayNameLocalized}",
 					State = "Loading..."
 				});
 		}
@@ -161,7 +161,7 @@ namespace Integrations
 					Assets = new ActivityAssets
 					{
 						LargeImage = scene.largeImageKey,
-						LargeText = scene.largeImageKeyText
+						LargeText = scene.LargeImageKeyTextLocalized
 					}
 				};
 
@@ -173,7 +173,7 @@ namespace Integrations
 
 				if (scene.isOnlineScene)
 				{
-					presence.Details = TCScenesManager.GetActiveScene().displayName;
+					presence.Details = TCScenesManager.GetActiveScene().DisplayNameLocalized;
 					presence.State = "Team Capture";
 				}
 				else if (scene.isMainMenu)

@@ -13,7 +13,7 @@ namespace Editor.Scripts
         {
             Debug.Log($"{nameof(TCScene)}s found:");
             foreach (TCScene tcScene in TCScenesManager.GetAllTCScenesInfo())
-                Debug.Log($"{tcScene.scene} ({tcScene.displayName})");
+                Debug.Log($"{tcScene.scene} ({tcScene.DisplayNameLocalized})");
         }
 
         [MenuItem("Team Capture/List Enabled Scenes")]
@@ -21,7 +21,7 @@ namespace Editor.Scripts
         {
             Debug.Log($"Enabled {nameof(TCScene)}s found:");
             foreach (TCScene tcScene in TCScenesManager.GetAllEnabledTCScenesInfo())
-                Debug.Log($"{tcScene.scene} ({tcScene.displayName})");
+                Debug.Log($"{tcScene.scene} ({tcScene.DisplayNameLocalized})");
         }
     }
 }

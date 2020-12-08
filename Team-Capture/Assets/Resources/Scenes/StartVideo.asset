@@ -13,13 +13,14 @@ MonoBehaviour:
   m_Name: StartVideo
   m_EditorClassIdentifier: 
   scene: Assets/Scenes/StartVideo.unity
-  displayName: StartVideo
+  displayName: Map_DisplayName
   enabled: 1
   isOnlineScene: 0
   canLoadTo: 1
   pickupsParent: 
   respawnTime: 0
+  stockWeapons: []
   showStartTime: 0
   isMainMenu: 0
   largeImageKey: tc_icon
-  largeImageKeyText: Starting game...
+  largeImageKeyText: Discord_LargeImageKeyText

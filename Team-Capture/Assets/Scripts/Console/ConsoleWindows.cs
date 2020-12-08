@@ -173,7 +173,7 @@ namespace Console
 					serverOnline = "Online";
 
 			//Final message
-			string message = $"Team-Capture server: {serverOnline} - {TCScenesManager.GetActiveScene().displayName}";
+			string message = $"Team-Capture server: {serverOnline} - {TCScenesManager.GetActiveScene().DisplayNameLocalized}";
 			System.Console.Write(message + new string(' ', System.Console.BufferWidth - message.Length));
 
 			//Reset everything to how it was before

@@ -13,13 +13,14 @@ MonoBehaviour:
   m_Name: BootStrapper
   m_EditorClassIdentifier: 
   scene: Assets/Scenes/BootStrapper.unity
-  displayName: BootStrapper
+  displayName: Map_DisplayName
   enabled: 1
   isOnlineScene: 0
   canLoadTo: 0
   pickupsParent: 
   respawnTime: 4
+  stockWeapons: []
   showStartTime: 1
   isMainMenu: 0
   largeImageKey: tc_icon
-  largeImageKeyText: Team Capture
+  largeImageKeyText: Discord_LargeImageKeyText
