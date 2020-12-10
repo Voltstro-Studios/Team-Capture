@@ -4,15 +4,17 @@
       "version": "https://github.com/VoltUnityPackages/Mirror.git?path=/Assets/Mirror",
       "depth": 0,
       "source": "git",
-      "dependencies": {},
-      "hash": "4fced9043fff0f6e8148b873b719cba3f28b4af6"
+      "dependencies": {
+        "nuget.mono-cecil": "0.1.6-preview"
+      },
+      "hash": "fba091ad228b2f79ce42590c36967b7f52f8674d"
     },
     "com.mirror-networking.mirror.transport.ignorance": {
       "version": "https://github.com/VoltUnityPackages/Ignorance.git?path=/Assets/Mirror",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "ee18eac621285cb9913ef63eff3ffc9679609a99"
+      "hash": "2aec0b4639e7a39552cdd1a169b9b1e639de4e81"
     },
     "com.unity.build-report-inspector": {
       "version": "0.2.2-preview",
@@ -156,13 +158,6 @@
         "com.unity.modules.imgui": "1.0.0"
       }
     },
-    "com.vis2k.telepathy": {
-      "version": "https://github.com/VoltUnityPackages/Telepathy.git?path=/src",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "c65283046a817aa688a3d390494bbe5f31fb2fff"
-    },
     "dev.voltstro.voltbuildertool": {
       "version": "https://github.com/VoltUnityPackages/VoltUnityBuilder.git",
       "depth": 0,
@@ -185,6 +180,13 @@
       "source": "git",
       "dependencies": {},
       "hash": "c6d5bf70a150512d463193bb35ee0a229ba7174d"
+    },
+    "nuget.mono-cecil": {
+      "version": "0.1.6-preview",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
     },
     "com.unity.modules.animation": {
       "version": "1.0.0",
