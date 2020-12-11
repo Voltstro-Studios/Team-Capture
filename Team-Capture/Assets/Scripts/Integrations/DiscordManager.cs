@@ -77,7 +77,7 @@ namespace Integrations
 			}
 			catch (ResultException ex)
 			{
-				Logger.Error("Failed to connect with Discord! {@Message} {@ResultCode", ex.Message, ex.Result);
+				Logger.Error("Failed to connect with Discord! {@Message} {@ResultCode}", ex.Message, ex.Result);
 				client = null;
 				Destroy(gameObject);
 				return;
