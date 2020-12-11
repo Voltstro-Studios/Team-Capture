@@ -192,8 +192,6 @@ namespace Core.Networking
 
 			//Set what network address to use, if the computer has multiple adapters then it will default to localhost
 			singleton.networkAddress = NetHelper.LocalIpAddress();
-			if (Transport.activeTransport is IgnoranceThreaded threaded)
-				threaded.ServerBindAddress = singleton.networkAddress;
 
 			//Setup the pickup manager
 			ServerPickupManager.Setup();

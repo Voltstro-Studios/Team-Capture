@@ -9,13 +9,6 @@
       },
       "hash": "59ab5e2bb16d75eeece932f128237e5c9d24d4bc"
     },
-    "com.mirror-networking.mirror.transport.ignorance": {
-      "version": "https://github.com/VoltUnityPackages/Ignorance.git?path=/Assets/Mirror",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "81e0c5f606931fdaffdd39653971ea32180457f1"
-    },
     "com.unity.build-report-inspector": {
       "version": "0.2.2-preview",
       "depth": 0,
