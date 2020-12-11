@@ -6,7 +6,7 @@ using Logger = Core.Logging.Logger;
 
 namespace Core.Networking
 {
-	public static class ServerPing
+	public static class PingManager
 	{
 		private static Dictionary<int, ExponentialMovingAverage> clientsPing;
 

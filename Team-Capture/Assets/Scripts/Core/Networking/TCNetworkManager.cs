@@ -92,7 +92,7 @@ namespace Core.Networking
 
 		public void Update()
 		{
-			if(mode == NetworkManagerMode.ServerOnly) ServerPing.ServerPingUpdate();
+			if(mode == NetworkManagerMode.ServerOnly) PingManager.ServerPingUpdate();
 		}
 
 		#region Loading Screen
@@ -178,7 +178,7 @@ namespace Core.Networking
 			NetworkServer.AddPlayerForConnection(conn, player);
 
 			//Make initial ping
-			ServerPing.PingClient(conn);
+			PingManager.PingClient(conn);
 
 			Logger.Info(
 				"Player from {@Address} connected with the connection ID of {@ConnectionID} and a net ID of {@NetID}",
@@ -199,7 +199,7 @@ namespace Core.Networking
 			ServerPickupManager.Setup();
 
 			//Start ping service
-			ServerPing.ServerSetup();
+			PingManager.ServerSetup();
 
 			base.OnStartServer();
 
@@ -224,7 +224,7 @@ namespace Core.Networking
 			//Stop advertising the server when the server stops
 			gameDiscovery.StopDiscovery();
 
-			ServerPing.ServerShutdown();
+			PingManager.ServerShutdown();
 
 			Logger.Info("Server stopped!");
 		}
@@ -291,7 +291,7 @@ namespace Core.Networking
 		public override void OnStartClient()
 		{
 			ClientPickupManager.Setup();
-			ServerPing.ClientSetup();
+			PingManager.ClientSetup();
 
 			base.OnStartClient();
 		}
@@ -301,7 +301,7 @@ namespace Core.Networking
 			base.OnStopClient();
 
 			ClientPickupManager.Shutdown();
-			ServerPing.ClientShutdown();
+			PingManager.ClientShutdown();
 
 			Logger.Info("Stopped client");
 		}
