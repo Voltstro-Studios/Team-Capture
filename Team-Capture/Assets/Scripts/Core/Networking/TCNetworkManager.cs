@@ -90,6 +90,11 @@ namespace Core.Networking
 			if (mode == NetworkManagerMode.ServerOnly) SimulationHelper.UpdateSimulationObjectData();
 		}
 
+		public void Update()
+		{
+			if(mode == NetworkManagerMode.ServerOnly) ServerPing.ServerPingUpdate();
+		}
+
 		#region Loading Screen
 
 		private IEnumerator OnStartSceneLoadAsync(AsyncOperation sceneLoadOperation)
@@ -172,6 +177,9 @@ namespace Core.Networking
 			//Add the connection for the player
 			NetworkServer.AddPlayerForConnection(conn, player);
 
+			//Make initial ping
+			ServerPing.PingClient(conn);
+
 			Logger.Info(
 				"Player from {@Address} connected with the connection ID of {@ConnectionID} and a net ID of {@NetID}",
 				Transport.activeTransport.ServerGetClientAddress(conn.connectionId), conn.connectionId,
@@ -189,6 +197,9 @@ namespace Core.Networking
 
 			//Setup the pickup manager
 			ServerPickupManager.Setup();
+
+			//Start ping service
+			ServerPing.ServerSetup();
 
 			base.OnStartServer();
 
@@ -212,6 +223,8 @@ namespace Core.Networking
 
 			//Stop advertising the server when the server stops
 			gameDiscovery.StopDiscovery();
+
+			ServerPing.ServerShutdown();
 
 			Logger.Info("Server stopped!");
 		}
@@ -278,6 +291,7 @@ namespace Core.Networking
 		public override void OnStartClient()
 		{
 			ClientPickupManager.Setup();
+			ServerPing.ClientSetup();
 
 			base.OnStartClient();
 		}
@@ -287,6 +301,7 @@ namespace Core.Networking
 			base.OnStopClient();
 
 			ClientPickupManager.Shutdown();
+			ServerPing.ClientShutdown();
 
 			Logger.Info("Stopped client");
 		}
