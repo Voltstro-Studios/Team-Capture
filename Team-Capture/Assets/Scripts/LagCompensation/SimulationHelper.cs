@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Core.Networking;
 using Mirror;
 using Player;
 using UnityEngine;
@@ -20,9 +21,7 @@ namespace LagCompensation
 
 		public static void SimulateCommand(PlayerManager playerExecutedCommand, Action command)
 		{
-			int playersLatency =
-				Transport.activeTransport.GetConnectionRtt((uint) playerExecutedCommand.connectionToClient
-					.connectionId);
+			int playersLatency = (int)PingManager.GetClientPing(playerExecutedCommand.netIdentity.connectionToClient.connectionId);
 
 			//Logger.Log($"Player's ping is {playersLatency}", LogVerbosity.Debug);
 

@@ -7,14 +7,14 @@
       "dependencies": {
         "nuget.mono-cecil": "0.1.6-preview"
       },
-      "hash": "fba091ad228b2f79ce42590c36967b7f52f8674d"
+      "hash": "59ab5e2bb16d75eeece932f128237e5c9d24d4bc"
     },
     "com.mirror-networking.mirror.transport.ignorance": {
       "version": "https://github.com/VoltUnityPackages/Ignorance.git?path=/Assets/Mirror",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "2aec0b4639e7a39552cdd1a169b9b1e639de4e81"
+      "hash": "81e0c5f606931fdaffdd39653971ea32180457f1"
     },
     "com.unity.build-report-inspector": {
       "version": "0.2.2-preview",

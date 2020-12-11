@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Console;
 using Core.Networking.Messages;
 using Mirror;
 using UnityEngine;
@@ -11,13 +12,24 @@ namespace Core.Networking
 	/// </summary>
 	public static class PingManager
 	{
-		private static Dictionary<int, ExponentialMovingAverage> clientsPing;
+		[ConVar("sv_pingfrequency", "How often will the server ping the clients")]
+		private static float PingFrequency = 2.0f;
 
 		private static float lastPingTime;
 
-		private static float PingFrequency = 2.0f;
+		private static Dictionary<int, ExponentialMovingAverage> clientsPing;
 
 		#region Server
+
+		/// <summary>
+		///		Gets a client's ping
+		/// </summary>
+		/// <param name="connectionId"></param>
+		/// <returns></returns>
+		public static double GetClientPing(int connectionId)
+		{
+			return clientsPing[connectionId].Value;
+		}
 
 		/// <summary>
 		///		Sets up the server side of the <see cref="PingManager"/>

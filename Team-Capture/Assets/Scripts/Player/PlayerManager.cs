@@ -2,6 +2,7 @@
 using System.Collections;
 using Console;
 using Core;
+using Core.Networking;
 using Core.Networking.Messages;
 using Mirror;
 using Player.Movement;
@@ -432,7 +433,7 @@ namespace Player
 		{
 			while (isServer)
 			{
-				latency = Transport.activeTransport.GetConnectionRtt((uint) connectionToClient.connectionId);
+				latency = PingManager.GetClientPing(connectionToClient.connectionId);
 				yield return new WaitForSeconds(playerLatencyUpdateTime);
 			}
 		}
