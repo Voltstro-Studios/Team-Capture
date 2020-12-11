@@ -6,6 +6,9 @@ using Logger = Core.Logging.Logger;
 
 namespace Core.Networking
 {
+	/// <summary>
+	///		Provides a way to get ping of clients
+	/// </summary>
 	public static class PingManager
 	{
 		private static Dictionary<int, ExponentialMovingAverage> clientsPing;
@@ -16,6 +19,9 @@ namespace Core.Networking
 
 		#region Server
 
+		/// <summary>
+		///		Sets up the server side of the <see cref="PingManager"/>
+		/// </summary>
 		internal static void ServerSetup()
 		{
 			lastPingTime = Time.time - 1;
@@ -23,12 +29,18 @@ namespace Core.Networking
 			NetworkServer.RegisterHandler<ClientPongMessage>(OnReceiveClientPongMessage);
 		}
 
+		/// <summary>
+		///		Shutdown the server side of the <see cref="PingManager"/>
+		/// </summary>
 		internal static void ServerShutdown()
 		{
 			clientsPing.Clear();
 			NetworkServer.UnregisterHandler<ClientPongMessage>();
 		}
 
+		/// <summary>
+		///		Call this every frame
+		/// </summary>
 		internal static void ServerPingUpdate()
 		{
 			if (Time.time - lastPingTime >= PingFrequency)
@@ -77,11 +89,17 @@ namespace Core.Networking
 
 		#region Client
 
+		/// <summary>
+		///		Sets up the client side of the <see cref="PingManager"/>
+		/// </summary>
 		internal static void ClientSetup()
 		{
 			NetworkClient.RegisterHandler<ServerPingMessage>(OnReceiveServerPing);
 		}
 
+		/// <summary>
+		///		Shutdown the client side of the <see cref="PingManager"/>
+		/// </summary>
 		internal static void ClientShutdown()
 		{
 			NetworkClient.UnregisterHandler<ServerPingMessage>();
