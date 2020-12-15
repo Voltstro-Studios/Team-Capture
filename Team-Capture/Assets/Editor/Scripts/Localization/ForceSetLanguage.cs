@@ -12,7 +12,7 @@ namespace Editor.Scripts.Localization
 			InitLoadSettings();
 		}
 
-		private static LanguageInfo language = LanguageInfo.Unable;
+		private static LanguageInfo language = LanguageInfo.Unavailable;
 
 		private static string LanguageEditorKey = "LocaleOverrideLanguage";
 
@@ -29,7 +29,7 @@ namespace Editor.Scripts.Localization
 			if (EditorPrefs.HasKey(LanguageEditorKey))
 			{
 				language = (LanguageInfo) EditorPrefs.GetInt(LanguageEditorKey);
-				if(language != LanguageInfo.Unable)
+				if(language != LanguageInfo.Unavailable)
 					SetLanguage(false);
 			}
 		}
@@ -37,7 +37,7 @@ namespace Editor.Scripts.Localization
 		public void OnGUI()
 		{
 			EditorGUILayout.LabelField("Choose what language you want the game to use.");
-			EditorGUILayout.LabelField("Select 'Unable' for system default.");
+			EditorGUILayout.LabelField("Select 'Unavailable' for system default.");
 			EditorGUILayout.Space();
 
 			language = (LanguageInfo)EditorGUILayout.EnumPopup("Language", language);

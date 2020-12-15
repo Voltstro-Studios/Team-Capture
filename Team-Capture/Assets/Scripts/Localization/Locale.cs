@@ -13,7 +13,7 @@ namespace Localization
 	public class Locale
 	{
 		[CommandLineArgument("language")]
-		internal static LanguageInfo OverrideLanguage = LanguageInfo.Unable;
+		internal static LanguageInfo OverrideLanguage = LanguageInfo.Unavailable;
 
 		/// <summary>
 		///		Creates a new <see cref="Locale"/> instance
@@ -42,7 +42,7 @@ namespace Localization
 				File.ReadAllText(systemLanguageLocaleLocation));
 		}
 		
-		private LanguageInfo language = LanguageInfo.Unable;
+		private LanguageInfo language = LanguageInfo.Unavailable;
 
 		/// <summary>
 		///		Gets the language that this local is for
@@ -51,9 +51,9 @@ namespace Localization
 		{
 			get
 			{
-				if (language == LanguageInfo.Unable)
+				if (language == LanguageInfo.Unavailable)
 				{
-					language = OverrideLanguage == LanguageInfo.Unable ? Application.systemLanguage.ToLanguageInfo() : OverrideLanguage;
+					language = OverrideLanguage == LanguageInfo.Unavailable ? Application.systemLanguage.ToLanguageInfo() : OverrideLanguage;
 				}
 
 				return language;
