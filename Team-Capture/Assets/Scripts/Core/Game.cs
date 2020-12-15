@@ -5,9 +5,9 @@ using Mirror;
 using UnityEngine;
 using UnityEngine.Rendering;
 using Logger = Core.Logging.Logger;
+
 #if UNITY_EDITOR
 using UnityEditor;
-
 #endif
 
 namespace Core

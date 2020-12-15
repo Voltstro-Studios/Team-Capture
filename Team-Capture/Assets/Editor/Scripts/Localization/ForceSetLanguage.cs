@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Editor.Scripts.Localization
 {
-	[InitializeOnLoadAttribute]
+	[InitializeOnLoad]
 	public class ForceSetLanguage : EditorWindow
 	{
 		static ForceSetLanguage()
