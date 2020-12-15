@@ -9,7 +9,8 @@ namespace Localization
 	{
 		Unable = 0,
 		None = 1,
-		English = 2
+		English = 2,
+		LolCat = 3
 	}
 
 	public static class LanguageExtensions
