@@ -2,6 +2,7 @@
 using System.IO;
 using Newtonsoft.Json;
 using UnityEngine;
+using Voltstro.CommandLineParser;
 using Logger = Core.Logging.Logger;
 
 namespace Localization
@@ -11,6 +12,9 @@ namespace Localization
 	/// </summary>
 	public class Locale
 	{
+		[CommandLineArgument("language")]
+		internal static LanguageInfo OverrideLanguage = LanguageInfo.Unable;
+
 		/// <summary>
 		///		Creates a new <see cref="Locale"/> instance
 		/// </summary>
@@ -48,7 +52,9 @@ namespace Localization
 			get
 			{
 				if (language == LanguageInfo.Unable)
-					language = Application.systemLanguage.ToLanguageInfo();
+				{
+					language = OverrideLanguage == LanguageInfo.Unable ? Application.systemLanguage.ToLanguageInfo() : OverrideLanguage;
+				}
 
 				return language;
 			}
