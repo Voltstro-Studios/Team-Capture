@@ -38,19 +38,19 @@ namespace Localization
 				File.ReadAllText(systemLanguageLocaleLocation));
 		}
 		
-		private int language = -1;
+		private LanguageInfo language = LanguageInfo.Unable;
 
 		/// <summary>
 		///		Gets the language that this local is for
 		/// </summary>
-		public SystemLanguage Language
+		public LanguageInfo Language
 		{
 			get
 			{
-				if (language == -1)
-					language = (int) Application.systemLanguage;
+				if (language == LanguageInfo.Unable)
+					language = Application.systemLanguage.ToLanguageInfo();
 
-				return (SystemLanguage) language;
+				return language;
 			}
 		}
 
