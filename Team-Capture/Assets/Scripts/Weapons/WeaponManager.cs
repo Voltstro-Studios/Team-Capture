@@ -170,7 +170,6 @@ namespace Weapons
 		/// <summary>
 		///     Requests the server to reload the current weapon
 		/// </summary>
-		[Client]
 		internal void ClientReloadWeapon()
 		{
 			//Ask the server kindly to reload the weapon

@@ -29,8 +29,7 @@ namespace Player
 		///     The <see cref="weaponManager" /> associated with this <see cref="PlayerWeaponShoot" />
 		/// </summary>
 		private WeaponManager weaponManager;
-
-		[Client]
+		
 		private void ShootWeapon()
 		{
 			CmdShootWeapon();

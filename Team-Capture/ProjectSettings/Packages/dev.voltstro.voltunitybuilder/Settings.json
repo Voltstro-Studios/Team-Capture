@@ -14,7 +14,7 @@
                 "value": "{\"m_Value\":\"yy-MM-dd\"}"
             },
             {
-                "type": "UnityEditor.BuildTarget, UnityEditor, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null",
+                "type": "UnityEditor.BuildTarget, UnityEditor.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null",
                 "key": "BuildTarget",
                 "value": "{\"m_Value\":19}"
             },
