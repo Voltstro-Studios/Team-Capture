@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Core.Networking;
+using Core.Networking.MessagePack;
 using Helper;
 using LagCompensation;
 using Mirror;
@@ -228,8 +230,14 @@ namespace Player
 				}
 			}
 
+			byte[] weaponShootEffectBytes = PacketCompression.CompressMessage(new WeaponShootEffectsTargets
+			{
+				Targets = targets.ToArray(),
+				TargetNormals = targetsNormal.ToArray()
+			});
+
 			//Send where the bullets hit in one big message
-			RpcDoWeaponShootEffects(targets.ToArray(), targetsNormal.ToArray());
+			RpcDoWeaponShootEffects(weaponShootEffectBytes);
 
 			stopwatch.Stop();
 			Logger.Debug("Took {@Milliseconds}ms to fire {@Player}'s {@Weapon}", stopwatch.Elapsed.TotalMilliseconds, transform.name, tcWeapon.weapon);
@@ -251,26 +259,26 @@ namespace Player
 		/// <summary>
 		///     Make a tracer effect go to the target
 		/// </summary>
-		/// <param name="targets"></param>
-		/// <param name="targetNormals"></param>
+		/// <param name="bytes"></param>
 		[ClientRpc(channel = 4)]
-		private void RpcDoWeaponShootEffects(Vector3[] targets, Vector3[] targetNormals)
+		private void RpcDoWeaponShootEffects(byte[] bytes)
 		{
+			WeaponShootEffectsTargets targets = PacketCompression.ReadMessage<WeaponShootEffectsTargets>(bytes);
+
 			TCWeapon weapon = weaponManager.GetActiveWeapon().GetTCWeapon();
 			WeaponGraphics weaponGraphics = weaponManager.GetActiveWeaponGraphics();
 
-			for (int i = 0; i < targets.Length; i++)
+			for (int i = 0; i < targets.Targets.Length; i++)
 			{
 				//Do bullet tracer
 				BulletTracer tracer =
 					Instantiate(weapon.bulletTracerEffect, weaponGraphics.bulletTracerPosition.position,
 						weaponGraphics.bulletTracerPosition.rotation).GetComponent<BulletTracer>();
-				tracer.Play(targets[i]);
+				tracer.Play(targets.Targets[i]);
 
 				//Do bullet holes
-				Instantiate(weapon.bulletHitEffectPrefab, targets[i], Quaternion.LookRotation(targetNormals[i]));
-				Instantiate(weapon.bulletHolePrefab, targets[i],
-					Quaternion.FromToRotation(Vector3.back, targetNormals[i]));
+				Instantiate(weapon.bulletHitEffectPrefab, targets.Targets[i], Quaternion.LookRotation(targets.TargetNormals[i]));
+				Instantiate(weapon.bulletHolePrefab, targets.Targets[i], Quaternion.FromToRotation(Vector3.back, targets.TargetNormals[i]));
 			}
 		}
 
