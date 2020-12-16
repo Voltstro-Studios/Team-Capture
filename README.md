@@ -47,7 +47,7 @@ You will need to build the project yourself to play!
 ### Prerequisites
 
 ```
-Unity 2019.4.15f1
+Unity 2020.2.0f1
 Git
 Blender 2.83
 ```
