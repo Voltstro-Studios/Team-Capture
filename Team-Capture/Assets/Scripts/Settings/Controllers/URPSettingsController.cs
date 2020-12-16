@@ -62,7 +62,7 @@ namespace Settings.Controllers
 		{
 			if (int.TryParse(args[0], out int result))
 			{
-				GameSettings.AdvSettings.ShadowCascades = (ShadowCascadesOption) result;
+				GameSettings.AdvSettings.ShadowCascades = (ShadowCascadesCount) result;
 				GameSettings.Save();
 
 				return;

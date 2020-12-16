@@ -42,7 +42,7 @@ namespace Settings.SettingClasses
 		[Range(10, 100)] public int ShadowDistance = 45;
 
 		[SettingsPropertyFormatName("Settings_AdvCascades")] 
-		public ShadowCascadesOption ShadowCascades = ShadowCascadesOption.FourCascades;
+		public ShadowCascadesCount ShadowCascades = ShadowCascadesCount.FourCascades;
 
 		//Camera Settings
 		[SettingsPropertyFormatName("Settings_AdvFOV")] 

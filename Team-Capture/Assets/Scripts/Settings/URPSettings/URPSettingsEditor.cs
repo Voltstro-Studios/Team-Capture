@@ -70,10 +70,10 @@ namespace Settings.URPSettings
 		/// <summary>
 		///     Set what shadow cascade option to use
 		/// </summary>
-		/// <param name="cascadesOption"></param>
-		public void SetShadowCascades(ShadowCascadesOption cascadesOption)
+		/// <param name="cascadesCount"></param>
+		public void SetShadowCascades(ShadowCascadesCount cascadesCount)
 		{
-			urpPipelineAsset.shadowCascadeOption = cascadesOption;
+			urpPipelineAsset.shadowCascadeCount = (int) cascadesCount;
 		}
 
 		#endregion
