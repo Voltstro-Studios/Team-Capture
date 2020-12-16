@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Helper;
 using LagCompensation;
 using Mirror;
 using UI;
 using UnityEngine;
 using Weapons;
+using Logger = Core.Logging.Logger;
 using Random = UnityEngine.Random;
 
 namespace Player
@@ -186,6 +188,8 @@ namespace Player
 			if (tcWeapon == null)
 				return;
 
+			Stopwatch stopwatch = Stopwatch.StartNew();
+
 			//Get the direction the player was facing
 			Transform playerFacingDirection = localPlayerCamera.transform;
 
@@ -226,6 +230,9 @@ namespace Player
 
 			//Send where the bullets hit in one big message
 			RpcDoWeaponShootEffects(targets.ToArray(), targetsNormal.ToArray());
+
+			stopwatch.Stop();
+			Logger.Debug("Took {@Milliseconds}ms to fire {@Player}'s {@Weapon}", stopwatch.Elapsed.TotalMilliseconds, transform.name, tcWeapon.weapon);
 		}
 
 		#endregion
