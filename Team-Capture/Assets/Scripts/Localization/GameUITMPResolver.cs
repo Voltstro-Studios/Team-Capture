@@ -4,8 +4,9 @@ using Logger = Core.Logging.Logger;
 
 namespace Localization
 {
+	[DisallowMultipleComponent]
 	[RequireComponent(typeof(TextMeshProUGUI))]
-	public class GameUITMPResolver : MonoBehaviour
+	public sealed class GameUITMPResolver : MonoBehaviour
 	{
 		private void Start()
 		{
