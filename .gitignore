@@ -36,6 +36,10 @@ ExportedObj/
 *.pidb.meta
 *.pdb.meta
 
+#Plugin files
+!Team-Capture/Assets/Plugins/**/*.pdb
+!Team-Capture/Assets/Plugins/**/*.pdb.meta
+
 # Unity3D Generated File On Crash Reports
 sysinfo.txt
 
