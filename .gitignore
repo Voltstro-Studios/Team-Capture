@@ -55,3 +55,9 @@ debug.log
 #Blender backup files
 *.blend1
 *.blend1.meta
+
+#MessagePack
+Team-Capture/MessagePack/MessagePackProject/bin/*
+Team-Capture/MessagePack/MessagePackProject/obj/*
+Team-Capture/MessagePack/MessagePackProject/MessagePack.xml
+!Team-Capture/MessagePack/MessagePackProject/MessagePack.csproj
