@@ -32,11 +32,6 @@ namespace Core.Networking.Discovery
 			Logger.Debug("Game discovery is ready!");
 		}
 
-		private void OnDestroy()
-		{
-			Logger.Debug("Game discovery has been destroyed.");
-		}
-
 		protected override TCServerResponse ProcessRequest(TCServerRequest request, IPEndPoint endpoint)
 		{
 			Logger.Debug("Processing discovery request from `{@Address}`...", endpoint.Address);

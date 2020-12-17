@@ -19,11 +19,15 @@ namespace Core
 		/// </summary>
 		public static bool IsHeadless => SystemInfo.graphicsDeviceType == GraphicsDeviceType.Null;
 
+		public static bool IsGameQuitting { get; private set; }
+
 		/// <summary>
 		///     Quits the game
 		/// </summary>
 		public static void QuitGame()
 		{
+			IsGameQuitting = true;
+
 			if (NetworkManager.singleton != null)
 				NetworkManager.singleton.StopHost();
 
@@ -73,6 +77,12 @@ namespace Core
 				Directory.CreateDirectory(documentsFolder);
 
 			return documentsFolder;
+		}
+
+		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+		private static void Init()
+		{
+			Application.quitting += () => IsGameQuitting = true;
 		}
 	}
 }

@@ -55,7 +55,6 @@ namespace Integrations
 
 		protected override void SingletonDestroyed()
 		{
-			Logger.Debug("Destroying discord integration...");
 			//Using Null Propagation seems to crash Unity...
 			// ReSharper disable once UseNullPropagation
 			if (client != null)

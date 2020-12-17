@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Core;
 using Localization;
 using Mirror;
 using TMPro;
@@ -118,6 +119,9 @@ namespace UI
 
 		private void OnDestroy()
 		{
+			if(Game.IsGameQuitting)
+				return;
+
 			Logger.Debug("Resetting all main menu events...");
 
 			//Reset all the main menu script-able objects
