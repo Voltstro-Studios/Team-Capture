@@ -3,8 +3,6 @@
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
-using Mirror;
-using SceneManagement;
 using UnityEngine;
 using Logger = Core.Logging.Logger;
 
@@ -17,8 +15,6 @@ namespace Console
 	{
 		private readonly string consoleTitle;
 		private string currentLine;
-
-		private float nextHeaderUpdateTime;
 
 		internal ConsoleWindows(string consoleTitle)
 		{
@@ -36,15 +32,9 @@ namespace Console
 			System.Console.Clear();
 			System.Console.SetOut(new StreamWriter(System.Console.OpenStandardOutput()) {AutoFlush = true});
 			System.Console.SetIn(new StreamReader(System.Console.OpenStandardInput()));
-			System.Console.BufferHeight = System.Console.WindowHeight;
-			System.Console.Write("\n");
 			currentLine = "";
 
 			Logger.Info("Started Windows command line console.");
-
-			//Draw our header for the first
-			DrawHeader();
-			TCScenesManager.OnSceneLoadedEvent += scene => DrawHeader(); //Re-draw it if the scene changes
 		}
 
 		public void Shutdown()
@@ -78,10 +68,6 @@ namespace Console
 
 		public void UpdateConsole()
 		{
-			//If enough time has past since last header draw time, re-draw it
-			if (Time.time >= nextHeaderUpdateTime)
-				DrawHeader();
-
 			//Return if there is no key available
 			if (!System.Console.KeyAvailable)
 				return;
@@ -148,37 +134,6 @@ namespace Console
 		private static void DrawInputLine(string value)
 		{
 			System.Console.Write(value);
-		}
-
-		private void DrawHeader()
-		{
-			//Calculate next header update time
-			nextHeaderUpdateTime = Time.time + 2f;
-
-			//Get current cursor and color
-			int cursorLeft = System.Console.CursorLeft;
-			int cursorTop = System.Console.CursorTop;
-			ConsoleColor color = System.Console.BackgroundColor;
-
-			//Set the cursor position to the top of the console
-			System.Console.SetCursorPosition(0, 0);
-
-			//And set the background color
-			System.Console.BackgroundColor = ConsoleColor.Blue;
-
-			//Get if our server is offline or online
-			string serverOnline = "Offline";
-			if (NetworkManager.singleton != null)
-				if (NetworkManager.singleton.mode == NetworkManagerMode.ServerOnly)
-					serverOnline = "Online";
-
-			//Final message
-			string message = $"Team-Capture server: {serverOnline} - {TCScenesManager.GetActiveScene().DisplayNameLocalized}";
-			System.Console.Write(message + new string(' ', System.Console.BufferWidth - message.Length));
-
-			//Reset everything to how it was before
-			System.Console.BackgroundColor = color;
-			System.Console.SetCursorPosition(cursorLeft, cursorTop);
 		}
 
 		private static void RemoveLastInput()
