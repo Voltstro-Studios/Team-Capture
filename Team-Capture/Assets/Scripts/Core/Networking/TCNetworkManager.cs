@@ -115,10 +115,10 @@ namespace Core.Networking
 
 		#region Inital Server Join Message
 
-		private void OnServerJoinMessage(NetworkConnection conn, InitialClientJoinMessage message)
+		private void OnServerJoinMessage(NetworkConnection conn, ServerConfigurationMessage message)
 		{
 			//We don't need to listen for the initial server message any more
-			NetworkClient.UnregisterHandler<InitialClientJoinMessage>();
+			NetworkClient.UnregisterHandler<ServerConfigurationMessage>();
 
 			//Set the game name
 			serverConfig = message.ServerConfig;
@@ -161,8 +161,7 @@ namespace Core.Networking
 		public override void OnServerAddPlayer(NetworkConnection conn)
 		{
 			//Sent to client info about the server
-			//TODO: Do this in an authenticator
-			conn.Send(new InitialClientJoinMessage
+			conn.Send(new ServerConfigurationMessage
 			{
 				ServerConfig = serverConfig
 			});
@@ -266,9 +265,8 @@ namespace Core.Networking
 
 		public override void OnClientConnect(NetworkConnection conn)
 		{
-			//We register for InitialClientJoinMessage, so we get server info
-			//TODO: Should do this in an authenticator 
-			NetworkClient.RegisterHandler<InitialClientJoinMessage>(OnServerJoinMessage);
+			//We register for ServerConfigurationMessage, so we get server info
+			NetworkClient.RegisterHandler<ServerConfigurationMessage>(OnServerJoinMessage);
 
 			base.OnClientConnect(conn);
 
