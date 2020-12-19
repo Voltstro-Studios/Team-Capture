@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Core;
 using ElRaccoone.Tweens;
 using ElRaccoone.Tweens.Core;
 using UnityEngine;
@@ -85,7 +86,8 @@ namespace Tweens
 				Logger.Error("Unsupported tween event type!");
 			}
 
-			Logger.Debug("Played event {@Event}", tweenEvent.name);
+			if(!Game.IsGameQuitting)
+				Logger.Debug("Played event {@Event}", tweenEvent.name);
 		}
 
 		private void OnEnd(bool activeOnEnd)

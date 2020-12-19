@@ -29,7 +29,8 @@ namespace Core.Networking.Discovery
 			//Set the active game discovery to this discovery object
 			netManager.gameDiscovery = this;
 
-			Logger.Debug("Game discovery is ready!");
+			if(!Game.IsGameQuitting)
+				Logger.Debug("Game discovery is ready!");
 		}
 
 		protected override TCServerResponse ProcessRequest(TCServerRequest request, IPEndPoint endpoint)
