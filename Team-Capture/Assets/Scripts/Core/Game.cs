@@ -62,7 +62,8 @@ namespace Core
 		/// <returns></returns>
 		public static string GetGameConfigPath()
 		{
-			//Get our initial documents folder
+			//For Windows we store our settings into the documents
+#if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
 			string documentsFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\My Games\";
 
 			//And make sure the 'My Games' folder exists
@@ -71,6 +72,10 @@ namespace Core
 
 			//Add on our game name
 			documentsFolder += Application.productName + @"\";
+#else
+			//But on UNIX we don't
+			string documentsFolder = $"{GetGameExecutePath()}/Settings/";
+#endif
 
 			//And make sure our game name folder exists as well
 			if (!Directory.Exists(documentsFolder))
