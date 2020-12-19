@@ -1,3 +1,5 @@
+#if UNITY_STANDALONE_LINUX
+
 using System;
 using UnityEngine;
 using Logger = Core.Logging.Logger;
@@ -16,7 +18,6 @@ namespace Console
 
 		public void Shutdown()
 		{
-			
 		}
 
 		public void LogMessage(string message, LogType logType)
@@ -69,3 +70,5 @@ namespace Console
 		}
 	}
 }
+
+#endif
