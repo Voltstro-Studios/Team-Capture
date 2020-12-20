@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 382fd59d55b31814bbc6947598c360fd, type: 3}
+  m_Name: LoadStartVideo
+  m_EditorClassIdentifier: 
+  runOn: 0
+  sceneToLoadTo: {fileID: 11400000, guid: 471b24a2f0e2fda498c460d76acfa1e5, type: 2}

@@ -1,6 +1,5 @@
 ﻿using System;
 using Mirror;
-using Team_Capture.BootManagement;
 using Team_Capture.Console;
 using Team_Capture.Helper;
 using Team_Capture.Player.Movement;
@@ -12,7 +11,7 @@ namespace Team_Capture.UI
 	/// <summary>
 	///     A UI used for debugging purposes
 	/// </summary>
-	internal class DebugMenu : SingletonMonoBehaviour<DebugMenu>, IStartOnBoot
+	internal class DebugMenu : SingletonMonoBehaviour<DebugMenu>
 	{
 		/// <summary>
 		///     Is the debug menu open?
@@ -100,10 +99,6 @@ namespace Team_Capture.UI
 
 			yOffset += 20;
 			GUI.Label(new Rect(10, yOffset, 1000, 40), $"Status: {GetNetworkingStatus()}");
-		}
-
-		public void Init()
-		{
 		}
 
 		protected override void SingletonAwakened()

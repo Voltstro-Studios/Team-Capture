@@ -1,19 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections;
 using Team_Capture.Core;
-using Team_Capture.SceneManagement;
 using UnityEngine;
 using Logger = Team_Capture.Core.Logging.Logger;
 
 namespace Team_Capture.BootManagement
 {
-	internal class Bootmanager : MonoBehaviour
+	internal class BootManager : MonoBehaviour
 	{
 		public static bool HasBooted;
 
-		public string nextScene = "StartVideo";
-		public string nextHeadlessScene = "MainMenu";
+		public float delayBetweenItems = 0.1f;
+		public BootItem[] bootItems;
 
 		private void Start()
 		{
@@ -24,46 +21,35 @@ namespace Team_Capture.BootManagement
 				return;
 			}
 
-			//First, find all scripts that inherit from IStartOnBoot
-			IEnumerable<Type> types = AppDomain.CurrentDomain.GetAssemblies().SelectMany(x => x.GetTypes())
-				.Where(x => typeof(IStartOnBoot).IsAssignableFrom(x) && !x.IsInterface);
+			StartCoroutine(RunBootItems());
+		}
 
-			foreach (Type type in types)
-				try
+		private IEnumerator RunBootItems()
+		{
+			foreach (BootItem bootItem in bootItems)
+			{
+				if (Game.IsHeadless)
 				{
-					//Create a new game object and add the script to it
-					GameObject newBootedObject = new GameObject(type.Name);
-					IStartOnBoot bootedScript = (IStartOnBoot) newBootedObject.AddComponent(type);
-					bootedScript.Init();
+					if(bootItem.runOn == RunOn.GraphicsOnly)
+						continue;
 				}
-				catch
-				{
-					//Ignore
-				}
+
+				if(bootItem.runOn == RunOn.ServerOnly)
+					continue;
+
+				bootItem.OnBoot();
+
+				yield return new WaitForSeconds(delayBetweenItems);
+			}
 
 			Logger.Info("Bootloader has successfully loaded!");
-
 			HasBooted = true;
-
-			LoadNextScene();
-
 			Destroy();
 		}
 
 		private void Destroy()
 		{
 			Destroy(gameObject);
-		}
-
-		private void LoadNextScene()
-		{
-			if (Game.IsHeadless)
-			{
-				TCScenesManager.LoadScene(TCScenesManager.FindSceneInfo(nextHeadlessScene));
-				return;
-			}
-
-			TCScenesManager.LoadScene(TCScenesManager.FindSceneInfo(nextScene));
 		}
 	}
 }

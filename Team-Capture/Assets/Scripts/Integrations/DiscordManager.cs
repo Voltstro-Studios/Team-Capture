@@ -2,7 +2,6 @@
 using System.IO;
 using Discord.GameSDK;
 using Discord.GameSDK.Activities;
-using Team_Capture.BootManagement;
 using Team_Capture.Core;
 using Team_Capture.Core.Logging;
 using Team_Capture.Helper;
@@ -13,7 +12,7 @@ namespace Team_Capture.Integrations
 	/// <summary>
 	///     Handles communicating with Discord's game SDK
 	/// </summary>
-	internal class DiscordManager : SingletonMonoBehaviour<DiscordManager>, IStartOnBoot
+	internal class DiscordManager : SingletonMonoBehaviour<DiscordManager>
 	{
 		/// <summary>
 		///     Where to load the settings from
@@ -31,10 +30,6 @@ namespace Team_Capture.Integrations
 		private void Update()
 		{
 			client?.RunCallbacks();
-		}
-
-		public void Init()
-		{
 		}
 
 		protected override void SingletonAwakened()
