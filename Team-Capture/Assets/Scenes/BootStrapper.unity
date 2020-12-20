@@ -156,8 +156,8 @@ MonoBehaviour:
   bootItems:
   - {fileID: 11400000, guid: 9552ef012c7e322489a49d3a5582fb0d, type: 2}
   - {fileID: 11400000, guid: 675efc9adeeb3b24ba59320a4f1e6907, type: 2}
-  - {fileID: 11400000, guid: d2f5df61cd22a654c979e385990a7bb9, type: 2}
   - {fileID: 11400000, guid: 517d52e4e8e109f45ae3ccad4a93bc34, type: 2}
+  - {fileID: 11400000, guid: d2f5df61cd22a654c979e385990a7bb9, type: 2}
 --- !u!4 &293334183
 Transform:
   m_ObjectHideFlags: 0

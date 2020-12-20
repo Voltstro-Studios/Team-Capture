@@ -33,9 +33,11 @@ namespace Team_Capture.BootManagement
 					if(bootItem.runOn == RunOn.GraphicsOnly)
 						continue;
 				}
-
-				if(bootItem.runOn == RunOn.ServerOnly)
-					continue;
+				else
+				{
+					if(bootItem.runOn == RunOn.ServerOnly)
+						continue;
+				}
 
 				bootItem.OnBoot();
 
