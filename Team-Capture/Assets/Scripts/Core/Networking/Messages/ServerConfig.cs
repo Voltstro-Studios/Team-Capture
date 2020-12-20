@@ -1,7 +1,7 @@
 ﻿using System;
 using Mirror;
 
-namespace Core.Networking.Messages
+namespace Team_Capture.Core.Networking.Messages
 {
 	[Serializable]
 	internal class ServerConfig : NetworkMessage

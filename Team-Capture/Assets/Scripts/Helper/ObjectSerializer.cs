@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using Newtonsoft.Json;
 
-namespace Helper
+namespace Team_Capture.Helper
 {
 	/// <summary>
 	///     Serialization and Deserialization using <see cref="JsonConvert" />.

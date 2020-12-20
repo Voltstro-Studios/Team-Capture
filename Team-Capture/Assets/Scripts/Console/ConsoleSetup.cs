@@ -1,8 +1,8 @@
-﻿using Core;
+﻿using Team_Capture.Core;
 using UnityEngine;
-using Logger = Core.Logging.Logger;
+using Logger = Team_Capture.Core.Logging.Logger;
 
-namespace Console
+namespace Team_Capture.Console
 {
 	/// <summary>
 	///     Sets up what console to use (if it is in-game GUI, or a terminal)

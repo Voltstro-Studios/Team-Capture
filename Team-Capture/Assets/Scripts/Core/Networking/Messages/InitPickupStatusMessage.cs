@@ -1,6 +1,6 @@
 ﻿using Mirror;
 
-namespace Core.Networking.Messages
+namespace Team_Capture.Core.Networking.Messages
 {
 	/// <summary>
 	///     A message for initially sending the status of all the pickups

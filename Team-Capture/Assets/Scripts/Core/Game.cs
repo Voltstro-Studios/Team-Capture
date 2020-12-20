@@ -1,16 +1,18 @@
-﻿using System;
+﻿// ReSharper disable once RedundantUsingDirective
+using System;
+
 using System.IO;
-using Console;
 using Mirror;
+using Team_Capture.Console;
 using UnityEngine;
 using UnityEngine.Rendering;
-using Logger = Core.Logging.Logger;
+using Logger = Team_Capture.Core.Logging.Logger;
 
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 
-namespace Core
+namespace Team_Capture.Core
 {
 	public static class Game
 	{

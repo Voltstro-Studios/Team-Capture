@@ -1,9 +1,9 @@
-﻿using SceneManagement;
+﻿using Team_Capture.SceneManagement;
 using UnityEngine;
 using UnityEngine.Video;
 using Voltstro.CommandLineParser;
 
-namespace StartUpVideo
+namespace Team_Capture.StartUpVideo
 {
 	/// <summary>
 	///     Controller for the start up video
@@ -16,8 +16,7 @@ namespace StartUpVideo
 
 		private Camera mainCamera;
 
-		[CommandLineArgument("novid")]
-		public static bool SkipVideo = false;
+		[CommandLineArgument("novid")] public static bool SkipVideo = false;
 
 		/// <summary>
 		///     Can we skip the start up video?
@@ -38,11 +37,7 @@ namespace StartUpVideo
 
 		private bool inPlayMode;
 
-#if TEAM_CAPTURE
 		public TCScene nextScene;
-#else
-		public string nextSceneName = "MainMenu";
-#endif
 
 		private void Start()
 		{
@@ -82,11 +77,7 @@ namespace StartUpVideo
 
 		private void ChangeScene()
 		{
-#if TEAM_CAPTURE
 			TCScenesManager.LoadScene(nextScene);
-#else
-			SceneManager.LoadScene(nextSceneName);
-#endif
 		}
 
 		public void Setup()

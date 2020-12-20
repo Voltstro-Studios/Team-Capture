@@ -1,18 +1,17 @@
-﻿#if UNITY_EDITOR
-
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
+using Team_Capture.StartUpVideo;
 
 namespace Editor.Scripts.CustomEditors
 {
-	[CustomEditor(typeof(StartUpVideo.StartUpVideo))]
+	[CustomEditor(typeof(StartUpVideo))]
 	public class StartUpVideoEditor : UnityEditor.Editor {
 
 		public override void OnInspectorGUI()
 		{
 			base.OnInspectorGUI();
 
-			StartUpVideo.StartUpVideo vid = (StartUpVideo.StartUpVideo)target;
+			StartUpVideo vid = (StartUpVideo)target;
 
 			EditorGUILayout.Space();
 
@@ -27,5 +26,3 @@ namespace Editor.Scripts.CustomEditors
 		}
 	}
 }
-
-#endif

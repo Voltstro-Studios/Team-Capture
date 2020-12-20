@@ -1,4 +1,4 @@
-﻿namespace Weapons
+﻿namespace Team_Capture.Weapons
 {
 	/// <summary>
 	///     A simplified version of <see cref="TCWeapon" />, designed for sending over the network (as the name might implied)

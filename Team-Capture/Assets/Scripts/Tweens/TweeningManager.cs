@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 using UnityEngine;
-using Logger = Core.Logging.Logger;
+using Logger = Team_Capture.Core.Logging.Logger;
 
-namespace Tweens
+namespace Team_Capture.Tweens
 {
 	/// <summary>
 	///     A manager for tweening

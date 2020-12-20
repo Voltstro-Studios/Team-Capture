@@ -1,14 +1,14 @@
 ﻿using System;
 using System.IO;
-using BootManagement;
-using Core;
-using Core.Logging;
 using Discord.GameSDK;
 using Discord.GameSDK.Activities;
-using Helper;
-using SceneManagement;
+using Team_Capture.BootManagement;
+using Team_Capture.Core;
+using Team_Capture.Core.Logging;
+using Team_Capture.Helper;
+using Team_Capture.SceneManagement;
 
-namespace Integrations
+namespace Team_Capture.Integrations
 {
 	/// <summary>
 	///     Handles communicating with Discord's game SDK

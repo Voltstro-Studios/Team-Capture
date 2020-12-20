@@ -1,12 +1,13 @@
-﻿using Console;
-using Core;
-using Settings.SettingClasses;
+﻿using Settings.SettingClasses;
+using Team_Capture.Console;
+using Team_Capture.Core;
+using Team_Capture.Settings.SettingClasses;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
-using Logger = Core.Logging.Logger;
+using Logger = Team_Capture.Core.Logging.Logger;
 
-namespace Settings.Controllers
+namespace Team_Capture.Settings.Controllers
 {
 	/// <summary>
 	///     Controller for Unity's <see cref="Volume" /> for URP

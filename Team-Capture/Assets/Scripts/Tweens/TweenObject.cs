@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Linq;
-using Core;
 using ElRaccoone.Tweens;
 using ElRaccoone.Tweens.Core;
+using Team_Capture.Core;
 using UnityEngine;
 using UnityEngine.UI;
-using Logger = Core.Logging.Logger;
+using Logger = Team_Capture.Core.Logging.Logger;
 
-namespace Tweens
+namespace Team_Capture.Tweens
 {
 	/// <summary>
 	///     A class for handling tweening
@@ -86,7 +86,7 @@ namespace Tweens
 				Logger.Error("Unsupported tween event type!");
 			}
 
-			if(!Game.IsGameQuitting)
+			if (!Game.IsGameQuitting)
 				Logger.Debug("Played event {@Event}", tweenEvent.name);
 		}
 

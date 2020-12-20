@@ -1,8 +1,8 @@
 ﻿using TMPro;
 using UnityEngine;
-using Logger = Core.Logging.Logger;
+using Logger = Team_Capture.Core.Logging.Logger;
 
-namespace Localization
+namespace Team_Capture.Localization
 {
 	[DisallowMultipleComponent]
 	[RequireComponent(typeof(TextMeshProUGUI))]
@@ -16,7 +16,8 @@ namespace Localization
 
 			//The text was not found
 			if (text.text == currentId)
-				Logger.Warn("The localization key '{@Key}' was not found in the GameUI locale! ({@ObjectName})", currentId, gameObject.name);
+				Logger.Warn("The localization key '{@Key}' was not found in the GameUI locale! ({@ObjectName})",
+					currentId, gameObject.name);
 
 			Destroy(this);
 		}

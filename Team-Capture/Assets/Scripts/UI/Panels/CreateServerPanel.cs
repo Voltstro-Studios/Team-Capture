@@ -4,13 +4,13 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using Core.Networking;
-using SceneManagement;
+using Team_Capture.Core.Networking;
+using Team_Capture.SceneManagement;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Debug = UnityEngine.Debug;
-using Logger = Core.Logging.Logger;
+using Logger = Team_Capture.Core.Logging.Logger;
 
 namespace UI.Panels
 {
@@ -136,7 +136,8 @@ namespace UI.Panels
 				StartInfo = new ProcessStartInfo
 				{
 #if UNITY_EDITOR
-					FileName = $"{Voltstro.UnityBuilder.Build.GameBuilder.GetBuildDirectory()}Team-Capture-Quick/Team-Capture.exe",
+					FileName =
+ $"{Voltstro.UnityBuilder.Build.GameBuilder.GetBuildDirectory()}Team-Capture-Quick/Team-Capture.exe",
 #elif UNITY_STANDALONE_WIN
 					FileName = "Team-Capture.exe",
 #else

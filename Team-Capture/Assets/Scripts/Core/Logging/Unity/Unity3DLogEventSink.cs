@@ -6,7 +6,7 @@ using Serilog.Formatting;
 using Serilog.Formatting.Display;
 using UnityEngine;
 
-namespace Core.Logging.Unity
+namespace Team_Capture.Core.Logging.Unity
 {
 	internal sealed class Unity3DLogEventSink : ILogEventSink
 	{

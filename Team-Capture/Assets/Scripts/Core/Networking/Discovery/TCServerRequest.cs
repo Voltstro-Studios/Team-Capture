@@ -1,6 +1,6 @@
 ﻿using Mirror;
 
-namespace Core.Networking.Discovery
+namespace Team_Capture.Core.Networking.Discovery
 {
 	internal class TCServerRequest : NetworkMessage
 	{

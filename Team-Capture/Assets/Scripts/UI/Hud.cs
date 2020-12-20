@@ -1,8 +1,8 @@
-﻿using TMPro;
+﻿using Team_Capture.Weapons;
+using TMPro;
 using UnityEngine;
-using Weapons;
 
-namespace UI
+namespace Team_Capture.UI
 {
 	/// <summary>
 	///     Hud, or 'Heads Up Display', it displays your health and ammo as well as other stuff

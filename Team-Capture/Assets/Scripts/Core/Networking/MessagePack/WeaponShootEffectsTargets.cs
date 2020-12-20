@@ -1,7 +1,7 @@
 ﻿using MessagePack;
 using UnityEngine;
 
-namespace Core.Networking.MessagePack
+namespace Team_Capture.Core.Networking.MessagePack
 {
 	[MessagePackObject]
 	public struct WeaponShootEffectsTargets

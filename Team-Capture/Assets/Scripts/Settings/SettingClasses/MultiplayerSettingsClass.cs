@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Settings.SettingClasses
+namespace Team_Capture.Settings.SettingClasses
 {
 	internal class MultiplayerSettingsClass : Setting
 	{

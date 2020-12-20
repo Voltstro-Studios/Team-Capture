@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using Console.TypeReader;
-using Core;
 using Mirror;
+using Team_Capture.Console.TypeReader;
+using Team_Capture.Core;
 using UnityEngine;
-using Logger = Core.Logging.Logger;
-using StringReader = Console.TypeReader.StringReader;
+using Logger = Team_Capture.Core.Logging.Logger;
+using StringReader = Team_Capture.Console.TypeReader.StringReader;
 
-namespace Console
+namespace Team_Capture.Console
 {
 	/// <summary>
 	///     The backend system for the console

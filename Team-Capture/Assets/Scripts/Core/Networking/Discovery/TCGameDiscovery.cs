@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Net;
 using Mirror.Discovery;
-using SceneManagement;
+using Team_Capture.SceneManagement;
 using UnityEngine;
 using UnityEngine.Events;
-using Logger = Core.Logging.Logger;
+using Logger = Team_Capture.Core.Logging.Logger;
 
-namespace Core.Networking.Discovery
+namespace Team_Capture.Core.Networking.Discovery
 {
 	[RequireComponent(typeof(TCNetworkManager))]
 	internal class TCGameDiscovery : NetworkDiscoveryBase<TCServerRequest, TCServerResponse>
@@ -29,7 +29,7 @@ namespace Core.Networking.Discovery
 			//Set the active game discovery to this discovery object
 			netManager.gameDiscovery = this;
 
-			if(!Game.IsGameQuitting)
+			if (!Game.IsGameQuitting)
 				Logger.Debug("Game discovery is ready!");
 		}
 

@@ -1,5 +1,5 @@
 ﻿using System;
-using Core.Networking.Discovery;
+using Team_Capture.Core.Networking.Discovery;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;

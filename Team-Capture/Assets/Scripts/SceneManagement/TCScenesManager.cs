@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Console;
 using Mirror;
+using Team_Capture.Console;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Logger = Core.Logging.Logger;
+using Logger = Team_Capture.Core.Logging.Logger;
 using SceneManager = UnityEngine.SceneManagement.SceneManager;
 
-namespace SceneManagement
+namespace Team_Capture.SceneManagement
 {
 	/// <summary>
 	///     Scene Manager for Team-Capture

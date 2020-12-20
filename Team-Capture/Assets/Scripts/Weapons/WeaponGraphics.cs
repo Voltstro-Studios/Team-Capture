@@ -1,10 +1,11 @@
 ﻿using System;
-using Console;
-using Settings;
 using Settings.SettingClasses;
+using Team_Capture.Console;
+using Team_Capture.Settings;
+using Team_Capture.Settings.SettingClasses;
 using UnityEngine;
 
-namespace Weapons
+namespace Team_Capture.Weapons
 {
 	internal class WeaponGraphics : MonoBehaviour
 	{

@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using Helper.Extensions;
+using Team_Capture.Helper.Extensions;
 using TMPro;
 using UI.Elements.Settings;
 using UI.Panels;
 using UnityEngine;
 using UnityEngine.Scripting;
 using UnityEngine.UI;
-using Logger = Core.Logging.Logger;
+using Logger = Team_Capture.Core.Logging.Logger;
 
-namespace Settings
+namespace Team_Capture.Settings
 {
 	#region Attributes
 

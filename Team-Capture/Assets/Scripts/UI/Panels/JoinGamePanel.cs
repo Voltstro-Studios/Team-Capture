@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using Core.Networking;
-using Core.Networking.Discovery;
 using Mirror;
+using Team_Capture.Core.Networking;
+using Team_Capture.Core.Networking.Discovery;
 using TMPro;
 using UI.Elements;
 using UnityEngine;
-using Logger = Core.Logging.Logger;
+using Logger = Team_Capture.Core.Logging.Logger;
 
 namespace UI.Panels
 {

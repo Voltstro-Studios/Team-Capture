@@ -1,4 +1,4 @@
-﻿namespace Console.TypeReader
+﻿namespace Team_Capture.Console.TypeReader
 {
 	/// <summary>
 	///     The interface for a type reader

@@ -1,9 +1,9 @@
 using System;
-using Console;
 using Mirror;
+using Team_Capture.Console;
 using UnityEngine;
 
-namespace Player.Movement
+namespace Team_Capture.Player.Movement
 {
 	//This code is built on unity-fastpacedmultiplayer
 	//https://github.com/JoaoBorks/unity-fastpacedmultiplayer

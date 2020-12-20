@@ -1,11 +1,11 @@
-﻿using Core;
-using Core.Networking.Messages;
-using Mirror;
-using Pickups;
+﻿using Mirror;
+using Team_Capture.Core;
+using Team_Capture.Core.Networking.Messages;
+using Team_Capture.Pickups;
 using UnityEngine;
-using Logger = Core.Logging.Logger;
+using Logger = Team_Capture.Core.Logging.Logger;
 
-namespace Player
+namespace Team_Capture.Player
 {
 	/// <summary>
 	///     Handles messages from the server

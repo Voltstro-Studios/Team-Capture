@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Misc
+namespace Team_Capture.Misc
 {
 	/// <summary>
 	///     Destroys a particle after <see cref="destroyDelayTime" /> passes

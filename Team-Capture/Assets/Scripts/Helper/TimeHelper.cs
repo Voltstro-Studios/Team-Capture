@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Helper
+namespace Team_Capture.Helper
 {
 	/// <summary>
 	///     Helper for time

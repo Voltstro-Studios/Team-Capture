@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Helper
+namespace Team_Capture.Helper
 {
 	/// <summary>
 	///     Helpers for using Unity's layers

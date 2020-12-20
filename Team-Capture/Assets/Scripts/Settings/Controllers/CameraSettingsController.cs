@@ -1,10 +1,10 @@
-﻿using Console;
-using Core;
+﻿using Team_Capture.Console;
+using Team_Capture.Core;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
-using Logger = Core.Logging.Logger;
+using Logger = Team_Capture.Core.Logging.Logger;
 
-namespace Settings.Controllers
+namespace Team_Capture.Settings.Controllers
 {
 	/// <summary>
 	///     Handles controlling the <see cref="Camera" />'s settings.

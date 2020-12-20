@@ -3,20 +3,21 @@ using System.IO;
 using Newtonsoft.Json;
 using UnityEngine;
 using Voltstro.CommandLineParser;
-using Logger = Core.Logging.Logger;
+using Logger = Team_Capture.Core.Logging.Logger;
 
-namespace Localization
+namespace Team_Capture.Localization
 {
 	/// <summary>
-	///		A locale, handles loading locale files for different language based off user preference or by the system language. 
+	///     A locale, handles loading locale files for different language based off user preference or by the system language.
 	/// </summary>
 	public class Locale
 	{
-		[CommandLineArgument("language")]
-		internal static LanguageInfo OverrideLanguage = LanguageInfo.Unavailable;
+		[CommandLineArgument("language")] internal static LanguageInfo OverrideLanguage = LanguageInfo.Unavailable;
+
+		private LanguageInfo language = LanguageInfo.Unavailable;
 
 		/// <summary>
-		///		Creates a new <see cref="Locale"/> instance
+		///     Creates a new <see cref="Locale" /> instance
 		/// </summary>
 		/// <param name="fileLocation"></param>
 		public Locale(string fileLocation)
@@ -34,40 +35,42 @@ namespace Localization
 					return;
 				}
 
-				Logger.Warn("No locale exists for system language {@Language}... defaulting to english!", Language.ToString());
+				Logger.Warn("No locale exists for system language {@Language}... defaulting to english!",
+					Language.ToString());
 			}
-			
+
 			//Now to load the tokens
 			Tokens = JsonConvert.DeserializeObject<Dictionary<string, string>>(
 				File.ReadAllText(systemLanguageLocaleLocation));
 		}
-		
-		private LanguageInfo language = LanguageInfo.Unavailable;
 
 		/// <summary>
-		///		Gets the language that this local is for
+		///     Gets the language that this local is for
 		/// </summary>
 		public LanguageInfo Language
 		{
 			get
 			{
 				if (language == LanguageInfo.Unavailable)
-				{
-					language = OverrideLanguage == LanguageInfo.Unavailable ? Application.systemLanguage.ToLanguageInfo() : OverrideLanguage;
-				}
+					language = OverrideLanguage == LanguageInfo.Unavailable
+						? Application.systemLanguage.ToLanguageInfo()
+						: OverrideLanguage;
 
 				return language;
 			}
 		}
 
 		/// <summary>
-		///		All the available tokens
+		///     All the available tokens
 		/// </summary>
 		public Dictionary<string, string> Tokens { get; }
 
 		/// <summary>
-		///		Resolves the string
-		///		<para>If the <see cref="id"/> doesn't exist in the <see cref="Tokens"/> dictionary then the <see cref="id"/> will be returned.</para>
+		///     Resolves the string
+		///     <para>
+		///         If the <see cref="id" /> doesn't exist in the <see cref="Tokens" /> dictionary then the <see cref="id" />
+		///         will be returned.
+		///     </para>
 		/// </summary>
 		/// <param name="id"></param>
 		/// <returns></returns>

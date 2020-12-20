@@ -1,7 +1,7 @@
-﻿using Player;
+﻿using Team_Capture.Player;
 using UnityEngine;
 
-namespace Pickups
+namespace Team_Capture.Pickups
 {
 	/// <summary>
 	///     A health pack, if ya don't know what a health pack is then you are officially retarded

@@ -1,12 +1,12 @@
 ﻿using System.Collections;
-using Core;
-using Core.Networking.Messages;
-using Player;
+using Team_Capture.Core;
+using Team_Capture.Core.Networking.Messages;
+using Team_Capture.Player;
 using UI.Elements;
 using UnityEngine;
-using Logger = Core.Logging.Logger;
+using Logger = Team_Capture.Core.Logging.Logger;
 
-namespace UI
+namespace Team_Capture.UI
 {
 	/// <summary>
 	///     Displays a list of kills

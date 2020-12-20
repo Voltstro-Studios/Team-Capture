@@ -1,25 +1,25 @@
 {
-    "name": "Team-Capture",
-    "rootNamespace": "Team_Capture",
-    "references": [
-        "GUID:df380645f10b7bc4b97d4f5eb6303d95",
-        "GUID:15fc0a57446b3144c949da3e2b9737a9",
-        "GUID:6055be8ebefd69e48b49212b09b47b2f",
-        "GUID:30817c1a0e6d646d99c048fc403f5979",
-        "GUID:e720aa64e3f58fb4880566a322584340",
-        "GUID:72872094b21c16e48b631b2224833d49",
-        "GUID:39ebee09f220c604481547ede8ceb364",
-        "GUID:e3c323938430e974eb568e603b85eb9e",
-        "GUID:994e1c56bd90a2c498b2312a4664a74d",
-        "GUID:6f0786a5bbd4d44b992c72105d6500fe"
-    ],
-    "includePlatforms": [],
-    "excludePlatforms": [],
-    "allowUnsafeCode": false,
-    "overrideReferences": false,
-    "precompiledReferences": [],
-    "autoReferenced": true,
-    "defineConstraints": [],
-    "versionDefines": [],
-    "noEngineReferences": false
+  "name": "Team-Capture",
+  "rootNamespace": "Team_Capture",
+  "references": [
+    "GUID:df380645f10b7bc4b97d4f5eb6303d95",
+    "GUID:15fc0a57446b3144c949da3e2b9737a9",
+    "GUID:6055be8ebefd69e48b49212b09b47b2f",
+    "GUID:30817c1a0e6d646d99c048fc403f5979",
+    "GUID:e720aa64e3f58fb4880566a322584340",
+    "GUID:72872094b21c16e48b631b2224833d49",
+    "GUID:39ebee09f220c604481547ede8ceb364",
+    "GUID:e3c323938430e974eb568e603b85eb9e",
+    "GUID:994e1c56bd90a2c498b2312a4664a74d",
+    "GUID:6f0786a5bbd4d44b992c72105d6500fe"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
 }

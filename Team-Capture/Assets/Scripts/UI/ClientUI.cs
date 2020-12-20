@@ -1,10 +1,11 @@
 ﻿using System;
-using Player;
+using Team_Capture.Player;
+using Team_Capture.Weapons;
+using UI.ScoreBoard;
 using UnityEngine;
-using Weapons;
-using Logger = Core.Logging.Logger;
+using Logger = Team_Capture.Core.Logging.Logger;
 
-namespace UI
+namespace Team_Capture.UI
 {
 	/// <summary>
 	///     Controller for the client UI
@@ -37,7 +38,7 @@ namespace UI
 		[Tooltip("The scoreboard gameobject")] public GameObject scoreBoardObject;
 
 		/// <summary>
-		///     The <see cref="Player.PlayerManager" />
+		///     The <see cref="Team_Capture.Player.PlayerManager" />
 		/// </summary>
 		[NonSerialized] public PlayerManager PlayerManager;
 
@@ -63,7 +64,7 @@ namespace UI
 			pauseMenu.gameObject.SetActive(false);
 
 			scoreBoardObject.SetActive(false);
-			scoreBoardObject.GetComponent<ScoreBoard.ScoreBoard>().clientPlayer = playerManager;
+			scoreBoardObject.GetComponent<ScoreBoard>().clientPlayer = playerManager;
 
 			Logger.Debug("The ClientUI is now ready.");
 		}

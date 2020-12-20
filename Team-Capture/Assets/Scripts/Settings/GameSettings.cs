@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using Core;
-using Helper;
 using Newtonsoft.Json;
 using Settings.SettingClasses;
+using Team_Capture.Core;
+using Team_Capture.Helper;
+using Team_Capture.Settings.SettingClasses;
 using UnityEngine;
-using Logger = Core.Logging.Logger;
+using Logger = Team_Capture.Core.Logging.Logger;
 
-namespace Settings
+namespace Team_Capture.Settings
 {
 	/// <summary>
 	///     Handles game settings
@@ -86,7 +87,8 @@ namespace Settings
 			.BeforeSceneLoad)] //This now gets called before the scene is loaded.
 #else
 		//Otherwise, we're in a build, so we can run once the assemblies are loaded
-	[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)] //This now gets called as soon as the assemblies are loaded
+		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType
+			.AfterAssembliesLoaded)] //This now gets called as soon as the assemblies are loaded
 #endif
 		public static void Load()
 		{

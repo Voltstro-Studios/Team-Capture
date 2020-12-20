@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Tweens
+namespace Team_Capture.Tweens
 {
 	/// <summary>
 	///     The base for a tween event

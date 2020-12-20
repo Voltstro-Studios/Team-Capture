@@ -1,12 +1,11 @@
 ﻿#if UNITY_STANDALONE_WIN
-
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
 using UnityEngine;
-using Logger = Core.Logging.Logger;
+using Logger = Team_Capture.Core.Logging.Logger;
 
-namespace Console
+namespace Team_Capture.Console
 {
 	/// <summary>
 	///     Console system for Windows

@@ -1,4 +1,4 @@
-﻿namespace Console
+﻿namespace Team_Capture.Console
 {
 	/// <summary>
 	///     What run permission does this console command have

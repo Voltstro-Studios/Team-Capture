@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Collections;
-using Console;
-using Core.Logging;
-using Core.Networking.Discovery;
-using Core.Networking.Messages;
-using Helper;
-using LagCompensation;
 using Mirror;
-using Pickups;
-using SceneManagement;
+using Team_Capture.Console;
+using Team_Capture.Core.Logging;
+using Team_Capture.Core.Networking.Discovery;
+using Team_Capture.Core.Networking.Messages;
+using Team_Capture.Helper;
+using Team_Capture.LagCompensation;
+using Team_Capture.Pickups;
+using Team_Capture.SceneManagement;
 using UI.Panels;
 using UnityEngine;
 using Voltstro.CommandLineParser;
-using Logger = Core.Logging.Logger;
+using Logger = Team_Capture.Core.Logging.Logger;
 
-namespace Core.Networking
+namespace Team_Capture.Core.Networking
 {
 	/// <summary>
 	///     The networking manager for Team-Capture
@@ -84,15 +84,15 @@ namespace Core.Networking
 			Application.targetFrameRate = 128;
 		}
 
+		public void Update()
+		{
+			if (mode == NetworkManagerMode.ServerOnly) PingManager.ServerPingUpdate();
+		}
+
 		public void FixedUpdate()
 		{
 			//If we are the server then update simulated objects
 			if (mode == NetworkManagerMode.ServerOnly) SimulationHelper.UpdateSimulationObjectData();
-		}
-
-		public void Update()
-		{
-			if(mode == NetworkManagerMode.ServerOnly) PingManager.ServerPingUpdate();
 		}
 
 		#region Loading Screen

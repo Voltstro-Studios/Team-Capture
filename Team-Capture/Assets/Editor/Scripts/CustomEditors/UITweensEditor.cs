@@ -1,5 +1,5 @@
-﻿using Tweens;
-using UnityEditor;
+﻿using UnityEditor;
+using Team_Capture.Tweens;
 
 namespace Editor.Scripts.CustomEditors
 {

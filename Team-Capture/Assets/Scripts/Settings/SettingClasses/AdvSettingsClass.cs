@@ -1,8 +1,8 @@
-﻿using Settings.URPSettings;
+﻿using Team_Capture.Settings.URPSettings;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
-namespace Settings.SettingClasses
+namespace Team_Capture.Settings.SettingClasses
 {
 	internal sealed class AdvSettingsClass : Setting
 	{

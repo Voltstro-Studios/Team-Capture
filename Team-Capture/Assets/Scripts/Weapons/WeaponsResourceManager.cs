@@ -2,7 +2,7 @@
 using System.Linq;
 using UnityEngine;
 
-namespace Weapons
+namespace Team_Capture.Weapons
 {
 	/// <summary>
 	///     Handles getting weapon data

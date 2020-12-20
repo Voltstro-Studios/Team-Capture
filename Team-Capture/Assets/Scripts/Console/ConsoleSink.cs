@@ -8,7 +8,7 @@ using Serilog.Formatting;
 using Serilog.Formatting.Display;
 using UnityEngine;
 
-namespace Console
+namespace Team_Capture.Console
 {
 	internal static class ConsoleSink
 	{

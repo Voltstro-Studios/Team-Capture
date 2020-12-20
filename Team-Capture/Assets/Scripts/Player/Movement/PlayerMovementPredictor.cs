@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace Player.Movement
+namespace Team_Capture.Player.Movement
 {
 	//This code is built on unity-fastpacedmultiplayer
 	//https://github.com/JoaoBorks/unity-fastpacedmultiplayer

@@ -1,10 +1,10 @@
-﻿using Core;
-using Core.Networking.Messages;
-using Mirror;
+﻿using Mirror;
+using Team_Capture.Core;
+using Team_Capture.Core.Networking.Messages;
 using UnityEngine;
-using Logger = Core.Logging.Logger;
+using Logger = Team_Capture.Core.Logging.Logger;
 
-namespace Pickups
+namespace Team_Capture.Pickups
 {
 	/// <summary>
 	///     Handles pickup related tasks for the client

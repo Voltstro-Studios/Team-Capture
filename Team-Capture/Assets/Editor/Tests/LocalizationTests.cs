@@ -1,7 +1,7 @@
-﻿using Localization;
-using NUnit.Framework;
+﻿using NUnit.Framework;
+using Team_Capture.Localization;
 using UnityEngine;
-using Logger = Core.Logging.Logger;
+using Logger = Team_Capture.Core.Logging.Logger;
 
 namespace Editor.Tests
 {

@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections;
-using Console;
-using Core;
-using Core.Networking;
-using Core.Networking.Messages;
 using Mirror;
-using Player.Movement;
+using Team_Capture.Console;
+using Team_Capture.Core;
+using Team_Capture.Core.Networking;
+using Team_Capture.Core.Networking.Messages;
+using Team_Capture.Player.Movement;
+using Team_Capture.Weapons;
 using UnityEngine;
 using Voltstro.CommandLineParser;
-using Weapons;
-using Logger = Core.Logging.Logger;
+using Logger = Team_Capture.Core.Logging.Logger;
 
-namespace Player
+namespace Team_Capture.Player
 {
 	/// <summary>
 	///     Handles player stuff, such as health
@@ -140,12 +140,12 @@ namespace Player
 		public event Action PlayerDamaged;
 
 		/// <summary>
-		///		Invoked when this player dies
+		///     Invoked when this player dies
 		/// </summary>
 		public event Action PlayerDied;
 
 		/// <summary>
-		///		Invoked when this player gets a kill
+		///     Invoked when this player gets a kill
 		/// </summary>
 		public event Action PlayerKilled;
 

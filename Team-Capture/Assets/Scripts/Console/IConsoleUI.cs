@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Console
+namespace Team_Capture.Console
 {
 	/// <summary>
 	///     The interface for a console

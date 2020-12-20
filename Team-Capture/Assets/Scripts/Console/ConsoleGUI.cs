@@ -3,25 +3,25 @@ using System.Collections.Generic;
 using System.Text;
 using TMPro;
 using UnityEngine;
-using Logger = Core.Logging.Logger;
+using Logger = Team_Capture.Core.Logging.Logger;
 
-namespace Console
+namespace Team_Capture.Console
 {
 	/// <summary>
 	///     An in-game console
 	/// </summary>
 	internal class ConsoleGUI : MonoBehaviour, IConsoleUI
 	{
-		[SerializeField] private TMP_InputField inputField;
-		[SerializeField] private TextMeshProUGUI consoleTextArea;
-		[SerializeField] private GameObject consolePanel;
-		[SerializeField] private KeyCode consoleToggleKey = KeyCode.F1;
-
 		[ConVar("console_scale", "Sets the console's scale", nameof(UpdateConsoleScaleCallback), true)]
 		public static float ConsoleTextScale = 1;
 
 		[ConVar("console_log_debug", "Shows debug logs in the console", true)]
 		public static bool ShowDebugMessages = false;
+
+		[SerializeField] private TMP_InputField inputField;
+		[SerializeField] private TextMeshProUGUI consoleTextArea;
+		[SerializeField] private GameObject consolePanel;
+		[SerializeField] private KeyCode consoleToggleKey = KeyCode.F1;
 
 		private readonly List<string> lines = new List<string>();
 		private float defaultFontSize;

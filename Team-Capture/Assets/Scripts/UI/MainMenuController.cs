@@ -1,18 +1,18 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using Core;
-using Localization;
 using Mirror;
+using Team_Capture.Core;
+using Team_Capture.Localization;
+using Team_Capture.Tweens;
 using TMPro;
-using Tweens;
 using UI.Panels;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
-using Logger = Core.Logging.Logger;
+using Logger = Team_Capture.Core.Logging.Logger;
 
-namespace UI
+namespace Team_Capture.UI
 {
 	/// <summary>
 	///     Controller for a main menu
@@ -119,7 +119,7 @@ namespace UI
 
 		private void OnDestroy()
 		{
-			if(Game.IsGameQuitting)
+			if (Game.IsGameQuitting)
 				return;
 
 			Logger.Debug("Resetting all main menu events...");

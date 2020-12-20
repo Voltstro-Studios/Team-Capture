@@ -1,8 +1,8 @@
 ﻿using System;
-using Core.Logging;
+using Team_Capture.Core.Logging;
 using UnityEngine.Scripting;
 
-namespace Console
+namespace Team_Capture.Console
 {
 	/// <summary>
 	///     Marks a method to be used as a command for the in-game console.

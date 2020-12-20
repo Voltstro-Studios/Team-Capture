@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using Core.Networking;
-using Mirror;
-using Player;
+using Team_Capture.Core.Networking;
+using Team_Capture.Player;
 using UnityEngine;
 
-namespace LagCompensation
+namespace Team_Capture.LagCompensation
 {
 	internal static class SimulationHelper
 	{
@@ -21,7 +20,8 @@ namespace LagCompensation
 
 		public static void SimulateCommand(PlayerManager playerExecutedCommand, Action command)
 		{
-			int playersLatency = (int)PingManager.GetClientPing(playerExecutedCommand.netIdentity.connectionToClient.connectionId);
+			int playersLatency =
+				(int) PingManager.GetClientPing(playerExecutedCommand.netIdentity.connectionToClient.connectionId);
 
 			//Logger.Log($"Player's ping is {playersLatency}", LogVerbosity.Debug);
 

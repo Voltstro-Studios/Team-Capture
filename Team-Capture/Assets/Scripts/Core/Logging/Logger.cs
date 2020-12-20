@@ -1,13 +1,13 @@
 ﻿using System;
-using Console;
-using Core.Logging.Unity;
-using Exceptions;
 using Serilog;
 using Serilog.Core;
 using Serilog.Events;
+using Team_Capture.Console;
+using Team_Capture.Core.Logging.Unity;
+using Team_Capture.Exceptions;
 using UnityEngine;
 
-namespace Core.Logging
+namespace Team_Capture.Core.Logging
 {
 	/// <summary>
 	///     Provides the ability to log stuff to a file and the console
@@ -63,12 +63,7 @@ namespace Core.Logging
 
 			Application.quitting += Shutdown;
 
-			level = new LoggingLevelSwitch
-			{
-#if UNITY_EDITOR //Default to debug logging in the editor
-				MinimumLevel = LogEventLevel.Debug
-#endif
-			};
+			level = new LoggingLevelSwitch();
 
 			const string outPutTemplate = "{Timestamp:dd-MM hh:mm:ss tt} [{Level:u3}] {Message:lj}{NewLine}{Exception}";
 			string logFileName =

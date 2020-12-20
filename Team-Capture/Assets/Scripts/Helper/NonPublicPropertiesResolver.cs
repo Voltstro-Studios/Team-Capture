@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace Helper
+namespace Team_Capture.Helper
 {
 	/// <summary>
 	///     Resolver for Newtonsoft.Json

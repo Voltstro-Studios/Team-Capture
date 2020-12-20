@@ -1,13 +1,13 @@
 ﻿using System;
-using BootManagement;
-using Console;
-using Helper;
 using Mirror;
-using Player.Movement;
+using Team_Capture.BootManagement;
+using Team_Capture.Console;
+using Team_Capture.Helper;
+using Team_Capture.Player.Movement;
 using UnityEngine;
 using Voltstro.CommandLineParser;
 
-namespace UI
+namespace Team_Capture.UI
 {
 	/// <summary>
 	///     A UI used for debugging purposes

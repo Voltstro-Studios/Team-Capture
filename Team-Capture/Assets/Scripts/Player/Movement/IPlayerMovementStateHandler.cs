@@ -1,4 +1,4 @@
-namespace Player.Movement
+namespace Team_Capture.Player.Movement
 {
 	//This code is built on unity-fastpacedmultiplayer
 	//https://github.com/JoaoBorks/unity-fastpacedmultiplayer

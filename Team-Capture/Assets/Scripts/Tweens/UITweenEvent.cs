@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Tweens
+namespace Team_Capture.Tweens
 {
 	/// <summary>
 	///     A tween for a UI element

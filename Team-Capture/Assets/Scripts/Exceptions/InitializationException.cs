@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Exceptions
+namespace Team_Capture.Exceptions
 {
 	/// <summary>
 	///     An error when something failed while initializing or de-initializing

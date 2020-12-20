@@ -1,9 +1,9 @@
 ﻿using System;
-using Core;
-using Localization;
+using Team_Capture.Core;
+using Team_Capture.Localization;
 using UnityEngine;
 
-namespace Weapons
+namespace Team_Capture.Weapons
 {
 	/// <summary>
 	///     A weapon for Team-Capture
@@ -45,11 +45,6 @@ namespace Weapons
 		/// </summary>
 		[Tooltip("The formatted name. This is what will show on HUDs")] [SerializeField]
 		private string weaponFormattedName;
-
-		/// <summary>
-		///     The formatted name. This is what will show on HUDs
-		/// </summary>
-		public string WeaponFormattedNameLocalized => weaponFormattedName ?? (weaponFormattedName = ResolveWeaponString(weaponFormattedName));
 
 		/// <summary>
 		///     The prefab that this weapon will use
@@ -123,6 +118,12 @@ namespace Weapons
 		[Tooltip("The bullet tracer effect that will be used")]
 		public GameObject bulletTracerEffect;
 
+		/// <summary>
+		///     The formatted name. This is what will show on HUDs
+		/// </summary>
+		public string WeaponFormattedNameLocalized =>
+			weaponFormattedName ?? (weaponFormattedName = ResolveWeaponString(weaponFormattedName));
+
 		#region Locales
 
 		[NonSerialized] private string weaponFormattedNameLocalized;
@@ -131,7 +132,7 @@ namespace Weapons
 
 		public string ResolveWeaponString(string id)
 		{
-			if(mapLocale == null)
+			if (mapLocale == null)
 				mapLocale = new Locale($"{Game.GetGameExecutePath()}/Resources/Maps/{weapon}-%LANG%.json");
 
 			return mapLocale.ResolveString(id);

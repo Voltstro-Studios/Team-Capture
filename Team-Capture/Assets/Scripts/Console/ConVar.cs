@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Console
+namespace Team_Capture.Console
 {
 	/// <summary>
 	///     An editable variable in both the console

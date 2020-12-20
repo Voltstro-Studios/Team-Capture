@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
-using Core.Networking.Messages;
 using Mirror;
-using SceneManagement;
+using Team_Capture.Core.Networking.Messages;
+using Team_Capture.SceneManagement;
 using UnityEngine;
-using Logger = Core.Logging.Logger;
+using Logger = Team_Capture.Core.Logging.Logger;
 
-namespace Pickups
+namespace Team_Capture.Pickups
 {
 	/// <summary>
 	///     A static class for the server to manage pickups

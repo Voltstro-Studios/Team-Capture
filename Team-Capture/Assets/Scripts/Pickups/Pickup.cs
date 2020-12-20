@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections;
-using Player;
+using Team_Capture.Player;
 using UnityEngine;
 
-namespace Pickups
+namespace Team_Capture.Pickups
 {
 	/// <summary>
 	///     Base class for a something that can picked up, such as a weapon or a health pack

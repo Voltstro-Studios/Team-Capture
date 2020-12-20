@@ -1,4 +1,4 @@
-﻿namespace Settings.URPSettings
+﻿namespace Team_Capture.Settings.URPSettings
 {
 	/// <summary>
 	///     MSAA Quality

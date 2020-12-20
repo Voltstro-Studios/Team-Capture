@@ -1,4 +1,4 @@
-﻿namespace Settings.URPSettings
+﻿namespace Team_Capture.Settings.URPSettings
 {
 	public enum ShadowCascadesCount
 	{

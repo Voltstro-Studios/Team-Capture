@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using Core.Networking;
-using Core.Networking.MessagePack;
-using Helper;
-using LagCompensation;
 using Mirror;
-using UI;
+using Team_Capture.Core.Networking;
+using Team_Capture.Core.Networking.MessagePack;
+using Team_Capture.Helper;
+using Team_Capture.LagCompensation;
+using Team_Capture.UI;
+using Team_Capture.Weapons;
 using UnityEngine;
-using Weapons;
-using Logger = Core.Logging.Logger;
+using Logger = Team_Capture.Core.Logging.Logger;
 using Random = UnityEngine.Random;
 
-namespace Player
+namespace Team_Capture.Player
 {
 	/// <summary>
 	///     Handles shooting
@@ -33,7 +33,7 @@ namespace Player
 		///     The <see cref="weaponManager" /> associated with this <see cref="PlayerWeaponShoot" />
 		/// </summary>
 		private WeaponManager weaponManager;
-		
+
 		private void ShootWeapon()
 		{
 			CmdShootWeapon();
@@ -240,7 +240,8 @@ namespace Player
 			RpcDoWeaponShootEffects(weaponShootEffectBytes);
 
 			stopwatch.Stop();
-			Logger.Debug("Took {@Milliseconds}ms to fire {@Player}'s {@Weapon}", stopwatch.Elapsed.TotalMilliseconds, transform.name, tcWeapon.weapon);
+			Logger.Debug("Took {@Milliseconds}ms to fire {@Player}'s {@Weapon}", stopwatch.Elapsed.TotalMilliseconds,
+				transform.name, tcWeapon.weapon);
 		}
 
 		#endregion
@@ -277,8 +278,10 @@ namespace Player
 				tracer.Play(targets.Targets[i]);
 
 				//Do bullet holes
-				Instantiate(weapon.bulletHitEffectPrefab, targets.Targets[i], Quaternion.LookRotation(targets.TargetNormals[i]));
-				Instantiate(weapon.bulletHolePrefab, targets.Targets[i], Quaternion.FromToRotation(Vector3.back, targets.TargetNormals[i]));
+				Instantiate(weapon.bulletHitEffectPrefab, targets.Targets[i],
+					Quaternion.LookRotation(targets.TargetNormals[i]));
+				Instantiate(weapon.bulletHolePrefab, targets.Targets[i],
+					Quaternion.FromToRotation(Vector3.back, targets.TargetNormals[i]));
 			}
 		}
 

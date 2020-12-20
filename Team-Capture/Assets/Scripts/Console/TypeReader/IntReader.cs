@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 
-namespace Console.TypeReader
+namespace Team_Capture.Console.TypeReader
 {
 	/// <summary>
 	///     A default reader for <see cref="int" />

@@ -1,4 +1,5 @@
-﻿using Settings.Enums;
+﻿using Team_Capture.Settings;
+using Team_Capture.Settings.Enums;
 using UnityEngine;
 
 namespace Settings.SettingClasses
@@ -7,8 +8,8 @@ namespace Settings.SettingClasses
 	{
 		[SettingsPropertyFormatName("Settings_VideoResolution")]
 		public Resolution Resolution = Screen.currentResolution;
-		
-		[SettingsPropertyFormatName("Settings_VideoScreenMode")] 
+
+		[SettingsPropertyFormatName("Settings_VideoScreenMode")]
 		public FullScreenMode ScreenMode = FullScreenMode.FullScreenWindow;
 
 		[SettingsPropertyFormatName("Settings_VideoTextureQuality")]

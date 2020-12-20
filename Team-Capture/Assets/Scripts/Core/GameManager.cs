@@ -1,14 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Console;
 using Mirror;
-using Player;
-using SceneManagement;
+using Team_Capture.Console;
+using Team_Capture.Player;
+using Team_Capture.SceneManagement;
 using UnityEngine;
-using Logger = Core.Logging.Logger;
+using Logger = Team_Capture.Core.Logging.Logger;
 using SceneManager = UnityEngine.SceneManagement.SceneManager;
 
-namespace Core
+namespace Team_Capture.Core
 {
 	public class GameManager : MonoBehaviour
 	{

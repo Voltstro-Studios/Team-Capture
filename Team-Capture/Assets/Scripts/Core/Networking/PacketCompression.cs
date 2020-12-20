@@ -1,6 +1,6 @@
 using MessagePack;
 
-namespace Core.Networking
+namespace Team_Capture.Core.Networking
 {
 	public static class PacketCompression
 	{

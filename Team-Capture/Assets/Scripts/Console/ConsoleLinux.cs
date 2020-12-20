@@ -1,10 +1,9 @@
 #if UNITY_STANDALONE_LINUX
-
 using System;
 using UnityEngine;
 using Logger = Core.Logging.Logger;
 
-namespace Console
+namespace Team_Capture.Console
 {
 	public class ConsoleLinux : IConsoleUI
 	{

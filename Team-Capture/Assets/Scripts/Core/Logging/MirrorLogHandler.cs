@@ -3,7 +3,7 @@ using kcp2k;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Core.Logging
+namespace Team_Capture.Core.Logging
 {
 	internal class MirrorLogHandler : ILogHandler
 	{

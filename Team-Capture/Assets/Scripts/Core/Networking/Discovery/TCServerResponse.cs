@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using Mirror;
 
-namespace Core.Networking.Discovery
+namespace Team_Capture.Core.Networking.Discovery
 {
 	internal class TCServerResponse : NetworkMessage
 	{

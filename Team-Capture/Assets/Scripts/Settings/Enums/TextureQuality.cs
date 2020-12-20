@@ -1,4 +1,4 @@
-﻿namespace Settings.Enums
+﻿namespace Team_Capture.Settings.Enums
 {
 	/// <summary>
 	///     The texture quality

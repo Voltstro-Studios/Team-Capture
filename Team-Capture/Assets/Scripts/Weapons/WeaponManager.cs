@@ -2,13 +2,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Core;
-using Helper;
 using Mirror;
+using Team_Capture.Core;
+using Team_Capture.Helper;
 using UnityEngine;
-using Logger = Core.Logging.Logger;
+using Logger = Team_Capture.Core.Logging.Logger;
 
-namespace Weapons
+namespace Team_Capture.Weapons
 {
 	/// <summary>
 	///     Weapon management, such as adding, removing and selecting weapons

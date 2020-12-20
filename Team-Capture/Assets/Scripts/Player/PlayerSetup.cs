@@ -1,9 +1,9 @@
-﻿using Core;
-using Mirror;
-using UI;
+﻿using Mirror;
+using Team_Capture.Core;
+using Team_Capture.UI;
 using UnityEngine;
 
-namespace Player
+namespace Team_Capture.Player
 {
 	/// <summary>
 	///     Handles setting up the player

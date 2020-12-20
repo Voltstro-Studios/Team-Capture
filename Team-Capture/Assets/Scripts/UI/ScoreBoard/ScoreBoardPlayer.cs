@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Globalization;
-using Player;
+using Team_Capture.Player;
 using TMPro;
 using UnityEngine;
 

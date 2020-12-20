@@ -1,4 +1,4 @@
-﻿namespace Console
+﻿namespace Team_Capture.Console
 {
 	/// <summary>
 	///     A command that is used in the console

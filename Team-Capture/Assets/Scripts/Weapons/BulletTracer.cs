@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Weapons
+namespace Team_Capture.Weapons
 {
 	/// <summary>
 	///     The line thingy that goes were the bullets go that we fake, because it looks

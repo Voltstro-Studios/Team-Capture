@@ -1,7 +1,7 @@
 ﻿using Serilog;
 using Serilog.Configuration;
 
-namespace Core.Logging.Unity
+namespace Team_Capture.Core.Logging.Unity
 {
 	internal static class UnitySinkExtensions
 	{

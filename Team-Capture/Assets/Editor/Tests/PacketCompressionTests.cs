@@ -1,6 +1,6 @@
-using Core.Networking;
-using Core.Networking.MessagePack;
 using NUnit.Framework;
+using Team_Capture.Core.Networking;
+using Team_Capture.Core.Networking.MessagePack;
 using UnityEngine;
 
 namespace Editor.Tests

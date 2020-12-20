@@ -1,9 +1,9 @@
-﻿using Core.Networking.Messages;
-using UI;
+﻿using Team_Capture.Core.Networking.Messages;
+using Team_Capture.UI;
+using Team_Capture.Weapons;
 using UnityEngine;
-using Weapons;
 
-namespace Player
+namespace Team_Capture.Player
 {
 	/// <summary>
 	///     Provides an easy way of calling methods for related functions in the <see cref="ClientUI" />

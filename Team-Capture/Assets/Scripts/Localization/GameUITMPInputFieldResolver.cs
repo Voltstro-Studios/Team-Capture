@@ -1,14 +1,16 @@
-﻿using Localization;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 
-[RequireComponent(typeof(TMP_InputField))]
-public class GameUITMPInputFieldResolver : MonoBehaviour
+namespace Team_Capture.Localization
 {
-	private void Start()
+	[RequireComponent(typeof(TMP_InputField))]
+	public class GameUITMPInputFieldResolver : MonoBehaviour
 	{
-		TMP_InputField input = GetComponent<TMP_InputField>();
-		input.text = GameUILocale.ResolveString(input.text);
-		Destroy(this);
+		private void Start()
+		{
+			TMP_InputField input = GetComponent<TMP_InputField>();
+			input.text = GameUILocale.ResolveString(input.text);
+			Destroy(this);
+		}
 	}
 }

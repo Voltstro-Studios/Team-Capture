@@ -1,4 +1,4 @@
-﻿using Localization;
+﻿using Team_Capture.Localization;
 using UnityEditor;
 using UnityEngine;
 

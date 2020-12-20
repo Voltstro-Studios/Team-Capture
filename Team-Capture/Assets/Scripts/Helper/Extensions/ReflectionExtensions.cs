@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace Helper.Extensions
+namespace Team_Capture.Helper.Extensions
 {
 	public static class ReflectionExtensions
 	{

@@ -1,4 +1,4 @@
-﻿namespace BootManagement
+﻿namespace Team_Capture.BootManagement
 {
 	/// <summary>
 	///     An interface for starting something on boot

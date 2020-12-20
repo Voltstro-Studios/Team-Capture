@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Core;
-using SceneManagement;
+using Team_Capture.Core;
+using Team_Capture.SceneManagement;
 using UnityEngine;
-using Logger = Core.Logging.Logger;
+using Logger = Team_Capture.Core.Logging.Logger;
 
-namespace BootManagement
+namespace Team_Capture.BootManagement
 {
 	internal class Bootmanager : MonoBehaviour
 	{

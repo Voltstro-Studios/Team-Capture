@@ -1,4 +1,4 @@
-﻿namespace Core.Logging
+﻿namespace Team_Capture.Core.Logging
 {
 	/// <summary>
 	///     The config for <see cref="Logger" />

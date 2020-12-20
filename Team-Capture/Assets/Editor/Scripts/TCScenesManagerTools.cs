@@ -1,6 +1,4 @@
-﻿#if UNITY_EDITOR
-
-using SceneManagement;
+﻿using Team_Capture.SceneManagement;
 using UnityEditor;
 using UnityEngine;
 
@@ -25,5 +23,3 @@ namespace Editor.Scripts
         }
     }
 }
-
-#endif

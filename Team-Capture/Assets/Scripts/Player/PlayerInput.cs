@@ -1,13 +1,13 @@
-﻿using Console;
-using Mirror;
-using Player.Movement;
-using Settings;
+﻿using Mirror;
 using Settings.SettingClasses;
-using UI;
+using Team_Capture.Console;
+using Team_Capture.Player.Movement;
+using Team_Capture.Settings;
+using Team_Capture.UI;
+using Team_Capture.Weapons;
 using UnityEngine;
-using Weapons;
 
-namespace Player
+namespace Team_Capture.Player
 {
 	/// <summary>
 	///     Handles input

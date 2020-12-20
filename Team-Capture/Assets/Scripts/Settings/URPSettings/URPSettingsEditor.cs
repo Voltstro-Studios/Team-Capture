@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine.Rendering.Universal;
 
-namespace Settings.URPSettings
+namespace Team_Capture.Settings.URPSettings
 {
 	/// <summary>
 	///     An editor for URP

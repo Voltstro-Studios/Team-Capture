@@ -1,9 +1,9 @@
 using System.Threading.Tasks;
 using Mirror;
 using UnityEngine;
-using Logger = Core.Logging.Logger;
+using Logger = Team_Capture.Core.Logging.Logger;
 
-namespace Core.Networking
+namespace Team_Capture.Core.Networking
 {
 	public class TCAuthenticator : NetworkAuthenticator
 	{

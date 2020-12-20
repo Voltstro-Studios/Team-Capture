@@ -3,7 +3,7 @@ using System.Linq;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 
-namespace Helper
+namespace Team_Capture.Helper
 {
 	/// <summary>
 	///     Helper for networking

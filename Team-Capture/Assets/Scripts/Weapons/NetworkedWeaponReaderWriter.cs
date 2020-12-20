@@ -1,7 +1,7 @@
-﻿using Core.Logging;
-using Mirror;
+﻿using Mirror;
+using Team_Capture.Core.Logging;
 
-namespace Weapons
+namespace Team_Capture.Weapons
 {
 	/// <summary>
 	///     A <see cref="NetworkWriter" /> and <see cref="NetworkReader" /> for <see cref="NetworkedWeapon" />

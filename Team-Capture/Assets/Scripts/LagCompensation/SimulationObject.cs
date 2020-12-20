@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Core.Networking;
+using Team_Capture.Core.Networking;
 using UnityEngine;
 
-namespace LagCompensation
+namespace Team_Capture.LagCompensation
 {
 	internal class SimulationObject : MonoBehaviour
 	{

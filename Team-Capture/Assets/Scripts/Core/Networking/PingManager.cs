@@ -1,19 +1,19 @@
 ﻿using System.Collections.Generic;
-using Console;
-using Core.Networking.Messages;
 using Mirror;
+using Team_Capture.Console;
+using Team_Capture.Core.Networking.Messages;
 using UnityEngine;
-using Logger = Core.Logging.Logger;
+using Logger = Team_Capture.Core.Logging.Logger;
 
-namespace Core.Networking
+namespace Team_Capture.Core.Networking
 {
 	/// <summary>
-	///		Provides a way to get ping of clients
+	///     Provides a way to get ping of clients
 	/// </summary>
 	public static class PingManager
 	{
 		[ConVar("sv_pingfrequency", "How often will the server ping the clients")]
-		private static float PingFrequency = 2.0f;
+		private static readonly float PingFrequency = 2.0f;
 
 		private static float lastPingTime;
 
@@ -22,7 +22,7 @@ namespace Core.Networking
 		#region Server
 
 		/// <summary>
-		///		Gets a client's ping
+		///     Gets a client's ping
 		/// </summary>
 		/// <param name="connectionId"></param>
 		/// <returns></returns>
@@ -32,7 +32,7 @@ namespace Core.Networking
 		}
 
 		/// <summary>
-		///		Sets up the server side of the <see cref="PingManager"/>
+		///     Sets up the server side of the <see cref="PingManager" />
 		/// </summary>
 		internal static void ServerSetup()
 		{
@@ -42,7 +42,7 @@ namespace Core.Networking
 		}
 
 		/// <summary>
-		///		Shutdown the server side of the <see cref="PingManager"/>
+		///     Shutdown the server side of the <see cref="PingManager" />
 		/// </summary>
 		internal static void ServerShutdown()
 		{
@@ -51,7 +51,7 @@ namespace Core.Networking
 		}
 
 		/// <summary>
-		///		Call this every frame
+		///     Call this every frame
 		/// </summary>
 		internal static void ServerPingUpdate()
 		{
@@ -63,7 +63,7 @@ namespace Core.Networking
 		}
 
 		/// <summary>
-		///		Pings all clients connected to the server
+		///     Pings all clients connected to the server
 		/// </summary>
 		internal static void PingClients()
 		{
@@ -71,7 +71,7 @@ namespace Core.Networking
 		}
 
 		/// <summary>
-		///		Pings a client
+		///     Pings a client
 		/// </summary>
 		/// <param name="conn"></param>
 		internal static void PingClient(NetworkConnection conn)
@@ -102,7 +102,7 @@ namespace Core.Networking
 		#region Client
 
 		/// <summary>
-		///		Sets up the client side of the <see cref="PingManager"/>
+		///     Sets up the client side of the <see cref="PingManager" />
 		/// </summary>
 		internal static void ClientSetup()
 		{
@@ -110,7 +110,7 @@ namespace Core.Networking
 		}
 
 		/// <summary>
-		///		Shutdown the client side of the <see cref="PingManager"/>
+		///     Shutdown the client side of the <see cref="PingManager" />
 		/// </summary>
 		internal static void ClientShutdown()
 		{

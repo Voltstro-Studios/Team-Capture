@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Helper
+namespace Team_Capture.Helper
 {
 	/// <summary>
 	///     Additional methods to help with ray-casting

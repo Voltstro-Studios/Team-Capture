@@ -1,8 +1,8 @@
-﻿using Player;
+﻿using Team_Capture.Player;
+using Team_Capture.Weapons;
 using UnityEngine;
-using Weapons;
 
-namespace Pickups
+namespace Team_Capture.Pickups
 {
 	/// <summary>
 	///     A pickup for a weapon

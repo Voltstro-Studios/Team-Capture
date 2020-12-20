@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Localization;
-using Settings;
+using Team_Capture.Localization;
+using Team_Capture.Settings;
 using TMPro;
 using UI.Elements.Settings;
 using UnityEngine;

@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using Core;
-using Core.Networking;
-using Localization;
-using Player;
+using Team_Capture.Core;
+using Team_Capture.Core.Networking;
+using Team_Capture.Localization;
+using Team_Capture.Player;
 using TMPro;
 using UnityEngine;
-using Logger = Core.Logging.Logger;
+using Logger = Team_Capture.Core.Logging.Logger;
 
 namespace UI.ScoreBoard
 {
@@ -61,11 +60,110 @@ namespace UI.ScoreBoard
 		[Tooltip("The player list transform")] [SerializeField]
 		private Transform playerListTransform;
 
-		private List<PlayerManager> players;
-		private List<ScoreBoardPlayer> playerItems = new List<ScoreBoardPlayer>();
+		private readonly List<ScoreBoardPlayer> playerItems = new List<ScoreBoardPlayer>();
+
+		private string deathsTextLocale;
 
 		private string killsTextLocale;
-		private string deathsTextLocale;
+
+		private List<PlayerManager> players;
+
+		/// <summary>
+		///     Generate the list from scratch
+		///     <para>Should only need to do this when a player is added or removed, or when the panel is opened</para>
+		/// </summary>
+		private void SetPlayerList()
+		{
+			Stopwatch stopwatch = Stopwatch.StartNew();
+
+			players = GameManager.GetAllPlayers().ToList();
+			SortPlayerList();
+			SetScoreBoardPlayerItems();
+			UpdateUIPositions();
+
+			stopwatch.Stop();
+			Logger.Debug($"Took {stopwatch.Elapsed.TotalMilliseconds}ms to update scoreboard player items.");
+		}
+
+		/// <summary>
+		///     Sorts the <see cref="players" /> list
+		/// </summary>
+		private void SortPlayerList()
+		{
+			players.Sort(new PlayerListComparer());
+		}
+
+		/// <summary>
+		///     Generate the player scoreboard items from scratch
+		/// </summary>
+		private void SetScoreBoardPlayerItems()
+		{
+			ClearScoreBoardPlayerItems();
+			foreach (PlayerManager player in players)
+			{
+				GameObject playerItem = Instantiate(playerItemPrefab, playerListTransform, false);
+				ScoreBoardPlayer scoreBoardPlayer = playerItem.GetComponent<ScoreBoardPlayer>();
+
+				scoreBoardPlayer.SetupPlayerInfo(player);
+				playerItems.Add(scoreBoardPlayer);
+
+				player.PlayerDied += PlayerKilled;
+			}
+		}
+
+		/// <summary>
+		///     Clears all the player scoreboard items
+		/// </summary>
+		private void ClearScoreBoardPlayerItems()
+		{
+			playerItems.Clear();
+
+			for (int i = 0; i < playerListTransform.childCount; i++)
+			{
+				GameObject item = playerListTransform.GetChild(i).gameObject;
+				item.GetComponent<ScoreBoardPlayer>().PlayerToTrack.PlayerDied -= PlayerKilled;
+
+				Destroy(item);
+			}
+		}
+
+		/// <summary>
+		///     Updates the UI positions of the player scoreboard items
+		/// </summary>
+		private void UpdateUIPositions()
+		{
+			foreach (ScoreBoardPlayer scoreBoardPlayer in playerItems)
+				scoreBoardPlayer.transform.SetSiblingIndex(players.IndexOf(scoreBoardPlayer.PlayerToTrack));
+		}
+
+		private void PlayerKilled()
+		{
+			SortPlayerList();
+			UpdateUIPositions();
+
+			foreach (ScoreBoardPlayer scoreBoardPlayer in playerItems)
+				scoreBoardPlayer.UpdatePlayerStats();
+		}
+
+		private void ClientPlayerUpdateUI()
+		{
+			killDeathRatioText.text = $"{clientPlayer.Kills}/{clientPlayer.Deaths}";
+			playerStatsText.text =
+				$"{killsTextLocale}: {clientPlayer.Kills}\n{deathsTextLocale}: {clientPlayer.Deaths}";
+		}
+
+		private class PlayerListComparer : IComparer<PlayerManager>
+		{
+			public int Compare(PlayerManager x, PlayerManager y)
+			{
+				// ReSharper disable PossibleNullReferenceException
+				if (x.Kills == 0 && y.Kills == 0)
+					return 0;
+
+				return y.Kills.CompareTo(x.Kills);
+				// ReSharper enable PossibleNullReferenceException
+			}
+		}
 
 		#region Unity Callbacks
 
@@ -108,89 +206,6 @@ namespace UI.ScoreBoard
 
 		#endregion
 
-		/// <summary>
-		///		Generate the list from scratch
-		///		<para>Should only need to do this when a player is added or removed, or when the panel is opened</para>
-		/// </summary>
-		private void SetPlayerList()
-		{
-			Stopwatch stopwatch = Stopwatch.StartNew();
-
-			players = GameManager.GetAllPlayers().ToList();
-			SortPlayerList();
-			SetScoreBoardPlayerItems();
-			UpdateUIPositions();
-
-			stopwatch.Stop();
-			Logger.Debug($"Took {stopwatch.Elapsed.TotalMilliseconds}ms to update scoreboard player items.");
-		}
-
-		/// <summary>
-		///		Sorts the <see cref="players"/> list
-		/// </summary>
-		private void SortPlayerList()
-		{
-			players.Sort(new PlayerListComparer());
-		}
-
-		/// <summary>
-		///		Generate the player scoreboard items from scratch
-		/// </summary>
-		private void SetScoreBoardPlayerItems()
-		{
-			ClearScoreBoardPlayerItems();
-			foreach (PlayerManager player in players)
-			{
-				GameObject playerItem = Instantiate(playerItemPrefab, playerListTransform, false);
-				ScoreBoardPlayer scoreBoardPlayer = playerItem.GetComponent<ScoreBoardPlayer>();
-
-				scoreBoardPlayer.SetupPlayerInfo(player);
-				playerItems.Add(scoreBoardPlayer);
-
-				player.PlayerDied += PlayerKilled;
-			}
-		}
-
-		/// <summary>
-		///		Clears all the player scoreboard items
-		/// </summary>
-		private void ClearScoreBoardPlayerItems()
-		{
-			playerItems.Clear();
-
-			for (int i = 0; i < playerListTransform.childCount; i++)
-			{
-				GameObject item = playerListTransform.GetChild(i).gameObject;
-				item.GetComponent<ScoreBoardPlayer>().PlayerToTrack.PlayerDied -= PlayerKilled;
-
-				Destroy(item);
-			}
-		}
-
-		/// <summary>
-		///		Updates the UI positions of the player scoreboard items
-		/// </summary>
-		private void UpdateUIPositions()
-		{
-			foreach (ScoreBoardPlayer scoreBoardPlayer in playerItems)
-				scoreBoardPlayer.transform.SetSiblingIndex(players.IndexOf(scoreBoardPlayer.PlayerToTrack));
-		}
-
-		private void PlayerKilled()
-		{
-			SortPlayerList();
-			UpdateUIPositions();
-
-			foreach (ScoreBoardPlayer scoreBoardPlayer in playerItems)
-				scoreBoardPlayer.UpdatePlayerStats();
-		}
-
-		private void ClientPlayerUpdateUI()
-		{
-			killDeathRatioText.text = $"{clientPlayer.Kills}/{clientPlayer.Deaths}";
-			playerStatsText.text = $"{killsTextLocale}: {clientPlayer.Kills}\n{deathsTextLocale}: {clientPlayer.Deaths}";
-		}
-
 		#region GameManager Callbacks
 
 		private void OnPlayerAdded(string playerId)
@@ -204,18 +219,5 @@ namespace UI.ScoreBoard
 		}
 
 		#endregion
-
-		private class PlayerListComparer : IComparer<PlayerManager>
-		{
-			public int Compare(PlayerManager x, PlayerManager y)
-			{
-				// ReSharper disable PossibleNullReferenceException
-				if (x.Kills == 0 && y.Kills == 0)
-					return 0;
-
-				return y.Kills.CompareTo(x.Kills);
-				// ReSharper enable PossibleNullReferenceException
-			}
-		}
 	}
 }
