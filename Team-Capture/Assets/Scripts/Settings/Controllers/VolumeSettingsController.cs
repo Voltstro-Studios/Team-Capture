@@ -1,6 +1,4 @@
-﻿using Settings.SettingClasses;
-using Team_Capture.Console;
-using Team_Capture.Core;
+﻿using Team_Capture.Console;
 using Team_Capture.Settings.SettingClasses;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -13,30 +11,32 @@ namespace Team_Capture.Settings.Controllers
 	///     Controller for Unity's <see cref="Volume" /> for URP
 	/// </summary>
 	[RequireComponent(typeof(Volume))]
-	internal class VolumeSettingsController : MonoBehaviour
+	internal class VolumeSettingsController : SingletonMonoBehaviour<VolumeSettingsController>
 	{
-		private static VolumeSettingsController instance;
-
 		/// <summary>
 		///     The active <see cref="Volume" />
 		/// </summary>
 		public static Volume ActiveVolume;
 
-		private void Awake()
+		protected override void SingletonAwakened()
 		{
-			if (instance != null || Game.IsHeadless)
-			{
-				Destroy(gameObject);
-				return;
-			}
-
-			instance = this;
-			DontDestroyOnLoad(gameObject);
-
 			ActiveVolume = GetComponent<Volume>();
 
 			GameSettings.SettingsUpdated += ApplyVolumeSettings;
 			ApplyVolumeSettings();
+		}
+
+		protected override void SingletonStarted()
+		{
+		}
+
+		protected override void SingletonDestroyed()
+		{
+		}
+
+		protected override void NotifyInstanceRepeated()
+		{
+			Destroy(gameObject);
 		}
 
 		private void ApplyVolumeSettings()

@@ -182,7 +182,6 @@ namespace Team_Capture
 
 			else if (thisInstance != instance)
 			{
-				Logger.Warn("Duplicate {Type} Singleton created", typeof(T));
 				NotifyInstanceRepeated();
 
 				return;
