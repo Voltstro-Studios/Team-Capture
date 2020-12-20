@@ -1,26 +1,16 @@
 ﻿using System.Collections;
 using Team_Capture.Core;
 using UnityEngine;
-using Logger = Team_Capture.Core.Logging.Logger;
 
 namespace Team_Capture.BootManagement
 {
 	internal class BootManager : MonoBehaviour
 	{
-		public static bool HasBooted;
-
 		public float delayBetweenItems = 0.1f;
 		public BootItem[] bootItems;
 
 		private void Start()
 		{
-			//No needed to do stuff if this has been booted already
-			if (HasBooted)
-			{
-				Destroy();
-				return;
-			}
-
 			StartCoroutine(RunBootItems());
 		}
 
@@ -43,15 +33,6 @@ namespace Team_Capture.BootManagement
 
 				yield return new WaitForSeconds(delayBetweenItems);
 			}
-
-			Logger.Info("Bootloader has successfully loaded!");
-			HasBooted = true;
-			Destroy();
-		}
-
-		private void Destroy()
-		{
-			Destroy(gameObject);
 		}
 	}
 }
