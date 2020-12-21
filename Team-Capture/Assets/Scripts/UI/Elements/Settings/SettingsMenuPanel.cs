@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace UI.Elements.Settings
+namespace Team_Capture.UI.Elements.Settings
 {
 	/// <summary>
 	///     Panel for a menu that contains all the controls

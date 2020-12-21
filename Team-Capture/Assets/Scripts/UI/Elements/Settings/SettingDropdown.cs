@@ -1,7 +1,7 @@
 ﻿using TMPro;
 using UnityEngine;
 
-namespace UI.Elements.Settings
+namespace Team_Capture.UI.Elements.Settings
 {
 	/// <summary>
 	///     A dropdown for the settings menu

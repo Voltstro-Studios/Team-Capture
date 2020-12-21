@@ -1,7 +1,6 @@
 ﻿using System;
 using Team_Capture.Player;
 using Team_Capture.Weapons;
-using UI.ScoreBoard;
 using UnityEngine;
 using Logger = Team_Capture.Core.Logging.Logger;
 
@@ -64,7 +63,7 @@ namespace Team_Capture.UI
 			pauseMenu.gameObject.SetActive(false);
 
 			scoreBoardObject.SetActive(false);
-			scoreBoardObject.GetComponent<ScoreBoard>().clientPlayer = playerManager;
+			scoreBoardObject.GetComponent<ScoreBoard.ScoreBoard>().clientPlayer = playerManager;
 
 			Logger.Debug("The ClientUI is now ready.");
 		}

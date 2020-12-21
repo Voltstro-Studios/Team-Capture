@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Elements.Settings
+namespace Team_Capture.UI.Elements.Settings
 {
 	/// <summary>
 	///     Slider for the settings menu

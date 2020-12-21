@@ -1,7 +1,7 @@
 ﻿using TMPro;
 using UnityEngine;
 
-namespace UI.Elements
+namespace Team_Capture.UI.Elements
 {
 	/// <summary>
 	///     An item for the kill feed

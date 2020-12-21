@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Panels
+namespace Team_Capture.UI.Panels
 {
 	/// <summary>
 	///     The base for a main menu panel

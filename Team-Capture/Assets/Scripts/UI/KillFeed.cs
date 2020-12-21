@@ -2,7 +2,7 @@
 using Team_Capture.Core;
 using Team_Capture.Core.Networking.Messages;
 using Team_Capture.Player;
-using UI.Elements;
+using Team_Capture.UI.Elements;
 using UnityEngine;
 using Logger = Team_Capture.Core.Logging.Logger;
 

@@ -1,6 +1,6 @@
 ﻿using Mirror;
 
-namespace UI.Panels
+namespace Team_Capture.UI.Panels
 {
 	/// <summary>
 	///     The panel for the disconnect dialog

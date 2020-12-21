@@ -9,7 +9,7 @@ using Team_Capture.Helper;
 using Team_Capture.LagCompensation;
 using Team_Capture.Pickups;
 using Team_Capture.SceneManagement;
-using UI.Panels;
+using Team_Capture.UI.Panels;
 using UnityEngine;
 using Voltstro.CommandLineParser;
 using Logger = Team_Capture.Core.Logging.Logger;

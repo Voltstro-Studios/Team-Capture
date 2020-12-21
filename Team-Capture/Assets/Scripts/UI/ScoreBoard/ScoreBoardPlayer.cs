@@ -4,7 +4,7 @@ using Team_Capture.Player;
 using TMPro;
 using UnityEngine;
 
-namespace UI.ScoreBoard
+namespace Team_Capture.UI.ScoreBoard
 {
 	internal class ScoreBoardPlayer : MonoBehaviour
 	{

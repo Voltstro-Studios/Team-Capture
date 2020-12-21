@@ -12,7 +12,7 @@ using UnityEngine.UI;
 using Debug = UnityEngine.Debug;
 using Logger = Team_Capture.Core.Logging.Logger;
 
-namespace UI.Panels
+namespace Team_Capture.UI.Panels
 {
 	/// <summary>
 	///     The code driving the create server panel

@@ -9,7 +9,7 @@ using TMPro;
 using UnityEngine;
 using Logger = Team_Capture.Core.Logging.Logger;
 
-namespace UI.ScoreBoard
+namespace Team_Capture.UI.ScoreBoard
 {
 	/// <summary>
 	///     The scoreboard controller

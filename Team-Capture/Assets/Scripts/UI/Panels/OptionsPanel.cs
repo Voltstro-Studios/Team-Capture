@@ -2,12 +2,12 @@
 using System.Linq;
 using Team_Capture.Localization;
 using Team_Capture.Settings;
+using Team_Capture.UI.Elements.Settings;
 using TMPro;
-using UI.Elements.Settings;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Panels
+namespace Team_Capture.UI.Panels
 {
 	/// <summary>
 	///     The panel for options

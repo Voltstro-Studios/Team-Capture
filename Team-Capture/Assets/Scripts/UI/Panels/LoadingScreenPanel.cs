@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Panels
+namespace Team_Capture.UI.Panels
 {
 	/// <summary>
 	///     A panel for a loading screen

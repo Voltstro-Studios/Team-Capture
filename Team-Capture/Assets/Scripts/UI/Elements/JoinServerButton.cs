@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.Elements
+namespace Team_Capture.UI.Elements
 {
 	/// <summary>
 	///     A button for joining a server

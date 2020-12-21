@@ -4,7 +4,7 @@ using Team_Capture.Core;
 using TMPro;
 using UnityEngine;
 
-namespace UI.Panels
+namespace Team_Capture.UI.Panels
 {
 	internal class QuitPanel : MainMenuPanelBase
 	{

@@ -1,4 +1,4 @@
-﻿namespace UI.Elements.Settings
+﻿namespace Team_Capture.UI.Elements.Settings
 {
 	/// <summary>
 	///     Represents a menu for the options

@@ -4,12 +4,12 @@ using System.Net;
 using Mirror;
 using Team_Capture.Core.Networking;
 using Team_Capture.Core.Networking.Discovery;
+using Team_Capture.UI.Elements;
 using TMPro;
-using UI.Elements;
 using UnityEngine;
 using Logger = Team_Capture.Core.Logging.Logger;
 
-namespace UI.Panels
+namespace Team_Capture.UI.Panels
 {
 	/// <summary>
 	///     A panel for joining games
