@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Team_Capture.UI.Panels
 {
-	internal class QuitPanel : MainMenuPanelBase
+	internal class QuitPanel : PanelBase
 	{
 		/// <summary>
 		///     The location of where the quit messages are

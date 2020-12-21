@@ -5,7 +5,7 @@ namespace Team_Capture.UI.Panels
 	/// <summary>
 	///     The panel for the disconnect dialog
 	/// </summary>
-	internal class DisconnectPanel : MainMenuPanelBase
+	internal class DisconnectPanel : PanelBase
 	{
 		/// <summary>
 		///     Disconnects from the current game

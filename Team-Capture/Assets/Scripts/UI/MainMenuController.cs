@@ -86,9 +86,9 @@ namespace Team_Capture.UI
 				panel.SetActive(false);
 				menuPanel.activePanel = panel;
 
-				//If it has a MainMenuPanelBase, set it cancel button's onClick event to toggle it self
-				if (panel.GetComponent<MainMenuPanelBase>() != null)
-					panel.GetComponent<MainMenuPanelBase>().cancelButton.onClick
+				//If it has a PanelBase, set it cancel button's onClick event to toggle it self
+				if (panel.GetComponent<PanelBase>() != null)
+					panel.GetComponent<PanelBase>().cancelButton.onClick
 						.AddListener(delegate { TogglePanel(menuPanel.name); });
 
 				//Create the button for it

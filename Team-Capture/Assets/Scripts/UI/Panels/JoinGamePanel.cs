@@ -14,7 +14,7 @@ namespace Team_Capture.UI.Panels
 	/// <summary>
 	///     A panel for joining games
 	/// </summary>
-	internal class JoinGamePanel : MainMenuPanelBase
+	internal class JoinGamePanel : PanelBase
 	{
 		/// <summary>
 		///     The prefab for a server button

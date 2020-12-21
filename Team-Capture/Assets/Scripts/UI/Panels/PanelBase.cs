@@ -7,7 +7,7 @@ namespace Team_Capture.UI.Panels
 	/// <summary>
 	///     The base for a main menu panel
 	/// </summary>
-	internal class MainMenuPanelBase : MonoBehaviour
+	internal class PanelBase : MonoBehaviour
 	{
 		/// <summary>
 		///     The cancel or close button

@@ -17,7 +17,7 @@ namespace Team_Capture.UI.Panels
 	/// <summary>
 	///     The code driving the create server panel
 	/// </summary>
-	internal class CreateServerPanel : MainMenuPanelBase
+	internal class CreateServerPanel : PanelBase
 	{
 		/// <summary>
 		///     Dropdown for the maps

@@ -12,7 +12,7 @@ namespace Team_Capture.UI.Panels
 	/// <summary>
 	///     The panel for options
 	/// </summary>
-	internal class OptionsPanel : MainMenuPanelBase
+	internal class OptionsPanel : PanelBase
 	{
 		[Header("Object Locations")] [SerializeField]
 		private GameObject appliedOptionsPanel;
