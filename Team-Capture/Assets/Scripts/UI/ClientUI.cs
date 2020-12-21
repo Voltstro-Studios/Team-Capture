@@ -89,6 +89,9 @@ namespace Team_Capture.UI
 
 			pauseMenu.gameObject.SetActive(state);
 			killFeed.killFeedItemsHolder.gameObject.SetActive(!state);
+			
+			if(state)
+				scoreBoardObject.SetActive(false);
 
 			if (PlayerManager.IsDead) return;
 			hud.gameObject.SetActive(!state);
