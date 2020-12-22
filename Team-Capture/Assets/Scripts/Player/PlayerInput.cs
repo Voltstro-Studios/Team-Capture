@@ -178,6 +178,9 @@ namespace Team_Capture.Player
 
 		private void OnPlayerWeaponSelection(float value)
 		{
+			if(ClientUI.IsPauseMenuOpen)
+				return;
+
 			int selectedWeaponIndex = weaponManager.SelectedWeaponIndex;
 			int weaponHolderChildCount = weaponManager.WeaponHolderSpotChildCount - 1;
 
@@ -208,6 +211,9 @@ namespace Team_Capture.Player
 
 		private void OnPlayerWeaponReload()
 		{
+			if(ClientUI.IsPauseMenuOpen)
+				return;
+
 			weaponManager.ClientReloadWeapon();
 		}
 
