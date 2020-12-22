@@ -11,6 +11,12 @@ namespace Team_Capture.Player
 	internal sealed class PlayerSetup : NetworkBehaviour
 	{
 		/// <summary>
+		///		Handles reading inputs
+		/// </summary>
+		[Tooltip("Handles reading inputs")] [SerializeField]
+		private InputReader inputReader;
+
+		/// <summary>
 		///     Player's local <see cref="Camera" />
 		/// </summary>
 		[Tooltip("Player's local Camera")] [SerializeField]
@@ -45,7 +51,7 @@ namespace Team_Capture.Player
 			localCamera.gameObject.AddComponent<AudioListener>();
 
 			//Player Input
-			gameObject.AddComponent<PlayerInput>();
+			gameObject.AddComponent<PlayerInput>().Setup(inputReader);
 
 			//Lock the cursor
 			Cursor.visible = false;
@@ -60,6 +66,12 @@ namespace Team_Capture.Player
 		{
 			return localCamera;
 		}
+
+		/// <summary>
+		///		Gets the input reader
+		/// </summary>
+		/// <returns></returns>
+		public InputReader GetInputReader() => inputReader;
 
 		#region Unity Methods
 

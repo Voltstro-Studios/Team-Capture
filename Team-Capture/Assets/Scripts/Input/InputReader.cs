@@ -25,6 +25,12 @@ namespace Team_Capture
 				//MenuController
 				gameInput.MenuController.Close.performed += OnMenuClose;
 
+				//Player
+				gameInput.Player.ScoreBoard.performed += OnPlayerScoreBoard;
+				gameInput.Player.Suicide.performed += OnPlayerSuicide;
+				gameInput.Player.Jump.performed += OnPlayerJump;
+				gameInput.Player.Pause.performed += OnPlayerPause;
+
 			    Application.quitting += ShutdownInput;
 		    }
 	    }
@@ -42,6 +48,12 @@ namespace Team_Capture
 
 			//MenuController
 			gameInput.MenuController.Close.performed -= OnMenuClose;
+
+			//Player
+			gameInput.Player.ScoreBoard.performed -= OnPlayerScoreBoard;
+			gameInput.Player.Suicide.performed -= OnPlayerSuicide;
+			gameInput.Player.Jump.performed -= OnPlayerJump;
+			gameInput.Player.Pause.performed -= OnPlayerPause;
 
 			gameInput.Dispose();
 
@@ -110,6 +122,49 @@ namespace Team_Capture
 	    public void DisableMenuControllerInput()
 	    {
 			gameInput.MenuController.Disable();
+	    }
+
+	    #endregion
+
+	    #region Player
+
+	    public event Action PlayerScoreboard;
+	    public event Action PlayerSuicide;
+	    public event Action<bool> PlayerJump;
+	    public event Action PlayerPause;
+
+	    private void OnPlayerScoreBoard(InputAction.CallbackContext context)
+	    {
+		    PlayerScoreboard?.Invoke();
+	    }
+
+	    private void OnPlayerSuicide(InputAction.CallbackContext context)
+	    {
+		    PlayerSuicide?.Invoke();
+	    }
+		
+	    private void OnPlayerJump(InputAction.CallbackContext context)
+	    {
+		    PlayerJump?.Invoke(context.ReadValueAsButton());
+	    }
+
+	    private void OnPlayerPause(InputAction.CallbackContext context)
+	    {
+		    PlayerPause?.Invoke();
+	    }
+
+	    public Vector2 ReadPlayerMove() => gameInput.Player.Move.ReadValue<Vector2>();
+
+	    public Vector2 ReadPlayerLook() => gameInput.Player.Look.ReadValue<Vector2>();
+
+	    public void EnablePlayerInput()
+	    {
+			gameInput.Player.Enable();
+	    }
+
+	    public void DisablePlayerInput()
+	    {
+			gameInput.Player.Disable();
 	    }
 
 	    #endregion

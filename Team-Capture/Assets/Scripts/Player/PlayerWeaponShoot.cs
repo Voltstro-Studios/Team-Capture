@@ -79,6 +79,7 @@ namespace Team_Capture.Player
 
 		private void Update()
 		{
+			/*
 			if (!isLocalPlayer)
 				return;
 
@@ -124,6 +125,7 @@ namespace Team_Capture.Player
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
+			*/
 		}
 
 		#endregion

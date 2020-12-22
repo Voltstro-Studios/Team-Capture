@@ -1,4 +1,5 @@
-﻿using Mirror;
+﻿using System;
+using Mirror;
 using Settings.SettingClasses;
 using Team_Capture.Console;
 using Team_Capture.Player.Movement;
@@ -32,13 +33,26 @@ namespace Team_Capture.Player
 			UpdateSettings();
 		}
 
+		public void Setup(InputReader reader)
+		{
+			InputReader = reader;
+
+			InputReader.PlayerScoreboard += () => uiManager.ToggleScoreboard();
+			InputReader.PlayerSuicide += OnPlayerSuicidePress;
+			InputReader.PlayerJump += OnPlayerJump;
+			InputReader.PlayerPause += () => uiManager.TogglePauseMenu();
+
+			InputReader.EnablePlayerInput();
+		}
+
+		private void OnDisable()
+		{
+			InputReader.DisablePlayerInput();
+		}
+
 		private void Update()
 		{
 			if (!isLocalPlayer) return; //Acts as a backup
-
-			//Pause menu
-			if (Input.GetKeyDown(pauseMenuKey))
-				uiManager.TogglePauseMenu();
 
 			//Make sure mouse lock/visibility is correct
 			HandleMouseLock();
@@ -57,32 +71,25 @@ namespace Team_Capture.Player
 				return;
 			}
 
-			//Scoreboard
-			if (Input.GetKeyDown(scoreBoardKey) || Input.GetKeyUp(scoreBoardKey))
-				uiManager.ToggleScoreboard();
-
 			//Don't want to move if the player is dead
 			if (!playerManager.IsDead)
 			{
-				//Player movement rotation
-				SetPlayerMouseRotation();
+				//Movement
+				Vector2 movement = InputReader.ReadPlayerMove();
+				horizontal = movement.x;
+				vertical = movement.y;
 
-				//Player movement jump
-				SetPlayerWishToJump();
-
-				//Player movement direction
-				SetPlayerMovementDirection();
+				//Look
+				Vector2 look = InputReader.ReadPlayerLook();
+				rotationX = look.x * xMouseSensitivity * Time.deltaTime;
+				rotationY = look.y * yMouseSensitivity * Time.deltaTime;
 
 				//Send inputs
 				playerInput.SetInput(horizontal, vertical, rotationX, rotationY, wishToJump);
 				weaponManager.WeaponSway.SetInput(rotationX, rotationY);
 
-				//Good ol' suicide button
-				if (Input.GetKeyDown(suicideKey))
-					playerManager.CmdSuicide();
-
 				//Weapon selection, we do this last
-				SetSelectedWeaponIndex();
+				//SetSelectedWeaponIndex();
 			}
 		}
 
@@ -101,16 +108,10 @@ namespace Team_Capture.Player
 
 		#region Inspector fields
 
-		[Header("Inputs")] [SerializeField] private KeyCode pauseMenuKey = KeyCode.Escape;
-
-		[SerializeField] private KeyCode scoreBoardKey = KeyCode.Tab;
-		[SerializeField] private KeyCode suicideKey = KeyCode.P;
-		[SerializeField] private KeyCode jumpKey = KeyCode.Space;
-		[SerializeField] private string verticalAxisName = "Vertical";
-		[SerializeField] private string horizontalAxisName = "Horizontal";
-		[SerializeField] private string yMouseAxisName = "Mouse Y";
-		[SerializeField] private string xMouseAxisName = "Mouse X";
+		[Header("Inputs")]
 		[SerializeField] private string mouseScrollWheel = "Mouse ScrollWheel";
+
+		[NonSerialized] public InputReader InputReader;
 
 		[Header("Player Movement")] [SerializeField]
 		private bool rawAxis = true;
@@ -138,6 +139,18 @@ namespace Team_Capture.Player
 
 		#region Input Functions
 
+		private void OnPlayerSuicidePress()
+		{
+			if(!playerManager.IsDead)
+				playerManager.CmdSuicide();
+		}
+
+		private void OnPlayerJump(bool jump)
+		{
+			if (!playerManager.IsDead)
+				wishToJump = jump;
+		}
+
 		private static void HandleMouseLock()
 		{
 			if (ClientUI.IsPauseMenuOpen)
@@ -156,58 +169,6 @@ namespace Team_Capture.Player
 
 			if (Cursor.lockState != CursorLockMode.Locked)
 				Cursor.lockState = CursorLockMode.Locked;
-		}
-
-		private void SetPlayerMouseRotation()
-		{
-			if (rawMouseAxis)
-			{
-				if (reverseMouse)
-				{
-					rotationX = Input.GetAxisRaw(yMouseAxisName) * yMouseSensitivity * Time.deltaTime;
-					rotationY = Input.GetAxisRaw(xMouseAxisName) * xMouseSensitivity * Time.deltaTime;
-				}
-				else
-				{
-					rotationX = Input.GetAxisRaw(xMouseAxisName) * xMouseSensitivity * Time.deltaTime;
-					rotationY = Input.GetAxisRaw(yMouseAxisName) * yMouseSensitivity * Time.deltaTime;
-				}
-			}
-			else
-			{
-				if (reverseMouse)
-				{
-					rotationX = Input.GetAxis(yMouseAxisName) * yMouseSensitivity;
-					rotationY = Input.GetAxis(xMouseAxisName) * xMouseSensitivity;
-				}
-				else
-				{
-					rotationX = Input.GetAxis(xMouseAxisName) * xMouseSensitivity;
-					rotationY = Input.GetAxis(yMouseAxisName) * yMouseSensitivity;
-				}
-			}
-		}
-
-		private void SetPlayerWishToJump()
-		{
-			if (ClientUI.IsPauseMenuOpen)
-				return;
-
-			wishToJump = Input.GetKey(jumpKey);
-		}
-
-		private void SetPlayerMovementDirection()
-		{
-			if (rawAxis)
-			{
-				vertical = Input.GetAxisRaw(verticalAxisName);
-				horizontal = Input.GetAxisRaw(horizontalAxisName);
-			}
-			else
-			{
-				vertical = Input.GetAxis(verticalAxisName);
-				horizontal = Input.GetAxis(horizontalAxisName);
-			}
 		}
 
 		private void SetSelectedWeaponIndex()
