@@ -165,6 +165,33 @@
             ]
         },
         {
+            "name": "StartVideo",
+            "id": "df7b0a06-e16a-4698-9061-0eea7267b829",
+            "actions": [
+                {
+                    "name": "Skip",
+                    "type": "Button",
+                    "id": "185fe5c5-0670-418d-a606-5a318b4f0e90",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press"
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "67fa4ab2-92c0-401d-8bfd-bb7b4d44b290",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "Skip",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
             "name": "Player",
             "id": "b89642bb-b069-4676-83b4-13d73f3c5e0e",
             "actions": [

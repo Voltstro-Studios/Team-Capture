@@ -189,6 +189,33 @@ namespace Team_Capture
             ]
         },
         {
+            ""name"": ""StartVideo"",
+            ""id"": ""df7b0a06-e16a-4698-9061-0eea7267b829"",
+            ""actions"": [
+                {
+                    ""name"": ""Skip"",
+                    ""type"": ""Button"",
+                    ""id"": ""185fe5c5-0670-418d-a606-5a318b4f0e90"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press""
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""67fa4ab2-92c0-401d-8bfd-bb7b4d44b290"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Skip"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
             ""name"": ""Player"",
             ""id"": ""b89642bb-b069-4676-83b4-13d73f3c5e0e"",
             ""actions"": [
@@ -414,6 +441,9 @@ namespace Team_Capture
             // MenuController
             m_MenuController = asset.FindActionMap("MenuController", throwIfNotFound: true);
             m_MenuController_Close = m_MenuController.FindAction("Close", throwIfNotFound: true);
+            // StartVideo
+            m_StartVideo = asset.FindActionMap("StartVideo", throwIfNotFound: true);
+            m_StartVideo_Skip = m_StartVideo.FindAction("Skip", throwIfNotFound: true);
             // Player
             m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
             m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
@@ -577,6 +607,39 @@ namespace Team_Capture
         }
         public MenuControllerActions @MenuController => new MenuControllerActions(this);
 
+        // StartVideo
+        private readonly InputActionMap m_StartVideo;
+        private IStartVideoActions m_StartVideoActionsCallbackInterface;
+        private readonly InputAction m_StartVideo_Skip;
+        public struct StartVideoActions
+        {
+            private @GameInput m_Wrapper;
+            public StartVideoActions(@GameInput wrapper) { m_Wrapper = wrapper; }
+            public InputAction @Skip => m_Wrapper.m_StartVideo_Skip;
+            public InputActionMap Get() { return m_Wrapper.m_StartVideo; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(StartVideoActions set) { return set.Get(); }
+            public void SetCallbacks(IStartVideoActions instance)
+            {
+                if (m_Wrapper.m_StartVideoActionsCallbackInterface != null)
+                {
+                    @Skip.started -= m_Wrapper.m_StartVideoActionsCallbackInterface.OnSkip;
+                    @Skip.performed -= m_Wrapper.m_StartVideoActionsCallbackInterface.OnSkip;
+                    @Skip.canceled -= m_Wrapper.m_StartVideoActionsCallbackInterface.OnSkip;
+                }
+                m_Wrapper.m_StartVideoActionsCallbackInterface = instance;
+                if (instance != null)
+                {
+                    @Skip.started += instance.OnSkip;
+                    @Skip.performed += instance.OnSkip;
+                    @Skip.canceled += instance.OnSkip;
+                }
+            }
+        }
+        public StartVideoActions @StartVideo => new StartVideoActions(this);
+
         // Player
         private readonly InputActionMap m_Player;
         private IPlayerActions m_PlayerActionsCallbackInterface;
@@ -677,6 +740,10 @@ namespace Team_Capture
         public interface IMenuControllerActions
         {
             void OnClose(InputAction.CallbackContext context);
+        }
+        public interface IStartVideoActions
+        {
+            void OnSkip(InputAction.CallbackContext context);
         }
         public interface IPlayerActions
         {

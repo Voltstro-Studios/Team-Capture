@@ -19,23 +19,14 @@ namespace Team_Capture.StartUpVideo
 		[CommandLineArgument("novid")] public static bool SkipVideo = false;
 
 		/// <summary>
-		///     Can we skip the start up video?
+		///		Handles reading inputs
 		/// </summary>
-		[Tooltip("Can we skip the start up video?")]
-		public bool canSkip = true;
-
-		/// <summary>
-		///     What key do we use to skip the start up video
-		/// </summary>
-		[Tooltip("What key do we use to skip the start up video")]
-		public KeyCode skipKey = KeyCode.Escape;
+		public InputReader inputReader;
 
 		/// <summary>
 		///     Video clip to play
 		/// </summary>
 		[Tooltip("Video clip to play")] public VideoClip startUpVideoClip;
-
-		private bool inPlayMode;
 
 		public TCScene nextScene;
 
@@ -47,27 +38,24 @@ namespace Team_Capture.StartUpVideo
 				return;
 			}
 
-			inPlayMode = true;
+			inputReader.StartVideoSkip += SkipStartVideo;
+			inputReader.EnableStartVideoInput();
 			Play();
+		}
+
+		private void SkipStartVideo()
+		{
+			inputReader.DisableStartVideoInput();
+			inputReader.StartVideoSkip -= SkipStartVideo;
+
+			startUpVideo.Pause();
+			ChangeScene();
 		}
 
 		public void Play()
 		{
 			Setup();
 			startUpVideo.Play();
-		}
-
-		private void Update()
-		{
-			if (!inPlayMode)
-				return;
-
-			if (!canSkip) return;
-
-			if (!Input.GetKeyDown(skipKey)) return;
-
-			startUpVideo.Pause();
-			ChangeScene();
 		}
 
 		private void VideoEnd(VideoPlayer source)

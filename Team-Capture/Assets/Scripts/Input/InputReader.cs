@@ -25,6 +25,9 @@ namespace Team_Capture
 				//MenuController
 				gameInput.MenuController.Close.performed += OnMenuClose;
 
+				//StartVideo
+				gameInput.StartVideo.Skip.performed += OnStartVideoSkip;
+
 				//Player
 				gameInput.Player.ScoreBoard.performed += OnPlayerScoreBoard;
 				gameInput.Player.Suicide.performed += OnPlayerSuicide;
@@ -49,6 +52,8 @@ namespace Team_Capture
 
 			//MenuController
 			gameInput.MenuController.Close.performed -= OnMenuClose;
+
+			//StartVideo
 
 			//Player
 			gameInput.Player.ScoreBoard.performed -= OnPlayerScoreBoard;
@@ -123,6 +128,27 @@ namespace Team_Capture
 	    public void DisableMenuControllerInput()
 	    {
 			gameInput.MenuController.Disable();
+	    }
+
+	    #endregion
+
+	    #region StartVideo
+
+	    public event Action StartVideoSkip;
+
+	    private void OnStartVideoSkip(InputAction.CallbackContext context)
+	    {
+		    StartVideoSkip?.Invoke();
+	    }
+
+	    public void EnableStartVideoInput()
+	    {
+			gameInput.StartVideo.Enable();
+	    }
+
+	    public void DisableStartVideoInput()
+	    {
+			gameInput.StartVideo.Disable();
 	    }
 
 	    #endregion
