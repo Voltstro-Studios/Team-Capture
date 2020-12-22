@@ -13,7 +13,7 @@ namespace Team_Capture
 	    public event Action ConsoleHistoryDown;
 	    public event Action ConsoleSubmitInput;
 
-	    private GameInput gameInput;
+	    private static GameInput gameInput;
 
 	    public void OnEnable()
 	    {
@@ -25,16 +25,24 @@ namespace Team_Capture
 			    gameInput.Console.HistoryUp.performed += OnHistoryUp;
 			    gameInput.Console.HistoryDown.performed += OnHistoryDown;
 			    gameInput.Console.SubmitInput.performed += OnSubmitInput;
+
+			    Application.quitting += ShutdownInput;
 		    }
 	    }
 
-	    public void OnDisable()
+	    public void ShutdownInput()
 	    {
+		    gameInput.Disable();
+
 		    gameInput.Console.ToggleConsole.performed -= OnToggleConsole;
 		    gameInput.Console.AutoComplete.performed -= OnAutoComplete;
 		    gameInput.Console.HistoryUp.performed -= OnHistoryUp;
 		    gameInput.Console.HistoryDown.performed -= OnHistoryDown;
 		    gameInput.Console.SubmitInput.performed -= OnSubmitInput;
+
+			gameInput.Dispose();
+
+		    Application.quitting -= ShutdownInput;
 	    }
 
 	    private void OnToggleConsole(InputAction.CallbackContext context)
