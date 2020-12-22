@@ -21,7 +21,7 @@ namespace Team_Capture.Console
 		[SerializeField] private TMP_InputField inputField;
 		[SerializeField] private TextMeshProUGUI consoleTextArea;
 		[SerializeField] private GameObject consolePanel;
-		[SerializeField] private KeyCode consoleToggleKey = KeyCode.F1;
+		[SerializeField] private InputReader inputReader;
 
 		private readonly List<string> lines = new List<string>();
 		private float defaultFontSize;
@@ -34,38 +34,27 @@ namespace Team_Capture.Console
 			ToggleConsole();
 
 			Logger.Info("Console in-game GUI ready!");
+
+			inputReader.ConsoleToggle += ToggleConsole;
+			inputReader.ConsoleAutoComplete += AutoCompleteConsole;
+			inputReader.ConsoleHistoryUp += HistoryUp;
+			inputReader.ConsoleHistoryDown += HistoryDown;
+			inputReader.ConsoleSubmitInput += SubmitInput;
+
+			inputReader.EnableConsoleInput();
 		}
 
 		public void Shutdown()
 		{
+			inputReader.ConsoleToggle -= ToggleConsole;
+			inputReader.ConsoleAutoComplete -= AutoCompleteConsole;
+			inputReader.ConsoleHistoryUp -= HistoryUp;
+			inputReader.ConsoleHistoryDown -= HistoryDown;
+			inputReader.ConsoleSubmitInput -= SubmitInput;
 		}
 
 		public void UpdateConsole()
 		{
-			if (Input.GetKeyDown(consoleToggleKey)) ToggleConsole();
-
-			if (!consolePanel.activeSelf) return;
-
-			if (Input.GetKeyDown(KeyCode.Tab))
-			{
-				inputField.text = ConsoleBackend.AutoComplete(inputField.text);
-				inputField.caretPosition = inputField.text.Length;
-			}
-
-			if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.PageUp))
-			{
-				inputField.text = ConsoleBackend.HistoryUp(inputField.text);
-				inputField.caretPosition = inputField.text.Length;
-			}
-
-			if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.PageDown))
-			{
-				inputField.text = ConsoleBackend.HistoryDown();
-				inputField.caretPosition = inputField.text.Length;
-			}
-
-			if (Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.Return))
-				SubmitInput();
 		}
 
 		public void LogMessage(string message, LogType logType)
@@ -114,12 +103,42 @@ namespace Team_Capture.Console
 			return consolePanel.activeSelf;
 		}
 
+		private void AutoCompleteConsole()
+		{
+			if(!IsOpen())
+				return;
+
+			inputField.text = ConsoleBackend.AutoComplete(inputField.text);
+			inputField.caretPosition = inputField.text.Length;
+		}
+
+		private void HistoryUp()
+		{
+			if(!IsOpen())
+				return;
+
+			inputField.text = ConsoleBackend.HistoryUp(inputField.text);
+			inputField.caretPosition = inputField.text.Length;
+		}
+
+		private void HistoryDown()
+		{
+			if(!IsOpen())
+				return;
+
+			inputField.text = ConsoleBackend.HistoryDown();
+			inputField.caretPosition = inputField.text.Length;
+		}
+
 		#endregion
 
 		#region Console Input
 
 		public void SubmitInput()
 		{
+			if(!IsOpen())
+				return;
+
 			HandleInput(inputField.text);
 
 			inputField.text = "";
