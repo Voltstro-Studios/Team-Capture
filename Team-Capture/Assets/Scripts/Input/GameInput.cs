@@ -15,7 +15,7 @@ using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
 
-namespace Team_Capture
+namespace Team_Capture.Input
 {
     public partial class @GameInput : IInputActionCollection2, IDisposable
     {
@@ -210,6 +210,33 @@ namespace Team_Capture
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
                     ""action"": ""Skip"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""DebugMenu"",
+            ""id"": ""8f2f2761-ee31-4e51-9ad0-f00b8ecd8957"",
+            ""actions"": [
+                {
+                    ""name"": ""ToggleMenu"",
+                    ""type"": ""Button"",
+                    ""id"": ""768fde4b-d40c-4a39-b0d1-26a99d061ba8"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press""
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""a533ece7-fcbd-4674-9583-ee8f55fe00f0"",
+                    ""path"": ""<Keyboard>/f3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""ToggleMenu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -482,6 +509,9 @@ namespace Team_Capture
             // StartVideo
             m_StartVideo = asset.FindActionMap("StartVideo", throwIfNotFound: true);
             m_StartVideo_Skip = m_StartVideo.FindAction("Skip", throwIfNotFound: true);
+            // DebugMenu
+            m_DebugMenu = asset.FindActionMap("DebugMenu", throwIfNotFound: true);
+            m_DebugMenu_ToggleMenu = m_DebugMenu.FindAction("ToggleMenu", throwIfNotFound: true);
             // Player
             m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
             m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
@@ -680,6 +710,39 @@ namespace Team_Capture
         }
         public StartVideoActions @StartVideo => new StartVideoActions(this);
 
+        // DebugMenu
+        private readonly InputActionMap m_DebugMenu;
+        private IDebugMenuActions m_DebugMenuActionsCallbackInterface;
+        private readonly InputAction m_DebugMenu_ToggleMenu;
+        public struct DebugMenuActions
+        {
+            private @GameInput m_Wrapper;
+            public DebugMenuActions(@GameInput wrapper) { m_Wrapper = wrapper; }
+            public InputAction @ToggleMenu => m_Wrapper.m_DebugMenu_ToggleMenu;
+            public InputActionMap Get() { return m_Wrapper.m_DebugMenu; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(DebugMenuActions set) { return set.Get(); }
+            public void SetCallbacks(IDebugMenuActions instance)
+            {
+                if (m_Wrapper.m_DebugMenuActionsCallbackInterface != null)
+                {
+                    @ToggleMenu.started -= m_Wrapper.m_DebugMenuActionsCallbackInterface.OnToggleMenu;
+                    @ToggleMenu.performed -= m_Wrapper.m_DebugMenuActionsCallbackInterface.OnToggleMenu;
+                    @ToggleMenu.canceled -= m_Wrapper.m_DebugMenuActionsCallbackInterface.OnToggleMenu;
+                }
+                m_Wrapper.m_DebugMenuActionsCallbackInterface = instance;
+                if (instance != null)
+                {
+                    @ToggleMenu.started += instance.OnToggleMenu;
+                    @ToggleMenu.performed += instance.OnToggleMenu;
+                    @ToggleMenu.canceled += instance.OnToggleMenu;
+                }
+            }
+        }
+        public DebugMenuActions @DebugMenu => new DebugMenuActions(this);
+
         // Player
         private readonly InputActionMap m_Player;
         private IPlayerActions m_PlayerActionsCallbackInterface;
@@ -800,6 +863,10 @@ namespace Team_Capture
         public interface IStartVideoActions
         {
             void OnSkip(InputAction.CallbackContext context);
+        }
+        public interface IDebugMenuActions
+        {
+            void OnToggleMenu(InputAction.CallbackContext context);
         }
         public interface IPlayerActions
         {

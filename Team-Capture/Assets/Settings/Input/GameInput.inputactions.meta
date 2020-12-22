@@ -11,4 +11,4 @@ ScriptedImporter:
   generateWrapperCode: 1
   wrapperCodePath: Assets/Scripts/Input/GameInput.cs
   wrapperClassName: GameInput
-  wrapperCodeNamespace: Team_Capture
+  wrapperCodeNamespace: Team_Capture.Input

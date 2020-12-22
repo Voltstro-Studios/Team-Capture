@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Team_Capture
+namespace Team_Capture.Input
 {
 	[CreateAssetMenu(fileName = "InputReader", menuName = "Team Capture/Input Reader")]
     public class InputReader : ScriptableObject
@@ -27,6 +27,9 @@ namespace Team_Capture
 
 				//StartVideo
 				gameInput.StartVideo.Skip.performed += OnStartVideoSkip;
+
+				//Debug menu
+				gameInput.DebugMenu.ToggleMenu.performed += OnDebugMenuToggle;
 
 				//Player
 				gameInput.Player.ScoreBoard.performed += OnPlayerScoreBoard;
@@ -56,6 +59,9 @@ namespace Team_Capture
 			gameInput.MenuController.Close.performed -= OnMenuClose;
 
 			//StartVideo
+
+			//Debug menu
+			gameInput.DebugMenu.ToggleMenu.performed -= OnDebugMenuToggle;
 
 			//Player
 			gameInput.Player.ScoreBoard.performed -= OnPlayerScoreBoard;
@@ -154,6 +160,27 @@ namespace Team_Capture
 	    public void DisableStartVideoInput()
 	    {
 			gameInput.StartVideo.Disable();
+	    }
+
+	    #endregion
+
+	    #region DebugMenu
+
+	    public event Action DebugMenuToggle;
+
+	    private void OnDebugMenuToggle(InputAction.CallbackContext context)
+	    {
+		    DebugMenuToggle?.Invoke();
+	    }
+
+	    public void EnableDebugMenuInput()
+	    {
+			gameInput.DebugMenu.Enable();
+	    }
+
+	    public void DisableDebugMenuInput()
+	    {
+			gameInput.DebugMenu.Disable();
 	    }
 
 	    #endregion

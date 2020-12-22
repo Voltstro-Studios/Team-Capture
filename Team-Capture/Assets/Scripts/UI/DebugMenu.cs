@@ -2,6 +2,7 @@
 using Mirror;
 using Team_Capture.Console;
 using Team_Capture.Helper;
+using Team_Capture.Input;
 using Team_Capture.Player.Movement;
 using UnityEngine;
 using Voltstro.CommandLineParser;
@@ -20,9 +21,9 @@ namespace Team_Capture.UI
 		public static bool DebugMenuOpen;
 
 		/// <summary>
-		///     The key used to open and close the debug menu
+		///     Reads input
 		/// </summary>
-		public KeyCode openDebugMenuKey = KeyCode.F3;
+		public InputReader inputReader;
 
 		/// <summary>
 		///     How often to refresh the fps counter
@@ -32,12 +33,6 @@ namespace Team_Capture.UI
 		private float fps;
 
 		private float timer;
-
-		private void Update()
-		{
-			if (Input.GetKeyDown(openDebugMenuKey))
-				DebugMenuOpen = !DebugMenuOpen;
-		}
 
 		private void OnGUI()
 		{
@@ -113,6 +108,9 @@ namespace Team_Capture.UI
 			ram = $"RAM: {SystemInfo.systemMemorySize / 1000} GB";
 			renderingApi = $"Rendering API: {SystemInfo.graphicsDeviceType}";
 			ipAddress = $"IP: {NetHelper.LocalIpAddress()}";
+
+			inputReader.DebugMenuToggle += () => DebugMenuOpen = !DebugMenuOpen;
+			inputReader.EnableDebugMenuInput();
 		}
 
 		protected override void SingletonDestroyed()

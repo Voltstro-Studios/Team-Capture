@@ -1,4 +1,5 @@
-﻿using Team_Capture.SceneManagement;
+﻿using Team_Capture.Input;
+using Team_Capture.SceneManagement;
 using UnityEngine;
 using UnityEngine.Video;
 using Voltstro.CommandLineParser;

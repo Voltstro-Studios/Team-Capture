@@ -192,6 +192,33 @@
             ]
         },
         {
+            "name": "DebugMenu",
+            "id": "8f2f2761-ee31-4e51-9ad0-f00b8ecd8957",
+            "actions": [
+                {
+                    "name": "ToggleMenu",
+                    "type": "Button",
+                    "id": "768fde4b-d40c-4a39-b0d1-26a99d061ba8",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press"
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "a533ece7-fcbd-4674-9583-ee8f55fe00f0",
+                    "path": "<Keyboard>/f3",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "ToggleMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
             "name": "Player",
             "id": "b89642bb-b069-4676-83b4-13d73f3c5e0e",
             "actions": [

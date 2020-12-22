@@ -1,5 +1,6 @@
 ﻿using Mirror;
 using Team_Capture.Core;
+using Team_Capture.Input;
 using Team_Capture.UI;
 using UnityEngine;
 
