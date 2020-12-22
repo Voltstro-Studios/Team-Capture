@@ -17,6 +17,7 @@ namespace Team_Capture.Player
 	{
 		private PlayerMovementInput playerInput;
 		private PlayerManager playerManager;
+		private PlayerWeaponShoot weaponShoot;
 		private PlayerUIManager uiManager;
 
 		private WeaponManager weaponManager;
@@ -25,6 +26,7 @@ namespace Team_Capture.Player
 		{
 			weaponManager = GetComponent<WeaponManager>();
 			playerManager = GetComponent<PlayerManager>();
+			weaponShoot = GetComponent<PlayerWeaponShoot>();
 			playerInput = GetComponent<PlayerMovementInput>();
 			uiManager = GetComponent<PlayerUIManager>();
 
@@ -42,6 +44,8 @@ namespace Team_Capture.Player
 			InputReader.PlayerJump += OnPlayerJump;
 			InputReader.PlayerPause += () => uiManager.TogglePauseMenu();
 			InputReader.PlayerWeaponSelection += OnPlayerWeaponSelection;
+			InputReader.PlayerWeaponShoot += OnPlayerWeaponShoot;
+			InputReader.PlayerWeaponReload += OnPlayerWeaponReload;
 
 			InputReader.EnablePlayerInput();
 		}
@@ -140,18 +144,6 @@ namespace Team_Capture.Player
 
 		#region Input Functions
 
-		private void OnPlayerSuicidePress()
-		{
-			if(!playerManager.IsDead)
-				playerManager.CmdSuicide();
-		}
-
-		private void OnPlayerJump(bool jump)
-		{
-			if (!playerManager.IsDead)
-				wishToJump = jump;
-		}
-
 		private static void HandleMouseLock()
 		{
 			if (ClientUI.IsPauseMenuOpen)
@@ -170,6 +162,18 @@ namespace Team_Capture.Player
 
 			if (Cursor.lockState != CursorLockMode.Locked)
 				Cursor.lockState = CursorLockMode.Locked;
+		}
+
+		private void OnPlayerSuicidePress()
+		{
+			if(!playerManager.IsDead)
+				playerManager.CmdSuicide();
+		}
+
+		private void OnPlayerJump(bool jump)
+		{
+			if (!playerManager.IsDead)
+				wishToJump = jump;
 		}
 
 		private void OnPlayerWeaponSelection(float value)
@@ -197,29 +201,14 @@ namespace Team_Capture.Player
 			weaponManager.CmdSetWeapon(selectedWeaponIndex);
 		}
 
-		private void SetSelectedWeaponIndex()
+		private void OnPlayerWeaponShoot(bool button)
 		{
-			int selectedWeaponIndex = weaponManager.SelectedWeaponIndex;
-			int weaponHolderChildCount = weaponManager.WeaponHolderSpotChildCount - 1;
+			weaponShoot.ShootWeapon(button);
+		}
 
-			if (Input.GetAxis(mouseScrollWheel) > 0f)
-			{
-				if (selectedWeaponIndex >= weaponHolderChildCount)
-					selectedWeaponIndex = 0;
-				else
-					selectedWeaponIndex++;
-			}
-
-			if (Input.GetAxis(mouseScrollWheel) < 0f)
-			{
-				if (selectedWeaponIndex <= 0)
-					selectedWeaponIndex = weaponHolderChildCount;
-				else
-					selectedWeaponIndex--;
-			}
-
-			if (selectedWeaponIndex == weaponManager.SelectedWeaponIndex) return;
-			weaponManager.CmdSetWeapon(selectedWeaponIndex);
+		private void OnPlayerWeaponReload()
+		{
+			weaponManager.ClientReloadWeapon();
 		}
 
 		#endregion

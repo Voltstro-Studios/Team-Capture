@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using Mirror;
 using Team_Capture.Core.Networking;
@@ -9,6 +8,7 @@ using Team_Capture.LagCompensation;
 using Team_Capture.UI;
 using Team_Capture.Weapons;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 using Logger = Team_Capture.Core.Logging.Logger;
 using Random = UnityEngine.Random;
 
@@ -33,11 +33,6 @@ namespace Team_Capture.Player
 		///     The <see cref="weaponManager" /> associated with this <see cref="PlayerWeaponShoot" />
 		/// </summary>
 		private WeaponManager weaponManager;
-
-		private void ShootWeapon()
-		{
-			CmdShootWeapon();
-		}
 
 		#region Mirror Events
 
@@ -75,15 +70,18 @@ namespace Team_Capture.Player
 		{
 			weaponManager = GetComponent<WeaponManager>();
 			playerManager = GetComponent<PlayerManager>();
+			playerManager.PlayerDied += PlayerDied;
 		}
 
-		private void Update()
+		private void PlayerDied()
 		{
-			/*
-			if (!isLocalPlayer)
-				return;
+			CancelInvoke(nameof(ClientCallServerShoot));
+		}
 
-			if (ClientUI.IsPauseMenuOpen)
+		[Client]
+		internal void ShootWeapon(bool buttonDown)
+		{
+			if(ClientUI.IsPauseMenuOpen)
 				return;
 
 			//Cache our current weapon
@@ -93,39 +91,25 @@ namespace Team_Capture.Player
 			if (networkedWeapon == null)
 				return;
 
+			if(networkedWeapon.IsReloading)
+				return;
+
 			TCWeapon weapon = networkedWeapon.GetTCWeapon();
 
 			if (weapon == null)
 				return;
 
-			if (playerManager.IsDead)
-			{
-				CancelInvoke(nameof(CmdShootWeapon));
-				return;
-			}
+			if(buttonDown && weapon.fireMode == TCWeapon.WeaponFireMode.Semi)
+				ClientCallServerShoot();
+			if(buttonDown && weapon.fireMode == TCWeapon.WeaponFireMode.Auto)
+				InvokeRepeating(nameof(ClientCallServerShoot), 0f, 1f / weapon.fireRate);
+			if(!buttonDown && weapon.fireMode == TCWeapon.WeaponFireMode.Auto)
+				CancelInvoke(nameof(ClientCallServerShoot));
+		}
 
-			if (Input.GetButtonDown("Reload"))
-			{
-				weaponManager.ClientReloadWeapon();
-				return;
-			}
-
-			switch (weapon.fireMode)
-			{
-				case TCWeapon.WeaponFireMode.Semi:
-					if (Input.GetButtonDown("Fire1"))
-						ShootWeapon();
-					break;
-				case TCWeapon.WeaponFireMode.Auto:
-					if (Input.GetButtonDown("Fire1"))
-						InvokeRepeating(nameof(ShootWeapon), 0f, 1f / weapon.fireRate);
-					else if (Input.GetButtonUp("Fire1"))
-						CancelInvoke(nameof(ShootWeapon));
-					break;
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
-			*/
+		private void ClientCallServerShoot()
+		{
+			CmdShootWeapon();
 		}
 
 		#endregion

@@ -34,6 +34,8 @@ namespace Team_Capture
 				gameInput.Player.Jump.performed += OnPlayerJump;
 				gameInput.Player.Pause.performed += OnPlayerPause;
 				gameInput.Player.WeaponSelection.performed += OnPlayerWeaponSelection;
+				gameInput.Player.ShootWeapon.performed += OnPlayerWeaponShoot;
+				gameInput.Player.ReloadWeapon.performed += OnPlayerReloadWeapon;
 
 			    Application.quitting += ShutdownInput;
 		    }
@@ -60,6 +62,9 @@ namespace Team_Capture
 			gameInput.Player.Suicide.performed -= OnPlayerSuicide;
 			gameInput.Player.Jump.performed -= OnPlayerJump;
 			gameInput.Player.Pause.performed -= OnPlayerPause;
+			gameInput.Player.WeaponSelection.performed -= OnPlayerWeaponSelection;
+			gameInput.Player.ShootWeapon.performed -= OnPlayerWeaponShoot;
+			gameInput.Player.ReloadWeapon.performed -= OnPlayerReloadWeapon;
 
 			gameInput.Dispose();
 
@@ -159,7 +164,9 @@ namespace Team_Capture
 	    public event Action PlayerSuicide;
 	    public event Action<bool> PlayerJump;
 	    public event Action PlayerPause;
-	    public event Action<float> PlayerWeaponSelection; 
+	    public event Action<float> PlayerWeaponSelection;
+	    public event Action<bool> PlayerWeaponShoot;
+	    public event Action PlayerWeaponReload;
 
 	    private void OnPlayerScoreBoard(InputAction.CallbackContext context)
 	    {
@@ -188,6 +195,16 @@ namespace Team_Capture
 	    private void OnPlayerWeaponSelection(InputAction.CallbackContext context)
 	    {
 		    PlayerWeaponSelection?.Invoke(context.ReadValue<float>());
+	    }
+
+	    private void OnPlayerWeaponShoot(InputAction.CallbackContext context)
+	    {
+		    PlayerWeaponShoot?.Invoke(context.ReadValueAsButton());
+	    }
+
+	    private void OnPlayerReloadWeapon(InputAction.CallbackContext context)
+	    {
+		    PlayerWeaponReload?.Invoke();
 	    }
 
 	    public void EnablePlayerInput()

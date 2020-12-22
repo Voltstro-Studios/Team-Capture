@@ -250,6 +250,22 @@
                     "expectedControlType": "Axis",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "ReloadWeapon",
+                    "type": "Button",
+                    "id": "a98c354d-d84a-474b-8a41-9bb52f98d186",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press"
+                },
+                {
+                    "name": "ShootWeapon",
+                    "type": "Value",
+                    "id": "774017ef-43d3-4248-b042-b30dafb45737",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press(pressPoint=0.01,behavior=2)"
                 }
             ],
             "bindings": [
@@ -382,6 +398,28 @@
                     "processors": "",
                     "groups": "KeyboardMouse",
                     "action": "WeaponSelection",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e270918e-fff2-43f2-8069-46d1a4bca491",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "ReloadWeapon",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7713805d-7180-4087-9bd9-a1e1645ab8b3",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "ShootWeapon",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

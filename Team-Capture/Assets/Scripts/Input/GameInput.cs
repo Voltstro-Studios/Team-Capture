@@ -274,6 +274,22 @@ namespace Team_Capture
                     ""expectedControlType"": ""Axis"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""ReloadWeapon"",
+                    ""type"": ""Button"",
+                    ""id"": ""a98c354d-d84a-474b-8a41-9bb52f98d186"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press""
+                },
+                {
+                    ""name"": ""ShootWeapon"",
+                    ""type"": ""Value"",
+                    ""id"": ""774017ef-43d3-4248-b042-b30dafb45737"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press(pressPoint=0.01,behavior=2)""
                 }
             ],
             ""bindings"": [
@@ -408,6 +424,28 @@ namespace Team_Capture
                     ""action"": ""WeaponSelection"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e270918e-fff2-43f2-8069-46d1a4bca491"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""ReloadWeapon"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7713805d-7180-4087-9bd9-a1e1645ab8b3"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""ShootWeapon"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -453,6 +491,8 @@ namespace Team_Capture
             m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
             m_Player_Pause = m_Player.FindAction("Pause", throwIfNotFound: true);
             m_Player_WeaponSelection = m_Player.FindAction("WeaponSelection", throwIfNotFound: true);
+            m_Player_ReloadWeapon = m_Player.FindAction("ReloadWeapon", throwIfNotFound: true);
+            m_Player_ShootWeapon = m_Player.FindAction("ShootWeapon", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -650,6 +690,8 @@ namespace Team_Capture
         private readonly InputAction m_Player_Jump;
         private readonly InputAction m_Player_Pause;
         private readonly InputAction m_Player_WeaponSelection;
+        private readonly InputAction m_Player_ReloadWeapon;
+        private readonly InputAction m_Player_ShootWeapon;
         public struct PlayerActions
         {
             private @GameInput m_Wrapper;
@@ -661,6 +703,8 @@ namespace Team_Capture
             public InputAction @Jump => m_Wrapper.m_Player_Jump;
             public InputAction @Pause => m_Wrapper.m_Player_Pause;
             public InputAction @WeaponSelection => m_Wrapper.m_Player_WeaponSelection;
+            public InputAction @ReloadWeapon => m_Wrapper.m_Player_ReloadWeapon;
+            public InputAction @ShootWeapon => m_Wrapper.m_Player_ShootWeapon;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -691,6 +735,12 @@ namespace Team_Capture
                     @WeaponSelection.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnWeaponSelection;
                     @WeaponSelection.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnWeaponSelection;
                     @WeaponSelection.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnWeaponSelection;
+                    @ReloadWeapon.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnReloadWeapon;
+                    @ReloadWeapon.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnReloadWeapon;
+                    @ReloadWeapon.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnReloadWeapon;
+                    @ShootWeapon.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShootWeapon;
+                    @ShootWeapon.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShootWeapon;
+                    @ShootWeapon.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShootWeapon;
                 }
                 m_Wrapper.m_PlayerActionsCallbackInterface = instance;
                 if (instance != null)
@@ -716,6 +766,12 @@ namespace Team_Capture
                     @WeaponSelection.started += instance.OnWeaponSelection;
                     @WeaponSelection.performed += instance.OnWeaponSelection;
                     @WeaponSelection.canceled += instance.OnWeaponSelection;
+                    @ReloadWeapon.started += instance.OnReloadWeapon;
+                    @ReloadWeapon.performed += instance.OnReloadWeapon;
+                    @ReloadWeapon.canceled += instance.OnReloadWeapon;
+                    @ShootWeapon.started += instance.OnShootWeapon;
+                    @ShootWeapon.performed += instance.OnShootWeapon;
+                    @ShootWeapon.canceled += instance.OnShootWeapon;
                 }
             }
         }
@@ -754,6 +810,8 @@ namespace Team_Capture
             void OnJump(InputAction.CallbackContext context);
             void OnPause(InputAction.CallbackContext context);
             void OnWeaponSelection(InputAction.CallbackContext context);
+            void OnReloadWeapon(InputAction.CallbackContext context);
+            void OnShootWeapon(InputAction.CallbackContext context);
         }
     }
 }
