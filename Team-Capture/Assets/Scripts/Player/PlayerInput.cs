@@ -40,10 +40,10 @@ namespace Team_Capture.Player
 		{
 			InputReader = reader;
 
-			InputReader.PlayerScoreboard += () => uiManager.ToggleScoreboard();
+			InputReader.PlayerScoreboard += OnPlayerScoreBoard;
 			InputReader.PlayerSuicide += OnPlayerSuicidePress;
 			InputReader.PlayerJump += OnPlayerJump;
-			InputReader.PlayerPause += () => uiManager.TogglePauseMenu();
+			InputReader.PlayerPause += OnPlayerPause;
 			InputReader.PlayerWeaponSelection += OnPlayerWeaponSelection;
 			InputReader.PlayerWeaponShoot += OnPlayerWeaponShoot;
 			InputReader.PlayerWeaponReload += OnPlayerWeaponReload;
@@ -54,6 +54,14 @@ namespace Team_Capture.Player
 		private void OnDisable()
 		{
 			InputReader.DisablePlayerInput();
+
+			InputReader.PlayerScoreboard -= OnPlayerScoreBoard;
+			InputReader.PlayerSuicide -= OnPlayerSuicidePress;
+			InputReader.PlayerJump -= OnPlayerJump;
+			InputReader.PlayerPause -= OnPlayerPause;
+			InputReader.PlayerWeaponSelection -= OnPlayerWeaponSelection;
+			InputReader.PlayerWeaponShoot -= OnPlayerWeaponShoot;
+			InputReader.PlayerWeaponReload -= OnPlayerWeaponReload;
 		}
 
 		private void Update()
@@ -165,6 +173,11 @@ namespace Team_Capture.Player
 				Cursor.lockState = CursorLockMode.Locked;
 		}
 
+		private void OnPlayerScoreBoard()
+		{
+			uiManager.ToggleScoreboard();
+		}
+
 		private void OnPlayerSuicidePress()
 		{
 			if(!playerManager.IsDead)
@@ -175,6 +188,11 @@ namespace Team_Capture.Player
 		{
 			if (!playerManager.IsDead)
 				wishToJump = jump;
+		}
+
+		private void OnPlayerPause()
+		{
+			uiManager.TogglePauseMenu();
 		}
 
 		private void OnPlayerWeaponSelection(float value)

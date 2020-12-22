@@ -4,6 +4,16 @@ using UnityEngine.InputSystem;
 
 namespace Team_Capture.Input
 {
+	//Ohhh how much I love inputs... no, inputs can go fuck them selves. 
+	//
+	//Unity old input system was alright, apart from you had to call Input.GetButton/Key every update, and that cross-platform was a fucking pain.
+	//The new input system uses events, which is 100% times better, (you can also do .ReadValue, which is handy for stuff like mouses)
+	//but its fucking dog shit to setup and use, and has no fucking XML docs on it, so you have to refer to the online docs constantly.
+	//I hope Unity can prove me wrong in the future, and fix their shit up. (Unlikely ROLF) Wasn't the point of Unity to be easy to use?
+
+	/// <summary>
+	///		Handles reading inputs
+	/// </summary>
 	[CreateAssetMenu(fileName = "InputReader", menuName = "Team Capture/Input Reader")]
     public class InputReader : ScriptableObject
     {
@@ -59,6 +69,7 @@ namespace Team_Capture.Input
 			gameInput.MenuController.Close.performed -= OnMenuClose;
 
 			//StartVideo
+			gameInput.StartVideo.Skip.performed -= OnStartVideoSkip;
 
 			//Debug menu
 			gameInput.DebugMenu.ToggleMenu.performed -= OnDebugMenuToggle;
