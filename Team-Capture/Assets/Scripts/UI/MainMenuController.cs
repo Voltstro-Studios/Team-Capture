@@ -54,10 +54,9 @@ namespace Team_Capture.UI
 		public MainMenuPanel[] menuPanels;
 
 		/// <summary>
-		///     The key to use to close the current panel
+		///		Handles reading input
 		/// </summary>
-		[Tooltip("The key to use to close the current panel")]
-		public KeyCode closeKey = KeyCode.Escape;
+		public InputReader inputReader; 
 
 		private TweeningManager tweeningManager;
 
@@ -104,17 +103,19 @@ namespace Team_Capture.UI
 			Logger.Debug("Time taken to update menu UI: {@TotalMilliseconds}ms", stopwatch.ElapsedMilliseconds);
 		}
 
-		private void Update()
-		{
-			//If the close key is pressed, then close the active panel
-			if (Input.GetKeyDown(closeKey))
-				CloseActivePanel();
-		}
-
 		private void OnEnable()
 		{
+			inputReader.MenuClose += CloseActivePanel;
+			inputReader.EnableMenuControllerInput();
+
 			tweeningManager.GetTweenObject("TopNavBar").PlayAllEvents();
 			tweeningManager.GetTweenObject("BottomNavBar").PlayAllEvents();
+		}
+
+		private void OnDisable()
+		{
+			inputReader.MenuClose -= CloseActivePanel;
+			inputReader.DisableMenuControllerInput();
 		}
 
 		private void OnDestroy()

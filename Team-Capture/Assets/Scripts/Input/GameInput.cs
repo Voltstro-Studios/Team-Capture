@@ -160,6 +160,33 @@ namespace Team_Capture
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""MenuController"",
+            ""id"": ""94878f43-56d2-4d25-8782-ef6ec623286e"",
+            ""actions"": [
+                {
+                    ""name"": ""Close"",
+                    ""type"": ""Button"",
+                    ""id"": ""44234032-4fd7-4286-b535-117fdff0b435"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press""
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""e0a2f3bd-8315-43f1-829e-5d3aa5a77adb"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Close"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -188,6 +215,9 @@ namespace Team_Capture
             m_Console_HistoryUp = m_Console.FindAction("HistoryUp", throwIfNotFound: true);
             m_Console_HistoryDown = m_Console.FindAction("HistoryDown", throwIfNotFound: true);
             m_Console_SubmitInput = m_Console.FindAction("SubmitInput", throwIfNotFound: true);
+            // MenuController
+            m_MenuController = asset.FindActionMap("MenuController", throwIfNotFound: true);
+            m_MenuController_Close = m_MenuController.FindAction("Close", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -308,6 +338,39 @@ namespace Team_Capture
             }
         }
         public ConsoleActions @Console => new ConsoleActions(this);
+
+        // MenuController
+        private readonly InputActionMap m_MenuController;
+        private IMenuControllerActions m_MenuControllerActionsCallbackInterface;
+        private readonly InputAction m_MenuController_Close;
+        public struct MenuControllerActions
+        {
+            private @GameInput m_Wrapper;
+            public MenuControllerActions(@GameInput wrapper) { m_Wrapper = wrapper; }
+            public InputAction @Close => m_Wrapper.m_MenuController_Close;
+            public InputActionMap Get() { return m_Wrapper.m_MenuController; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(MenuControllerActions set) { return set.Get(); }
+            public void SetCallbacks(IMenuControllerActions instance)
+            {
+                if (m_Wrapper.m_MenuControllerActionsCallbackInterface != null)
+                {
+                    @Close.started -= m_Wrapper.m_MenuControllerActionsCallbackInterface.OnClose;
+                    @Close.performed -= m_Wrapper.m_MenuControllerActionsCallbackInterface.OnClose;
+                    @Close.canceled -= m_Wrapper.m_MenuControllerActionsCallbackInterface.OnClose;
+                }
+                m_Wrapper.m_MenuControllerActionsCallbackInterface = instance;
+                if (instance != null)
+                {
+                    @Close.started += instance.OnClose;
+                    @Close.performed += instance.OnClose;
+                    @Close.canceled += instance.OnClose;
+                }
+            }
+        }
+        public MenuControllerActions @MenuController => new MenuControllerActions(this);
         private int m_KeyboardMouseSchemeIndex = -1;
         public InputControlScheme KeyboardMouseScheme
         {
@@ -324,6 +387,10 @@ namespace Team_Capture
             void OnHistoryUp(InputAction.CallbackContext context);
             void OnHistoryDown(InputAction.CallbackContext context);
             void OnSubmitInput(InputAction.CallbackContext context);
+        }
+        public interface IMenuControllerActions
+        {
+            void OnClose(InputAction.CallbackContext context);
         }
     }
 }

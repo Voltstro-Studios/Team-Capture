@@ -7,12 +7,6 @@ namespace Team_Capture
 	[CreateAssetMenu(fileName = "InputReader", menuName = "Team Capture/Input Reader")]
     public class InputReader : ScriptableObject
     {
-	    public event Action ConsoleToggle;
-	    public event Action ConsoleAutoComplete;
-	    public event Action ConsoleHistoryUp;
-	    public event Action ConsoleHistoryDown;
-	    public event Action ConsoleSubmitInput;
-
 	    private static GameInput gameInput;
 
 	    public void OnEnable()
@@ -20,11 +14,16 @@ namespace Team_Capture
 		    if (gameInput == null)
 		    {
 			    gameInput = new GameInput();
+
+				//Console
 			    gameInput.Console.ToggleConsole.performed += OnToggleConsole;
 			    gameInput.Console.AutoComplete.performed += OnAutoComplete;
 			    gameInput.Console.HistoryUp.performed += OnHistoryUp;
 			    gameInput.Console.HistoryDown.performed += OnHistoryDown;
 			    gameInput.Console.SubmitInput.performed += OnSubmitInput;
+
+				//MenuController
+				gameInput.MenuController.Close.performed += OnMenuClose;
 
 			    Application.quitting += ShutdownInput;
 		    }
@@ -34,16 +33,28 @@ namespace Team_Capture
 	    {
 		    gameInput.Disable();
 
+			//Console
 		    gameInput.Console.ToggleConsole.performed -= OnToggleConsole;
 		    gameInput.Console.AutoComplete.performed -= OnAutoComplete;
 		    gameInput.Console.HistoryUp.performed -= OnHistoryUp;
 		    gameInput.Console.HistoryDown.performed -= OnHistoryDown;
 		    gameInput.Console.SubmitInput.performed -= OnSubmitInput;
 
+			//MenuController
+			gameInput.MenuController.Close.performed -= OnMenuClose;
+
 			gameInput.Dispose();
 
 		    Application.quitting -= ShutdownInput;
 	    }
+
+	    #region Console
+
+	    public event Action ConsoleToggle;
+	    public event Action ConsoleAutoComplete;
+	    public event Action ConsoleHistoryUp;
+	    public event Action ConsoleHistoryDown;
+	    public event Action ConsoleSubmitInput;
 
 	    private void OnToggleConsole(InputAction.CallbackContext context)
 	    {
@@ -79,5 +90,28 @@ namespace Team_Capture
 	    {
 			gameInput.Console.Disable();
 	    }
+
+	    #endregion
+
+	    #region MenuController
+
+	    public event Action MenuClose;
+	    
+	    private void OnMenuClose(InputAction.CallbackContext context)
+	    {
+		    MenuClose?.Invoke();
+	    }
+
+	    public void EnableMenuControllerInput()
+	    {
+			gameInput.MenuController.Enable();
+	    }
+
+	    public void DisableMenuControllerInput()
+	    {
+			gameInput.MenuController.Disable();
+	    }
+
+	    #endregion
     }
 }
