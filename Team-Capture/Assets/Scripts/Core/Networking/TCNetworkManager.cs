@@ -99,6 +99,9 @@ namespace Team_Capture.Core.Networking
 
 		private IEnumerator OnStartSceneLoadAsync(AsyncOperation sceneLoadOperation)
 		{
+			if (sceneLoadOperation == null)
+				yield return null;
+
 			if (singleton.mode == NetworkManagerMode.ServerOnly) yield return null;
 
 			LoadingScreenPanel loadingScreenPanel = Instantiate(loadingScreenPrefab).GetComponent<LoadingScreenPanel>();
