@@ -30,6 +30,7 @@ namespace Team_Capture
 				gameInput.Player.Suicide.performed += OnPlayerSuicide;
 				gameInput.Player.Jump.performed += OnPlayerJump;
 				gameInput.Player.Pause.performed += OnPlayerPause;
+				gameInput.Player.WeaponSelection.performed += OnPlayerWeaponSelection;
 
 			    Application.quitting += ShutdownInput;
 		    }
@@ -132,6 +133,7 @@ namespace Team_Capture
 	    public event Action PlayerSuicide;
 	    public event Action<bool> PlayerJump;
 	    public event Action PlayerPause;
+	    public event Action<float> PlayerWeaponSelection; 
 
 	    private void OnPlayerScoreBoard(InputAction.CallbackContext context)
 	    {
@@ -156,6 +158,11 @@ namespace Team_Capture
 	    public Vector2 ReadPlayerMove() => gameInput.Player.Move.ReadValue<Vector2>();
 
 	    public Vector2 ReadPlayerLook() => gameInput.Player.Look.ReadValue<Vector2>();
+
+	    private void OnPlayerWeaponSelection(InputAction.CallbackContext context)
+	    {
+		    PlayerWeaponSelection?.Invoke(context.ReadValue<float>());
+	    }
 
 	    public void EnablePlayerInput()
 	    {

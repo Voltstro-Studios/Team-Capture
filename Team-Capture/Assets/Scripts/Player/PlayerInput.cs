@@ -41,6 +41,7 @@ namespace Team_Capture.Player
 			InputReader.PlayerSuicide += OnPlayerSuicidePress;
 			InputReader.PlayerJump += OnPlayerJump;
 			InputReader.PlayerPause += () => uiManager.TogglePauseMenu();
+			InputReader.PlayerWeaponSelection += OnPlayerWeaponSelection;
 
 			InputReader.EnablePlayerInput();
 		}
@@ -169,6 +170,31 @@ namespace Team_Capture.Player
 
 			if (Cursor.lockState != CursorLockMode.Locked)
 				Cursor.lockState = CursorLockMode.Locked;
+		}
+
+		private void OnPlayerWeaponSelection(float value)
+		{
+			int selectedWeaponIndex = weaponManager.SelectedWeaponIndex;
+			int weaponHolderChildCount = weaponManager.WeaponHolderSpotChildCount - 1;
+
+			if (value > 0f)
+			{
+				if (selectedWeaponIndex >= weaponHolderChildCount)
+					selectedWeaponIndex = 0;
+				else
+					selectedWeaponIndex++;
+			}
+
+			if (value < 0f)
+			{
+				if (selectedWeaponIndex <= 0)
+					selectedWeaponIndex = weaponHolderChildCount;
+				else
+					selectedWeaponIndex--;
+			}
+
+			if (selectedWeaponIndex == weaponManager.SelectedWeaponIndex) return;
+			weaponManager.CmdSetWeapon(selectedWeaponIndex);
 		}
 
 		private void SetSelectedWeaponIndex()

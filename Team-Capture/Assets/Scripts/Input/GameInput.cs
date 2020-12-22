@@ -239,6 +239,14 @@ namespace Team_Capture
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": ""Press""
+                },
+                {
+                    ""name"": ""WeaponSelection"",
+                    ""type"": ""Value"",
+                    ""id"": ""75e6bbb3-9a28-4b13-a87a-9dc96932b16e"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -351,6 +359,28 @@ namespace Team_Capture
                     ""action"": ""Pause"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""872aef05-ccf2-40e0-99a3-ad826420a473"",
+                    ""path"": ""<Mouse>/scroll/x"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""WeaponSelection"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""41ec4b0f-6c3b-42e7-af7e-44d219fc39b7"",
+                    ""path"": ""<Mouse>/scroll/y"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""WeaponSelection"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -392,6 +422,7 @@ namespace Team_Capture
             m_Player_Suicide = m_Player.FindAction("Suicide", throwIfNotFound: true);
             m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
             m_Player_Pause = m_Player.FindAction("Pause", throwIfNotFound: true);
+            m_Player_WeaponSelection = m_Player.FindAction("WeaponSelection", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -555,6 +586,7 @@ namespace Team_Capture
         private readonly InputAction m_Player_Suicide;
         private readonly InputAction m_Player_Jump;
         private readonly InputAction m_Player_Pause;
+        private readonly InputAction m_Player_WeaponSelection;
         public struct PlayerActions
         {
             private @GameInput m_Wrapper;
@@ -565,6 +597,7 @@ namespace Team_Capture
             public InputAction @Suicide => m_Wrapper.m_Player_Suicide;
             public InputAction @Jump => m_Wrapper.m_Player_Jump;
             public InputAction @Pause => m_Wrapper.m_Player_Pause;
+            public InputAction @WeaponSelection => m_Wrapper.m_Player_WeaponSelection;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -592,6 +625,9 @@ namespace Team_Capture
                     @Pause.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPause;
                     @Pause.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPause;
                     @Pause.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPause;
+                    @WeaponSelection.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnWeaponSelection;
+                    @WeaponSelection.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnWeaponSelection;
+                    @WeaponSelection.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnWeaponSelection;
                 }
                 m_Wrapper.m_PlayerActionsCallbackInterface = instance;
                 if (instance != null)
@@ -614,6 +650,9 @@ namespace Team_Capture
                     @Pause.started += instance.OnPause;
                     @Pause.performed += instance.OnPause;
                     @Pause.canceled += instance.OnPause;
+                    @WeaponSelection.started += instance.OnWeaponSelection;
+                    @WeaponSelection.performed += instance.OnWeaponSelection;
+                    @WeaponSelection.canceled += instance.OnWeaponSelection;
                 }
             }
         }
@@ -647,6 +686,7 @@ namespace Team_Capture
             void OnSuicide(InputAction.CallbackContext context);
             void OnJump(InputAction.CallbackContext context);
             void OnPause(InputAction.CallbackContext context);
+            void OnWeaponSelection(InputAction.CallbackContext context);
         }
     }
 }
