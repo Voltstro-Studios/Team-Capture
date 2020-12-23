@@ -23,6 +23,14 @@ namespace Team_Capture.Player
 
 		private WeaponManager weaponManager;
 
+		[NonSerialized] public InputReader InputReader;
+
+		[Header("Player Movement")]
+		[SerializeField] private float xMouseSensitivity = 100.0f;
+		[SerializeField] private float yMouseSensitivity = 100.0f;
+
+		[SerializeField] private bool reverseMouse;
+
 		private void Start()
 		{
 			weaponManager = GetComponent<WeaponManager>();
@@ -95,15 +103,20 @@ namespace Team_Capture.Player
 
 				//Look
 				Vector2 look = InputReader.ReadPlayerLook();
-				rotationX = look.x * xMouseSensitivity * Time.deltaTime;
-				rotationY = look.y * yMouseSensitivity * Time.deltaTime;
+				if (reverseMouse)
+				{
+					rotationX = look.y * yMouseSensitivity * Time.deltaTime;
+					rotationY = look.x * xMouseSensitivity * Time.deltaTime;
+				}
+				else
+				{
+					rotationX = look.x * xMouseSensitivity * Time.deltaTime;
+					rotationY = look.y * yMouseSensitivity * Time.deltaTime;
+				}
 
 				//Send inputs
 				playerInput.SetInput(horizontal, vertical, rotationX, rotationY, wishToJump);
 				weaponManager.WeaponSway.SetInput(rotationX, rotationY);
-
-				//Weapon selection, we do this last
-				//SetSelectedWeaponIndex();
 			}
 		}
 
@@ -114,28 +127,8 @@ namespace Team_Capture.Player
 			MouseSettingsClass mouseSettings = GameSettings.MouseSettings;
 			xMouseSensitivity = mouseSettings.MouseSensitivity;
 			yMouseSensitivity = mouseSettings.MouseSensitivity;
-			rawMouseAxis = mouseSettings.RawAxis;
 			reverseMouse = mouseSettings.ReverseMouse;
 		}
-
-		#endregion
-
-		#region Inspector fields
-
-		[Header("Inputs")]
-		[SerializeField] private string mouseScrollWheel = "Mouse ScrollWheel";
-
-		[NonSerialized] public InputReader InputReader;
-
-		[Header("Player Movement")] [SerializeField]
-		private bool rawAxis = true;
-
-		[SerializeField] private bool rawMouseAxis = true;
-
-		[SerializeField] private float xMouseSensitivity = 100.0f;
-		[SerializeField] private float yMouseSensitivity = 100.0f;
-
-		[SerializeField] private bool reverseMouse;
 
 		#endregion
 
