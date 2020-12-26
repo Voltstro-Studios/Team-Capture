@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Mirror;
 using Team_Capture.Console;
 using Team_Capture.Helper;
 using Team_Capture.Input;
 using Team_Capture.Player.Movement;
+using Unity.Profiling;
 using UnityEngine;
 using Voltstro.CommandLineParser;
 
@@ -15,61 +18,102 @@ namespace Team_Capture.UI
 	internal class DebugMenu : SingletonMonoBehaviour<DebugMenu>
 	{
 		/// <summary>
-		///     Is the debug menu open?
-		/// </summary>
-		[CommandLineArgument("debugmenu")] [ConVar("cl_debugmenu", "Shows the debug menu", true)]
-		public static bool DebugMenuOpen;
-
-		/// <summary>
 		///     Reads input
 		/// </summary>
 		public InputReader inputReader;
 
 		/// <summary>
-		///     How often to refresh the fps counter
+		///		How often to refresh the fps counter
 		/// </summary>
 		public float refreshRate = 1f;
 
-		private float fps;
+		/// <summary>
+		///     Is the debug menu open?
+		/// </summary>
+		[CommandLineArgument("debugmenu")] [ConVar("cl_debugmenu", "Shows the debug menu", true)]
+		public static bool DebugMenuOpen;
+
+		private const string Spacer = "===================";
+
+		private ProfilerRecorder mainThreadRecorder;
+		private ProfilerRecorder totalMemoryUsedRecorder;
+		private ProfilerRecorder gcReservedMemoryRecorder;
+		private ProfilerRecorder totalDrawCallsRecorder;
 
 		private float timer;
+
+		private double frameTime;
+		private int fps;
+		private int totalMemoryUsed;
+		private int gcReserved;
+		private int drawCalls;
 
 		private void OnGUI()
 		{
 			if (!DebugMenuOpen)
 				return;
 
-			const string spacer = "===================";
-
+			//Setup GUI
 			GUI.skin.label.fontSize = 20;
 
+			//Setup our initial yOffset;
 			float yOffset = 10;
-
 			if (NetworkManager.singleton != null && NetworkManager.singleton.mode == NetworkManagerMode.ClientOnly)
 				if (PlayerMovementManager.ShowPos)
 					yOffset = 120;
 
-			GUI.Box(new Rect(8, yOffset, 475, 310), "");
+			GUI.Box(new Rect(8, yOffset, 475, 400), "");
 			GUI.Label(new Rect(10, yOffset, 1000, 40), version);
-			GUI.Label(new Rect(10, yOffset += 20, 1000, 40), spacer);
+			GUI.Label(new Rect(10, yOffset += 20, 1000, 40), Spacer);
 
-			if (Time.unscaledTime > timer)
-			{
-				fps = (int) (1f / Time.unscaledDeltaTime);
-				timer = Time.unscaledTime + refreshRate;
-			}
+			GUI.Label(new Rect(10, yOffset += 30, 1000, 40), $"Frame Time: {frameTime:F1}ms");
+			GUI.Label(new Rect(10, yOffset += 20, 1000, 40), $"FPS: {fps}");
+			GUI.Label(new Rect(10, yOffset += 20, 1000, 40), $"Total Memory: {totalMemoryUsed} MB");
+			GUI.Label(new Rect(10, yOffset += 20, 1000, 40), $"GC Reserved: {gcReserved} MB");
+			GUI.Label(new Rect(10, yOffset += 20, 1000, 40), $"Draw Calls: {drawCalls}");
 
-			GUI.Label(new Rect(10, yOffset += 30, 1000, 40), $"FPS: {fps}");
 			GUI.Label(new Rect(10, yOffset += 30, 1000, 40), "Device Info");
-			GUI.Label(new Rect(10, yOffset += 20, 1000, 40), spacer);
+			GUI.Label(new Rect(10, yOffset += 20, 1000, 40), Spacer);
 			GUI.Label(new Rect(10, yOffset += 20, 1000, 40), cpu);
 			GUI.Label(new Rect(10, yOffset += 20, 1000, 40), gpu);
 			GUI.Label(new Rect(10, yOffset += 20, 1000, 40), ram);
 			GUI.Label(new Rect(10, yOffset += 20, 1000, 40), renderingApi);
 			GUI.Label(new Rect(10, yOffset += 30, 1000, 40), "Network");
-			GUI.Label(new Rect(10, yOffset += 20, 1000, 40), spacer);
+			GUI.Label(new Rect(10, yOffset += 20, 1000, 40), Spacer);
 			GUI.Label(new Rect(10, yOffset += 20, 1000, 40), ipAddress);
 			GUI.Label(new Rect(10, yOffset + 20, 1000, 40), $"Status: {GetNetworkingStatus()}");
+		}
+
+		private void Update()
+		{
+			if (!(Time.unscaledTime > timer)) return;
+
+			frameTime = GetRecorderFrameTimeAverage(mainThreadRecorder) * 1e-6f;
+			fps = (int) (1f / Time.unscaledDeltaTime);
+
+			totalMemoryUsed = (int) totalMemoryUsedRecorder.LastValue / (1024 * 1024);
+			gcReserved = (int) gcReservedMemoryRecorder.LastValue / (1024 * 1024);
+			drawCalls = (int) totalDrawCallsRecorder.LastValue;
+
+			timer = Time.unscaledTime + refreshRate;
+		}
+
+		private void OnEnable()
+		{
+			timer = Time.unscaledTime;
+
+			mainThreadRecorder = ProfilerRecorder.StartNew(ProfilerCategory.Internal, "Main Thread", 15);
+			totalMemoryUsedRecorder = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "Total Used Memory");
+			gcReservedMemoryRecorder = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "GC Reserved Memory");
+			totalDrawCallsRecorder = ProfilerRecorder.StartNew(ProfilerCategory.Render, "Draw Calls Count");
+		}
+
+		private void OnDisable()
+		{
+			mainThreadRecorder.Dispose();
+			totalMemoryUsedRecorder.Dispose();
+			gcReservedMemoryRecorder.Dispose();
+			totalDrawCallsRecorder.Dispose();
 		}
 
 		protected override void SingletonAwakened()
@@ -109,6 +153,20 @@ namespace Team_Capture.UI
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
+		}
+
+		private double GetRecorderFrameTimeAverage(ProfilerRecorder recorder)
+		{
+			int samplesCount = recorder.Capacity;
+			if (samplesCount == 0)
+				return 0;
+
+			List<ProfilerRecorderSample> samples = new List<ProfilerRecorderSample>(samplesCount);
+			recorder.CopyTo(samples);
+			double r = samples.Aggregate<ProfilerRecorderSample, double>(0, (current, sample) => current + sample.Value);
+			r /= samplesCount;
+
+			return r;
 		}
 
 		#region Info
