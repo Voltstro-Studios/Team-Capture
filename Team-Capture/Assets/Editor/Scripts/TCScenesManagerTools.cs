@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Editor.Scripts
+namespace Team_Capture.Editor
 {
     public static class TCScenesManagerTools
     {

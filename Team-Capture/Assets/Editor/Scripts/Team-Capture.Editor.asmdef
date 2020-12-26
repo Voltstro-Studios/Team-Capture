@@ -1,6 +1,6 @@
 {
     "name": "Team-Capture.Editor",
-    "rootNamespace": "",
+    "rootNamespace": "Team_Capture.Editor",
     "references": [
         "GUID:c0f9e615fc974fe429e23cadc144d55a",
         "GUID:e3c323938430e974eb568e603b85eb9e",

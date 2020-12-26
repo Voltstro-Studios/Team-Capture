@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Editor.Scripts.Localization
+namespace Team_Capture.Editor.Localization
 {
 	[InitializeOnLoad]
 	public class ForceSetLanguage : EditorWindow

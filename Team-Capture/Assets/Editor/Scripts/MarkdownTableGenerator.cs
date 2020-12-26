@@ -4,7 +4,7 @@ using System.Text;
 using UnityEditor;
 using UnityEngine;
 
-namespace Editor.Scripts
+namespace Team_Capture.Editor
 {
 	/// <summary>
 	/// Generates a markdown table depending on your options

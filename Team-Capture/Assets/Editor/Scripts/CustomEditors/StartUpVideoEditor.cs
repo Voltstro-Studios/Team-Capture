@@ -1,17 +1,16 @@
 ﻿using UnityEditor;
 using UnityEngine;
-using Team_Capture.StartUpVideo;
 
-namespace Editor.Scripts.CustomEditors
+namespace Team_Capture.Editor.CustomEditors
 {
-	[CustomEditor(typeof(StartUpVideo))]
+	[CustomEditor(typeof(StartUpVideo.StartUpVideo))]
 	public class StartUpVideoEditor : UnityEditor.Editor {
 
 		public override void OnInspectorGUI()
 		{
 			base.OnInspectorGUI();
 
-			StartUpVideo vid = (StartUpVideo)target;
+			StartUpVideo.StartUpVideo vid = (StartUpVideo.StartUpVideo)target;
 
 			EditorGUILayout.Space();
 

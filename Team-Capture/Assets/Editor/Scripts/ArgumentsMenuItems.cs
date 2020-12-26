@@ -4,7 +4,7 @@ using UnityEditor;
 using UnityEngine;
 using Voltstro.CommandLineParser;
 
-namespace Editor.Scripts
+namespace Team_Capture.Editor
 {
 	public static class ArgumentsMenuItems
 	{

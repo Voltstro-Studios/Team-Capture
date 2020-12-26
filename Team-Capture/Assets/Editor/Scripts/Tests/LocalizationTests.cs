@@ -3,7 +3,7 @@ using Team_Capture.Localization;
 using UnityEngine;
 using Logger = Team_Capture.Core.Logging.Logger;
 
-namespace Editor.Tests
+namespace Team_Capture.Editor.Tests
 {
 	public class LocalizationTests
 	{

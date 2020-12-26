@@ -3,7 +3,7 @@ using Team_Capture.Core.Networking;
 using Team_Capture.Core.Networking.MessagePack;
 using UnityEngine;
 
-namespace Editor.Tests
+namespace Team_Capture.Editor.Tests
 {
 	public class PacketCompressionTests
 	{

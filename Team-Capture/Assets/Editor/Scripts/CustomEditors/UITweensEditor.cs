@@ -1,7 +1,7 @@
-﻿using UnityEditor;
-using Team_Capture.Tweens;
+﻿using Team_Capture.Tweens;
+using UnityEditor;
 
-namespace Editor.Scripts.CustomEditors
+namespace Team_Capture.Editor.CustomEditors
 {
 	[CustomEditor(typeof(UITweenEvent))]
 	public class UITweensEditor : UnityEditor.Editor

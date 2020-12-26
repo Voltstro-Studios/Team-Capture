@@ -1,8 +1,7 @@
 ﻿using System;
-using Editor.Scripts;
 using NUnit.Framework;
 
-namespace Editor.Tests
+namespace Team_Capture.Editor.Tests
 {
     public class MarkdownTableGeneratorTests
     {

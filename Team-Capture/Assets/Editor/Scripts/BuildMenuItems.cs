@@ -4,7 +4,7 @@ using UnityEditor;
 using Voltstro.UnityBuilder.Build;
 using Debug = UnityEngine.Debug;
 
-namespace Editor.Scripts
+namespace Team_Capture.Editor
 {
 	public static class BuildMenuItems
 	{
