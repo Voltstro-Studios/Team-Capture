@@ -50,11 +50,8 @@ namespace Team_Capture.UI
 					yOffset = 120;
 
 			GUI.Box(new Rect(8, yOffset, 475, 310), "");
-
 			GUI.Label(new Rect(10, yOffset, 1000, 40), version);
-			yOffset += 20;
-
-			GUI.Label(new Rect(10, yOffset, 1000, 40), spacer);
+			GUI.Label(new Rect(10, yOffset += 20, 1000, 40), spacer);
 
 			if (Time.unscaledTime > timer)
 			{
@@ -62,38 +59,17 @@ namespace Team_Capture.UI
 				timer = Time.unscaledTime + refreshRate;
 			}
 
-			yOffset += 30;
-			GUI.Label(new Rect(10, yOffset, 1000, 40), $"FPS: {fps}");
-
-			yOffset += 30;
-			GUI.Label(new Rect(10, yOffset, 1000, 40), "Device Info");
-
-			yOffset += 20;
-			GUI.Label(new Rect(10, yOffset, 1000, 40), spacer);
-
-			yOffset += 20;
-			GUI.Label(new Rect(10, yOffset, 1000, 40), cpu);
-
-			yOffset += 20;
-			GUI.Label(new Rect(10, yOffset, 1000, 40), gpu);
-
-			yOffset += 20;
-			GUI.Label(new Rect(10, yOffset, 1000, 40), ram);
-
-			yOffset += 20;
-			GUI.Label(new Rect(10, yOffset, 1000, 40), renderingApi);
-
-			yOffset += 30;
-			GUI.Label(new Rect(10, yOffset, 1000, 40), "Network");
-
-			yOffset += 20;
-			GUI.Label(new Rect(10, yOffset, 1000, 40), spacer);
-
-			yOffset += 20;
-			GUI.Label(new Rect(10, yOffset, 1000, 40), ipAddress);
-
-			yOffset += 20;
-			GUI.Label(new Rect(10, yOffset, 1000, 40), $"Status: {GetNetworkingStatus()}");
+			GUI.Label(new Rect(10, yOffset += 30, 1000, 40), $"FPS: {fps}");
+			GUI.Label(new Rect(10, yOffset += 30, 1000, 40), "Device Info");
+			GUI.Label(new Rect(10, yOffset += 20, 1000, 40), spacer);
+			GUI.Label(new Rect(10, yOffset += 20, 1000, 40), cpu);
+			GUI.Label(new Rect(10, yOffset += 20, 1000, 40), gpu);
+			GUI.Label(new Rect(10, yOffset += 20, 1000, 40), ram);
+			GUI.Label(new Rect(10, yOffset += 20, 1000, 40), renderingApi);
+			GUI.Label(new Rect(10, yOffset += 30, 1000, 40), "Network");
+			GUI.Label(new Rect(10, yOffset += 20, 1000, 40), spacer);
+			GUI.Label(new Rect(10, yOffset += 20, 1000, 40), ipAddress);
+			GUI.Label(new Rect(10, yOffset + 20, 1000, 40), $"Status: {GetNetworkingStatus()}");
 		}
 
 		protected override void SingletonAwakened()
