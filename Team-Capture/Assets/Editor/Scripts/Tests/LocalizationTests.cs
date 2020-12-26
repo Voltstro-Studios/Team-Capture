@@ -13,7 +13,7 @@ namespace Editor.Tests
 		public void Setup()
 		{
 			Logger.Init();
-			locale = new Locale($"{Application.dataPath}/Editor/Tests/LocaleTest-%LANG%.json");
+			locale = new Locale($"{Application.dataPath}/Editor/Scripts/Tests/LocaleTest-%LANG%.json");
 		}
 
 		[OneTimeTearDown]
