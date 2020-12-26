@@ -1,0 +1,24 @@
+{
+    "name": "Team-Capture.Editor.Tests",
+    "rootNamespace": "",
+    "references": [
+        "GUID:c0f9e615fc974fe429e23cadc144d55a",
+        "GUID:d66621a4e95daee4c9db1ceae07fb737",
+        "GUID:0acc523941302664db1f4e527237feb3"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

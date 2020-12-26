@@ -38,5 +38,6 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyFileVersion("0.2")]
 
 #if UNITY_EDITOR
-[assembly: InternalsVisibleTo("Assembly-CSharp-Editor")]
+[assembly: InternalsVisibleTo("Team-Capture.Editor")]
+[assembly: InternalsVisibleTo("Team-Capture.Editor.Tests")]
 #endif

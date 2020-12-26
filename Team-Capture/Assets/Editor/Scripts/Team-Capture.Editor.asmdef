@@ -1,0 +1,20 @@
+{
+    "name": "Team-Capture.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:c0f9e615fc974fe429e23cadc144d55a",
+        "GUID:e3c323938430e974eb568e603b85eb9e",
+        "GUID:994e1c56bd90a2c498b2312a4664a74d"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
