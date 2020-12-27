@@ -125,7 +125,7 @@ namespace Team_Capture.Player.Movement
 			stateHandler?.OnStateChange(State);
 		}
 
-		[Command(channel = 0)]
+		[Command(channel = Channels.DefaultReliable)]
 		public void CmdMove(PlayerInputs[] inputs)
 		{
 			server.AddInputs(inputs);

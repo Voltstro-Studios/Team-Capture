@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.coffee.upm-git-extension": {
+      "version": "https://github.com/mob-sakai/UpmGitExtension.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "314846d68c45684a9a82b76fae4892c4992fecd7"
+    },
     "com.mirror-networking.mirror": {
       "version": "https://github.com/VoltUnityPackages/Mirror.git?path=/Assets/Mirror",
       "depth": 0,
