@@ -211,6 +211,8 @@ namespace Team_Capture.Core.Networking
 
 			Logger.Info("Server has started and is running on {@Address} with max connections of {@MaxPlayers}!",
 				singleton.networkAddress, singleton.maxConnections);
+
+			Server.OnStartServer();
 		}
 
 		public override void OnStopServer()
@@ -227,6 +229,8 @@ namespace Team_Capture.Core.Networking
 			PingManager.ServerShutdown();
 
 			Logger.Info("Server stopped!");
+
+			Server.OnStopServer();
 		}
 
 		public override void OnServerDisconnect(NetworkConnection conn)
