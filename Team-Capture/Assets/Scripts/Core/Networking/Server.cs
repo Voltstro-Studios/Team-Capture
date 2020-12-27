@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Text;
 using Mirror;
 using Team_Capture.Core.Logging;
 
@@ -10,7 +9,7 @@ namespace Team_Capture.Core.Networking
 	public static class Server
 	{
 		private const string ServerOnlineFile = "SERVERONLINE";
-		private const string ServerOnlineFileMessage = "A -Gawr Gura";
+		private static readonly byte[] ServerOnlineFileMessage = {65, 32, 45, 71, 97, 119, 114, 32, 71, 117, 114, 97};
 
 		private static FileStream serverOnlineFileStream;
 
@@ -25,8 +24,7 @@ namespace Team_Capture.Core.Networking
 				throw new Exception("Server is already online!");
 
 			serverOnlineFileStream = File.Create(serverOnlinePath, 128, FileOptions.DeleteOnClose);
-			byte[] messageBytes = Encoding.UTF8.GetBytes(ServerOnlineFileMessage);
-			serverOnlineFileStream.Write(messageBytes, 0, messageBytes.Length);
+			serverOnlineFileStream.Write(ServerOnlineFileMessage, 0, ServerOnlineFileMessage.Length);
 			serverOnlineFileStream.Flush();
 			File.SetAttributes(serverOnlinePath, FileAttributes.Hidden);
 		}
