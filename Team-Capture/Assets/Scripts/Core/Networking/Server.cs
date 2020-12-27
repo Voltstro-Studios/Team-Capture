@@ -69,7 +69,7 @@ namespace Team_Capture.Core.Networking
 					FileName = "Team-Capture",
 #endif
 					Arguments =
-						$"-batchmode -nographics -gamename \"{gameName}\" -scene {sceneName} -maxplayers {maxPlayers}"
+						$"-batchmode -nographics -gamename \"{gameName}\" -scene {sceneName} -maxplayers {maxPlayers} -closeserveronfirstclientdisconnect"
 				}
 			};
 			newTcServer.Start();

@@ -22,6 +22,9 @@ namespace Team_Capture.Core.Networking
 	[RequireComponent(typeof(TCGameDiscovery))]
 	internal class TCNetworkManager : NetworkManager
 	{
+		[CommandLineArgument("closeserveronfirstclientdisconnect")]
+		public static bool CloseServerOnFirstClientDisconnect = false;
+
 		/// <summary>
 		///     The active <see cref="TCNetworkManager" />
 		/// </summary>
@@ -236,6 +239,9 @@ namespace Team_Capture.Core.Networking
 		public override void OnServerDisconnect(NetworkConnection conn)
 		{
 			Logger.Info("Player {@Id} disconnected from the server.", conn.identity.netId);
+
+			if(CloseServerOnFirstClientDisconnect && conn.identity.netId == 1)
+				Game.QuitGame();
 
 			base.OnServerDisconnect(conn);
 		}
