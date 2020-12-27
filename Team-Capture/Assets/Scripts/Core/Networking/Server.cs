@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
+using Mirror;
+using Team_Capture.Core.Logging;
 
 namespace Team_Capture.Core.Networking
 {
@@ -36,6 +39,47 @@ namespace Team_Capture.Core.Networking
 			serverOnlineFileStream.Close();
 			serverOnlineFileStream.Dispose();
 			serverOnlineFileStream = null;
+		}
+
+		public static void CreateServerAndConnectToServer(this NetworkManager netManager, string gameName, string sceneName, int maxPlayers)
+		{
+#if UNITY_EDITOR
+			string serverOnlinePath =
+				$"{Voltstro.UnityBuilder.Build.GameBuilder.GetBuildDirectory()}Team-Capture-Quick/{ServerOnlineFile}";
+#else
+			string serverOnlinePath = $"{Game.GetGameExecutePath()}/{ServerOnlineFile}";
+#endif
+
+			if (File.Exists(serverOnlinePath))
+			{
+				Logger.Error("A server is already running!");
+				return;
+			}
+
+			Process newTcServer = new Process
+			{
+				StartInfo = new ProcessStartInfo
+				{
+#if UNITY_EDITOR
+					FileName =
+						$"{Voltstro.UnityBuilder.Build.GameBuilder.GetBuildDirectory()}Team-Capture-Quick/Team-Capture.exe",
+#elif UNITY_STANDALONE_WIN
+					FileName = "Team-Capture.exe",
+#else
+					FileName = "Team-Capture",
+#endif
+					Arguments =
+						$"-batchmode -nographics -gamename \"{gameName}\" -scene {sceneName} -maxplayers {maxPlayers}"
+				}
+			};
+			newTcServer.Start();
+
+			while (!File.Exists(serverOnlinePath))
+			{
+			}
+
+			netManager.networkAddress = "localhost";
+			netManager.StartClient();
 		}
 	}
 }

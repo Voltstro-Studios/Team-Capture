@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Team_Capture.Core.Networking;
@@ -131,25 +130,7 @@ namespace Team_Capture.UI.Panels
 		private void CreateServerProcess()
 		{
 			//Now start the server
-			Process newTcServer = new Process
-			{
-				StartInfo = new ProcessStartInfo
-				{
-#if UNITY_EDITOR
-					FileName =
- $"{Voltstro.UnityBuilder.Build.GameBuilder.GetBuildDirectory()}Team-Capture-Quick/Team-Capture.exe",
-#elif UNITY_STANDALONE_WIN
-					FileName = "Team-Capture.exe",
-#else
-					FileName = "Team-Capture",
-#endif
-					Arguments =
-						$"-batchmode -nographics -gamename \"{gameNameText.text}\" -scene {onlineTCScenes[mapsDropdown.value].SceneFileName} -maxplayers {maxPlayers}"
-				}
-			};
-			newTcServer.Start();
-
-			StartCoroutine(WaitAndConnectToGame());
+			netManager.CreateServerAndConnectToServer(gameNameText.text, onlineTCScenes[mapsDropdown.value].SceneFileName, maxPlayers);
 		}
 
 		private IEnumerator QuitExistingGame(Action doLast)
@@ -159,13 +140,6 @@ namespace Team_Capture.UI.Panels
 			yield return new WaitForSeconds(0.1f);
 
 			doLast();
-		}
-
-		private IEnumerator WaitAndConnectToGame()
-		{
-			yield return new WaitForSeconds(1.0f);
-
-			netManager.StartClient();
 		}
 
 		public void ResetGameNameTextColor()
