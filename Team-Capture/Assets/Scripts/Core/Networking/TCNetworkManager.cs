@@ -238,6 +238,9 @@ namespace Team_Capture.Core.Networking
 
 		public override void OnServerDisconnect(NetworkConnection conn)
 		{
+			if(conn == null)
+				return;
+
 			Logger.Info("Player {@Id} disconnected from the server.", conn.identity.netId);
 
 			if(CloseServerOnFirstClientDisconnect && conn.identity.netId == 1)

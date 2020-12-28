@@ -28,6 +28,9 @@ namespace Team_Capture.Core.Networking
 		/// <returns></returns>
 		public static double GetClientPing(int connectionId)
 		{
+			if (!clientsPing.ContainsKey(connectionId))
+				return 0;
+
 			return clientsPing[connectionId].Value;
 		}
 
