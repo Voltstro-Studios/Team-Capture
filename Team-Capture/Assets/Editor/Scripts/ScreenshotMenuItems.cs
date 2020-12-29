@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Team_Capture.Editor
 {
-    public static class ScreenshotMenuItem
+    public static class ScreenshotMenuItems
     {
 	    private static string screenshotDir = $"{Game.GetGameExecutePath()}/Screenshots/";
 
