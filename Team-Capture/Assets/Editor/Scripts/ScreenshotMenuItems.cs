@@ -10,14 +10,14 @@ namespace Team_Capture.Editor
 {
     public static class ScreenshotMenuItems
     {
-	    private static string screenshotDir = $"{Game.GetGameExecutePath()}/Screenshots/";
+	    private static readonly string ScreenshotDir = $"{Game.GetGameExecutePath()}/Screenshots/";
 
 		[MenuItem("Screenshot/Take Screenshot")]
 	    public static void TakeScreenshot()
 	    {
 		    CheckScreenshotDirectory();
 
-		    string fileName = $"{screenshotDir}{DateTime.Now:yy-MM-dd-hh-mm-ss}.png";
+		    string fileName = $"{ScreenshotDir}{DateTime.Now:yy-MM-dd-hh-mm-ss}.png";
 			ScreenCapture.CaptureScreenshot(fileName);
 			Debug.Log($"Saved screenshot to {fileName}");
 	    }
@@ -27,13 +27,13 @@ namespace Team_Capture.Editor
 	    {
 		    CheckScreenshotDirectory();
 
-		    Process.Start(screenshotDir);
+		    Process.Start(ScreenshotDir);
 	    }
 
 	    private static void CheckScreenshotDirectory()
 	    {
-		    if (!Directory.Exists(screenshotDir))
-			    Directory.CreateDirectory(screenshotDir);
+		    if (!Directory.Exists(ScreenshotDir))
+			    Directory.CreateDirectory(ScreenshotDir);
 	    }
     }
 }
