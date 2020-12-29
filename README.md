@@ -89,6 +89,8 @@ While working on the project, remember that if you alter code that runs on the s
 
 You can run a server from either the command line with the `startserver` command, start a server from in the in-game 'Create Server' menu, launch the Team-Capture exe with `-batchmode -nographics`, or via running the PowerShell scripts in the build directory.
 
+You can also test the build from the editor by going to Team Capture **->** Build **->** Launch Player *etc*.
+
 Check out the [Command Line Arguments Wiki page](https://github.com/Voltstro/Team-Capture/wiki/Command-Line-Arguments) for more info on the command line arguments in this project.
 
 # License
@@ -118,7 +120,6 @@ This project is licensed under the GNU AGPLv3 License - see the [LICENSE](/LICEN
 **Q:** Why not use [MLAPI](https://github.com/Unity-Technologies/com.unity.multiplayer.mlapi)?
 
 **A:** When we started planning for this project, MLAPI was not apart of the Unity ecosystem. On top of that, at the time, MLAPI had really bad documentation, and a lack of community, so Mirror was the obvious chose. Now we are too far into development to change, not that we would.
-
 
 ---
 
