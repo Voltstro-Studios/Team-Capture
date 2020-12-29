@@ -6,10 +6,12 @@
 [Bb]uilds/
 Assets/AssetStoreTools*
 
+Team-Capture/Game/Screenshots/*
+
 # Unity Memory Profiler
 Team-Capture/MemoryCaptures/*
 
-#Unity Build Report Inspector
+# Unity Build Report Inspector
 Team-Capture/Assets/BuildReports/*
 Team-Capture/Assets/BuildReports.meta
 
