@@ -1,3 +1,4 @@
+using Mirror;
 using UnityEngine;
 
 namespace Team_Capture.Player.Movement
@@ -11,7 +12,7 @@ namespace Team_Capture.Player.Movement
 	/// <summary>
 	///     The state of this player
 	/// </summary>
-	public struct PlayerState
+	public struct PlayerState : NetworkMessage
 	{
 		public Vector3 Position;
 		public Vector3 Velocity;

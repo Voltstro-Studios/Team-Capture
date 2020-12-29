@@ -1,4 +1,16 @@
 <linker>
   <assembly fullname="Discord.GameSDK" preserve="all" />
   <assembly fullname="Newtonsoft.Json" preserve="all" />
+
+  <assembly fullname="Mirror">
+    <type fullname="Mirror.Writer" preserve="all"/>
+    <type fullname="Mirror.NetworkWriter" preserve="all"/>
+
+    <type fullname="Mirror.Reader" preserve="all"/>
+    <type fullname="Mirror.NetworkReader" preserve="all"/>
+  </assembly>
+
+  <assembly fullname="Team-Capture">
+    <type fullname="Mirror.GeneratedNetworkCode" preserve="all" />
+  </assembly>
 </linker>

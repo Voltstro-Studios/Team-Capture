@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Mirror;
+using UnityEngine;
+using UnityEngine.Scripting;
 
 namespace Team_Capture.Player.Movement
 {
@@ -11,7 +13,7 @@ namespace Team_Capture.Player.Movement
 	/// <summary>
 	///     The inputs to send to the server
 	/// </summary>
-	public struct PlayerInputs
+	public struct PlayerInputs : NetworkMessage
 	{
 		public PlayerInputs(Vector2 dirs, Vector2 mouseDirs, bool jump, int inputNum)
 		{
@@ -30,5 +32,23 @@ namespace Team_Capture.Player.Movement
 
 		public static PlayerInputs Zero =>
 			new PlayerInputs(Vector2.zero, Vector2.zero, false, 0);
+	}
+
+	[Preserve]
+	public static class PlayerInputsReaderWriter
+	{
+		public static void WritePlayerInputs(this NetworkWriter writer, PlayerInputs inputs)
+		{
+			writer.WriteVector2(inputs.Directions);
+			writer.WriteVector2(inputs.MouseDirections);
+
+			writer.WriteBoolean(inputs.Jump);
+			writer.WriteInt32(inputs.InputNum);
+		}
+
+		public static PlayerInputs ReaderPlayerInputs(this NetworkReader reader)
+		{
+			return new PlayerInputs(reader.ReadVector2(), reader.ReadVector2(), reader.ReadBoolean(), reader.ReadInt32());
+		}
 	}
 }
