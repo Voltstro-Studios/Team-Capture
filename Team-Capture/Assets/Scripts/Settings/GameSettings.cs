@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Newtonsoft.Json;
-using Settings.SettingClasses;
 using Team_Capture.Core;
 using Team_Capture.Helper;
 using Team_Capture.Settings.SettingClasses;

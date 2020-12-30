@@ -1,7 +1,6 @@
-﻿using Team_Capture.Settings;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Settings.SettingClasses
+namespace Team_Capture.Settings.SettingClasses
 {
 	internal class MouseSettingsClass : Setting
 	{

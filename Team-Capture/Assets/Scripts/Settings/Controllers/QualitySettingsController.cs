@@ -1,6 +1,6 @@
-﻿using Settings.SettingClasses;
-using Team_Capture.Console;
+﻿using Team_Capture.Console;
 using Team_Capture.Core;
+using Team_Capture.Settings.SettingClasses;
 using UnityEngine;
 using Logger = Team_Capture.Core.Logging.Logger;
 

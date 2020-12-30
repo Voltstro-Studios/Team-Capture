@@ -1,8 +1,7 @@
-﻿using Team_Capture.Settings;
-using Team_Capture.Settings.Enums;
+﻿using Team_Capture.Settings.Enums;
 using UnityEngine;
 
-namespace Settings.SettingClasses
+namespace Team_Capture.Settings.SettingClasses
 {
 	internal sealed class VideoSettingsClass : Setting
 	{

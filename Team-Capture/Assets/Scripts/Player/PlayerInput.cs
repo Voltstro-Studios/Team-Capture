@@ -1,10 +1,10 @@
 ﻿using System;
 using Mirror;
-using Settings.SettingClasses;
 using Team_Capture.Console;
 using Team_Capture.Input;
 using Team_Capture.Player.Movement;
 using Team_Capture.Settings;
+using Team_Capture.Settings.SettingClasses;
 using Team_Capture.UI;
 using Team_Capture.Weapons;
 using UnityEngine;
