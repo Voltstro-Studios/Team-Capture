@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using Mirror;
-using Team_Capture.Core.Networking.MessagePack;
 using Team_Capture.Helper;
 using Team_Capture.LagCompensation;
 using Team_Capture.UI;
@@ -263,6 +262,13 @@ namespace Team_Capture.Player
 				Instantiate(weapon.bulletHolePrefab, hitTargets.Targets[i],
 					Quaternion.FromToRotation(Vector3.back, hitTargets.TargetNormals[i]));
 			}
+		}
+
+		private struct WeaponShootEffectsTargets : NetworkMessage
+		{
+			public Vector3[] Targets;
+
+			public Vector3[] TargetNormals;
 		}
 
 		#endregion
