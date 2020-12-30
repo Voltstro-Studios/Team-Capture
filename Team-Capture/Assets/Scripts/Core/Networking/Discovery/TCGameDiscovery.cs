@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using Mirror;
 using Mirror.Discovery;
 using Team_Capture.SceneManagement;
 using UnityEngine;
@@ -8,6 +9,28 @@ using Logger = Team_Capture.Core.Logging.Logger;
 
 namespace Team_Capture.Core.Networking.Discovery
 {
+	#region Messages
+
+	internal class TCServerRequest : NetworkMessage
+	{
+		public string ApplicationVersion;
+	}
+
+	internal class TCServerResponse : NetworkMessage
+	{
+		public int CurrentAmountOfPlayers;
+
+		public string GameName;
+
+		public int MaxPlayers;
+
+		public string SceneName;
+
+		public IPEndPoint EndPoint { get; set; }
+	}
+
+	#endregion
+
 	[RequireComponent(typeof(TCNetworkManager))]
 	internal class TCGameDiscovery : NetworkDiscoveryBase<TCServerRequest, TCServerResponse>
 	{
