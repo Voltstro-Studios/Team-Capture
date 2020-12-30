@@ -1,3 +1,0 @@
-[submodule "Team-Capture/MessagePack/MessagePackSource"]
-	path = Team-Capture/MessagePack/MessagePackSource
-	url = https://github.com/neuecc/MessagePack-CSharp
