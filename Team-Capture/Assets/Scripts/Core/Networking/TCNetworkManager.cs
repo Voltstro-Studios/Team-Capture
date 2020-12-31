@@ -22,6 +22,9 @@ namespace Team_Capture.Core.Networking
 	[RequireComponent(typeof(TCGameDiscovery))]
 	internal class TCNetworkManager : NetworkManager
 	{
+		/// <summary>
+		///		Will make the server shutdown when the first connected player disconnects
+		/// </summary>
 		[CommandLineArgument("closeserveronfirstclientdisconnect")]
 		public static bool CloseServerOnFirstClientDisconnect = false;
 
@@ -65,6 +68,7 @@ namespace Team_Capture.Core.Networking
 				return;
 			}
 
+			//Replace Mirror's logger with ours
 			LogFactory.ReplaceLogHandler(new MirrorLogHandler());
 
 			base.Awake();
@@ -74,6 +78,7 @@ namespace Team_Capture.Core.Networking
 
 		public override void Start()
 		{
+			//Setup configuration with our launch arguments
 			serverConfig.gameName = GameName;
 			singleton.maxConnections = MaxPlayers;
 			singleton.onlineScene = Scene;
@@ -83,7 +88,11 @@ namespace Team_Capture.Core.Networking
 				//Start the server
 				StartServer();
 
+			//Setup loading screen
+			//TODO: Handle loading screen stuff somewhere different
 			SceneManager.OnBeginSceneLoading += operation => StartCoroutine(OnStartSceneLoadAsync(operation));
+
+			//TODO: Make auth movement not server framerate dependent
 			Application.targetFrameRate = 128;
 		}
 
@@ -132,25 +141,9 @@ namespace Team_Capture.Core.Networking
 
 		#endregion
 
-		private void SetupNeededSceneStuffClient()
-		{
-			//Create our the game manager
-			Instantiate(gameMangerPrefab);
-			Logger.Debug("Created game manager object");
-		}
-
-		#region Console Arguments
-
-		[CommandLineArgument("gamename")] public static string GameName = "Team-Capture Game";
-
-		[CommandLineArgument("maxplayers")] public static int MaxPlayers = 16;
-
-		[CommandLineArgument("scene")] public static string Scene = "dm_ditch";
-
-		#endregion
-
 		#region Server Events
 
+		/// <inheritdoc/>
 		public override void OnServerSceneChanged(string sceneName)
 		{
 			Logger.Info("Server changing scene to {@SceneName}", sceneName);
@@ -275,6 +268,13 @@ namespace Team_Capture.Core.Networking
 			Logger.Info("The server has requested to change the scene to {@NewSceneName}", newSceneName);
 		}
 
+		private void SetupNeededSceneStuffClient()
+		{
+			//Create our the game manager
+			Instantiate(gameMangerPrefab);
+			Logger.Debug("Created game manager object");
+		}
+
 		#endregion
 
 		#region Client Events
@@ -374,6 +374,16 @@ namespace Team_Capture.Core.Networking
 			singleton.networkAddress = args[0];
 			Logger.Info("Server's address was set to {@Address}", args[0]);
 		}
+
+		#endregion
+
+		#region Command Line Arguments
+
+		[CommandLineArgument("gamename")] public static string GameName = "Team-Capture Game";
+
+		[CommandLineArgument("maxplayers")] public static int MaxPlayers = 16;
+
+		[CommandLineArgument("scene")] public static string Scene = "dm_ditch";
 
 		#endregion
 	}
