@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using Mirror;
 using Team_Capture.Console;
-using Team_Capture.Core.Networking.Messages;
 using UnityEngine;
 using Logger = Team_Capture.Core.Logging.Logger;
 
@@ -41,7 +40,7 @@ namespace Team_Capture.Core.Networking
 		{
 			lastPingTime = Time.time - 1;
 			clientsPing = new Dictionary<int, ExponentialMovingAverage>();
-			NetworkServer.RegisterHandler<ClientPongMessage>(OnReceiveClientPongMessage);
+			NetworkServer.RegisterHandler<PingClientMessage>(OnReceiveClientPingMessage);
 		}
 
 		/// <summary>
@@ -50,7 +49,7 @@ namespace Team_Capture.Core.Networking
 		internal static void ServerShutdown()
 		{
 			clientsPing.Clear();
-			NetworkServer.UnregisterHandler<ClientPongMessage>();
+			NetworkServer.UnregisterHandler<PingClientMessage>();
 		}
 
 		/// <summary>
@@ -70,7 +69,7 @@ namespace Team_Capture.Core.Networking
 		/// </summary>
 		internal static void PingClients()
 		{
-			NetworkServer.SendToAll(new ServerPingMessage());
+			NetworkServer.SendToAll(new PingServerMessage());
 		}
 
 		/// <summary>
@@ -79,10 +78,10 @@ namespace Team_Capture.Core.Networking
 		/// <param name="conn"></param>
 		internal static void PingClient(NetworkConnection conn)
 		{
-			conn.Send(new ServerPingMessage());
+			conn.Send(new PingServerMessage());
 		}
 
-		private static void OnReceiveClientPongMessage(NetworkConnection conn, ClientPongMessage message)
+		private static void OnReceiveClientPingMessage(NetworkConnection conn, PingClientMessage message)
 		{
 			ExponentialMovingAverage rtt;
 			if (clientsPing.ContainsKey(conn.connectionId))
@@ -109,7 +108,7 @@ namespace Team_Capture.Core.Networking
 		/// </summary>
 		internal static void ClientSetup()
 		{
-			NetworkClient.RegisterHandler<ServerPingMessage>(OnReceiveServerPing);
+			NetworkClient.RegisterHandler<PingServerMessage>(OnReceiveServerPingMessage);
 		}
 
 		/// <summary>
@@ -117,17 +116,29 @@ namespace Team_Capture.Core.Networking
 		/// </summary>
 		internal static void ClientShutdown()
 		{
-			NetworkClient.UnregisterHandler<ServerPingMessage>();
+			NetworkClient.UnregisterHandler<PingServerMessage>();
 		}
 
-		private static void OnReceiveServerPing(NetworkConnection conn, ServerPingMessage message)
+		private static void OnReceiveServerPingMessage(NetworkConnection conn, PingServerMessage message)
 		{
-			conn.Send(new ClientPongMessage
+			conn.Send(new PingClientMessage
 			{
 				ClientTime = NetworkTime.time
 			});
 		}
 
 		#endregion
+
+		internal struct PingClientMessage : NetworkMessage
+		{
+			/// <summary>
+			///		The current time of the client
+			/// </summary>
+			public double ClientTime;
+		}
+
+		internal struct PingServerMessage : NetworkMessage
+		{
+		}
 	}
 }
