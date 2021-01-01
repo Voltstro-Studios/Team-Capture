@@ -116,7 +116,7 @@ namespace Team_Capture.Player
 		/// <summary>
 		///     Asks the server to shoot this client's weapon
 		/// </summary>
-		[Command(channel = 3)]
+		[Command(channel = Channels.DefaultUnreliable)]
 		private void CmdShootWeapon()
 		{
 			//First, get our active weapon

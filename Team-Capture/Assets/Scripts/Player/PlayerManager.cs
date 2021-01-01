@@ -423,7 +423,7 @@ namespace Team_Capture.Player
 		/// <summary>
 		///     Kills the player
 		/// </summary>
-		[Command(channel = 5)]
+		[Command(channel = Channels.DefaultUnreliable)]
 		public void CmdSuicide()
 		{
 			TakeDamage(Health, transform.name);

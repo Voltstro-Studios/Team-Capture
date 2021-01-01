@@ -179,7 +179,7 @@ namespace Team_Capture.Weapons
 		/// <summary>
 		///     Reloads clients current weapon
 		/// </summary>
-		[Command(channel = 3)]
+		[Command(channel = Channels.DefaultUnreliable)]
 		private void CmdReloadPlayerWeapon()
 		{
 			NetworkedWeapon weapon = GetActiveWeapon();
@@ -310,7 +310,7 @@ namespace Team_Capture.Weapons
 		///     Sets the <see cref="SelectedWeaponIndex" /> to your index
 		/// </summary>
 		/// <param name="index"></param>
-		[Command(channel = 3)]
+		[Command(channel = Channels.DefaultUnreliable)]
 		public void CmdSetWeapon(int index)
 		{
 			if (weapons.ElementAt(index) == null)
