@@ -1,6 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using Mirror;
+using Team_Capture.Core;
 using Team_Capture.Core.Networking;
+using Team_Capture.Helper;
 using Team_Capture.Player;
 using UnityEngine;
 
@@ -23,7 +27,9 @@ namespace Team_Capture.Pickups
 		[Tooltip("The radius of the trigger")] 
 		[SerializeField] private float triggerRadius = 1.3f;
 
-		[SyncVar] private bool isPickedUp;
+		[SyncVar(hook = nameof(OnIsPickedUp))] private bool isPickedUp;
+
+		public List<PickupMaterials> pickupMaterials = new List<PickupMaterials>();
 
 		private void Start()
 		{
@@ -35,6 +41,9 @@ namespace Team_Capture.Pickups
 				newCollider.isTrigger = true;
 				newCollider.radius = triggerRadius;
 			}
+			
+			if(!Game.IsHeadless)
+				GeneratePickupMaterials();
 		}
 
 		/// <summary>
@@ -71,6 +80,57 @@ namespace Team_Capture.Pickups
 			yield return new WaitForSeconds(pickupRespawnTime);
 
 			isPickedUp = false;
+		}
+
+		private void OnIsPickedUp(bool oldValue, bool newValue)
+		{
+			SetMeshRenderMaterials();
+		}
+
+		private void GeneratePickupMaterials()
+		{
+			//Get all mesh renderers
+			MeshRenderer[] meshRenderers = gameObject.GetComponentsInChildren<MeshRenderer>();
+			foreach (MeshRenderer meshRenderer in meshRenderers)
+			{
+				//Get the non-picked up material
+				Material nonPickedUpMaterial = meshRenderer.material;
+				Color nonPickedUpMaterialColor = nonPickedUpMaterial.color;
+
+				//Copy it, and set it's color to have alpha
+				Material pickedUpMaterial = new Material(nonPickedUpMaterial)
+				{
+					color = new Color(nonPickedUpMaterialColor.r, nonPickedUpMaterialColor.g,
+						nonPickedUpMaterialColor.b, 0.4f)
+				};
+				pickedUpMaterial.ChangeMaterialTransparency(true);
+
+				pickupMaterials.Add(new PickupMaterials
+				{
+					meshRenderer = meshRenderer,
+					defaultMaterial = nonPickedUpMaterial,
+					pickedUpMaterial = pickedUpMaterial
+				});
+			}
+		}
+
+		private void SetMeshRenderMaterials()
+		{
+			foreach (PickupMaterials pickupMaterial in pickupMaterials)
+			{
+				pickupMaterial.meshRenderer.material =
+					isPickedUp ? pickupMaterial.pickedUpMaterial : pickupMaterial.defaultMaterial;
+			}
+		}
+
+		[Serializable]
+		public struct PickupMaterials
+		{
+			public MeshRenderer meshRenderer;
+
+			public Material defaultMaterial;
+
+			public Material pickedUpMaterial;
 		}
 	}
 }
