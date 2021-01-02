@@ -1,5 +1,6 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
+using Mirror;
+using Team_Capture.Core.Networking;
 using Team_Capture.Player;
 using UnityEngine;
 
@@ -8,15 +9,8 @@ namespace Team_Capture.Pickups
 	/// <summary>
 	///     Base class for a something that can picked up, such as a weapon or a health pack
 	/// </summary>
-	public abstract class Pickup : MonoBehaviour
+	internal abstract class Pickup : NetworkBehaviour
 	{
-		//TODO: We should create picked up variations of materials at runtime
-		/// <summary>
-		///     Version of the picked up version of the materials on the pickup
-		/// </summary>
-		[Tooltip("Version of the picked up version of the materials on the pickup")]
-		public PickupMaterials[] pickupMaterials;
-
 		/// <summary>
 		///     How long this pickup takes to respawn
 		/// </summary>
@@ -26,16 +20,22 @@ namespace Team_Capture.Pickups
 		/// <summary>
 		///     The radius of the trigger
 		/// </summary>
-		[Tooltip("The radius of the trigger")] [SerializeField]
-		private float triggerRadius = 1.3f;
+		[Tooltip("The radius of the trigger")] 
+		[SerializeField] private float triggerRadius = 1.3f;
 
-		/// <summary>
-		///     The centre of the trigger
-		/// </summary>
-		[Tooltip("The centre of the trigger")] [SerializeField]
-		private Vector3 triggerCenter = Vector3.zero;
+		[SyncVar] private bool isPickedUp;
 
-		private bool isPickedUp;
+		private void Start()
+		{
+			//TODO: Create picked up materials
+
+			if (TCNetworkManager.IsServer)
+			{
+				SphereCollider newCollider = gameObject.AddComponent<SphereCollider>();
+				newCollider.isTrigger = true;
+				newCollider.radius = triggerRadius;
+			}
+		}
 
 		/// <summary>
 		///     Called when a collider enters the trigger
@@ -51,17 +51,6 @@ namespace Team_Capture.Pickups
 		}
 
 		/// <summary>
-		///     Sets up the collider (trigger) for the server
-		/// </summary>
-		public void SetupTrigger()
-		{
-			SphereCollider newCollider = gameObject.AddComponent<SphereCollider>();
-			newCollider.isTrigger = true;
-			newCollider.radius = triggerRadius;
-			newCollider.center = triggerCenter;
-		}
-
-		/// <summary>
 		///     Called when a <see cref="PlayerManager" /> interacts with the pickup
 		/// </summary>
 		/// <param name="player"></param>
@@ -70,7 +59,6 @@ namespace Team_Capture.Pickups
 			isPickedUp = true;
 
 			//Deactivate the pickup and respawn it
-			ServerPickupManager.DeactivatePickup(this);
 			StartCoroutine(RespawnPickup());
 		}
 
@@ -82,17 +70,7 @@ namespace Team_Capture.Pickups
 		{
 			yield return new WaitForSeconds(pickupRespawnTime);
 
-			ServerPickupManager.ActivatePickup(this);
 			isPickedUp = false;
 		}
-	}
-
-	[Serializable]
-	public class PickupMaterials
-	{
-		public MeshRenderer meshToChange;
-
-		public Material pickupMaterial;
-		public Material pickupPickedUpMaterial;
 	}
 }

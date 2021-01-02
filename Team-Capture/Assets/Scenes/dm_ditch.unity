@@ -14085,6 +14085,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: HealthPack2
       objectReference: {fileID: 0}
+    - target: {fileID: 1744910315619233118, guid: 0ae707cd6882ff842951820829382e2a,
+        type: 3}
+      propertyPath: sceneId
+      value: 3996053041
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0ae707cd6882ff842951820829382e2a, type: 3}
 --- !u!4 &659685271 stripped
@@ -41502,6 +41507,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Rifle1
       objectReference: {fileID: 0}
+    - target: {fileID: 6344015274723330416, guid: 1cb2406c378873a439e6d27fee28a882,
+        type: 3}
+      propertyPath: sceneId
+      value: 1573999434
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1cb2406c378873a439e6d27fee28a882, type: 3}
 --- !u!4 &739785286659655357 stripped
@@ -41576,6 +41586,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: HealthPack1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1744910315619233118, guid: 0ae707cd6882ff842951820829382e2a,
+        type: 3}
+      propertyPath: sceneId
+      value: 3864510730
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0ae707cd6882ff842951820829382e2a, type: 3}
@@ -48745,6 +48760,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 958358809}
     m_Modifications:
+    - target: {fileID: 2053532300107205026, guid: 773090c7561846d4a9468f8702a87642,
+        type: 3}
+      propertyPath: sceneId
+      value: 4085629308
+      objectReference: {fileID: 0}
     - target: {fileID: 5672168424297345538, guid: 773090c7561846d4a9468f8702a87642,
         type: 3}
       propertyPath: m_Name

@@ -17,7 +17,6 @@ namespace Team_Capture.Player
 		private void Awake()
 		{
 			//Register all our custom messages
-			NetworkClient.RegisterHandler<SetPickupStatus>(PickupMessage);
 			NetworkClient.RegisterHandler<PlayerDiedMessage>(PlayerDiedMessage);
 
 			uiManager = GetComponent<PlayerUIManager>();
@@ -38,30 +37,6 @@ namespace Team_Capture.Player
 		private void PlayerDiedMessage(NetworkConnection conn, PlayerDiedMessage message)
 		{
 			uiManager.AddKillfeedItem(message);
-		}
-
-		/// <summary>
-		///     When a pickup changes status
-		/// </summary>
-		/// <param name="conn"></param>
-		/// <param name="status"></param>
-		private static void PickupMessage(NetworkConnection conn, SetPickupStatus status)
-		{
-			string pickupDirectory = GameManager.GetActiveScene().pickupsParent + status.PickupName;
-			GameObject pickup = GameObject.Find(pickupDirectory);
-			if (pickup == null)
-			{
-				Logger.Error("Was told to change status of a pickup at `{@PickupDirectory}` that doesn't exist!",
-					pickupDirectory);
-				return;
-			}
-
-			Pickup pickupLogic = pickup.GetComponent<Pickup>();
-
-			foreach (PickupMaterials pickupMaterial in pickupLogic.pickupMaterials)
-				pickupMaterial.meshToChange.material = status.IsActive
-					? pickupMaterial.pickupMaterial
-					: pickupMaterial.pickupPickedUpMaterial;
 		}
 	}
 }

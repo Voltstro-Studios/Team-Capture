@@ -60,6 +60,8 @@ namespace Team_Capture.Core.Networking
 		[Header("Loading Screen")] [SerializeField]
 		private GameObject loadingScreenPrefab;
 
+		public static bool IsServer => Instance.mode == NetworkManagerMode.ServerOnly;
+
 		public override void Awake()
 		{
 			if (Instance != null)
@@ -165,9 +167,6 @@ namespace Team_Capture.Core.Networking
 				ServerConfig = serverConfig
 			});
 
-			//Send pickup's status
-			ServerPickupManager.OnClientJoined(conn);
-
 			//Create the player object
 			GameObject player = Instantiate(playerPrefab);
 			player.AddComponent<SimulationObject>();
@@ -191,9 +190,6 @@ namespace Team_Capture.Core.Networking
 			//Set what network address to use, if the computer has multiple adapters then it will default to localhost
 			singleton.networkAddress = NetHelper.LocalIpAddress();
 
-			//Setup the pickup manager
-			ServerPickupManager.Setup();
-
 			//Start ping service
 			PingManager.ServerSetup();
 
@@ -216,8 +212,6 @@ namespace Team_Capture.Core.Networking
 			Logger.Info("Stopping server...");
 
 			base.OnStopServer();
-
-			ServerPickupManager.Shutdown();
 
 			//Stop advertising the server when the server stops
 			gameDiscovery.StopDiscovery();
@@ -302,7 +296,6 @@ namespace Team_Capture.Core.Networking
 
 		public override void OnStartClient()
 		{
-			ClientPickupManager.Setup();
 			PingManager.ClientSetup();
 
 			base.OnStartClient();
@@ -312,7 +305,6 @@ namespace Team_Capture.Core.Networking
 		{
 			base.OnStopClient();
 
-			ClientPickupManager.Shutdown();
 			PingManager.ClientShutdown();
 
 			Logger.Info("Stopped client");
