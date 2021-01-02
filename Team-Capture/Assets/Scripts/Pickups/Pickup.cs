@@ -33,17 +33,17 @@ namespace Team_Capture.Pickups
 
 		private void Start()
 		{
-			//TODO: Create picked up materials
-
 			if (TCNetworkManager.IsServer)
 			{
 				SphereCollider newCollider = gameObject.AddComponent<SphereCollider>();
 				newCollider.isTrigger = true;
 				newCollider.radius = triggerRadius;
 			}
-			
-			if(!Game.IsHeadless)
-				GeneratePickupMaterials();
+
+			if (Game.IsHeadless) return;
+
+			GeneratePickupMaterials();
+			SetMeshRenderMaterials();
 		}
 
 		/// <summary>
