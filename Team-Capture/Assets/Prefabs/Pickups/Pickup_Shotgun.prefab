@@ -1,5 +1,24 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!95 &5517659945719439460
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4022353263861246700}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 0322ba29ca8b1054493fea4b8e4a9109, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &5672168424297345538
 GameObject:
   m_ObjectHideFlags: 0
@@ -49,6 +68,7 @@ MonoBehaviour:
   syncInterval: 0.1
   pickupRespawnTime: 4
   triggerRadius: 1.3
+  pickupMaterials: []
   weapon: {fileID: 11400000, guid: 362135e29414fcc4cb8b6717cd3ff4c2, type: 2}
 --- !u!114 &2053532300107205026
 MonoBehaviour:
@@ -175,6 +195,12 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 097ae9b4eb905744dac4b05972f61dea, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a1c3205fb7735474bb492dc5f45e442a, type: 3}
+--- !u!1 &4022353263861246700 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -927199367670048503, guid: a1c3205fb7735474bb492dc5f45e442a,
+    type: 3}
+  m_PrefabInstance: {fileID: 4968501649352586213}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &110651704189638911 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: a1c3205fb7735474bb492dc5f45e442a,
