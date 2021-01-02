@@ -1,9 +1,6 @@
 ﻿using Mirror;
-using Team_Capture.Core;
 using Team_Capture.Core.Networking.Messages;
-using Team_Capture.Pickups;
 using UnityEngine;
-using Logger = Team_Capture.Core.Logging.Logger;
 
 namespace Team_Capture.Player
 {
@@ -25,7 +22,6 @@ namespace Team_Capture.Player
 		private void OnDestroy()
 		{
 			//Unregister our custom messages on destroy
-			NetworkClient.UnregisterHandler<SetPickupStatus>();
 			NetworkClient.UnregisterHandler<PlayerDiedMessage>();
 		}
 
