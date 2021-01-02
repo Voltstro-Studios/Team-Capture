@@ -94,7 +94,7 @@ namespace Team_Capture.UI
 				scoreBoardObject.SetActive(false);
 
 			if (PlayerManager.IsDead) return;
-			hud.gameObject.SetActive(!state);
+			ActivateHud(!state);
 		}
 
 		/// <summary>
@@ -103,6 +103,18 @@ namespace Team_Capture.UI
 		public void ToggleScoreBoard()
 		{
 			scoreBoardObject.SetActive(!scoreBoardObject.activeSelf);
+		}
+
+		/// <summary>
+		///		Activates the hud
+		/// </summary>
+		/// <param name="state"></param>
+		public void ActivateHud(bool state)
+		{
+			if(IsPauseMenuOpen)
+				return;
+
+			hud.gameObject.SetActive(state);
 		}
 	}
 }

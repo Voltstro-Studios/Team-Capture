@@ -56,7 +56,7 @@ namespace Team_Capture.Player
 		/// <param name="active"></param>
 		internal void SetHud(bool active)
 		{
-			ui.hud.gameObject.SetActive(active);
+			ui.ActivateHud(active);
 		}
 
 		/// <summary>
