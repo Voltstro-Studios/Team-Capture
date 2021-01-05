@@ -7,7 +7,6 @@ using Team_Capture.Core.Networking.Discovery;
 using Team_Capture.Core.Networking.Messages;
 using Team_Capture.Helper;
 using Team_Capture.LagCompensation;
-using Team_Capture.Pickups;
 using Team_Capture.SceneManagement;
 using Team_Capture.UI.Panels;
 using UnityEngine;
@@ -52,7 +51,7 @@ namespace Team_Capture.Core.Networking
 		/// <summary>
 		///     The config for the server
 		/// </summary>
-		public ServerConfig serverConfig = new ServerConfig();
+		public ServerConfig serverConfig;
 
 		/// <summary>
 		///     The loading screen prefab
@@ -132,13 +131,13 @@ namespace Team_Capture.Core.Networking
 
 		#region Inital Server Join Message
 
-		private void OnServerJoinMessage(NetworkConnection conn, ServerConfigurationMessage message)
+		private void OnReceivedServerConfig(NetworkConnection conn, ServerConfig config)
 		{
 			//We don't need to listen for the initial server message any more
-			NetworkClient.UnregisterHandler<ServerConfigurationMessage>();
+			NetworkClient.UnregisterHandler<ServerConfig>();
 
 			//Set the game name
-			serverConfig = message.ServerConfig;
+			serverConfig = config;
 		}
 
 		#endregion
@@ -161,11 +160,8 @@ namespace Team_Capture.Core.Networking
 
 		public override void OnServerAddPlayer(NetworkConnection conn)
 		{
-			//Sent to client info about the server
-			conn.Send(new ServerConfigurationMessage
-			{
-				ServerConfig = serverConfig
-			});
+			//Sent to client the server config
+			conn.Send(serverConfig);
 
 			//Create the player object
 			GameObject player = Instantiate(playerPrefab);
@@ -276,7 +272,7 @@ namespace Team_Capture.Core.Networking
 		public override void OnClientConnect(NetworkConnection conn)
 		{
 			//We register for ServerConfigurationMessage, so we get server info
-			NetworkClient.RegisterHandler<ServerConfigurationMessage>(OnServerJoinMessage);
+			NetworkClient.RegisterHandler<ServerConfig>(OnReceivedServerConfig);
 
 			base.OnClientConnect(conn);
 

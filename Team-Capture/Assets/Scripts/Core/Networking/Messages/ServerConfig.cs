@@ -7,11 +7,11 @@ namespace Team_Capture.Core.Networking.Messages
 	///		Config for server settings
 	/// </summary>
 	[Serializable]
-	internal class ServerConfig : NetworkMessage
+	internal struct ServerConfig : NetworkMessage
 	{
 		/// <summary>
 		///		The name of the game
 		/// </summary>
-		public string gameName = "Team-Capture game";
+		public string gameName;
 	}
 }
