@@ -4,7 +4,6 @@ using Mirror;
 using Team_Capture.Console;
 using Team_Capture.Core.Logging;
 using Team_Capture.Core.Networking.Discovery;
-using Team_Capture.Core.Networking.Messages;
 using Team_Capture.Helper;
 using Team_Capture.LagCompensation;
 using Team_Capture.SceneManagement;

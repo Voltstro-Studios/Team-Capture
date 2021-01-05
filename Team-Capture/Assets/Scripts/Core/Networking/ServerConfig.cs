@@ -1,7 +1,7 @@
 ﻿using System;
 using Mirror;
 
-namespace Team_Capture.Core.Networking.Messages
+namespace Team_Capture.Core.Networking
 {
 	/// <summary>
 	///		Config for server settings

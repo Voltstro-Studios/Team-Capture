@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using Team_Capture.Core;
-using Team_Capture.Core.Networking.Messages;
 using Team_Capture.Player;
 using Team_Capture.UI.Elements;
 using UnityEngine;
