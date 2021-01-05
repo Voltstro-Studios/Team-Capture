@@ -14,6 +14,9 @@ using UnityEditor;
 
 namespace Team_Capture.Core
 {
+	/// <summary>
+	///		Some core functions relating to the game
+	/// </summary>
 	public static class Game
 	{
 		/// <summary>
@@ -21,6 +24,9 @@ namespace Team_Capture.Core
 		/// </summary>
 		public static bool IsHeadless => SystemInfo.graphicsDeviceType == GraphicsDeviceType.Null;
 
+		/// <summary>
+		///		Is the game in a quitting state
+		/// </summary>
 		public static bool IsGameQuitting { get; private set; }
 
 		/// <summary>
