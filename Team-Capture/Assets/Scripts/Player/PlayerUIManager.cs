@@ -1,5 +1,4 @@
-﻿using Team_Capture.Core.Networking.Messages;
-using Team_Capture.UI;
+﻿using Team_Capture.UI;
 using Team_Capture.Weapons;
 using UnityEngine;
 

@@ -1,6 +1,6 @@
 ﻿using Mirror;
 
-namespace Team_Capture.Core.Networking.Messages
+namespace Team_Capture.Player
 {
 	/// <summary>
 	///     A player has died message

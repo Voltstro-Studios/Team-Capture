@@ -1,5 +1,4 @@
 ﻿using Mirror;
-using Team_Capture.Core.Networking.Messages;
 using UnityEngine;
 
 namespace Team_Capture.Player

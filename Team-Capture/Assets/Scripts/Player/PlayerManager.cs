@@ -4,7 +4,6 @@ using Mirror;
 using Team_Capture.Console;
 using Team_Capture.Core;
 using Team_Capture.Core.Networking;
-using Team_Capture.Core.Networking.Messages;
 using Team_Capture.Player.Movement;
 using Team_Capture.Weapons;
 using UnityEngine;
