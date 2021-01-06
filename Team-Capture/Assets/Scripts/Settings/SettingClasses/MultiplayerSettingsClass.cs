@@ -5,14 +5,14 @@ namespace Team_Capture.Settings.SettingClasses
 {
 	internal class MultiplayerSettingsClass : Setting
 	{
-		[SettingsPropertyFormatName("Settings_MultiplayerMuzzleFlashLighting")]
+		[SettingsPropertyDisplayText("Settings_MultiplayerMuzzleFlashLighting")]
 		public bool WeaponMuzzleFlashLighting = true;
 
-		[SettingsPropertyFormatName("Settings_MultiplayerWeaponSway")]
+		[SettingsPropertyDisplayText("Settings_MultiplayerWeaponSway")]
 		public bool WeaponSwayEnabled = true;
 
 		[Range(0, 15)]
-		[SettingsPropertyFormatName("Settings_MultiplayerWeaponSwayAmount")]
+		[SettingsPropertyDisplayText("Settings_MultiplayerWeaponSwayAmount")]
 		public float WeaponSwayAmount = 0.1f;
 	}
 }

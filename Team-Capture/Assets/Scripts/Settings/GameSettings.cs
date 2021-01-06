@@ -28,16 +28,16 @@ namespace Team_Capture.Settings
 
 		#region Settings
 
-		[SettingsPropertyFormatName("Settings_Mouse")]
+		[SettingsPropertyDisplayText("Settings_Mouse")]
 		internal static MouseSettingsClass MouseSettings { get; } = new MouseSettingsClass();
 
-		[SettingsPropertyFormatName("Settings_Video")]
+		[SettingsPropertyDisplayText("Settings_Video")]
 		internal static VideoSettingsClass VideoSettings { get; } = new VideoSettingsClass();
 
-		[SettingsPropertyFormatName("Settings_Adv")]
+		[SettingsPropertyDisplayText("Settings_Adv")]
 		internal static AdvSettingsClass AdvSettings { get; } = new AdvSettingsClass();
 
-		[SettingsPropertyFormatName("Settings_Multiplayer")]
+		[SettingsPropertyDisplayText("Settings_Multiplayer")]
 		internal static MultiplayerSettingsClass MultiplayerSettings { get; } = new MultiplayerSettingsClass();
 
 		#endregion

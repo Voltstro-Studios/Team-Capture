@@ -23,9 +23,9 @@ namespace Team_Capture.UI
 	///     name.
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
-	internal class SettingsPropertyFormatNameAttribute : PreserveAttribute
+	internal class SettingsPropertyDisplayTextAttribute : PreserveAttribute
 	{
-		public SettingsPropertyFormatNameAttribute(string menuFormat)
+		public SettingsPropertyDisplayTextAttribute(string menuFormat)
 		{
 			MenuNameFormat = menuFormat;
 		}
@@ -71,16 +71,13 @@ namespace Team_Capture.UI
 			foreach (PropertyInfo settingInfo in GameSettings.GetSettingClasses())
 			{
 				//If it has the don't show attribute, then, well... don't show it
-				if (Attribute.GetCustomAttribute(settingInfo, typeof(SettingsDontShowAttribute)) != null)
+				if (settingInfo.DontShowObject())
 					continue;
 
 				object settingGroupInstance = settingInfo.GetStaticValue<object>();
 
-				//If it has the SettingsPropertyFormatNameAttribute then use the format name of that
-				string settingGroupName = settingInfo.Name;
-				if (Attribute.GetCustomAttribute(settingInfo, typeof(SettingsPropertyFormatNameAttribute)) is
-					SettingsPropertyFormatNameAttribute attribute)
-					settingGroupName = attribute.MenuNameFormat;
+				//Get display text
+				string settingGroupName = settingInfo.GetObjectDisplayText();
 
 				//Create a menu module
 				OptionsMenu optionOptionsMenu = new OptionsMenu(settingGroupName);
@@ -93,7 +90,7 @@ namespace Team_Capture.UI
 				foreach (FieldInfo settingField in menuFields)
 				{
 					//If it has the don't show attribute, then, well... don't show it
-					if (Attribute.GetCustomAttribute(settingField, typeof(SettingsDontShowAttribute)) != null)
+					if (settingField.DontShowObject())
 						continue;
 
 					Type fieldType = settingField.FieldType;
@@ -174,13 +171,13 @@ namespace Team_Capture.UI
 
 		private void CreateFloatSlider(float val, float min, float max, FieldInfo field, GameObject panel)
 		{
-			Slider slider = optionsPanel.AddSliderToPanel(panel, GetFieldFormatName(field), val, false, min, max);
+			Slider slider = optionsPanel.AddSliderToPanel(panel, field.GetObjectDisplayText(), val, false, min, max);
 			slider.onValueChanged.AddListener(f => field.SetValue(GetSettingObject(field), f));
 		}
 
 		private void CreateIntSlider(int val, int min, int max, FieldInfo field, GameObject panel)
 		{
-			Slider slider = optionsPanel.AddSliderToPanel(panel, GetFieldFormatName(field), val, true, min, max);
+			Slider slider = optionsPanel.AddSliderToPanel(panel, field.GetObjectDisplayText(), val, true, min, max);
 			slider.onValueChanged.AddListener(f => field.SetValue(GetSettingObject(field), (int) f));
 		}
 
@@ -198,7 +195,7 @@ namespace Team_Capture.UI
 
 		private void CreateBoolToggle(bool val, FieldInfo field, GameObject panel)
 		{
-			Toggle toggle = optionsPanel.AddToggleToPanel(panel, GetFieldFormatName(field), val);
+			Toggle toggle = optionsPanel.AddToggleToPanel(panel, field.GetObjectDisplayText(), val);
 			toggle.onValueChanged.AddListener(b => field.SetValue(GetSettingObject(field), b));
 		}
 
@@ -225,7 +222,7 @@ namespace Team_Capture.UI
 
 			//Create the dropdown, with all of our resolutions
 			TMP_Dropdown dropdown =
-				optionsPanel.AddDropdownToPanel(panel, GetFieldFormatName(field), resolutionsText.ToArray(),
+				optionsPanel.AddDropdownToPanel(panel, field.GetObjectDisplayText(), resolutionsText.ToArray(),
 					activeResIndex);
 			dropdown.onValueChanged.AddListener(index =>
 			{
@@ -238,7 +235,7 @@ namespace Team_Capture.UI
 			string[] names = Enum.GetNames(field.FieldType);
 			val = names.ToList().IndexOf(Enum.GetName(field.FieldType, val));
 
-			TMP_Dropdown dropdown = optionsPanel.AddDropdownToPanel(panel, GetFieldFormatName(field), names, val);
+			TMP_Dropdown dropdown = optionsPanel.AddDropdownToPanel(panel, field.GetObjectDisplayText(), names, val);
 
 			dropdown.onValueChanged.AddListener(index =>
 			{
@@ -265,20 +262,41 @@ namespace Team_Capture.UI
 			return settingGroup.GetValue(null);
 		}
 
-		private string GetFieldFormatName(MemberInfo field)
-		{
-			string sideName = field.Name;
-			if (Attribute.GetCustomAttribute(field, typeof(SettingsPropertyFormatNameAttribute)) is
-				SettingsPropertyFormatNameAttribute attribute)
-				sideName = attribute.MenuNameFormat;
-
-			return sideName;
-		}
-
 		// ReSharper restore UnusedParameter.Local
 		// ReSharper restore MemberCanBeMadeStatic.Local
 		// ReSharper restore ParameterHidesMember
 
 		#endregion
+	}
+
+	/// <summary>
+	///		Helper functions for <see cref="DynamicSettingsUI"/>
+	/// </summary>
+	internal static class DynamicSettingsUIHelper
+	{
+		/// <summary>
+		///		Don't show this object
+		/// </summary>
+		/// <param name="info"></param>
+		/// <returns></returns>
+		public static bool DontShowObject(this MemberInfo info)
+		{
+			return Attribute.GetCustomAttribute(info, typeof(SettingsDontShowAttribute)) != null;
+		}
+
+		/// <summary>
+		///		Gets the display text
+		/// </summary>
+		/// <param name="info"></param>
+		/// <returns></returns>
+		public static string GetObjectDisplayText(this MemberInfo info)
+		{
+			string text = info.Name;
+			if (Attribute.GetCustomAttribute(info, typeof(SettingsPropertyDisplayTextAttribute)) is
+				SettingsPropertyDisplayTextAttribute attribute)
+				text = attribute.MenuNameFormat;
+
+			return text;
+		}
 	}
 }
