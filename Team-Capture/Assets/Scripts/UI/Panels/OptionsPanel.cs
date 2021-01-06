@@ -67,6 +67,11 @@ namespace Team_Capture.UI.Panels
 			appliedOptionsPanel.SetActive(false);
 		}
 
+		/// <summary>
+		///		Gets the panel's scrolling area (aka where all the elements go)
+		/// </summary>
+		/// <param name="panel"></param>
+		/// <returns></returns>
 		private static Transform GetPanelItemArea(GameObject panel)
 		{
 			return panel.GetComponent<SettingsMenuPanel>().scrollingArea;
@@ -156,6 +161,11 @@ namespace Team_Capture.UI.Panels
 
 		#region Add UI Elemements
 
+		/// <summary>
+		///		Adds a title to a panel
+		/// </summary>
+		/// <param name="panel"></param>
+		/// <param name="title"></param>
 		private void AddTitleToPanel(GameObject panel, string title)
 		{
 			//Create new title object
@@ -163,6 +173,13 @@ namespace Team_Capture.UI.Panels
 			titleObject.GetComponent<TextMeshProUGUI>().text = GameUILocale.ResolveString(title);
 		}
 
+		/// <summary>
+		///		Adds a <see cref="Toggle"/> element to a panel
+		/// </summary>
+		/// <param name="panel"></param>
+		/// <param name="toggleText"></param>
+		/// <param name="currentValue"></param>
+		/// <returns></returns>
 		public Toggle AddToggleToPanel(GameObject panel, string toggleText, bool currentValue)
 		{
 			//Create new toggle object
@@ -177,6 +194,16 @@ namespace Team_Capture.UI.Panels
 			return toggle;
 		}
 
+		/// <summary>
+		///		Adds a <see cref="Slider"/> to a panel
+		/// </summary>
+		/// <param name="panel"></param>
+		/// <param name="sideText"></param>
+		/// <param name="currentValue"></param>
+		/// <param name="wholeNumbers"></param>
+		/// <param name="min"></param>
+		/// <param name="max"></param>
+		/// <returns></returns>
 		public Slider AddSliderToPanel(GameObject panel, string sideText, float currentValue, bool wholeNumbers = false,
 			float min = 0, float max = 100)
 		{
@@ -200,6 +227,14 @@ namespace Team_Capture.UI.Panels
 			return slider;
 		}
 
+		/// <summary>
+		///		Adds a <see cref="TMP_Dropdown"/> to panel
+		/// </summary>
+		/// <param name="panel"></param>
+		/// <param name="sideText"></param>
+		/// <param name="options"></param>
+		/// <param name="currentIndex"></param>
+		/// <returns></returns>
 		public TMP_Dropdown AddDropdownToPanel(GameObject panel, string sideText, string[] options, int currentIndex)
 		{
 			//Create dropdown object
