@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Team_Capture.UI;
+using UnityEngine;
 
 namespace Team_Capture.Settings.SettingClasses
 {

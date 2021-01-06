@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using Team_Capture.Core;
 using Team_Capture.Helper;
 using Team_Capture.Settings.SettingClasses;
+using Team_Capture.UI;
 using UnityEngine;
 using Logger = Team_Capture.Core.Logging.Logger;
 

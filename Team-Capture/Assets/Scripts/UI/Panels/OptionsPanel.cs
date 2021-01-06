@@ -33,7 +33,7 @@ namespace Team_Capture.UI.Panels
 		private void Start()
 		{
 			//Tell our dynamic settings UI to generate all the options
-			GetComponent<DynamicSettingsUi>().UpdateUI();
+			GetComponent<DynamicSettingsUI>().UpdateUI();
 
 			//Close all panels
 			ClosePanels();

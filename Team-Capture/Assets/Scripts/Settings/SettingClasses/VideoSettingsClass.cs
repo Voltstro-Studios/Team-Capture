@@ -1,4 +1,5 @@
 ﻿using Team_Capture.Settings.Enums;
+using Team_Capture.UI;
 using UnityEngine;
 
 namespace Team_Capture.Settings.SettingClasses

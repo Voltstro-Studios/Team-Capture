@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using Team_Capture.Helper.Extensions;
+using Team_Capture.Settings;
 using Team_Capture.UI.Elements.Settings;
 using Team_Capture.UI.Panels;
 using TMPro;
@@ -12,12 +13,12 @@ using UnityEngine.Scripting;
 using UnityEngine.UI;
 using Logger = Team_Capture.Core.Logging.Logger;
 
-namespace Team_Capture.Settings
+namespace Team_Capture.UI
 {
 	#region Attributes
 
 	/// <summary>
-	///     Tells the <see cref="DynamicSettingsUi" /> what the text should say next to the element, instead of just using
+	///     Tells the <see cref="DynamicSettingsUI" /> what the text should say next to the element, instead of just using
 	///     property
 	///     name.
 	/// </summary>
@@ -33,7 +34,7 @@ namespace Team_Capture.Settings
 	}
 
 	/// <summary>
-	///     Tells the <see cref="DynamicSettingsUi" /> not to show this object
+	///     Tells the <see cref="DynamicSettingsUI" /> not to show this object
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Class)]
 	internal class SettingsDontShowAttribute : PreserveAttribute
@@ -46,7 +47,7 @@ namespace Team_Capture.Settings
 	///     Generates a setting menu based on available options
 	/// </summary>
 	[RequireComponent(typeof(OptionsPanel))]
-	internal class DynamicSettingsUi : MonoBehaviour
+	internal class DynamicSettingsUI : MonoBehaviour
 	{
 		private OptionsPanel optionsPanel;
 
