@@ -101,27 +101,28 @@ namespace Team_Capture.UI
 						//If it's an int or a float, we need to check if it has a range attribute
 						RangeAttribute rangeAttribute = settingField.GetCustomAttribute<RangeAttribute>();
 
-						//If it has a range attribute, create a slider, otherwise use a input field
-						if (rangeAttribute != null)
-							CreateIntSlider(settingField.GetValue<int>(settingGroupInstance), (int) rangeAttribute.min,
-								(int) rangeAttribute.max,
+						if (rangeAttribute == null)
+						{
+							Logger.Error("{@SettingField} doesn't have a Range attribute!", settingField.Name);
+							continue;
+						}
+
+						CreateIntSlider(settingField.GetValue<int>(settingGroupInstance), (int) rangeAttribute.min, (int) rangeAttribute.max,
 								settingField, panel);
-						else
-							CreateIntField(settingField.GetValue<int>(settingGroupInstance), settingField,
-								optionOptionsMenu);
 					}
 					else if (fieldType == typeof(float))
 					{
 						//If it's an int or a float, we need to check if it has a range attribute
 						RangeAttribute rangeAttribute = settingField.GetCustomAttribute<RangeAttribute>();
 
-						//If it has a range attribute, create a slider, otherwise use a input field
-						if (rangeAttribute != null)
-							CreateFloatSlider(settingField.GetValue<float>(settingGroupInstance), rangeAttribute.min,
-								rangeAttribute.max, settingField, panel);
-						else
-							CreateFloatField(settingField.GetValue<float>(settingGroupInstance), settingField,
-								optionOptionsMenu);
+						if (rangeAttribute == null)
+						{
+							Logger.Error("{@SettingField} doesn't have a Range attribute!", settingField.Name);
+							continue;
+						}
+
+						CreateFloatSlider(settingField.GetValue<float>(settingGroupInstance), rangeAttribute.min, rangeAttribute.max, 
+							settingField, panel);
 					}
 					else if (fieldType == typeof(bool))
 					{
@@ -141,18 +142,11 @@ namespace Team_Capture.UI
 					//TODO: Finish these
 					else if (fieldType.IsEnum)
 					{
-						if (fieldType == typeof(KeyCode))
-							//We don't do a dropdown, we create a button and do some complicated shit that i'll steal from one of my other games
-							CreateKeybindButton(settingField.GetValue<KeyCode>(settingGroupInstance),
-								settingField,
-								optionOptionsMenu);
-						//Just a normal enum popup
-						else
-							CreateEnumDropdown(settingField.GetValue<int>(settingGroupInstance), settingField, panel);
+						CreateEnumDropdown(settingField.GetValue<int>(settingGroupInstance), settingField, panel);
 					}
 					else
 					{
-						Logger.Error("UI Element for setting of type {@FullName} could not be created",
+						Logger.Error("UI Element for setting of type {@FullName} is not supported!",
 							fieldType.FullName);
 					}
 				}
@@ -179,18 +173,6 @@ namespace Team_Capture.UI
 		{
 			Slider slider = optionsPanel.AddSliderToPanel(panel, field.GetObjectDisplayText(), val, true, min, max);
 			slider.onValueChanged.AddListener(f => field.SetValue(GetSettingObject(field), (int) f));
-		}
-
-		private void CreateFloatField(float val, FieldInfo field, OptionsMenu optionsMenu)
-		{
-			Logger.Debug($"\tCreating float field for {field.Name} in {optionsMenu.Name}. Current is {val}");
-			// new FloatField().RegisterValueChangedCallback(c => field.SetValue(GetSettingObject(field), c.newValue));
-		}
-
-		private void CreateIntField(int val, FieldInfo field, OptionsMenu optionsMenu)
-		{
-			Logger.Debug($"\tCreating int field for {field.Name} in {optionsMenu.Name}. Current is {val}");
-			// new IntegerField().RegisterValueChangedCallback(c => field.SetValue(GetSettingObject(field), c.newValue));
 		}
 
 		private void CreateBoolToggle(bool val, FieldInfo field, GameObject panel)
