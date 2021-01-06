@@ -127,8 +127,11 @@ namespace Team_Capture.UI.Panels
 		public void ClearPanels()
 		{
 			//Remove all panels
-			foreach (GameObject panel in settingPanels.Values)
-				Destroy(panel);
+			foreach (KeyValuePair<Button, GameObject> panel in settingPanels)
+			{
+				Destroy(panel.Value);
+				Destroy(panel.Key.gameObject);
+			}
 
 			settingPanels.Clear();
 		}
