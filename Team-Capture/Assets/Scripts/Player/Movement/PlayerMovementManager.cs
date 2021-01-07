@@ -82,7 +82,6 @@ namespace Team_Capture.Player.Movement
 			}
 
 			//Setup for local player
-			GetComponentInChildren<Renderer>().material.color = Color.green;
 			stateHandler = gameObject.AddComponent<PlayerMovementPredictor>();
 			gameObject.AddComponent<PlayerMovementInput>();
 		}
