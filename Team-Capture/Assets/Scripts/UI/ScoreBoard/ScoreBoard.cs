@@ -107,7 +107,7 @@ namespace Team_Capture.UI.ScoreBoard
 				scoreBoardPlayer.SetupPlayerInfo(player);
 				playerItems.Add(scoreBoardPlayer);
 
-				player.PlayerDied += PlayerKilled;
+				player.PlayerDeath += PlayerKilled;
 			}
 		}
 
@@ -121,7 +121,7 @@ namespace Team_Capture.UI.ScoreBoard
 			for (int i = 0; i < playerListTransform.childCount; i++)
 			{
 				GameObject item = playerListTransform.GetChild(i).gameObject;
-				item.GetComponent<ScoreBoardPlayer>().PlayerToTrack.PlayerDied -= PlayerKilled;
+				item.GetComponent<ScoreBoardPlayer>().PlayerToTrack.PlayerDeath -= PlayerKilled;
 
 				Destroy(item);
 			}
@@ -187,8 +187,8 @@ namespace Team_Capture.UI.ScoreBoard
 			GameManager.PlayerAdded += OnPlayerAdded;
 			GameManager.PlayerRemoved += OnPlayerRemoved;
 
-			clientPlayer.PlayerKilled += ClientPlayerUpdateUI;
-			clientPlayer.PlayerDied += ClientPlayerUpdateUI;
+			clientPlayer.PlayerKill += ClientPlayerUpdateUI;
+			clientPlayer.PlayerDeath += ClientPlayerUpdateUI;
 			ClientPlayerUpdateUI();
 		}
 
@@ -200,8 +200,8 @@ namespace Team_Capture.UI.ScoreBoard
 			GameManager.PlayerAdded -= OnPlayerAdded;
 			GameManager.PlayerRemoved -= OnPlayerRemoved;
 
-			clientPlayer.PlayerKilled -= ClientPlayerUpdateUI;
-			clientPlayer.PlayerDied -= ClientPlayerUpdateUI;
+			clientPlayer.PlayerKill -= ClientPlayerUpdateUI;
+			clientPlayer.PlayerDeath -= ClientPlayerUpdateUI;
 		}
 
 		#endregion

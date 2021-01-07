@@ -18,11 +18,6 @@ namespace Team_Capture.Player
 	public sealed class PlayerManager : NetworkBehaviour
 	{
 		/// <summary>
-		///     <see cref="Behaviour" />s to disable/enable on death and respawn
-		/// </summary>
-		[SerializeField] private Behaviour[] disableBehaviourOnDeath;
-
-		/// <summary>
 		///     <see cref="GameObject" />s to disable/enable on death and respawn
 		/// </summary>
 		[SerializeField] private GameObject[] disableGameObjectsOnDeath;
@@ -44,8 +39,6 @@ namespace Team_Capture.Player
 
 		public override void OnStartServer()
 		{
-			base.OnStartServer();
-
 			Health = MaxHealth;
 			weaponManager = GetComponent<WeaponManager>();
 
@@ -53,24 +46,14 @@ namespace Team_Capture.Player
 			StartCoroutine(ServerPlayerRespawn(true));
 		}
 
-		public override void OnStartClient()
-		{
-			base.OnStartClient();
-
-			CmdSetName(StartPlayerName);
-		}
-
 		public override void OnStartLocalPlayer()
 		{
-			base.OnStartLocalPlayer();
-
 			uiManager = GetComponent<PlayerUIManager>();
+			CmdSetName(StartPlayerName);
 		}
 
 		public override void OnStopServer()
 		{
-			base.OnStopServer();
-
 			StopAllCoroutines();
 		}
 
@@ -107,25 +90,25 @@ namespace Team_Capture.Player
 		[SyncVar] public string username = "Not Set";
 
 		/// <summary>
-		///     How much health does this player have?
+		///     How much health does this player have
 		/// </summary>
-		[field: SyncVar(hook = nameof(UpdateHealthUi))]
+		[field: SyncVar(hook = nameof(OnPlayerDamaged))]
 		public int Health { get; private set; }
 
 		/// <summary>
-		///     How many kills does this player have in this active game
+		///     How many kills does this player have
 		/// </summary>
 		[field: SyncVar(hook = nameof(OnPlayerKilled))]
 		public int Kills { get; private set; }
 
 		/// <summary>
-		///     How many deaths does this player have in this active game
+		///     How many deaths does this player have
 		/// </summary>
 		[field: SyncVar(hook = nameof(OnPlayerDeath))]
 		public int Deaths { get; private set; }
 
 		/// <summary>
-		///     Updated every X amount of seconds and haves this player's latency
+		///     Updated every <see cref="playerLatencyUpdateTime"/> by the server of the player's latency (rtt)
 		/// </summary>
 		[SyncVar] public double latency;
 
@@ -134,20 +117,41 @@ namespace Team_Capture.Player
 		#region Events
 
 		/// <summary>
-		///     Triggered when this player takes damage
+		///     Invoked when this player takes damage
 		/// </summary>
 		public event Action PlayerDamaged;
 
 		/// <summary>
 		///     Invoked when this player dies
 		/// </summary>
-		public event Action PlayerDied;
+		public event Action PlayerDeath;
 
 		/// <summary>
 		///     Invoked when this player gets a kill
 		/// </summary>
-		public event Action PlayerKilled;
+		public event Action PlayerKill;
 
+		#endregion
+
+		#region Event Hooks
+
+		// ReSharper disable UnusedParameter.Local
+		private void OnPlayerDeath(int oldValue, int newValue)
+		{
+			PlayerDeath?.Invoke();
+		}
+
+		private void OnPlayerKilled(int oldValue, int newValue)
+		{
+			PlayerKill?.Invoke();
+		}
+
+		private void OnPlayerDamaged(int oldHealth, int newHealth)
+		{
+			PlayerDamaged?.Invoke();
+		}
+		// ReSharper restore UnusedParameter.Local
+		
 		#endregion
 
 		#region Server Variables
@@ -352,8 +356,6 @@ namespace Team_Capture.Player
 			characterController.enabled = false;
 
 			foreach (GameObject toDisable in disableGameObjectsOnDeath) toDisable.SetActive(false);
-
-			foreach (Behaviour toDisable in disableBehaviourOnDeath) toDisable.enabled = false;
 		}
 
 		/// <summary>
@@ -364,8 +366,6 @@ namespace Team_Capture.Player
 		{
 			//Enable game objects
 			foreach (GameObject toEnable in disableGameObjectsOnDeath) toEnable.SetActive(true);
-
-			foreach (Behaviour toEnable in disableBehaviourOnDeath) toEnable.enabled = true;
 
 			//Enable movement
 			characterController.enabled = true;
@@ -390,30 +390,6 @@ namespace Team_Capture.Player
 				playerMovementObserver.enabled = true;
 			}
 		}
-
-		#region UI
-
-		private void OnPlayerDeath(int oldValue, int newValue)
-		{
-			PlayerDied?.Invoke();
-		}
-
-		private void OnPlayerKilled(int oldValue, int newValue)
-		{
-			PlayerKilled?.Invoke();
-		}
-
-		#endregion
-
-#pragma warning disable IDE0060 // Remove unused parameter, yes these paramaters HAVE to be here for the hook! And yea we gotta do it for both ReSharper and VS
-		// ReSharper disable UnusedParameter.Local
-		private void UpdateHealthUi(int oldHealth, int newHealth)
-			// ReSharper restore UnusedParameter.Local
-		{
-			if (isLocalPlayer)
-				PlayerDamaged?.Invoke();
-		}
-#pragma warning restore IDE0060 // Remove unused parameter
 
 		#endregion
 

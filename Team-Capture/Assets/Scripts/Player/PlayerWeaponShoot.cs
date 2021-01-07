@@ -67,10 +67,10 @@ namespace Team_Capture.Player
 		{
 			weaponManager = GetComponent<WeaponManager>();
 			playerManager = GetComponent<PlayerManager>();
-			playerManager.PlayerDied += PlayerDied;
+			playerManager.PlayerDeath += PlayerDeath;
 		}
 
-		private void PlayerDied()
+		private void PlayerDeath()
 		{
 			CancelInvoke(nameof(ClientCallServerShoot));
 		}
