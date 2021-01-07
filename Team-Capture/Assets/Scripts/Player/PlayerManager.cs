@@ -13,7 +13,8 @@ using Logger = Team_Capture.Core.Logging.Logger;
 namespace Team_Capture.Player
 {
 	/// <summary>
-	///     Handles player stuff, such as health
+	///		The primary <see cref="Behaviour"/> for managing the player.
+	///		<para>This class manages health, death, respawning as well some other minor things.</para>
 	/// </summary>
 	public sealed class PlayerManager : NetworkBehaviour
 	{
