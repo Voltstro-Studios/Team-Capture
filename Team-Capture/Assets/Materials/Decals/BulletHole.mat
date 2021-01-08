@@ -72,10 +72,11 @@ Material:
     - _SrcBlend: 0
     - _StencilComp: 0
     - _StencilRef: 0
+    - _SupportOrthographicCamera: 0
     - _Surface: 0
     - _UnityFogEnable: 1
     - _WorkflowMode: 1
-    - _ZTest: 0
+    - _ZTest: 4
     - _ZWrite: 1
     m_Colors:
     - _AlphaRemap: {r: 4.72, g: -2.61, b: 8.54, a: -3.78}
@@ -83,6 +84,7 @@ Material:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
+  m_BuildTextureStacks: []
 --- !u!114 &7820222028100783753
 MonoBehaviour:
   m_ObjectHideFlags: 11
