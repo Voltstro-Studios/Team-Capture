@@ -70,8 +70,8 @@ namespace Team_Capture.Console
 				}
 				catch (Exception ex)
 				{
-					Logger.Error("An error occurred while adding the command `{@Command}`'s method! {@Exception}",
-						attribute.Name, ex);
+					Logger.Error(ex, "An error occurred while adding the command {@Command}'s method!",
+						attribute.Name);
 					continue;
 				}
 
@@ -111,9 +111,9 @@ namespace Team_Capture.Console
 				}
 				catch (Exception ex)
 				{
-					Logger.Error(
-						"An error occurred while adding the con var `{@ConVar}`'s callback method! {@Exception}",
-						attribute.Name, ex);
+					Logger.Error(ex, 
+						"An error occurred while adding the ConVar {@ConVar}'s callback method!",
+						attribute.Name);
 					continue;
 				}
 
@@ -286,7 +286,7 @@ namespace Team_Capture.Console
 				}
 				catch (Exception ex)
 				{
-					Logger.Error("An error occurred! {@Exception}", ex);
+					Logger.Error(ex, "An error occurred while handling a command!");
 				}
 
 				return;

@@ -225,7 +225,7 @@ namespace Team_Capture.Player
 		{
 			if (string.IsNullOrWhiteSpace(sourcePlayerId))
 			{
-				Logger.Error("The sourcePlayerId cannot be empty or null!");
+				Logger.Error("The {@ArgumentName} cannot be empty or null!", nameof(sourcePlayerId));
 				return;
 			}
 

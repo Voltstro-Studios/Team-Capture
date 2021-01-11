@@ -180,7 +180,7 @@ namespace Team_Capture.Integrations
 				}
 				else
 				{
-					Logger.Error("You CANNOT have a online scene and a main menu scene!");
+					Logger.Error("You CANNOT have an online scene and a main menu scene!");
 				}
 
 				UpdateActivity(presence);

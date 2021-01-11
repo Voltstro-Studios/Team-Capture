@@ -6,6 +6,7 @@ using Team_Capture.Console;
 using Team_Capture.Core.Logging.Unity;
 using Team_Capture.Exceptions;
 using UnityEngine;
+using Voltstro.CommandLineParser;
 
 namespace Team_Capture.Core.Logging
 {
@@ -63,7 +64,10 @@ namespace Team_Capture.Core.Logging
 
 			Application.quitting += Shutdown;
 
+			//Setup logging level
 			level = new LoggingLevelSwitch();
+			if (DebugLogMode)
+				level.MinimumLevel = LogEventLevel.Debug;
 
 			const string outPutTemplate = "{Timestamp:dd-MM hh:mm:ss tt} [{Level:u3}] {Message:lj}{NewLine}{Exception}";
 			string logFileName =

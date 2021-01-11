@@ -77,7 +77,7 @@ ___________
 			}
 			catch (Exception ex)
 			{
-				Logger.Error("{@Ex}", ex);
+				Logger.Error(ex, "Manual exception thrown!");
 			}
 		}
 

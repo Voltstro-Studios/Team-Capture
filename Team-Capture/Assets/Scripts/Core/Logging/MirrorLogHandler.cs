@@ -37,7 +37,7 @@ namespace Team_Capture.Core.Logging
 
 		public void LogException(Exception exception, Object context)
 		{
-			Logger.Error("Exception: {@Ex}", exception);
+			Logger.Error(exception, "");
 		}
 	}
 }
