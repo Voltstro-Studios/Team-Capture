@@ -91,6 +91,7 @@
             </summary>
             <param name="scalarType">Type to treat as scalar.</param>
             <returns>Configuration object allowing method chaining.</returns>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="scalarType"/> is <code>null</code></exception>
         </member>
         <member name="M:Serilog.Configuration.LoggerDestructuringConfiguration.AsScalar``1">
             <summary>
@@ -106,6 +107,8 @@
             </summary>
             <param name="destructuringPolicies">Policies to apply when destructuring.</param>
             <returns>Configuration object allowing method chaining.</returns>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="destructuringPolicies"/> is <code>null</code></exception>
+            <exception cref="T:System.ArgumentException">When any element of <paramref name="destructuringPolicies"/> is <code>null</code></exception>
         </member>
         <member name="M:Serilog.Configuration.LoggerDestructuringConfiguration.With``1">
             <summary>
@@ -123,7 +126,7 @@
             to an alternative representation.</param>
             <typeparam name="TValue">Type of values to transform.</typeparam>
             <returns>Configuration object allowing method chaining.</returns>
-            <exception cref="T:System.ArgumentNullException"></exception>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="transformation"/> is <code>null</code></exception>
         </member>
         <member name="M:Serilog.Configuration.LoggerDestructuringConfiguration.ByTransformingWhere``1(System.Func{System.Type,System.Boolean},System.Func{``0,System.Object})">
             <summary>
@@ -137,7 +140,8 @@
             to an alternative representation.</param>
             <typeparam name="TValue">Type of values to transform.</typeparam>
             <returns>Configuration object allowing method chaining.</returns>
-            <exception cref="T:System.ArgumentNullException"></exception>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="predicate"/> is <code>null</code></exception>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="transformation"/> is <code>null</code></exception>
         </member>
         <member name="M:Serilog.Configuration.LoggerDestructuringConfiguration.ToMaximumDepth(System.Int32)">
             <summary>
@@ -147,7 +151,7 @@
             </summary>
             <param name="maximumDestructuringDepth">The maximum depth to use.</param>
             <returns>Configuration object allowing method chaining.</returns>
-            <exception cref="T:System.ArgumentOutOfRangeException"></exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">When <paramref name="maximumDestructuringDepth"/> is negative</exception>
         </member>
         <member name="M:Serilog.Configuration.LoggerDestructuringConfiguration.ToMaximumStringLength(System.Int32)">
             <summary>
@@ -157,7 +161,7 @@
             </summary>
             <param name="maximumStringLength">The maximum string length.</param>
             <returns>Configuration object allowing method chaining.</returns>
-            <exception cref="T:System.ArgumentOutOfRangeException">When passed length is less than 2</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">When <paramref name="maximumStringLength"/> is less than 2</exception>
         </member>
         <member name="M:Serilog.Configuration.LoggerDestructuringConfiguration.ToMaximumCollectionCount(System.Int32)">
             <summary>
@@ -167,7 +171,7 @@
             Applies limit to all <see cref="T:System.Collections.IEnumerable"/> including dictionaries.
             </summary>
             <returns>Configuration object allowing method chaining.</returns>
-            <exception cref="T:System.ArgumentOutOfRangeException">When passed length is less than 1</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">When <paramref name="maximumCollectionCount"/> is less than 1</exception>
         </member>
         <member name="T:Serilog.Configuration.LoggerEnrichmentConfiguration">
             <summary>
@@ -182,6 +186,8 @@
             <param name="enrichers">Enrichers to apply to all events passing through
             the logger.</param>
             <returns>Configuration object allowing method chaining.</returns>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="enrichers"/> is <code>null</code></exception>
+            <exception cref="T:System.ArgumentException">When any element of <paramref name="enrichers"/> is <code>null</code></exception>
         </member>
         <member name="M:Serilog.Configuration.LoggerEnrichmentConfiguration.With``1">
             <summary>
@@ -217,6 +223,8 @@
             should be enriched.</param>
             <param name="configureEnricher">An action that configures the wrapped enricher.</param>
             <returns>Configuration object allowing method chaining.</returns>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="condition"/> is <code>null</code></exception>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="configureEnricher"/> is <code>null</code></exception>
         </member>
         <member name="M:Serilog.Configuration.LoggerEnrichmentConfiguration.AtLevel(Serilog.Events.LogEventLevel,System.Action{Serilog.Configuration.LoggerEnrichmentConfiguration})">
             <summary>
@@ -227,6 +235,7 @@
             <returns>Configuration object allowing method chaining.</returns>
             <remarks>This method permits additional information to be attached to e.g. warnings and errors, that might be too expensive
             to collect or store at lower levels.</remarks>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="configureEnricher"/> is <code>null</code></exception>
         </member>
         <member name="M:Serilog.Configuration.LoggerEnrichmentConfiguration.AtLevel(Serilog.Core.LoggingLevelSwitch,System.Action{Serilog.Configuration.LoggerEnrichmentConfiguration})">
             <summary>
@@ -237,6 +246,7 @@
             <returns>Configuration object allowing method chaining.</returns>
             <remarks>This method permits additional information to be attached to e.g. warnings and errors, that might be too expensive
             to collect or store at lower levels.</remarks>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="configureEnricher"/> is <code>null</code></exception>
         </member>
         <member name="M:Serilog.Configuration.LoggerEnrichmentConfiguration.Wrap(Serilog.Configuration.LoggerEnrichmentConfiguration,System.Func{Serilog.Core.ILogEventEnricher,Serilog.Core.ILogEventEnricher},System.Action{Serilog.Configuration.LoggerEnrichmentConfiguration})">
             <summary>
@@ -247,6 +257,9 @@
             added in <paramref name="configureWrappedEnricher"/>.</param>
             <param name="configureWrappedEnricher">An action that configures enrichers to be wrapped in <paramref name="wrapEnricher"/>.</param>
             <returns>Configuration object allowing method chaining.</returns>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="loggerEnrichmentConfiguration"/> is <code>null</code></exception>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="wrapEnricher"/> is <code>null</code></exception>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="configureWrappedEnricher"/> is <code>null</code></exception>
         </member>
         <member name="T:Serilog.Configuration.LoggerFilterConfiguration">
             <summary>
@@ -259,6 +272,8 @@
             </summary>
             <param name="filters">The filters to apply.</param>
             <returns>Configuration object allowing method chaining.</returns>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="filters"/> is <code>null</code></exception>
+            <exception cref="T:System.ArgumentException">When any element of <paramref name="filters"/> is <code>null</code></exception>
         </member>
         <member name="M:Serilog.Configuration.LoggerFilterConfiguration.With``1">
             <summary>
@@ -301,6 +316,7 @@
             </summary>
             <param name="levelSwitch">The switch.</param>
             <returns>Configuration object allowing method chaining.</returns>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="levelSwitch"/> is <code>null</code></exception>
         </member>
         <member name="M:Serilog.Configuration.LoggerMinimumLevelConfiguration.Verbose">
             <summary>
@@ -346,18 +362,26 @@
         <member name="M:Serilog.Configuration.LoggerMinimumLevelConfiguration.Override(System.String,Serilog.Core.LoggingLevelSwitch)">
             <summary>
             Override the minimum level for events from a specific namespace or type name.
+            This API is not supported for configuring sub-loggers (created through <see cref="M:Serilog.Configuration.LoggerSinkConfiguration.Logger(Serilog.ILogger,Serilog.Events.LogEventLevel)"/>). Use <see cref="P:Serilog.LoggerConfiguration.Filter"/> or <see cref="M:Serilog.Configuration.LoggerSinkConfiguration.Conditional(System.Func{Serilog.Events.LogEvent,System.Boolean},System.Action{Serilog.Configuration.LoggerSinkConfiguration})"/> instead.
+            You also might consider using https://github.com/serilog/serilog-filters-expressions.
             </summary>
             <param name="source">The (partial) namespace or type name to set the override for.</param>
             <param name="levelSwitch">The switch controlling loggers for matching sources.</param>
             <returns>Configuration object allowing method chaining.</returns>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="source"/> is <code>null</code></exception>
+            <exception cref="T:System.ArgumentException">When a trimmed <paramref name="source"/> is empty</exception>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="levelSwitch"/> is <code>null</code></exception> 
         </member>
         <member name="M:Serilog.Configuration.LoggerMinimumLevelConfiguration.Override(System.String,Serilog.Events.LogEventLevel)">
             <summary>
             Override the minimum level for events from a specific namespace or type name.
+            This API is not supported for configuring sub-loggers (created through <see cref="M:Serilog.Configuration.LoggerSinkConfiguration.Logger(Serilog.ILogger,Serilog.Events.LogEventLevel)"/>). Use <see cref="P:Serilog.LoggerConfiguration.Filter"/> or <see cref="M:Serilog.Configuration.LoggerSinkConfiguration.Conditional(System.Func{Serilog.Events.LogEvent,System.Boolean},System.Action{Serilog.Configuration.LoggerSinkConfiguration})"/> instead.
+            You also might consider using https://github.com/serilog/serilog-filters-expressions.
             </summary>
             <param name="source">The (partial) namespace or type name to set the override for.</param>
             <param name="minimumLevel">The minimum level applied to loggers for matching sources.</param>
             <returns>Configuration object allowing method chaining.</returns>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="source"/> is <code>null</code></exception>
         </member>
         <member name="T:Serilog.Configuration.LoggerSettingsConfiguration">
             <summary>
@@ -369,6 +393,7 @@
             Apply external settings to the logger configuration.
             </summary>
             <returns>Configuration object allowing method chaining.</returns>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="settings"/> is <code>null</code></exception>
         </member>
         <member name="M:Serilog.Configuration.LoggerSettingsConfiguration.KeyValuePairs(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{System.String,System.String}})">
             <summary>
@@ -377,6 +402,7 @@
             <param name="settings">A list of key-value pairs describing logger settings.</param>
             <returns>Configuration object allowing method chaining.</returns>
             <remarks>In case of duplicate keys, the last value for the key is kept and the previous ones are ignored.</remarks>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="settings"/> is <code>null</code></exception>
         </member>
         <member name="T:Serilog.Configuration.LoggerSinkConfiguration">
             <summary>
@@ -428,8 +454,9 @@
             <param name="restrictedToMinimumLevel">The minimum level for
             events passed through the sink. Ignored when <paramref name="levelSwitch"/> is specified.</param>
             <param name="levelSwitch">A switch allowing the pass-through minimum level
-            to be changed at runtime.</param>
+            to be changed at runtime. Can be <code>null</code></param>
             <returns>Configuration object allowing method chaining.</returns>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="configureLogger"/> is <code>null</code></exception>
         </member>
         <member name="M:Serilog.Configuration.LoggerSinkConfiguration.Logger(Serilog.ILogger,Serilog.Events.LogEventLevel)">
             <summary>
@@ -443,6 +470,7 @@
             <param name="restrictedToMinimumLevel">The minimum level for
             events passed through the sink.</param>
             <returns>Configuration object allowing method chaining.</returns>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="logger"/> is <code>null</code></exception>
         </member>
         <member name="M:Serilog.Configuration.LoggerSinkConfiguration.Conditional(System.Func{Serilog.Events.LogEvent,System.Boolean},System.Action{Serilog.Configuration.LoggerSinkConfiguration})">
             <summary>
@@ -452,6 +480,8 @@
             should be written to the configured sink.</param>
             <param name="configureSink">An action that configures the wrapped sink.</param>
             <returns>Configuration object allowing method chaining.</returns>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="condition"/> is <code>null</code></exception>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="configureSink"/> is <code>null</code></exception>
         </member>
         <member name="M:Serilog.Configuration.LoggerSinkConfiguration.Wrap(Serilog.Configuration.LoggerSinkConfiguration,System.Func{Serilog.Core.ILogEventSink,Serilog.Core.ILogEventSink},System.Action{Serilog.Configuration.LoggerSinkConfiguration})">
             <summary>
@@ -474,8 +504,11 @@
             <param name="restrictedToMinimumLevel">The minimum level for
             events passed through the sink. Ignored when <paramref name="levelSwitch"/> is specified.</param>
             <param name="levelSwitch">A switch allowing the pass-through minimum level
-            to be changed at runtime.</param>
+            to be changed at runtime. Can be <code>null</code></param>
             <returns>Configuration object allowing method chaining.</returns>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="loggerSinkConfiguration"/> is <code>null</code></exception>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="wrapSink"/> is <code>null</code></exception>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="configureWrappedSink"/> is <code>null</code></exception>
         </member>
         <member name="T:Serilog.Context.LogContext">
             <summary>
@@ -524,7 +557,7 @@
             </summary>
             <param name="enricher">An enricher to push onto the log context</param>
             <returns>A token that must be disposed, in order, to pop properties back off the stack.</returns>
-            <exception cref="T:System.ArgumentNullException"></exception>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="enricher"/> is <code>null</code></exception>
         </member>
         <member name="M:Serilog.Context.LogContext.Push(Serilog.Core.ILogEventEnricher[])">
             <summary>
@@ -536,7 +569,7 @@
             <seealso cref="T:Serilog.Core.Enrichers.PropertyEnricher"/>.
             <param name="enrichers">Enrichers to push onto the log context</param>
             <returns>A token that must be disposed, in order, to pop properties back off the stack.</returns>
-            <exception cref="T:System.ArgumentNullException"></exception>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="enrichers"/> is <code>null</code></exception>
         </member>
         <member name="M:Serilog.Context.LogContext.PushProperties(Serilog.Core.ILogEventEnricher[])">
             <summary>
@@ -594,7 +627,8 @@
             then the value will be converted to a structure; otherwise, unknown types will
             be converted to scalars, which are generally stored as strings.</param>
             <returns></returns>
-            <exception cref="T:System.ArgumentNullException"></exception>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="name"/> is <code>null</code></exception>
+            <exception cref="T:System.ArgumentException">When <paramref name="name"/> is empty or only contains whitespace</exception>
         </member>
         <member name="M:Serilog.Core.Enrichers.PropertyEnricher.Enrich(Serilog.Events.LogEvent,Serilog.Core.ILogEventPropertyFactory)">
             <summary>
@@ -602,6 +636,8 @@
             </summary>
             <param name="logEvent">The log event to enrich.</param>
             <param name="propertyFactory">Factory for creating new properties to add to the event.</param>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="logEvent"/> is <code>null</code></exception>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="propertyFactory"/> is <code>null</code></exception>
         </member>
         <member name="T:Serilog.Core.IDestructuringPolicy">
             <summary>
@@ -793,7 +829,7 @@
         </member>
         <member name="M:Serilog.Core.Logger.IsEnabled(Serilog.Events.LogEventLevel)">
             <summary>
-            Determine if events at the specified level will be passed through
+            Determine if events at the specified level, and higher, will be passed through
             to the log sinks.
             </summary>
             <param name="level">Level to check.</param>
@@ -1509,7 +1545,7 @@
         <member name="M:Serilog.Core.Logger.BindMessageTemplate(System.String,System.Object[],Serilog.Events.MessageTemplate@,System.Collections.Generic.IEnumerable{Serilog.Events.LogEventProperty}@)">
             <summary>
             Uses configured scalar conversion and destructuring rules to bind a set of properties to a
-            message template. Returns false if the template or values are invalid (<summary>ILogger</summary>
+            message template. Returns false if the template or values are invalid (<c>ILogger</c>
             methods never throw exceptions).
             </summary>
             <param name="messageTemplate">Message template describing an event.</param>
@@ -1533,12 +1569,12 @@
             Uses configured scalar conversion and destructuring rules to bind a property value to its captured
             representation.
             </summary>
-            <returns>True if the property could be bound, otherwise false (<summary>ILogger</summary>
             <param name="propertyName">The name of the property. Must be non-empty.</param>
             <param name="value">The property value.</param>
             <param name="destructureObjects">If true, the value will be serialized as a structured
             object if possible; if false, the object will be recorded as a scalar or simple array.</param>
             <param name="property">The resulting property.</param>
+            <returns>True if the property could be bound, otherwise false (<summary>ILogger</summary>
             methods never throw exceptions).</returns>
         </member>
         <member name="M:Serilog.Core.Logger.Dispose">
@@ -1625,6 +1661,7 @@
             <param name="state">Operation state.</param>
             <param name="scalar">The value to visit.</param>
             <returns>The result of visiting <paramref name="scalar"/>.</returns>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="scalar"/> is <code>null</code></exception>
         </member>
         <member name="M:Serilog.Data.LogEventPropertyValueRewriter`1.VisitSequenceValue(`0,Serilog.Events.SequenceValue)">
             <summary>
@@ -1633,6 +1670,7 @@
             <param name="state">Operation state.</param>
             <param name="sequence">The value to visit.</param>
             <returns>The result of visiting <paramref name="sequence"/>.</returns>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="sequence"/> is <code>null</code></exception>
         </member>
         <member name="M:Serilog.Data.LogEventPropertyValueRewriter`1.VisitStructureValue(`0,Serilog.Events.StructureValue)">
             <summary>
@@ -1641,6 +1679,7 @@
             <param name="state">Operation state.</param>
             <param name="structure">The value to visit.</param>
             <returns>The result of visiting <paramref name="structure"/>.</returns>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="structure"/> is <code>null</code></exception>
         </member>
         <member name="M:Serilog.Data.LogEventPropertyValueRewriter`1.VisitDictionaryValue(`0,Serilog.Events.DictionaryValue)">
             <summary>
@@ -1649,6 +1688,7 @@
             <param name="state">Operation state.</param>
             <param name="dictionary">The value to visit.</param>
             <returns>The result of visiting <paramref name="dictionary"/>.</returns>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="dictionary"/> is <code>null</code></exception>
         </member>
         <member name="M:Serilog.Data.LogEventPropertyValueRewriter`1.VisitUnsupportedValue(`0,Serilog.Events.LogEventPropertyValue)">
             <summary>
@@ -1682,6 +1722,7 @@
             <param name="state">Operation state.</param>
             <param name="value">The value to visit.</param>
             <returns>The result of visiting <paramref name="value"/>.</returns>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="value"/> is <code>null</code></exception>
         </member>
         <member name="M:Serilog.Data.LogEventPropertyValueVisitor`2.VisitScalarValue(`0,Serilog.Events.ScalarValue)">
             <summary>
@@ -1717,11 +1758,13 @@
         </member>
         <member name="M:Serilog.Data.LogEventPropertyValueVisitor`2.VisitUnsupportedValue(`0,Serilog.Events.LogEventPropertyValue)">
             <summary>
-            Visit a value of an unsupported type.
+            Visit a value of an unsupported type. Always throws <see cref="T:System.NotSupportedException"/>, when is not overridden.
             </summary>
             <param name="state">Operation state.</param>
             <param name="value">The value to visit.</param>
             <returns>The result of visiting <paramref name="value"/>.</returns>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="value"/> is <code>null</code></exception>
+            <exception cref="T:System.NotSupportedException">Always</exception>
         </member>
         <member name="T:Serilog.Debugging.LoggingFailedException">
             <summary>
@@ -1755,6 +1798,7 @@
             </summary>
             <param name="output">A synchronized <see cref="T:System.IO.TextWriter"/> to which
             self-log messages will be written.</param>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="output"/> is <code>null</code></exception>
         </member>
         <member name="M:Serilog.Debugging.SelfLog.Enable(System.Action{System.String})">
             <summary>
@@ -1762,6 +1806,7 @@
             </summary>
             <param name="output">An action to invoke with self-log messages.</param>
             // ReSharper disable once MemberCanBePrivate.Global
+            <exception cref="T:System.ArgumentNullException">When <paramref name="output"/> is <code>null</code></exception>
         </member>
         <member name="M:Serilog.Debugging.SelfLog.Disable">
             <summary>
@@ -1792,7 +1837,7 @@
             Create a <see cref="T:Serilog.Events.DictionaryValue"/> with the provided <paramref name="elements"/>.
             </summary>
             <param name="elements">The key-value mappings represented in the dictionary.</param>
-            <exception cref="T:System.ArgumentNullException"></exception>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="elements"/> is <code>null</code></exception>
         </member>
         <member name="P:Serilog.Events.DictionaryValue.Elements">
             <summary>
@@ -1807,6 +1852,7 @@
             <param name="format">A format string applied to the value, or null.</param>
             <param name="formatProvider">A format provider to apply to the value, or null to use the default.</param>
             <seealso cref="M:Serilog.Events.LogEventPropertyValue.ToString(System.String,System.IFormatProvider)"/>.
+            <exception cref="T:System.ArgumentNullException">When <paramref name="output"/> is <code>null</code></exception>
         </member>
         <member name="T:Serilog.Events.EventProperty">
             <summary>
@@ -1836,8 +1882,9 @@
             </summary>
             <param name="name">The name of the property.</param>
             <param name="value">The value of the property.</param>
-            <exception cref="T:System.ArgumentException"></exception>
-            <exception cref="T:System.ArgumentNullException"></exception>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="name"/> is <code>null</code></exception>
+            <exception cref="T:System.ArgumentException">When <paramref name="name"/> is empty or only contains whitespace</exception>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="value"/> is <code>null</code></exception>
         </member>
         <member name="M:Serilog.Events.EventProperty.Deconstruct(System.String@,Serilog.Events.LogEventPropertyValue@)">
             <summary>
@@ -1890,6 +1937,8 @@
             <param name="exception">An exception associated with the event, or null.</param>
             <param name="messageTemplate">The message template describing the event.</param>
             <param name="properties">Properties associated with the event, including those presented in <paramref name="messageTemplate"/>.</param>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="messageTemplate"/> is <code>null</code></exception>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="properties"/> is <code>null</code></exception>
         </member>
         <member name="M:Serilog.Events.LogEvent.#ctor(System.DateTimeOffset,Serilog.Events.LogEventLevel,System.Exception,Serilog.Events.MessageTemplate,Serilog.Events.EventProperty[])">
             <summary>
@@ -1900,6 +1949,8 @@
             <param name="exception">An exception associated with the event, or null.</param>
             <param name="messageTemplate">The message template describing the event.</param>
             <param name="properties">Properties associated with the event, including those presented in <paramref name="messageTemplate"/>.</param>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="messageTemplate"/> is <code>null</code></exception>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="properties"/> is <code>null</code></exception>
         </member>
         <member name="P:Serilog.Events.LogEvent.Timestamp">
             <summary>
@@ -1946,28 +1997,28 @@
             Add a property to the event if not already present, otherwise, update its value.
             </summary>
             <param name="property">The property to add or update.</param>
-            <exception cref="T:System.ArgumentNullException"></exception>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="property"/> is <code>null</code></exception>
         </member>
         <member name="M:Serilog.Events.LogEvent.AddOrUpdateProperty(Serilog.Events.EventProperty@)">
             <summary>
             Add a property to the event if not already present, otherwise, update its value.
             </summary>
             <param name="property">The property to add or update.</param>
-            <exception cref="T:System.ArgumentNullException"></exception>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="property"/> is <code>default</code></exception>
         </member>
         <member name="M:Serilog.Events.LogEvent.AddPropertyIfAbsent(Serilog.Events.LogEventProperty)">
             <summary>
             Add a property to the event if not already present.
             </summary>
             <param name="property">The property to add.</param>
-            <exception cref="T:System.ArgumentNullException"></exception>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="property"/> is <code>null</code></exception>
         </member>
         <member name="M:Serilog.Events.LogEvent.AddPropertyIfAbsent(Serilog.Events.EventProperty@)">
             <summary>
             Add a property to the event if not already present.
             </summary>
             <param name="property">The property to add.</param>
-            <exception cref="T:System.ArgumentNullException"></exception>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="property"/> is <code>default</code></exception>
         </member>
         <member name="M:Serilog.Events.LogEvent.RemovePropertyIfPresent(System.String)">
             <summary>
@@ -2027,16 +2078,16 @@
             </summary>
             <param name="name">The name of the property.</param>
             <param name="value">The value of the property.</param>
-            <exception cref="T:System.ArgumentException"></exception>
-            <exception cref="T:System.ArgumentNullException"></exception>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="name"/> is <code>null</code></exception>
+            <exception cref="T:System.ArgumentException">When <paramref name="name"/> is empty or only contains whitespace</exception>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="value"/> is <code>null</code></exception>
         </member>
         <member name="M:Serilog.Events.LogEventProperty.#ctor(Serilog.Events.EventProperty)">
             <summary>
             Construct a <see cref="T:Serilog.Events.LogEventProperty"/> from an existing <see cref="T:Serilog.Events.EventProperty"/> instance.
             </summary>
             <param name="property">The existing property.</param>
-            <exception cref="T:System.ArgumentException"></exception>
-            <exception cref="T:System.ArgumentNullException"></exception>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="property"/> is <code>default</code></exception>
         </member>
         <member name="P:Serilog.Events.LogEventProperty.Name">
             <summary>
@@ -2054,6 +2105,10 @@
             </summary>
             <param name="name">The name to check.</param>
             <returns>True if the name is valid; otherwise, false.</returns>
+        </member>
+        <member name="M:Serilog.Events.LogEventProperty.EnsureValidName(System.String)">
+            <exception cref="T:System.ArgumentNullException">When <paramref name="name"/> is <code>null</code></exception>
+            <exception cref="T:System.ArgumentException">When <paramref name="name"/> is empty or only contains whitespace</exception>
         </member>
         <member name="T:Serilog.Events.LogEventPropertyValue">
             <summary>
@@ -2117,6 +2172,8 @@
             <param name="text">The full text of the template; used by Serilog internally to avoid unneeded
             string concatenation.</param>
             <param name="tokens">The text and property tokens defining the template.</param>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="text"/> is <code>null</code></exception>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="tokens"/> is <code>null</code></exception>
         </member>
         <member name="M:Serilog.Events.MessageTemplate.GetElementsOfTypeToArray``1(Serilog.Parsing.MessageTemplateToken[])">
             <summary>
@@ -2149,6 +2206,7 @@
             <returns>The message created from the template and properties. If the
             properties are mismatched with the template, the template will be
             returned with incomplete substitution.</returns>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="properties"/> is <code>null</code></exception>
         </member>
         <member name="M:Serilog.Events.MessageTemplate.Render(System.Collections.Generic.IReadOnlyDictionary{System.String,Serilog.Events.LogEventPropertyValue},System.IO.TextWriter,System.IFormatProvider)">
             <summary>
@@ -2160,6 +2218,8 @@
             properties are mismatched with the template, the template will be
             returned with incomplete substitution.</param>
             <param name="formatProvider">Supplies culture-specific formatting information, or null.</param>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="properties"/> is <code>null</code></exception>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="output"/> is <code>null</code></exception>
         </member>
         <member name="T:Serilog.Events.ScalarValue">
             <summary>
@@ -2186,6 +2246,10 @@
             <param name="format">A format string applied to the value, or null.</param>
             <param name="formatProvider">A format provider to apply to the value, or null to use the default.</param>
             <seealso cref="M:Serilog.Events.LogEventPropertyValue.ToString(System.String,System.IFormatProvider)"/>.
+            <exception cref="T:System.ArgumentNullException">When <paramref name="output"/> is <code>null</code></exception>
+        </member>
+        <member name="M:Serilog.Events.ScalarValue.Render(System.Object,System.IO.TextWriter,System.String,System.IFormatProvider)">
+            <exception cref="T:System.ArgumentNullException">When <paramref name="output"/> is <code>null</code></exception>
         </member>
         <member name="M:Serilog.Events.ScalarValue.Equals(System.Object)">
             <summary>
@@ -2210,7 +2274,7 @@
             Create a <see cref="T:Serilog.Events.SequenceValue"/> with the provided <paramref name="elements"/>.
             </summary>
             <param name="elements">The elements of the sequence.</param>
-            <exception cref="T:System.ArgumentNullException"></exception>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="elements"/> is <code>null</code></exception>
         </member>
         <member name="P:Serilog.Events.SequenceValue.Elements">
             <summary>
@@ -2225,6 +2289,7 @@
             <param name="format">A format string applied to the value, or null.</param>
             <param name="formatProvider">A format provider to apply to the value, or null to use the default.</param>
             <seealso cref="M:Serilog.Events.LogEventPropertyValue.ToString(System.String,System.IFormatProvider)"/>.
+            <exception cref="T:System.ArgumentNullException">When <paramref name="output"/> is <code>null</code></exception>
         </member>
         <member name="T:Serilog.Events.StructureValue">
             <summary>
@@ -2236,9 +2301,9 @@
             Construct a <see cref="T:Serilog.Events.StructureValue"/> with the provided properties.
             </summary>
             <param name="typeTag">Optionally, a piece of metadata describing the "type" of the
-            structure.</param>
+            structure. Can be <code>null</code>.</param>
             <param name="properties">The properties of the structure.</param>
-            <exception cref="T:System.ArgumentNullException"></exception>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="properties"/> is <code>null</code></exception>
         </member>
         <member name="P:Serilog.Events.StructureValue.TypeTag">
             <summary>
@@ -2262,6 +2327,7 @@
             <param name="format">A format string applied to the value, or null.</param>
             <param name="formatProvider">A format provider to apply to the value, or null to use the default.</param>
             <seealso cref="M:Serilog.Events.LogEventPropertyValue.ToString(System.String,System.IFormatProvider)"/>.
+            <exception cref="T:System.ArgumentNullException">When <paramref name="output"/> is <code>null</code></exception>
         </member>
         <member name="T:Serilog.Filters.Matching">
             <summary>
@@ -2282,6 +2348,7 @@
             </summary>
             <param name="source">A dotted source type or namespace identifier.</param>
             <returns>A function that matches log events emitted by the source.</returns>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="source"/> is <code>null</code></exception>
         </member>
         <member name="M:Serilog.Filters.Matching.WithProperty(System.String)">
             <summary>
@@ -2290,6 +2357,7 @@
             </summary>
             <param name="propertyName">The name of the property to match.</param>
             <returns>A predicate for matching events.</returns>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="propertyName"/> is <code>null</code></exception>
         </member>
         <member name="M:Serilog.Filters.Matching.WithProperty(System.String,System.Object)">
             <summary>
@@ -2299,6 +2367,7 @@
             <param name="scalarValue">The property value to match; must be a scalar type.
             Null is allowed.</param>
             <returns>A predicate for matching events.</returns>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="propertyName"/> is <code>null</code></exception>
         </member>
         <member name="M:Serilog.Filters.Matching.WithProperty``1(System.String,System.Func{``0,System.Boolean})">
             <summary>
@@ -2308,6 +2377,8 @@
             <param name="predicate">A predicate for testing </param>
             <typeparam name="TScalar">The type of scalar values to match.</typeparam>
             <returns>A predicate for matching events.</returns>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="propertyName"/> is <code>null</code></exception>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="predicate"/> is <code>null</code></exception>
         </member>
         <member name="T:Serilog.Formatting.Display.LevelOutputFormat">
             <summary>
@@ -2336,6 +2407,7 @@
             <param name="outputTemplate">A message template describing the
             output messages.</param>
             <param name="formatProvider">Supplies culture-specific formatting information, or null.</param>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="outputTemplate"/> is <code>null</code></exception>
         </member>
         <member name="M:Serilog.Formatting.Display.MessageTemplateTextFormatter.Format(Serilog.Events.LogEvent,System.IO.TextWriter)">
             <summary>
@@ -2343,6 +2415,8 @@
             </summary>
             <param name="logEvent">The event to format.</param>
             <param name="output">The output.</param>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="logEvent"/> is <code>null</code></exception>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="output"/> is <code>null</code></exception>
         </member>
         <member name="M:Serilog.Formatting.Display.Obsolete.LogEventLevelValue.Render(System.IO.TextWriter,System.String,System.IFormatProvider)">
             <summary>
@@ -2448,6 +2522,8 @@
             </summary>
             <param name="logEvent">The event to format.</param>
             <param name="output">The output.</param>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="logEvent"/> is <code>null</code></exception>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="output"/> is <code>null</code></exception>
         </member>
         <member name="M:Serilog.Formatting.Json.JsonFormatter.AddLiteralWriter(System.Type,System.Action{System.Object,System.IO.TextWriter})">
             <summary>
@@ -2455,6 +2531,8 @@
             </summary>
             <param name="type">The type of values, which <paramref name="writer" /> handles.</param>
             <param name="writer">The function, which writes the values.</param>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="type"/> is <code>null</code></exception>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="writer"/> is <code>null</code></exception>
         </member>
         <member name="M:Serilog.Formatting.Json.JsonFormatter.WriteRenderings(System.Linq.IGrouping{System.String,Serilog.Parsing.PropertyToken}[],System.Collections.Generic.IReadOnlyDictionary{System.String,Serilog.Events.LogEventPropertyValue},System.IO.TextWriter)">
             <summary>
@@ -2563,6 +2641,7 @@
             <param name="state">Operation state.</param>
             <param name="scalar">The value to visit.</param>
             <returns>The result of visiting <paramref name="scalar"/>.</returns>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="scalar"/> is <code>null</code></exception>
         </member>
         <member name="M:Serilog.Formatting.Json.JsonValueFormatter.VisitSequenceValue(System.IO.TextWriter,Serilog.Events.SequenceValue)">
             <summary>
@@ -2571,6 +2650,7 @@
             <param name="state">Operation state.</param>
             <param name="sequence">The value to visit.</param>
             <returns>The result of visiting <paramref name="sequence"/>.</returns>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="sequence"/> is <code>null</code></exception>
         </member>
         <member name="M:Serilog.Formatting.Json.JsonValueFormatter.VisitStructureValue(System.IO.TextWriter,Serilog.Events.StructureValue)">
             <summary>
@@ -3434,7 +3514,7 @@
         <member name="M:Serilog.ILogger.BindMessageTemplate(System.String,System.Object[],Serilog.Events.MessageTemplate@,System.Collections.Generic.IEnumerable{Serilog.Events.LogEventProperty}@)">
             <summary>
             Uses configured scalar conversion and destructuring rules to bind a set of properties to a
-            message template. Returns false if the template or values are invalid (<summary>ILogger</summary>
+            message template. Returns false if the template or values are invalid (<c>ILogger</c>
             methods never throw exceptions).
             </summary>
             <param name="messageTemplate">Message template describing an event.</param>
@@ -3458,12 +3538,12 @@
             Uses configured scalar conversion and destructuring rules to bind a property value to its captured
             representation.
             </summary>
-            <returns>True if the property could be bound, otherwise false (<summary>ILogger</summary>
             <param name="propertyName">The name of the property. Must be non-empty.</param>
             <param name="value">The property value.</param>
             <param name="destructureObjects">If true, the value will be serialized as a structured
             object if possible; if false, the object will be recorded as a scalar or simple array.</param>
             <param name="property">The resulting property.</param>
+            <returns>True if the property could be bound, otherwise false (<summary>ILogger</summary>
             methods never throw exceptions).</returns>
         </member>
         <member name="T:Serilog.Log">
@@ -3489,7 +3569,7 @@
             <summary>
             The globally-shared logger.
             </summary>
-            <exception cref="T:System.ArgumentNullException"></exception>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="value"/> is <code>null</code></exception>
         </member>
         <member name="M:Serilog.Log.CloseAndFlush">
             <summary>
@@ -4316,12 +4396,12 @@
             Uses configured scalar conversion and destructuring rules to bind a property value to its captured
             representation.
             </summary>
-            <returns>True if the property could be bound, otherwise false (<summary>ILogger</summary>
             <param name="propertyName">The name of the property. Must be non-empty.</param>
             <param name="value">The property value.</param>
             <param name="destructureObjects">If true, the value will be serialized as a structured
             object if possible; if false, the object will be recorded as a scalar or simple array.</param>
             <param name="property">The resulting property.</param>
+            <returns>True if the property could be bound, otherwise false (<summary>ILogger</summary>
             methods never throw exceptions).</returns>
         </member>
         <member name="T:Serilog.LoggerConfiguration">
@@ -4389,6 +4469,7 @@
             <remarks>To free resources held by sinks ahead of program shutdown,
             the returned logger may be cast to <see cref="T:System.IDisposable"/> and
             disposed.</remarks>
+            <exception cref="T:System.InvalidOperationException">When the logger is already created</exception>
         </member>
         <member name="T:Serilog.LoggerExtensions">
             <summary>
@@ -4407,7 +4488,7 @@
             <param name="destructureObjects">If true, the value will be serialized as a structured
             object if possible; if false, the object will be recorded as a scalar or simple array.</param>
             <returns>A logger that will enrich log events as specified.</returns>
-            <returns></returns>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="logger"/> is <code>null</code></exception>
         </member>
         <member name="T:Serilog.Parsing.Alignment">
             <summary>
@@ -4483,6 +4564,7 @@
             is not syntactically valid, text tokens will be returned. The parser
             will make a best effort to extract valid property tokens even in the
             presence of parsing issues.</returns>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="messageTemplate"/> is <code>null</code></exception>
         </member>
         <member name="T:Serilog.Parsing.MessageTemplateToken">
             <summary>
@@ -4538,7 +4620,8 @@
             <param name="alignment">The alignment applied to the property, if any.</param>
             <param name="destructuring">The destructuring strategy applied to the property, if any.</param>
             <param name="startIndex">The token's start index in the template.</param>
-            <exception cref="T:System.ArgumentNullException"></exception>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="propertyName"/> is <code>null</code></exception>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="rawText"/> is <code>null</code></exception>
         </member>
         <member name="P:Serilog.Parsing.PropertyToken.Length">
             <summary>
@@ -4552,6 +4635,8 @@
             <param name="properties">Properties that may be represented by the token.</param>
             <param name="output">Output for the rendered string.</param>
             <param name="formatProvider">Supplies culture-specific formatting information, or null.</param>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="properties"/> is <code>null</code></exception>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="output"/> is <code>null</code></exception>
         </member>
         <member name="P:Serilog.Parsing.PropertyToken.PropertyName">
             <summary>
@@ -4623,7 +4708,7 @@
             </summary>
             <param name="text">The text of the token.</param>
             <param name="startIndex">The token's start index in the template.</param>
-            <exception cref="T:System.ArgumentNullException"></exception>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="text"/> is <code>null</code></exception>
         </member>
         <member name="P:Serilog.Parsing.TextToken.Length">
             <summary>
@@ -4637,6 +4722,7 @@
             <param name="properties">Properties that may be represented by the token.</param>
             <param name="output">Output for the rendered string.</param>
             <param name="formatProvider">Supplies culture-specific formatting information, or null.</param>
+            <exception cref="T:System.ArgumentNullException">When <paramref name="output"/> is <code>null</code></exception>
         </member>
         <member name="M:Serilog.Parsing.TextToken.Equals(System.Object)">
             <summary>
