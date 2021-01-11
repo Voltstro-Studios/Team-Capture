@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 using Team_Capture.Core;
 using Logger = Team_Capture.Core.Logging.Logger;
 using Random = UnityEngine.Random;
@@ -79,6 +82,30 @@ ___________
 			{
 				Logger.Error(ex, "Manual exception thrown!");
 			}
+		}
+
+		[ConCommand("exception_async", "Manually causes an exception (Async)")]
+		public static void ManualExceptionAsyncCommand(string[] args)
+		{
+			try
+			{
+				FailingMethodAsync().GetAwaiter().GetResult();
+			}
+			catch (Exception ex)
+			{
+				Logger.Error(ex, "Manual exception thrown!");
+			}
+		}
+
+		private static async Task<int> FailingMethodAsync()
+		{
+			return await Task.FromResult(FailingEnumerator().Sum());
+		}
+
+		private static IEnumerable<int> FailingEnumerator()
+		{
+			yield return 1;
+			throw new Exception();
 		}
 
 #endif
