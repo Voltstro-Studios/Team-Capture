@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Serilog.Enrichers.Demystify</name>
+    </assembly>
+    <members>
+        <member name="T:Serilog.LoggerEnrichmentConfigurationExtensions">
+            <summary>
+            Adds methods for enriching exception stack traces.
+            </summary>
+        </member>
+        <member name="M:Serilog.LoggerEnrichmentConfigurationExtensions.WithDemystifiedStackTraces(Serilog.Configuration.LoggerEnrichmentConfiguration)">
+            <summary>
+            Enriches exception stack traces using Demystifier.
+            </summary>
+            <param name="enrichmentConfiguration">The logger enrichment configuration (`Enrich`).</param>
+            <returns>Logger configuration to allow method chaining.</returns>
+        </member>
+    </members>
+</doc>

@@ -81,6 +81,7 @@ namespace Team_Capture.Core.Logging
 					buffered: loggerConfig.BufferedFileWrite))
 				.WriteTo.Unity3D()
 				.WriteTo.Console(outPutTemplate)
+				.Enrich.WithDemystifiedStackTraces()
 				.CreateLogger();
 
 			log.Debug("Logger initialized at {@Date}", DateTime.Now.ToString("dd/MM/yyyy hh:mm tt"));
