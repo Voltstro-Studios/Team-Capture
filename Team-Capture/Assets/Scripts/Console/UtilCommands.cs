@@ -1,7 +1,8 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Team_Capture.Core;
-using UnityEngine;
 using Logger = Team_Capture.Core.Logging.Logger;
+using Random = UnityEngine.Random;
 
 namespace Team_Capture.Console
 {
@@ -59,5 +60,27 @@ ___________
 				Logger.Info($"	{lines[index]}");
 			}
 		}
+
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+
+		[ConCommand("exception", "Manually causes an exception", CommandRunPermission.Both, 0, 1000)]
+		public static void ManualExceptionCommand(string[] args)
+		{
+			try
+			{
+				string message = "Manual exception!";
+				string argsJoined = string.Join(" ", args);
+				if (!string.IsNullOrWhiteSpace(argsJoined))
+					message = argsJoined;
+
+				throw new Exception(message);
+			}
+			catch (Exception ex)
+			{
+				Logger.Error("{@Ex}", ex);
+			}
+		}
+
+#endif
 	}
 }
