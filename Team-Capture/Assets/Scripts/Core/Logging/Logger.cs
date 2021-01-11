@@ -6,7 +6,6 @@ using Team_Capture.Console;
 using Team_Capture.Core.Logging.Unity;
 using Team_Capture.Exceptions;
 using UnityEngine;
-using Voltstro.CommandLineParser;
 
 namespace Team_Capture.Core.Logging
 {
@@ -42,9 +41,12 @@ namespace Team_Capture.Core.Logging
 		/// </summary>
 		public static bool IsLoggerInitialized => log != null;
 
+		/// <summary>
+		///		Do we log debug messages
+		/// </summary>
 		[ConVar("cl_log_debug", "Logs debug messages", nameof(DebugLogModeCallback))]
 #if UNITY_EDITOR //Default to debug logging in the editor
-		public static bool DebugLogMode = true;
+		internal static bool DebugLogMode = true;
 #else
 		public static bool DebugLogMode = false;
 #endif
