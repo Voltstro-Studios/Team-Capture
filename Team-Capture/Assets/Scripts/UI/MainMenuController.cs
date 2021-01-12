@@ -11,7 +11,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
-using Logger = Team_Capture.Core.Logging.Logger;
+using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.UI
 {

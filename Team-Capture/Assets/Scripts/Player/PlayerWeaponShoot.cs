@@ -6,7 +6,7 @@ using Team_Capture.LagCompensation;
 using Team_Capture.UI;
 using Team_Capture.Weapons;
 using UnityEngine;
-using Logger = Team_Capture.Core.Logging.Logger;
+using Logger = Team_Capture.Logging.Logger;
 using Random = UnityEngine.Random;
 
 namespace Team_Capture.Player

@@ -4,7 +4,7 @@ using Mirror;
 using Team_Capture.Console;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Logger = Team_Capture.Core.Logging.Logger;
+using Logger = Team_Capture.Logging.Logger;
 using SceneManager = UnityEngine.SceneManagement.SceneManager;
 
 namespace Team_Capture.SceneManagement

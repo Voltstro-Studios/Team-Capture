@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using Mirror;
 using UnityEngine;
-using Logger = Team_Capture.Core.Logging.Logger;
+using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.Core.Networking
 {

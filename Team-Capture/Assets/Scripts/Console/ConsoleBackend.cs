@@ -6,7 +6,7 @@ using Mirror;
 using Team_Capture.Console.TypeReader;
 using Team_Capture.Core;
 using UnityEngine;
-using Logger = Team_Capture.Core.Logging.Logger;
+using Logger = Team_Capture.Logging.Logger;
 using StringReader = Team_Capture.Console.TypeReader.StringReader;
 
 namespace Team_Capture.Console

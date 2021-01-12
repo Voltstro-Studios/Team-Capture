@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using Mirror;
-using Team_Capture.Core.Logging;
+using Team_Capture.Logging;
 
 namespace Team_Capture.Core.Networking
 {

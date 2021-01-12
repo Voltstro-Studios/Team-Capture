@@ -5,7 +5,7 @@ using ElRaccoone.Tweens.Core;
 using Team_Capture.Core;
 using UnityEngine;
 using UnityEngine.UI;
-using Logger = Team_Capture.Core.Logging.Logger;
+using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.Tweens
 {

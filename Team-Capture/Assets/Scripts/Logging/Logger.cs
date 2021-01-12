@@ -3,11 +3,11 @@ using Serilog;
 using Serilog.Core;
 using Serilog.Events;
 using Team_Capture.Console;
-using Team_Capture.Core.Logging.Unity;
 using Team_Capture.Exceptions;
+using Team_Capture.Logging.Unity;
 using UnityEngine;
 
-namespace Team_Capture.Core.Logging
+namespace Team_Capture.Logging
 {
 	/// <summary>
 	///     An API to provide the ability to record events that occur in the game.

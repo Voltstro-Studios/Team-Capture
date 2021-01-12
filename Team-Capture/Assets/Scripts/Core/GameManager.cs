@@ -5,7 +5,7 @@ using Team_Capture.Console;
 using Team_Capture.Player;
 using Team_Capture.SceneManagement;
 using UnityEngine;
-using Logger = Team_Capture.Core.Logging.Logger;
+using Logger = Team_Capture.Logging.Logger;
 using SceneManager = UnityEngine.SceneManagement.SceneManager;
 
 namespace Team_Capture.Core

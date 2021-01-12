@@ -6,7 +6,7 @@ using Mirror;
 using Team_Capture.Console;
 using UnityEngine;
 using UnityEngine.Rendering;
-using Logger = Team_Capture.Core.Logging.Logger;
+using Logger = Team_Capture.Logging.Logger;
 
 #if UNITY_EDITOR
 using UnityEditor;

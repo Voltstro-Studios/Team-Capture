@@ -7,7 +7,7 @@ using Team_Capture.Core.Networking.Discovery;
 using Team_Capture.UI.Elements;
 using TMPro;
 using UnityEngine;
-using Logger = Team_Capture.Core.Logging.Logger;
+using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.UI.Panels
 {

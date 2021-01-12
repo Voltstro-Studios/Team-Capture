@@ -1,7 +1,7 @@
 ﻿using System;
 using JetBrains.Annotations;
 using UnityEngine;
-using Logger = Team_Capture.Core.Logging.Logger;
+using Logger = Team_Capture.Logging.Logger;
 
 //From https://github.com/EternalClickbait/LibEternal/blob/Dev/LibEternal.Unity/SingletonMonoBehaviour.cs
 

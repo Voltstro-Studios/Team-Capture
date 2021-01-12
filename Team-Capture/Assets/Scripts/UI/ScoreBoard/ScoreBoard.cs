@@ -7,7 +7,7 @@ using Team_Capture.Localization;
 using Team_Capture.Player;
 using TMPro;
 using UnityEngine;
-using Logger = Team_Capture.Core.Logging.Logger;
+using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.UI.ScoreBoard
 {

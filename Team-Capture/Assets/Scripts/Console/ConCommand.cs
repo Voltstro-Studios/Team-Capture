@@ -1,5 +1,5 @@
 ﻿using System;
-using Team_Capture.Core.Logging;
+using Team_Capture.Logging;
 using UnityEngine.Scripting;
 
 namespace Team_Capture.Console

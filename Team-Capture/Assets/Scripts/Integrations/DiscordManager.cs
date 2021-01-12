@@ -3,8 +3,8 @@ using System.IO;
 using Discord.GameSDK;
 using Discord.GameSDK.Activities;
 using Team_Capture.Core;
-using Team_Capture.Core.Logging;
 using Team_Capture.Helper;
+using Team_Capture.Logging;
 using Team_Capture.SceneManagement;
 
 namespace Team_Capture.Integrations

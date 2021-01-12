@@ -2,7 +2,7 @@
 using Team_Capture.Core;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
-using Logger = Team_Capture.Core.Logging.Logger;
+using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.Settings.Controllers
 {

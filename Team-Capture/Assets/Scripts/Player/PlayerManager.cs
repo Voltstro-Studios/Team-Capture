@@ -8,7 +8,7 @@ using Team_Capture.Player.Movement;
 using Team_Capture.Weapons;
 using UnityEngine;
 using Voltstro.CommandLineParser;
-using Logger = Team_Capture.Core.Logging.Logger;
+using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.Player
 {

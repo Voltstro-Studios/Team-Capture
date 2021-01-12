@@ -2,15 +2,15 @@
 using System.Collections;
 using Mirror;
 using Team_Capture.Console;
-using Team_Capture.Core.Logging;
 using Team_Capture.Core.Networking.Discovery;
 using Team_Capture.Helper;
 using Team_Capture.LagCompensation;
+using Team_Capture.Logging;
 using Team_Capture.SceneManagement;
 using Team_Capture.UI.Panels;
 using UnityEngine;
 using Voltstro.CommandLineParser;
-using Logger = Team_Capture.Core.Logging.Logger;
+using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.Core.Networking
 {

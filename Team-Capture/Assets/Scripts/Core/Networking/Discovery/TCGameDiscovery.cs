@@ -5,7 +5,7 @@ using Mirror.Discovery;
 using Team_Capture.SceneManagement;
 using UnityEngine;
 using UnityEngine.Events;
-using Logger = Team_Capture.Core.Logging.Logger;
+using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.Core.Networking.Discovery
 {
