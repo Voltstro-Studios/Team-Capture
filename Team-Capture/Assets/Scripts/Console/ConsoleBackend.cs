@@ -453,7 +453,7 @@ namespace Team_Capture.Console
 			string[] lines = File.ReadAllLines(configFilesLocation + fileName);
 			foreach (string line in lines)
 			{
-				if (line.StartsWith("//")) continue;
+				if (line.StartsWith("//") || line.StartsWith(" ")) continue;
 
 				ExecuteCommand(line);
 			}

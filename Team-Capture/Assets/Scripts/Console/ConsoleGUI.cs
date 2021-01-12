@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using Team_Capture.Input;
@@ -110,7 +111,7 @@ namespace Team_Capture.Console
 				return;
 
 			inputField.text = ConsoleBackend.AutoComplete(inputField.text);
-			inputField.caretPosition = inputField.text.Length;
+			SetInputFieldCaretPos(inputField.text.Length);
 		}
 
 		private void HistoryUp()
@@ -119,7 +120,7 @@ namespace Team_Capture.Console
 				return;
 
 			inputField.text = ConsoleBackend.HistoryUp(inputField.text);
-			inputField.caretPosition = inputField.text.Length;
+			SetInputFieldCaretPos(inputField.text.Length);
 		}
 
 		private void HistoryDown()
@@ -128,7 +129,23 @@ namespace Team_Capture.Console
 				return;
 
 			inputField.text = ConsoleBackend.HistoryDown();
-			inputField.caretPosition = inputField.text.Length;
+			SetInputFieldCaretPos(inputField.text.Length);
+		}
+
+		private void SetInputFieldCaretPos(int pos)
+		{
+			StartCoroutine(SetPosition());
+
+			IEnumerator SetPosition()
+			{
+				int width = inputField.caretWidth;
+				inputField.caretWidth = 0;
+
+				yield return new WaitForEndOfFrame();
+
+				inputField.caretWidth = width;
+				inputField.caretPosition = pos;
+			}
 		}
 
 		#endregion
