@@ -82,7 +82,7 @@ namespace Team_Capture.Logging
 				.MinimumLevel.ControlledBy(level)
 				.WriteTo.Async(a => a.File(logFileName, outputTemplate: outPutTemplate,
 					buffered: loggerConfig.BufferedFileWrite))
-				.WriteTo.Unity3D()
+				.WriteTo.Unity()
 				.WriteTo.Console(outPutTemplate)
 				.Enrich.WithDemystifiedStackTraces()
 				.CreateLogger();

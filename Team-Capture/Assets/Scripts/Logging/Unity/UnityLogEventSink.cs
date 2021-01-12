@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using Serilog;
+using Serilog.Configuration;
 using Serilog.Core;
 using Serilog.Events;
 using Serilog.Formatting;
@@ -8,11 +10,20 @@ using UnityEngine;
 
 namespace Team_Capture.Logging.Unity
 {
-	internal sealed class Unity3DLogEventSink : ILogEventSink
+	internal static class UnitySinkExtensions
+	{
+		public static LoggerConfiguration Unity(this LoggerSinkConfiguration loggerSinkConfiguration,
+			string format = "{Timestamp:dd-MM hh:mm:ss tt} [{Level:u3}] {Message:lj}{NewLine}{Exception}")
+		{
+			return loggerSinkConfiguration.Sink(new UnityLogEventSink(format));
+		}
+	}
+
+	internal sealed class UnityLogEventSink : ILogEventSink
 	{
 		private readonly ITextFormatter formatProvider;
 
-		public Unity3DLogEventSink(string messageFormat)
+		public UnityLogEventSink(string messageFormat)
 		{
 			formatProvider = new MessageTemplateTextFormatter(messageFormat);
 		}
