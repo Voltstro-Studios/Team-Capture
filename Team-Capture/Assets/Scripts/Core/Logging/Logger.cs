@@ -10,7 +10,10 @@ using UnityEngine;
 namespace Team_Capture.Core.Logging
 {
 	/// <summary>
-	///     Provides the ability to log stuff to a file and the console
+	///     An API to provide the ability to record events that occur in the game.
+	///		<para>Try to use this API rather then Unity's <see cref="UnityEngine.Debug"/> methods.
+	///		If your code needs to run in the editor, then use Unity's <see cref="UnityEngine.Debug"/> methods.</para>
+	///		<para>Never use Serilog's <see cref="Log"/>, as it is never setup!</para>
 	/// </summary>
 	public static class Logger
 	{
@@ -23,9 +26,9 @@ namespace Team_Capture.Core.Logging
 		/// <summary>
 		///     The logger's config, can only be set while the logger isn't running
 		/// </summary>
-		internal static LoggerConfig LoggerConfig
+		public static LoggerConfig LoggerConfig
 		{
-			set
+			internal set
 			{
 				if (IsLoggerInitialized)
 					throw new InitializationException("The logger is already initialized!");

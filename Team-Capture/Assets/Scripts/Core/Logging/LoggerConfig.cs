@@ -3,7 +3,7 @@
 	/// <summary>
 	///     The config for <see cref="Logger" />
 	/// </summary>
-	internal sealed class LoggerConfig
+	public sealed class LoggerConfig
 	{
 		/// <summary>
 		///     The underlying stream will be permit to do buffered writes
