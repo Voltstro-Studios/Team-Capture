@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Text;
 using Mirror;
 using Team_Capture.Console.TypeReader;
 using Team_Capture.Core;
@@ -304,30 +305,40 @@ namespace Team_Capture.Console
 		{
 			List<string> possibleMatches = new List<string>();
 
+			//Go through all commands, and find if they start with the prefix
 			foreach (KeyValuePair<string, ConsoleCommand> command in commands)
 			{
 				string name = command.Key;
 				if (!name.StartsWith(prefix, true, null))
 					continue;
+
 				possibleMatches.Add(name);
 			}
 
+			//No commands that start with the prefix where found, so just return
 			if (possibleMatches.Count == 0)
 				return prefix;
 
-			// Look for longest common prefix
+			//Look for longest common prefix
 			int lcp = possibleMatches[0].Length;
 			for (int i = 0; i < possibleMatches.Count - 1; i++)
 				lcp = Mathf.Min(lcp, CommonPrefix(possibleMatches[i], possibleMatches[i + 1]));
 
 			prefix += possibleMatches[0].Substring(prefix.Length, lcp - prefix.Length);
-			if (possibleMatches.Count > 1)
-				// write list of possible completions
-				foreach (string t in possibleMatches)
-					Logger.Info(t);
-			else
-				prefix += " ";
+			if (possibleMatches.Count <= 1) return prefix;
 
+			//Build a list of all possible matches
+			StringBuilder sb = new StringBuilder();
+			sb.Append("Possible matches:\n");
+
+			for (int i = 0; i < possibleMatches.Count; i++)
+			{
+				if (i != 0)
+					sb.Append("\n");
+				sb.Append(possibleMatches[i]);
+			}
+
+			Logger.Info(sb.ToString());
 			return prefix;
 		}
 
@@ -365,6 +376,7 @@ namespace Team_Capture.Console
 			for (int i = 1; i <= minl; i++)
 				if (!a.StartsWith(b.Substring(0, i), true, null))
 					return i - 1;
+
 			return minl;
 		}
 
