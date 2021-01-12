@@ -95,7 +95,7 @@ namespace Team_Capture.UI.Panels
 
 			statusText.gameObject.SetActive(false);
 
-			Logger.Debug("Found server at {@Address}", server.EndPoint.Address);
+			Logger.Debug("Found server at {Address}", server.EndPoint.Address);
 		}
 
 		/// <summary>

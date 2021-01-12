@@ -58,7 +58,7 @@ namespace Team_Capture.Core.Networking.Discovery
 
 		protected override TCServerResponse ProcessRequest(TCServerRequest request, IPEndPoint endpoint)
 		{
-			Logger.Debug("Processing discovery request from `{@Address}`...", endpoint.Address);
+			Logger.Debug("Processing discovery request from `{Address}`...", endpoint.Address);
 
 			try
 			{
