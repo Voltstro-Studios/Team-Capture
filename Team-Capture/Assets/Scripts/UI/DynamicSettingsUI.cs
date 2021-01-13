@@ -95,34 +95,13 @@ namespace Team_Capture.UI
 
 					Type fieldType = settingField.FieldType;
 
-					//TODO: Considering the unity slider uses a float, could we have 1 overload with a bool for int or float mode?
 					if (fieldType == typeof(int))
 					{
-						//If it's an int or a float, we need to check if it has a range attribute
-						RangeAttribute rangeAttribute = settingField.GetCustomAttribute<RangeAttribute>();
-
-						if (rangeAttribute == null)
-						{
-							Logger.Error("{@SettingField} doesn't have a Range attribute!", settingField.Name);
-							continue;
-						}
-
-						CreateIntSlider(settingField.GetValue<int>(settingGroupInstance), (int) rangeAttribute.min, (int) rangeAttribute.max,
-								settingField, panel);
+						CreateIntSlider(settingField.GetValue<int>(settingGroupInstance), settingField, panel);
 					}
 					else if (fieldType == typeof(float))
 					{
-						//If it's an int or a float, we need to check if it has a range attribute
-						RangeAttribute rangeAttribute = settingField.GetCustomAttribute<RangeAttribute>();
-
-						if (rangeAttribute == null)
-						{
-							Logger.Error("{@SettingField} doesn't have a Range attribute!", settingField.Name);
-							continue;
-						}
-
-						CreateFloatSlider(settingField.GetValue<float>(settingGroupInstance), rangeAttribute.min, rangeAttribute.max, 
-							settingField, panel);
+						CreateFloatSlider(settingField.GetValue<float>(settingGroupInstance), settingField, panel);
 					}
 					else if (fieldType == typeof(bool))
 					{
@@ -139,21 +118,20 @@ namespace Team_Capture.UI
 						CreateResolutionDropdown(settingField.GetValue<Resolution>(settingGroupInstance), settingField,
 							panel);
 					}
-					//TODO: Finish these
 					else if (fieldType.IsEnum)
 					{
 						CreateEnumDropdown(settingField.GetValue<int>(settingGroupInstance), settingField, panel);
 					}
 					else
 					{
-						Logger.Error("UI Element for setting of type {@FullName} is not supported!",
+						Logger.Error("UI Element for setting of type {FullName} is not supported!",
 							fieldType.FullName);
 					}
 				}
 			}
 
 			stopwatch.Stop();
-			Logger.Debug("Time taken to update settings UI: {@TotalMilliseconds}ms",
+			Logger.Debug("Time taken to update settings UI: {TotalMilliseconds}ms",
 				stopwatch.Elapsed.TotalMilliseconds);
 		}
 
@@ -163,16 +141,34 @@ namespace Team_Capture.UI
 		// ReSharper disable MemberCanBeMadeStatic.Local
 		// ReSharper disable UnusedParameter.Local
 
-		private void CreateFloatSlider(float val, float min, float max, FieldInfo field, GameObject panel)
+		private void CreateIntSlider(int val, FieldInfo field, GameObject panel)
 		{
-			Slider slider = optionsPanel.AddSliderToPanel(panel, field.GetObjectDisplayText(), val, false, min, max);
-			slider.onValueChanged.AddListener(f => field.SetValue(GetSettingObject(field), f));
+			//If it's an int or a float, we need to check if it has a range attribute
+			RangeAttribute rangeAttribute = field.GetCustomAttribute<RangeAttribute>();
+
+			if (rangeAttribute == null)
+			{
+				Logger.Error("{SettingField} doesn't have a Range attribute!", field.Name);
+				return;
+			}
+
+			Slider slider = optionsPanel.AddSliderToPanel(panel, field.GetObjectDisplayText(), val, true, (int)rangeAttribute.min, (int)rangeAttribute.max);
+			slider.onValueChanged.AddListener(f => field.SetValue(GetSettingObject(field), (int) f));
 		}
 
-		private void CreateIntSlider(int val, int min, int max, FieldInfo field, GameObject panel)
+		private void CreateFloatSlider(float val, FieldInfo field, GameObject panel)
 		{
-			Slider slider = optionsPanel.AddSliderToPanel(panel, field.GetObjectDisplayText(), val, true, min, max);
-			slider.onValueChanged.AddListener(f => field.SetValue(GetSettingObject(field), (int) f));
+			//If it's an int or a float, we need to check if it has a range attribute
+			RangeAttribute rangeAttribute = field.GetCustomAttribute<RangeAttribute>();
+
+			if (rangeAttribute == null)
+			{
+				Logger.Error("{SettingField} doesn't have a Range attribute!", field.Name);
+				return;
+			}
+
+			Slider slider = optionsPanel.AddSliderToPanel(panel, field.GetObjectDisplayText(), val, false, rangeAttribute.min, rangeAttribute.max);
+			slider.onValueChanged.AddListener(f => field.SetValue(GetSettingObject(field), f));
 		}
 
 		private void CreateBoolToggle(bool val, FieldInfo field, GameObject panel)
