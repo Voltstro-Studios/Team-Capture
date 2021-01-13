@@ -66,11 +66,11 @@ namespace Team_Capture.Player.Movement
 		/// <param name="jump"></param>
 		public void SetInput(float x, float y, float mouseX, float mouseY, bool jump)
 		{
-			inputs.Directions.x = x;
-			inputs.Directions.y = y;
+			inputs.MoveDirections.x = x;
+			inputs.MoveDirections.y = y;
 
-			inputs.MouseDirections.x = mouseX;
-			inputs.MouseDirections.y = mouseY;
+			inputs.LookDirections.x = mouseX;
+			inputs.LookDirections.y = mouseY;
 
 			inputs.Jump = jump;
 		}

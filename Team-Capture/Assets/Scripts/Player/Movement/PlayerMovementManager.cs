@@ -183,7 +183,7 @@ namespace Team_Capture.Player.Movement
 			bool isGrounded = Physics.Raycast(groundCheck.position, Vector3.down, groundDistance, groundMask);
 
 			//Calculate velocity
-			Vector3 inputs = new Vector3(input.Directions.x, 0f, input.Directions.y) * moveSpeed;
+			Vector3 inputs = new Vector3(input.MoveDirections.x, 0f, input.MoveDirections.y) * moveSpeed;
 			playerState.Velocity = transform.TransformDirection(inputs);
 			playerState.Velocity.y = previous.Velocity.y;
 
@@ -201,8 +201,8 @@ namespace Team_Capture.Player.Movement
 			playerState.Position += playerState.Velocity * Time.deltaTime;
 
 			//Mouse Movement
-			playerState.RotationX -= input.MouseDirections.y;
-			playerState.RotationY += input.MouseDirections.x;
+			playerState.RotationX -= input.LookDirections.y;
+			playerState.RotationY += input.LookDirections.x;
 
 			playerState.RotationX = Mathf.Clamp(playerState.RotationX, -90, 90);
 

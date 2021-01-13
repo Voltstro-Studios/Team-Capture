@@ -15,16 +15,16 @@ namespace Team_Capture.Player.Movement
 	/// </summary>
 	public struct PlayerInputs : NetworkMessage
 	{
-		public PlayerInputs(Vector2 dirs, Vector2 mouseDirs, bool jump, int inputNum)
+		public PlayerInputs(Vector2 moveDirections, Vector2 lookDirections, bool jump, int inputNum)
 		{
-			Directions = dirs;
-			MouseDirections = mouseDirs;
+			MoveDirections = moveDirections;
+			LookDirections = lookDirections;
 			Jump = jump;
 			InputNum = inputNum;
 		}
 
-		public Vector2 Directions;
-		public Vector2 MouseDirections;
+		public Vector2 MoveDirections;
+		public Vector2 LookDirections;
 
 		public bool Jump;
 
@@ -39,8 +39,8 @@ namespace Team_Capture.Player.Movement
 	{
 		public static void WritePlayerInputs(this NetworkWriter writer, PlayerInputs inputs)
 		{
-			writer.WriteVector2(inputs.Directions);
-			writer.WriteVector2(inputs.MouseDirections);
+			writer.WriteVector2(inputs.MoveDirections);
+			writer.WriteVector2(inputs.LookDirections);
 
 			writer.WriteBoolean(inputs.Jump);
 			writer.WriteInt32(inputs.InputNum);
