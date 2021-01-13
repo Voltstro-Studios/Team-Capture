@@ -188,7 +188,7 @@
       "dependencies": {
         "com.unity.settings-manager": "1.0.3"
       },
-      "hash": "91d193b0a91ab76d12dca312280104ce3d011dc4"
+      "hash": "8b087b2b5db8aeb631feca8c144a5675d813a9f1"
     },
     "dev.voltstro.voltcommandlineparser": {
       "version": "https://github.com/VoltUnityPackages/VoltUnityCommandLineParser.git",
