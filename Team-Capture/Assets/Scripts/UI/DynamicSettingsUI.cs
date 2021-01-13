@@ -96,37 +96,22 @@ namespace Team_Capture.UI
 					Type fieldType = settingField.FieldType;
 
 					if (fieldType == typeof(int))
-					{
 						CreateIntSlider(settingField.GetValue<int>(settingGroupInstance), settingField, panel);
-					}
 					else if (fieldType == typeof(float))
-					{
 						CreateFloatSlider(settingField.GetValue<float>(settingGroupInstance), settingField, panel);
-					}
 					else if (fieldType == typeof(bool))
-					{
 						CreateBoolToggle(settingField.GetValue<bool>(settingGroupInstance), settingField, panel);
-					}
 					else if (fieldType == typeof(string))
-					{
 						CreateStringField(settingField.GetValue<string>(settingGroupInstance), settingField,
 							optionOptionsMenu);
-					}
 					else if (fieldType == typeof(Resolution))
-					{
-						//For a resolution property, we will create a dropdown with all available resolutions and select the active one
 						CreateResolutionDropdown(settingField.GetValue<Resolution>(settingGroupInstance), settingField,
 							panel);
-					}
 					else if (fieldType.IsEnum)
-					{
 						CreateEnumDropdown(settingField.GetValue<int>(settingGroupInstance), settingField, panel);
-					}
 					else
-					{
 						Logger.Error("UI Element for setting of type {FullName} is not supported!",
 							fieldType.FullName);
-					}
 				}
 			}
 
@@ -222,14 +207,6 @@ namespace Team_Capture.UI
 				int value = (int) Enum.Parse(field.FieldType, name);
 				field.SetValue(GetSettingObject(field), value);
 			});
-		}
-
-		private void CreateKeybindButton(KeyCode val, FieldInfo field, OptionsMenu optionsMenu)
-		{
-			Logger.Debug($"\tCreating keybind button for {field.Name} in {optionsMenu.Name}. Current is {val}");
-			//Sorry future Creepysin in case this freezes the game...
-			//TODO: Need to create this function. Might need to start a coroutine/async void to avoid freezing the screen till a key is pressed
-			//            new Button().onClick.AddListener(  () => field.SetValue(GetSettingObject(field), WaitForKeyPressAndReturnKeycode()));
 		}
 
 		private object GetSettingObject(FieldInfo field)
