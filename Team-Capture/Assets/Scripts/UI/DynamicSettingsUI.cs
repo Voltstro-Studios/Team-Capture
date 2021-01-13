@@ -129,8 +129,7 @@ namespace Team_Capture.UI
 		private void CreateIntSlider(int val, FieldInfo field, GameObject panel)
 		{
 			//If it's an int or a float, we need to check if it has a range attribute
-			RangeAttribute rangeAttribute = field.GetCustomAttribute<RangeAttribute>();
-
+			RangeAttribute rangeAttribute = field.GetFieldRange();
 			if (rangeAttribute == null)
 			{
 				Logger.Error("{SettingField} doesn't have a Range attribute!", field.Name);
@@ -144,8 +143,7 @@ namespace Team_Capture.UI
 		private void CreateFloatSlider(float val, FieldInfo field, GameObject panel)
 		{
 			//If it's an int or a float, we need to check if it has a range attribute
-			RangeAttribute rangeAttribute = field.GetCustomAttribute<RangeAttribute>();
-
+			RangeAttribute rangeAttribute = field.GetFieldRange();
 			if (rangeAttribute == null)
 			{
 				Logger.Error("{SettingField} doesn't have a Range attribute!", field.Name);
@@ -252,6 +250,12 @@ namespace Team_Capture.UI
 				text = attribute.MenuNameFormat;
 
 			return text;
+		}
+
+		public static RangeAttribute GetFieldRange(this FieldInfo field)
+		{
+			RangeAttribute rangeAttribute = field.GetCustomAttribute<RangeAttribute>();
+			return rangeAttribute;
 		}
 	}
 }
