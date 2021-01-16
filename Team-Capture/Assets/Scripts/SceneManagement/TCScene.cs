@@ -27,6 +27,12 @@ namespace Team_Capture.SceneManagement
 		private string displayName = "Map_DisplayName";
 
 		/// <summary>
+		///		Image that will be displayed while loading
+		/// </summary>
+		[Tooltip("Image that will be displayed while loading")]
+		public Texture2D loadingScreenBackgroundImage;
+
+		/// <summary>
 		///     Will this scene be included in the build?
 		/// </summary>
 		[Tooltip("Will this scene be included in the build?")]
@@ -43,12 +49,6 @@ namespace Team_Capture.SceneManagement
 		/// </summary>
 		[Tooltip("Can this scene be loaded to directly (Using the scene command)")]
 		public bool canLoadTo = true;
-
-		/// <summary>
-		///     The parent object that will hold all the pickups
-		/// </summary>
-		[Tooltip("The parent object that will hold all the pickups")]
-		public string pickupsParent = "/Pickups/";
 
 		/// <summary>
 		///     The time until the players respawn

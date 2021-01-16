@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Team_Capture.SceneManagement;
+using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Team_Capture.UI.LoadingScreen
@@ -9,6 +11,20 @@ namespace Team_Capture.UI.LoadingScreen
 	internal class LoadingScreenUI : MonoBehaviour
 	{
 		[SerializeField] private Slider slider;
+		[SerializeField] private RawImage backgroundImage;
+		[SerializeField] private TextMeshProUGUI mapTex;
+
+		/// <summary>
+		///		Sets up the loading screen
+		/// </summary>
+		/// <param name="scene"></param>
+		public void Setup(TCScene scene)
+		{
+			if (scene.loadingScreenBackgroundImage != null)
+				backgroundImage.texture = scene.loadingScreenBackgroundImage;
+
+			mapTex.text = scene.DisplayNameLocalized;
+		}
 
 		/// <summary>
 		///     Sets the loading bar amount

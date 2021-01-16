@@ -53,5 +53,6 @@
     "ScoreBoard_Name": "Name",
     "ScoreBoard_Kills": "Kills",
     "ScoreBoard_Deaths": "Deaths",
-    "ScoreBoard_Ping": "Ping"
+    "ScoreBoard_Ping": "Ping",
+    "Loading_OnUrWayTo": "You are on your way to:"
 }

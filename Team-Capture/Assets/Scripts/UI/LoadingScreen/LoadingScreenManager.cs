@@ -1,6 +1,7 @@
 using System.Collections;
 using Mirror;
 using Team_Capture.Core;
+using Team_Capture.SceneManagement;
 using UnityEngine;
 using Logger = Team_Capture.Logging.Logger;
 
@@ -39,10 +40,10 @@ namespace Team_Capture.UI.LoadingScreen
 
 	    private void OnBeginSceneLoading(AsyncOperation operation, string sceneName)
 	    {
-		    StartCoroutine(OnStartSceneLoadAsync(operation));
+		    StartCoroutine(OnStartSceneLoadAsync(operation, TCScenesManager.FindSceneInfo(sceneName)));
 	    }
 
-	    private IEnumerator OnStartSceneLoadAsync(AsyncOperation sceneLoadOperation)
+	    private IEnumerator OnStartSceneLoadAsync(AsyncOperation sceneLoadOperation, TCScene scene)
 	    {
 		    if (sceneLoadOperation == null || isLoading || !isSetup || Game.IsGameQuitting)
 			    yield return null;
@@ -50,6 +51,7 @@ namespace Team_Capture.UI.LoadingScreen
 		    isLoading = true;
 		    LoadingScreenUI loadingScreenUI =
 			    Instantiate(loadingScenePrefab).GetComponent<LoadingScreenUI>();
+			loadingScreenUI.Setup(scene);
 
 		    // ReSharper disable once PossibleNullReferenceException
 		    while (!sceneLoadOperation.isDone)
