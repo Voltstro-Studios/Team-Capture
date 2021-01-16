@@ -14,10 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scene: Assets/Scenes/dm_ditch.unity
   displayName: Map_DisplayName
+  loadingScreenBackgroundImage: {fileID: 2800000, guid: 8556b8fe6a721f04ab7ea14c1f4b82de,
+    type: 3}
   enabled: 1
   isOnlineScene: 1
   canLoadTo: 1
-  pickupsParent: /Pickups/
   respawnTime: 4
   stockWeapons:
   - {fileID: 11400000, guid: da803de1f5f09f247aac351f1c13c59a, type: 2}
