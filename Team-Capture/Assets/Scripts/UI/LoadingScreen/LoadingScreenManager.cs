@@ -1,8 +1,6 @@
-using System;
 using System.Collections;
 using Mirror;
 using Team_Capture.Core;
-using Team_Capture.UI.Panels;
 using UnityEngine;
 using Logger = Team_Capture.Logging.Logger;
 
@@ -39,7 +37,7 @@ namespace Team_Capture.UI.LoadingScreen
 			    SceneManager.OnBeginSceneLoading -= OnBeginSceneLoading;
 	    }
 
-	    private void OnBeginSceneLoading(AsyncOperation operation)
+	    private void OnBeginSceneLoading(AsyncOperation operation, string sceneName)
 	    {
 		    StartCoroutine(OnStartSceneLoadAsync(operation));
 	    }
