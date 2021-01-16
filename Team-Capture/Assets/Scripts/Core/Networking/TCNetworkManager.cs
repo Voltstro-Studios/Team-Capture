@@ -52,12 +52,6 @@ namespace Team_Capture.Core.Networking
 		/// </summary>
 		public ServerConfig serverConfig;
 
-		/// <summary>
-		///     The loading screen prefab
-		/// </summary>
-		[Header("Loading Screen")] [SerializeField]
-		private GameObject loadingScreenPrefab;
-
 		public static bool IsServer => Instance.mode == NetworkManagerMode.ServerOnly;
 
 		public override void Awake()
@@ -88,10 +82,6 @@ namespace Team_Capture.Core.Networking
 				//Start the server
 				StartServer();
 
-			//Setup loading screen
-			//TODO: Handle loading screen stuff somewhere different
-			SceneManager.OnBeginSceneLoading += operation => StartCoroutine(OnStartSceneLoadAsync(operation));
-
 			//TODO: Make auth movement not server framerate dependent
 			Application.targetFrameRate = 128;
 		}
@@ -106,27 +96,6 @@ namespace Team_Capture.Core.Networking
 			//If we are the server then update simulated objects
 			if (mode == NetworkManagerMode.ServerOnly) SimulationHelper.UpdateSimulationObjectData();
 		}
-
-		#region Loading Screen
-
-		private IEnumerator OnStartSceneLoadAsync(AsyncOperation sceneLoadOperation)
-		{
-			if (sceneLoadOperation == null)
-				yield return null;
-
-			if (singleton.mode == NetworkManagerMode.ServerOnly) yield return null;
-
-			LoadingScreenPanel loadingScreenPanel = Instantiate(loadingScreenPrefab).GetComponent<LoadingScreenPanel>();
-
-			while (!sceneLoadOperation.isDone)
-			{
-				loadingScreenPanel.SetLoadingBarAmount(Mathf.Clamp01(sceneLoadOperation.progress / .9f));
-
-				yield return null;
-			}
-		}
-
-		#endregion
 
 		#region Inital Server Join Message
 
