@@ -50,13 +50,13 @@ namespace Team_Capture.UI.LoadingScreen
 			    yield return null;
 
 		    isLoading = true;
-		    LoadingScreenPanel loadingScreenPanel =
-			    Instantiate(loadingScenePrefab).GetComponent<LoadingScreenPanel>();
+		    LoadingScreenUI loadingScreenUI =
+			    Instantiate(loadingScenePrefab).GetComponent<LoadingScreenUI>();
 
 		    // ReSharper disable once PossibleNullReferenceException
 		    while (!sceneLoadOperation.isDone)
 		    {
-			    loadingScreenPanel.SetLoadingBarAmount(Mathf.Clamp01(sceneLoadOperation.progress / .9f));
+			    loadingScreenUI.SetLoadingBarAmount(Mathf.Clamp01(sceneLoadOperation.progress / .9f));
 
 			    yield return null;
 		    }

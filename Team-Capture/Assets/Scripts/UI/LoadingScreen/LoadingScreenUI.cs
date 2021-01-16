@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace Team_Capture.UI.Panels
+namespace Team_Capture.UI.LoadingScreen
 {
 	/// <summary>
 	///     A panel for a loading screen
 	/// </summary>
-	internal class LoadingScreenPanel : MonoBehaviour
+	internal class LoadingScreenUI : MonoBehaviour
 	{
 		[SerializeField] private Slider slider;
 
