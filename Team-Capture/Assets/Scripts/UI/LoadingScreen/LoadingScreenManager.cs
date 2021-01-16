@@ -7,11 +7,21 @@ using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.UI.LoadingScreen
 {
+	/// <summary>
+	///		Handles when to create <see cref="LoadingScreenUI"/> and manages it.
+	/// </summary>
     internal class LoadingScreenManager : SingletonMonoBehaviour<LoadingScreenManager>
     {
 	    [SerializeField] private GameObject loadingScenePrefab;
 
-	    private static bool isLoading;
+		/// <summary>
+		///		Are we loading?
+		/// </summary>
+	    public static bool IsLoading;
+
+		/// <summary>
+		///		Is the <see cref="LoadingScreenManager"/> setup?
+		/// </summary>
 	    private static bool isSetup;
 
 	    protected override void SingletonAwakened()
@@ -45,14 +55,18 @@ namespace Team_Capture.UI.LoadingScreen
 
 	    private IEnumerator OnStartSceneLoadAsync(AsyncOperation sceneLoadOperation, TCScene scene)
 	    {
-		    if (sceneLoadOperation == null || isLoading || !isSetup || Game.IsGameQuitting)
+			//Check to make sure that we aren't already loading, that LoadingScreenManager is setup, and that we aren't quitting
+		    if (sceneLoadOperation == null || IsLoading || !isSetup || Game.IsGameQuitting)
 			    yield return null;
 
-		    isLoading = true;
+		    IsLoading = true;
+
+			//Create LoadingScreenUI and set it up
 		    LoadingScreenUI loadingScreenUI =
 			    Instantiate(loadingScenePrefab).GetComponent<LoadingScreenUI>();
 			loadingScreenUI.Setup(scene);
 
+			//While we are loading, set the progress bar to sceneLoadOperation progress
 		    // ReSharper disable once PossibleNullReferenceException
 		    while (!sceneLoadOperation.isDone)
 		    {
@@ -61,7 +75,8 @@ namespace Team_Capture.UI.LoadingScreen
 			    yield return null;
 		    }
 
-		    isLoading = false;
+			//We are done, no need to destroy loadingScreenUI as it will automatically be done by changing scenes
+		    IsLoading = false;
 	    }
     }
 }
