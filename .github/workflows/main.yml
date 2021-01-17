@@ -8,14 +8,32 @@ on:
     
 jobs:
   build:
-    name: Build Game
+    name: Build TC for ${{ matrix.targetPlatform }}
     runs-on: ubuntu-latest
-    if: true
+    strategy:
+      fail-test: false
+      matrix:
+        projectPath:
+          - Team-Capture
+        unityVersion:
+          - 2020.2.1f1
+        targetPlatform:
+          - StandaloneWindows64
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2.3.4
         with:
           lfs: true
+
+      - name: Cache for ${{ matrix.targetPlatform }}
+        uses: actions/cache@v1.1.0
+        with:
+          path: ${{ matrix.projectPath }}/Library
+          key: Library-${{ matrix.projectPath }}-${{ matrix.projectPath }}
+          restore-keys: |
+            Library-${{ matrix.projectPath }}-
+            Library-
 
       - name: Build Game
         uses: game-ci/unity-builder@v2.0-alpha-6
@@ -24,9 +42,9 @@ jobs:
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
           UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
         with:
-          projectPath: Team-Capture/
-          unityVersion: 2020.2.1f1
-          targetPlatform: StandaloneWindows64
+          projectPath: ${{ matrix.projectPath }}
+          unityVersion: ${{ matrix.unityVersion }}
+          targetPlatform: ${{ matrix.targetPlatform }}
           buildName: 'Team-Capture'
-          buildsPath: 'Team-Capture/Builds'
-          versioning: None
+          buildsPath: '${{ matrix.projectPath }}/Builds'
+          versioning: none
