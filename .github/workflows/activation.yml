@@ -10,6 +10,7 @@ jobs:
   activation:
     name: Request Activation
     runs-on: ubuntu-latest
+    if: false
     steps:
       #Request for manual activation file        
       - name: Activate

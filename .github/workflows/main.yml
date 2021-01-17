@@ -1,0 +1,28 @@
+name: Activation
+
+on:
+  push:
+    branches: [ master, CI ]
+  pull_request:
+    branches: [ master ]
+    
+jobs:
+  build:
+    name: Build Game
+    runs-on: ubuntu-latest
+    if: true
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2.3.4
+        with:
+          lfs: true
+      - name: Build Game
+      - uses: game-ci/unity-builder@v2.0-alpha-6
+        env:
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+        with:
+          projectPath: Team-Capture/
+          unityVersion: 2020.2.1f1
+          targetPlatform: StandaloneWindows64
