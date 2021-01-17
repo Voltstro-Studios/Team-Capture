@@ -5,6 +5,9 @@ on:
     branches: [ master, CI ]
   pull_request:
     branches: [ master ]
+
+env:
+  gameName: 'Team-Capture'
     
 jobs:
   build:
@@ -44,6 +47,12 @@ jobs:
           projectPath: ${{ matrix.projectPath }}
           unityVersion: ${{ matrix.unityVersion }}
           targetPlatform: ${{ matrix.targetPlatform }}
-          buildName: 'Team-Capture'
+          buildName: $gameName
           buildsPath: '${{ matrix.projectPath }}/Builds'
           versioning: None
+      
+      - name: Upload Build
+        uses: actions/upload-artifact@v2
+        with:
+          name: $gameName-${{ matrix.targetPlatform }}-$(echo ${GITHUB_SHA} | cut -c1-8)
+          path: '${{ matrix.projectPath }}/Builds'
