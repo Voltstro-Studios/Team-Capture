@@ -51,10 +51,10 @@ jobs:
           buildName: $gameName
           buildsPath: '${{ matrix.projectPath }}/Builds'
           versioning: Custom
-          version: ${{ version }}
+          version: $version
       
       - name: Upload Build
         uses: actions/upload-artifact@v2
         with:
-          name: '${{ gameName }}-${{ matrix.targetPlatform }}-${{ version }}'
+          name: '$gameName-${{ matrix.targetPlatform }}-$version'
           path: '${{ matrix.projectPath }}/Builds'
