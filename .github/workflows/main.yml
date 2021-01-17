@@ -18,7 +18,7 @@ jobs:
           lfs: true
 
       - name: Build Game
-      - uses: game-ci/unity-builder@v2.0-alpha-6
+        uses: game-ci/unity-builder@v2.0-alpha-6
         env:
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
