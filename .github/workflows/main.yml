@@ -8,6 +8,7 @@ on:
 
 env:
   gameName: 'Team-Capture'
+  version: 'v0.2-Alpha'
     
 jobs:
   build:
@@ -49,10 +50,11 @@ jobs:
           targetPlatform: ${{ matrix.targetPlatform }}
           buildName: $gameName
           buildsPath: '${{ matrix.projectPath }}/Builds'
-          versioning: None
+          versioning: Custom
+          version: ${{ version }}
       
       - name: Upload Build
         uses: actions/upload-artifact@v2
         with:
-          name: '$gameName-${{ matrix.targetPlatform }}-$(echo ${GITHUB_SHA} | cut -c1-8)'
+          name: '${{ gameName }}-${{ matrix.targetPlatform }}-${{ version }}'
           path: '${{ matrix.projectPath }}/Builds'
