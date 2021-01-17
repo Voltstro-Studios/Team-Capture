@@ -46,4 +46,4 @@ jobs:
           targetPlatform: ${{ matrix.targetPlatform }}
           buildName: 'Team-Capture'
           buildsPath: '${{ matrix.projectPath }}/Builds'
-          versioning: none
+          versioning: None
