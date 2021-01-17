@@ -9,7 +9,7 @@ on:
 jobs:
   activation:
     name: Request Activation
-    runs-on: windows-2019
+    runs-on: ubuntu-latest
     steps:
       #Request for manual activation file        
       - name: Activate
