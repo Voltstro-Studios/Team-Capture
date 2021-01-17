@@ -29,3 +29,4 @@ jobs:
           targetPlatform: StandaloneWindows64
           buildName: 'Team-Capture'
           buildsPath: 'Team-Capture/Builds'
+          versioning: None
