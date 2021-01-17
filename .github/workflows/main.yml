@@ -56,5 +56,5 @@ jobs:
       - name: Upload Build
         uses: actions/upload-artifact@v2
         with:
-          name: '${{ env.gameName }}-${{ matrix.targetPlatform }}-${{ env.version }}'
-          path: '${{ matrix.projectPath }}/Builds'
+          name: '${{ env.gameName }}-${{ matrix.targetPlatform }}-${{ env.version }}-DevOpsBuild'
+          path: '${{ matrix.projectPath }}/Builds/${{ matrix.targetPlatform }}'
