@@ -9,7 +9,7 @@ namespace Team_Capture.Editor
         public static void StartVoltBuilder()
         {
 	        BuildTarget target = EditorUserBuildSettings.activeBuildTarget;
-	        string buildDir = $"{GameBuilder.GetBuildDirectory()}{target}-DevOpsBuild/";
+	        string buildDir = $"{GameBuilder.GetBuildDirectory()}{target}-DevOpsBuild/{PlayerSettings.productName}";
 	        GameBuilder.BuildGame(buildDir, target);
 		}
     }
