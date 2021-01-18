@@ -39,10 +39,10 @@ jobs:
         uses: actions/cache@v1.1.0
         with:
           path: ${{ matrix.projectPath }}/Library
-          key: Library-${{ matrix.targetPlatform }}
+          key: Library-${{ matrix.targetPlatform }}-v
           restore-keys: |
-            Library-${{ matrix.targetPlatform }}
-            Library-
+            Library-${{ matrix.targetPlatform }}-v
+            Library-v-
 
       - name: Build Player for ${{ matrix.targetPlatform }}
         uses: game-ci/unity-builder@v2.0-alpha-6
