@@ -33,7 +33,7 @@ jobs:
       - name: Install Blender
         run: |
           sudo snap install blender --channel=${{ env.blenderVersion }}/stable --classic
-          export PATH="/snap/bin:$PATH"
+          echo "/snap/bin/" >> $GITHUB_PATH
 
       - name: Cache for ${{ matrix.targetPlatform }}
         uses: actions/cache@v1.1.0
