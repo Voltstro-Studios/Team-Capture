@@ -9,6 +9,7 @@ on:
 env:
   gameName: 'Team-Capture'
   version: 'v0.2-Alpha'
+  blenderVersion: '2.83lts'
     
 jobs:
   build:
@@ -29,16 +30,23 @@ jobs:
         with:
           lfs: true
 
+      - name: Install Blender
+        uses: actions/github-script@v3
+        with:
+          script: |
+            sudo snap install blender --channel=${{ env.blenderVersion }}/stable --classic
+            export PATH="/snap/bin:$PATH"
+
       - name: Cache for ${{ matrix.targetPlatform }}
         uses: actions/cache@v1.1.0
         with:
           path: ${{ matrix.projectPath }}/Library
-          key: Library-${{ matrix.projectPath }}-${{ matrix.projectPath }}
+          key: Library-${{ matrix.targetPlatform }}
           restore-keys: |
-            Library-${{ matrix.projectPath }}-
+            Library-${{ matrix.targetPlatform }}
             Library-
 
-      - name: Build Game
+      - name: Build Player for ${{ matrix.targetPlatform }}
         uses: game-ci/unity-builder@v2.0-alpha-6
         env:
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
