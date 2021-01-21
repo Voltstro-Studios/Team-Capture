@@ -287,7 +287,6 @@ namespace Team_Capture.Player
 
 			//Add stock weapons
 			weaponManager.AddStockWeapons();
-			weaponManager.TargetSendWeaponStatus(connectionToClient, weaponManager.GetActiveWeapon());
 
 			//Set position to spawn
 			Transform spawnPoint = NetworkManager.singleton.GetStartPosition();
