@@ -1,5 +1,44 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-2241577859393317679
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b3d386ba5cd94485973aee1479b272e, type: 3}
+  m_Name: Gun Transparents Overylay
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  settings:
+    passTag: Gun Transparents Overylay
+    Event: 500
+    filterSettings:
+      RenderQueueType: 1
+      LayerMask:
+        serializedVersion: 2
+        m_Bits: 512
+      PassNames: []
+    overrideMaterial: {fileID: 0}
+    overrideMaterialPassIndex: 0
+    overrideDepthState: 1
+    depthCompareFunction: 8
+    enableWrite: 1
+    stencilSettings:
+      overrideStencilState: 1
+      stencilReference: 0
+      stencilCompareFunction: 3
+      passOperation: 0
+      failOperation: 0
+      zFailOperation: 0
+    cameraSettings:
+      overrideCamera: 1
+      restoreCamera: 1
+      offset: {x: 0, y: 0, z: 0, w: 0}
+      cameraFieldOfView: 75
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15,7 +54,8 @@ MonoBehaviour:
   m_RendererFeatures:
   - {fileID: 93087318424288160}
   - {fileID: 7637940509982023686}
-  m_RendererFeatureMap: 
+  - {fileID: -2241577859393317679}
+  m_RendererFeatureMap: d1147b32d050e4e0
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   shaders:
     blitPS: {fileID: 4800000, guid: c17132b1f77d20942aa75f8429c0f8bc, type: 3}
@@ -35,9 +75,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1335
   m_DefaultStencilState:
-    overrideStencilState: 0
+    overrideStencilState: 1
     stencilReference: 0
-    stencilCompareFunction: 8
+    stencilCompareFunction: 3
     passOperation: 0
     failOperation: 0
     zFailOperation: 0
@@ -59,7 +99,7 @@ MonoBehaviour:
   m_Active: 1
   settings:
     passTag: Gun Opaque
-    Event: 500
+    Event: 250
     filterSettings:
       RenderQueueType: 0
       LayerMask:
@@ -72,16 +112,16 @@ MonoBehaviour:
     depthCompareFunction: 4
     enableWrite: 1
     stencilSettings:
-      overrideStencilState: 0
-      stencilReference: 0
+      overrideStencilState: 1
+      stencilReference: 1
       stencilCompareFunction: 8
-      passOperation: 0
+      passOperation: 2
       failOperation: 0
       zFailOperation: 0
     cameraSettings:
       overrideCamera: 1
       restoreCamera: 1
-      offset: {x: 0, y: 0, z: 0, w: 0}
+      offset: {x: 0, y: 0, z: 0, w: 1}
       cameraFieldOfView: 75
 --- !u!114 &7637940509982023686
 MonoBehaviour:
@@ -111,9 +151,9 @@ MonoBehaviour:
     depthCompareFunction: 4
     enableWrite: 1
     stencilSettings:
-      overrideStencilState: 0
-      stencilReference: 0
-      stencilCompareFunction: 8
+      overrideStencilState: 1
+      stencilReference: 1
+      stencilCompareFunction: 3
       passOperation: 0
       failOperation: 0
       zFailOperation: 0
