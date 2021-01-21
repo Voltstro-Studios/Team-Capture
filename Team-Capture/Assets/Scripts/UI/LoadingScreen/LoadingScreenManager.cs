@@ -56,7 +56,7 @@ namespace Team_Capture.UI.LoadingScreen
 	    private IEnumerator OnStartSceneLoadAsync(AsyncOperation sceneLoadOperation, TCScene scene)
 	    {
 			//Check to make sure that we aren't already loading, that LoadingScreenManager is setup, and that we aren't quitting
-		    if (sceneLoadOperation == null || IsLoading || !isSetup || Game.IsGameQuitting)
+		    if (sceneLoadOperation == null || IsLoading || !isSetup || Game.IsGameQuitting || scene == null)
 			    yield return null;
 
 		    IsLoading = true;
