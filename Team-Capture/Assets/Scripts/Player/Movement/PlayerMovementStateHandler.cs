@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace Team_Capture.Player.Movement
 {
 	//This code is built on unity-fastpacedmultiplayer
@@ -9,8 +11,8 @@ namespace Team_Capture.Player.Movement
 	/// <summary>
 	///     Handles player's state
 	/// </summary>
-	internal interface IPlayerMovementStateHandler
+	internal abstract class PlayerMovementStateHandler : MonoBehaviour
 	{
-		void OnStateChange(PlayerState newState);
+		public abstract void OnStateChange(PlayerState newState);
 	}
 }

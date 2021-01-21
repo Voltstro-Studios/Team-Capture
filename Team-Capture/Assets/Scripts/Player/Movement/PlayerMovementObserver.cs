@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace Team_Capture.Player.Movement
 {
@@ -12,7 +11,7 @@ namespace Team_Capture.Player.Movement
 	/// <summary>
 	///     Handles observing other players
 	/// </summary>
-	internal sealed class PlayerMovementObserver : MonoBehaviour, IPlayerMovementStateHandler
+	internal sealed class PlayerMovementObserver : PlayerMovementStateHandler
 	{
 		private PlayerMovementManager character;
 		private int clientTick;
@@ -54,7 +53,7 @@ namespace Team_Capture.Player.Movement
 			stateBuffer.Clear();
 		}
 
-		public void OnStateChange(PlayerState newState)
+		public override void OnStateChange(PlayerState newState)
 		{
 			clientTick = newState.Timestamp;
 			AddState(newState);

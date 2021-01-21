@@ -38,26 +38,6 @@ namespace Team_Capture.Player
 		/// </summary>
 		public int MaxHealth { get; } = 100;
 
-		public override void OnStartServer()
-		{
-			Health = MaxHealth;
-			weaponManager = GetComponent<WeaponManager>();
-
-			StartCoroutine(UpdateLatency());
-			StartCoroutine(ServerPlayerRespawn(true));
-		}
-
-		public override void OnStartLocalPlayer()
-		{
-			uiManager = GetComponent<PlayerUIManager>();
-			CmdSetName(StartPlayerName);
-		}
-
-		public override void OnStopServer()
-		{
-			StopAllCoroutines();
-		}
-
 		#region Movement
 
 		/// <summary>
@@ -69,11 +49,6 @@ namespace Team_Capture.Player
 		///     The player's <see cref="CharacterController" />
 		/// </summary>
 		private CharacterController characterController;
-
-		/// <summary>
-		///     The OBSERVER. Only set on other clients (not local)
-		/// </summary>
-		private PlayerMovementObserver playerMovementObserver;
 
 		#endregion
 
@@ -115,7 +90,7 @@ namespace Team_Capture.Player
 
 		#endregion
 
-		#region Events
+		#region Event System
 
 		/// <summary>
 		///     Invoked when this player takes damage
@@ -131,10 +106,6 @@ namespace Team_Capture.Player
 		///     Invoked when this player gets a kill
 		/// </summary>
 		public event Action PlayerKill;
-
-		#endregion
-
-		#region Event Hooks
 
 		// ReSharper disable UnusedParameter.Local
 		private void OnPlayerDeath(int oldValue, int newValue)
@@ -152,7 +123,7 @@ namespace Team_Capture.Player
 			PlayerDamaged?.Invoke();
 		}
 		// ReSharper restore UnusedParameter.Local
-		
+
 		#endregion
 
 		#region Server Variables
@@ -174,16 +145,6 @@ namespace Team_Capture.Player
 		#region Client Variables
 
 		/// <summary>
-		///     Handles predicting movements
-		/// </summary>
-		private PlayerMovementPredictor playerMovementPredictor;
-
-		/// <summary>
-		///     Handles sending inputs to the server
-		/// </summary>
-		private PlayerMovementInput playerMovementInput;
-
-		/// <summary>
 		///     Manages UI
 		/// </summary>
 		private PlayerUIManager uiManager;
@@ -200,15 +161,28 @@ namespace Team_Capture.Player
 
 		private void Start()
 		{
-			if (isLocalPlayer)
-			{
-				playerMovementPredictor = GetComponent<PlayerMovementPredictor>();
-				playerMovementInput = GetComponent<PlayerMovementInput>();
-			}
-			else
-			{
-				playerMovementObserver = GetComponent<PlayerMovementObserver>();
-			}
+			if (!isLocalPlayer) return;
+
+			uiManager = GetComponent<PlayerUIManager>();
+			CmdSetName(StartPlayerName);
+		}
+
+		#endregion
+
+		#region Network Methods
+
+		public override void OnStartServer()
+		{
+			Health = MaxHealth;
+			weaponManager = GetComponent<WeaponManager>();
+
+			StartCoroutine(UpdateLatency());
+			StartCoroutine(ServerPlayerRespawn(true));
+		}
+
+		public override void OnStopServer()
+		{
+			StopAllCoroutines();
 		}
 
 		#endregion
@@ -333,30 +307,30 @@ namespace Team_Capture.Player
 		[ClientRpc(channel = 5)]
 		private void RpcClientPlayerDie()
 		{
-			//Disable the collider, or the Char controller
-			if (isLocalPlayer)
+			try
 			{
-				//Disable local player movement
-				playerMovementInput.enabled = false;
-				playerMovementPredictor.enabled = false;
+				playerMovementManager.DisableStateHandling();
 
-				//Switch cams
-				GameManager.GetActiveSceneCamera().SetActive(true);
+				//Disable the collider, or the Char controller
+				if (isLocalPlayer)
+				{
+					//Switch cams
+					GameManager.GetActiveSceneCamera().SetActive(true);
 
-				//Disable the HUD
-				uiManager.SetHud(false);
+					//Disable the HUD
+					uiManager.SetHud(false);
+				}
+
+				//Disable movement
+				playerMovementManager.enabled = false;
+				characterController.enabled = false;
+
+				foreach (GameObject toDisable in disableGameObjectsOnDeath) toDisable.SetActive(false);
 			}
-			else
+			catch (Exception ex)
 			{
-				//Disable observer
-				playerMovementObserver.enabled = false;
+				Logger.Error(ex, "Something went wrong in {MethodName}!", nameof(RpcClientPlayerDie));
 			}
-
-			//Disable movement
-			playerMovementManager.enabled = false;
-			characterController.enabled = false;
-
-			foreach (GameObject toDisable in disableGameObjectsOnDeath) toDisable.SetActive(false);
 		}
 
 		/// <summary>
@@ -365,30 +339,30 @@ namespace Team_Capture.Player
 		[ClientRpc(channel = 5)]
 		private void RpcClientRespawn()
 		{
-			//Enable game objects
-			foreach (GameObject toEnable in disableGameObjectsOnDeath) toEnable.SetActive(true);
-
-			//Enable movement
-			characterController.enabled = true;
-			playerMovementManager.enabled = true;
-
-			//Enable the collider, or the Char controller
-			if (isLocalPlayer)
+			try
 			{
-				//Switch cams
-				GameManager.GetActiveSceneCamera().SetActive(false);
+				//Enable game objects
+				foreach (GameObject toEnable in disableGameObjectsOnDeath) toEnable.SetActive(true);
 
-				//Enable our HUD
-				uiManager.SetHud(true);
+				//Enable movement
+				characterController.enabled = true;
+				playerMovementManager.enabled = true;
 
-				//Enable local player movement stuff
-				playerMovementPredictor.enabled = true;
-				playerMovementInput.enabled = true;
+				//Enable the collider, or the Char controller
+				if (isLocalPlayer)
+				{
+					//Switch cams
+					GameManager.GetActiveSceneCamera().SetActive(false);
+
+					//Enable our HUD
+					uiManager.SetHud(true);
+				}
+
+				playerMovementManager.EnableStateHandling();
 			}
-			else
+			catch (Exception ex)
 			{
-				//Enable observer
-				playerMovementObserver.enabled = true;
+				Logger.Error(ex, "Something went wrong in {MethodName}!", nameof(RpcClientRespawn));
 			}
 		}
 

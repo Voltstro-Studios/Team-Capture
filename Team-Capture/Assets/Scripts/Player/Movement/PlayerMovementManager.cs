@@ -1,4 +1,3 @@
-using System;
 using Mirror;
 using Team_Capture.Console;
 using UnityEngine;
@@ -39,27 +38,35 @@ namespace Team_Capture.Player.Movement
 		private int inputUpdateRate = 10;
 
 		/// <summary>
+		///     The current state of the player
+		/// </summary>
+		[SyncVar(hook = nameof(OnServerStateChange))]
+		internal PlayerState State = PlayerState.Zero;
+
+		/// <summary>
+		///		The <see cref="PlayerManager"/>
+		/// </summary>
+		private PlayerManager playerManager;
+
+		/// <summary>
 		///     The <see cref="CharacterController" />
 		/// </summary>
 		private CharacterController characterController;
 
-		private PlayerManager playerManager;
-
 		/// <summary>
-		///     The <see cref="PlayerMovementServer" />, set if we are the server
+		///     The <see cref="PlayerMovementServer" /> (Only set on server)
 		/// </summary>
 		private PlayerMovementServer server;
 
 		/// <summary>
-		///     The current state of the player
-		/// </summary>
-		[NonSerialized] [SyncVar(hook = nameof(OnServerStateChange))]
-		public PlayerState State = PlayerState.Zero;
-
-		/// <summary>
 		///     The state handler (Observer or predictor)
 		/// </summary>
-		private IPlayerMovementStateHandler stateHandler;
+		private PlayerMovementStateHandler stateHandler;
+
+		/// <summary>
+		///		The <see cref="PlayerMovementInput"/> (Only set on local client)
+		/// </summary>
+		private PlayerMovementInput playerInput;
 
 		/// <summary>
 		///     Controls how many inputs are needed before sending update command
@@ -83,7 +90,7 @@ namespace Team_Capture.Player.Movement
 
 			//Setup for local player
 			stateHandler = gameObject.AddComponent<PlayerMovementPredictor>();
-			gameObject.AddComponent<PlayerMovementInput>();
+			playerInput = gameObject.AddComponent<PlayerMovementInput>();
 		}
 
 		private void OnGUI()
@@ -99,6 +106,22 @@ namespace Team_Capture.Player.Movement
 			GUI.Label(new Rect(10, 50, 1000, 40), $"LookingAt: {cameraTransform.rotation}");
 			GUI.Label(new Rect(10, 70, 1000, 40),
 				$"IsGround: {Physics.Raycast(groundCheck.position, Vector3.down, groundDistance, groundMask)}");
+		}
+
+		public void DisableStateHandling()
+		{
+			stateHandler.enabled = false;
+
+			if (isLocalPlayer)
+				playerInput.enabled = false;
+		}
+
+		public void EnableStateHandling()
+		{
+			stateHandler.enabled = true;
+
+			if (isLocalPlayer)
+				playerInput.enabled = true;
 		}
 
 		public override void OnStartServer()
