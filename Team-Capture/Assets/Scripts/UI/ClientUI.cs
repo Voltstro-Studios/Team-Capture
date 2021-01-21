@@ -111,7 +111,7 @@ namespace Team_Capture.UI
 		/// <param name="state"></param>
 		public void ActivateHud(bool state)
 		{
-			if(IsPauseMenuOpen)
+			if(IsPauseMenuOpen && PlayerManager.IsDead)
 				return;
 
 			hud.gameObject.SetActive(state);
