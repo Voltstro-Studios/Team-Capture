@@ -304,7 +304,7 @@ namespace Team_Capture.Player
 		/// <summary>
 		///     Disables components on each of the clients
 		/// </summary>
-		[ClientRpc(channel = 5)]
+		[ClientRpc]
 		private void RpcClientPlayerDie()
 		{
 			try
@@ -336,7 +336,7 @@ namespace Team_Capture.Player
 		/// <summary>
 		///     Client side method of enabling client side stuff per client
 		/// </summary>
-		[ClientRpc(channel = 5)]
+		[ClientRpc]
 		private void RpcClientRespawn()
 		{
 			try

@@ -268,7 +268,7 @@ namespace Team_Capture.Weapons
 		///     Instantiates a weapon model in all clients
 		/// </summary>
 		/// <param name="weaponName"></param>
-		[ClientRpc(channel = 3)]
+		[ClientRpc(channel = Channels.DefaultUnreliable)]
 		private void RpcInstantiateWeaponOnClients(string weaponName)
 		{
 			if (weaponName == null) return;
@@ -296,7 +296,7 @@ namespace Team_Capture.Weapons
 		/// <summary>
 		///     Removes all weapons on the client
 		/// </summary>
-		[ClientRpc(channel = 4)]
+		[ClientRpc(channel = Channels.DefaultUnreliable)]
 		private void RpcRemoveAllActiveWeapons()
 		{
 			for (int i = 0; i < weaponsHolderSpot.childCount; i++) Destroy(weaponsHolderSpot.GetChild(i).gameObject);
@@ -348,7 +348,7 @@ namespace Team_Capture.Weapons
 		///     Changes the weapons <see cref="GameObject" /> active on this client
 		/// </summary>
 		/// <param name="index"></param>
-		[ClientRpc(channel = 3)]
+		[ClientRpc(channel = Channels.DefaultUnreliable)]
 		private void RpcSelectWeapon(int index)
 		{
 			for (int i = 0; i < weaponsHolderSpot.childCount; i++)

@@ -232,7 +232,7 @@ namespace Team_Capture.Player
 		/// <summary>
 		///     Makes the muzzle flash play
 		/// </summary>
-		[ClientRpc(channel = 4)]
+		[ClientRpc(channel = Channels.DefaultUnreliable)]
 		private void RpcWeaponMuzzleFlash()
 		{
 			weaponManager.GetActiveWeaponGraphics().muzzleFlash.Play(true);
@@ -242,7 +242,7 @@ namespace Team_Capture.Player
 		///     Make a tracer effect go to the target
 		/// </summary>
 		/// <param name="hitTargets"></param>
-		[ClientRpc(channel = 4)]
+		[ClientRpc(channel = Channels.DefaultUnreliable)]
 		private void RpcDoWeaponShootEffects(WeaponShootEffectsTargets hitTargets)
 		{
 			TCWeapon weapon = weaponManager.GetActiveWeapon().GetTCWeapon();
