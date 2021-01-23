@@ -37,7 +37,15 @@ namespace Team_Capture.Weapons
 		/// </summary>
 		private Coroutine reloadingCoroutine;
 
+		/// <summary>
+		///		<see cref="Weapons.WeaponSway"/> script, for use by <see cref="Player.PlayerInput"/>
+		/// </summary>
 		[NonSerialized] internal WeaponSway WeaponSway;
+
+		/// <summary>
+		///		Invoked when the client's weapon is updated
+		/// </summary>
+		public event WeaponUpdatedDelegate WeaponUpdated;
 
 		/// <summary>
 		///     What is the selected weapon
@@ -71,8 +79,6 @@ namespace Team_Capture.Weapons
 		}
 
 		#endregion
-
-		public event WeaponUpdatedDelegate WeaponUpdated;
 
 		/// <summary>
 		///     Server callback for when <see cref="weapons" /> is modified
