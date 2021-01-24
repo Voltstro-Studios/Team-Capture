@@ -54,6 +54,7 @@ jobs:
           buildsPath: '${{ matrix.projectPath }}/Builds'
           versioning: Custom
           version: ${{ env.version }}
+          androidVersionCode: 1 #This is here so we can stop getting warnings about it, even tho we have no plans to support Android
           buildMethod: Team_Capture.Editor.CIBuilder.StartVoltBuilder
       
       - name: Upload Build
