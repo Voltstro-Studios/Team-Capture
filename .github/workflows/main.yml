@@ -23,6 +23,7 @@ jobs:
           - 2020.2.1f1
         targetPlatform:
           - StandaloneWindows64
+          - StandaloneLinux64
 
     steps:
       - name: Checkout repository
