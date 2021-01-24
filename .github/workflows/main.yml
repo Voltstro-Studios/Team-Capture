@@ -9,12 +9,11 @@ on:
 env:
   gameName: 'Team-Capture'
   version: 'v0.2-Alpha'
-  blenderVersion: '2.83lts'
     
 jobs:
   build:
     name: Build TC for ${{ matrix.targetPlatform }}
-    runs-on: ubuntu-latest
+    runs-on: Ubuntu-20.04
     strategy:
       matrix:
         projectPath:
