@@ -29,6 +29,7 @@ Please remember that this project is still in early development!
 - Dynamic settings UI
 - Dynamic settings save system
 - Discord RPC intergration
+- Cross-platform play (Windows, Linux)
 - Well documented API
 
 For a roadmap of what is either being worked on, or planed to come, check out the [projects](https://github.com/Voltstro-Studios/Team-Capture/projects) tab.
@@ -49,28 +50,25 @@ If you think you can help out the team, please don't hesitate to email me (proje
 
 ## Getting the project
 
-As this project is in an alpha state, a lot of things will constantly change, so it is recommended to build the project your self.
+As this project is in an alpha state, a lot of things will constantly change, so it is recommended to build the project your self. However we do offer [DevOps builds via GitHub actions](https://github.com/Voltstro-Studios/Team-Capture/actions?query=workflow%3A%22Game+Build%22). To download a build, goto [Actions](https://github.com/Voltstro-Studios/Team-Capture/actions?query=workflow%3A%22Game+Build%22), select the latest succeeding build, go down to the artifacts section and download for your OS.
 
-However, we do offer [releases](https://github.com/Voltstro-Studios/Team-Capture/releases) every version milestone.
+We also upload a [release](https://github.com/Voltstro-Studios/Team-Capture/releases) every version milestone. This builds will be stable however will have major 
 
 ### Prerequisites
 
 ```
 Unity 2020.2.1f1
-Blender 2.83
 PowerShell Core
 Git
 ```
 
 ### Pre Setup
 
-Since within the assets of our game we use straight raw Blender files, you will needed to have downloaded and installed [Blender 2.83 LTS](https://www.blender.org/download/lts/), and to make sure `.blend` files are associated with the Blender program.
-
-You will also want [PowerShell Core](https://github.com/PowerShell/PowerShell#get-powershell) installed on your system if you want to use the scripts as well as some other features.
+You may want [PowerShell Core](https://github.com/PowerShell/PowerShell#get-powershell) installed on your system if you want to use the scripts as well as some other features. This is however optional.
 
 ### Setup
 
-Once you have Blender and PowerShell ready:
+Once you have PowerShell ready:
 
 1. Fork and clone the project
 
@@ -80,9 +78,9 @@ Once you have Blender and PowerShell ready:
     
 3. There might be some errors and warnings at first, but should be safe to ignore
 
-4. There seems to be an issue with Blender model's default material not working, re-import the models folder if you are having this issue
-
-5. You need to build a player build to play and test, goto Tools **->** Volt Unity Builder **->** Volt Builder **->** Build Player
+4. You need to build a player build to play and test, goto Tools **->** Volt Unity Builder **->** Volt Builder **->** Build Player
+    
+    - Building for the first time may take awhile (30~ mins), once the cache is built it takes about 90~ secs. This all depends on your computer.
 
 ### Testing the project
 
