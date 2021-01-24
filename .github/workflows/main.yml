@@ -1,0 +1,68 @@
+name: Game Build
+
+on:
+  push:
+    branches: [ master, CI ]
+  pull_request:
+    branches: [ master ]
+
+#Variables
+env:
+  gameName: 'Team-Capture'
+  version: 'v0.2-Alpha'
+    
+jobs:
+  build:
+    name: Build TC for ${{ matrix.targetPlatform }}
+    runs-on: Ubuntu-20.04
+    strategy:
+      matrix:
+        projectPath:
+          - Team-Capture
+        unityVersion:
+          - 2020.2.1f1
+        targetPlatform:
+          - StandaloneWindows64
+          - StandaloneLinux64
+
+    steps:
+      #Clone the repo
+      - name: Checkout repository
+        uses: actions/checkout@v2.3.4
+        with:
+          lfs: true
+
+      #Setup cache, Unity without it's Library cache is really slow
+      - name: Cache for ${{ matrix.targetPlatform }}
+        uses: actions/cache@v1.1.0
+        with:
+          path: ${{ matrix.projectPath }}/Library
+          key: Library-${{ matrix.targetPlatform }}-v2
+          restore-keys: |
+            Library-${{ matrix.targetPlatform }}-v2
+            Library-v2-
+
+      #Build the player using TC's CIBuilder.StartVoltBuilder
+      - name: Build Player for ${{ matrix.targetPlatform }}
+        uses: game-ci/unity-builder@v2.0-alpha-6
+        env:
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+        with:
+          projectPath: ${{ matrix.projectPath }}
+          unityVersion: ${{ matrix.unityVersion }}
+          targetPlatform: ${{ matrix.targetPlatform }}
+          buildName: ${{ env.gameName }}
+          buildsPath: '${{ matrix.projectPath }}/Builds'
+          versioning: Custom
+          version: ${{ env.version }}
+          androidVersionCode: 1 #This is here so we can stop getting warnings about it, even tho we have no plans to support Android
+          buildMethod: Team_Capture.Editor.CIBuilder.StartVoltBuilder
+      
+      #Upload the build as an artifact
+      - name: Upload Build
+        uses: actions/upload-artifact@v2
+        with:
+          name: '${{ env.gameName }}-${{ matrix.targetPlatform }}-${{ env.version }}-DevOpsBuild'
+          path: '${{ matrix.projectPath }}/Builds/${{ matrix.targetPlatform }}-DevOpsBuild'
