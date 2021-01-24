@@ -6,6 +6,7 @@ on:
   pull_request:
     branches: [ master ]
 
+#Variables
 env:
   gameName: 'Team-Capture'
   version: 'v0.2-Alpha'
@@ -25,11 +26,13 @@ jobs:
           - StandaloneLinux64
 
     steps:
+      #Clone the repo
       - name: Checkout repository
         uses: actions/checkout@v2.3.4
         with:
           lfs: true
 
+      #Setup cache, Unity without it's Library cache is really slow
       - name: Cache for ${{ matrix.targetPlatform }}
         uses: actions/cache@v1.1.0
         with:
@@ -39,6 +42,7 @@ jobs:
             Library-${{ matrix.targetPlatform }}-v2
             Library-v2-
 
+      #Build the player using TC's CIBuilder.StartVoltBuilder
       - name: Build Player for ${{ matrix.targetPlatform }}
         uses: game-ci/unity-builder@v2.0-alpha-6
         env:
@@ -56,6 +60,7 @@ jobs:
           androidVersionCode: 1 #This is here so we can stop getting warnings about it, even tho we have no plans to support Android
           buildMethod: Team_Capture.Editor.CIBuilder.StartVoltBuilder
       
+      #Upload the build as an artifact
       - name: Upload Build
         uses: actions/upload-artifact@v2
         with:
