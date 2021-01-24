@@ -5,8 +5,18 @@ using Voltstro.UnityBuilder.Build;
 
 namespace Team_Capture.Editor
 {
+	/// <summary>
+	///		A class with the intent to be used by Unity editor headless mode.
+	///		<para>
+	///			This is so a CI integration can run Unity and tell it to run the <see cref="StartVoltBuilder"/> method.
+	///			You NEED to add <c>-buildTarget [target]</c> as a launch option when running the editor so Volt builder can know what platform to build for.
+	///		</para>
+	/// </summary>
     public static class CIBuilder
     {
+		/// <summary>
+		///		Builds the game using Volt Builder's <see cref="GameBuilder.BuildGame"/>
+		/// </summary>
         public static void StartVoltBuilder()
         {
 			System.Console.WriteLine("Build game started...");
