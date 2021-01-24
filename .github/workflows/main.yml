@@ -30,11 +30,6 @@ jobs:
         with:
           lfs: true
 
-      - name: Install Blender
-        run: |
-          sudo snap install blender --channel=${{ env.blenderVersion }}/stable --classic
-          echo "/snap/bin/" >> $GITHUB_PATH
-
       - name: Cache for ${{ matrix.targetPlatform }}
         uses: actions/cache@v1.1.0
         with:
