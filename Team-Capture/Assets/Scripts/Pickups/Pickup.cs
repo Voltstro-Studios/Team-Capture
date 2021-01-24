@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using Mirror;
 using Team_Capture.Core;
@@ -29,7 +28,7 @@ namespace Team_Capture.Pickups
 
 		[SyncVar(hook = nameof(OnIsPickedUp))] private bool isPickedUp;
 
-		public List<PickupMaterials> pickupMaterials = new List<PickupMaterials>();
+		private List<PickupMaterials> pickupMaterials;
 
 		private void Start()
 		{
@@ -41,6 +40,8 @@ namespace Team_Capture.Pickups
 			}
 
 			if (Game.IsHeadless) return;
+
+			pickupMaterials = new List<PickupMaterials>();
 
 			GeneratePickupMaterials();
 			SetMeshRenderMaterials();
@@ -107,9 +108,9 @@ namespace Team_Capture.Pickups
 
 				pickupMaterials.Add(new PickupMaterials
 				{
-					meshRenderer = meshRenderer,
-					defaultMaterial = nonPickedUpMaterial,
-					pickedUpMaterial = pickedUpMaterial
+					MeshRenderer = meshRenderer,
+					DefaultMaterial = nonPickedUpMaterial,
+					PickedUpMaterial = pickedUpMaterial
 				});
 			}
 		}
@@ -118,19 +119,18 @@ namespace Team_Capture.Pickups
 		{
 			foreach (PickupMaterials pickupMaterial in pickupMaterials)
 			{
-				pickupMaterial.meshRenderer.material =
-					isPickedUp ? pickupMaterial.pickedUpMaterial : pickupMaterial.defaultMaterial;
+				pickupMaterial.MeshRenderer.material =
+					isPickedUp ? pickupMaterial.PickedUpMaterial : pickupMaterial.DefaultMaterial;
 			}
 		}
 
-		[Serializable]
-		public struct PickupMaterials
+		private struct PickupMaterials
 		{
-			public MeshRenderer meshRenderer;
+			public MeshRenderer MeshRenderer;
 
-			public Material defaultMaterial;
+			public Material DefaultMaterial;
 
-			public Material pickedUpMaterial;
+			public Material PickedUpMaterial;
 		}
 	}
 }

@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 namespace Team_Capture.Player.Movement
 {
@@ -13,7 +12,7 @@ namespace Team_Capture.Player.Movement
 	/// <summary>
 	///     Helps in predicting movement
 	/// </summary>
-	internal sealed class PlayerMovementPredictor : MonoBehaviour, IPlayerMovementStateHandler
+	internal sealed class PlayerMovementPredictor : PlayerMovementStateHandler
 	{
 		private PlayerMovementManager character;
 		private PlayerState lastServerState = PlayerState.Zero;
@@ -33,7 +32,7 @@ namespace Team_Capture.Player.Movement
 			lastServerState = PlayerState.Zero;
 		}
 
-		public void OnStateChange(PlayerState newState)
+		public override void OnStateChange(PlayerState newState)
 		{
 			if (newState.Timestamp <= lastServerState.Timestamp) return;
 
