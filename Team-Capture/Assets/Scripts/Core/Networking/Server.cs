@@ -2,7 +2,11 @@
 using System.Diagnostics;
 using System.IO;
 using Mirror;
-using Team_Capture.Logging;
+using Team_Capture.Console;
+using Team_Capture.Helper;
+using Team_Capture.LagCompensation;
+using UnityEngine;
+using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.Core.Networking
 {
@@ -12,6 +16,8 @@ namespace Team_Capture.Core.Networking
 		private static readonly byte[] ServerOnlineFileMessage = {65, 32, 45, 71, 97, 119, 114, 32, 71, 117, 114, 97};
 
 		private static FileStream serverOnlineFileStream;
+
+		private static TCNetworkManager NetManager => TCNetworkManager.Instance;
 
 		/// <summary>
 		///		Call this when the server is started
@@ -23,10 +29,26 @@ namespace Team_Capture.Core.Networking
 			if (File.Exists(serverOnlinePath))
 				throw new Exception("Server is already online!");
 
+			Logger.Info("Starting server...");
+
+			//Set what network address to use and start to advertise the server on lan
+			NetManager.networkAddress = NetHelper.LocalIpAddress();
+			NetManager.gameDiscovery.AdvertiseServer();
+
+			//Start ping service
+			PingManager.ServerSetup();
+
+			//Run the server autoexec config
+			ConsoleBackend.ExecuteFileCommand(new[] {"server-autoexec"});
+
+			//Create server online file
 			serverOnlineFileStream = File.Create(serverOnlinePath, 128, FileOptions.DeleteOnClose);
 			serverOnlineFileStream.Write(ServerOnlineFileMessage, 0, ServerOnlineFileMessage.Length);
 			serverOnlineFileStream.Flush();
 			File.SetAttributes(serverOnlinePath, FileAttributes.Hidden);
+
+			Logger.Info("Server has started and is running on '{Address}' with max connections of {MaxPlayers}!",
+				NetManager.networkAddress, NetManager.maxConnections);
 		}
 
 		/// <summary>
@@ -34,9 +56,64 @@ namespace Team_Capture.Core.Networking
 		/// </summary>
 		public static void OnStopServer()
 		{
+			Logger.Info("Stopping server...");
+			PingManager.ServerShutdown();
+
+			//Stop advertising the server when the server stops
+			NetManager.gameDiscovery.StopDiscovery();
+
+			Logger.Info("Server stopped!");
+
+			//Close server online file stream
 			serverOnlineFileStream.Close();
 			serverOnlineFileStream.Dispose();
 			serverOnlineFileStream = null;
+		}
+
+		/// <summary>
+		///		Call when a client connects
+		/// </summary>
+		/// <param name="conn"></param>
+		public static void OnServerAddClient(NetworkConnection conn)
+		{
+			Logger.Info(
+				"Client from '{Address}' connected with the connection ID of {ConnectionID}.",
+				conn.address, conn.connectionId);
+		}
+
+		public static void OnServerRemoveClient(NetworkConnection conn)
+		{
+			NetworkServer.DestroyPlayerForConnection(conn);
+			Logger.Info("Client '{ConnectionId}' disconnected from the server.", conn.connectionId);
+
+			//TODO: Fix this
+			/*
+			if(CloseServerOnFirstClientDisconnect && conn.identity.netId == 1)
+				Game.QuitGame();
+			*/
+		}
+
+		/// <summary>
+		///		Called when a client request for a player object
+		/// </summary>
+		/// <param name="conn"></param>
+		/// <param name="playerPrefab"></param>
+		public static void ServerCreatePlayerObject(NetworkConnection conn, GameObject playerPrefab)
+		{
+			//Sent to client the server config
+			conn.Send(TCNetworkManager.Instance.serverConfig);
+
+			//Create the player object
+			GameObject player = UnityEngine.Object.Instantiate(playerPrefab);
+			player.AddComponent<SimulationObject>();
+
+			//Add the connection for the player
+			NetworkServer.AddPlayerForConnection(conn, player);
+
+			//Make initial ping
+			PingManager.PingClient(conn);
+
+			Logger.Info("Created player object for {NetID}", conn.identity.netId);
 		}
 
 		public static void CreateServerAndConnectToServer(this NetworkManager netManager, string gameName, string sceneName, int maxPlayers)

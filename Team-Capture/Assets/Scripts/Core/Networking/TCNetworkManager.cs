@@ -112,7 +112,6 @@ namespace Team_Capture.Core.Networking
 
 		#region Server Events
 
-		/// <inheritdoc/>
 		public override void OnServerSceneChanged(string sceneName)
 		{
 			Logger.Info("Server changing scene to {@SceneName}", sceneName);
@@ -126,78 +125,29 @@ namespace Team_Capture.Core.Networking
 			Logger.Info("Loaded scene to {@SceneName}", sceneName);
 		}
 
+		public override void OnServerConnect(NetworkConnection conn)
+		{
+			Server.OnServerAddClient(conn);
+		}
+
 		public override void OnServerAddPlayer(NetworkConnection conn)
 		{
-			//Sent to client the server config
-			conn.Send(serverConfig);
-
-			//Create the player object
-			GameObject player = Instantiate(playerPrefab);
-			player.AddComponent<SimulationObject>();
-
-			//Add the connection for the player
-			NetworkServer.AddPlayerForConnection(conn, player);
-
-			//Make initial ping
-			PingManager.PingClient(conn);
-
-			Logger.Info(
-				"Player from {@Address} connected with the connection ID of {@ConnectionID} and a net ID of {@NetID}",
-				Transport.activeTransport.ServerGetClientAddress(conn.connectionId), conn.connectionId,
-				conn.identity.netId);
+			Server.ServerCreatePlayerObject(conn, playerPrefab);
 		}
 
 		public override void OnStartServer()
 		{
-			Logger.Info("Starting server...");
-
-			//Set what network address to use, if the computer has multiple adapters then it will default to localhost
-			singleton.networkAddress = NetHelper.LocalIpAddress();
-
-			//Start ping service
-			PingManager.ServerSetup();
-
-			base.OnStartServer();
-
-			//Start advertising the server when the server starts
-			gameDiscovery.AdvertiseServer();
-
-			//Run the server autoexec config
-			ConsoleBackend.ExecuteFileCommand(new[] {"server-autoexec"});
-
-			Logger.Info("Server has started and is running on {@Address} with max connections of {@MaxPlayers}!",
-				singleton.networkAddress, singleton.maxConnections);
-
 			Server.OnStartServer();
 		}
 
 		public override void OnStopServer()
 		{
-			Logger.Info("Stopping server...");
-
-			base.OnStopServer();
-
-			//Stop advertising the server when the server stops
-			gameDiscovery.StopDiscovery();
-
-			PingManager.ServerShutdown();
-
-			Logger.Info("Server stopped!");
-
 			Server.OnStopServer();
 		}
 
 		public override void OnServerDisconnect(NetworkConnection conn)
 		{
-			if(conn == null)
-				return;
-
-			Logger.Info("Player {@Id} disconnected from the server.", conn.identity.netId);
-
-			if(CloseServerOnFirstClientDisconnect && conn.identity.netId == 1)
-				Game.QuitGame();
-
-			base.OnServerDisconnect(conn);
+			Server.OnServerRemoveClient(conn);
 		}
 
 		#endregion
