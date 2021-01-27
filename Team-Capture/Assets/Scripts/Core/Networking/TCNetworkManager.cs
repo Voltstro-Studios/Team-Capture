@@ -34,8 +34,8 @@ namespace Team_Capture.Core.Networking
 		/// <summary>
 		///     The prefab for the <see cref="GameManager" />
 		/// </summary>
-		[Tooltip("The prefab for the GameManager")] [Header("Team Capture")] [SerializeField]
-		private GameObject gameMangerPrefab;
+		[Tooltip("The prefab for the GameManager")] [Header("Team Capture")]
+		public GameObject gameMangerPrefab;
 
 		/// <summary>
 		///     How many frames to keep
@@ -112,43 +112,26 @@ namespace Team_Capture.Core.Networking
 
 		#region Server Events
 
-		public override void OnServerSceneChanged(string sceneName)
-		{
-			Logger.Info("Server changing scene to {@SceneName}", sceneName);
-
-			base.OnServerSceneChanged(sceneName);
-
-			//Instantiate the new game manager
-			Instantiate(gameMangerPrefab);
-			Logger.Debug("Created GameManager object");
-
-			Logger.Info("Loaded scene to {@SceneName}", sceneName);
-		}
-
-		public override void OnServerConnect(NetworkConnection conn)
-		{
-			Server.OnServerAddClient(conn);
-		}
-
-		public override void OnServerAddPlayer(NetworkConnection conn)
-		{
-			Server.ServerCreatePlayerObject(conn, playerPrefab);
-		}
-
-		public override void OnStartServer()
-		{
-			Server.OnStartServer();
-		}
+		public override void OnStartServer() 
+			=> Server.OnStartServer(this);
 
 		public override void OnStopServer()
-		{
-			Server.OnStopServer();
-		}
+			=> Server.OnStopServer();
+
+		public override void OnServerChangeScene(string newSceneName)
+			=> Server.OnServerSceneChanging(newSceneName);
+
+		public override void OnServerSceneChanged(string sceneName) 
+			=> Server.OnServerChangedScene(sceneName);
+
+		public override void OnServerConnect(NetworkConnection conn) 
+			=> Server.OnServerAddClient(conn);
+
+		public override void OnServerAddPlayer(NetworkConnection conn) 
+			=> Server.ServerCreatePlayerObject(conn, playerPrefab);
 
 		public override void OnServerDisconnect(NetworkConnection conn)
-		{
-			Server.OnServerRemoveClient(conn);
-		}
+			=> Server.OnServerRemoveClient(conn);
 
 		#endregion
 

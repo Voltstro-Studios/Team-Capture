@@ -7,6 +7,7 @@ using Team_Capture.Helper;
 using Team_Capture.LagCompensation;
 using UnityEngine;
 using Logger = Team_Capture.Logging.Logger;
+using Object = UnityEngine.Object;
 
 namespace Team_Capture.Core.Networking
 {
@@ -17,23 +18,25 @@ namespace Team_Capture.Core.Networking
 
 		private static FileStream serverOnlineFileStream;
 
-		private static TCNetworkManager NetManager => TCNetworkManager.Instance;
+		private static TCNetworkManager netManager;
 
 		/// <summary>
 		///		Call this when the server is started
 		/// </summary>
-		public static void OnStartServer()
+		internal static void OnStartServer(TCNetworkManager workingNetManager)
 		{
 			string serverOnlinePath = $"{Game.GetGameExecutePath()}/{ServerOnlineFile}";
 
 			if (File.Exists(serverOnlinePath))
 				throw new Exception("Server is already online!");
 
+			netManager = workingNetManager;
+
 			Logger.Info("Starting server...");
 
 			//Set what network address to use and start to advertise the server on lan
-			NetManager.networkAddress = NetHelper.LocalIpAddress();
-			NetManager.gameDiscovery.AdvertiseServer();
+			netManager.networkAddress = NetHelper.LocalIpAddress();
+			netManager.gameDiscovery.AdvertiseServer();
 
 			//Start ping service
 			PingManager.ServerSetup();
@@ -42,46 +45,53 @@ namespace Team_Capture.Core.Networking
 			ConsoleBackend.ExecuteFileCommand(new[] {"server-autoexec"});
 
 			//Create server online file
+			//TODO: Setup Try/Catch stuff for this, in-case something goes wrong
 			serverOnlineFileStream = File.Create(serverOnlinePath, 128, FileOptions.DeleteOnClose);
 			serverOnlineFileStream.Write(ServerOnlineFileMessage, 0, ServerOnlineFileMessage.Length);
 			serverOnlineFileStream.Flush();
 			File.SetAttributes(serverOnlinePath, FileAttributes.Hidden);
 
 			Logger.Info("Server has started and is running on '{Address}' with max connections of {MaxPlayers}!",
-				NetManager.networkAddress, NetManager.maxConnections);
+				netManager.networkAddress, netManager.maxConnections);
 		}
 
 		/// <summary>
 		///		Call this when the server is stopped
 		/// </summary>
-		public static void OnStopServer()
+		internal static void OnStopServer()
 		{
 			Logger.Info("Stopping server...");
 			PingManager.ServerShutdown();
 
 			//Stop advertising the server when the server stops
-			NetManager.gameDiscovery.StopDiscovery();
+			netManager.gameDiscovery.StopDiscovery();
 
 			Logger.Info("Server stopped!");
 
 			//Close server online file stream
+			//TODO: Setup Try/Catch stuff for this, in-case something goes wrong
 			serverOnlineFileStream.Close();
 			serverOnlineFileStream.Dispose();
 			serverOnlineFileStream = null;
+			netManager = null;
 		}
 
 		/// <summary>
 		///		Call when a client connects
 		/// </summary>
 		/// <param name="conn"></param>
-		public static void OnServerAddClient(NetworkConnection conn)
+		internal static void OnServerAddClient(NetworkConnection conn)
 		{
 			Logger.Info(
 				"Client from '{Address}' connected with the connection ID of {ConnectionID}.",
 				conn.address, conn.connectionId);
 		}
 
-		public static void OnServerRemoveClient(NetworkConnection conn)
+		/// <summary>
+		///		Call when a client disconnects
+		/// </summary>
+		/// <param name="conn"></param>
+		internal static void OnServerRemoveClient(NetworkConnection conn)
 		{
 			NetworkServer.DestroyPlayerForConnection(conn);
 			Logger.Info("Client '{ConnectionId}' disconnected from the server.", conn.connectionId);
@@ -94,17 +104,39 @@ namespace Team_Capture.Core.Networking
 		}
 
 		/// <summary>
+		///		Called when a scene is about to be changed
+		/// </summary>
+		/// <param name="sceneName"></param>
+		internal static void OnServerSceneChanging(string sceneName)
+		{
+			Logger.Info("Server is changing scene to {SceneName}...", sceneName);
+		}
+
+		/// <summary>
+		///		Called after the scene changes
+		/// </summary>
+		/// <param name="sceneName"></param>
+		internal static void OnServerChangedScene(string sceneName)
+		{
+			//Instantiate the new game manager
+			Object.Instantiate(netManager.gameMangerPrefab);
+			Logger.Debug("Created GameManager object");
+
+			Logger.Info("Server changed scene to {SceneName}", sceneName);
+		}
+
+		/// <summary>
 		///		Called when a client request for a player object
 		/// </summary>
 		/// <param name="conn"></param>
 		/// <param name="playerPrefab"></param>
-		public static void ServerCreatePlayerObject(NetworkConnection conn, GameObject playerPrefab)
+		internal static void ServerCreatePlayerObject(NetworkConnection conn, GameObject playerPrefab)
 		{
 			//Sent to client the server config
 			conn.Send(TCNetworkManager.Instance.serverConfig);
 
 			//Create the player object
-			GameObject player = UnityEngine.Object.Instantiate(playerPrefab);
+			GameObject player = Object.Instantiate(playerPrefab);
 			player.AddComponent<SimulationObject>();
 
 			//Add the connection for the player
@@ -116,7 +148,7 @@ namespace Team_Capture.Core.Networking
 			Logger.Info("Created player object for {NetID}", conn.identity.netId);
 		}
 
-		public static void CreateServerAndConnectToServer(this NetworkManager netManager, string gameName, string sceneName, int maxPlayers)
+		public static void CreateServerAndConnectToServer(this NetworkManager workingNetManager, string gameName, string sceneName, int maxPlayers)
 		{
 #if UNITY_EDITOR
 			string serverOnlinePath =
@@ -153,8 +185,8 @@ namespace Team_Capture.Core.Networking
 			{
 			}
 
-			netManager.networkAddress = "localhost";
-			netManager.StartClient();
+			workingNetManager.networkAddress = "localhost";
+			workingNetManager.StartClient();
 		}
 	}
 }
