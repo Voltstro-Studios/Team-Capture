@@ -455,7 +455,12 @@ namespace Team_Capture.Console
 				return;
 			}
 
-			string fileName = args[0] + ".cfg";
+			ExecuteFile(args[0]);
+		}
+
+		public static void ExecuteFile(string fileName)
+		{
+			fileName = $"{fileName}.cfg";
 			if (!File.Exists(configFilesLocation + fileName))
 			{
 				Logger.Error($"`{fileName}` doesn't exist! Not executing.");

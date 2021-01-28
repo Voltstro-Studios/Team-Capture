@@ -42,7 +42,7 @@ namespace Team_Capture.Core.Networking
 			PingManager.ServerSetup();
 
 			//Run the server autoexec config
-			ConsoleBackend.ExecuteFileCommand(new[] {"server-autoexec"});
+			ConsoleBackend.ExecuteFile("server-autoexec");
 
 			//Create server online file
 			//TODO: Setup Try/Catch stuff for this, in-case something goes wrong
