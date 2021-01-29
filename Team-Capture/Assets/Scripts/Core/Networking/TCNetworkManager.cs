@@ -97,19 +97,6 @@ namespace Team_Capture.Core.Networking
 			if (mode == NetworkManagerMode.ServerOnly) SimulationHelper.UpdateSimulationObjectData();
 		}
 
-		#region Inital Server Join Message
-
-		private void OnReceivedServerConfig(NetworkConnection conn, ServerConfig config)
-		{
-			//We don't need to listen for the initial server message any more
-			NetworkClient.UnregisterHandler<ServerConfig>();
-
-			//Set the game name
-			serverConfig = config;
-		}
-
-		#endregion
-
 		#region Server Events
 
 		public override void OnStartServer() 
@@ -135,77 +122,29 @@ namespace Team_Capture.Core.Networking
 
 		#endregion
 
-		#region Client Scene Changing
+		#region Client Events
+
+		public override void OnStartClient()
+			=> Client.OnClientStart(this);
+
+		public override void OnStopClient()
+			=> Client.OnClientStop();
+
+		public override void OnClientConnect(NetworkConnection conn)
+			=> Client.OnClientConnect(conn);
+
+		public override void OnClientDisconnect(NetworkConnection conn)
+			=> Client.OnClientDisconnect(conn);
 
 		public override void OnClientSceneChanged(NetworkConnection conn)
 		{
 			base.OnClientSceneChanged(conn);
-
-			Logger.Info("The scene has been loaded to {@Scene}", TCScenesManager.GetActiveScene().scene);
-
-			SetupNeededSceneStuffClient();
+			Client.OnClientSceneChanged();
 		}
 
 		public override void OnClientChangeScene(string newSceneName, SceneOperation sceneOperation,
 			bool customHandling)
-		{
-			base.OnClientChangeScene(newSceneName, sceneOperation, customHandling);
-
-			if (GameManager.Instance == null)
-				return;
-
-			Destroy(GameManager.Instance.gameObject);
-
-			Logger.Info("The server has requested to change the scene to {@NewSceneName}", newSceneName);
-		}
-
-		private void SetupNeededSceneStuffClient()
-		{
-			//Create our the game manager
-			Instantiate(gameMangerPrefab);
-			Logger.Debug("Created game manager object");
-		}
-
-		#endregion
-
-		#region Client Events
-
-		public override void OnClientConnect(NetworkConnection conn)
-		{
-			//We register for ServerConfigurationMessage, so we get server info
-			NetworkClient.RegisterHandler<ServerConfig>(OnReceivedServerConfig);
-
-			base.OnClientConnect(conn);
-
-			Logger.Info("Connected to server {@Address} with the net ID of {@ConnectionId}.", conn.address,
-				conn.connectionId);
-
-			//Stop searching for servers
-			gameDiscovery.StopDiscovery();
-		}
-
-		public override void OnClientDisconnect(NetworkConnection conn)
-		{
-			base.OnClientDisconnect(conn);
-
-			Logger.Info($"Disconnected from server {conn.address}");
-		}
-
-		public override void OnStartClient()
-		{
-			PingManager.ClientSetup();
-
-			base.OnStartClient();
-		}
-
-		public override void OnStopClient()
-		{
-			base.OnStopClient();
-
-			PingManager.ClientShutdown();
-
-			Logger.Info("Stopped client");
-		}
+			=> Client.OnClientSceneChanging(newSceneName);
 
 		#endregion
 
