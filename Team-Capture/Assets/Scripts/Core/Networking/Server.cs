@@ -16,8 +16,8 @@ namespace Team_Capture.Core.Networking
 		private const string ServerOnlineFile = "SERVERONLINE";
 		private static readonly byte[] ServerOnlineFileMessage = {65, 32, 45, 71, 97, 119, 114, 32, 71, 117, 114, 97};
 
+		private static string serverOnlineFilePath;
 		private static FileStream serverOnlineFileStream;
-
 		private static TCNetworkManager netManager;
 
 		/// <summary>
@@ -25,9 +25,9 @@ namespace Team_Capture.Core.Networking
 		/// </summary>
 		internal static void OnStartServer(TCNetworkManager workingNetManager)
 		{
-			string serverOnlinePath = $"{Game.GetGameExecutePath()}/{ServerOnlineFile}";
+			serverOnlineFilePath = $"{Game.GetGameExecutePath()}/{ServerOnlineFile}";
 
-			if (File.Exists(serverOnlinePath))
+			if (File.Exists(serverOnlineFilePath))
 				throw new Exception("Server is already online!");
 
 			netManager = workingNetManager;
@@ -45,11 +45,20 @@ namespace Team_Capture.Core.Networking
 			ConsoleBackend.ExecuteFile("server-autoexec");
 
 			//Create server online file
-			//TODO: Setup Try/Catch stuff for this, in-case something goes wrong
-			serverOnlineFileStream = File.Create(serverOnlinePath, 128, FileOptions.DeleteOnClose);
-			serverOnlineFileStream.Write(ServerOnlineFileMessage, 0, ServerOnlineFileMessage.Length);
-			serverOnlineFileStream.Flush();
-			File.SetAttributes(serverOnlinePath, FileAttributes.Hidden);
+			try
+			{
+				serverOnlineFileStream = File.Create(serverOnlineFilePath, 128, FileOptions.DeleteOnClose);
+				serverOnlineFileStream.Write(ServerOnlineFileMessage, 0, ServerOnlineFileMessage.Length);
+				serverOnlineFileStream.Flush();
+				File.SetAttributes(serverOnlineFilePath, FileAttributes.Hidden);
+			}
+			catch (IOException ex)
+			{
+				Logger.Error(ex, "An error occured while setting up the server!");
+				netManager.StopHost();
+
+				return;
+			}
 
 			Logger.Info("Server has started and is running on '{Address}' with max connections of {MaxPlayers}!",
 				netManager.networkAddress, netManager.maxConnections);
@@ -69,11 +78,23 @@ namespace Team_Capture.Core.Networking
 			Logger.Info("Server stopped!");
 
 			//Close server online file stream
-			//TODO: Setup Try/Catch stuff for this, in-case something goes wrong
-			serverOnlineFileStream.Close();
-			serverOnlineFileStream.Dispose();
-			serverOnlineFileStream = null;
+			try
+			{
+				serverOnlineFileStream.Close();
+				serverOnlineFileStream.Dispose();
+				serverOnlineFileStream = null;
+			}
+			catch (Exception ex)
+			{
+				Logger.Error(ex, "An error occured while shutting down the server!");
+			}
+			
 			netManager = null;
+
+			//Double check that the file is deleted
+			if(File.Exists(serverOnlineFilePath))
+				File.Delete(serverOnlineFilePath);
+
 		}
 
 		/// <summary>
