@@ -11,7 +11,10 @@ using Object = UnityEngine.Object;
 
 namespace Team_Capture.Core.Networking
 {
-	public static class Server
+	/// <summary>
+	///		A class for handling stuff on the server
+	/// </summary>
+	internal static class Server
 	{
 		private const string ServerOnlineFile = "SERVERONLINE";
 		private static readonly byte[] ServerOnlineFileMessage = {65, 32, 45, 71, 97, 119, 114, 32, 71, 117, 114, 97};
@@ -169,7 +172,14 @@ namespace Team_Capture.Core.Networking
 			Logger.Info("Created player object for {NetID}", conn.identity.netId);
 		}
 
-		public static void CreateServerAndConnectToServer(this NetworkManager workingNetManager, string gameName, string sceneName, int maxPlayers)
+		/// <summary>
+		///		Creates a new server process and connects this process to it
+		/// </summary>
+		/// <param name="workingNetManager"></param>
+		/// <param name="gameName"></param>
+		/// <param name="sceneName"></param>
+		/// <param name="maxPlayers"></param>
+		internal static void CreateServerAndConnectToServer(this NetworkManager workingNetManager, string gameName, string sceneName, int maxPlayers)
 		{
 #if UNITY_EDITOR
 			string serverOnlinePath =
