@@ -6,6 +6,7 @@ using Team_Capture.Console;
 using Team_Capture.Helper;
 using Team_Capture.LagCompensation;
 using UnityEngine;
+using Voltstro.CommandLineParser;
 using Logger = Team_Capture.Logging.Logger;
 using Object = UnityEngine.Object;
 
@@ -16,12 +17,19 @@ namespace Team_Capture.Core.Networking
 	/// </summary>
 	internal static class Server
 	{
+		/// <summary>
+		///		Will make the server shutdown when the first connected player disconnects
+		/// </summary>
+		[CommandLineArgument("closeserveronfirstclientdisconnect")]
+		public static bool CloseServerOnFirstClientDisconnect = false;
+
 		private const string ServerOnlineFile = "SERVERONLINE";
 		private static readonly byte[] ServerOnlineFileMessage = {65, 32, 45, 71, 97, 119, 114, 32, 71, 117, 114, 97};
 
 		private static string serverOnlineFilePath;
 		private static FileStream serverOnlineFileStream;
 		private static TCNetworkManager netManager;
+		private static int firstConnectionId = int.MaxValue;
 
 		/// <summary>
 		///		Call this when the server is started
@@ -109,6 +117,10 @@ namespace Team_Capture.Core.Networking
 			//Sent to client the server config
 			conn.Send(TCNetworkManager.Instance.serverConfig);
 
+			//Lets just hope our transport never assigns the first connection max value of int
+			if (CloseServerOnFirstClientDisconnect && firstConnectionId == int.MaxValue)
+				firstConnectionId = conn.connectionId;
+
 			Logger.Info(
 				"Client from '{Address}' connected with the connection ID of {ConnectionID}.",
 				conn.address, conn.connectionId);
@@ -123,11 +135,9 @@ namespace Team_Capture.Core.Networking
 			NetworkServer.DestroyPlayerForConnection(conn);
 			Logger.Info("Client '{ConnectionId}' disconnected from the server.", conn.connectionId);
 
-			//TODO: Fix this
-			/*
-			if(CloseServerOnFirstClientDisconnect && conn.identity.netId == 1)
+			//Our first connected client disconnected
+			if(CloseServerOnFirstClientDisconnect && conn.connectionId == firstConnectionId)
 				Game.QuitGame();
-			*/
 		}
 
 		/// <summary>

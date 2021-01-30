@@ -16,13 +16,6 @@ namespace Team_Capture.Core.Networking
 	[RequireComponent(typeof(TCGameDiscovery))]
 	internal class TCNetworkManager : NetworkManager
 	{
-		//TODO: Re-implement this feature
-		/// <summary>
-		///		Will make the server shutdown when the first connected player disconnects
-		/// </summary>
-		[CommandLineArgument("closeserveronfirstclientdisconnect")]
-		public static bool CloseServerOnFirstClientDisconnect = false;
-
 		/// <summary>
 		///     The active <see cref="TCNetworkManager" />
 		/// </summary>
