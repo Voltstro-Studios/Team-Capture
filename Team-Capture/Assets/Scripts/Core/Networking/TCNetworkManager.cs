@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections;
 using Mirror;
 using Team_Capture.Console;
 using Team_Capture.Core.Networking.Discovery;
-using Team_Capture.Helper;
 using Team_Capture.LagCompensation;
 using Team_Capture.Logging;
-using Team_Capture.SceneManagement;
-using Team_Capture.UI.Panels;
 using UnityEngine;
 using Voltstro.CommandLineParser;
 using Logger = Team_Capture.Logging.Logger;
@@ -20,6 +16,7 @@ namespace Team_Capture.Core.Networking
 	[RequireComponent(typeof(TCGameDiscovery))]
 	internal class TCNetworkManager : NetworkManager
 	{
+		//TODO: Re-implement this feature
 		/// <summary>
 		///		Will make the server shutdown when the first connected player disconnects
 		/// </summary>
@@ -52,6 +49,9 @@ namespace Team_Capture.Core.Networking
 		/// </summary>
 		public ServerConfig serverConfig;
 
+		/// <summary>
+		///		Are we a server or not
+		/// </summary>
 		public static bool IsServer => Instance.mode == NetworkManagerMode.ServerOnly;
 
 		public override void Awake()
@@ -105,20 +105,21 @@ namespace Team_Capture.Core.Networking
 		public override void OnStopServer()
 			=> Server.OnStopServer();
 
+		public override void OnServerConnect(NetworkConnection conn) 
+			=> Server.OnServerAddClient(conn);
+
+		public override void OnServerDisconnect(NetworkConnection conn)
+			=> Server.OnServerRemoveClient(conn);
+
+		public override void OnServerAddPlayer(NetworkConnection conn) 
+			=> Server.ServerCreatePlayerObject(conn, playerPrefab);
+
 		public override void OnServerChangeScene(string newSceneName)
 			=> Server.OnServerSceneChanging(newSceneName);
 
 		public override void OnServerSceneChanged(string sceneName) 
 			=> Server.OnServerChangedScene(sceneName);
 
-		public override void OnServerConnect(NetworkConnection conn) 
-			=> Server.OnServerAddClient(conn);
-
-		public override void OnServerAddPlayer(NetworkConnection conn) 
-			=> Server.ServerCreatePlayerObject(conn, playerPrefab);
-
-		public override void OnServerDisconnect(NetworkConnection conn)
-			=> Server.OnServerRemoveClient(conn);
 
 		#endregion
 
@@ -137,10 +138,7 @@ namespace Team_Capture.Core.Networking
 			=> Client.OnClientDisconnect(conn);
 
 		public override void OnClientSceneChanged(NetworkConnection conn)
-		{
-			//base.OnClientSceneChanged(conn);
-			Client.OnClientSceneChanged(conn);
-		}
+			=> Client.OnClientSceneChanged(conn);
 
 		public override void OnClientChangeScene(string newSceneName, SceneOperation sceneOperation,
 			bool customHandling)
