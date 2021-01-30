@@ -1,7 +1,9 @@
-﻿using Mirror;
+﻿using System;
+using Mirror;
+using Team_Capture.Console;
 using Team_Capture.SceneManagement;
-using UnityEngine;
 using Logger = Team_Capture.Logging.Logger;
+using Object = UnityEngine.Object;
 
 namespace Team_Capture.Core.Networking
 {
@@ -105,5 +107,26 @@ namespace Team_Capture.Core.Networking
 
 			Logger.Debug("Client has requested player object.");
 		}
+
+		#region Console Commands
+
+		[ConCommand("connect", "Connects to a server", CommandRunPermission.ClientOnly, 1, 1)]
+		public static void ConnectCommand(string[] args)
+		{
+			try
+			{
+				NetworkManager networkManager = NetworkManager.singleton;
+				networkManager.StopClient();
+
+				networkManager.networkAddress = args[0];
+				networkManager.StartClient();
+			}
+			catch (Exception ex)
+			{
+				Logger.Error(ex, "An error occurred while connecting to the server '{Address}'", args[0]);
+			}
+		}
+
+		#endregion
 	}
 }

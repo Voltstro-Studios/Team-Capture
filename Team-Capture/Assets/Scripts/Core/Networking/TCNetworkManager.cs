@@ -1,5 +1,4 @@
-﻿using System;
-using Mirror;
+﻿using Mirror;
 using Team_Capture.Console;
 using Team_Capture.Core.Networking.Discovery;
 using Team_Capture.LagCompensation;
@@ -139,62 +138,22 @@ namespace Team_Capture.Core.Networking
 
 		#endregion
 
-		#region Console Commands
-
-		[ConCommand("connect", "Connects to a server", CommandRunPermission.ClientOnly, 1, 1)]
-		public static void ConnectCommand(string[] args)
-		{
-			try
-			{
-				singleton.StopHost();
-
-				singleton.networkAddress = args[0];
-				singleton.StartClient();
-			}
-			catch (Exception e)
-			{
-				Logger.Error("An error occured: {@Error}", e);
-			}
-		}
-
-		[ConCommand("disconnect", "Disconnect from the current game")]
+		[ConCommand("stop", "Stops the current game, whether that is disconnecting or stopping the server")]
 		public static void DisconnectCommand(string[] args)
 		{
-			if (singleton.mode == NetworkManagerMode.Offline)
+			NetworkManager networkManager = singleton;
+			if (networkManager.mode == NetworkManagerMode.Offline)
 			{
 				Logger.Error("You are not in a game!");
 				return;
 			}
 
-			singleton.StopHost();
+			networkManager.StopHost();
+
+			//Quit the game if we are headless
+			if(Game.IsHeadless)
+				Game.QuitGame();
 		}
-
-		[ConCommand("startserver", "Starts a server", CommandRunPermission.ClientOnly, 1, 1)]
-		public static void StartServerCommand(string[] args)
-		{
-			string scene = args[0];
-			singleton.onlineScene = scene;
-
-			singleton.StartServer();
-		}
-
-		[ConCommand("gamename", "Sets the game name", CommandRunPermission.ServerOnly)]
-		public static void SetGameNameCommand(string[] args)
-		{
-			Instance.serverConfig.gameName = string.Join(" ", args);
-			Logger.Info("Game name was set to {@Name}", Instance.serverConfig.gameName);
-		}
-
-		[ConCommand("sv_address", "Sets the server's address", CommandRunPermission.ServerOnly, 1, 1)]
-		public static void SetAddressCommand(string[] args)
-		{
-			if (singleton == null) return;
-
-			singleton.networkAddress = args[0];
-			Logger.Info("Server's address was set to {@Address}", args[0]);
-		}
-
-		#endregion
 
 		#region Command Line Arguments
 

@@ -97,7 +97,7 @@ namespace Team_Capture.Core.Networking
 			}
 			catch (Exception ex)
 			{
-				Logger.Error(ex, "An error occured while shutting down the server!");
+				Logger.Error(ex, "An error occurred while shutting down the server!");
 			}
 			
 			netManager = null;
@@ -231,5 +231,33 @@ namespace Team_Capture.Core.Networking
 			workingNetManager.networkAddress = "localhost";
 			workingNetManager.StartClient();
 		}
+
+		#region Console Commands
+
+		[ConCommand("startserver", "Starts a server", CommandRunPermission.ClientOnly, 1, 1)]
+		public static void StartServerCommand(string[] args)
+		{
+			NetworkManager networkManager = NetworkManager.singleton;
+			string scene = args[0];
+			networkManager.onlineScene = scene;
+
+			networkManager.StartServer();
+		}
+
+		[ConCommand("gamename", "Sets the game name", CommandRunPermission.ServerOnly)]
+		public static void SetGameNameCommand(string[] args)
+		{
+			TCNetworkManager.Instance.serverConfig.gameName = string.Join(" ", args);
+			Logger.Info("Game name was set to {Name}", TCNetworkManager.Instance.serverConfig.gameName);
+		}
+
+		[ConCommand("sv_address", "Sets the server's address", CommandRunPermission.ServerOnly, 1, 1)]
+		public static void SetAddressCommand(string[] args)
+		{
+			NetworkManager.singleton.networkAddress = args[0];
+			Logger.Info("Server's address was set to {Address}", args[0]);
+		}
+
+		#endregion
 	}
 }
