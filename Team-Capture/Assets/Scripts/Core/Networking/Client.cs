@@ -11,6 +11,7 @@ namespace Team_Capture.Core.Networking
 	internal static class Client
 	{
 		private static TCNetworkManager netManager;
+		private static bool clientHasPlayer;
 
 		/// <summary>
 		///		
@@ -18,7 +19,11 @@ namespace Team_Capture.Core.Networking
 		/// <param name="workingNetManager"></param>
 		internal static void OnClientStart(TCNetworkManager workingNetManager)
 		{
+			clientHasPlayer = false;
 			netManager = workingNetManager;
+
+			//We register for ServerConfigurationMessage, so we get server info
+			NetworkClient.RegisterHandler<ServerConfig>(OnReceivedServerConfig);
 
 			PingManager.ClientSetup();
 			Logger.Info("Started client.");
@@ -39,17 +44,6 @@ namespace Team_Capture.Core.Networking
 		/// <param name="conn"></param>
 		internal static void OnClientConnect(NetworkConnection conn)
 		{
-			//We register for ServerConfigurationMessage, so we get server info
-			NetworkClient.RegisterHandler<ServerConfig>(OnReceivedServerConfig);
-
-			if (!netManager.clientLoadedScene)
-			{
-				// Ready/AddPlayer is usually triggered by a scene load completing. if no scene was loaded, then Ready/AddPlayer it here instead.
-				if (!ClientScene.ready) 
-					ClientScene.Ready(conn);
-				ClientScene.AddPlayer(conn);
-			}
-
 			Logger.Info("Connected to the server '{Address}' with a connection ID of {ConnectionId}.", conn.address,
 				conn.connectionId);
 
@@ -73,6 +67,7 @@ namespace Team_Capture.Core.Networking
 		/// <param name="newSceneName"></param>
 		internal static void OnClientSceneChanging(string newSceneName)
 		{
+			clientHasPlayer = false;
 			if (GameManager.Instance == null)
 				return;
 
@@ -83,7 +78,7 @@ namespace Team_Capture.Core.Networking
 		/// <summary>
 		///		Called after the client changes scenes
 		/// </summary>
-		internal static void OnClientSceneChanged()
+		internal static void OnClientSceneChanged(NetworkConnection conn)
 		{
 			Object.Instantiate(netManager.gameMangerPrefab);
 			Logger.Info("The scene has been loaded to {Scene}", TCScenesManager.GetActiveScene().scene);
@@ -91,11 +86,24 @@ namespace Team_Capture.Core.Networking
 
 		private static void OnReceivedServerConfig(NetworkConnection conn, ServerConfig config)
 		{
-			//We don't need to listen for the initial server message any more
-			NetworkClient.UnregisterHandler<ServerConfig>();
+			//Server has sent config twice in the same scene session? Probs a modified server
+			if (clientHasPlayer)
+			{
+				Logger.Error("The server has sent it's config twice in the same scene session!");
+				return;
+			}
 
 			//Set the game name
 			netManager.serverConfig = config;
+
+			// Ready/AddPlayer is usually triggered by a scene load completing. if no scene was loaded, then Ready/AddPlayer it here instead.
+			if (!ClientScene.ready) 
+				ClientScene.Ready(conn);
+
+			ClientScene.AddPlayer(conn);
+			clientHasPlayer = true;
+
+			Logger.Debug("Client has requested player object.");
 		}
 	}
 }

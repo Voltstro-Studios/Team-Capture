@@ -106,6 +106,9 @@ namespace Team_Capture.Core.Networking
 		/// <param name="conn"></param>
 		internal static void OnServerAddClient(NetworkConnection conn)
 		{
+			//Sent to client the server config
+			conn.Send(TCNetworkManager.Instance.serverConfig);
+
 			Logger.Info(
 				"Client from '{Address}' connected with the connection ID of {ConnectionID}.",
 				conn.address, conn.connectionId);
@@ -146,6 +149,8 @@ namespace Team_Capture.Core.Networking
 			Object.Instantiate(netManager.gameMangerPrefab);
 			Logger.Debug("Created GameManager object");
 
+			NetworkServer.SendToAll(TCNetworkManager.Instance.serverConfig);
+
 			Logger.Info("Server changed scene to {SceneName}", sceneName);
 		}
 
@@ -156,9 +161,6 @@ namespace Team_Capture.Core.Networking
 		/// <param name="playerPrefab"></param>
 		internal static void ServerCreatePlayerObject(NetworkConnection conn, GameObject playerPrefab)
 		{
-			//Sent to client the server config
-			conn.Send(TCNetworkManager.Instance.serverConfig);
-
 			//Create the player object
 			GameObject player = Object.Instantiate(playerPrefab);
 			player.AddComponent<SimulationObject>();

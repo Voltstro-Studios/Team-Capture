@@ -138,8 +138,8 @@ namespace Team_Capture.Core.Networking
 
 		public override void OnClientSceneChanged(NetworkConnection conn)
 		{
-			base.OnClientSceneChanged(conn);
-			Client.OnClientSceneChanged();
+			//base.OnClientSceneChanged(conn);
+			Client.OnClientSceneChanged(conn);
 		}
 
 		public override void OnClientChangeScene(string newSceneName, SceneOperation sceneOperation,
