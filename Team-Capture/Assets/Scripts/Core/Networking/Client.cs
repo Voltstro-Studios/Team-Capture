@@ -5,10 +5,17 @@ using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.Core.Networking
 {
+	/// <summary>
+	///		A class for handling stuff on the client
+	/// </summary>
 	internal static class Client
 	{
 		private static TCNetworkManager netManager;
 
+		/// <summary>
+		///		
+		/// </summary>
+		/// <param name="workingNetManager"></param>
 		internal static void OnClientStart(TCNetworkManager workingNetManager)
 		{
 			netManager = workingNetManager;
@@ -17,12 +24,19 @@ namespace Team_Capture.Core.Networking
 			Logger.Info("Started client.");
 		}
 
+		/// <summary>
+		///		Called when the client is stopped
+		/// </summary>
 		internal static void OnClientStop()
 		{
 			PingManager.ClientShutdown();
 			Logger.Info("Stopped client.");
 		}
 
+		/// <summary>
+		///		Called when the client connects to a server
+		/// </summary>
+		/// <param name="conn"></param>
 		internal static void OnClientConnect(NetworkConnection conn)
 		{
 			//We register for ServerConfigurationMessage, so we get server info
@@ -43,12 +57,20 @@ namespace Team_Capture.Core.Networking
 			netManager.gameDiscovery.StopDiscovery();
 		}
 
+		/// <summary>
+		///		Called when the client disconnects from a server
+		/// </summary>
+		/// <param name="conn"></param>
 		internal static void OnClientDisconnect(NetworkConnection conn)
 		{
 			netManager.StopClient();
 			Logger.Info($"Disconnected from server {conn.address}");
 		}
 
+		/// <summary>
+		///		Called when the client changes scenes
+		/// </summary>
+		/// <param name="newSceneName"></param>
 		internal static void OnClientSceneChanging(string newSceneName)
 		{
 			if (GameManager.Instance == null)
@@ -58,6 +80,9 @@ namespace Team_Capture.Core.Networking
 			Logger.Info("The server has requested to change the scene to {@NewSceneName}", newSceneName);
 		}
 
+		/// <summary>
+		///		Called after the client changes scenes
+		/// </summary>
 		internal static void OnClientSceneChanged()
 		{
 			Object.Instantiate(netManager.gameMangerPrefab);
