@@ -2,7 +2,6 @@
 using Mirror;
 using Team_Capture.Console;
 using Team_Capture.SceneManagement;
-using Team_Capture.Settings.Enums;
 using Team_Capture.UI.MOTD;
 using Logger = Team_Capture.Logging.Logger;
 using Object = UnityEngine.Object;

@@ -1,11 +1,13 @@
 using System;
 using Team_Capture.Core.Networking;
-using Team_Capture.Settings.Enums;
 using TMPro;
 using UnityEngine;
 
 namespace Team_Capture.UI.MOTD
 {
+	/// <summary>
+	///		UI for displaying MOTDs
+	/// </summary>
     internal class MOTDUI : MonoBehaviour
     {
 	    [SerializeField] private TextMeshProUGUI motdTitleText;
@@ -13,6 +15,11 @@ namespace Team_Capture.UI.MOTD
 
 	    private Action onCloseAction;
 
+		/// <summary>
+		///		Setup the MOTD UI
+		/// </summary>
+		/// <param name="config"></param>
+		/// <param name="onClose"></param>
 	    internal void Setup(ServerConfig config, Action onClose)
 	    {
 		    if (config.motdMode == Server.ServerMOTDMode.TextOnly)

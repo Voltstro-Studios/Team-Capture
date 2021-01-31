@@ -33,9 +33,19 @@ namespace Team_Capture.Core.Networking
 		private static TCNetworkManager netManager;
 		private static int firstConnectionId = int.MaxValue;
 
+		/// <summary>
+		///		MOTD mode that a server is using
+		/// </summary>
 		internal enum ServerMOTDMode : byte
 		{
+			/// <summary>
+			///		The server's MOTD is disabled
+			/// </summary>
 			Disabled,
+
+			/// <summary>
+			///		The server only has a text based MOTD
+			/// </summary>
 			TextOnly
 		}
 
