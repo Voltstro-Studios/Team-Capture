@@ -239,6 +239,12 @@ namespace Team_Capture.Core.Networking
 
 		private static void SetupServerConfig()
 		{
+			//Setup configuration with our launch arguments
+			netManager.serverConfig.gameName = GameName;
+			netManager.serverConfig.motdMode = MotdMode;
+			netManager.maxConnections = MaxPlayers;
+			netManager.onlineScene = Scene;
+
 			//Setup MOTD
 			string gamePath = Game.GetGameExecutePath();
 
@@ -298,6 +304,21 @@ namespace Team_Capture.Core.Networking
 			NetworkManager.singleton.networkAddress = args[0];
 			Logger.Info("Server's address was set to {Address}", args[0]);
 		}
+
+		[ConVar("sv_gamename", "Sets the game name")]
+		[CommandLineArgument("gamename")] 
+		public static string GameName = "Team-Capture Game";
+
+		[ConVar("sv_maxplayers", "How many players do we support")]
+		[CommandLineArgument("maxplayers")] 
+		public static int MaxPlayers = 16;
+
+		[ConVar("sv_scene", "Sets what scene to use on the server")]
+		[CommandLineArgument("scene")] 
+		public static string Scene = "dm_ditch";
+
+		[ConVar("sv_motd", "The MOTD mode to use")] 
+		public static MOTDMode MotdMode = MOTDMode.TextOnly;
 
 		#endregion
 	}

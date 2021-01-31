@@ -67,12 +67,6 @@ namespace Team_Capture.Core.Networking
 
 		public override void Start()
 		{
-			//Setup configuration with our launch arguments
-			serverConfig.gameName = GameName;
-			serverConfig.motdMode = MotdMode;
-			singleton.maxConnections = MaxPlayers;
-			singleton.onlineScene = Scene;
-
 			//We are running in headless mode
 			if (Game.IsHeadless)
 				//Start the server
@@ -158,17 +152,5 @@ namespace Team_Capture.Core.Networking
 			if(Game.IsHeadless)
 				Game.QuitGame();
 		}
-
-		#region Command Line Arguments
-
-		[CommandLineArgument("gamename")] public static string GameName = "Team-Capture Game";
-
-		[CommandLineArgument("maxplayers")] public static int MaxPlayers = 16;
-
-		[CommandLineArgument("scene")] public static string Scene = "dm_ditch";
-
-		[ConVar("sr_motd", "The MOTD mode to use")] public static MOTDMode MotdMode = MOTDMode.TextOnly;
-
-		#endregion
 	}
 }
