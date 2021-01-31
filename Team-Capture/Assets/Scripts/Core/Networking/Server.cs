@@ -332,7 +332,7 @@ namespace Team_Capture.Core.Networking
 		[CommandLineArgument("scene")] 
 		public static string Scene = "dm_ditch";
 
-		[ConVar("sv_motd", "The MOTD mode to use")] 
+		[ConVar("sv_motd", "Set what MOTD mode to use on the server")] 
 		public static ServerMOTDMode ServerMotdMode = ServerMOTDMode.TextOnly;
 
 		#endregion

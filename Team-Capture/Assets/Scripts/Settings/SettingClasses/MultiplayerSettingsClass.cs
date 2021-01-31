@@ -1,4 +1,5 @@
-﻿using Team_Capture.UI;
+﻿using Team_Capture.Core.Networking;
+using Team_Capture.UI;
 using UnityEngine;
 
 namespace Team_Capture.Settings.SettingClasses
@@ -14,5 +15,8 @@ namespace Team_Capture.Settings.SettingClasses
 		[Range(0, 15)]
 		[SettingsPropertyDisplayText("Settings_MultiplayerWeaponSwayAmount")]
 		public float WeaponSwayAmount = 0.1f;
+
+		[SettingsPropertyDisplayText("Settings_MultiplayerMOTDMode")]
+		public Client.ClientMOTDMode MOTDMode = Client.ClientMOTDMode.TextOnly;
 	}
 }

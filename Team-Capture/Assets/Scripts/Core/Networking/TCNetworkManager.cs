@@ -3,9 +3,7 @@ using Team_Capture.Console;
 using Team_Capture.Core.Networking.Discovery;
 using Team_Capture.LagCompensation;
 using Team_Capture.Logging;
-using Team_Capture.Settings.Enums;
 using UnityEngine;
-using Voltstro.CommandLineParser;
 using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.Core.Networking

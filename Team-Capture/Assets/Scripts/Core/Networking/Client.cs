@@ -2,6 +2,7 @@
 using Mirror;
 using Team_Capture.Console;
 using Team_Capture.SceneManagement;
+using Team_Capture.Settings;
 using Team_Capture.UI.MOTD;
 using Logger = Team_Capture.Logging.Logger;
 using Object = UnityEngine.Object;
@@ -15,6 +16,12 @@ namespace Team_Capture.Core.Networking
 	{
 		private static TCNetworkManager netManager;
 		private static bool clientHasPlayer;
+
+		internal enum ClientMOTDMode
+		{
+			Disable,
+			TextOnly
+		}
 
 		/// <summary>
 		///		
@@ -99,8 +106,10 @@ namespace Team_Capture.Core.Networking
 			//Set the game name
 			netManager.serverConfig = config;
 
+			ClientMotdMode = GameSettings.MultiplayerSettings.MOTDMode;
+
 			//If the server has an MOTD, display it before creating a player object
-			if (config.motdMode != Server.ServerMOTDMode.Disabled)
+			if (config.motdMode != Server.ServerMOTDMode.Disabled && ClientMotdMode != ClientMOTDMode.Disable)
 			{
 				try
 				{
@@ -112,6 +121,7 @@ namespace Team_Capture.Core.Networking
 				{
 					Logger.Error(ex, "Something was wrong with the server's MOTD settings!");
 					netManager.StopHost();
+					return;
 				}
 			}
 
@@ -149,6 +159,15 @@ namespace Team_Capture.Core.Networking
 			}
 		}
 
+		[ConVar("cl_motd", "Set what MOTD mode to use on the client", "UpdateSettings", true)]
+		public static ClientMOTDMode ClientMotdMode = ClientMOTDMode.TextOnly;
+
 		#endregion
+
+		public static void UpdateSettings()
+		{
+			GameSettings.MultiplayerSettings.MOTDMode = ClientMotdMode;
+			GameSettings.Save();
+		}
 	}
 }
