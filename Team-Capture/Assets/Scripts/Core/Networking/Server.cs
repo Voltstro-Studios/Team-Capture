@@ -5,6 +5,7 @@ using Mirror;
 using Team_Capture.Console;
 using Team_Capture.Helper;
 using Team_Capture.LagCompensation;
+using Team_Capture.Settings.Enums;
 using UnityEngine;
 using Voltstro.CommandLineParser;
 using Logger = Team_Capture.Logging.Logger;
@@ -23,6 +24,8 @@ namespace Team_Capture.Core.Networking
 		[CommandLineArgument("closeserveronfirstclientdisconnect")]
 		public static bool CloseServerOnFirstClientDisconnect = false;
 
+		private const string MotdPath = "/Resources/motd.txt";
+		private const string MotdDefaultText = @"Welcome to Team-Capture!";
 		private const string ServerOnlineFile = "SERVERONLINE";
 		private static readonly byte[] ServerOnlineFileMessage = {65, 32, 45, 71, 97, 119, 114, 32, 71, 117, 114, 97};
 
@@ -54,6 +57,8 @@ namespace Team_Capture.Core.Networking
 
 			//Run the server autoexec config
 			ConsoleBackend.ExecuteFile("server-autoexec");
+
+			SetupServerConfig();
 
 			//Create server online file
 			try
@@ -230,6 +235,42 @@ namespace Team_Capture.Core.Networking
 
 			workingNetManager.networkAddress = "localhost";
 			workingNetManager.StartClient();
+		}
+
+		private static void SetupServerConfig()
+		{
+			//Setup MOTD
+			string gamePath = Game.GetGameExecutePath();
+
+			if (netManager.serverConfig.motdMode == MOTDMode.TextOnly)
+			{
+				string motdGamePath = $"{gamePath}{MotdPath}";
+				string motdData;
+
+				//If the MOTD file doesn't exist, create it
+				if (!File.Exists(motdGamePath))
+				{
+					WriteDefaultMotd(motdGamePath);
+					motdData = MotdDefaultText;
+				}
+				else //The file exists
+				{
+					motdData = File.ReadAllText(motdGamePath);
+					if (string.IsNullOrWhiteSpace(motdData))
+					{
+						WriteDefaultMotd(motdGamePath);
+						motdData = MotdDefaultText;
+					}
+				}
+
+				netManager.serverConfig.motdText = motdData;
+			}
+		}
+
+		private static void WriteDefaultMotd(string motdPath)
+		{
+			Logger.Warn("Created new default MOTD.");
+			File.WriteAllText(motdPath, MotdDefaultText);
 		}
 
 		#region Console Commands

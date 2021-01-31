@@ -68,12 +68,14 @@ MonoBehaviour:
   spawnPrefabs: []
   gameMangerPrefab: {fileID: 5023681518765488030, guid: 924fec1313feb8346bd0bf297c02c3fb,
     type: 3}
+  motdUIPrefab: {fileID: 1451107585728086516, guid: a02253513dd58044e8caf924098aa371,
+    type: 3}
   maxFrameCount: 128
   gameDiscovery: {fileID: 0}
   serverConfig:
     gameName: Team-Capture game
-  loadingScreenPrefab: {fileID: 6528200632955751276, guid: d142e4e46a570a34e82fcd92ea58b4ba,
-    type: 3}
+    motdMode: 0
+    motdText: 
 --- !u!114 &1601811758747872255
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -162,4 +164,5 @@ MonoBehaviour:
   SendWindowSize: 128
   ReceiveWindowSize: 128
   debugLog: 0
-  debugGUI: 0
+  statisticsGUI: 0
+  statisticsLog: 0

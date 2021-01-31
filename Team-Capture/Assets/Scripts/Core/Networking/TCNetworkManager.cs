@@ -3,6 +3,7 @@ using Team_Capture.Console;
 using Team_Capture.Core.Networking.Discovery;
 using Team_Capture.LagCompensation;
 using Team_Capture.Logging;
+using Team_Capture.Settings.Enums;
 using UnityEngine;
 using Voltstro.CommandLineParser;
 using Logger = Team_Capture.Logging.Logger;
@@ -25,6 +26,8 @@ namespace Team_Capture.Core.Networking
 		/// </summary>
 		[Tooltip("The prefab for the GameManager")] [Header("Team Capture")]
 		public GameObject gameMangerPrefab;
+
+		public GameObject motdUIPrefab;
 
 		/// <summary>
 		///     How many frames to keep
@@ -66,6 +69,7 @@ namespace Team_Capture.Core.Networking
 		{
 			//Setup configuration with our launch arguments
 			serverConfig.gameName = GameName;
+			serverConfig.motdMode = MotdMode;
 			singleton.maxConnections = MaxPlayers;
 			singleton.onlineScene = Scene;
 
@@ -162,6 +166,8 @@ namespace Team_Capture.Core.Networking
 		[CommandLineArgument("maxplayers")] public static int MaxPlayers = 16;
 
 		[CommandLineArgument("scene")] public static string Scene = "dm_ditch";
+
+		[ConVar("sr_motd", "The MOTD mode to use")] public static MOTDMode MotdMode = MOTDMode.TextOnly;
 
 		#endregion
 	}

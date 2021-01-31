@@ -2,6 +2,8 @@
 using Mirror;
 using Team_Capture.Console;
 using Team_Capture.SceneManagement;
+using Team_Capture.Settings.Enums;
+using Team_Capture.UI.MOTD;
 using Logger = Team_Capture.Logging.Logger;
 using Object = UnityEngine.Object;
 
@@ -98,6 +100,27 @@ namespace Team_Capture.Core.Networking
 			//Set the game name
 			netManager.serverConfig = config;
 
+			//If the server has an MOTD, display it before creating a player object
+			if (config.motdMode != MOTDMode.Disabled)
+			{
+				try
+				{
+					MOTDUI motdUILogic = Object.Instantiate(netManager.motdUIPrefab).GetComponent<MOTDUI>();
+					motdUILogic.Setup(config, () => RequestPlayerObject(conn));
+					return;
+				}
+				catch (InvalidMOTDSettings ex)
+				{
+					Logger.Error(ex, "Something was wrong with the server's MOTD settings!");
+					netManager.StopHost();
+				}
+			}
+
+			RequestPlayerObject(conn);
+		}
+
+		private static void RequestPlayerObject(NetworkConnection conn)
+		{
 			// Ready/AddPlayer is usually triggered by a scene load completing. if no scene was loaded, then Ready/AddPlayer it here instead.
 			if (!ClientScene.ready) 
 				ClientScene.Ready(conn);

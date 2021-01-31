@@ -127,6 +127,17 @@ namespace Team_Capture.Console
 					MaxArgs = 1,
 					CommandMethod = args =>
 					{
+						if (fieldInfo.FieldType.IsEnum)
+						{
+							object enumOption = Enum.Parse(fieldInfo.FieldType, args[0]);
+
+							fieldInfo.SetValue(fieldInfo, enumOption);
+							action?.Invoke();
+
+							Logger.Info("'{Name}' was set to {Value}", attribute.Name, enumOption);
+							return;
+						}
+
 						//If we have an ITypeReader for the type, then read the arg using it
 						if (typeReaders.TryGetValue(fieldInfo.FieldType, out ITypeReader reader))
 						{
@@ -134,7 +145,7 @@ namespace Team_Capture.Console
 							fieldInfo.SetValue(fieldInfo, reader.ReadType(args[0]));
 							action?.Invoke();
 
-							Logger.Info("'{@Attribute}' was set to '{@Value}'", attribute.Name,
+							Logger.Info("'{Name}' was set to '{Value}'", attribute.Name,
 								reader.ReadType(args[0]));
 							return;
 						}
