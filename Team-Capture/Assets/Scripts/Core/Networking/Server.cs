@@ -24,7 +24,13 @@ namespace Team_Capture.Core.Networking
 		public static bool CloseServerOnFirstClientDisconnect = false;
 
 		private const string MotdPath = "/Resources/motd.txt";
-		private const string MotdDefaultText = @"Welcome to Team-Capture!";
+		private const string MotdDefaultText = "<style=\"Title\">Welcome to Team-Capture!</style>\n\n" +
+		                                       "<style=\"h2\">Map Rotation</style>\n" +
+		                                       "Here is our map rotation:\n" +
+		                                       "    dm_ditch\n\n" +
+		                                       "<style=\"h2\">Rules</style>\n" +
+		                                       "    - No cheating\n" +
+		                                       "    - Have fun!";
 		private const string ServerOnlineFile = "SERVERONLINE";
 		private static readonly byte[] ServerOnlineFileMessage = {65, 32, 45, 71, 97, 119, 114, 32, 71, 117, 114, 97};
 
