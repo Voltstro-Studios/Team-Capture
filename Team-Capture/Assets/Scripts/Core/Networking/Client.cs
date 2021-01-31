@@ -101,7 +101,7 @@ namespace Team_Capture.Core.Networking
 			netManager.serverConfig = config;
 
 			//If the server has an MOTD, display it before creating a player object
-			if (config.motdMode != MOTDMode.Disabled)
+			if (config.motdMode != Server.ServerMOTDMode.Disabled)
 			{
 				try
 				{

@@ -19,7 +19,7 @@ namespace Team_Capture.Core.Networking
 		/// <summary>
 		///		The motd mode
 		/// </summary>
-		public MOTDMode motdMode;
+		public Server.ServerMOTDMode motdMode;
 
 		/// <summary>
 		///		Text for motd
@@ -33,7 +33,7 @@ namespace Team_Capture.Core.Networking
 		{
 			writer.WriteString(config.gameName);
 			writer.WriteByte((byte)config.motdMode);
-			if(config.motdMode == MOTDMode.TextOnly)
+			if(config.motdMode == Server.ServerMOTDMode.TextOnly)
 				writer.WriteString(config.motdText);
 		}
 
@@ -42,10 +42,10 @@ namespace Team_Capture.Core.Networking
 			ServerConfig config = new ServerConfig
 			{
 				gameName = reader.ReadString(),
-				motdMode = (MOTDMode)reader.ReadByte()
+				motdMode = (Server.ServerMOTDMode)reader.ReadByte()
 			};
 
-			if (config.motdMode == MOTDMode.TextOnly)
+			if (config.motdMode == Server.ServerMOTDMode.TextOnly)
 				config.motdText = reader.ReadString();
 
 			return config;

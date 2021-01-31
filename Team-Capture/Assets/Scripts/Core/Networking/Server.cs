@@ -5,7 +5,6 @@ using Mirror;
 using Team_Capture.Console;
 using Team_Capture.Helper;
 using Team_Capture.LagCompensation;
-using Team_Capture.Settings.Enums;
 using UnityEngine;
 using Voltstro.CommandLineParser;
 using Logger = Team_Capture.Logging.Logger;
@@ -33,6 +32,12 @@ namespace Team_Capture.Core.Networking
 		private static FileStream serverOnlineFileStream;
 		private static TCNetworkManager netManager;
 		private static int firstConnectionId = int.MaxValue;
+
+		internal enum ServerMOTDMode : byte
+		{
+			Disabled,
+			TextOnly
+		}
 
 		/// <summary>
 		///		Call this when the server is started
@@ -241,14 +246,14 @@ namespace Team_Capture.Core.Networking
 		{
 			//Setup configuration with our launch arguments
 			netManager.serverConfig.gameName = GameName;
-			netManager.serverConfig.motdMode = MotdMode;
+			netManager.serverConfig.motdMode = ServerMotdMode;
 			netManager.maxConnections = MaxPlayers;
 			netManager.onlineScene = Scene;
 
 			//Setup MOTD
 			string gamePath = Game.GetGameExecutePath();
 
-			if (netManager.serverConfig.motdMode == MOTDMode.TextOnly)
+			if (netManager.serverConfig.motdMode == ServerMOTDMode.TextOnly)
 			{
 				string motdGamePath = $"{gamePath}{MotdPath}";
 				string motdData;
@@ -318,7 +323,7 @@ namespace Team_Capture.Core.Networking
 		public static string Scene = "dm_ditch";
 
 		[ConVar("sv_motd", "The MOTD mode to use")] 
-		public static MOTDMode MotdMode = MOTDMode.TextOnly;
+		public static ServerMOTDMode ServerMotdMode = ServerMOTDMode.TextOnly;
 
 		#endregion
 	}
