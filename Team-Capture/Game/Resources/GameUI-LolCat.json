@@ -25,6 +25,7 @@
     "Menu_MaxPlayers": "Max Playrs",
     "Menu_CreateServerWarning": "Dis will start up a new instance of TC in headless server mode.",
     "Menu_Start": "Start",
+    "Menu_Next": "Next",
     "Settings_Mouse": "Mouse Settings",
     "Settings_MouseSensitivity": "Mouse Sensitivity",
     "Settings_MouseRawAxis": "Raw Axis",
