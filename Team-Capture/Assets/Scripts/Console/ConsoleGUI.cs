@@ -5,6 +5,7 @@ using System.Text;
 using Team_Capture.Input;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.Console
@@ -22,6 +23,7 @@ namespace Team_Capture.Console
 
 		[SerializeField] private TMP_InputField inputField;
 		[SerializeField] private TextMeshProUGUI consoleTextArea;
+		[SerializeField] private ScrollRect consoleScrollRect;
 		[SerializeField] private GameObject consolePanel;
 		[SerializeField] private InputReader inputReader;
 
@@ -85,6 +87,8 @@ namespace Team_Capture.Console
 			int count = Mathf.Min(100, lines.Count);
 			int start = lines.Count - count;
 			consoleTextArea.text = string.Join("\n", lines.GetRange(start, count).ToArray());
+			Canvas.ForceUpdateCanvases();
+			consoleScrollRect.normalizedPosition = new Vector2(0, 0);
 		}
 
 		#region Console GUI
