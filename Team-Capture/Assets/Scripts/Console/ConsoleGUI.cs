@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
+using System.Diagnostics;
 using Team_Capture.Input;
 using TMPro;
 using UnityEngine;
@@ -183,13 +183,17 @@ namespace Team_Capture.Console
 		[ConCommand("help", "Shows a list of all the commands")]
 		public static void HelpCommand(string[] args)
 		{
-			StringBuilder sb = new StringBuilder();
-			sb.Append("\n");
-
+			Stopwatch stopwatch = Stopwatch.StartNew();
+			List<string> helpList = new List<string>();
 			foreach (KeyValuePair<string, ConsoleCommand> command in ConsoleBackend.GetAllCommands())
-				sb.Append($"`{command.Key}` - {command.Value.CommandSummary}\n");
+				helpList.Add($"\n`{command.Key}` - {command.Value.CommandSummary}");
 
-			Logger.Info(sb.ToString());
+			helpList.Sort(string.Compare);
+
+			Logger.Info(string.Join("", helpList));
+
+			stopwatch.Stop();
+			Logger.Debug("Took {Time}ms to build help menu.", stopwatch.Elapsed.TotalMilliseconds);
 		}
 
 		[ConCommand("version", "Shows Team-Capture's current version")]
