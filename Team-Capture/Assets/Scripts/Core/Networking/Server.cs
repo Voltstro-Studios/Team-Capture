@@ -290,6 +290,14 @@ namespace Team_Capture.Core.Networking
 					}
 				}
 
+				//Check to make sure the MOTD text isn't beyond what is allowed to be sent over
+				//(As of writing this its 32,768, sooo probs long enough for anyone lol)
+				if (motdData.Length == NetworkWriter.MaxStringLength)
+				{
+					Logger.Error("The MOTD text is longer then the max allowed text length! ({MaxStringLength})", NetworkWriter.MaxStringLength);
+					return;
+				}
+
 				netManager.serverConfig.motdText = motdData;
 			}
 		}

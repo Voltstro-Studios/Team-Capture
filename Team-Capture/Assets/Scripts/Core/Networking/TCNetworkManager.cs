@@ -22,14 +22,20 @@ namespace Team_Capture.Core.Networking
 		/// <summary>
 		///     The prefab for the <see cref="GameManager" />
 		/// </summary>
-		[Tooltip("The prefab for the GameManager")] [Header("Team Capture")]
+		[Header("Team Capture")]
+		[Tooltip("The prefab for the GameManager")]
 		public GameObject gameMangerPrefab;
 
+		/// <summary>
+		///		The prefab for the MOTD
+		/// </summary>
+		[Tooltip("The prefab for the MOTD")]
 		public GameObject motdUIPrefab;
 
 		/// <summary>
 		///     How many frames to keep
 		/// </summary>
+		[Tooltip("How many frames to keep")]
 		public int maxFrameCount = 128;
 
 		/// <summary>
@@ -135,7 +141,7 @@ namespace Team_Capture.Core.Networking
 		#endregion
 
 		[ConCommand("stop", "Stops the current game, whether that is disconnecting or stopping the server")]
-		public static void DisconnectCommand(string[] args)
+		public static void StopCommand(string[] args)
 		{
 			NetworkManager networkManager = singleton;
 			if (networkManager.mode == NetworkManagerMode.Offline)
