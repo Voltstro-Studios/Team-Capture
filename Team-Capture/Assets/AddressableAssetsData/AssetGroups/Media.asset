@@ -16,7 +16,13 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: 7fedb4e124d4f2948acfe97c1425f914
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: 14969ddeb2ea3d04b980ef4eefbf939f
+    m_Address: Assets/Media/TC-Start-Up.webm
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 438ba52aad4393b4dbd42d1101b6442f, type: 2}
   m_SchemaSet:
