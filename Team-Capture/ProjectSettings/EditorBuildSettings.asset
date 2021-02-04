@@ -20,4 +20,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/dm_ditch.unity
     guid: 6e76099a2eca9af49bf97a0450aa8f41
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.addressableassets: {fileID: 11400000, guid: 0ef85b68b23c5784eb5c46066e057eba,
+      type: 2}

@@ -1,6 +1,8 @@
-﻿using Team_Capture.Input;
+﻿using Cysharp.Threading.Tasks;
+using Team_Capture.Input;
 using Team_Capture.SceneManagement;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.Video;
 using Voltstro.CommandLineParser;
 
@@ -27,7 +29,7 @@ namespace Team_Capture.StartUpVideo
 		/// <summary>
 		///     Video clip to play
 		/// </summary>
-		[Tooltip("Video clip to play")] public VideoClip startUpVideoClip;
+		[Tooltip("Video clip to play")] public AssetReference startUpVideoClip;
 
 		public TCScene nextScene;
 
@@ -53,9 +55,9 @@ namespace Team_Capture.StartUpVideo
 			ChangeScene();
 		}
 
-		public void Play()
+		public async void Play()
 		{
-			Setup();
+			await Setup();
 			startUpVideo.Play();
 		}
 
@@ -69,7 +71,7 @@ namespace Team_Capture.StartUpVideo
 			TCScenesManager.LoadScene(nextScene);
 		}
 
-		public void Setup()
+		public async UniTask Setup()
 		{
 			startUpVideo = GetComponent<VideoPlayer>();
 			mainCamera = GetComponent<Camera>();
@@ -85,7 +87,7 @@ namespace Team_Capture.StartUpVideo
 				}
 
 				startUpVideo.source = VideoSource.VideoClip;
-				startUpVideo.clip = startUpVideoClip;
+				startUpVideo.clip = await startUpVideoClip.LoadAssetAsync<VideoClip>();
 				startUpVideo.renderMode = VideoRenderMode.CameraNearPlane;
 				startUpVideo.playOnAwake = false;
 				startUpVideo.waitForFirstFrame = true;
