@@ -1,8 +1,6 @@
 {
   "dependencies": {
-    "com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
     "com.mirror-networking.mirror": "https://github.com/VoltUnityPackages/Mirror.git?path=/Assets/Mirror",
-    "com.unity.addressables": "1.16.16",
     "com.unity.build-report-inspector": "0.2.2-preview",
     "com.unity.ext.nunit": "1.0.6",
     "com.unity.ide.rider": "2.0.7",

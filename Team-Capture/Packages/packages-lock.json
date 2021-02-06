@@ -1,12 +1,5 @@
 {
   "dependencies": {
-    "com.cysharp.unitask": {
-      "version": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "7d21a75ea8abbc3ed43afedeb450c8d44f244ece"
-    },
     "com.mirror-networking.mirror": {
       "version": "https://github.com/VoltUnityPackages/Mirror.git?path=/Assets/Mirror",
       "depth": 0,
@@ -15,18 +8,6 @@
         "nuget.mono-cecil": "0.1.6-preview"
       },
       "hash": "44e6cd4e02553dae9e844e61e68dde08adead9db"
-    },
-    "com.unity.addressables": {
-      "version": "1.16.16",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {
-        "com.unity.scriptablebuildpipeline": "1.15.2",
-        "com.unity.modules.assetbundle": "1.0.0",
-        "com.unity.modules.unitywebrequest": "1.0.0",
-        "com.unity.modules.unitywebrequestassetbundle": "1.0.0"
-      },
-      "url": "https://packages.unity.com"
     },
     "com.unity.build-report-inspector": {
       "version": "0.2.2-preview",
@@ -136,13 +117,6 @@
         "com.unity.render-pipelines.core": "10.2.2",
         "com.unity.shadergraph": "10.2.2"
       },
-      "url": "https://packages.unity.com"
-    },
-    "com.unity.scriptablebuildpipeline": {
-      "version": "1.15.2",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {},
       "url": "https://packages.unity.com"
     },
     "com.unity.searcher": {
@@ -343,15 +317,6 @@
       "depth": 0,
       "source": "builtin",
       "dependencies": {}
-    },
-    "com.unity.modules.unitywebrequestassetbundle": {
-      "version": "1.0.0",
-      "depth": 1,
-      "source": "builtin",
-      "dependencies": {
-        "com.unity.modules.assetbundle": "1.0.0",
-        "com.unity.modules.unitywebrequest": "1.0.0"
-      }
     },
     "com.unity.modules.video": {
       "version": "1.0.0",

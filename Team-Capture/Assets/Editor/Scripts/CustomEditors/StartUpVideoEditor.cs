@@ -4,9 +4,9 @@ using UnityEngine;
 namespace Team_Capture.Editor.CustomEditors
 {
 	[CustomEditor(typeof(StartUpVideo.StartUpVideo))]
-	public class StartUpVideoEditor : UnityEditor.Editor 
-	{
-		public override async void OnInspectorGUI()
+	public class StartUpVideoEditor : UnityEditor.Editor {
+
+		public override void OnInspectorGUI()
 		{
 			base.OnInspectorGUI();
 
@@ -18,7 +18,7 @@ namespace Team_Capture.Editor.CustomEditors
 
 			if(GUILayout.Button("Setup Now"))
 			{
-				await vid.Setup();
+				vid.Setup();
 			}
 
 			EditorGUILayout.EndHorizontal();

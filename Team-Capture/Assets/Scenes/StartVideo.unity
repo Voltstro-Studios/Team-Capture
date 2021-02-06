@@ -222,10 +222,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inputReader: {fileID: 11400000, guid: e233decf6e8ea7d4696452f4cd476d55, type: 2}
-  startUpVideoClip:
-    m_AssetGUID: 14969ddeb2ea3d04b980ef4eefbf939f
-    m_SubObjectName: 
-    m_SubObjectType: 
+  startUpVideoClip: {fileID: 32900000, guid: 14969ddeb2ea3d04b980ef4eefbf939f, type: 3}
   nextScene: {fileID: 11400000, guid: fee6dc6d01051db4c8826c383c58d001, type: 2}
 --- !u!328 &2111282999
 VideoPlayer:
@@ -235,7 +232,7 @@ VideoPlayer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2111282994}
   m_Enabled: 1
-  m_VideoClip: {fileID: 0}
+  m_VideoClip: {fileID: 32900000, guid: 14969ddeb2ea3d04b980ef4eefbf939f, type: 3}
   m_TargetCameraAlpha: 1
   m_TargetCamera3DLayout: 0
   m_TargetCamera: {fileID: 2111282996}
