@@ -212,14 +212,17 @@ namespace Team_Capture.Core.Networking
 			Logger.Info("Created player object for {NetID}", conn.identity.netId);
 		}
 
-		/// <summary>
-		///		Creates a new server process and connects this process to it
-		/// </summary>
-		/// <param name="workingNetManager"></param>
-		/// <param name="gameName"></param>
-		/// <param name="sceneName"></param>
-		/// <param name="maxPlayers"></param>
-		internal static void CreateServerAndConnectToServer(this NetworkManager workingNetManager, string gameName, string sceneName, int maxPlayers)
+		///  <summary>
+		/// 		Creates a new server process and connects this process to it
+		///  </summary>
+		///  <param name="workingNetManager"></param>
+		///  <param name="gameName"></param>
+		///  <param name="sceneName"></param>
+		///  <param name="maxPlayers"></param>
+		///  <param name="onFailedToStart"></param>
+		internal static void CreateServerAndConnectToServer(this NetworkManager workingNetManager, 
+			string gameName, string sceneName, int maxPlayers,
+			Action onFailedToStart = null)
 		{
 #if UNITY_EDITOR
 			string serverOnlinePath =
@@ -257,10 +260,12 @@ namespace Team_Capture.Core.Networking
 			{
 				workingNetManager.networkAddress = "localhost";
 				workingNetManager.StartClient();
-			}).Forget();
+			}, onFailedToStart).Forget();
 		}
 
-		private static async UniTaskVoid WaitForServerOneFileAndConnect(string serverOnlinePath, Action onSuccessFullCompletion = null)
+		private static async UniTaskVoid WaitForServerOneFileAndConnect(string serverOnlinePath, 
+			Action onSuccessFullCompletion = null,
+			Action onFailToStart = null)
 		{
 			float timeUntilCancel = Time.time + TimeOutServerTime;
 
@@ -270,6 +275,7 @@ namespace Team_Capture.Core.Networking
 				if (Time.time >= timeUntilCancel)
 				{
 					Logger.Error("Server process did not start for some reason! Not connecting.");
+					onFailToStart?.Invoke();
 					return;
 				}
 			}

@@ -18,7 +18,8 @@ namespace Team_Capture.UI.Panels
 
 		public virtual void OnEnable()
 		{
-			tweenObject.PlayEvent("PanelOpen");
+			if(tweenObject.objectToTween != null)
+				tweenObject.PlayEvent("PanelOpen");
 		}
 	}
 }

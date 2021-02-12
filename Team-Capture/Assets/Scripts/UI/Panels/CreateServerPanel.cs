@@ -29,6 +29,12 @@ namespace Team_Capture.UI.Panels
 		[Tooltip("Input for the game name")] public TMP_InputField gameNameText;
 
 		/// <summary>
+		///		The button the user clicks to start the server
+		/// </summary>
+		[Tooltip("The button the user clicks to start the server")]
+		public Button startServerButton;
+
+		/// <summary>
 		///     Input for the max amount of players
 		/// </summary>
 		[Tooltip("Input for the max amount of players")]
@@ -39,6 +45,12 @@ namespace Team_Capture.UI.Panels
 		/// </summary>
 		[Tooltip("The color to use when there is an error")]
 		public Color errorColor = Color.red;
+
+		/// <summary>
+		///		The panel that is displayed when starting a server
+		/// </summary>
+		[Tooltip("The panel that is displayed when starting a server")]
+		public CreatingServerPanel onStartingServerPanel;
 
 		private Image gameNameImage;
 
@@ -53,6 +65,8 @@ namespace Team_Capture.UI.Panels
 
 		private void Start()
 		{
+			onStartingServerPanel.gameObject.SetActive(false);
+
 			//First, clear the maps dropdown
 			mapsDropdown.ClearOptions();
 
@@ -129,8 +143,16 @@ namespace Team_Capture.UI.Panels
 
 		private void CreateServerProcess()
 		{
+			onStartingServerPanel.gameObject.SetActive(true);
+			startServerButton.interactable = false;
+
 			//Now start the server
-			netManager.CreateServerAndConnectToServer(gameNameText.text, onlineTCScenes[mapsDropdown.value].SceneFileName, maxPlayers);
+			netManager.CreateServerAndConnectToServer(gameNameText.text, onlineTCScenes[mapsDropdown.value].SceneFileName, maxPlayers,
+				() =>
+				{
+					onStartingServerPanel.FailedToStartMessage();
+					startServerButton.interactable = true;
+				});
 		}
 
 		private IEnumerator QuitExistingGame(Action doLast)
