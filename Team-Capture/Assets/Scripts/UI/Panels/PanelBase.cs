@@ -14,6 +14,9 @@ namespace Team_Capture.UI.Panels
 		/// </summary>
 		public Button cancelButton;
 
+		/// <summary>
+		///		The <see cref="TweenObject"/> for this panel
+		/// </summary>
 		public TweenObject tweenObject;
 
 		public virtual void OnEnable()
