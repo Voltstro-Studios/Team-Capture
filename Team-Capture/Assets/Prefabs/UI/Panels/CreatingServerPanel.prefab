@@ -94,8 +94,9 @@ MonoBehaviour:
   cancelButton: {fileID: 6802600301512550928}
   tweenObject:
     tweenObjectName: 
-    objectToTween: {fileID: 0}
-    eventsToPlay: []
+    objectToTween: {fileID: 3900155338001809271}
+    eventsToPlay:
+    - {fileID: 11400000, guid: 659626b028f42eb40865973821c6f518, type: 2}
   startingMessageLocale: Menu_StartingServer
   failedToStartMessageLocale: Menu_StartingServerFail
   messageText: {fileID: 6802600301102271682}

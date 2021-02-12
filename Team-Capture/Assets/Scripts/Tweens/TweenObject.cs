@@ -39,7 +39,7 @@ namespace Team_Capture.Tweens
 			TweenEvent tweenEvent = eventsToPlay.FirstOrDefault(x => x.name == eventName);
 			if (tweenEvent == null)
 			{
-				Logger.Error("THere is no tween event called {@EventName} on tween object {@ObjectName}!", eventName,
+				Logger.Error("There is no tween event called {EventName} on tween object {ObjectName}!", eventName,
 					objectToTween.name);
 				return;
 			}
