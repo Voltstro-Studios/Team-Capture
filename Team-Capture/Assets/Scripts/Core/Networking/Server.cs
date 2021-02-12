@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using Cysharp.Threading.Tasks;
 using Mirror;
 using Team_Capture.Console;
 using Team_Capture.Helper;
@@ -23,6 +24,7 @@ namespace Team_Capture.Core.Networking
 		[CommandLineArgument("closeserveronfirstclientdisconnect")]
 		public static bool CloseServerOnFirstClientDisconnect = false;
 
+		private const int TimeOutServerTime = 4;
 		private const string MotdPath = "/Resources/motd.txt";
 		private const string MotdDefaultText = "<style=\"Title\">Welcome to Team-Capture!</style>\n\n" +
 		                                       "<style=\"h2\">Map Rotation</style>\n" +
@@ -250,12 +252,29 @@ namespace Team_Capture.Core.Networking
 			};
 			newTcServer.Start();
 
+			//We need to wait for the server online file, and to not cause the game to freeze we run it async
+			WaitForServerOneFileAndConnect(serverOnlinePath, () =>
+			{
+				workingNetManager.networkAddress = "localhost";
+				workingNetManager.StartClient();
+			}).Forget();
+		}
+
+		private static async UniTaskVoid WaitForServerOneFileAndConnect(string serverOnlinePath, Action onSuccessFullCompletion = null)
+		{
+			float timeUntilCancel = Time.time + TimeOutServerTime;
+
 			while (!File.Exists(serverOnlinePath))
 			{
+				await UniTask.Delay(100);
+				if (Time.time >= timeUntilCancel)
+				{
+					Logger.Error("Server process did not start for some reason! Not connecting.");
+					return;
+				}
 			}
 
-			workingNetManager.networkAddress = "localhost";
-			workingNetManager.StartClient();
+			onSuccessFullCompletion?.Invoke();
 		}
 
 		private static void SetupServerConfig()
