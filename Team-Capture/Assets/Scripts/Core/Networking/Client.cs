@@ -17,14 +17,24 @@ namespace Team_Capture.Core.Networking
 		private static TCNetworkManager netManager;
 		private static bool clientHasPlayer;
 
-		internal enum ClientMOTDMode
+		/// <summary>
+		///		MOTD mode that the client is using
+		/// </summary>
+		internal enum ClientMOTDMode : byte
 		{
+			/// <summary>
+			///		The client has disabled MOTDs
+			/// </summary>
 			Disable,
+
+			/// <summary>
+			///		The client only accepts Text only MOTDs
+			/// </summary>
 			TextOnly
 		}
 
 		/// <summary>
-		///		
+		///		Called when the client starts
 		/// </summary>
 		/// <param name="workingNetManager"></param>
 		internal static void OnClientStart(TCNetworkManager workingNetManager)
