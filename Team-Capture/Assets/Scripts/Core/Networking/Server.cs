@@ -24,7 +24,9 @@ namespace Team_Capture.Core.Networking
 		[CommandLineArgument("closeserveronfirstclientdisconnect")]
 		public static bool CloseServerOnFirstClientDisconnect = false;
 
-		private const int TimeOutServerTime = 4;
+		[ConVar("sv_serverstarttimeout", "The timeout time to wait while creating a server from the UI")]
+		private static int TimeOutServerTime = 6;
+
 		private const string MotdPath = "/Resources/motd.txt";
 		private const string MotdDefaultText = "<style=\"Title\">Welcome to Team-Capture!</style>\n\n" +
 		                                       "<style=\"h2\">Map Rotation</style>\n" +
