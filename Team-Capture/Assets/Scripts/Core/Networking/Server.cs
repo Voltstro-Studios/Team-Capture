@@ -24,10 +24,22 @@ namespace Team_Capture.Core.Networking
 		[CommandLineArgument("closeserveronfirstclientdisconnect")]
 		public static bool CloseServerOnFirstClientDisconnect = false;
 
+		/// <summary>
+		///		The timeout time to wait while creating a server from the UI
+		/// </summary>
 		[ConVar("sv_serverstarttimeout", "The timeout time to wait while creating a server from the UI")]
 		private static int TimeOutServerTime = 6;
 
+		//MOTD related Variables
+
+		/// <summary>
+		///		The base path to the MOTD
+		/// </summary>
 		private const string MotdPath = "/Resources/motd.txt";
+
+		/// <summary>
+		///		Whats the default text in the MOTD
+		/// </summary>
 		private const string MotdDefaultText = "<style=\"Title\">Welcome to Team-Capture!</style>\n\n" +
 		                                       "<style=\"h2\">Map Rotation</style>\n" +
 		                                       "Here is our map rotation:\n" +
@@ -35,13 +47,39 @@ namespace Team_Capture.Core.Networking
 		                                       "<style=\"h2\">Rules</style>\n" +
 		                                       "    - No cheating\n" +
 		                                       "    - Have fun!";
+
+		//Server online file related variables
+
+		/// <summary>
+		///		Server online file name
+		/// </summary>
 		private const string ServerOnlineFile = "SERVERONLINE";
+
+		/// <summary>
+		///		The message to put in the server online file (Done as a joke)
+		/// </summary>
 		private static readonly byte[] ServerOnlineFileMessage = {65, 32, 45, 71, 97, 119, 114, 32, 71, 117, 114, 97};
 
+		/// <summary>
+		///		Runtime path to the server online file
+		/// </summary>
 		private static string serverOnlineFilePath;
+
+		/// <summary>
+		///		The <see cref="FileStream"/> for the server online file
+		/// </summary>
 		private static FileStream serverOnlineFileStream;
-		private static TCNetworkManager netManager;
+
+		/// <summary>
+		///		Who was the first connected ID
+		///		<para>KCP just seems to assign random connection IDs, so we just hope the first person never has <see cref="int.MaxValue"/> as their ID</para>
+		/// </summary>
 		private static int firstConnectionId = int.MaxValue;
+
+		/// <summary>
+		///		The working <see cref="TCNetworkManager"/>, set on <see cref="OnStartServer"/>
+		/// </summary>
+		private static TCNetworkManager netManager;
 
 		/// <summary>
 		///		MOTD mode that a server is using
