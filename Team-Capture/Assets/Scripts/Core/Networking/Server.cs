@@ -231,12 +231,14 @@ namespace Team_Capture.Core.Networking
 			string serverOnlinePath = $"{Game.GetGameExecutePath()}/{ServerOnlineFile}";
 #endif
 
+			//Check to make sure the server online file doesn't already exist
 			if (File.Exists(serverOnlinePath))
 			{
 				Logger.Error("A server is already running!");
 				return;
 			}
 
+			//Create and start the process
 			Process newTcServer = new Process
 			{
 				StartInfo = new ProcessStartInfo
@@ -258,6 +260,7 @@ namespace Team_Capture.Core.Networking
 			//We need to wait for the server online file, and to not cause the game to freeze we run it async
 			WaitForServerOneFileAndConnect(serverOnlinePath, () =>
 			{
+				//Start the client
 				workingNetManager.networkAddress = "localhost";
 				workingNetManager.StartClient();
 			}, onFailedToStart).Forget();
@@ -269,8 +272,10 @@ namespace Team_Capture.Core.Networking
 		{
 			float timeUntilCancel = Time.time + TimeOutServerTime;
 
+			//Wait until the server online file exist
 			while (!File.Exists(serverOnlinePath))
 			{
+				//If we hit the timeout time, then fail it
 				await UniTask.Delay(100);
 				if (Time.time >= timeUntilCancel)
 				{
