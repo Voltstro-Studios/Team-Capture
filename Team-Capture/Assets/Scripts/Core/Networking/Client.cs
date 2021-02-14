@@ -20,7 +20,7 @@ namespace Team_Capture.Core.Networking
 		/// <summary>
 		///		MOTD mode that the client is using
 		/// </summary>
-		internal enum ClientMOTDMode : byte
+		internal enum ClientMOTDMode
 		{
 			/// <summary>
 			///		The client has disabled MOTDs
