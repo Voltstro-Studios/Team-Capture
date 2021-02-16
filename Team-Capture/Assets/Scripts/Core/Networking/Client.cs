@@ -4,6 +4,7 @@ using Team_Capture.Console;
 using Team_Capture.SceneManagement;
 using Team_Capture.Settings;
 using Team_Capture.UI.MOTD;
+using UnityEngine.Scripting;
 using Logger = Team_Capture.Logging.Logger;
 using Object = UnityEngine.Object;
 
@@ -169,11 +170,12 @@ namespace Team_Capture.Core.Networking
 			}
 		}
 
-		[ConVar("cl_motd", "Set what MOTD mode to use on the client", "UpdateSettings", true)]
+		[ConVar("cl_motd", "Set what MOTD mode to use on the client", nameof(UpdateSettings), true)]
 		public static ClientMOTDMode ClientMotdMode = ClientMOTDMode.TextOnly;
 
 		#endregion
 
+		[Preserve]
 		public static void UpdateSettings()
 		{
 			GameSettings.MultiplayerSettings.MOTDMode = ClientMotdMode;
