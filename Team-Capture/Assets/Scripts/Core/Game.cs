@@ -1,6 +1,5 @@
 ﻿// ReSharper disable once RedundantUsingDirective
 using System;
-
 using System.IO;
 using Mirror;
 using Team_Capture.Console;
@@ -52,7 +51,7 @@ namespace Team_Capture.Core
 
 		/// <summary>
 		///     Gets the path where the game's exe is
-		///     <para>(Or with the editor is is under the `/Game` folder)</para>
+		///     <para>(Or with the editor it is under the `/Game` folder)</para>
 		/// </summary>
 		/// <returns></returns>
 		public static string GetGameExecutePath()
