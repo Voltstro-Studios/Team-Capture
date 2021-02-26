@@ -62,7 +62,7 @@ namespace Team_Capture.Core.Networking
 			}
 
 			//Replace Mirror's logger with ours
-			LogFactory.ReplaceLogHandler(new MirrorLogHandler());
+			//LogFactory.ReplaceLogHandler(new MirrorLogHandler());
 
 			base.Awake();
 
