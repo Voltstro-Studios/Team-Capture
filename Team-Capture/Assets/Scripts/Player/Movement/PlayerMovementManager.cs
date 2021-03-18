@@ -87,7 +87,10 @@ namespace Team_Capture.Player.Movement
 				stateHandler = gameObject.AddComponent<PlayerMovementObserver>();
 				return;
 			}
+		}
 
+		public override void OnStartLocalPlayer()
+		{
 			//Setup for local player
 			stateHandler = gameObject.AddComponent<PlayerMovementPredictor>();
 			playerInput = gameObject.AddComponent<PlayerMovementInput>();
@@ -133,6 +136,9 @@ namespace Team_Capture.Player.Movement
 		public void SyncState(PlayerState overrideState)
 		{
 			if (playerManager.IsDead)
+				return;
+
+			if(characterController == null)
 				return;
 
 			characterController.Move(overrideState.Position - transform.position);
