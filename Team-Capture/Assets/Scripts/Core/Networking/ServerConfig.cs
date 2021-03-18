@@ -1,7 +1,5 @@
 ﻿using System;
 using Mirror;
-using Team_Capture.Logging;
-using Team_Capture.Settings.Enums;
 
 namespace Team_Capture.Core.Networking
 {
@@ -17,14 +15,19 @@ namespace Team_Capture.Core.Networking
 		public string gameName;
 
 		/// <summary>
-		///		The motd mode
+		///		The MOTD mode
 		/// </summary>
 		public Server.ServerMOTDMode motdMode;
 
 		/// <summary>
-		///		Text for motd
+		///		Text for MOTD
 		/// </summary>
 		public string motdText;
+
+		/// <summary>
+		///		URL for MOTD
+		/// </summary>
+		public string motdUrl;
 	}
 
 	internal static class ServerConfigNetwork
@@ -35,6 +38,8 @@ namespace Team_Capture.Core.Networking
 			writer.WriteByte((byte)config.motdMode);
 			if(config.motdMode == Server.ServerMOTDMode.TextOnly)
 				writer.WriteString(config.motdText);
+			else if(config.motdMode == Server.ServerMOTDMode.WebOnly)
+				writer.WriteString(config.motdUrl);
 		}
 
 		public static ServerConfig ReadServerConfig(this NetworkReader reader)
@@ -47,6 +52,8 @@ namespace Team_Capture.Core.Networking
 
 			if (config.motdMode == Server.ServerMOTDMode.TextOnly)
 				config.motdText = reader.ReadString();
+			else if (config.motdMode == Server.ServerMOTDMode.WebOnly)
+				config.motdUrl = reader.ReadString();
 
 			return config;
 		}

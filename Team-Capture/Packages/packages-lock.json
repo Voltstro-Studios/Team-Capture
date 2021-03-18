@@ -190,6 +190,15 @@
         "com.unity.modules.imgui": "1.0.0"
       }
     },
+    "dev.voltstro.unitywebbrowser": {
+      "version": "https://gitlab.com/Voltstro-Studios/WebBrowser/Package.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.nuget.newtonsoft-json": "2.0.0"
+      },
+      "hash": "69c076f698153ec19c5a2974eb6c043d30070c81"
+    },
     "dev.voltstro.voltbuildertool": {
       "version": "https://github.com/VoltUnityPackages/VoltUnityBuilder.git",
       "depth": 0,

@@ -94,7 +94,12 @@ namespace Team_Capture.Core.Networking
 			/// <summary>
 			///		The server only has a text based MOTD
 			/// </summary>
-			TextOnly
+			TextOnly,
+
+			/// <summary>
+			///		The server only has a web based MOTD
+			/// </summary>
+			WebOnly
 		}
 
 		/// <summary>
@@ -333,6 +338,7 @@ namespace Team_Capture.Core.Networking
 			//Setup configuration with our launch arguments
 			netManager.serverConfig.gameName = GameName;
 			netManager.serverConfig.motdMode = ServerMotdMode;
+			netManager.serverConfig.motdUrl = ServerMotdUrl;
 			netManager.maxConnections = MaxPlayers;
 			netManager.onlineScene = Scene;
 
@@ -416,8 +422,11 @@ namespace Team_Capture.Core.Networking
 		[CommandLineArgument("scene")] 
 		public static string Scene = "dm_ditch";
 
-		[ConVar("sv_motd", "Set what MOTD mode to use on the server")] 
+		[ConVar("sv_motd_mode", "Set what MOTD mode to use on the server")] 
 		public static ServerMOTDMode ServerMotdMode = ServerMOTDMode.TextOnly;
+
+		[ConVar("sv_motd_url", "Sets what URL for the MOTD to use")] 
+		public static string ServerMotdUrl = "https://voltstro.dev";
 
 		#endregion
 	}

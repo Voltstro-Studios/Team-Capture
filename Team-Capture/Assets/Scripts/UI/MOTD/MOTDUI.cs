@@ -2,6 +2,7 @@ using System;
 using Team_Capture.Core.Networking;
 using TMPro;
 using UnityEngine;
+using UnityWebBrowser;
 
 namespace Team_Capture.UI.MOTD
 {
@@ -12,6 +13,9 @@ namespace Team_Capture.UI.MOTD
     {
 	    [SerializeField] private TextMeshProUGUI motdTitleText;
 	    [SerializeField] private TextMeshProUGUI motdText;
+
+	    [SerializeField] private GameObject motdTextScroll;
+	    [SerializeField] private WebBrowserUI webBrowserUI;
 
 	    private Action onCloseAction;
 
@@ -27,8 +31,19 @@ namespace Team_Capture.UI.MOTD
 			    if (string.IsNullOrWhiteSpace(config.motdText))
 				    throw new InvalidMOTDSettings("The server's MOTD was set to text, however the sent over text contained nothing!");
 
+				motdTextScroll.SetActive(true);
+				webBrowserUI.gameObject.SetActive(false);
+
 			    motdTitleText.text = $"{config.gameName}'s MOTD.";
 			    motdText.text = config.motdText;
+		    }
+
+			else if (config.motdMode == Server.ServerMOTDMode.WebOnly)
+		    {
+			    webBrowserUI.browserClient.initialUrl = config.motdUrl;
+
+			    motdTextScroll.SetActive(false);
+			    webBrowserUI.gameObject.SetActive(true);
 		    }
 
 		    onCloseAction = onClose;
