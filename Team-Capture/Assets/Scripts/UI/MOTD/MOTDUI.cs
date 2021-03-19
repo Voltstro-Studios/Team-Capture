@@ -3,6 +3,7 @@ using Team_Capture.Core.Networking;
 using TMPro;
 using UnityEngine;
 using UnityWebBrowser;
+using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.UI.MOTD
 {
@@ -40,6 +41,7 @@ namespace Team_Capture.UI.MOTD
 
 			else if (config.motdMode == Server.ServerMOTDMode.WebOnly)
 		    {
+				webBrowserUI.browserClient.ReplaceLogger(Logger.UnityLogger);
 			    webBrowserUI.browserClient.initialUrl = config.motdUrl;
 
 			    motdTextScroll.SetActive(false);

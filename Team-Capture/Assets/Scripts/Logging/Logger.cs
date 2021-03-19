@@ -6,6 +6,7 @@ using Team_Capture.Console;
 using Team_Capture.Exceptions;
 using Team_Capture.Logging.Unity;
 using UnityEngine;
+using ILogger = UnityEngine.ILogger;
 
 namespace Team_Capture.Logging
 {
@@ -23,6 +24,8 @@ namespace Team_Capture.Logging
 
 		private static LoggingLevelSwitch level;
 
+		private static ILogger unityLogger;
+
 		/// <summary>
 		///     The logger's config, can only be set while the logger isn't running
 		/// </summary>
@@ -36,6 +39,11 @@ namespace Team_Capture.Logging
 				loggerConfig = value;
 			}
 			get => loggerConfig;
+		}
+
+		public static ILogger UnityLogger
+		{
+			get => unityLogger;
 		}
 
 		/// <summary>
@@ -66,6 +74,8 @@ namespace Team_Capture.Logging
 
 			if (LoggerConfig == null)
 				LoggerConfig = new LoggerConfig();
+
+			unityLogger = new TCUnityLogger();
 
 			Application.quitting += Shutdown;
 
