@@ -65,7 +65,6 @@ jobs:
         uses: TheDoctor0/zip-release@0.4.1
         with:
           filename: '${{ env.gameName }}-${{ matrix.targetPlatform }}-${{ env.version }}-DevOpsBuild.tar'
-          path: '.'
           directory: '${{ matrix.projectPath }}/Builds/${{ matrix.targetPlatform }}-DevOpsBuild/'
           type: tar
 
