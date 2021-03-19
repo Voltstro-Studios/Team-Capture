@@ -66,6 +66,7 @@ jobs:
         with:
           filename: '${{ env.gameName }}-${{ matrix.targetPlatform }}-${{ env.version }}-DevOpsBuild.tar'
           path: '${{ matrix.projectPath }}/Builds/${{ matrix.targetPlatform }}-DevOpsBuild/'
+          directory: '${{ matrix.projectPath }}/Builds/${{ matrix.targetPlatform }}-DevOpsBuild/'
           type: tar
 
       #Upload the build as an artifact
