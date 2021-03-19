@@ -60,17 +60,9 @@ jobs:
           androidVersionCode: 1 #This is here so we can stop getting warnings about it, even tho we have no plans to support Android
           buildMethod: Team_Capture.Editor.CIBuilder.StartVoltBuilder
 
-      #Zip build before releasing it
-      - name: Zip Build
-        uses: TheDoctor0/zip-release@0.4.1
-        with:
-          filename: '${{ env.gameName }}-${{ matrix.targetPlatform }}-${{ env.version }}-DevOpsBuild.tar'
-          directory: '${{ matrix.projectPath }}/Builds/${{ matrix.targetPlatform }}-DevOpsBuild/'
-          type: tar
-
       #Upload the build as an artifact
       - name: Upload Build
         uses: actions/upload-artifact@v2
         with:
           name: '${{ env.gameName }}-${{ matrix.targetPlatform }}-${{ env.version }}-DevOpsBuild'
-          path: '${{ env.gameName }}-${{ matrix.targetPlatform }}-${{ env.version }}-DevOpsBuild.tar'
+          path: '${{ matrix.projectPath }}/Builds/${{ matrix.targetPlatform }}-DevOpsBuild'
