@@ -311,7 +311,7 @@ namespace Team_Capture.Core.Networking
 			}, onFailedToStart).Forget();
 		}
 
-		private static async UniTaskVoid WaitForServerOneFileAndConnect(string serverOnlinePath, 
+		private static UniTask WaitForServerOneFileAndConnect(string serverOnlinePath, 
 			Action onSuccessFullCompletion = null,
 			Action onFailToStart = null)
 		{
@@ -320,17 +320,18 @@ namespace Team_Capture.Core.Networking
 			//Wait until the server online file exist
 			while (!File.Exists(serverOnlinePath))
 			{
+				//TODO: We should have a delay here, so the CPU doesn't get entirely used just to constantly check if the file exists or not, but for some reason UniTask.Delay stopped working...
 				//If we hit the timeout time, then fail it
-				await UniTask.Delay(100);
 				if (Time.time >= timeUntilCancel)
 				{
 					Logger.Error("Server process did not start for some reason! Not connecting.");
 					onFailToStart?.Invoke();
-					return;
+					return UniTask.CompletedTask;
 				}
 			}
 
 			onSuccessFullCompletion?.Invoke();
+			return UniTask.CompletedTask;
 		}
 
 		private static void SetupServerConfig()
