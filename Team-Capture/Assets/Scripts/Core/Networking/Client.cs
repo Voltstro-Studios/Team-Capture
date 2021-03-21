@@ -31,7 +31,12 @@ namespace Team_Capture.Core.Networking
 			/// <summary>
 			///		The client only accepts Text only MOTDs
 			/// </summary>
-			TextOnly
+			TextOnly,
+
+			/// <summary>
+			///		The client accepts both text and web MOTDs
+			/// </summary>
+			WebSupport
 		}
 
 		/// <summary>

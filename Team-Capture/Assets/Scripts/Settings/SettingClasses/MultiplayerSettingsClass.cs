@@ -17,6 +17,6 @@ namespace Team_Capture.Settings.SettingClasses
 		public float WeaponSwayAmount = 0.1f;
 
 		[SettingsPropertyDisplayText("Settings_MultiplayerMOTDMode")]
-		public Client.ClientMOTDMode MOTDMode = Client.ClientMOTDMode.TextOnly;
+		public Client.ClientMOTDMode MOTDMode = Client.ClientMOTDMode.WebSupport;
 	}
 }

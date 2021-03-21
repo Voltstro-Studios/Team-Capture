@@ -99,7 +99,12 @@ namespace Team_Capture.Core.Networking
 			/// <summary>
 			///		The server only has a web based MOTD
 			/// </summary>
-			WebOnly
+			WebOnly,
+
+			/// <summary>
+			///		The server supports both web and text MOTDs
+			/// </summary>
+			WebWithTextBackup
 		}
 
 		/// <summary>
@@ -138,7 +143,7 @@ namespace Team_Capture.Core.Networking
 			}
 			catch (IOException ex)
 			{
-				Logger.Error(ex, "An error occured while setting up the server!");
+				Logger.Error(ex, "An error occurred while setting up the server!");
 				netManager.StopHost();
 
 				return;
@@ -346,7 +351,7 @@ namespace Team_Capture.Core.Networking
 			//Setup MOTD
 			string gamePath = Game.GetGameExecutePath();
 
-			if (netManager.serverConfig.motdMode == ServerMOTDMode.TextOnly)
+			if (netManager.serverConfig.motdMode == ServerMOTDMode.TextOnly || netManager.serverConfig.motdMode == ServerMOTDMode.WebWithTextBackup)
 			{
 				string motdGamePath = $"{gamePath}{MotdPath}";
 				string motdData;

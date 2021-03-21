@@ -1,5 +1,6 @@
 ﻿using System;
 using Mirror;
+using UnityEngine.Scripting;
 
 namespace Team_Capture.Core.Networking
 {
@@ -30,6 +31,7 @@ namespace Team_Capture.Core.Networking
 		public string motdUrl;
 	}
 
+	[Preserve]
 	internal static class ServerConfigNetwork
 	{
 		public static void WriteServerConfig(this NetworkWriter writer, ServerConfig config)
@@ -40,6 +42,11 @@ namespace Team_Capture.Core.Networking
 				writer.WriteString(config.motdText);
 			else if(config.motdMode == Server.ServerMOTDMode.WebOnly)
 				writer.WriteString(config.motdUrl);
+			else if (config.motdMode == Server.ServerMOTDMode.WebWithTextBackup)
+			{
+				writer.WriteString(config.motdText);
+				writer.WriteString(config.motdUrl);
+			}
 		}
 
 		public static ServerConfig ReadServerConfig(this NetworkReader reader)
@@ -54,6 +61,11 @@ namespace Team_Capture.Core.Networking
 				config.motdText = reader.ReadString();
 			else if (config.motdMode == Server.ServerMOTDMode.WebOnly)
 				config.motdUrl = reader.ReadString();
+			else if (config.motdMode == Server.ServerMOTDMode.WebWithTextBackup)
+			{
+				config.motdText = reader.ReadString();
+				config.motdUrl = reader.ReadString();
+			}
 
 			return config;
 		}
