@@ -27,6 +27,8 @@ namespace Team_Capture.UI.MOTD
 		/// <param name="onClose"></param>
 	    internal void Setup(ServerConfig serverConfig, Action onClose)
 	    {
+		    motdTitleText.text = $"{serverConfig.gameName}'s MOTD.";
+
 		    if (serverConfig.motdMode == Server.ServerMOTDMode.WebOnly || serverConfig.motdMode == Server.ServerMOTDMode.WebWithTextBackup && Client.ClientMotdMode == Client.ClientMOTDMode.WebSupport)
 		    {
 			    webBrowserUI.browserClient.ReplaceLogger(Logger.UnityLogger);
@@ -44,7 +46,6 @@ namespace Team_Capture.UI.MOTD
 				motdTextScroll.SetActive(true);
 				webBrowserUI.gameObject.SetActive(false);
 
-			    motdTitleText.text = $"{serverConfig.gameName}'s MOTD.";
 			    motdText.text = serverConfig.motdText;
 		    }
 
