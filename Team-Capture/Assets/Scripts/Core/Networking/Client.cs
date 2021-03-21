@@ -127,6 +127,12 @@ namespace Team_Capture.Core.Networking
 			//If the server has an MOTD, display it before creating a player object
 			if (config.motdMode != Server.ServerMOTDMode.Disabled && ClientMotdMode != ClientMOTDMode.Disable)
 			{
+				if (config.motdMode == Server.ServerMOTDMode.WebOnly && ClientMotdMode == ClientMOTDMode.TextOnly)
+				{
+					RequestPlayerObject(conn);
+					return;
+				}
+
 				try
 				{
 					MOTDUI motdUILogic = Object.Instantiate(netManager.motdUIPrefab).GetComponent<MOTDUI>();
