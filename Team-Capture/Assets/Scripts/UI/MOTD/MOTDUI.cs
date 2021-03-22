@@ -1,5 +1,7 @@
 using System;
+using System.Collections;
 using Team_Capture.Core.Networking;
+using Team_Capture.Player;
 using TMPro;
 using UnityEngine;
 using UnityWebBrowser;
@@ -21,6 +23,17 @@ namespace Team_Capture.UI.MOTD
 	    private Action onCloseAction;
 
 		/// <summary>
+		///		This javascript code will provide the client a way to display info such as username on the webpage
+		///		<para>
+		///			You can do something like 'document.getElementById("playerName").innerHTML = userDetails.UserName;' to set
+		///			text to the player's name.
+		///		</para>
+		/// </summary>
+	    private readonly string javaScriptCode =
+		    $"class UserDetails {{ constructor(username) {{ this.UserName = username; }} }}" +
+		    $"let userDetails = new UserDetails(\"{PlayerManager.StartPlayerName}\");";
+
+		/// <summary>
 		///		Setup the MOTD UI
 		/// </summary>
 		/// <param name="serverConfig"></param>
@@ -36,6 +49,7 @@ namespace Team_Capture.UI.MOTD
 
 			    motdTextScroll.SetActive(false);
 			    webBrowserUI.gameObject.SetActive(true);
+			    StartCoroutine(SendJs());
 		    }
 
 		    else if (serverConfig.motdMode == Server.ServerMOTDMode.TextOnly || serverConfig.motdMode == Server.ServerMOTDMode.WebWithTextBackup)
@@ -57,5 +71,12 @@ namespace Team_Capture.UI.MOTD
 			onCloseAction.Invoke();
 			Destroy(gameObject);
 	    }
+
+	    private IEnumerator SendJs()
+	    {
+		    //TODO: Make webBrowserClient.isRunning public
+		    yield return new WaitForSeconds(1.0f);
+		    webBrowserUI.ExecuteJs(javaScriptCode);
+	    } 
     }
 }

@@ -790,7 +790,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   browserClient:
-    initialUrl: https://google.com
+    initialUrl: https://voltstro.dev
     width: 1761
     height: 754
     backgroundColor:
