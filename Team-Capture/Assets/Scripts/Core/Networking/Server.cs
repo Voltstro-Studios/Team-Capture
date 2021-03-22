@@ -8,8 +8,10 @@ using Team_Capture.Helper;
 using Team_Capture.LagCompensation;
 using UnityEngine;
 using Voltstro.CommandLineParser;
+using Debug = UnityEngine.Debug;
 using Logger = Team_Capture.Logging.Logger;
 using Object = UnityEngine.Object;
+using UniTask = Team_Capture.Integrations.UniTask.UniTask;
 
 namespace Team_Capture.Core.Networking
 {
@@ -316,7 +318,7 @@ namespace Team_Capture.Core.Networking
 			}, onFailedToStart).Forget();
 		}
 
-		private static UniTask WaitForServerOneFileAndConnect(string serverOnlinePath, 
+		private static async UniTaskVoid WaitForServerOneFileAndConnect(string serverOnlinePath, 
 			Action onSuccessFullCompletion = null,
 			Action onFailToStart = null)
 		{
@@ -325,18 +327,18 @@ namespace Team_Capture.Core.Networking
 			//Wait until the server online file exist
 			while (!File.Exists(serverOnlinePath))
 			{
-				//TODO: We should have a delay here, so the CPU doesn't get entirely used just to constantly check if the file exists or not, but for some reason UniTask.Delay stopped working...
 				//If we hit the timeout time, then fail it
 				if (Time.time >= timeUntilCancel)
 				{
 					Logger.Error("Server process did not start for some reason! Not connecting.");
 					onFailToStart?.Invoke();
-					return UniTask.CompletedTask;
+					return;
 				}
+
+				await UniTask.Delay(100);
 			}
 
 			onSuccessFullCompletion?.Invoke();
-			return UniTask.CompletedTask;
 		}
 
 		private static void SetupServerConfig()
