@@ -1,11 +1,13 @@
 using System;
 using System.Collections;
+using Cysharp.Threading.Tasks;
 using Team_Capture.Core.Networking;
 using Team_Capture.Player;
 using TMPro;
 using UnityEngine;
 using UnityWebBrowser;
 using Logger = Team_Capture.Logging.Logger;
+using UniTask = Team_Capture.Integrations.UniTask.UniTask;
 
 namespace Team_Capture.UI.MOTD
 {
@@ -49,7 +51,7 @@ namespace Team_Capture.UI.MOTD
 
 			    motdTextScroll.SetActive(false);
 			    webBrowserUI.gameObject.SetActive(true);
-			    StartCoroutine(SendJs());
+			    SendJs().Forget();
 		    }
 
 		    else if (serverConfig.motdMode == Server.ServerMOTDMode.TextOnly || serverConfig.motdMode == Server.ServerMOTDMode.WebWithTextBackup)
@@ -72,10 +74,10 @@ namespace Team_Capture.UI.MOTD
 			Destroy(gameObject);
 	    }
 
-	    private IEnumerator SendJs()
+	    private async UniTaskVoid SendJs()
 	    {
-		    //TODO: Make webBrowserClient.isRunning public
-		    yield return new WaitForSeconds(1.0f);
+		    await UniTask.WaitUntil(() => webBrowserUI.browserClient.IsRunning);
+
 		    webBrowserUI.ExecuteJs(javaScriptCode);
 	    } 
     }

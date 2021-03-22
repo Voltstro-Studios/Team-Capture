@@ -1,3 +1,4 @@
+using System;
 using Cysharp.Threading.Tasks;
 using Team_Capture.Logging;
 using UnityEngine.LowLevel;
@@ -19,6 +20,11 @@ namespace Team_Capture.Integrations.UniTask
 	    public static Cysharp.Threading.Tasks.UniTask Delay(int milliseconds)
 	    {
 		    return Cysharp.Threading.Tasks.UniTask.Delay(milliseconds);
+	    }
+
+	    public static Cysharp.Threading.Tasks.UniTask WaitUntil(Func<bool> predicate)
+	    {
+		    return Cysharp.Threading.Tasks.UniTask.WaitUntil(predicate);
 	    }
     }
 }
