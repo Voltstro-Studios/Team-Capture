@@ -29,6 +29,7 @@ Please remember that this project is still in early development!
 - Dynamic settings UI
 - Dynamic settings save system
 - Discord RPC intergration
+- Server MOTDs (HTML or regular text)
 - Cross-platform play (Windows, Linux)
 - Well documented API
 
