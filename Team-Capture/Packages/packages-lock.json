@@ -197,7 +197,7 @@
       "dependencies": {
         "com.unity.nuget.newtonsoft-json": "2.0.0"
       },
-      "hash": "1d287f9595043776053c29629eb2828c2b3d02a0"
+      "hash": "7f02af4c7baa33e9da12a2c8225a8fb21235327f"
     },
     "dev.voltstro.voltbuildertool": {
       "version": "https://github.com/VoltUnityPackages/VoltUnityBuilder.git",
