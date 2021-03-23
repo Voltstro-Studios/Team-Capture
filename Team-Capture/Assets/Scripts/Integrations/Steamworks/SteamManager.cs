@@ -3,7 +3,6 @@ using System.IO;
 using Steamworks;
 using Team_Capture.Core;
 using Team_Capture.Helper;
-using Team_Capture.Integrations.Discord;
 using Team_Capture.Logging;
 
 namespace Team_Capture.Integrations.Steamworks
@@ -61,7 +60,7 @@ namespace Team_Capture.Integrations.Steamworks
 		    }
 		    catch (Exception ex)
 		    {
-				Logger.Error(ex, "Something went wrong while starting the Steam integration!");
+				Logger.Error("Something went wrong while starting the Steam integration! {ExceptionMessage}", ex.Message);
 				Destroy(gameObject);
 				return;
 		    }
