@@ -1,4 +1,5 @@
 ﻿using System;
+using Team_Capture.Console;
 using Team_Capture.Player;
 using Team_Capture.Weapons;
 using UnityEngine;
@@ -82,6 +83,12 @@ namespace Team_Capture.UI
 		/// <param name="state"></param>
 		public void ActivatePauseMenu(bool state)
 		{
+			if (pauseMenu.gameObject.activeSelf && ConsoleSetup.ConsoleUI != null)
+			{
+				if(ConsoleSetup.ConsoleUI.IsOpen())
+					return;
+			}
+
 			IsPauseMenuOpen = state;
 
 			Cursor.visible = IsPauseMenuOpen;

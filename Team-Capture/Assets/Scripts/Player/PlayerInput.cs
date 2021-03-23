@@ -83,7 +83,6 @@ namespace Team_Capture.Player
 				if (ConsoleSetup.ConsoleUI.IsOpen())
 				{
 					uiManager.SetPauseMenu(true);
-					return;
 				}
 
 			//If the pause menu is open, set player movement direction to 0 and return
