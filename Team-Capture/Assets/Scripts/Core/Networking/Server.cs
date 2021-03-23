@@ -430,7 +430,7 @@ namespace Team_Capture.Core.Networking
 		public static string Scene = "dm_ditch";
 
 		[ConVar("sv_motd_mode", "Set what MOTD mode to use on the server")] 
-		public static ServerMOTDMode ServerMotdMode = ServerMOTDMode.TextOnly;
+		public static ServerMOTDMode ServerMotdMode = ServerMOTDMode.WebWithTextBackup;
 
 		[ConVar("sv_motd_url", "Sets what URL for the MOTD to use")] 
 		public static string ServerMotdUrl = "https://voltstro.dev";
