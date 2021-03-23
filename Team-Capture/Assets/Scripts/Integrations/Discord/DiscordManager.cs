@@ -7,7 +7,7 @@ using Team_Capture.Helper;
 using Team_Capture.Logging;
 using Team_Capture.SceneManagement;
 
-namespace Team_Capture.Integrations
+namespace Team_Capture.Integrations.Discord
 {
 	/// <summary>
 	///     Handles communicating with Discord's game SDK
@@ -25,7 +25,7 @@ namespace Team_Capture.Integrations
 		public DiscordManagerSettings settings;
 
 		private ActivityManager activityManager;
-		private Discord.GameSDK.Discord client;
+		private global::Discord.GameSDK.Discord client;
 
 		private void Update()
 		{
@@ -66,7 +66,7 @@ namespace Team_Capture.Integrations
 
 			try
 			{
-				client = new Discord.GameSDK.Discord(long.Parse(settings.clientId), CreateFlags.NoRequireDiscord);
+				client = new global::Discord.GameSDK.Discord(long.Parse(settings.clientId), CreateFlags.NoRequireDiscord);
 				client.Init();
 			}
 			catch (ResultException ex)

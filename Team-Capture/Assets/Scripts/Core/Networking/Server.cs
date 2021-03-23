@@ -8,7 +8,6 @@ using Team_Capture.Helper;
 using Team_Capture.LagCompensation;
 using UnityEngine;
 using Voltstro.CommandLineParser;
-using Debug = UnityEngine.Debug;
 using Logger = Team_Capture.Logging.Logger;
 using Object = UnityEngine.Object;
 using UniTask = Team_Capture.Integrations.UniTask.UniTask;

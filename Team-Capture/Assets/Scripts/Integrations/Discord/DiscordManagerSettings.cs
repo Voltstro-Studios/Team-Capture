@@ -2,7 +2,7 @@
 using Discord.GameSDK;
 using UnityEngine;
 
-namespace Team_Capture.Integrations
+namespace Team_Capture.Integrations.Discord
 {
 	[Serializable]
 	internal class DiscordManagerSettings
