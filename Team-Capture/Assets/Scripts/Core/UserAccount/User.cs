@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -10,7 +11,7 @@ namespace Team_Capture.Core.UserAccount
 	/// </summary>
     internal static class User
     {
-	    private static List<AccountProvider> accountProvidersPriority;
+	    private static AccountProvider[] accountProvidersPriority;
 
 	    private static SortedList<AccountProvider, Account> accounts;
 
@@ -19,14 +20,10 @@ namespace Team_Capture.Core.UserAccount
 		/// </summary>
 	    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
 	    internal static void Init()
-	    {
-		    accountProvidersPriority = new List<AccountProvider>
-		    {
-			    AccountProvider.Steam,
-			    AccountProvider.Discord,
-			    AccountProvider.Offline
-		    };
+		{
+			accountProvidersPriority = new[] {AccountProvider.Steam, AccountProvider.Discord, AccountProvider.Offline};
 		    accounts = new SortedList<AccountProvider, Account>(new AccountProviderComparer());
+
 			Logger.Debug("Initialized user account system.");
 	    }
 
@@ -61,8 +58,8 @@ namespace Team_Capture.Core.UserAccount
 		{
 			public int Compare(AccountProvider x, AccountProvider y)
 			{
-				int xIndex = accountProvidersPriority.IndexOf(x);
-				int yIndex = accountProvidersPriority.IndexOf(y);
+				int xIndex = Array.IndexOf(accountProvidersPriority, x);
+				int yIndex = Array.IndexOf(accountProvidersPriority, y);
 
 				return xIndex.CompareTo(yIndex);
 			}

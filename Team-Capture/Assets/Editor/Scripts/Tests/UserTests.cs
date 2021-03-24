@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using Team_Capture.Core.UserAccount;
+using Team_Capture.Logging;
 
 namespace Team_Capture.Editor.Tests
 {
@@ -8,6 +9,18 @@ namespace Team_Capture.Editor.Tests
 	    private const string DiscordAccountName = "Discord";
 	    private const string SteamAccountName = "Steam";
 	    private const string OfflineAccountName = "Offline";
+
+		[OneTimeSetUp]
+		public void Setup()
+		{
+			Logger.Init();
+		}
+
+		[OneTimeTearDown]
+		public void Shutdown()
+		{
+			Logger.Shutdown();
+		}
 
 	    [Test]
 	    public void GetDefaultAccountSteamOrDiscordTest()
