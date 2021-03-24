@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections;
 using Mirror;
-using Team_Capture.Console;
 using Team_Capture.Core;
 using Team_Capture.Core.Networking;
+using Team_Capture.Core.UserAccount;
 using Team_Capture.Player.Movement;
 using Team_Capture.Weapons;
 using UnityEngine;
-using Voltstro.CommandLineParser;
 using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.Player
@@ -164,7 +163,7 @@ namespace Team_Capture.Player
 			if (!isLocalPlayer) return;
 
 			uiManager = GetComponent<PlayerUIManager>();
-			CmdSetName(StartPlayerName);
+			CmdSetName(User.DefaultAccount.AccountName);
 		}
 
 		#endregion
@@ -390,9 +389,6 @@ namespace Team_Capture.Player
 		#endregion
 
 		#region Naming
-
-		[CommandLineArgument("name")] [ConVar("name", "Sets the name", true)]
-		public static string StartPlayerName = "NotSet";
 
 		[Command]
 		private void CmdSetName(string newName)

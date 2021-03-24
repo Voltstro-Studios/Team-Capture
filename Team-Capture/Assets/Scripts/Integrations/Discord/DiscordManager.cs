@@ -2,10 +2,13 @@
 using System.IO;
 using Discord.GameSDK;
 using Discord.GameSDK.Activities;
+using Discord.GameSDK.Users;
 using Team_Capture.Core;
+using Team_Capture.Core.UserAccount;
 using Team_Capture.Helper;
 using Team_Capture.Logging;
 using Team_Capture.SceneManagement;
+using User = Team_Capture.Core.UserAccount.User;
 
 namespace Team_Capture.Integrations.Discord
 {
@@ -25,6 +28,8 @@ namespace Team_Capture.Integrations.Discord
 		public DiscordManagerSettings settings;
 
 		private ActivityManager activityManager;
+		private UserManager userManager;
+
 		private global::Discord.GameSDK.Discord client;
 
 		private void Update()
@@ -98,6 +103,14 @@ namespace Team_Capture.Integrations.Discord
 				}
 			});
 			activityManager = client?.GetActivityManager();
+			userManager = client?.GetUserManager();
+
+			global::Discord.GameSDK.Users.User user = userManager.GetCurrentUser();
+			User.AddAccount(new Account
+			{
+				AccountProvider = AccountProvider.Discord,
+				AccountName = user.Username
+			});
 
 			TCScenesManager.PreparingSceneLoadEvent += PreparingSceneLoad;
 			TCScenesManager.OnSceneLoadedEvent += SceneLoaded;

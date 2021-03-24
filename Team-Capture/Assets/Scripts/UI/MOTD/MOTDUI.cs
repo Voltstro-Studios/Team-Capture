@@ -1,8 +1,7 @@
 using System;
-using System.Collections;
 using Cysharp.Threading.Tasks;
 using Team_Capture.Core.Networking;
-using Team_Capture.Player;
+using Team_Capture.Core.UserAccount;
 using TMPro;
 using UnityEngine;
 using UnityWebBrowser;
@@ -23,17 +22,6 @@ namespace Team_Capture.UI.MOTD
 	    [SerializeField] private WebBrowserUI webBrowserUI;
 
 	    private Action onCloseAction;
-
-		/// <summary>
-		///		This javascript code will provide the client a way to display info such as username on the webpage
-		///		<para>
-		///			You can do something like 'document.getElementById("playerName").innerHTML = userDetails.UserName;' to set
-		///			text to the player's name.
-		///		</para>
-		/// </summary>
-	    private readonly string javaScriptCode =
-		    $"class UserDetails {{ constructor(username) {{ this.UserName = username; }} }}" +
-		    $"let userDetails = new UserDetails(\"{PlayerManager.StartPlayerName}\");";
 
 		/// <summary>
 		///		Setup the MOTD UI
@@ -77,6 +65,10 @@ namespace Team_Capture.UI.MOTD
 	    private async UniTaskVoid SendJs()
 	    {
 		    await UniTask.WaitUntil(() => webBrowserUI.browserClient.IsRunning);
+
+		    string javaScriptCode =
+			    $"class UserDetails {{ constructor(username) {{ this.UserName = username; }} }}" +
+			    $"let userDetails = new UserDetails(\"{User.DefaultAccount.AccountName}\");";
 
 		    webBrowserUI.ExecuteJs(javaScriptCode);
 	    } 

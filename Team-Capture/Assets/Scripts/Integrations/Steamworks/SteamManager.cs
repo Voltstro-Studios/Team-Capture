@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using Steamworks;
 using Team_Capture.Core;
+using Team_Capture.Core.UserAccount;
 using Team_Capture.Helper;
 using Team_Capture.Logging;
 
@@ -74,6 +75,12 @@ namespace Team_Capture.Integrations.Steamworks
 				Destroy(gameObject);
 				return;
 		    }
+
+			User.AddAccount(new Account
+			{
+				AccountProvider = AccountProvider.Steam,
+				AccountName = SteamClient.Name
+			});
 
 			Logger.Info("Logged into Steam account {AccountName} with an ID of {AccountID}", SteamClient.Name, SteamClient.SteamId.Value);
 	    }

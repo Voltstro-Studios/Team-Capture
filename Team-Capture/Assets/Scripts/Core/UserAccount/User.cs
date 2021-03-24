@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Team_Capture.Console;
 using UnityEngine;
+using Voltstro.CommandLineParser;
 using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.Core.UserAccount
@@ -11,6 +13,9 @@ namespace Team_Capture.Core.UserAccount
 	/// </summary>
     internal static class User
     {
+	    [CommandLineArgument("name")] [ConVar("name", "Sets the name", true)]
+	    public static string PlayerName = "NotSet";
+
 	    private static AccountProvider[] accountProvidersPriority;
 
 	    private static SortedList<AccountProvider, Account> accounts;
@@ -23,6 +28,12 @@ namespace Team_Capture.Core.UserAccount
 		{
 			accountProvidersPriority = new[] {AccountProvider.Steam, AccountProvider.Discord, AccountProvider.Offline};
 		    accounts = new SortedList<AccountProvider, Account>(new AccountProviderComparer());
+
+			AddAccount(new Account
+			{
+				AccountProvider = AccountProvider.Offline,
+				AccountName = PlayerName
+			});
 
 			Logger.Debug("Initialized user account system.");
 	    }
