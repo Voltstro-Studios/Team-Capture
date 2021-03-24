@@ -7,7 +7,10 @@ using Team_Capture.Logging;
 
 namespace Team_Capture.Integrations.Steamworks
 {
-    public class SteamManager : SingletonMonoBehaviour<SteamManager>
+	/// <summary>
+	///		Handles connecting to Steam
+	/// </summary>
+    internal class SteamManager : SingletonMonoBehaviour<SteamManager>
     {
 	    /// <summary>
 	    ///     Where to load the settings from
