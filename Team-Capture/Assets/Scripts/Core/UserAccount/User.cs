@@ -5,12 +5,18 @@ using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.Core.UserAccount
 {
+	/// <summary>
+	///		Provides a system to user information such as their profile and username
+	/// </summary>
     internal static class User
     {
 	    private static List<AccountProvider> accountProvidersPriority;
 
 	    private static SortedList<AccountProvider, Account> accounts;
 
+		/// <summary>
+		///		Initializes the user system
+		/// </summary>
 	    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
 	    internal static void Init()
 	    {
@@ -24,6 +30,10 @@ namespace Team_Capture.Core.UserAccount
 			Logger.Debug("Initialized user account system.");
 	    }
 
+		/// <summary>
+		///		Adds an <see cref="Account"/> to the user system
+		/// </summary>
+		/// <param name="account"></param>
 	    internal static void AddAccount(Account account)
 	    {
 		    if (accounts.ContainsKey(account.AccountProvider))
@@ -32,11 +42,19 @@ namespace Team_Capture.Core.UserAccount
 		    accounts.Add(account.AccountProvider, account);
 	    }
 
+		/// <summary>
+		///		Gets an <see cref="Account"/> that is provided by a certain <see cref="AccountProvider"/>
+		/// </summary>
+		/// <param name="provider"></param>
+		/// <returns></returns>
 	    internal static Account GetAccount(AccountProvider provider)
 	    {
 		    return accounts.SingleOrDefault(x => x.Key == provider).Value;
 	    }
 
+		/// <summary>
+		///		Gets the default <see cref="Account"/> based of loaded integrations and priorities
+		/// </summary>
 	    internal static Account DefaultAccount => accounts.First().Value;
 
 		private class AccountProviderComparer : IComparer<AccountProvider>
