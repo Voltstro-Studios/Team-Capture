@@ -13,7 +13,8 @@ namespace Team_Capture.Core.UserAccount
 	/// </summary>
     internal static class User
     {
-	    [CommandLineArgument("name")] [ConVar("name", "Sets the name", true)]
+	    [CommandLineArgument("name")] 
+	    [ConVar("name", "Sets the name", nameof(UpdateOfflineAccount), true)]
 	    public static string PlayerName = "NotSet";
 
 	    private static AccountProvider[] accountProvidersPriority;
@@ -64,6 +65,11 @@ namespace Team_Capture.Core.UserAccount
 		///		Gets the default <see cref="Account"/> based of loaded integrations and priorities
 		/// </summary>
 	    internal static Account DefaultAccount => accounts.First().Value;
+
+		private static void UpdateOfflineAccount()
+		{
+			GetAccount(AccountProvider.Offline).AccountName = PlayerName;
+		}
 
 		private class AccountProviderComparer : IComparer<AccountProvider>
 		{
