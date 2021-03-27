@@ -104,18 +104,26 @@ namespace Team_Capture.Integrations.Discord
 			});
 			activityManager = client?.GetActivityManager();
 			userManager = client?.GetUserManager();
-
-			global::Discord.GameSDK.Users.User user = userManager.GetCurrentUser();
-			User.AddAccount(new Account
-			{
-				AccountProvider = AccountProvider.Discord,
-				AccountName = user.Username
-			});
+			userManager.OnCurrentUserUpdate += UpdateUserAccountInfo;
 
 			TCScenesManager.PreparingSceneLoadEvent += PreparingSceneLoad;
 			TCScenesManager.OnSceneLoadedEvent += SceneLoaded;
 
 			SceneLoaded(TCScenesManager.GetActiveScene());
+		}
+
+		private void UpdateUserAccountInfo()
+		{
+			global::Discord.GameSDK.Users.User user = userManager.GetCurrentUser();
+			if(User.GetAccount(AccountProvider.Discord) != null)
+				return;
+
+			Logger.Debug($"Added Discord account {user.Username}#{user.Discriminator}");
+			User.AddAccount(new Account
+			{
+				AccountProvider = AccountProvider.Discord,
+				AccountName = user.Username
+			});
 		}
 
 		private void LoadSettings()
