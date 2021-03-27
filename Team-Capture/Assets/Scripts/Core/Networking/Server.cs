@@ -29,7 +29,7 @@ namespace Team_Capture.Core.Networking
 		///		The timeout time to wait while creating a server from the UI
 		/// </summary>
 		[ConVar("sv_serverstarttimeout", "The timeout time to wait while creating a server from the UI")]
-		private static int TimeOutServerTime = 6;
+		private static int TimeOutServerTime = 25;
 
 		//MOTD related Variables
 
