@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Mirror;
@@ -57,13 +58,16 @@ namespace Team_Capture.UI
 		/// <summary>
 		///		Handles reading input
 		/// </summary>
-		public InputReader inputReader; 
+		public InputReader inputReader;
+
+		[NonSerialized] public bool allowPanelToggling = true;
 
 		private TweeningManager tweeningManager;
 
 		private void Awake()
 		{
 			tweeningManager = GetComponent<TweeningManager>();
+			allowPanelToggling = true;
 		}
 
 		private void Start()
@@ -140,6 +144,9 @@ namespace Team_Capture.UI
 		/// <param name="panelName"></param>
 		public void TogglePanel(string panelName)
 		{
+			if(!allowPanelToggling)
+				return;
+
 			MainMenuPanel panel = GetMenuPanel(panelName);
 			if (panel == null)
 			{
@@ -169,6 +176,9 @@ namespace Team_Capture.UI
 		/// </summary>
 		public void CloseActivePanel()
 		{
+			if(!allowPanelToggling)
+				return;
+
 			if (GetActivePanel() != null)
 				ClosePanel(GetActivePanel());
 		}
