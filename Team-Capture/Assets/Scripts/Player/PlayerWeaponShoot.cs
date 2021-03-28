@@ -116,7 +116,7 @@ namespace Team_Capture.Player
 		/// <summary>
 		///     Asks the server to shoot this client's weapon
 		/// </summary>
-		[Command(channel = Channels.DefaultUnreliable)]
+		[Command(channel = Channels.Unreliable)]
 		private void CmdShootWeapon()
 		{
 			//First, get our active weapon
@@ -232,7 +232,7 @@ namespace Team_Capture.Player
 		/// <summary>
 		///     Makes the muzzle flash play
 		/// </summary>
-		[ClientRpc(channel = Channels.DefaultUnreliable)]
+		[ClientRpc(channel = Channels.Unreliable)]
 		private void RpcWeaponMuzzleFlash()
 		{
 			weaponManager.GetActiveWeaponGraphics().muzzleFlash.Play(true);
@@ -242,7 +242,7 @@ namespace Team_Capture.Player
 		///     Make a tracer effect go to the target
 		/// </summary>
 		/// <param name="hitTargets"></param>
-		[ClientRpc(channel = Channels.DefaultUnreliable)]
+		[ClientRpc(channel = Channels.Unreliable)]
 		private void RpcDoWeaponShootEffects(WeaponShootEffectsTargets hitTargets)
 		{
 			TCWeapon weapon = weaponManager.GetActiveWeapon().GetTCWeapon();

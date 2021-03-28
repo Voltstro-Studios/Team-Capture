@@ -1,4 +1,5 @@
 ﻿using System;
+using Cysharp.Threading.Tasks;
 using Mirror;
 using Team_Capture.Console;
 using Team_Capture.SceneManagement;
@@ -7,6 +8,7 @@ using Team_Capture.UI.MOTD;
 using UnityEngine.Scripting;
 using Logger = Team_Capture.Logging.Logger;
 using Object = UnityEngine.Object;
+using UniTask = Team_Capture.Integrations.UniTask.UniTask;
 
 namespace Team_Capture.Core.Networking
 {
@@ -17,6 +19,8 @@ namespace Team_Capture.Core.Networking
 	{
 		private static TCNetworkManager netManager;
 		private static bool clientHasPlayer;
+
+		private static bool clientReceivedConfig;
 
 		/// <summary>
 		///		MOTD mode that the client is using
@@ -45,6 +49,7 @@ namespace Team_Capture.Core.Networking
 		/// <param name="workingNetManager"></param>
 		internal static void OnClientStart(TCNetworkManager workingNetManager)
 		{
+			clientReceivedConfig = false;
 			clientHasPlayer = false;
 			netManager = workingNetManager;
 
@@ -104,13 +109,15 @@ namespace Team_Capture.Core.Networking
 		/// <summary>
 		///		Called after the client changes scenes
 		/// </summary>
-		internal static void OnClientSceneChanged(NetworkConnection conn)
+		internal static void OnClientSceneChanged()
 		{
 			Object.Instantiate(netManager.gameMangerPrefab);
 			Logger.Info("The scene has been loaded to {Scene}", TCScenesManager.GetActiveScene().scene);
+
+			DisplayMotdAndOrCreatePlayer().Forget();
 		}
 
-		private static void OnReceivedServerConfig(NetworkConnection conn, ServerConfig config)
+		private static void OnReceivedServerConfig(ServerConfig config)
 		{
 			//Server has sent config twice in the same scene session? Probs a modified server
 			if (clientHasPlayer)
@@ -121,22 +128,39 @@ namespace Team_Capture.Core.Networking
 
 			//Set the game name
 			netManager.serverConfig = config;
-
 			ClientMotdMode = GameSettings.MultiplayerSettings.MOTDMode;
+			clientReceivedConfig = true;
+		}
+
+		private static void RequestPlayerObject()
+		{
+			// Ready/AddPlayer is usually triggered by a scene load completing. if no scene was loaded, then Ready/AddPlayer it here instead.
+			if (!NetworkClient.ready) 
+				NetworkClient.Ready();
+
+			NetworkClient.AddPlayer();
+			clientHasPlayer = true;
+
+			Logger.Debug("Client has requested player object.");
+		}
+
+		private static async UniTaskVoid DisplayMotdAndOrCreatePlayer()
+		{
+			await UniTask.WaitUntil(() => clientReceivedConfig);
 
 			//If the server has an MOTD, display it before creating a player object
-			if (config.motdMode != Server.ServerMOTDMode.Disabled && ClientMotdMode != ClientMOTDMode.Disable)
+			if (netManager.serverConfig.motdMode != Server.ServerMOTDMode.Disabled && ClientMotdMode != ClientMOTDMode.Disable)
 			{
-				if (config.motdMode == Server.ServerMOTDMode.WebOnly && ClientMotdMode == ClientMOTDMode.TextOnly)
+				if (netManager.serverConfig.motdMode == Server.ServerMOTDMode.WebOnly && ClientMotdMode == ClientMOTDMode.TextOnly)
 				{
-					RequestPlayerObject(conn);
+					RequestPlayerObject();
 					return;
 				}
 
 				try
 				{
 					MOTDUI motdUILogic = Object.Instantiate(netManager.motdUIPrefab).GetComponent<MOTDUI>();
-					motdUILogic.Setup(config, () => RequestPlayerObject(conn));
+					motdUILogic.Setup(netManager.serverConfig, RequestPlayerObject);
 					return;
 				}
 				catch (InvalidMOTDSettings ex)
@@ -147,19 +171,7 @@ namespace Team_Capture.Core.Networking
 				}
 			}
 
-			RequestPlayerObject(conn);
-		}
-
-		private static void RequestPlayerObject(NetworkConnection conn)
-		{
-			// Ready/AddPlayer is usually triggered by a scene load completing. if no scene was loaded, then Ready/AddPlayer it here instead.
-			if (!ClientScene.ready) 
-				ClientScene.Ready(conn);
-
-			ClientScene.AddPlayer(conn);
-			clientHasPlayer = true;
-
-			Logger.Debug("Client has requested player object.");
+			RequestPlayerObject();
 		}
 
 		#region Console Commands

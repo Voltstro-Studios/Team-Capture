@@ -27,9 +27,8 @@ namespace Team_Capture.Player
 		/// <summary>
 		///     Player died message, for killfeed
 		/// </summary>
-		/// <param name="conn"></param>
 		/// <param name="message"></param>
-		private void PlayerDiedMessage(NetworkConnection conn, PlayerDiedMessage message)
+		private void PlayerDiedMessage(PlayerDiedMessage message)
 		{
 			uiManager.AddKillfeedItem(message);
 		}

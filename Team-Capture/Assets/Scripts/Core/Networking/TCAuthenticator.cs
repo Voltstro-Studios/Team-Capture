@@ -77,20 +77,20 @@ namespace Team_Capture.Core.Networking
 			});
 		}
 
-		private void OnReceivedJoinRequestResponse(NetworkConnection conn, JoinRequestResponseMessage msg)
+		private void OnReceivedJoinRequestResponse(JoinRequestResponseMessage msg)
 		{
 			//We good to connect
 			if (msg.Code == 200)
 			{
 				Logger.Info("Join request was accepted! {@Message} ({@Code})", msg.Message, msg.Code);
 
-				ClientAccept(conn);
+				ClientAccept(NetworkClient.connection);
 			}
 			else
 			{
 				Logger.Error("Failed to connect! Error: {@Message} ({@Code})", msg.Message, msg.Code);
 
-				ClientReject(conn);
+				ClientReject(NetworkClient.connection);
 			}
 		}
 

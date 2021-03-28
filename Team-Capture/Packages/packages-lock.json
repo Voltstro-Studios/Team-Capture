@@ -14,7 +14,7 @@
       "dependencies": {
         "com.unity.nuget.mono-cecil": "1.10.1-preview.1"
       },
-      "hash": "e0e9ac24ee32212e05c8f90a0d758443e0e127c2"
+      "hash": "c926303ed4b07d98f5d6ab114d518640c7ee99c7"
     },
     "com.unity.build-report-inspector": {
       "version": "0.2.2-preview",

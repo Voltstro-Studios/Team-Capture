@@ -2,7 +2,6 @@
 using Team_Capture.Console;
 using Team_Capture.Core.Networking.Discovery;
 using Team_Capture.LagCompensation;
-using Team_Capture.Logging;
 using UnityEngine;
 using Logger = Team_Capture.Logging.Logger;
 
@@ -132,7 +131,7 @@ namespace Team_Capture.Core.Networking
 			=> Client.OnClientDisconnect(conn);
 
 		public override void OnClientSceneChanged(NetworkConnection conn)
-			=> Client.OnClientSceneChanged(conn);
+			=> Client.OnClientSceneChanged();
 
 		public override void OnClientChangeScene(string newSceneName, SceneOperation sceneOperation,
 			bool customHandling)

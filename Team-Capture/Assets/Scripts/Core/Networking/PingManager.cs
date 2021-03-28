@@ -119,9 +119,9 @@ namespace Team_Capture.Core.Networking
 			NetworkClient.UnregisterHandler<PingServerMessage>();
 		}
 
-		private static void OnReceiveServerPingMessage(NetworkConnection conn, PingServerMessage message)
+		private static void OnReceiveServerPingMessage(PingServerMessage message)
 		{
-			conn.Send(new PingClientMessage
+			NetworkClient.connection.Send(new PingClientMessage
 			{
 				ClientTime = NetworkTime.time
 			});

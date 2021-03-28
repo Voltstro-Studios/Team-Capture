@@ -83,10 +83,7 @@ namespace Team_Capture.Player.Movement
 		{
 			characterController = GetComponent<CharacterController>();
 			if (!isLocalPlayer)
-			{
 				stateHandler = gameObject.AddComponent<PlayerMovementObserver>();
-				return;
-			}
 		}
 
 		public override void OnStartLocalPlayer()
@@ -153,7 +150,7 @@ namespace Team_Capture.Player.Movement
 			stateHandler?.OnStateChange(State);
 		}
 
-		[Command(channel = Channels.DefaultReliable)]
+		[Command(channel = Channels.Reliable)]
 		public void CmdMove(PlayerInputs[] inputs)
 		{
 			server.AddInputs(inputs);
