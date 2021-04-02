@@ -19,7 +19,7 @@ Team Capture is built using the [Unity game engine](https://unity.com/), using [
 Please remember that this project is still in early development!
 
 - In-Game Console
-    - With commands! 
+    - With commands!
 - Headless/Console mode (Windows/Linux)
 - Working weapon shooting
 - Working pickups (Weapons/Health)
@@ -58,7 +58,7 @@ We also upload a [release](https://github.com/Voltstro-Studios/Team-Capture/rele
 ### Prerequisites
 
 ```
-Unity 2020.3.1f1
+Unity 2020.3.2f1
 PowerShell Core
 Git
 ```
@@ -76,11 +76,11 @@ Once you have PowerShell ready:
 2. Open the project up in Unity
 
     - When opening the project for the first time, it can take awhile to open!
-    
+
 3. There might be some errors and warnings at first, but should be safe to ignore
 
 4. You need to build a player build to play and test, goto Tools **->** Volt Unity Builder **->** Volt Builder **->** Build Player
-    
+
     - Building for the first time may take awhile (30~ mins), once the cache is built it takes about 90~ secs. This all depends on your computer.
 
 ### Testing the project
