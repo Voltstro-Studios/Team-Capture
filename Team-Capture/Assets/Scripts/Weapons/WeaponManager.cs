@@ -74,6 +74,9 @@ namespace Team_Capture.Weapons
 					Instantiate(WeaponsResourceManager.GetWeapon(weapons[i].Weapon).baseWeaponPrefab,
 						weaponsHolderSpot);
 
+				if(isLocalPlayer)
+					LayersHelper.SetLayerRecursively(newWeapon, LayerMask.NameToLayer(weaponLayerName));
+
 				newWeapon.SetActive(SelectedWeaponIndex == i);
 			}
 		}
