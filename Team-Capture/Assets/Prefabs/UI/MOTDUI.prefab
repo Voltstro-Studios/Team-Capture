@@ -289,8 +289,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -114.8, y: -120}
+  m_AnchoredPosition: {x: 0, y: -4.515381}
+  m_SizeDelta: {x: -114.8, y: -47.3052}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5414898729606530946
 CanvasRenderer:
@@ -739,8 +739,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -1.9804077, y: 6.0517883}
-  m_SizeDelta: {x: -44.6724, y: -205.9294}
+  m_AnchoredPosition: {x: -1.9804077, y: 0.24481201}
+  m_SizeDelta: {x: -44.6724, y: -194.3154}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5215684614827701939
 CanvasRenderer:
@@ -792,11 +792,12 @@ MonoBehaviour:
   browserClient:
     initialUrl: https://voltstro.dev
     width: 1761
-    height: 754
+    height: 838
     backgroundColor:
       serializedVersion: 2
       rgba: 4294967295
     javascript: 1
+    cache: 1
     port: 5555
     eventPollingTime: 0.04
     debugLog: 0
@@ -1301,8 +1302,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -1.9799194, y: 6.052002}
-  m_SizeDelta: {x: -43.8214, y: -205.9329}
+  m_AnchoredPosition: {x: -1.9799194, y: 0.24500084}
+  m_SizeDelta: {x: -43.8214, y: -194.319}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4760858362120932134
 CanvasRenderer:
