@@ -1,6 +1,8 @@
+using System.IO;
 using Team_Capture.Console;
 using UnityEngine;
 using UnityWebBrowser;
+using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.UI
 {
@@ -30,6 +32,7 @@ namespace Team_Capture.UI
 		    webBrowser.browserClient.eventPollingTime = WebBrowserPollingTime;
 		    webBrowser.browserClient.javascript = WebBrowserJs;
 		    webBrowser.browserClient.cache = WebBrowserCache;
+		    webBrowser.browserClient.LogPath = new FileInfo($"{Logger.LoggerConfig.LogDirectory}/cef.log");
 			Destroy(this);
 	    }
     }
