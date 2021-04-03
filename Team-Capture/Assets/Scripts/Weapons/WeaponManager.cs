@@ -111,7 +111,7 @@ namespace Team_Capture.Weapons
 
 		#region Client Stuff
 
-		[TargetRpc(channel = 4)]
+		[TargetRpc(channel = Channels.Unreliable)]
 		internal void TargetSendWeaponStatus(NetworkConnection conn, NetworkedWeapon weaponStatus)
 		{
 			WeaponUpdated?.Invoke(weaponStatus);
