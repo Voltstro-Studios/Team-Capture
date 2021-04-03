@@ -19,6 +19,9 @@ namespace Team_Capture.UI
 		[ConVar("cl_webbrowser_js", "Enable or disable JS for the web browser (WARNING, may break a lot of websites)")]
 	    public static bool WebBrowserJs = true;
 
+	    [ConVar("cl_webbrowser_cache", "Enable or disable the cache")]
+	    public static bool WebBrowserCache = true;
+
 	    private void Start()
 	    {
 		    WebBrowserUI webBrowser = GetComponent<WebBrowserUI>();
@@ -26,6 +29,7 @@ namespace Team_Capture.UI
 		    webBrowser.browserClient.debugLog = WebBrowserDebugLog;
 		    webBrowser.browserClient.eventPollingTime = WebBrowserPollingTime;
 		    webBrowser.browserClient.javascript = WebBrowserJs;
+		    webBrowser.browserClient.cache = WebBrowserCache;
 			Destroy(this);
 	    }
     }
