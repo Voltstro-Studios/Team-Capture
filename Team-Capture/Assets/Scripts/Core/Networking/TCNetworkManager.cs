@@ -76,7 +76,7 @@ namespace Team_Capture.Core.Networking
 				StartServer();
 
 			//TODO: Make auth movement not server framerate dependent
-			Application.targetFrameRate = 128;
+			Application.targetFrameRate = 120;
 		}
 
 		public void Update()

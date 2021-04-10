@@ -7,11 +7,13 @@ namespace Team_Capture.Console
 {
 	public class ConsoleLinux : IConsoleUI
 	{
+		private string currentLine;
+		
 		public void Init()
 		{
 			Debug.unityLogger.logEnabled = false;
 			System.Console.Clear();
-
+			currentLine = "";
 			Logger.Info("Started Linux command line console.");
 		}
 
@@ -55,10 +57,26 @@ namespace Team_Capture.Console
 			{
 				//Enter in input
 				case ConsoleKey.Enter:
-					string value = System.Console.ReadLine();
-					Logger.Info($"cmd>: {value}");
-					ConsoleBackend.ExecuteCommand(value);
-					
+					ConsoleBackend.ExecuteCommand(currentLine);
+					currentLine = "";
+
+					break;
+
+				//Remove last input
+				case ConsoleKey.Backspace:
+					if (currentLine.Length > 0)
+					{
+						currentLine = currentLine.Substring(0, currentLine.Length - 1);
+						System.Console.SetCursorPosition(0, System.Console.BufferHeight - 1);
+						ClearLine();
+						System.Console.Write(currentLine);
+					}
+
+					break;
+
+				//Enter in key char
+				default:
+					currentLine += keyInfo.KeyChar;
 					break;
 			}
 		}
@@ -66,6 +84,13 @@ namespace Team_Capture.Console
 		public bool IsOpen()
 		{
 			return true;
+		}
+		
+		private static void ClearLine()
+		{
+			System.Console.CursorLeft = 0;
+			System.Console.Write(new string(' ', System.Console.WindowWidth - 1));
+			System.Console.CursorLeft = 0;
 		}
 	}
 }

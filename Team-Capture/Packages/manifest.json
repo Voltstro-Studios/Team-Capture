@@ -16,6 +16,7 @@
     "com.unity.settings-manager": "1.0.3",
     "com.unity.test-framework": "1.1.24",
     "com.unity.textmeshpro": "3.0.4",
+    "com.unity.toolchain.linux-x86_64": "0.1.18-preview",
     "com.unity.ugui": "1.0.0",
     "dev.voltstro.unitywebbrowser": "https://gitlab.com/Voltstro-Studios/WebBrowser/Package.git",
     "dev.voltstro.voltbuildertool": "https://github.com/VoltUnityPackages/VoltUnityBuilder.git",
