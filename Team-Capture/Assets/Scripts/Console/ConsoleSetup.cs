@@ -30,7 +30,7 @@ namespace Team_Capture.Console
 #if UNITY_STANDALONE_WIN
 				ConsoleUI = new ConsoleWindows($"{Application.productName} Server");
 #elif UNITY_STANDALONE_LINUX
-				ConsoleUI = new ConsoleLinux();
+				ConsoleUI = new ConsoleLinux($"{Application.productName} Server");
 #elif UNITY_STANDALONE_OSX
 				//TODO: Add console for OSX
 #endif

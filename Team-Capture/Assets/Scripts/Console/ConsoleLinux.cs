@@ -5,20 +5,36 @@ using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.Console
 {
-	public class ConsoleLinux : IConsoleUI
+	/// <summary>
+	///		Console system for Linux
+	/// </summary>
+	internal class ConsoleLinux : IConsoleUI
 	{
+		private readonly string consoleTitle;
+		
+		private string previousTitle;
 		private string currentLine;
+
+		internal ConsoleLinux(string consoleTitle)
+		{
+			Debug.unityLogger.logEnabled = false;
+			this.consoleTitle = consoleTitle;
+		}
 		
 		public void Init()
 		{
-			Debug.unityLogger.logEnabled = false;
 			System.Console.Clear();
 			currentLine = "";
+			
+			previousTitle = System.Console.Title;
+			System.Console.Title = consoleTitle;
+			
 			Logger.Info("Started Linux command line console.");
 		}
 
 		public void Shutdown()
 		{
+			System.Console.Title = previousTitle;
 		}
 
 		public void LogMessage(string message, LogType logType)
