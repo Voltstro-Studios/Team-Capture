@@ -288,23 +288,11 @@ namespace Team_Capture.Core.Networking
 				Logger.Error("A server is already running!");
 				return;
 			}
-
+			
 			//Create and start the process
 			Process newTcServer = new Process
 			{
-				StartInfo = new ProcessStartInfo
-				{
-#if UNITY_EDITOR
-					FileName =
-						$"{Voltstro.UnityBuilder.Build.GameBuilder.GetBuildDirectory()}Team-Capture-Quick/Team-Capture.exe",
-#elif UNITY_STANDALONE_WIN
-					FileName = "Team-Capture.exe",
-#else
-					FileName = "Team-Capture",
-#endif
-					Arguments =
-						$"-batchmode -nographics -gamename \"{gameName}\" -scene {sceneName} -maxplayers {maxPlayers} -closeserveronfirstclientdisconnect"
-				}
+				StartInfo = GetTCProcessStartInfo(gameName, sceneName, maxPlayers)
 			};
 			newTcServer.Start();
 
@@ -389,6 +377,43 @@ namespace Team_Capture.Core.Networking
 		{
 			Logger.Warn("Created new default MOTD.");
 			File.WriteAllText(motdPath, MotdDefaultText);
+		}
+
+		private static ProcessStartInfo GetTCProcessStartInfo(string gameName, string sceneName, int maxPlayers)
+		{
+			ProcessStartInfo startInfo = new ProcessStartInfo();
+
+			#region Windows StartInfo
+#if UNITY_EDITOR_WINDOWS
+			startInfo.FileName = FileName =
+						$"{Voltstro.UnityBuilder.Build.GameBuilder.GetBuildDirectory()}Team-Capture-Quick/Team-Capture.exe";
+#elif UNITY_STANDALONE_WIN
+			startInfo.FileName = "Team-Capture.exe";
+#endif
+#if UNITY_EDITOR_WINDOWS || UNITY_STANDALONE_WIN
+			startInfo.Arguments =
+						$"-batchmode -nographics -gamename \"{gameName}\" -scene {sceneName} -maxplayers {maxPlayers} -closeserveronfirstclientdisconnect";
+#endif
+			#endregion
+
+			#region Linux StartInfo
+
+			//TODO: Other terminals?
+#if UNITY_EDITOR_LINUX || UNITY_STANDALONE_LINUX
+			startInfo.FileName = "/bin/bash";
+#if UNITY_EDITOR
+			startInfo.Arguments =
+				$"-c \"gnome-terminal -x bash -ic 'export TERM=gnome-terminal; {Voltstro.UnityBuilder.Build.GameBuilder.GetBuildDirectory()}Team-Capture-Quick/Team-Capture -batchmode -nographics -gamename '{gameName}' -scene {sceneName} -maxplayers {maxPlayers} -closeserveronfirstclientdisconnect'\"";
+#else
+			startInfo.Arguments =
+				$"-c \"gnome-terminal -x bash -ic 'export TERM=gnome-terminal; ./Team-Capture -batchmode -nographics -gamename '{gameName}' -scene {sceneName} -maxplayers {maxPlayers} -closeserveronfirstclientdisconnect'\"";
+#endif
+			startInfo.UseShellExecute = true;
+#endif
+
+			#endregion
+
+			return startInfo;
 		}
 
 		#region Console Commands
