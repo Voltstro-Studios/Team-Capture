@@ -69,26 +69,24 @@ namespace Team_Capture.Core
 		/// <returns></returns>
 		public static string GetGameConfigPath()
 		{
-			//For Windows we store our settings into the documents
-#if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
-			string documentsFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\My Games\";
-
-			//And make sure the 'My Games' folder exists
-			if (!Directory.Exists(documentsFolder))
-				Directory.CreateDirectory(documentsFolder);
+#if UNITY_EDITOR_WINDOWS || UNITY_STANDALONE_WIN //For Windows we store our config in their documents under 'My Games'
+			string configPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"/My Games/";
+#elif UNITY_EDITOR_LINUX || UNITY_STANDALONE_LINUX //For Linux we store our config in their home directory's .config folder
+			string configPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "/.config/";
+#endif		//TODO: Figure out where to store config files on MacOS, I would assume it be the same as Linux but need to double check
+			
+			//And make sure the config path exists
+			if (!Directory.Exists(configPath))
+				Directory.CreateDirectory(configPath);
 
 			//Add on our game name
-			documentsFolder += Application.productName + @"\";
-#else
-			//But on UNIX we don't
-			string documentsFolder = $"{GetGameExecutePath()}/Settings/";
-#endif
+			configPath += Application.productName + @"/";
 
 			//And make sure our game name folder exists as well
-			if (!Directory.Exists(documentsFolder))
-				Directory.CreateDirectory(documentsFolder);
+			if (!Directory.Exists(configPath))
+				Directory.CreateDirectory(configPath);
 
-			return documentsFolder;
+			return configPath;
 		}
 
 		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
