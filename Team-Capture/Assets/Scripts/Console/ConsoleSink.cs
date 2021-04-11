@@ -33,7 +33,7 @@ namespace Team_Capture.Console
 			StringWriter writer = new StringWriter();
 			formatter.Format(logEvent, writer);
 			string message = writer.ToString();
-			message = message.Remove(message.Length - 2, 2);
+			message = message.Remove(message.Length - 1, 1);
 
 			IConsoleUI console = ConsoleSetup.ConsoleUI;
 			if (console == null)
