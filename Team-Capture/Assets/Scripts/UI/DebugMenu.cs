@@ -8,7 +8,6 @@ using Team_Capture.Input;
 using Team_Capture.Player.Movement;
 using Unity.Profiling;
 using UnityEngine;
-using Voltstro.CommandLineParser;
 
 namespace Team_Capture.UI
 {
@@ -30,7 +29,7 @@ namespace Team_Capture.UI
 		/// <summary>
 		///     Is the debug menu open?
 		/// </summary>
-		[CommandLineArgument("debugmenu")] [ConVar("cl_debugmenu", "Shows the debug menu", true)]
+		[ConVar("cl_debugmenu", "Shows the debug menu", true)]
 		public static bool DebugMenuOpen;
 
 		private const string Spacer = "===================";

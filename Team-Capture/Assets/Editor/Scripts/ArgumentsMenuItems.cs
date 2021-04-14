@@ -2,7 +2,7 @@
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
-using Voltstro.CommandLineParser;
+using UnityCommandLineParser;
 
 namespace Team_Capture.Editor
 {
@@ -11,7 +11,7 @@ namespace Team_Capture.Editor
 		[MenuItem("Team Capture/Arguments/Launch Arguments to Markdown")]
 		public static void LaunchArgumentsToMarkdown()
 		{
-			Dictionary<FieldInfo, CommandLineArgumentAttribute> launchArguments = CommandLineParser.GetCommandFields();
+			Dictionary<FieldInfo, CommandLineArgumentAttribute> launchArguments = CommandLineParser.GetCommandLineArguments();
 
 			if (launchArguments.Count == 0)
 			{
@@ -19,9 +19,9 @@ namespace Team_Capture.Editor
 				return;
 			}
 
-			MarkdownTableGenerator generator = new MarkdownTableGenerator("Launch Arguments List", "Argument");
+			MarkdownTableGenerator generator = new MarkdownTableGenerator("Launch Arguments List", "Argument", "Description");
 			foreach (KeyValuePair<FieldInfo, CommandLineArgumentAttribute> argument in launchArguments)
-				generator.AddOption($"`{argument.Value.Name}`");
+				generator.AddOption($"`{argument.Value.Name}`", argument.Value.Description);
 
 			generator.SaveMarkdown("launch-arguments");
 		}

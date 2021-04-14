@@ -2,7 +2,7 @@
 using System.IO;
 using Newtonsoft.Json;
 using UnityEngine;
-using Voltstro.CommandLineParser;
+using UnityCommandLineParser;
 using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.Localization

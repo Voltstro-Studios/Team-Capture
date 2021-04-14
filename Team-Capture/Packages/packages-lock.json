@@ -216,6 +216,13 @@
         "com.unity.modules.imgui": "1.0.0"
       }
     },
+    "dev.voltstro.unitycommandlineparser": {
+      "version": "https://github.com/Voltstro-Studios/UnityCommandLineParser.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "9fe574fb858a6ba745358e20ab7b881dd1bdb752"
+    },
     "dev.voltstro.unitywebbrowser": {
       "version": "https://gitlab.com/Voltstro-Studios/WebBrowser/Package.git",
       "depth": 0,
@@ -233,13 +240,6 @@
         "com.unity.settings-manager": "1.0.3"
       },
       "hash": "aac4f441e64f01647ba0de0b6f9c2a23f3bb405b"
-    },
-    "dev.voltstro.voltcommandlineparser": {
-      "version": "https://github.com/VoltUnityPackages/VoltUnityCommandLineParser.git",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "a75da5d8e7aa6ea875a1f655a7e4e4403c86e8aa"
     },
     "nl.elraccoone.tweens": {
       "version": "git+https://github.com/elraccoone/unity-tweens",

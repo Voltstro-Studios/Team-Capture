@@ -2,7 +2,7 @@
 using Team_Capture.SceneManagement;
 using UnityEngine;
 using UnityEngine.Video;
-using Voltstro.CommandLineParser;
+using UnityCommandLineParser;
 
 namespace Team_Capture.StartUpVideo
 {
@@ -17,7 +17,13 @@ namespace Team_Capture.StartUpVideo
 
 		private Camera mainCamera;
 
-		[CommandLineArgument("novid")] public static bool SkipVideo = false;
+		[CommandLineCommand("novid")]
+		public static void NoVid()
+		{
+			skipVideo = true;
+		}
+		
+		private static bool skipVideo = false;
 
 		/// <summary>
 		///		Handles reading inputs
@@ -33,7 +39,7 @@ namespace Team_Capture.StartUpVideo
 
 		private void Start()
 		{
-			if (SkipVideo)
+			if (skipVideo)
 			{
 				ChangeScene();
 				return;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Team_Capture.Console;
 using UnityEngine;
-using Voltstro.CommandLineParser;
+using UnityCommandLineParser;
 using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.Core.UserAccount
