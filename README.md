@@ -53,7 +53,7 @@ If you think you can help out the team, please don't hesitate to email me (proje
 
 As this project is in an alpha state, a lot of things will constantly change, so it is recommended to build the project your self. However we do offer [DevOps builds via GitHub actions](https://github.com/Voltstro-Studios/Team-Capture/actions?query=workflow%3A%22Game+Build%22). To download a build, goto [Actions](https://github.com/Voltstro-Studios/Team-Capture/actions?query=workflow%3A%22Game+Build%22), select the latest succeeding build, go down to the artifacts section and download for your OS.
 
-We also upload a [release](https://github.com/Voltstro-Studios/Team-Capture/releases) every version milestone. This builds will be stable however will have major 
+We also upload [releases](https://github.com/Voltstro-Studios/Team-Capture/releases) every version milestone. The builds may be more stable then the DevOps builds but are still an early alpha and may lack new features and improvements that the DevOps builds have.
 
 ### Prerequisites
 
