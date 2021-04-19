@@ -8,6 +8,7 @@ using Team_Capture.Helper;
 using Team_Capture.LagCompensation;
 using UnityEngine;
 using UnityCommandLineParser;
+using UnityEngine.Scripting;
 using Logger = Team_Capture.Logging.Logger;
 using Object = UnityEngine.Object;
 using UniTask = Team_Capture.Integrations.UniTask.UniTask;
@@ -19,12 +20,6 @@ namespace Team_Capture.Core.Networking
 	/// </summary>
 	internal static class Server
 	{
-		/// <summary>
-		///		Will make the server shutdown when the first connected player disconnects
-		/// </summary>
-		[CommandLineArgument("closeserveronfirstclientdisconnect")]
-		public static bool CloseServerOnFirstClientDisconnect = false;
-
 		/// <summary>
 		///		The timeout time to wait while creating a server from the UI
 		/// </summary>
@@ -197,7 +192,7 @@ namespace Team_Capture.Core.Networking
 			conn.Send(TCNetworkManager.Instance.serverConfig);
 
 			//Lets just hope our transport never assigns the first connection max value of int
-			if (CloseServerOnFirstClientDisconnect && firstConnectionId == int.MaxValue)
+			if (closeServerOnFirstClientDisconnect && firstConnectionId == int.MaxValue)
 				firstConnectionId = conn.connectionId;
 
 			Logger.Info(
@@ -215,7 +210,7 @@ namespace Team_Capture.Core.Networking
 			Logger.Info("Client '{ConnectionId}' disconnected from the server.", conn.connectionId);
 
 			//Our first connected client disconnected
-			if(CloseServerOnFirstClientDisconnect && conn.connectionId == firstConnectionId)
+			if(closeServerOnFirstClientDisconnect && conn.connectionId == firstConnectionId)
 				Game.QuitGame();
 		}
 
@@ -459,6 +454,18 @@ namespace Team_Capture.Core.Networking
 
 		[ConVar("sv_motd_url", "Sets what URL for the MOTD to use")] 
 		public static string ServerMotdUrl = "https://voltstro.dev";
+		
+		[CommandLineCommand("closeserveronfirstclientdisconnect")]
+		[Preserve]
+		private static void SetCloseServerOnFirstClientDisconnect()
+		{
+			closeServerOnFirstClientDisconnect = true;
+		}
+
+		/// <summary>
+		///		Will make the server shutdown when the first connected player disconnects
+		/// </summary>
+		private static bool closeServerOnFirstClientDisconnect;
 
 		#endregion
 	}

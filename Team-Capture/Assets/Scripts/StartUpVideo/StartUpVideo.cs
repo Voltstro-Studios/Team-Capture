@@ -3,6 +3,7 @@ using Team_Capture.SceneManagement;
 using UnityEngine;
 using UnityEngine.Video;
 using UnityCommandLineParser;
+using UnityEngine.Scripting;
 
 namespace Team_Capture.StartUpVideo
 {
@@ -18,12 +19,13 @@ namespace Team_Capture.StartUpVideo
 		private Camera mainCamera;
 
 		[CommandLineCommand("novid")]
+		[Preserve]
 		public static void NoVid()
 		{
 			skipVideo = true;
 		}
 		
-		private static bool skipVideo = false;
+		private static bool skipVideo;
 
 		/// <summary>
 		///		Handles reading inputs
