@@ -392,18 +392,17 @@ namespace Team_Capture.Core.Networking
 			#endregion
 
 			#region Linux StartInfo
-
+			
 			//TODO: Other terminals?
 #if UNITY_EDITOR_LINUX || UNITY_STANDALONE_LINUX
-			startInfo.FileName = "/bin/bash";
+
 #if UNITY_EDITOR
-			startInfo.Arguments =
-				$"-c \"gnome-terminal -x bash -ic 'export TERM=gnome-terminal; {Voltstro.UnityBuilder.Build.GameBuilder.GetBuildDirectory()}Team-Capture-Quick/Team-Capture -batchmode -nographics -gamename '{gameName}' -scene {sceneName} -maxplayers {maxPlayers} -closeserveronfirstclientdisconnect'\"";
+			startInfo.FileName = $"{Voltstro.UnityBuilder.Build.GameBuilder.GetBuildDirectory()}Team-Capture-Quick/Team-Capture";
 #else
-			startInfo.Arguments =
-				$"-c \"gnome-terminal -x bash -ic 'export TERM=gnome-terminal; ./Team-Capture -batchmode -nographics -gamename '{gameName}' -scene {sceneName} -maxplayers {maxPlayers} -closeserveronfirstclientdisconnect'\"";
+			startInfo.FileName = "./Team-Capture";
 #endif
-			startInfo.UseShellExecute = true;
+			
+			startInfo.Arguments = $"-batchmode -nographics -gamename \"{gameName}\" -scene {sceneName} -maxplayers {maxPlayers} -closeserveronfirstclientdisconnect";
 #endif
 
 			#endregion
