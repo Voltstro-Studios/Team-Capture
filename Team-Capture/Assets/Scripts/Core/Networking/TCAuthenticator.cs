@@ -69,9 +69,9 @@ namespace Team_Capture.Core.Networking
 			NetworkClient.UnregisterHandler<JoinRequestResponseMessage>();
 		}
 
-		public override void OnClientAuthenticate(NetworkConnection conn)
+		public override void OnClientAuthenticate()
 		{
-			conn.Send(new JoinRequestMessage
+			NetworkClient.connection.Send(new JoinRequestMessage
 			{
 				ApplicationVersion = Application.version
 			});
@@ -84,13 +84,13 @@ namespace Team_Capture.Core.Networking
 			{
 				Logger.Info("Join request was accepted! {@Message} ({@Code})", msg.Message, msg.Code);
 
-				ClientAccept(NetworkClient.connection);
+				ClientAccept();
 			}
 			else
 			{
 				Logger.Error("Failed to connect! Error: {@Message} ({@Code})", msg.Message, msg.Code);
 
-				ClientReject(NetworkClient.connection);
+				ClientReject();
 			}
 		}
 
