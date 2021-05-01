@@ -28,7 +28,7 @@ Please remember that this project is still in early development!
 - Auth Movement
 - Dynamic settings UI
 - Dynamic settings save system
-- Discord RPC intergration
+- Discord RPC integration
 - Server MOTDs (HTML or regular text)
 - Cross-platform play (Windows, Linux)
 - Well documented API
@@ -37,7 +37,7 @@ For a roadmap of what is either being worked on, or planed to come, check out th
 
 ## Team
 
-Here is everyone who works on the project:
+Here is a list of people who have worked on the project:
 
 * [Voltstro](https://github.com/Voltstro) - *Project Lead*
 
@@ -54,6 +54,16 @@ If you think you can help out the team, please don't hesitate to email me (proje
 As this project is in an alpha state, a lot of things will constantly change, so it is recommended to build the project your self. However we do offer [DevOps builds via GitHub actions](https://github.com/Voltstro-Studios/Team-Capture/actions?query=workflow%3A%22Game+Build%22). To download a build, goto [Actions](https://github.com/Voltstro-Studios/Team-Capture/actions?query=workflow%3A%22Game+Build%22), select the latest succeeding build, go down to the artifacts section and download for your OS.
 
 We also upload [releases](https://github.com/Voltstro-Studios/Team-Capture/releases) every version milestone. The builds may be more stable then the DevOps builds but are still an early alpha and may lack new features and improvements that the DevOps builds have.
+
+### Platform Support
+
+Team-Capture plans to support most large x64-bit based desktop platforms.
+
+|OS             |Client|Server|Notes                                                                                                                            |
+|---------------|------|------|---------------------------------------------------------------------------------------------------------------------------------|
+|Windows (x64)  |✔     |✔     |Native.                                                                                                                          |
+|GNU/Linux (x64)|✔     |✔     |Native. Requires [VA-API support](https://github.com/Voltstro-Studios/UnityWebBrowser#enable-va-api-support) for some components.|
+|macOS (x64)    |✖     |✖     |No physical hardware to test or develop on.                                                                                      |
 
 ### Prerequisites
 
@@ -91,7 +101,7 @@ You can run a server from either the command line with the `startserver` command
 
 You can also test the build from the editor by going to Team Capture **->** Build **->** Launch Player *etc*.
 
-Check out the [Command Line Arguments Wiki page](https://github.com/Voltstro/Team-Capture/wiki/Command-Line-Arguments) for more info on the command line arguments in this project.
+Check out the [Command Line Arguments Wiki page](https://github.com/Voltstro-Studios/Team-Capture/wiki/Command-Line-Arguments) for more info on the command line arguments in this project.
 
 # License
 
