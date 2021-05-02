@@ -76,10 +76,15 @@ namespace Team_Capture.UI
 
 			//Create home/return button
 			string backButtonText = "Menu_Home";
+			UnityAction returnBtnAction = CloseActivePanel;
 			if (NetworkManager.singleton != null)
 				if (NetworkManager.singleton.isNetworkActive)
+				{
 					backButtonText = "Menu_Resume";
-			CreateButton(topButtonPrefab, topNavBar, backButtonText, CloseActivePanel, 69f);
+					returnBtnAction = CloseActivePanelPauseMenu;
+				}
+			
+			CreateButton(topButtonPrefab, topNavBar, backButtonText, returnBtnAction, 69f);
 
 			//Pre-create all panels and button
 			foreach (MainMenuPanel menuPanel in menuPanels)
@@ -174,7 +179,7 @@ namespace Team_Capture.UI
 		/// <summary>
 		///     Closes the active panel
 		/// </summary>
-		public void CloseActivePanel()
+		private void CloseActivePanel()
 		{
 			if(!allowPanelToggling)
 				return;
@@ -290,6 +295,24 @@ namespace Team_Capture.UI
 			panel.activePanel.SetActive(true);
 			panel.isOpen = true;
 		}
+
+		#endregion
+
+		#region Pause Menu Specfic
+
+		
+		private void CloseActivePanelPauseMenu()
+		{
+			if(!allowPanelToggling)
+				return;
+			
+			if (GetActivePanel() != null)
+				ClosePanel(GetActivePanel());
+
+			ClosePauseMenuAction();
+		}
+
+		public Action ClosePauseMenuAction;
 
 		#endregion
 	}

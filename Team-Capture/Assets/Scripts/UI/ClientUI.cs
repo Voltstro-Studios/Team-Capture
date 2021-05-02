@@ -66,6 +66,8 @@ namespace Team_Capture.UI
 			scoreBoardObject.SetActive(false);
 			scoreBoardObject.GetComponent<ScoreBoard.ScoreBoard>().clientPlayer = playerManager;
 
+			pauseMenu.ClosePauseMenuAction = TogglePauseMenu;
+
 			Logger.Debug("The ClientUI is now ready.");
 		}
 
