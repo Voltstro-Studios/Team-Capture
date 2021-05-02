@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using Unity.SharpZipLib.Utils;
 using UnityEditor;
 using Voltstro.UnityBuilder.Build;
 
@@ -32,7 +34,12 @@ namespace Team_Capture.Editor
 			System.Console.WriteLine($"Building TC for {target} platform to {buildDir}");
 
 	        GameBuilder.BuildGame(buildDir, target);
-		}
+	        
+	        //Zip
+	        string outPath = $"{buildDir}/../{Path.GetFileName(buildDir)}.zip";
+	        System.Console.WriteLine($"Zipping to {outPath}");
+	        ZipUtility.CompressFolderToZip(outPath, null, buildDir);
+        }
 
         private static void ParseCommandLineArguments(out Dictionary<string, string> providedArguments)
         {

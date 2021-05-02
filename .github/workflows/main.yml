@@ -59,14 +59,6 @@ jobs:
           version: ${{ env.version }}
           androidVersionCode: 1 #This is here so we can stop getting warnings about it, even tho we have no plans to support Android
           buildMethod: Team_Capture.Editor.CIBuilder.StartVoltBuilder
-          
-      #Install zip and zip the build
-      - name: Install Zip
-        uses: montudor/action-zip@v1
-        
-      - name: Zip Build
-        run: zip -qq -r ${{ env.gameName }}-${{ matrix.targetPlatform }}-${{ env.version }}-DevOpsBuild.zip Team-Capture
-        working-directory: ${{ matrix.projectPath }}/Builds/${{ env.gameName }}-${{ matrix.targetPlatform }}-${{ env.version }}-DevOpsBuild
 
       #Upload the build as an artifact
       - name: Upload Build
