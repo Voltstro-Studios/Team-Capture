@@ -38,7 +38,7 @@ namespace Team_Capture.Editor
 	        //Zip
 	        string outPath = $"{buildDir}/../{Path.GetFileName(buildDir)}.zip";
 	        System.Console.WriteLine($"Zipping to {outPath}");
-	        ZipUtility.CompressFolderToZip(outPath, null, buildDir);
+	        ZipUtility.CompressFolderToZip(outPath, null, Path.GetFullPath(buildDir));
         }
 
         private static void ParseCommandLineArguments(out Dictionary<string, string> providedArguments)
