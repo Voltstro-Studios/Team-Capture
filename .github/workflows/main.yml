@@ -2,7 +2,7 @@ name: Game Build
 
 on:
   push:
-    branches: [ master, CI ]
+    branches: [ master ]
   pull_request:
     branches: [ master ]
 
@@ -44,7 +44,7 @@ jobs:
 
       #Build the player using TC's CIBuilder.StartVoltBuilder
       - name: Build Player for ${{ matrix.targetPlatform }}
-        uses: game-ci/unity-builder@v2.0-alpha-6
+        uses: game-ci/unity-builder@v2.0-alpha-8
         env:
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
@@ -59,10 +59,18 @@ jobs:
           version: ${{ env.version }}
           androidVersionCode: 1 #This is here so we can stop getting warnings about it, even tho we have no plans to support Android
           buildMethod: Team_Capture.Editor.CIBuilder.StartVoltBuilder
+          
+      #Install zip and zip the build
+      - name: Install Zip
+        uses: montudor/action-zip@v1
+        
+      - name: Zip Build
+        run: zip -qq -r ${{ env.gameName }}-${{ matrix.targetPlatform }}-${{ env.version }}-DevOpsBuild.zip Team-Capture
+        working-directory: ${{ matrix.projectPath }}/Builds/${{ env.gameName }}-${{ matrix.targetPlatform }}-${{ env.version }}-DevOpsBuild
 
       #Upload the build as an artifact
       - name: Upload Build
         uses: actions/upload-artifact@v2
         with:
           name: '${{ env.gameName }}-${{ matrix.targetPlatform }}-${{ env.version }}-DevOpsBuild'
-          path: '${{ matrix.projectPath }}/Builds/${{ matrix.targetPlatform }}-DevOpsBuild'
+          path: '${{ matrix.projectPath }}/Builds/${{ env.gameName }}-${{ matrix.targetPlatform }}-${{ env.version }}-DevOpsBuild/${{ env.gameName }}-${{ matrix.targetPlatform }}-${{ env.version }}-DevOpsBuild.zip'
