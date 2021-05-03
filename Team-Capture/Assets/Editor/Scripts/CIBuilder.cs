@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
-using Unity.SharpZipLib.Utils;
 using UnityEditor;
+using UnityEngine;
 using Voltstro.UnityBuilder.Build;
+using Voltstro.UnityBuilder.Settings;
 
 namespace Team_Capture.Editor
 {
@@ -15,12 +15,15 @@ namespace Team_Capture.Editor
 	///		</para>
 	/// </summary>
     public static class CIBuilder
-    {
+	{
+		private const string ZipBuildKey = "ZipBuild";
+	    
 		/// <summary>
 		///		Builds the game using Volt Builder's <see cref="GameBuilder.BuildGame"/>
 		/// </summary>
         public static void StartVoltBuilder()
         {
+	        Debug.Log("Build game started...");
 			System.Console.WriteLine("Build game started...");
 
 			ParseCommandLineArguments(out Dictionary<string, string> arguments);
@@ -28,17 +31,19 @@ namespace Team_Capture.Editor
 			if(!arguments.ContainsKey("buildTarget"))
 				EditorApplication.Exit(-1);
 
-			BuildTarget target = (BuildTarget) Enum.Parse(typeof(BuildTarget), arguments["buildTarget"]);
+			bool currentZipBuild = false;
+			if (SettingsManager.Instance.ContainsKey<bool>(ZipBuildKey))
+				currentZipBuild = SettingsManager.Instance.Get<bool>(ZipBuildKey);
+			SettingsManager.Instance.Set(ZipBuildKey, true);
+			
+	        BuildTarget target = (BuildTarget) Enum.Parse(typeof(BuildTarget), arguments["buildTarget"]);
 			string buildDir = $"{GameBuilder.GetBuildDirectory()}{target}-DevOpsBuild/{PlayerSettings.productName}";
 
 			System.Console.WriteLine($"Building TC for {target} platform to {buildDir}");
 
 	        GameBuilder.BuildGame(buildDir, target);
 	        
-	        //Zip
-	        string outPath = $"{buildDir}/../{Path.GetFileName(buildDir)}.zip";
-	        System.Console.WriteLine($"Zipping to {outPath}");
-	        ZipUtility.CompressFolderToZip(outPath, null, Path.GetFullPath(buildDir));
+	        SettingsManager.Instance.Set(ZipBuildKey, currentZipBuild);
         }
 
         private static void ParseCommandLineArguments(out Dictionary<string, string> providedArguments)
