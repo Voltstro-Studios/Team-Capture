@@ -65,4 +65,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: '${{ env.gameName }}-${{ matrix.targetPlatform }}-${{ env.version }}-DevOpsBuild'
-          path: '${{ matrix.projectPath }}/Builds/${{ env.gameName }}-${{ matrix.targetPlatform }}-${{ env.version }}-DevOpsBuild.zip'
+          path: '${{ matrix.projectPath }}/Builds/${{ matrix.targetPlatform }}-DevOpsBuild.zip'
