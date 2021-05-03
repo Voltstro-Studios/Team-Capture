@@ -739,7 +739,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -1.9804077, y: 0.24481201}
+  m_AnchoredPosition: {x: -1.9804688, y: 0.24487305}
   m_SizeDelta: {x: -44.6724, y: -194.3154}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5215684614827701939
@@ -790,7 +790,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   browserClient:
-    initialUrl: https://voltstro.dev
+    initialUrl: https://tc.voltstro.dev/motd
     width: 1761
     height: 838
     backgroundColor:
@@ -801,6 +801,7 @@ MonoBehaviour:
     port: 5555
     eventPollingTime: 0.04
     debugLog: 0
+    logSeverity: 0
 --- !u!114 &7181878127308309454
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1302,7 +1303,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -1.9799194, y: 0.24500084}
+  m_AnchoredPosition: {x: -1.9799805, y: 0.24499512}
   m_SizeDelta: {x: -43.8214, y: -194.319}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4760858362120932134

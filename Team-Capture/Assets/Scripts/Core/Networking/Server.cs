@@ -452,7 +452,7 @@ namespace Team_Capture.Core.Networking
 		public static ServerMOTDMode ServerMotdMode = ServerMOTDMode.WebWithTextBackup;
 
 		[ConVar("sv_motd_url", "Sets what URL for the MOTD to use")] 
-		public static string ServerMotdUrl = "https://voltstro.dev";
+		public static string ServerMotdUrl = "https://tc.voltstro.dev/motd";
 		
 		[CommandLineCommand("closeserveronfirstclientdisconnect")]
 		[Preserve]
