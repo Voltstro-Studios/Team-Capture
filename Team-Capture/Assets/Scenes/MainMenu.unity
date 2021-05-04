@@ -789,8 +789,8 @@ GameObject:
   - component: {fileID: 319514906}
   - component: {fileID: 319514905}
   - component: {fileID: 319514904}
-  - component: {fileID: 319514908}
   - component: {fileID: 319514909}
+  - component: {fileID: 319514910}
   m_Layer: 5
   m_Name: MainMenu-UI
   m_TagString: Untagged
@@ -882,31 +882,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &319514908
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 319514903}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 53f16aed0ae221d45851676ca49f2f28, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mainMenuPanel: {fileID: 319514907}
-  topNavBar: {fileID: 362885668}
-  bottomNavBar: {fileID: 2081062986}
-  topButtonPrefab: {fileID: 2438872349478222752, guid: 012efb8539a764b41a36eec3a54461dd,
-    type: 3}
-  bottomButtonPrefab: {fileID: 6369731504798250186, guid: 89043bbcb42587049ab129f25e632baf,
-    type: 3}
-  menuPanels:
-  - {fileID: 11400000, guid: 28cdc30fea405604d8606f47dce57ea2, type: 2}
-  - {fileID: 11400000, guid: f472b36e4e05d0441ae031cff19e576d, type: 2}
-  - {fileID: 11400000, guid: 453728d24005aff4a80d5f5bfca1bc91, type: 2}
-  - {fileID: 11400000, guid: 501c13d390213f647b2cc936a29e1c40, type: 2}
-  inputReader: {fileID: 11400000, guid: e233decf6e8ea7d4696452f4cd476d55, type: 2}
 --- !u!114 &319514909
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -938,6 +913,31 @@ MonoBehaviour:
     eventsToPlay:
     - {fileID: 11400000, guid: 2be5f951f9335694daa34200a909effc, type: 2}
     - {fileID: 11400000, guid: 8b40e60d64ce5f641b03e107e6fc57af, type: 2}
+--- !u!114 &319514910
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 319514903}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a14d3cbf3065d1a4f9c8c28c5a4214e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainMenuPanel: {fileID: 319514907}
+  topNavBar: {fileID: 362885668}
+  bottomNavBar: {fileID: 2081062986}
+  topButtonPrefab: {fileID: 2438872349478222752, guid: 012efb8539a764b41a36eec3a54461dd,
+    type: 3}
+  bottomButtonPrefab: {fileID: 6369731504798250186, guid: 89043bbcb42587049ab129f25e632baf,
+    type: 3}
+  inputReader: {fileID: 11400000, guid: e233decf6e8ea7d4696452f4cd476d55, type: 2}
+  menuPanels:
+  - {fileID: 11400000, guid: 28cdc30fea405604d8606f47dce57ea2, type: 2}
+  - {fileID: 11400000, guid: f472b36e4e05d0441ae031cff19e576d, type: 2}
+  - {fileID: 11400000, guid: 453728d24005aff4a80d5f5bfca1bc91, type: 2}
+  - {fileID: 11400000, guid: 501c13d390213f647b2cc936a29e1c40, type: 2}
 --- !u!1 &352522260
 GameObject:
   m_ObjectHideFlags: 0

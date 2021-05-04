@@ -1,6 +1,7 @@
 ﻿using System;
 using Team_Capture.Console;
 using Team_Capture.Player;
+using Team_Capture.UI.Menus;
 using Team_Capture.Weapons;
 using UnityEngine;
 using Logger = Team_Capture.Logging.Logger;
@@ -30,7 +31,7 @@ namespace Team_Capture.UI
 		/// <summary>
 		///     The pause menu
 		/// </summary>
-		[Tooltip("The pause menu")] public MainMenuController pauseMenu;
+		[Tooltip("The pause menu")] public PauseMenu pauseMenu;
 
 		/// <summary>
 		///     The scoreboard gameobject
@@ -66,7 +67,7 @@ namespace Team_Capture.UI
 			scoreBoardObject.SetActive(false);
 			scoreBoardObject.GetComponent<ScoreBoard.ScoreBoard>().clientPlayer = playerManager;
 
-			pauseMenu.ClosePauseMenuAction = TogglePauseMenu;
+			pauseMenu.Setup(TogglePauseMenu);
 
 			Logger.Debug("The ClientUI is now ready.");
 		}

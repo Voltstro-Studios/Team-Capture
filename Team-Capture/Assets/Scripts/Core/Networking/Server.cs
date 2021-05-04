@@ -379,8 +379,8 @@ namespace Team_Capture.Core.Networking
 			ProcessStartInfo startInfo = new ProcessStartInfo();
 
 			#region Windows StartInfo
-#if UNITY_EDITOR_WINDOWS
-			startInfo.FileName = FileName =
+#if UNITY_EDITOR_WIN
+			startInfo.FileName =
 						$"{Voltstro.UnityBuilder.Build.GameBuilder.GetBuildDirectory()}Team-Capture-Quick/Team-Capture.exe";
 #elif UNITY_STANDALONE_WIN
 			startInfo.FileName = "Team-Capture.exe";

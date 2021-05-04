@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using Mirror;
 using Team_Capture.Core;
+using Team_Capture.Helper.Extensions;
 using Team_Capture.Input;
 using Team_Capture.Localization;
 using Team_Capture.Tweens;
@@ -17,9 +18,9 @@ using Logger = Team_Capture.Logging.Logger;
 namespace Team_Capture.UI
 {
 	/// <summary>
-	///     Controller for a main menu
+	///     Controller for a menu
 	/// </summary>
-	internal class MainMenuController : MonoBehaviour
+	internal class MenuController : MonoBehaviour
 	{
 		/// <summary>
 		///     The parent for all main menu panels
@@ -50,12 +51,6 @@ namespace Team_Capture.UI
 		[Tooltip("The bottom button prefab")] public GameObject bottomButtonPrefab;
 
 		/// <summary>
-		///     All the main menu panels that this main menu will have
-		/// </summary>
-		[Tooltip("All the main menu panels that this main menu will have")]
-		public MainMenuPanel[] menuPanels;
-
-		/// <summary>
 		///		Handles reading input
 		/// </summary>
 		public InputReader inputReader;
@@ -63,54 +58,12 @@ namespace Team_Capture.UI
 		[NonSerialized] public bool allowPanelToggling = true;
 
 		private TweeningManager tweeningManager;
+		private readonly Dictionary<MenuPanel, GameObject> activeMenuPanels = new Dictionary<MenuPanel, GameObject>();
 
 		private void Awake()
 		{
 			tweeningManager = GetComponent<TweeningManager>();
 			allowPanelToggling = true;
-		}
-
-		private void Start()
-		{
-			Stopwatch stopwatch = Stopwatch.StartNew();
-
-			//Create home/return button
-			string backButtonText = "Menu_Home";
-			UnityAction returnBtnAction = CloseActivePanel;
-			if (NetworkManager.singleton != null)
-				if (NetworkManager.singleton.isNetworkActive)
-				{
-					backButtonText = "Menu_Resume";
-					returnBtnAction = CloseActivePanelPauseMenu;
-				}
-			
-			CreateButton(topButtonPrefab, topNavBar, backButtonText, returnBtnAction, 69f);
-
-			//Pre-create all panels and button
-			foreach (MainMenuPanel menuPanel in menuPanels)
-			{
-				//Create the panel
-				GameObject panel = Instantiate(menuPanel.panelPrefab, mainMenuPanel);
-				panel.name = menuPanel.name;
-				panel.SetActive(false);
-				menuPanel.activePanel = panel;
-
-				//If it has a PanelBase, set it cancel button's onClick event to toggle it self
-				if (panel.GetComponent<PanelBase>() != null)
-					panel.GetComponent<PanelBase>().cancelButton.onClick
-						.AddListener(delegate { TogglePanel(menuPanel.name); });
-
-				//Create the button for it
-				if (menuPanel.bottomNavBarButton)
-					CreateButton(bottomButtonPrefab, bottomNavBar, menuPanel.menuButtonText,
-						delegate { TogglePanel(menuPanel.name); });
-				else
-					CreateButton(topButtonPrefab, topNavBar, menuPanel.menuButtonText,
-						delegate { TogglePanel(menuPanel.name); });
-			}
-
-			stopwatch.Stop();
-			Logger.Debug("Time taken to update menu UI: {@TotalMilliseconds}ms", stopwatch.ElapsedMilliseconds);
 		}
 
 		private void OnEnable()
@@ -135,12 +88,42 @@ namespace Team_Capture.UI
 
 			Logger.Debug("Resetting all main menu events...");
 
-			//Reset all the main menu script-able objects
-			foreach (MainMenuPanel menu in menuPanels)
+			DestroyButtons();
+		}
+
+		/// <summary>
+		///		Adds a list of <see cref="MenuPanel"/>s
+		/// </summary>
+		/// <param name="panels"></param>
+		protected void AddPanels(IEnumerable<MenuPanel> panels)
+		{
+			Stopwatch stopwatch = Stopwatch.StartNew();
+			
+			foreach (MenuPanel menuPanel in panels)
 			{
-				menu.isOpen = false;
-				menu.activePanel = null;
+				//Create the panel
+				GameObject panel = Instantiate(menuPanel.panelPrefab, mainMenuPanel);
+				panel.name = menuPanel.name;
+				panel.SetActive(false);
+				activeMenuPanels.Add(menuPanel, panel);
+
+				//If it has a PanelBase, set it cancel button's onClick event to toggle it self
+				PanelBase panelBase = panel.GetComponent<PanelBase>();
+				if (panelBase != null)
+					panelBase.cancelButton.onClick
+						.AddListener(delegate { TogglePanel(menuPanel.name); });
+
+				//Create the button for it
+				if (menuPanel.bottomNavBarButton)
+					CreateButton(bottomButtonPrefab, bottomNavBar, menuPanel.menuButtonText,
+						delegate { TogglePanel(menuPanel.name); });
+				else
+					CreateButton(topButtonPrefab, topNavBar, menuPanel.menuButtonText,
+						delegate { TogglePanel(menuPanel.name); });
 			}
+			
+			stopwatch.Stop();
+			Logger.Debug("Time taken to update menu UI: {TotalMilliseconds}ms", stopwatch.ElapsedMilliseconds);
 		}
 
 		/// <summary>
@@ -152,17 +135,17 @@ namespace Team_Capture.UI
 			if(!allowPanelToggling)
 				return;
 
-			MainMenuPanel panel = GetMenuPanel(panelName);
-			if (panel == null)
+			KeyValuePair<MenuPanel, GameObject> panel = GetMenuPanel(panelName);
+			if (panel.Key == null)
 			{
-				Logger.Error("No such panel with the name of {@PanelName}!", name);
+				Logger.Error("No such panel with the name of {PanelName}!", name);
 				return;
 			}
 
 			//There is a panel that is currently active, so close it
-			if (GetActivePanel() != null && panel != GetActivePanel())
+			if (GetActivePanel().Key != null && panel.Key != GetActivePanel().Key)
 			{
-				Logger.Debug($"{GetActivePanel().name} is currently active, switching...");
+				Logger.Debug($"{GetActivePanel().Key.name} is currently active, switching...");
 
 				ClosePanel(GetActivePanel(), true);
 				OpenPanel(panel, true);
@@ -170,7 +153,7 @@ namespace Team_Capture.UI
 				return;
 			}
 
-			if (!panel.isOpen)
+			if (!panel.Value.activeSelf)
 				OpenPanel(panel);
 			else
 				ClosePanel(panel);
@@ -179,16 +162,16 @@ namespace Team_Capture.UI
 		/// <summary>
 		///     Closes the active panel
 		/// </summary>
-		private void CloseActivePanel()
+		protected void CloseActivePanel()
 		{
 			if(!allowPanelToggling)
 				return;
 
-			if (GetActivePanel() != null)
+			if (GetActivePanel().Key != null)
 				ClosePanel(GetActivePanel());
 		}
 
-		private void CreateButton(GameObject buttonPrefab, Transform parent, string text, UnityAction action,
+		protected void CreateButton(GameObject buttonPrefab, Transform parent, string text, UnityAction action,
 			float maxSize = 52f, bool bold = false)
 		{
 			GameObject button = Instantiate(buttonPrefab, parent);
@@ -202,25 +185,32 @@ namespace Team_Capture.UI
 			tmpText.gameObject.AddComponent<GameUITMPResolver>();
 		}
 
+		private void DestroyButtons()
+		{
+			activeMenuPanels.Clear();
+			topNavBar.DestroyAllChildren();
+			bottomNavBar.DestroyAllChildren();
+		}
+
 		#region Panel List Functions
 
-		private MainMenuPanel GetMenuPanel(string panelName)
+		private KeyValuePair<MenuPanel, GameObject> GetMenuPanel(string panelName)
 		{
-			IEnumerable<MainMenuPanel> result = from a in menuPanels
-				where a.name == panelName
+			IEnumerable<KeyValuePair<MenuPanel, GameObject>> result = from a in activeMenuPanels
+				where a.Key.name == panelName
 				select a;
 
 			return result.FirstOrDefault();
 		}
 
 		/// <summary>
-		///     Returns the active panel's <see cref="MainMenuPanel" />
+		///     Returns the active panel's <see cref="MenuPanel" />
 		/// </summary>
 		/// <returns></returns>
-		public MainMenuPanel GetActivePanel()
+		public KeyValuePair<MenuPanel, GameObject> GetActivePanel()
 		{
-			IEnumerable<MainMenuPanel> result = from a in menuPanels
-				where a.isOpen
+			IEnumerable<KeyValuePair<MenuPanel, GameObject>> result = from a in activeMenuPanels
+				where a.Value.activeSelf
 				select a;
 
 			return result.FirstOrDefault();
@@ -262,38 +252,36 @@ namespace Team_Capture.UI
 
 		#region Panel Functions
 
-		private void ClosePanel(MainMenuPanel panel, bool isSwitching = false)
+		private void ClosePanel(KeyValuePair<MenuPanel, GameObject> panel, bool isSwitching = false)
 		{
-			Logger.Debug($"Closing {panel.name}");
+			Logger.Debug($"Closing {panel.Key.name}");
 
 			if (!isSwitching)
 			{
-				if (panel.showTopBlackBar)
+				if (panel.Key.showTopBlackBar)
 					DeactivateTopBlackBar();
 
-				if (panel.darkenScreen)
+				if (panel.Key.darkenScreen)
 					DeactivateBlackBackground();
 			}
 
-			panel.activePanel.SetActive(false);
-			panel.isOpen = false;
+			panel.Value.SetActive(false);
 		}
 
-		private void OpenPanel(MainMenuPanel panel, bool isSwitching = false)
+		private void OpenPanel(KeyValuePair<MenuPanel, GameObject> panel, bool isSwitching = false)
 		{
-			Logger.Debug($"Opening {panel.name}");
+			Logger.Debug($"Opening {panel.Key.name}");
 
 			if (!isSwitching)
 			{
-				if (panel.showTopBlackBar)
+				if (panel.Key.showTopBlackBar)
 					ActivateTopBlackBar();
 
-				if (panel.darkenScreen)
+				if (panel.Key.darkenScreen)
 					ActivateBlackBackground();
 			}
 
-			panel.activePanel.SetActive(true);
-			panel.isOpen = true;
+			panel.Value.SetActive(true);
 		}
 
 		#endregion
@@ -306,7 +294,7 @@ namespace Team_Capture.UI
 			if(!allowPanelToggling)
 				return;
 			
-			if (GetActivePanel() != null)
+			if (GetActivePanel().Key != null)
 				ClosePanel(GetActivePanel());
 
 			ClosePauseMenuAction();

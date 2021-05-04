@@ -60,7 +60,7 @@ namespace Team_Capture.UI.Panels
 		private Image maxPlayersImage;
 		private Color maxPlayersImageColor;
 
-		private MainMenuController mainMenuController;
+		private MenuController menuController;
 		private TCNetworkManager netManager;
 		private List<TCScene> onlineTCScenes;
 
@@ -90,7 +90,7 @@ namespace Team_Capture.UI.Panels
 			gameNameImageColor = gameNameImage.color;
 			maxPlayersImageColor = maxPlayersImage.color;
 
-			mainMenuController = GetComponentInParent<MainMenuController>();
+			menuController = GetComponentInParent<MenuController>();
 		}
 
 		/// <summary>
@@ -149,13 +149,13 @@ namespace Team_Capture.UI.Panels
 			onStartingServerPanel.gameObject.SetActive(true);
 			startServerButton.interactable = false;
 			cancelButton.interactable = false;
-			mainMenuController.allowPanelToggling = false;
+			menuController.allowPanelToggling = false;
 
 			//Now start the server
 			netManager.CreateServerAndConnectToServer(gameNameText.text, onlineTCScenes[mapsDropdown.value].SceneFileName, maxPlayers,
 				() =>
 				{
-					mainMenuController.allowPanelToggling = true;
+					menuController.allowPanelToggling = true;
 					cancelButton.interactable = true;
 					startServerButton.interactable = true;
 					onStartingServerPanel.FailedToStartMessage();
