@@ -285,23 +285,5 @@ namespace Team_Capture.UI
 		}
 
 		#endregion
-
-		#region Pause Menu Specfic
-
-		
-		private void CloseActivePanelPauseMenu()
-		{
-			if(!allowPanelToggling)
-				return;
-			
-			if (GetActivePanel().Key != null)
-				ClosePanel(GetActivePanel());
-
-			ClosePauseMenuAction();
-		}
-
-		public Action ClosePauseMenuAction;
-
-		#endregion
 	}
 }
