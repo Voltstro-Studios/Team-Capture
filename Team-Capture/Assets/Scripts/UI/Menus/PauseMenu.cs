@@ -2,6 +2,9 @@ using System;
 
 namespace Team_Capture.UI.Menus
 {
+    /// <summary>
+    ///     Menu for the pause menu
+    /// </summary>
     internal class PauseMenu : MenuController
     {
         public MenuPanel[] menuPanels;

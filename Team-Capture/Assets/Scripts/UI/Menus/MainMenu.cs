@@ -1,5 +1,8 @@
 namespace Team_Capture.UI.Menus
 {
+    /// <summary>
+    ///     Menu for the main menu
+    /// </summary>
     internal class MainMenu : MenuController
     {
         public MenuPanel[] menuPanels;

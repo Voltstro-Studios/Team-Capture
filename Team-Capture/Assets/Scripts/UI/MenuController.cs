@@ -171,6 +171,15 @@ namespace Team_Capture.UI
 				ClosePanel(GetActivePanel());
 		}
 
+		/// <summary>
+		///		Creates a button
+		/// </summary>
+		/// <param name="buttonPrefab"></param>
+		/// <param name="parent"></param>
+		/// <param name="text"></param>
+		/// <param name="action"></param>
+		/// <param name="maxSize"></param>
+		/// <param name="bold"></param>
 		protected void CreateButton(GameObject buttonPrefab, Transform parent, string text, UnityAction action,
 			float maxSize = 52f, bool bold = false)
 		{
