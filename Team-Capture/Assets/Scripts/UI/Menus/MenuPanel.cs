@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Team_Capture.UI
+namespace Team_Capture.UI.Menus
 {
 	/// <summary>
 	///     A panel for a main menu

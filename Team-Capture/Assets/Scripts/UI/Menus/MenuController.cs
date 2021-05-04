@@ -15,7 +15,7 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 using Logger = Team_Capture.Logging.Logger;
 
-namespace Team_Capture.UI
+namespace Team_Capture.UI.Menus
 {
 	/// <summary>
 	///     Controller for a menu
