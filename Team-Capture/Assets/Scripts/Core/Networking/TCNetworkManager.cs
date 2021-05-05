@@ -1,4 +1,5 @@
-﻿using Mirror;
+﻿using System;
+using Mirror;
 using Team_Capture.Console;
 using Team_Capture.Core.Networking.Discovery;
 using Team_Capture.LagCompensation;
@@ -45,7 +46,7 @@ namespace Team_Capture.Core.Networking
 		/// <summary>
 		///     The config for the server
 		/// </summary>
-		public ServerConfig serverConfig;
+		[NonSerialized] public ServerConfig serverConfig;
 
 		/// <summary>
 		///		Are we a server or not
