@@ -5,6 +5,7 @@ using Mirror.Discovery;
 using Team_Capture.SceneManagement;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Scripting;
 using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.Core.Networking.Discovery
@@ -20,7 +21,7 @@ namespace Team_Capture.Core.Networking.Discovery
 	{
 		public int CurrentAmountOfPlayers;
 
-		public string GameName;
+		public CompressedNetworkString GameName;
 
 		public int MaxPlayers;
 
@@ -30,6 +31,29 @@ namespace Team_Capture.Core.Networking.Discovery
 	}
 
 	#endregion
+
+	[Preserve]
+	internal static class TCServerRequestNetwork
+	{
+		public static void WriteServerResponse(this NetworkWriter writer, TCServerResponse response)
+		{
+			writer.WriteInt32(response.CurrentAmountOfPlayers);
+			response.GameName.Write(writer);
+			writer.WriteInt32(response.MaxPlayers);
+			writer.WriteString(response.SceneName);
+		}
+
+		public static TCServerResponse ReadServerResponse(this NetworkReader reader)
+		{
+			return new TCServerResponse
+			{
+				CurrentAmountOfPlayers = reader.ReadInt32(),
+				GameName = CompressedNetworkString.Read(reader),
+				MaxPlayers = reader.ReadInt32(),
+				SceneName = reader.ReadString()
+			};
+		}
+	}
 
 	[RequireComponent(typeof(TCNetworkManager))]
 	internal class TCGameDiscovery : NetworkDiscoveryBase<TCServerRequest, TCServerResponse>
@@ -67,7 +91,7 @@ namespace Team_Capture.Core.Networking.Discovery
 
 				return new TCServerResponse
 				{
-					GameName = TCNetworkManager.Instance.serverConfig.GameName.String,
+					GameName = TCNetworkManager.Instance.serverConfig.GameName,
 					MaxPlayers = netManager.maxConnections,
 					CurrentAmountOfPlayers = netManager.numPlayers,
 					SceneName = TCScenesManager.GetActiveScene().name

@@ -27,7 +27,7 @@ namespace Team_Capture.UI.Elements
 		{
 			baseButton.onClick.AddListener(delegate { call(); });
 
-			gameNameText.text = server.GameName;
+			gameNameText.text = server.GameName.String;
 			mapNameText.text = server.SceneName;
 			pingText.text = "0";
 			playerCountText.text = $"{server.CurrentAmountOfPlayers}/{server.MaxPlayers}";
