@@ -149,9 +149,9 @@ namespace Team_Capture.Core.Networking
 			await UniTask.WaitUntil(() => clientReceivedConfig);
 
 			//If the server has an MOTD, display it before creating a player object
-			if (netManager.serverConfig.motdMode != Server.ServerMOTDMode.Disabled && ClientMotdMode != ClientMOTDMode.Disable)
+			if (netManager.serverConfig.MotdMode != Server.ServerMOTDMode.Disabled && ClientMotdMode != ClientMOTDMode.Disable)
 			{
-				if (netManager.serverConfig.motdMode == Server.ServerMOTDMode.WebOnly && ClientMotdMode == ClientMOTDMode.TextOnly)
+				if (netManager.serverConfig.MotdMode == Server.ServerMOTDMode.WebOnly && ClientMotdMode == ClientMOTDMode.TextOnly)
 				{
 					RequestPlayerObject();
 					return;

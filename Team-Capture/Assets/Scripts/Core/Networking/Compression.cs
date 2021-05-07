@@ -2,6 +2,7 @@
 using System.Text;
 using JetBrains.Annotations;
 using K4os.Compression.LZ4;
+using Team_Capture.Logging;
 
 namespace Team_Capture.Core.Networking
 {
@@ -40,6 +41,7 @@ namespace Team_Capture.Core.Networking
             Span<byte> target = new byte[LZ4Codec.MaximumOutputSize(data.Length)];
             int compressedLength = LZ4Codec.Encode(data, target);
             Span<byte> compressed = target.Slice(0, compressedLength);
+            Logger.Debug("Compressed data from {UncompressedSize} to {CompressedSize}", length, compressed.Length);
             return compressed;
         }
 
@@ -64,6 +66,7 @@ namespace Team_Capture.Core.Networking
         {
             Span<byte> decompressed = new byte[length];
             LZ4Codec.Decode(data, decompressed);
+            Logger.Debug("Decompressed data from {DecompressedSize} {CompressedSize}", length, data.Length);
             return decompressed;
         }
     }

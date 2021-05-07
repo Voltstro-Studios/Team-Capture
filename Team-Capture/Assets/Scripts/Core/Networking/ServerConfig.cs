@@ -1,5 +1,4 @@
-﻿using System;
-using Mirror;
+﻿using Mirror;
 using UnityEngine.Scripting;
 
 namespace Team_Capture.Core.Networking
@@ -7,28 +6,39 @@ namespace Team_Capture.Core.Networking
 	/// <summary>
 	///		Config for server settings
 	/// </summary>
-	[Serializable]
 	internal struct ServerConfig : NetworkMessage
 	{
+		internal ServerConfig(string gameName, Server.ServerMOTDMode motdMode, string motdText, string motdUrl)
+		: this()
+		{
+			if(gameName != null)
+				GameName = new CompressedNetworkString(gameName);
+			MotdMode = motdMode;
+			if(motdText != null)
+				MotdText = new CompressedNetworkString(motdText);
+			if(motdUrl != null)
+				MotdUrl = new CompressedNetworkString(motdUrl);
+		}
+
 		/// <summary>
-		///		The name of the game
+		///		The name of this game
 		/// </summary>
-		public string gameName;
+		public CompressedNetworkString GameName;
 
 		/// <summary>
 		///		The MOTD mode
 		/// </summary>
-		public Server.ServerMOTDMode motdMode;
+		public Server.ServerMOTDMode MotdMode;
 
 		/// <summary>
 		///		Text for MOTD
 		/// </summary>
-		public string motdText;
+		public CompressedNetworkString MotdText;
 
 		/// <summary>
 		///		URL for MOTD
 		/// </summary>
-		public string motdUrl;
+		public CompressedNetworkString MotdUrl;
 	}
 
 	[Preserve]
@@ -36,16 +46,16 @@ namespace Team_Capture.Core.Networking
 	{
 		public static void WriteServerConfig(this NetworkWriter writer, ServerConfig config)
 		{
-			writer.WriteString(config.gameName);
-			writer.WriteByte((byte)config.motdMode);
-			if(config.motdMode == Server.ServerMOTDMode.TextOnly)
-				writer.WriteString(config.motdText);
-			else if(config.motdMode == Server.ServerMOTDMode.WebOnly)
-				writer.WriteString(config.motdUrl);
-			else if (config.motdMode == Server.ServerMOTDMode.WebWithTextBackup)
+			config.GameName.Write(writer);
+			writer.WriteByte((byte)config.MotdMode);
+			if(config.MotdMode == Server.ServerMOTDMode.TextOnly)
+				config.MotdText.Write(writer);
+			else if(config.MotdMode == Server.ServerMOTDMode.WebOnly)
+				config.MotdUrl.Write(writer);
+			else if (config.MotdMode == Server.ServerMOTDMode.WebWithTextBackup)
 			{
-				writer.WriteString(config.motdText);
-				writer.WriteString(config.motdUrl);
+				config.MotdText.Write(writer);
+				config.MotdUrl.Write(writer);
 			}
 		}
 
@@ -53,18 +63,18 @@ namespace Team_Capture.Core.Networking
 		{
 			ServerConfig config = new ServerConfig
 			{
-				gameName = reader.ReadString(),
-				motdMode = (Server.ServerMOTDMode)reader.ReadByte()
+				GameName = CompressedNetworkString.Read(reader),
+				MotdMode = (Server.ServerMOTDMode)reader.ReadByte()
 			};
 
-			if (config.motdMode == Server.ServerMOTDMode.TextOnly)
-				config.motdText = reader.ReadString();
-			else if (config.motdMode == Server.ServerMOTDMode.WebOnly)
-				config.motdUrl = reader.ReadString();
-			else if (config.motdMode == Server.ServerMOTDMode.WebWithTextBackup)
+			if (config.MotdMode == Server.ServerMOTDMode.TextOnly)
+				config.MotdText = CompressedNetworkString.Read(reader);
+			else if (config.MotdMode == Server.ServerMOTDMode.WebOnly)
+				config.MotdUrl = CompressedNetworkString.Read(reader);
+			else if (config.MotdMode == Server.ServerMOTDMode.WebWithTextBackup)
 			{
-				config.motdText = reader.ReadString();
-				config.motdUrl = reader.ReadString();
+				config.MotdText = CompressedNetworkString.Read(reader);
+				config.MotdUrl = CompressedNetworkString.Read(reader);
 			}
 
 			return config;

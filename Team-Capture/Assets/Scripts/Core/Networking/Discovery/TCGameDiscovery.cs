@@ -67,7 +67,7 @@ namespace Team_Capture.Core.Networking.Discovery
 
 				return new TCServerResponse
 				{
-					GameName = TCNetworkManager.Instance.serverConfig.gameName,
+					GameName = TCNetworkManager.Instance.serverConfig.GameName.String,
 					MaxPlayers = netManager.maxConnections,
 					CurrentAmountOfPlayers = netManager.numPlayers,
 					SceneName = TCScenesManager.GetActiveScene().name

@@ -30,27 +30,27 @@ namespace Team_Capture.UI.MOTD
 		/// <param name="onClose"></param>
 	    internal void Setup(ServerConfig serverConfig, Action onClose)
 	    {
-		    motdTitleText.text = $"{serverConfig.gameName}'s MOTD.";
+		    motdTitleText.text = $"{serverConfig.GameName.String}'s MOTD.";
 
-		    if (serverConfig.motdMode == Server.ServerMOTDMode.WebOnly || serverConfig.motdMode == Server.ServerMOTDMode.WebWithTextBackup && Client.ClientMotdMode == Client.ClientMOTDMode.WebSupport)
+		    if (serverConfig.MotdMode == Server.ServerMOTDMode.WebOnly || serverConfig.MotdMode == Server.ServerMOTDMode.WebWithTextBackup && Client.ClientMotdMode == Client.ClientMOTDMode.WebSupport)
 		    {
 			    webBrowserUI.browserClient.ReplaceLogger(Logger.UnityLogger);
-			    webBrowserUI.browserClient.initialUrl = serverConfig.motdUrl;
+			    webBrowserUI.browserClient.initialUrl = serverConfig.MotdUrl.String;
 
 			    motdTextScroll.SetActive(false);
 			    webBrowserUI.gameObject.SetActive(true);
 			    SendJs().Forget();
 		    }
 
-		    else if (serverConfig.motdMode == Server.ServerMOTDMode.TextOnly || serverConfig.motdMode == Server.ServerMOTDMode.WebWithTextBackup)
+		    else if (serverConfig.MotdMode == Server.ServerMOTDMode.TextOnly || serverConfig.MotdMode == Server.ServerMOTDMode.WebWithTextBackup)
 		    {
-			    if (string.IsNullOrWhiteSpace(serverConfig.motdText))
+			    if (string.IsNullOrWhiteSpace(serverConfig.MotdText.String))
 				    throw new InvalidMOTDSettings("The server's MOTD was set to text, however the sent over text contained nothing!");
 
 				motdTextScroll.SetActive(true);
 				webBrowserUI.gameObject.SetActive(false);
 
-			    motdText.text = serverConfig.motdText;
+			    motdText.text = serverConfig.MotdText.String;
 		    }
 
 		    onCloseAction = onClose;

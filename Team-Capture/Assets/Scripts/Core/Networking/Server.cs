@@ -326,16 +326,14 @@ namespace Team_Capture.Core.Networking
 		private static void SetupServerConfig()
 		{
 			//Setup configuration with our launch arguments
-			netManager.serverConfig.gameName = GameName;
-			netManager.serverConfig.motdMode = ServerMotdMode;
-			netManager.serverConfig.motdUrl = ServerMotdUrl;
+			netManager.serverConfig = new ServerConfig(GameName, ServerMotdMode, null, ServerMotdUrl);
 			netManager.maxConnections = MaxPlayers;
 			netManager.onlineScene = Scene;
 
 			//Setup MOTD
 			string gamePath = Game.GetGameExecutePath();
 
-			if (netManager.serverConfig.motdMode == ServerMOTDMode.TextOnly || netManager.serverConfig.motdMode == ServerMOTDMode.WebWithTextBackup)
+			if (netManager.serverConfig.MotdMode == ServerMOTDMode.TextOnly || netManager.serverConfig.MotdMode == ServerMOTDMode.WebWithTextBackup)
 			{
 				string motdGamePath = $"{gamePath}{MotdPath}";
 				string motdData;
@@ -364,7 +362,7 @@ namespace Team_Capture.Core.Networking
 					return;
 				}
 
-				netManager.serverConfig.motdText = motdData;
+				netManager.serverConfig.MotdText = new CompressedNetworkString(motdData);
 			}
 		}
 
@@ -425,8 +423,8 @@ namespace Team_Capture.Core.Networking
 		[ConCommand("gamename", "Sets the game name", CommandRunPermission.ServerOnly)]
 		public static void SetGameNameCommand(string[] args)
 		{
-			TCNetworkManager.Instance.serverConfig.gameName = string.Join(" ", args);
-			Logger.Info("Game name was set to {Name}", TCNetworkManager.Instance.serverConfig.gameName);
+			TCNetworkManager.Instance.serverConfig.GameName.String = string.Join(" ", args);
+			Logger.Info("Game name was set to {Name}", TCNetworkManager.Instance.serverConfig.GameName.String);
 		}
 
 		[ConCommand("sv_address", "Sets the server's address", CommandRunPermission.ServerOnly, 1, 1)]
