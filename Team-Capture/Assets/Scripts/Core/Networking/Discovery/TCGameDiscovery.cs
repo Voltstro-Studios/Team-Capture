@@ -2,6 +2,7 @@
 using System.Net;
 using Mirror;
 using Mirror.Discovery;
+using Team_Capture.Core.Compression;
 using Team_Capture.SceneManagement;
 using UnityEngine;
 using UnityEngine.Events;

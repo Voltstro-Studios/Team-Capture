@@ -4,7 +4,7 @@ using JetBrains.Annotations;
 using K4os.Compression.LZ4;
 using Team_Capture.Logging;
 
-namespace Team_Capture.Core.Networking
+namespace Team_Capture.Core.Compression
 {
     /// <summary>
     ///     Provides the ability to compress shit with LZ4

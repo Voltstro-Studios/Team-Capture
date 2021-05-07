@@ -1,5 +1,6 @@
 using System;
 using NUnit.Framework;
+using Team_Capture.Core.Compression;
 using Team_Capture.Core.Networking;
 
 namespace Team_Capture.Editor.Tests

@@ -4,6 +4,7 @@ using System.IO;
 using Cysharp.Threading.Tasks;
 using Mirror;
 using Team_Capture.Console;
+using Team_Capture.Core.Compression;
 using Team_Capture.Helper;
 using Team_Capture.LagCompensation;
 using UnityEngine;

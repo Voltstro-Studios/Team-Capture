@@ -1,6 +1,6 @@
 ﻿using Mirror;
 
-namespace Team_Capture.Core.Networking
+namespace Team_Capture.Core.Compression
 {
     public struct CompressedNetworkString
     {
@@ -18,7 +18,7 @@ namespace Team_Capture.Core.Networking
             set
             {
                 @string = value;
-                compressedString = Compression.CompressString(value, out int _).ToArray();
+                compressedString = Core.Compression.Compression.CompressString(value, out int _).ToArray();
             }
         }
 
@@ -32,7 +32,7 @@ namespace Team_Capture.Core.Networking
         {
             return new CompressedNetworkString
             {
-                @string = Compression.DecompressString(reader.ReadArray<byte>(), reader.ReadInt32())
+                @string = Core.Compression.Compression.DecompressString(reader.ReadArray<byte>(), reader.ReadInt32())
             };
         }
 

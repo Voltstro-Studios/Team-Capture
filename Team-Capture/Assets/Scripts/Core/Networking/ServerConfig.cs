@@ -1,4 +1,5 @@
 ﻿using Mirror;
+using Team_Capture.Core.Compression;
 using UnityEngine.Scripting;
 
 namespace Team_Capture.Core.Networking
