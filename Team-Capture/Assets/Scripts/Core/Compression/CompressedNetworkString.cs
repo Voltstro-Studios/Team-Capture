@@ -1,4 +1,6 @@
-﻿using Mirror;
+﻿using System;
+using Mirror;
+using Team_Capture.Logging;
 
 namespace Team_Capture.Core.Compression
 {
@@ -34,8 +36,16 @@ namespace Team_Capture.Core.Compression
             get => @string;
             set
             {
+                try
+                {
+                    compressedString = Compression.CompressString(value, out int _).ToArray();
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error(ex, "An error occured while compressing data!");
+                    return;
+                }
                 @string = value;
-                compressedString = Compression.CompressString(value, out int _).ToArray();
             }
         }
 
@@ -56,10 +66,21 @@ namespace Team_Capture.Core.Compression
         /// <returns></returns>
         public static CompressedNetworkString Read(NetworkReader reader)
         {
-            return new CompressedNetworkString
+            try
             {
-                @string = Compression.DecompressString(reader.ReadArray<byte>(), reader.ReadInt32())
-            };
+                return new CompressedNetworkString
+                {
+                    @string = Compression.DecompressString(reader.ReadArray<byte>(), reader.ReadInt32())
+                };
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex, "An error occured while decompressing data!");
+                return new CompressedNetworkString
+                {
+                    @String = null
+                };
+            }
         }
 
         public override string ToString()
