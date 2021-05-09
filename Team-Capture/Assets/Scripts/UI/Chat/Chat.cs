@@ -59,6 +59,9 @@ namespace Team_Capture.UI.Chat
 
         internal void ToggleChat()
         {
+            if(inputField.isFocused && IsChatOpen)
+                return;
+            
             mainView.SetActive(!IsChatOpen);
             preview.SetActive(!IsChatOpen);
             
