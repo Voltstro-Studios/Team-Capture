@@ -475,6 +475,52 @@ namespace Team_Capture.Input
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Chat"",
+            ""id"": ""828335d4-e438-4e3e-9ee0-6a40824abdff"",
+            ""actions"": [
+                {
+                    ""name"": ""ToggleChat"",
+                    ""type"": ""Button"",
+                    ""id"": ""712ab24b-122c-40ac-83c0-fd17740c1cf8"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""SubmitChat"",
+                    ""type"": ""Button"",
+                    ""id"": ""13b51f9c-919b-435e-9232-de2aafbdd6b9"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""17370327-8418-4a37-9518-e7ffb21bf530"",
+                    ""path"": ""<Keyboard>/t"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""ToggleChat"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""62e8d72d-0f75-4e19-87c2-795e511daa16"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""SubmitChat"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -523,6 +569,10 @@ namespace Team_Capture.Input
             m_Player_WeaponSelection = m_Player.FindAction("WeaponSelection", throwIfNotFound: true);
             m_Player_ReloadWeapon = m_Player.FindAction("ReloadWeapon", throwIfNotFound: true);
             m_Player_ShootWeapon = m_Player.FindAction("ShootWeapon", throwIfNotFound: true);
+            // Chat
+            m_Chat = asset.FindActionMap("Chat", throwIfNotFound: true);
+            m_Chat_ToggleChat = m_Chat.FindAction("ToggleChat", throwIfNotFound: true);
+            m_Chat_SubmitChat = m_Chat.FindAction("SubmitChat", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -839,6 +889,47 @@ namespace Team_Capture.Input
             }
         }
         public PlayerActions @Player => new PlayerActions(this);
+
+        // Chat
+        private readonly InputActionMap m_Chat;
+        private IChatActions m_ChatActionsCallbackInterface;
+        private readonly InputAction m_Chat_ToggleChat;
+        private readonly InputAction m_Chat_SubmitChat;
+        public struct ChatActions
+        {
+            private @GameInput m_Wrapper;
+            public ChatActions(@GameInput wrapper) { m_Wrapper = wrapper; }
+            public InputAction @ToggleChat => m_Wrapper.m_Chat_ToggleChat;
+            public InputAction @SubmitChat => m_Wrapper.m_Chat_SubmitChat;
+            public InputActionMap Get() { return m_Wrapper.m_Chat; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(ChatActions set) { return set.Get(); }
+            public void SetCallbacks(IChatActions instance)
+            {
+                if (m_Wrapper.m_ChatActionsCallbackInterface != null)
+                {
+                    @ToggleChat.started -= m_Wrapper.m_ChatActionsCallbackInterface.OnToggleChat;
+                    @ToggleChat.performed -= m_Wrapper.m_ChatActionsCallbackInterface.OnToggleChat;
+                    @ToggleChat.canceled -= m_Wrapper.m_ChatActionsCallbackInterface.OnToggleChat;
+                    @SubmitChat.started -= m_Wrapper.m_ChatActionsCallbackInterface.OnSubmitChat;
+                    @SubmitChat.performed -= m_Wrapper.m_ChatActionsCallbackInterface.OnSubmitChat;
+                    @SubmitChat.canceled -= m_Wrapper.m_ChatActionsCallbackInterface.OnSubmitChat;
+                }
+                m_Wrapper.m_ChatActionsCallbackInterface = instance;
+                if (instance != null)
+                {
+                    @ToggleChat.started += instance.OnToggleChat;
+                    @ToggleChat.performed += instance.OnToggleChat;
+                    @ToggleChat.canceled += instance.OnToggleChat;
+                    @SubmitChat.started += instance.OnSubmitChat;
+                    @SubmitChat.performed += instance.OnSubmitChat;
+                    @SubmitChat.canceled += instance.OnSubmitChat;
+                }
+            }
+        }
+        public ChatActions @Chat => new ChatActions(this);
         private int m_KeyboardMouseSchemeIndex = -1;
         public InputControlScheme KeyboardMouseScheme
         {
@@ -879,6 +970,11 @@ namespace Team_Capture.Input
             void OnWeaponSelection(InputAction.CallbackContext context);
             void OnReloadWeapon(InputAction.CallbackContext context);
             void OnShootWeapon(InputAction.CallbackContext context);
+        }
+        public interface IChatActions
+        {
+            void OnToggleChat(InputAction.CallbackContext context);
+            void OnSubmitChat(InputAction.CallbackContext context);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Team_Capture.UI;
+using Team_Capture.UI.Chat;
 using Team_Capture.Weapons;
 using UnityEngine;
 
@@ -66,6 +67,40 @@ namespace Team_Capture.Player
 		{
 			ui.killFeed.AddKillfeedItem(message);
 		}
+
+		#region Chat
+
+		/// <summary>
+		///		Is the chat opened
+		/// </summary>
+		internal bool IsChatOpen => ui.chat.IsChatOpen;
+
+		/// <summary>
+		///		Adds a message to the chat
+		/// </summary>
+		/// <param name="message"></param>
+		internal void AddChatMessage(ChatMessage message)
+		{
+			ui.chat.AddMessage(message);
+		}
+
+		/// <summary>
+		///		Submits the chat input
+		/// </summary>
+		internal void SubmitChatMessage()
+		{
+			ui.chat.Submit();
+		}
+
+		/// <summary>
+		///		Toggles the chat
+		/// </summary>
+		internal void ToggleChat()
+		{
+			ui.chat.ToggleChat();
+		}
+
+		#endregion
 
 		private void OnPlayerDamaged()
 		{

@@ -7,6 +7,7 @@ using Team_Capture.Console;
 using Team_Capture.Core.Compression;
 using Team_Capture.Helper;
 using Team_Capture.LagCompensation;
+using Team_Capture.UI.Chat;
 using UnityEngine;
 using UnityCommandLineParser;
 using UnityEngine.Scripting;
@@ -128,7 +129,11 @@ namespace Team_Capture.Core.Networking
 			//Run the server autoexec config
 			ConsoleBackend.ExecuteFile("server-autoexec");
 
+			//Setup the server's config
 			SetupServerConfig();
+			
+			//Server chat
+			NetworkServer.RegisterHandler<ChatMessage>(ServerChat.ReceivedChatMessage);
 
 			//Create server online file
 			try
@@ -160,8 +165,9 @@ namespace Team_Capture.Core.Networking
 
 			//Stop advertising the server when the server stops
 			netManager.gameDiscovery.StopDiscovery();
-
-			Logger.Info("Server stopped!");
+			
+			//Close server chat
+			NetworkServer.UnregisterHandler<ChatMessage>();
 
 			//Close server online file stream
 			try
@@ -181,6 +187,7 @@ namespace Team_Capture.Core.Networking
 			if(File.Exists(serverOnlineFilePath))
 				File.Delete(serverOnlineFilePath);
 
+			Logger.Info("Server stopped!");
 		}
 
 		/// <summary>

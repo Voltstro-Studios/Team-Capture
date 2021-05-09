@@ -49,8 +49,12 @@ namespace Team_Capture.Input
 				gameInput.Player.WeaponSelection.performed += OnPlayerWeaponSelection;
 				gameInput.Player.ShootWeapon.performed += OnPlayerWeaponShoot;
 				gameInput.Player.ReloadWeapon.performed += OnPlayerReloadWeapon;
+				
+				//Chat
+				gameInput.Chat.SubmitChat.performed += OnChatSubmit;
+				gameInput.Chat.ToggleChat.performed += OnChatToggle;
 
-			    Application.quitting += ShutdownInput;
+				Application.quitting += ShutdownInput;
 		    }
 	    }
 
@@ -82,6 +86,10 @@ namespace Team_Capture.Input
 			gameInput.Player.WeaponSelection.performed -= OnPlayerWeaponSelection;
 			gameInput.Player.ShootWeapon.performed -= OnPlayerWeaponShoot;
 			gameInput.Player.ReloadWeapon.performed -= OnPlayerReloadWeapon;
+			
+			//Chat
+			gameInput.Chat.SubmitChat.performed -= OnSubmitInput;
+			gameInput.Chat.ToggleChat.performed -= OnChatToggle;
 
 			gameInput.Dispose();
 
@@ -253,6 +261,33 @@ namespace Team_Capture.Input
 	    public void DisablePlayerInput()
 	    {
 			gameInput.Player.Disable();
+	    }
+
+	    #endregion
+
+	    #region Chat
+
+	    public event Action ChatToggle;
+	    public event Action ChatSubmit;
+
+	    private void OnChatToggle(InputAction.CallbackContext context)
+	    {
+		    ChatToggle?.Invoke();
+	    }
+
+	    private void OnChatSubmit(InputAction.CallbackContext context)
+	    {
+		    ChatSubmit?.Invoke();
+	    }
+
+	    public void EnableChatInput()
+	    {
+		    gameInput.Chat.Enable();
+	    }
+
+	    public void DisableChatInput()
+	    {
+		    gameInput.Chat.Disable();
 	    }
 
 	    #endregion

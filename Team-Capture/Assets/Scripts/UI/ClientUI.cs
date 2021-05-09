@@ -34,6 +34,11 @@ namespace Team_Capture.UI
 		[Tooltip("The pause menu")] public PauseMenu pauseMenu;
 
 		/// <summary>
+		///		The chat
+		/// </summary>
+		[Tooltip("The chat")] public Chat.Chat chat;
+
+		/// <summary>
 		///     The scoreboard gameobject
 		/// </summary>
 		[Tooltip("The scoreboard gameobject")] public GameObject scoreBoardObject;
@@ -99,9 +104,17 @@ namespace Team_Capture.UI
 
 			pauseMenu.gameObject.SetActive(state);
 			killFeed.killFeedItemsHolder.gameObject.SetActive(!state);
-			
-			if(state)
+
+			if (state)
+			{
 				scoreBoardObject.SetActive(false);
+				chat.ToggleChat();
+				chat.gameObject.SetActive(false);
+			}
+			else
+			{
+				chat.gameObject.SetActive(true);
+			}
 
 			if (PlayerManager.IsDead) return;
 			ActivateHud(!state);

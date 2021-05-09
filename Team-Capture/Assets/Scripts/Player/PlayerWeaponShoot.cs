@@ -78,9 +78,6 @@ namespace Team_Capture.Player
 		[Client]
 		internal void ShootWeapon(bool buttonDown)
 		{
-			if(ClientUI.IsPauseMenuOpen)
-				return;
-
 			//Cache our current weapon
 			NetworkedWeapon networkedWeapon = weaponManager.GetActiveWeapon();
 

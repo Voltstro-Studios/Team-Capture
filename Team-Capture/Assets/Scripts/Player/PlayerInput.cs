@@ -48,6 +48,7 @@ namespace Team_Capture.Player
 		{
 			InputReader = reader;
 
+			//Setup player input
 			InputReader.PlayerScoreboard += OnPlayerScoreBoard;
 			InputReader.PlayerSuicide += OnPlayerSuicidePress;
 			InputReader.PlayerJump += OnPlayerJump;
@@ -56,12 +57,17 @@ namespace Team_Capture.Player
 			InputReader.PlayerWeaponShoot += OnPlayerWeaponShoot;
 			InputReader.PlayerWeaponReload += OnPlayerWeaponReload;
 
+			InputReader.ChatSubmit += OnChatSubmit;
+			InputReader.ChatToggle += OnChatToggle;
+
 			InputReader.EnablePlayerInput();
+			InputReader.EnableChatInput();
 		}
 
 		private void OnDisable()
 		{
 			InputReader.DisablePlayerInput();
+			InputReader.DisableChatInput();
 
 			InputReader.PlayerScoreboard -= OnPlayerScoreBoard;
 			InputReader.PlayerSuicide -= OnPlayerSuicidePress;
@@ -70,6 +76,9 @@ namespace Team_Capture.Player
 			InputReader.PlayerWeaponSelection -= OnPlayerWeaponSelection;
 			InputReader.PlayerWeaponShoot -= OnPlayerWeaponShoot;
 			InputReader.PlayerWeaponReload -= OnPlayerWeaponReload;
+			
+			InputReader.ChatSubmit -= OnChatSubmit;
+			InputReader.ChatToggle -= OnChatToggle;
 		}
 
 		private void Update()
@@ -86,7 +95,7 @@ namespace Team_Capture.Player
 				}
 
 			//If the pause menu is open, set player movement direction to 0 and return
-			if (ClientUI.IsPauseMenuOpen)
+			if (ClientUI.IsPauseMenuOpen || uiManager.IsChatOpen)
 			{
 				playerInput.SetInput(0, 0, 0, 0, false);
 				return;
@@ -145,9 +154,9 @@ namespace Team_Capture.Player
 
 		#region Input Functions
 
-		private static void HandleMouseLock()
+		private void HandleMouseLock()
 		{
-			if (ClientUI.IsPauseMenuOpen)
+			if (ClientUI.IsPauseMenuOpen || uiManager.IsChatOpen)
 			{
 				if (!Cursor.visible)
 					Cursor.visible = true;
@@ -189,7 +198,7 @@ namespace Team_Capture.Player
 
 		private void OnPlayerWeaponSelection(float value)
 		{
-			if(ClientUI.IsPauseMenuOpen)
+			if(ClientUI.IsPauseMenuOpen || uiManager.IsChatOpen)
 				return;
 
 			int selectedWeaponIndex = weaponManager.SelectedWeaponIndex;
@@ -217,15 +226,28 @@ namespace Team_Capture.Player
 
 		private void OnPlayerWeaponShoot(bool button)
 		{
+			if(ClientUI.IsPauseMenuOpen || uiManager.IsChatOpen)
+				return;
+			
 			weaponShoot.ShootWeapon(button);
 		}
 
 		private void OnPlayerWeaponReload()
 		{
-			if(ClientUI.IsPauseMenuOpen)
+			if(ClientUI.IsPauseMenuOpen || uiManager.IsChatOpen)
 				return;
 
 			weaponManager.ClientReloadWeapon();
+		}
+
+		private void OnChatSubmit()
+		{
+			uiManager.SubmitChatMessage();
+		}
+		
+		private void OnChatToggle()
+		{
+			uiManager.ToggleChat();
 		}
 
 		#endregion

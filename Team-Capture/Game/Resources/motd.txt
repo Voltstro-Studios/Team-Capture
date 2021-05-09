@@ -1,0 +1,9 @@
+<style="Title">Welcome to Team-Capture!</style>
+
+<style="h2">Map Rotation</style>
+Here is our map rotation:
+    dm_ditch
+
+<style="h2">Rules</style>
+    - No cheating
+    - Have fun!

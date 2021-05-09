@@ -451,6 +451,52 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "Chat",
+            "id": "828335d4-e438-4e3e-9ee0-6a40824abdff",
+            "actions": [
+                {
+                    "name": "ToggleChat",
+                    "type": "Button",
+                    "id": "712ab24b-122c-40ac-83c0-fd17740c1cf8",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "SubmitChat",
+                    "type": "Button",
+                    "id": "13b51f9c-919b-435e-9232-de2aafbdd6b9",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "17370327-8418-4a37-9518-e7ffb21bf530",
+                    "path": "<Keyboard>/t",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "ToggleChat",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "62e8d72d-0f75-4e19-87c2-795e511daa16",
+                    "path": "<Keyboard>/enter",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "SubmitChat",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": [

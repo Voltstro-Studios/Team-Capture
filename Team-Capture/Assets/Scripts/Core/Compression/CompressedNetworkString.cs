@@ -63,15 +63,31 @@ namespace Team_Capture.Core.Compression
         ///     Reads the <see cref="CompressedNetworkString"/>
         /// </summary>
         /// <param name="reader"><see cref="NetworkReader"/> to read from</param>
+        /// <param name="reCompressString">
+        ///     Will assign <see cref="CompressedNetworkString.compressedString"/>. Use for security reasons,
+        ///     such as if you want to send data to the server, then to all the clients, like a message.
+        /// </param>
         /// <returns></returns>
-        public static CompressedNetworkString Read(NetworkReader reader)
+        public static CompressedNetworkString Read(NetworkReader reader, bool reCompressString = false)
         {
             try
             {
-                return new CompressedNetworkString
+                string rawString = Compression.DecompressString(reader.ReadArray<byte>(), reader.ReadInt32());
+                CompressedNetworkString compressedNetworkString;
+                
+                //You might want to do this in-case a client sends data, and that data goes to every client.
+                //So in-case the client sending the data sends fucky data, we will probs catch it here.
+                if (reCompressString)
+                    compressedNetworkString = new CompressedNetworkString(rawString);
+                else
                 {
-                    @string = Compression.DecompressString(reader.ReadArray<byte>(), reader.ReadInt32())
-                };
+                    compressedNetworkString = new CompressedNetworkString
+                    {
+                        @string = rawString
+                    };
+                }
+                
+                return compressedNetworkString;
             }
             catch (Exception ex)
             {

@@ -1,4 +1,5 @@
 ﻿using Mirror;
+using Team_Capture.UI.Chat;
 using UnityEngine;
 
 namespace Team_Capture.Player
@@ -14,6 +15,7 @@ namespace Team_Capture.Player
 		{
 			//Register all our custom messages
 			NetworkClient.RegisterHandler<PlayerDiedMessage>(PlayerDiedMessage);
+			NetworkClient.RegisterHandler<ChatMessage>(ChatMessage);
 
 			uiManager = GetComponent<PlayerUIManager>();
 		}
@@ -22,6 +24,7 @@ namespace Team_Capture.Player
 		{
 			//Unregister our custom messages on destroy
 			NetworkClient.UnregisterHandler<PlayerDiedMessage>();
+			NetworkClient.UnregisterHandler<ChatMessage>();
 		}
 
 		/// <summary>
@@ -31,6 +34,15 @@ namespace Team_Capture.Player
 		private void PlayerDiedMessage(PlayerDiedMessage message)
 		{
 			uiManager.AddKillfeedItem(message);
+		}
+		
+		/// <summary>
+		///		Chat message
+		/// </summary>
+		/// <param name="message"></param>
+		private void ChatMessage(ChatMessage message)
+		{
+			uiManager.AddChatMessage(message);
 		}
 	}
 }
