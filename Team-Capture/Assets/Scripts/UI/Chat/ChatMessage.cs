@@ -5,6 +5,9 @@ using UnityEngine.Scripting;
 
 namespace Team_Capture.UI.Chat
 {
+    /// <summary>
+    ///     Chat network message
+    /// </summary>
     public struct ChatMessage : NetworkMessage
     {
         internal ChatMessage(string message)
@@ -13,8 +16,14 @@ namespace Team_Capture.UI.Chat
             Message = new CompressedNetworkString(message);
         }
         
+        /// <summary>
+        ///     The player or thing that sent this message
+        /// </summary>
         public string Player;
         
+        /// <summary>
+        ///     Their message
+        /// </summary>
         public CompressedNetworkString Message;
     }
 
