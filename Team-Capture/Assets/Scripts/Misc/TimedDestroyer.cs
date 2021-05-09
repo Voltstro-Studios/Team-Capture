@@ -3,14 +3,14 @@
 namespace Team_Capture.Misc
 {
 	/// <summary>
-	///     Destroys a particle after <see cref="destroyDelayTime" /> passes
+	///     Destroys a <see cref="GameObject"/> after a certain amount of time
 	/// </summary>
-	public class ParticleDestroyer : MonoBehaviour
+	public class TimedDestroyer : MonoBehaviour
 	{
 		/// <summary>
 		///     What delay to use until destroy
 		/// </summary>
-		[SerializeField] private float destroyDelayTime = 2.0f;
+		public float destroyDelayTime = 2.0f;
 
 		private void Start()
 		{

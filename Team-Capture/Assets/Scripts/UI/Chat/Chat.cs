@@ -1,17 +1,30 @@
 using Mirror;
+using Team_Capture.Misc;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.UI.Chat
 {
     internal class Chat : MonoBehaviour
     {
-        public TMP_Text text;
         public TMP_InputField inputField;
-        public GameObject hideableSection;
 
-        public bool IsChatOpen => hideableSection.activeSelf;
+        public float previewTextDestroyDelayTime = 8.0f;
+        
+        public GameObject chatTextPrefab;
+
+        public GameObject preview;
+        public GameObject mainView;
+
+        public ScrollRect previewScroll;
+        public ScrollRect mainViewScroll;
+        
+        public Transform previewTextViewport;
+        public Transform mainViewTextViewport;
+
+        public bool IsChatOpen => mainView.activeSelf;
 
         internal void Submit()
         {
@@ -24,8 +37,19 @@ namespace Team_Capture.UI.Chat
 
         internal void AddMessage(ChatMessage message)
         {
-            text.text += $"{message.Player}: {message.Message}\n";
-            Logger.Info($"Chat: {message.Player}: {message.Message}");
+            string formattedMessage = $"{message.Player}: {message.Message.String}";
+            TMP_Text mainViewText = Instantiate(chatTextPrefab, mainViewTextViewport, false).GetComponent<TMP_Text>();
+            mainViewText.text = formattedMessage;
+
+            TMP_Text previewText = Instantiate(chatTextPrefab, previewTextViewport, false).GetComponent<TMP_Text>();
+            previewText.text = formattedMessage;
+            previewText.gameObject.AddComponent<TimedDestroyer>().destroyDelayTime = previewTextDestroyDelayTime;
+            
+            Canvas.ForceUpdateCanvases();
+            mainViewScroll.normalizedPosition = new Vector2(0, 0);
+            previewScroll.normalizedPosition = new Vector2(0, 0);
+
+            Logger.Info($"Chat: {formattedMessage}");
         }
 
         internal void SendChatMessage(ChatMessage message)
@@ -35,7 +59,11 @@ namespace Team_Capture.UI.Chat
 
         internal void ToggleChat()
         {
-            hideableSection.SetActive(!IsChatOpen);
+            mainView.SetActive(!IsChatOpen);
+            preview.SetActive(!IsChatOpen);
+            
+            mainViewScroll.normalizedPosition = new Vector2(0, 0);
+            previewScroll.normalizedPosition = new Vector2(0, 0);
 
             if (!IsChatOpen) return;
             
