@@ -22,9 +22,8 @@ namespace Team_Capture.Console
 
 		public void Init()
 		{
-			//Allocate a new console for us
-			AllocConsole();
-
+			Debug.unityLogger.logEnabled = false;
+			
 			//Set the title, color, out, in, buffer
 			SetConsoleTitle(consoleTitle);
 			System.Console.BackgroundColor = ConsoleColor.Black;
@@ -38,7 +37,6 @@ namespace Team_Capture.Console
 
 		public void Shutdown()
 		{
-			FreeConsole();
 		}
 
 		public void LogMessage(string message, LogType logType)
@@ -146,13 +144,7 @@ namespace Team_Capture.Console
 			System.Console.Write(new string(' ', System.Console.WindowWidth - 1));
 			System.Console.CursorLeft = 0;
 		}
-
-		[DllImport("Kernel32.dll")]
-		private static extern bool AllocConsole();
-
-		[DllImport("Kernel32.dll")]
-		private static extern bool FreeConsole();
-
+		
 		[DllImport("Kernel32.dll")]
 		private static extern bool SetConsoleTitle(string title);
 	}

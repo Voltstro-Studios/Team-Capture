@@ -40,9 +40,12 @@ namespace Team_Capture.Editor
 			string buildDir = $"{GameBuilder.GetBuildDirectory()}{target}-DevOpsBuild/{PlayerSettings.productName}";
 
 			System.Console.WriteLine($"Building TC for {target} platform to {buildDir}");
+			
+			if(target == BuildTarget.StandaloneWindows64)
+				GameBuilder.BuildGame(buildDir, target, true);
+			else
+				GameBuilder.BuildGame(buildDir, target, false);
 
-	        GameBuilder.BuildGame(buildDir, target);
-	        
 	        SettingsManager.Instance.Set(ZipBuildKey, currentZipBuild);
         }
 

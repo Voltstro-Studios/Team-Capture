@@ -246,7 +246,7 @@
       "dependencies": {
         "com.unity.settings-manager": "1.0.3"
       },
-      "hash": "aac4f441e64f01647ba0de0b6f9c2a23f3bb405b"
+      "hash": "e4cec0fb9bf869e3f3241d915be9b330e3946d30"
     },
     "nl.elraccoone.tweens": {
       "version": "git+https://github.com/elraccoone/unity-tweens",

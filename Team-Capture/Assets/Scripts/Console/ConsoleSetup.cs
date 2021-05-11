@@ -1,4 +1,6 @@
-﻿using Team_Capture.Core;
+﻿using System;
+using System.Runtime.InteropServices;
+using Team_Capture.Core;
 using UnityEngine;
 using Logger = Team_Capture.Logging.Logger;
 
@@ -39,6 +41,10 @@ namespace Team_Capture.Console
 			{
 				//Create in-game console GUI
 				ConsoleUI = Instantiate(consoleUiPrefab, transform).GetComponent<ConsoleGUI>();
+
+#if UNITY_STANDALONE_WIN
+				ShowWindow(GetConsoleWindow(), 0);
+#endif
 			}
 
 			//Init the console
@@ -55,5 +61,13 @@ namespace Team_Capture.Console
 		{
 			ConsoleUI.UpdateConsole();
 		}
+
+#if UNITY_STANDALONE_WIN
+		[DllImport("kernel32.dll")]
+		private static extern IntPtr GetConsoleWindow();
+
+		[DllImport("user32.dll")]
+		private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+#endif
 	}
 }
