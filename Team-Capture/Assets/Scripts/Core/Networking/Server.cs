@@ -385,15 +385,14 @@ namespace Team_Capture.Core.Networking
 			ProcessStartInfo startInfo = new ProcessStartInfo();
 
 			#region Windows StartInfo
-#if UNITY_EDITOR_WIN
 			startInfo.FileName =
-						$"{Voltstro.UnityBuilder.Build.GameBuilder.GetBuildDirectory()}Team-Capture-Quick/Team-Capture.exe";
-#elif UNITY_STANDALONE_WIN
-			startInfo.FileName = "Team-Capture.exe";
-#endif
-#if UNITY_EDITOR_WINDOWS || UNITY_STANDALONE_WIN
+						$"cmd";
+#if UNITY_EDITOR_WIN
 			startInfo.Arguments =
-						$"-batchmode -nographics -gamename \"{gameName}\" -scene {sceneName} -maxplayers {maxPlayers} -closeserveronfirstclientdisconnect";
+						$"\"/C {Voltstro.UnityBuilder.Build.GameBuilder.GetBuildDirectory()}Team-Capture-Quick/Team-Capture.exe -batchmode -nographics -gamename \"{gameName}\" -scene {sceneName} -maxplayers {maxPlayers} -closeserveronfirstclientdisconnect \" ";
+#elif UNITY_STANDALONE_WIN
+			startInfo.Arguments = $"\"/C Team-Capture.exe -batchmode -nographics -gamename \"{gameName}\" -scene {sceneName} -maxplayers {maxPlayers} -closeserveronfirstclientdisconnect \" ";
+			startInfo.WorkingDirectory = Game.GetGameExecutePath();
 #endif
 			#endregion
 
