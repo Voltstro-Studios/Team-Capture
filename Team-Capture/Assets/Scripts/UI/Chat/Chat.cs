@@ -118,13 +118,22 @@ namespace Team_Capture.UI.Chat
             if(inputField.isFocused && IsChatOpen)
                 return;
             
-            mainView.SetActive(!IsChatOpen);
-            preview.SetActive(!IsChatOpen);
+            ActivateChat(!IsChatOpen);
+        }
+
+        /// <summary>
+        ///     Activates the chat
+        /// </summary>
+        /// <param name="state"></param>
+        internal void ActivateChat(bool state)
+        {
+            mainView.SetActive(state);
+            preview.SetActive(!state);
             
             mainViewScroll.normalizedPosition = new Vector2(0, 0);
             previewScroll.normalizedPosition = new Vector2(0, 0);
 
-            if (!IsChatOpen) return;
+            if (!state) return;
             
             inputField.Select();
             inputField.ActivateInputField();

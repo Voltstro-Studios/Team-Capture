@@ -108,7 +108,9 @@ namespace Team_Capture.UI
 			if (state)
 			{
 				scoreBoardObject.SetActive(false);
-				chat.ToggleChat();
+				if(chat.IsChatOpen)
+					chat.ActivateChat(false);
+				
 				chat.gameObject.SetActive(false);
 			}
 			else
