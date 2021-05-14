@@ -1,4 +1,4 @@
-using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using Mirror;
 using UnityEngine;
 using Logger = Team_Capture.Logging.Logger;
@@ -27,32 +27,34 @@ namespace Team_Capture.Core.Networking
 		{
 			if (msg.ApplicationVersion == Application.version)
 			{
-				conn.Send(new JoinRequestResponseMessage
-				{
-					Code = 200,
-					Message = "Ok"
-				});
-
+				SendRequestResponseMessage(conn, HttpCode.Ok, "Ok");
 				ServerAccept(conn);
+				Logger.Debug("Accepted client {Id}", conn.connectionId);
 			}
 			else
 			{
-				conn.Send(new JoinRequestResponseMessage
-				{
-					Code = 412,
-					Message = "Server and client versions are out of sync!"
-				});
+				SendRequestResponseMessage(conn, HttpCode.PreconditionFailed, "Server and client versions mismatch!");
+				Logger.Warn("Client {Id} had mismatched versions with the server! Rejecting connection.", conn.connectionId);
 
 				conn.isAuthenticated = false;
-				DisconnectClientDelayed(conn).GetAwaiter().GetResult();
+				DisconnectClientDelayed(conn).Forget();
 			}
 		}
 
-		private async Task DisconnectClientDelayed(NetworkConnection conn)
+		private async UniTask DisconnectClientDelayed(NetworkConnection conn)
 		{
-			await Task.Delay(1000);
+			await Integrations.UniTask.UniTask.Delay(1000);
 
 			ServerReject(conn);
+		}
+
+		private void SendRequestResponseMessage(NetworkConnection conn, HttpCode code, string message)
+		{
+			conn.Send(new JoinRequestResponseMessage
+			{
+				Code = code,
+				Message = message
+			});
 		}
 
 		#endregion
@@ -80,15 +82,15 @@ namespace Team_Capture.Core.Networking
 		private void OnReceivedJoinRequestResponse(JoinRequestResponseMessage msg)
 		{
 			//We good to connect
-			if (msg.Code == 200)
+			if (msg.Code == HttpCode.Ok)
 			{
-				Logger.Info("Join request was accepted! {@Message} ({@Code})", msg.Message, msg.Code);
+				Logger.Info("Join request was accepted! {Message} ({Code})", msg.Message, (int)msg.Code);
 
 				ClientAccept();
 			}
 			else
 			{
-				Logger.Error("Failed to connect! Error: {@Message} ({@Code})", msg.Message, msg.Code);
+				Logger.Error("Failed to connect! Error: {Message} ({Code})", msg.Message, (int)msg.Code);
 
 				ClientReject();
 			}
@@ -105,7 +107,7 @@ namespace Team_Capture.Core.Networking
 
 		public struct JoinRequestResponseMessage : NetworkMessage
 		{
-			public int Code;
+			public HttpCode Code;
 			public string Message;
 		}
 

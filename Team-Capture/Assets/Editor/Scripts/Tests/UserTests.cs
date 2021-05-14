@@ -47,11 +47,6 @@ namespace Team_Capture.Editor.Tests
 	    public void GetDefaultAccountDiscordOrOfflineTest()
 	    {
 		    User.Init();
-		    User.AddAccount(new Account
-		    {
-			    AccountName = OfflineAccountName,
-			    AccountProvider = AccountProvider.Offline
-		    });
 
 		    User.AddAccount(new Account
 		    {
@@ -68,11 +63,6 @@ namespace Team_Capture.Editor.Tests
 	    public void GetDefaultAccountSteamOrOfflineTest()
 	    {
 		    User.Init();
-		    User.AddAccount(new Account
-		    {
-			    AccountName = OfflineAccountName,
-			    AccountProvider = AccountProvider.Offline
-		    });
 
 		    User.AddAccount(new Account
 		    {
@@ -89,11 +79,6 @@ namespace Team_Capture.Editor.Tests
 	    public void GetDefaultAccountOfflineTest()
 	    {
 		    User.Init();
-		    User.AddAccount(new Account
-		    {
-			    AccountName = OfflineAccountName,
-			    AccountProvider = AccountProvider.Offline
-		    });
 
 		    Account account = User.DefaultAccount;
 		    Assert.AreEqual(AccountProvider.Offline, account.AccountProvider);
