@@ -21,6 +21,8 @@ namespace Team_Capture.UI.Panels
 		[Tooltip("Whats the locale to use for the failed to start message")]
 		public string failedToStartMessageLocale = "Menu_StartingServerFail";
 
+		public string failedToConnectMessageLocale = "Menu_ConnectFail";
+
 		/// <summary>
 		///		The text object of where the text will be placed
 		/// </summary>
@@ -45,6 +47,15 @@ namespace Team_Capture.UI.Panels
 		{
 			cancelButton.interactable = true;
 			messageText.text = GameUILocale.ResolveString(failedToStartMessageLocale);
+		}
+
+		/// <summary>
+		///		Call this when the client fails to connect to the started server
+		/// </summary>
+		public void FailedToConnectMessage()
+		{
+			cancelButton.interactable = true;
+			messageText.text = GameUILocale.ResolveString(failedToConnectMessageLocale);
 		}
 	}
 }

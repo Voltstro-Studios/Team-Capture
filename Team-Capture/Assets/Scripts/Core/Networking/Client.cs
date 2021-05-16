@@ -22,6 +22,9 @@ namespace Team_Capture.Core.Networking
 
 		private static bool clientReceivedConfig;
 
+		internal static ClientStatus Status => status;
+		private static ClientStatus status;
+
 		/// <summary>
 		///		MOTD mode that the client is using
 		/// </summary>
@@ -49,6 +52,7 @@ namespace Team_Capture.Core.Networking
 		/// <param name="workingNetManager"></param>
 		internal static void OnClientStart(TCNetworkManager workingNetManager)
 		{
+			status = ClientStatus.Connecting;
 			clientReceivedConfig = false;
 			clientHasPlayer = false;
 			netManager = workingNetManager;
@@ -65,6 +69,7 @@ namespace Team_Capture.Core.Networking
 		/// </summary>
 		internal static void OnClientStop()
 		{
+			status = ClientStatus.Offline;
 			PingManager.ClientShutdown();
 			Logger.Info("Stopped client.");
 		}
@@ -75,6 +80,7 @@ namespace Team_Capture.Core.Networking
 		/// <param name="conn"></param>
 		internal static void OnClientConnect(NetworkConnection conn)
 		{
+			status = ClientStatus.Connected;
 			Logger.Info("Connected to the server '{Address}' with a connection ID of {ConnectionId}.", conn.address,
 				conn.connectionId);
 
@@ -88,6 +94,7 @@ namespace Team_Capture.Core.Networking
 		/// <param name="conn"></param>
 		internal static void OnClientDisconnect(NetworkConnection conn)
 		{
+			status = ClientStatus.Offline;
 			netManager.StopClient();
 			Logger.Info($"Disconnected from server {conn.address}");
 		}

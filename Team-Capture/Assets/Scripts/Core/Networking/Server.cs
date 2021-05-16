@@ -267,16 +267,16 @@ namespace Team_Capture.Core.Networking
 		}
 
 		///  <summary>
-		/// 		Creates a new server process and connects this process to it
+		/// 		Creates a new server process
 		///  </summary>
 		///  <param name="workingNetManager"></param>
 		///  <param name="gameName"></param>
 		///  <param name="sceneName"></param>
 		///  <param name="maxPlayers"></param>
-		///  <param name="onFailedToStart"></param>
-		internal static void CreateServerAndConnectToServer(this NetworkManager workingNetManager, 
-			string gameName, string sceneName, int maxPlayers,
-			Action onFailedToStart = null)
+		///  <param name="onServerStarted"></param>
+		///  <param name="onServerFailedToStart"></param>
+		internal static void CreateServerProcess(this NetworkManager workingNetManager, 
+			string gameName, string sceneName, int maxPlayers, Action onServerStarted, Action onServerFailedToStart = null)
 		{
 #if UNITY_EDITOR
 			string serverOnlinePath =
@@ -300,17 +300,12 @@ namespace Team_Capture.Core.Networking
 			newTcServer.Start();
 
 			//We need to wait for the server online file, and to not cause the game to freeze we run it async
-			WaitForServerOneFileAndConnect(serverOnlinePath, () =>
-			{
-				//Start the client
-				workingNetManager.networkAddress = "localhost";
-				workingNetManager.StartClient();
-			}, onFailedToStart).Forget();
+			WaitForServerOnlineFile(serverOnlinePath, onServerStarted, onServerFailedToStart).Forget();
 		}
 
-		private static async UniTaskVoid WaitForServerOneFileAndConnect(string serverOnlinePath, 
-			Action onSuccessFullCompletion = null,
-			Action onFailToStart = null)
+		private static async UniTaskVoid WaitForServerOnlineFile(string serverOnlinePath, 
+			Action onServerStart = null,
+			Action onServerFailToStart = null)
 		{
 			float timeUntilCancel = Time.time + TimeOutServerTime;
 
@@ -321,14 +316,14 @@ namespace Team_Capture.Core.Networking
 				if (Time.time >= timeUntilCancel)
 				{
 					Logger.Error("Server process did not start for some reason! Not connecting.");
-					onFailToStart?.Invoke();
+					onServerFailToStart?.Invoke();
 					return;
 				}
 
 				await UniTask.Delay(100);
 			}
 
-			onSuccessFullCompletion?.Invoke();
+			onServerStart?.Invoke();
 		}
 
 		private static void SetupServerConfig()

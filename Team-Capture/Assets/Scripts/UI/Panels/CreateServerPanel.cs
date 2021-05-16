@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Cysharp.Threading.Tasks;
 using Team_Capture.Core.Networking;
 using Team_Capture.SceneManagement;
 using Team_Capture.UI.Menus;
@@ -153,12 +154,11 @@ namespace Team_Capture.UI.Panels
 			menuController.allowPanelToggling = false;
 
 			//Now start the server
-			netManager.CreateServerAndConnectToServer(gameNameText.text, onlineTCScenes[mapsDropdown.value].SceneFileName, maxPlayers,
+			netManager.CreateServerProcess(gameNameText.text, onlineTCScenes[mapsDropdown.value].SceneFileName, maxPlayers,
+				() => ConnectToCreatedServer().Forget(),
 				() =>
 				{
-					menuController.allowPanelToggling = true;
-					cancelButton.interactable = true;
-					startServerButton.interactable = true;
+					EnableElements();
 					onStartingServerPanel.FailedToStartMessage();
 				});
 		}
@@ -172,6 +172,32 @@ namespace Team_Capture.UI.Panels
 			doLast();
 		}
 
+		private async UniTask ConnectToCreatedServer()
+		{
+			netManager.networkAddress = "localhost";
+			netManager.StartClient();
+
+			while (Client.Status == ClientStatus.Connecting)
+			{
+				await Integrations.UniTask.UniTask.Delay(100);
+			}
+
+			//We failed to connect
+			if (Client.Status == ClientStatus.Offline)
+			{
+				EnableElements();
+				onStartingServerPanel.FailedToConnectMessage();
+				Logger.Error("Failed to connect!");
+			}
+		}
+
+		private void EnableElements()
+		{
+			menuController.allowPanelToggling = true;
+			cancelButton.interactable = true;
+			startServerButton.interactable = true;
+		}
+		
 		public void ResetGameNameTextColor()
 		{
 			if (gameNameImage.color == errorColor)
