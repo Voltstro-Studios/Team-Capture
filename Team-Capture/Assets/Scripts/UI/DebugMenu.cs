@@ -46,7 +46,17 @@ namespace Team_Capture.UI
 		private int totalMemoryUsed;
 		private int gcReserved;
 		private int drawCalls;
-
+		
+		private int inMessageCountFrame;
+		private int outMessageCountFrame;
+		private int inMessageBytesFrame;
+		private int outMessageBytesFrame;
+		
+		private int inMessageCount;
+		private int outMessageCount;
+		private int inMessageBytes;
+		private int outMessageBytes;
+		
 		private void OnGUI()
 		{
 			if (!DebugMenuOpen)
@@ -61,7 +71,7 @@ namespace Team_Capture.UI
 				if (PlayerMovementManager.ShowPos)
 					yOffset = 120;
 
-			GUI.Box(new Rect(8, yOffset, 475, 400), "");
+			GUI.Box(new Rect(8, yOffset, 475, 420), "");
 			GUI.Label(new Rect(10, yOffset, 1000, 40), version);
 			GUI.Label(new Rect(10, yOffset += 20, 1000, 40), Spacer);
 
@@ -80,7 +90,9 @@ namespace Team_Capture.UI
 			GUI.Label(new Rect(10, yOffset += 30, 1000, 40), "Network");
 			GUI.Label(new Rect(10, yOffset += 20, 1000, 40), Spacer);
 			GUI.Label(new Rect(10, yOffset += 20, 1000, 40), ipAddress);
-			GUI.Label(new Rect(10, yOffset + 20, 1000, 40), $"Status: {GetNetworkingStatus()}");
+			GUI.Label(new Rect(10, yOffset += 20, 1000, 40), $"Status: {GetNetworkingStatus()}");
+			GUI.Label(new Rect(10, yOffset += 20, 1000, 40), $"In Messages {inMessageCountFrame} ({inMessageBytesFrame / 1000} kb)");
+			GUI.Label(new Rect(10, yOffset += 20, 1000, 40), $"Out Message {outMessageCountFrame} ({outMessageBytesFrame / 1000} kb)");
 		}
 
 		private void Update()
@@ -94,6 +106,16 @@ namespace Team_Capture.UI
 			gcReserved = (int) gcReservedMemoryRecorder.LastValue / (1024 * 1024);
 			drawCalls = (int) totalDrawCallsRecorder.LastValue;
 
+			inMessageCountFrame = inMessageCount;
+			outMessageCountFrame = outMessageCount;
+			inMessageBytesFrame = inMessageBytes;
+			outMessageBytesFrame = outMessageBytes;
+
+			inMessageCount = 0;
+			inMessageBytes = 0;
+			outMessageCount = 0;
+			outMessageBytes = 0;
+			
 			timer = Time.unscaledTime + refreshRate;
 		}
 
@@ -105,6 +127,9 @@ namespace Team_Capture.UI
 			totalMemoryUsedRecorder = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "Total Used Memory");
 			gcReservedMemoryRecorder = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "GC Reserved Memory");
 			totalDrawCallsRecorder = ProfilerRecorder.StartNew(ProfilerCategory.Render, "Draw Calls Count");
+
+			NetworkDiagnostics.InMessageEvent += AddInMessage;
+			NetworkDiagnostics.OutMessageEvent += AddOutMessage;
 		}
 
 		private void OnDisable()
@@ -113,6 +138,9 @@ namespace Team_Capture.UI
 			totalMemoryUsedRecorder.Dispose();
 			gcReservedMemoryRecorder.Dispose();
 			totalDrawCallsRecorder.Dispose();
+			
+			NetworkDiagnostics.InMessageEvent -= AddInMessage;
+			NetworkDiagnostics.OutMessageEvent -= AddOutMessage;
 		}
 
 		protected override void SingletonAwakened()
@@ -166,6 +194,18 @@ namespace Team_Capture.UI
 			r /= samplesCount;
 
 			return r;
+		}
+
+		private void AddInMessage(NetworkDiagnostics.MessageInfo info)
+		{
+			inMessageCount++;
+			inMessageBytes += info.bytes;
+		}
+
+		private void AddOutMessage(NetworkDiagnostics.MessageInfo info)
+		{
+			outMessageCount++;
+			outMessageBytes += info.bytes;
 		}
 
 		#region Info
