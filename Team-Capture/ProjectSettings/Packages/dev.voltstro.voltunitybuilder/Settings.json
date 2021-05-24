@@ -16,7 +16,7 @@
             {
                 "type": "UnityEditor.BuildTarget, UnityEditor.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null",
                 "key": "BuildTarget",
-                "value": "{\"m_Value\":19}"
+                "value": "{\"m_Value\":24}"
             },
             {
                 "type": "System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",

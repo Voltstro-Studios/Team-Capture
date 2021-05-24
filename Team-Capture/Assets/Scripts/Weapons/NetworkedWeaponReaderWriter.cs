@@ -16,8 +16,8 @@ namespace Team_Capture.Weapons
 		public static void WriteNetworkedWeapon(this NetworkWriter writer, NetworkedWeapon weapon)
 		{
 			writer.WriteString(weapon.Weapon);
-			writer.WriteInt32(weapon.CurrentBulletAmount);
-			writer.WriteBoolean(weapon.IsReloading);
+			writer.WriteInt(weapon.CurrentBulletAmount);
+			writer.WriteBool(weapon.IsReloading);
 		}
 
 		/// <summary>
@@ -34,8 +34,8 @@ namespace Team_Capture.Weapons
 			if (weapon != null)
 				return new NetworkedWeapon(weapon, false)
 				{
-					CurrentBulletAmount = reader.ReadInt32(),
-					IsReloading = reader.ReadBoolean()
+					CurrentBulletAmount = reader.ReadInt(),
+					IsReloading = reader.ReadBool()
 				};
 
 			//Something went wrong

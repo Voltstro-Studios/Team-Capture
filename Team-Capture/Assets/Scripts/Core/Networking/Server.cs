@@ -218,8 +218,16 @@ namespace Team_Capture.Core.Networking
 			Logger.Info("Client '{ConnectionId}' disconnected from the server.", conn.connectionId);
 
 			//Our first connected client disconnected
-			if(closeServerOnFirstClientDisconnect && conn.connectionId == firstConnectionId)
-				Game.QuitGame();
+			//TODO: I have no clue way but this has just stopped fucking working
+			if (closeServerOnFirstClientDisconnect && conn.connectionId == firstConnectionId)
+			{
+				Logger.Info("Shutting down server due to first client disconnecting...");
+				netManager.StopHost();
+
+				//Quit the game if we are headless
+				if(Game.IsHeadless)
+					Game.QuitGame();
+			}
 		}
 
 		/// <summary>

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using Team_Capture.Core;
 using UnityEngine;
+using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.BootManagement
 {
@@ -41,6 +42,7 @@ namespace Team_Capture.BootManagement
 						continue;
 				}
 
+				Logger.Info("Starting boot item {Name}", bootItem.name);
 				bootItem.OnBoot();
 
 				yield return new WaitForSeconds(delayBetweenItems);

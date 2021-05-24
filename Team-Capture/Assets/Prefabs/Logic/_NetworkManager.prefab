@@ -49,10 +49,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dontDestroyOnLoad: 1
+  PersistNetworkManagerToOfflineScene: 0
   runInBackground: 1
-  autoStartServerBuild: 1
-  showDebugMessages: 0
+  autoStartServerBuild: 0
   serverTickRate: 128
+  serverBatching: 1
+  serverBatchInterval: 0
   offlineScene: Assets/Scenes/MainMenu.unity
   onlineScene: Assets/Scenes/dm_ditch.unity
   transport: {fileID: 1601811758747872243}
@@ -72,10 +74,6 @@ MonoBehaviour:
     type: 3}
   maxFrameCount: 128
   gameDiscovery: {fileID: 0}
-  serverConfig:
-    gameName: Team-Capture game
-    motdMode: 0
-    motdText: 
 --- !u!114 &1601811758747872255
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -90,6 +88,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   secretHandshake: -4258480990573702963
   serverBroadcastListenPort: 7776
+  enableActiveDiscovery: 1
   ActiveDiscoveryInterval: 3
 --- !u!114 &1601811758747872254
 MonoBehaviour:

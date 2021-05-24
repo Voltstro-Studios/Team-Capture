@@ -83,8 +83,6 @@ namespace Team_Capture.Player
 
 		private void Update()
 		{
-			if (!isLocalPlayer) return; //Acts as a backup
-
 			//Make sure mouse lock/visibility is correct
 			HandleMouseLock();
 

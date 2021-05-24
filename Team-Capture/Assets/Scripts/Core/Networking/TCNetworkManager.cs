@@ -72,7 +72,7 @@ namespace Team_Capture.Core.Networking
 		public override void Start()
 		{
 			//We are running in headless mode
-			if (Game.IsHeadless)
+			if (Game.IsHeadless && !Game.IsGameQuitting)
 				//Start the server
 				StartServer();
 

@@ -3,6 +3,7 @@ using System;
 using System.IO;
 using Mirror;
 using Team_Capture.Console;
+using Team_Capture.Core.Networking;
 using UnityEngine;
 using UnityEngine.Rendering;
 using Logger = Team_Capture.Logging.Logger;
@@ -36,7 +37,10 @@ namespace Team_Capture.Core
 			IsGameQuitting = true;
 
 			if (NetworkManager.singleton != null)
-				NetworkManager.singleton.StopHost();
+			{
+				NetworkManager.singleton.StopServer();
+				NetworkManager.singleton.StopClient();
+			}
 
 			Logger.Info("Goodbye!");
 

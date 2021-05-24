@@ -38,9 +38,9 @@ namespace Team_Capture.Core.Networking.Discovery
 	{
 		public static void WriteServerResponse(this NetworkWriter writer, TCServerResponse response)
 		{
-			writer.WriteInt32(response.CurrentAmountOfPlayers);
+			writer.WriteInt(response.CurrentAmountOfPlayers);
 			response.GameName.Write(writer);
-			writer.WriteInt32(response.MaxPlayers);
+			writer.WriteInt(response.MaxPlayers);
 			writer.WriteString(response.SceneName);
 		}
 
@@ -48,9 +48,9 @@ namespace Team_Capture.Core.Networking.Discovery
 		{
 			return new TCServerResponse
 			{
-				CurrentAmountOfPlayers = reader.ReadInt32(),
+				CurrentAmountOfPlayers = reader.ReadInt(),
 				GameName = CompressedNetworkString.Read(reader),
-				MaxPlayers = reader.ReadInt32(),
+				MaxPlayers = reader.ReadInt(),
 				SceneName = reader.ReadString()
 			};
 		}

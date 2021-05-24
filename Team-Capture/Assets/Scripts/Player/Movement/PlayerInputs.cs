@@ -42,13 +42,13 @@ namespace Team_Capture.Player.Movement
 			writer.WriteVector2(inputs.MoveDirections);
 			writer.WriteVector2(inputs.LookDirections);
 
-			writer.WriteBoolean(inputs.Jump);
-			writer.WriteInt32(inputs.InputNum);
+			writer.WriteBool(inputs.Jump);
+			writer.WriteInt(inputs.InputNum);
 		}
 
 		public static PlayerInputs ReaderPlayerInputs(this NetworkReader reader)
 		{
-			return new PlayerInputs(reader.ReadVector2(), reader.ReadVector2(), reader.ReadBoolean(), reader.ReadInt32());
+			return new PlayerInputs(reader.ReadVector2(), reader.ReadVector2(), reader.ReadBool(), reader.ReadInt());
 		}
 	}
 }

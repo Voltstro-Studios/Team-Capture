@@ -56,7 +56,7 @@ namespace Team_Capture.Core.Compression
         public void Write(NetworkWriter writer)
         {
             writer.WriteArray(compressedString);
-            writer.WriteInt32(@string.Length);
+            writer.WriteInt(@string.Length);
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace Team_Capture.Core.Compression
         {
             try
             {
-                string rawString = Compression.DecompressString(reader.ReadArray<byte>(), reader.ReadInt32());
+                string rawString = Compression.DecompressString(reader.ReadArray<byte>(), reader.ReadInt());
                 CompressedNetworkString compressedNetworkString;
                 
                 //You might want to do this in-case a client sends data, and that data goes to every client.
