@@ -12,13 +12,15 @@ namespace Team_Capture.Integrations.Steamworks
 	///		Handles connecting to Steam
 	/// </summary>
     internal class SteamManager : SingletonMonoBehaviour<SteamManager>
-    {
-	    /// <summary>
+	{
+		/// <summary>
 	    ///     Where to load the settings from
 	    /// </summary>
 	    public string settingsLocation = "/Resources/Integrations/Steam.json";
 
 	    private SteamManagerSettings settings;
+
+	    private AuthTicket authTicket;
 
 	    protected override void SingletonAwakened()
 	    {
@@ -26,12 +28,6 @@ namespace Team_Capture.Integrations.Steamworks
 
 	    protected override void SingletonStarted()
 	    {
-		    if (Game.IsHeadless)
-		    {
-			    Destroy(gameObject);
-			    return;
-		    }
-
 		    LoadSettings();
 			Initialize();
 	    }
@@ -79,7 +75,8 @@ namespace Team_Capture.Integrations.Steamworks
 			User.AddAccount(new Account
 			{
 				AccountProvider = AccountProvider.Steam,
-				AccountName = SteamClient.Name
+				AccountName = SteamClient.Name,
+				AccountId = SteamClient.SteamId.Value
 			});
 
 			Logger.Info("Logged into Steam account {AccountName} with an ID of {AccountID}", SteamClient.Name, SteamClient.SteamId.Value);

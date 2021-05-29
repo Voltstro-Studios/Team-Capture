@@ -1,6 +1,6 @@
 ﻿namespace Team_Capture.Core.UserAccount
 {
-	internal enum AccountProvider
+	internal enum AccountProvider : byte
 	{
 		Offline,
 		Steam,

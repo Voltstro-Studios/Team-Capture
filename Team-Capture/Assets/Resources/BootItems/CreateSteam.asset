@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73a8cc213ae8c1c40be88091433c2fd7, type: 3}
   m_Name: CreateSteam
   m_EditorClassIdentifier: 
-  runOn: 0
+  runOn: 2
   objectToCreate: {fileID: 1283966762203483718, guid: 685ed873963f30e4ca97294e705dc599,
     type: 3}

@@ -215,6 +215,7 @@ namespace Team_Capture.Core.Networking
 		internal static void OnServerRemoveClient(NetworkConnection conn)
 		{
 			NetworkServer.DestroyPlayerForConnection(conn);
+			netManager.tcAuthenticator.ClientDisconnect(conn.connectionId);
 			Logger.Info("Client '{ConnectionId}' disconnected from the server.", conn.connectionId);
 
 			//Our first connected client disconnected

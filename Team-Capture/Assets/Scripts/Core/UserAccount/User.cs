@@ -66,6 +66,17 @@ namespace Team_Capture.Core.UserAccount
 		/// </summary>
 	    internal static Account DefaultAccount => accounts.First().Value;
 
+		/// <summary>
+		///		Gets all <see cref="Account"/>s as <see cref="NetworkedAccount"/>s
+		/// </summary>
+		/// <returns></returns>
+		internal static NetworkedAccount[] GetAccountsAsNetworked()
+		{
+			List<NetworkedAccount> networkedAccounts = new List<NetworkedAccount>(accounts.Count);
+			networkedAccounts.AddRange(User.accounts.Select(account => account.Value.ToNetworked()));
+			return networkedAccounts.ToArray();
+		}
+
 		private static void UpdateOfflineAccount()
 		{
 			GetAccount(AccountProvider.Offline).AccountName = PlayerName;

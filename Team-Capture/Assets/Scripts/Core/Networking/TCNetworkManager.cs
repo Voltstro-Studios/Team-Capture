@@ -37,6 +37,11 @@ namespace Team_Capture.Core.Networking
 		/// </summary>
 		[Tooltip("How many frames to keep")]
 		public int maxFrameCount = 128;
+		
+		/// <summary>
+		///		Team-Capture's authenticator
+		/// </summary>
+		[NonSerialized] public TCAuthenticator tcAuthenticator;
 
 		/// <summary>
 		///     The active <see cref="TCGameDiscovery" />
@@ -53,6 +58,17 @@ namespace Team_Capture.Core.Networking
 		/// </summary>
 		public static bool IsServer => Instance.mode == NetworkManagerMode.ServerOnly;
 
+		public static TCAuthenticator Authenticator
+		{
+			get
+			{
+				if (Instance == null)
+					throw new ArgumentNullException();
+
+				return Instance.tcAuthenticator;
+			}
+		}
+
 		public override void Awake()
 		{
 			if (Instance != null)
@@ -67,6 +83,7 @@ namespace Team_Capture.Core.Networking
 			base.Awake();
 
 			Instance = this;
+			tcAuthenticator = GetComponent<TCAuthenticator>();
 		}
 
 		public override void Start()

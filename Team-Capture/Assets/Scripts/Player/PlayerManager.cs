@@ -3,7 +3,6 @@ using System.Collections;
 using Mirror;
 using Team_Capture.Core;
 using Team_Capture.Core.Networking;
-using Team_Capture.Core.UserAccount;
 using Team_Capture.Player.Movement;
 using Team_Capture.Weapons;
 using UnityEngine;
@@ -163,7 +162,6 @@ namespace Team_Capture.Player
 			if (!isLocalPlayer) return;
 
 			uiManager = GetComponent<PlayerUIManager>();
-			CmdSetName(User.DefaultAccount.AccountName);
 		}
 
 		#endregion
@@ -172,6 +170,7 @@ namespace Team_Capture.Player
 
 		public override void OnStartServer()
 		{
+			username = TCNetworkManager.Authenticator.GetAccount(netIdentity.connectionToClient.connectionId).AccountName;
 			Health = MaxHealth;
 			weaponManager = GetComponent<WeaponManager>();
 
@@ -389,12 +388,6 @@ namespace Team_Capture.Player
 		#endregion
 
 		#region Naming
-
-		[Command]
-		private void CmdSetName(string newName)
-		{
-			username = newName;
-		}
 
 		#endregion
 	}

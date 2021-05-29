@@ -122,7 +122,8 @@ namespace Team_Capture.Integrations.Discord
 			User.AddAccount(new Account
 			{
 				AccountProvider = AccountProvider.Discord,
-				AccountName = user.Username
+				AccountName = user.Username,
+				AccountId = (ulong)user.Id
 			});
 		}
 
