@@ -42,7 +42,7 @@ namespace Team_Capture.BootManagement
 						continue;
 				}
 
-				Logger.Info("Starting boot item {Name}", bootItem.name);
+				Logger.Debug("Starting boot item {Name}", bootItem.name);
 				bootItem.OnBoot();
 
 				yield return new WaitForSeconds(delayBetweenItems);
