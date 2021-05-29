@@ -37,10 +37,10 @@ jobs:
         uses: actions/cache@v1.1.0
         with:
           path: ${{ matrix.projectPath }}/Library
-          key: Library-${{ matrix.targetPlatform }}-v2
+          key: Library-${{ matrix.targetPlatform }}-v3
           restore-keys: |
-            Library-${{ matrix.targetPlatform }}-v2
-            Library-v2-
+            Library-${{ matrix.targetPlatform }}-v3
+            Library-v3-
 
       #Build the player using TC's CIBuilder.StartVoltBuilder
       - name: Build Player for ${{ matrix.targetPlatform }}
