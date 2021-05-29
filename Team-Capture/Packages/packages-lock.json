@@ -12,9 +12,9 @@
       "depth": 0,
       "source": "git",
       "dependencies": {
-        "com.unity.nuget.mono-cecil": "1.10.1-preview.1"
+        "com.unity.nuget.mono-cecil": "1.10.1"
       },
-      "hash": "9970db83bca9810ce304c31ae2596542f0239f52"
+      "hash": "06e588fa3b234025b7bc6c730d9afa5905c289ae"
     },
     "com.unity.build-report-inspector": {
       "version": "0.2.2-preview",
@@ -86,7 +86,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.nuget.mono-cecil": {
-      "version": "1.10.1-preview.1",
+      "version": "1.10.1",
       "depth": 1,
       "source": "registry",
       "dependencies": {},
