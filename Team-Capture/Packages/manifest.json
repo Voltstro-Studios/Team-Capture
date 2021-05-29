@@ -23,6 +23,8 @@
     "dev.voltstro.unitywebbrowser": "https://gitlab.com/Voltstro-Studios/WebBrowser/Package.git",
     "dev.voltstro.voltbuildertool": "https://github.com/VoltUnityPackages/VoltUnityBuilder.git",
     "nl.elraccoone.tweens": "git+https://github.com/elraccoone/unity-tweens",
+    "org.nuget.system.memory": "4.5.4",
+    "org.nuget.system.reflection.metadata": "5.0.0",
     "com.unity.modules.animation": "1.0.0",
     "com.unity.modules.assetbundle": "1.0.0",
     "com.unity.modules.audio": "1.0.0",
@@ -39,5 +41,14 @@
     "com.unity.modules.unitywebrequest": "1.0.0",
     "com.unity.modules.video": "1.0.0",
     "com.unity.modules.wind": "1.0.0"
-  }
+  },
+  "scopedRegistries": [
+    {
+      "name": "Unity NuGet",
+      "url": "https://unitynuget-registry.azurewebsites.net",
+      "scopes": [
+        "org.nuget"
+      ]
+    }
+  ]
 }
