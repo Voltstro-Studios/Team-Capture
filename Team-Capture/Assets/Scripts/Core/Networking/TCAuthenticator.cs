@@ -16,6 +16,9 @@ namespace Team_Capture.Core.Networking
 		[ConVar("sv_auth_method", "What account system to use to check clients")]
 		[CommandLineArgument("auth-method", "What account system to use to check clients")]
 		public static AccountProvider ServerAuthMethod = AccountProvider.Steam;
+
+		[ConVar("sv_auth_clean_names", "Will trim whitespace at the start and end of account names")]
+		public static bool CleanAccountNames = true;
 		
 		#region Server
 
@@ -94,11 +97,20 @@ namespace Team_Capture.Core.Networking
 					RefuseClientConnection(conn);
 					return;
 				}
+
+				//Make sure there are no duplicate names already on the server, otherwise add the number to the end
+				string accountName = offlineAccount.AccountName.String;
+				if (CleanAccountNames)
+					accountName = accountName.TrimStart().TrimEnd();
 				
+				int duplicates = authAccounts.Count(x => x.Value.AccountName == accountName);
+				if (duplicates != 0)
+					accountName += $" ({duplicates})";
+
 				authAccounts.Add(conn.connectionId, new Account
 				{
 					AccountProvider = AccountProvider.Offline,
-					AccountName = offlineAccount.AccountName.String
+					AccountName = accountName
 				});
 			}
 
