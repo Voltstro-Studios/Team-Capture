@@ -17,6 +17,12 @@
       },
       "hash": "b2b4e73921b4aeebf602832b358039f00fd12e4f"
     },
+    "com.unity.2d.sprite": {
+      "version": "1.0.0",
+      "depth": 1,
+      "source": "builtin",
+      "dependencies": {}
+    },
     "com.unity.build-report-inspector": {
       "version": "0.2.2-preview",
       "depth": 0,
@@ -224,6 +230,25 @@
         "com.unity.modules.imgui": "1.0.0"
       }
     },
+    "com.unity.vectorgraphics": {
+      "version": "2.0.0-preview.16",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.2d.sprite": "1.0.0",
+        "com.unity.ugui": "1.0.0",
+        "com.unity.modules.animation": "1.0.0",
+        "com.unity.modules.imageconversion": "1.0.0",
+        "com.unity.modules.physics": "1.0.0",
+        "com.unity.modules.physics2d": "1.0.0",
+        "com.unity.modules.ui": "1.0.0",
+        "com.unity.modules.uielements": "1.0.0",
+        "com.unity.modules.unitywebrequest": "1.0.0",
+        "com.unity.modules.unitywebrequesttexture": "1.0.0",
+        "com.unity.modules.unitywebrequestwww": "1.0.0"
+      },
+      "url": "https://packages.unity.com"
+    },
     "dev.voltstro.unitycommandlineparser": {
       "version": "https://github.com/Voltstro-Studios/UnityCommandLineParser.git",
       "depth": 0,
@@ -430,6 +455,46 @@
       "depth": 0,
       "source": "builtin",
       "dependencies": {}
+    },
+    "com.unity.modules.unitywebrequestassetbundle": {
+      "version": "1.0.0",
+      "depth": 2,
+      "source": "builtin",
+      "dependencies": {
+        "com.unity.modules.assetbundle": "1.0.0",
+        "com.unity.modules.unitywebrequest": "1.0.0"
+      }
+    },
+    "com.unity.modules.unitywebrequestaudio": {
+      "version": "1.0.0",
+      "depth": 2,
+      "source": "builtin",
+      "dependencies": {
+        "com.unity.modules.unitywebrequest": "1.0.0",
+        "com.unity.modules.audio": "1.0.0"
+      }
+    },
+    "com.unity.modules.unitywebrequesttexture": {
+      "version": "1.0.0",
+      "depth": 1,
+      "source": "builtin",
+      "dependencies": {
+        "com.unity.modules.unitywebrequest": "1.0.0",
+        "com.unity.modules.imageconversion": "1.0.0"
+      }
+    },
+    "com.unity.modules.unitywebrequestwww": {
+      "version": "1.0.0",
+      "depth": 1,
+      "source": "builtin",
+      "dependencies": {
+        "com.unity.modules.unitywebrequest": "1.0.0",
+        "com.unity.modules.unitywebrequestassetbundle": "1.0.0",
+        "com.unity.modules.unitywebrequestaudio": "1.0.0",
+        "com.unity.modules.audio": "1.0.0",
+        "com.unity.modules.assetbundle": "1.0.0",
+        "com.unity.modules.imageconversion": "1.0.0"
+      }
     },
     "com.unity.modules.video": {
       "version": "1.0.0",
