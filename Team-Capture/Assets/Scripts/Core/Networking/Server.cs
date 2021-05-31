@@ -305,6 +305,7 @@ namespace Team_Capture.Core.Networking
 			//Check to make sure the server online file doesn't already exist
 			if (File.Exists(serverOnlinePath))
 			{
+				onServerFailedToStart?.Invoke();
 				Logger.Error("A server is already running!");
 				return;
 			}
