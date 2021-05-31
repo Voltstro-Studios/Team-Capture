@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <doc>
     <assembly>
-        <name>Serilog.Enrichers.Demystify</name>
+        <name>Serilog.Enrichers.Demystifier</name>
     </assembly>
     <members>
         <member name="T:Serilog.LoggerEnrichmentConfigurationExtensions">
