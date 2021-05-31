@@ -10,6 +10,9 @@ using UnityEngine.Scripting;
 
 namespace Team_Capture.Core.UserAccount
 {
+    /// <summary>
+    ///     A <see cref="Account"/> that can be sent over the network
+    /// </summary>
     internal struct NetworkedAccount : NetworkMessage
     {
         public AccountProvider AccountProvider;

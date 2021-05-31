@@ -10,16 +10,34 @@ using UnityEngine;
 
 namespace Team_Capture.Core.UserAccount
 {
+	/// <summary>
+	///		Contains data about a user
+	/// </summary>
     internal class Account
     {
+	    /// <summary>
+	    ///		Who provides this account
+	    /// </summary>
 	    public AccountProvider AccountProvider;
 
+	    /// <summary>
+	    ///		The account name (or username)
+	    /// </summary>
 	    public string AccountName;
 
+	    /// <summary>
+	    ///		The account ID
+	    /// </summary>
 	    public ulong AccountId;
 
+	    /// <summary>
+	    ///		Link to their profile picture
+	    /// </summary>
 	    public Uri AccountProfileURL;
 
+	    /// <summary>
+	    ///		<see cref="Texture2D"/> of their profile picture
+	    /// </summary>
 	    public Texture2D AccountProfile;
 
 	    public NetworkedAccount ToNetworked()

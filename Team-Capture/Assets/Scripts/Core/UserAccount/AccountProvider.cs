@@ -6,11 +6,30 @@
 
 namespace Team_Capture.Core.UserAccount
 {
+	/// <summary>
+	///		Who provides this account
+	/// </summary>
 	internal enum AccountProvider : byte
 	{
+		/// <summary>
+		///		Its an offline account, all details comes from us
+		/// </summary>
 		Offline,
+		
+		/// <summary>
+		///		Account details are from Steam
+		/// </summary>
 		Steam,
+		
+		/// <summary>
+		///		Account details are from Discord
+		/// </summary>
 		Discord,
+		
+		/// <summary>
+		///		Unknown.
+		///		<para>Don't use</para>
+		/// </summary>
 		Unknown
 	}
 }

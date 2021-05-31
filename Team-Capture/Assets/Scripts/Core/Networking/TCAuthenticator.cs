@@ -17,6 +17,9 @@ using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.Core.Networking
 {
+	/// <summary>
+	///		<see cref="NetworkAuthenticator"/> for Team-Capture
+	/// </summary>
 	internal class TCAuthenticator : NetworkAuthenticator
 	{
 		[ConVar("sv_auth_method", "What account system to use to check clients")]
@@ -30,6 +33,12 @@ namespace Team_Capture.Core.Networking
 
 		private Dictionary<int, Account> authAccounts;
 
+		/// <summary>
+		///		Gets an account from their connection ID
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
+		/// <exception cref="ArgumentException"></exception>
 		public Account GetAccount(int id)
 		{
 			Account account = authAccounts[id];
@@ -39,6 +48,10 @@ namespace Team_Capture.Core.Networking
 			return account;
 		}
 
+		/// <summary>
+		///		Call when a client disconnects
+		/// </summary>
+		/// <param name="id"></param>
 		public void ClientDisconnect(int id)
 		{
 			authAccounts.Remove(id);
@@ -179,6 +192,7 @@ namespace Team_Capture.Core.Networking
 
 				ClientAccept();
 			}
+			//Something fucked up
 			else
 			{
 				Logger.Error("Failed to connect! Error: {Message} ({Code})", msg.Message, (int)msg.Code);
