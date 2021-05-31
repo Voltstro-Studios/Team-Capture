@@ -17,7 +17,7 @@ namespace Team_Capture.Editor
     /// <summary>
     ///     Custom TC <see cref="IBuildAction"/> for Volt build
     /// </summary>
-    public class TVVoltAction : IBuildAction
+    public class TCVoltAction : IBuildAction
     {
         public void OnGUI()
         {
