@@ -1,4 +1,10 @@
-﻿using NUnit.Framework;
+﻿// Team-Capture
+// Copyright (C) 2019-2021 Voltstro-Studios
+// 
+// This project is governed by the AGPLv3 License.
+// For more details see the LICENSE file.
+
+using NUnit.Framework;
 using Team_Capture.Localization;
 using UnityEngine;
 using Logger = Team_Capture.Logging.Logger;
