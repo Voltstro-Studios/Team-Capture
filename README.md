@@ -68,7 +68,7 @@ Team-Capture plans to support most large x64-bit based desktop platforms.
 ### Prerequisites
 
 ```
-Unity 2021.1.9f1
+Unity 2021.1.10f1
 PowerShell Core
 Git
 ```
