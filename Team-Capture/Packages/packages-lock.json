@@ -13,9 +13,19 @@
       "source": "git",
       "dependencies": {
         "com.unity.nuget.mono-cecil": "1.10.1",
-        "org.nuget.system.threading.tasks.extensions": "4.5.4"
+        "dev.voltstro.unitysystemthreadingtasksextensions": "1.0.0"
       },
-      "hash": "b2b4e73921b4aeebf602832b358039f00fd12e4f"
+      "hash": "12bb21014226c335ce1034784a88efefdb33c81c"
+    },
+    "com.neuecc.messagepack": {
+      "version": "https://github.com/VoltUnityPackages/MessagePack.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "dev.voltstro.unitysystembuffers": "1.0.0",
+        "dev.voltstro.unitysystemthreadingtasksextensions": "1.0.0"
+      },
+      "hash": "9beab0a9652e74d1ef14937962bb13b727339f43"
     },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
@@ -256,14 +266,30 @@
       "dependencies": {},
       "hash": "9fe574fb858a6ba745358e20ab7b881dd1bdb752"
     },
+    "dev.voltstro.unitysystembuffers": {
+      "version": "https://github.com/VoltUnityPackages/UnitySystemBuffers.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "05304159275e7d16cc1a300b98ad2da6076fccfb"
+    },
+    "dev.voltstro.unitysystemthreadingtasksextensions": {
+      "version": "https://github.com/VoltUnityPackages/UnitySystemThreadingTasksExtensions.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "dev.voltstro.unitysystembuffers": "1.0.0"
+      },
+      "hash": "da311fbf3f63054d77606eb1fc20a333f0846521"
+    },
     "dev.voltstro.unitywebbrowser": {
       "version": "https://gitlab.com/Voltstro-Studios/WebBrowser/Package.git",
       "depth": 0,
       "source": "git",
       "dependencies": {
-        "com.unity.nuget.newtonsoft-json": "2.0.0"
+        "com.neuecc.messagepack": "2.3.58-alpha"
       },
-      "hash": "bc9ee22136fec6f396afb4c38367a8bed47f5c7d"
+      "hash": "57ed12943291cf834cf951ad03c2faeb6156dd9c"
     },
     "dev.voltstro.voltbuildertool": {
       "version": "https://github.com/VoltUnityPackages/VoltUnityBuilder.git",
@@ -280,65 +306,6 @@
       "source": "git",
       "dependencies": {},
       "hash": "d510c2d4482bf16796d8cf2e2d40aaf459bc88a1"
-    },
-    "org.nuget.system.buffers": {
-      "version": "4.5.1",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://unitynuget-registry.azurewebsites.net"
-    },
-    "org.nuget.system.collections.immutable": {
-      "version": "5.0.0",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {
-        "org.nuget.system.memory": "4.5.4"
-      },
-      "url": "https://unitynuget-registry.azurewebsites.net"
-    },
-    "org.nuget.system.memory": {
-      "version": "4.5.4",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {
-        "org.nuget.system.buffers": "4.5.1",
-        "org.nuget.system.numerics.vectors": "4.4.0",
-        "org.nuget.system.runtime.compilerservices.unsafe": "4.5.3"
-      },
-      "url": "https://unitynuget-registry.azurewebsites.net"
-    },
-    "org.nuget.system.numerics.vectors": {
-      "version": "4.4.0",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://unitynuget-registry.azurewebsites.net"
-    },
-    "org.nuget.system.reflection.metadata": {
-      "version": "5.0.0",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {
-        "org.nuget.system.collections.immutable": "5.0.0"
-      },
-      "url": "https://unitynuget-registry.azurewebsites.net"
-    },
-    "org.nuget.system.runtime.compilerservices.unsafe": {
-      "version": "4.5.3",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://unitynuget-registry.azurewebsites.net"
-    },
-    "org.nuget.system.threading.tasks.extensions": {
-      "version": "4.5.4",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {
-        "org.nuget.system.runtime.compilerservices.unsafe": "4.5.3"
-      },
-      "url": "https://unitynuget-registry.azurewebsites.net"
     },
     "com.unity.modules.animation": {
       "version": "1.0.0",
