@@ -15,7 +15,7 @@
         "com.unity.nuget.mono-cecil": "1.10.1",
         "dev.voltstro.unitysystemthreadingtasksextensions": "1.0.0"
       },
-      "hash": "12bb21014226c335ce1034784a88efefdb33c81c"
+      "hash": "13b3b4fc6a5e40f2c9899bce674d1ab00685520b"
     },
     "com.neuecc.messagepack": {
       "version": "https://github.com/VoltUnityPackages/MessagePack.git",
@@ -64,7 +64,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.visualstudio": {
-      "version": "2.0.8",
+      "version": "2.0.9",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -289,7 +289,7 @@
       "dependencies": {
         "com.neuecc.messagepack": "2.3.58-alpha"
       },
-      "hash": "57ed12943291cf834cf951ad03c2faeb6156dd9c"
+      "hash": "383a07e259989a735b547f8ad814618bb5149fe8"
     },
     "dev.voltstro.voltbuildertool": {
       "version": "https://github.com/VoltUnityPackages/VoltUnityBuilder.git",
