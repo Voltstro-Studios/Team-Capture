@@ -1,8 +1,8 @@
 {
   "dependencies": {
-    "com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
+    "com.cysharp.unitask": "2.2.5",
     "com.mirror-networking.mirror": "https://github.com/VoltUnityPackages/Mirror.git?path=/Assets/Mirror",
-    "com.neuecc.messagepack": "https://github.com/VoltUnityPackages/MessagePack.git",
+    "com.neuecc.messagepack": "2.3.58-alpha",
     "com.unity.build-report-inspector": "0.2.2-preview",
     "com.unity.ext.nunit": "1.0.6",
     "com.unity.ide.rider": "3.0.7",
@@ -26,7 +26,7 @@
     "dev.voltstro.unitysystemthreadingtasksextensions": "https://github.com/VoltUnityPackages/UnitySystemThreadingTasksExtensions.git",
     "dev.voltstro.unitywebbrowser": "https://gitlab.com/Voltstro-Studios/WebBrowser/Package.git",
     "dev.voltstro.voltbuildertool": "https://github.com/VoltUnityPackages/VoltUnityBuilder.git",
-    "nl.elraccoone.tweens": "git+https://github.com/elraccoone/unity-tweens",
+    "nl.elraccoone.tweens": "1.9.2",
     "com.unity.modules.animation": "1.0.0",
     "com.unity.modules.assetbundle": "1.0.0",
     "com.unity.modules.audio": "1.0.0",
@@ -50,6 +50,16 @@
       "url": "https://unitynuget-registry.azurewebsites.net",
       "scopes": [
         "org.nuget"
+      ]
+    },
+    {
+      "name": "package.openupm.com",
+      "url": "https://package.openupm.com",
+      "scopes": [
+        "com.cysharp.unitask",
+        "com.neuecc.messagepack",
+        "com.openupm",
+        "nl.elraccoone.tweens"
       ]
     }
   ]

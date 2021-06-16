@@ -1,11 +1,11 @@
 {
   "dependencies": {
     "com.cysharp.unitask": {
-      "version": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
+      "version": "2.2.5",
       "depth": 0,
-      "source": "git",
+      "source": "registry",
       "dependencies": {},
-      "hash": "7d21a75ea8abbc3ed43afedeb450c8d44f244ece"
+      "url": "https://package.openupm.com"
     },
     "com.mirror-networking.mirror": {
       "version": "https://github.com/VoltUnityPackages/Mirror.git?path=/Assets/Mirror",
@@ -18,14 +18,11 @@
       "hash": "13b3b4fc6a5e40f2c9899bce674d1ab00685520b"
     },
     "com.neuecc.messagepack": {
-      "version": "https://github.com/VoltUnityPackages/MessagePack.git",
+      "version": "2.3.58-alpha",
       "depth": 0,
-      "source": "git",
-      "dependencies": {
-        "dev.voltstro.unitysystembuffers": "1.0.0",
-        "dev.voltstro.unitysystemthreadingtasksextensions": "1.0.0"
-      },
-      "hash": "9beab0a9652e74d1ef14937962bb13b727339f43"
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://package.openupm.com"
     },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
@@ -301,11 +298,11 @@
       "hash": "e4cec0fb9bf869e3f3241d915be9b330e3946d30"
     },
     "nl.elraccoone.tweens": {
-      "version": "git+https://github.com/elraccoone/unity-tweens",
+      "version": "1.9.2",
       "depth": 0,
-      "source": "git",
+      "source": "registry",
       "dependencies": {},
-      "hash": "d510c2d4482bf16796d8cf2e2d40aaf459bc88a1"
+      "url": "https://package.openupm.com"
     },
     "com.unity.modules.animation": {
       "version": "1.0.0",
