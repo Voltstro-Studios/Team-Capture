@@ -13,9 +13,9 @@
       "source": "git",
       "dependencies": {
         "com.unity.nuget.mono-cecil": "1.10.1",
-        "dev.voltstro.unitysystemthreadingtasksextensions": "1.0.0"
+        "org.nuget.system.threading.tasks.extensions": "4.5.4"
       },
-      "hash": "13b3b4fc6a5e40f2c9899bce674d1ab00685520b"
+      "hash": "e58a7592bc5bd92eb989405b8371b82396462755"
     },
     "com.neuecc.messagepack": {
       "version": "2.3.58-alpha",
@@ -263,22 +263,6 @@
       "dependencies": {},
       "hash": "9fe574fb858a6ba745358e20ab7b881dd1bdb752"
     },
-    "dev.voltstro.unitysystembuffers": {
-      "version": "https://github.com/VoltUnityPackages/UnitySystemBuffers.git",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "05304159275e7d16cc1a300b98ad2da6076fccfb"
-    },
-    "dev.voltstro.unitysystemthreadingtasksextensions": {
-      "version": "https://github.com/VoltUnityPackages/UnitySystemThreadingTasksExtensions.git",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {
-        "dev.voltstro.unitysystembuffers": "1.0.0"
-      },
-      "hash": "da311fbf3f63054d77606eb1fc20a333f0846521"
-    },
     "dev.voltstro.unitywebbrowser": {
       "version": "https://gitlab.com/Voltstro-Studios/WebBrowser/Package.git",
       "depth": 0,
@@ -303,6 +287,84 @@
       "source": "registry",
       "dependencies": {},
       "url": "https://package.openupm.com"
+    },
+    "org.nuget.ben.demystifier": {
+      "version": "0.4.1",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "org.nuget.system.reflection.metadata": "5.0.0",
+        "org.nuget.system.threading.tasks.extensions": "4.5.4"
+      },
+      "url": "https://unitynuget-registry.azurewebsites.net"
+    },
+    "org.nuget.k4os.compression.lz4": {
+      "version": "1.2.6",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "org.nuget.system.memory": "4.5.4"
+      },
+      "url": "https://unitynuget-registry.azurewebsites.net"
+    },
+    "org.nuget.system.buffers": {
+      "version": "4.5.1",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://unitynuget-registry.azurewebsites.net"
+    },
+    "org.nuget.system.collections.immutable": {
+      "version": "5.0.0",
+      "depth": 2,
+      "source": "registry",
+      "dependencies": {
+        "org.nuget.system.memory": "4.5.4"
+      },
+      "url": "https://unitynuget-registry.azurewebsites.net"
+    },
+    "org.nuget.system.memory": {
+      "version": "4.5.4",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "org.nuget.system.buffers": "4.5.1",
+        "org.nuget.system.numerics.vectors": "4.4.0",
+        "org.nuget.system.runtime.compilerservices.unsafe": "4.5.3"
+      },
+      "url": "https://unitynuget-registry.azurewebsites.net"
+    },
+    "org.nuget.system.numerics.vectors": {
+      "version": "4.4.0",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://unitynuget-registry.azurewebsites.net"
+    },
+    "org.nuget.system.reflection.metadata": {
+      "version": "5.0.0",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {
+        "org.nuget.system.collections.immutable": "5.0.0"
+      },
+      "url": "https://unitynuget-registry.azurewebsites.net"
+    },
+    "org.nuget.system.runtime.compilerservices.unsafe": {
+      "version": "4.5.3",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://unitynuget-registry.azurewebsites.net"
+    },
+    "org.nuget.system.threading.tasks.extensions": {
+      "version": "4.5.4",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {
+        "org.nuget.system.runtime.compilerservices.unsafe": "4.5.3"
+      },
+      "url": "https://unitynuget-registry.azurewebsites.net"
     },
     "com.unity.modules.animation": {
       "version": "1.0.0",
