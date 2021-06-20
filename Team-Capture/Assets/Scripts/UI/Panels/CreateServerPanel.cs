@@ -180,6 +180,8 @@ namespace Team_Capture.UI.Panels
 
 		private async UniTask ConnectToCreatedServer()
 		{
+			await Integrations.UniTask.UniTask.Delay(1000);
+			
 			netManager.networkAddress = "localhost";
 			netManager.StartClient();
 
