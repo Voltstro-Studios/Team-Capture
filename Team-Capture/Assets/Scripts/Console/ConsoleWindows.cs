@@ -25,9 +25,13 @@ namespace Team_Capture.Console
 		private readonly string consoleTitle;
 		private bool isRunning;
 
+		private Action<string> executeCommand;
+
 		internal ConsoleWindows(string consoleTitle)
 		{
 			this.consoleTitle = consoleTitle;
+
+			executeCommand = ConsoleBackend.ExecuteCommand;
 		}
 
 		public void Init()
@@ -77,7 +81,7 @@ namespace Team_Capture.Console
 			while (isRunning)
 			{
 				string input = System.Console.ReadLine();
-				ConsoleBackend.ExecuteCommand(input);
+				executeCommand.Invoke(input);
 			}
 			
 			return Task.CompletedTask;
