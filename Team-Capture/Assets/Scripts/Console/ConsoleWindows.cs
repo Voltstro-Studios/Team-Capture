@@ -1,4 +1,4 @@
-﻿// Team-Capture
+// Team-Capture
 // Copyright (C) 2019-2021 Voltstro-Studios
 // 
 // This project is governed by the AGPLv3 License.
@@ -8,7 +8,10 @@
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
+using Microsoft.Win32.SafeHandles;
 using UnityEngine;
+using UnityEngine.Scripting;
 using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.Console
@@ -16,10 +19,11 @@ namespace Team_Capture.Console
 	/// <summary>
 	///     Console system for Windows
 	/// </summary>
+	[Preserve]
 	internal class ConsoleWindows : IConsoleUI
 	{
 		private readonly string consoleTitle;
-		private string currentLine;
+		private bool isRunning;
 
 		internal ConsoleWindows(string consoleTitle)
 		{
@@ -30,19 +34,18 @@ namespace Team_Capture.Console
 		{
 			Debug.unityLogger.logEnabled = false;
 			
-			//Set the title, color, out, in, buffer
-			SetConsoleTitle(consoleTitle);
-			System.Console.BackgroundColor = ConsoleColor.Black;
-			System.Console.Clear();
-			System.Console.SetOut(new StreamWriter(System.Console.OpenStandardOutput()) {AutoFlush = true});
-			System.Console.SetIn(new StreamReader(System.Console.OpenStandardInput()));
-			currentLine = "";
+			AllocConsole();
+			InitializeOutStream();
+			InitializeInStream();
+			isRunning = true;
+			_ = Task.Run(HandleInputs);
 
 			Logger.Info("Started Windows command line console.");
 		}
 
 		public void Shutdown()
 		{
+			isRunning = false;
 		}
 
 		public void LogMessage(string message, LogType logType)
@@ -69,90 +72,77 @@ namespace Team_Capture.Console
 			}
 		}
 
+		private Task HandleInputs()
+		{
+			while (isRunning)
+			{
+				string input = System.Console.ReadLine();
+				ConsoleBackend.ExecuteCommand(input);
+			}
+			
+			return Task.CompletedTask;
+		}
+
 		public void UpdateConsole()
 		{
-			//Return if there is no key available
-			if (!System.Console.KeyAvailable)
-				return;
-
-			//Read the key
-			ConsoleKeyInfo keyInfo = System.Console.ReadKey();
-			switch (keyInfo.Key)
-			{
-				//Enter in input
-				case ConsoleKey.Enter:
-					DrawInputLine("\n");
-					ConsoleBackend.ExecuteCommand(currentLine);
-					currentLine = "";
-
-					break;
-
-				//Remove last input
-				case ConsoleKey.Backspace:
-					if (currentLine.Length > 0)
-						currentLine = currentLine.Substring(0, currentLine.Length - 1);
-					RemoveLastInput();
-
-					break;
-
-				//Attempt to auto complete
-				case ConsoleKey.Tab:
-					ClearLine();
-					currentLine = ConsoleBackend.AutoComplete(currentLine);
-					System.Console.Write(currentLine);
-
-					break;
-
-				//Go up in history of commands
-				case ConsoleKey.PageUp:
-				case ConsoleKey.UpArrow:
-					ClearLine();
-					currentLine = ConsoleBackend.HistoryUp(currentLine);
-					System.Console.Write(currentLine);
-
-					break;
-
-				//Go back in history of commands
-				case ConsoleKey.PageDown:
-				case ConsoleKey.DownArrow:
-					ClearLine();
-					currentLine = ConsoleBackend.HistoryDown();
-					System.Console.Write(currentLine);
-
-					break;
-
-				//Enter in key char
-				default:
-					currentLine += keyInfo.KeyChar;
-					DrawInputLine(keyInfo.KeyChar.ToString());
-					break;
-			}
 		}
 
 		public bool IsOpen()
 		{
 			return true;
 		}
+		
+		//"Borrowed" from: https://stackoverflow.com/a/48864902 
 
-		private static void DrawInputLine(string value)
+		private static void InitializeOutStream()
 		{
-			System.Console.Write(value);
+			FileStream fs = CreateFileStream("CONOUT$", GENERIC_WRITE, FILE_SHARE_WRITE, FileAccess.Write);
+			if (fs == null) return;
+			
+			StreamWriter writer = new StreamWriter(fs) { AutoFlush = true };
+			System.Console.SetOut(writer);
+			System.Console.SetError(writer);
 		}
 
-		private static void RemoveLastInput()
+		private static void InitializeInStream()
 		{
-			System.Console.Write("\b \b");
+			FileStream fs = CreateFileStream("CONIN$", GENERIC_READ, FILE_SHARE_READ, FileAccess.Read);
+			if (fs != null)
+			{
+				System.Console.SetIn(new StreamReader(fs));
+			}
 		}
 
-		private static void ClearLine()
+		private static FileStream CreateFileStream(string name, uint win32DesiredAccess, uint win32ShareMode,
+			FileAccess dotNetFileAccess)
 		{
-			System.Console.CursorLeft = 0;
-			System.Console.Write(new string(' ', System.Console.WindowWidth - 1));
-			System.Console.CursorLeft = 0;
+			SafeFileHandle file = new SafeFileHandle(CreateFileW(name, win32DesiredAccess, win32ShareMode, IntPtr.Zero, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, IntPtr.Zero), true);
+			if (file.IsInvalid) return null;
+			
+			FileStream fs = new FileStream(file, dotNetFileAccess);
+			return fs;
 		}
 		
-		[DllImport("Kernel32.dll")]
-		private static extern bool SetConsoleTitle(string title);
+		[DllImport("kernel32.dll", EntryPoint = "AllocConsole", SetLastError = true, CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
+		private static extern int AllocConsole();
+
+		[DllImport("kernel32.dll", EntryPoint = "CreateFileW", SetLastError = true, CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
+		private static extern IntPtr CreateFileW(
+			string lpFileName,
+			uint dwDesiredAccess,
+			uint dwShareMode,
+			IntPtr lpSecurityAttributes,
+			uint dwCreationDisposition,
+			uint dwFlagsAndAttributes,
+			IntPtr hTemplateFile
+		);
+
+		private const uint GENERIC_WRITE = 0x40000000;
+		private const uint GENERIC_READ = 0x80000000;
+		private const uint FILE_SHARE_READ = 0x00000001;
+		private const uint FILE_SHARE_WRITE = 0x00000002;
+		private const uint OPEN_EXISTING = 0x00000003;
+		private const uint FILE_ATTRIBUTE_NORMAL = 0x80;
 	}
 }
 

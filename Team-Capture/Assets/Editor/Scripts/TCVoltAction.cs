@@ -27,12 +27,13 @@ namespace Team_Capture.Editor
         {
             if (buildTarget == BuildTarget.StandaloneWindows64)
             {
-                buildOptions |= BuildOptions.EnableHeadlessMode;
+                //buildOptions |= BuildOptions.EnableHeadlessMode;
             }
         }
 
         public void OnAfterBuild(string buildLocation, BuildReport report)
         {
+            /*
             if (report.summary.platform == BuildTarget.StandaloneWindows64)
             {
                 string location = Path.GetFullPath($"{buildLocation}/Team-Capture_Data/boot.config");
@@ -45,6 +46,7 @@ namespace Team_Capture.Editor
                 lines = lines.Take(lines.Length - 2).ToArray();
                 File.WriteAllLines(location, lines);
             }
+            */
         }
     }
 }

@@ -20,7 +20,7 @@ jobs:
         projectPath:
           - Team-Capture
         unityVersion:
-          - 2021.1.11f1
+          - 2021.1.12f1
         targetPlatform:
           - StandaloneWindows64
           - StandaloneLinux64
