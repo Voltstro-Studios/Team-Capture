@@ -25,7 +25,7 @@ namespace Team_Capture.Console
 		private readonly string consoleTitle;
 		private bool isRunning;
 
-		private Action<string> executeCommand;
+		private readonly Action<string> executeCommand;
 
 		internal ConsoleWindows(string consoleTitle)
 		{
@@ -39,6 +39,7 @@ namespace Team_Capture.Console
 			Debug.unityLogger.logEnabled = false;
 			
 			AllocConsole();
+			SetConsoleTitle(consoleTitle);
 			InitializeOutStream();
 			InitializeInStream();
 			isRunning = true;
@@ -129,6 +130,9 @@ namespace Team_Capture.Console
 		
 		[DllImport("kernel32.dll", EntryPoint = "AllocConsole", SetLastError = true, CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
 		private static extern int AllocConsole();
+
+		[DllImport("kernel32.dll", EntryPoint = "SetConsoleTitle", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
+		private static extern bool SetConsoleTitle(string title);
 
 		[DllImport("kernel32.dll", EntryPoint = "CreateFileW", SetLastError = true, CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
 		private static extern IntPtr CreateFileW(
