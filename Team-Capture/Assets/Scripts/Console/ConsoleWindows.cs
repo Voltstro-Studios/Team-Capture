@@ -10,6 +10,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Microsoft.Win32.SafeHandles;
+using Team_Capture.Core;
 using UnityEngine;
 using UnityEngine.Scripting;
 using Logger = Team_Capture.Logging.Logger;
@@ -20,138 +21,166 @@ namespace Team_Capture.Console
 	///     Console system for Windows
 	/// </summary>
 	[Preserve]
-	internal class ConsoleWindows : IConsoleUI
-	{
-		private readonly string consoleTitle;
-		private bool isRunning;
+    internal class ConsoleWindows : IConsoleUI
+    {
+        private enum GenericAccessRights : uint
+        {
+            GenericWrite = 0x40000000,
+            GenericRead = 0x80000000
+        }
+        
+        private enum FileShare : uint
+        {
+            Read = 0x00000001,
+            Write = 0x00000002
+        }
 
-		private readonly Action<string> executeCommand;
+        private enum CreationDisposition : uint
+        {
+            OpenExisting = 0x00000003
+        }
+        
+        private enum FileFlagAttribute : uint
+        {
+            AttributeNormal = 0x80
+        }
 
-		internal ConsoleWindows(string consoleTitle)
-		{
-			this.consoleTitle = consoleTitle;
+        private readonly string consoleTitle;
 
-			executeCommand = ConsoleBackend.ExecuteCommand;
-		}
+        private readonly Action<string> executeCommand;
+        private bool isRunning;
 
-		public void Init()
-		{
-			Debug.unityLogger.logEnabled = false;
-			
-			AllocConsole();
-			SetConsoleTitle(consoleTitle);
-			InitializeOutStream();
-			InitializeInStream();
-			isRunning = true;
-			_ = Task.Run(HandleInputs);
+        internal ConsoleWindows(string consoleTitle)
+        {
+            this.consoleTitle = consoleTitle;
 
-			Logger.Info("Started Windows command line console.");
-		}
+            executeCommand = ConsoleBackend.ExecuteCommand;
+        }
 
-		public void Shutdown()
-		{
-			isRunning = false;
-		}
+        public void Init()
+        {
+            Debug.unityLogger.logEnabled = false;
 
-		public void LogMessage(string message, LogType logType)
-		{
-			switch (logType)
-			{
-				case LogType.Exception:
-				case LogType.Error:
-					System.Console.ForegroundColor = ConsoleColor.Red;
-					System.Console.WriteLine(message);
-					System.Console.ResetColor();
-					break;
-				case LogType.Warning:
-					System.Console.ForegroundColor = ConsoleColor.Yellow;
-					System.Console.WriteLine(message);
-					System.Console.ResetColor();
-					break;
-				case LogType.Assert:
-				case LogType.Log:
-					System.Console.WriteLine(message);
-					break;
-				default:
-					throw new ArgumentOutOfRangeException(nameof(logType), logType, null);
-			}
-		}
+            //Attempt to alloc a console for us
+            if (!AllocConsole())
+            {
+                Logger.Error("Failed to allocate a windows console!");
+                Game.QuitGame();
+            }
+                
+            SetConsoleTitle(consoleTitle);
+            
+            //Setup our console streams
+            InitializeOutStream();
+            InitializeInStream();
+            
+            //Start input system
+            isRunning = true;
+            _ = Task.Run(HandleInputs);
 
-		private Task HandleInputs()
-		{
-			while (isRunning)
-			{
-				string input = System.Console.ReadLine();
-				executeCommand.Invoke(input);
-			}
-			
-			return Task.CompletedTask;
-		}
+            Logger.Info("Started Windows command line console.");
+        }
 
-		public void UpdateConsole()
-		{
-		}
+        public void Shutdown()
+        {
+            isRunning = false;
+        }
 
-		public bool IsOpen()
-		{
-			return true;
-		}
-		
-		//"Borrowed" from: https://stackoverflow.com/a/48864902 
+        public void LogMessage(string message, LogType logType)
+        {
+            switch (logType)
+            {
+                case LogType.Exception:
+                case LogType.Error:
+                    System.Console.ForegroundColor = ConsoleColor.Red;
+                    System.Console.WriteLine(message);
+                    System.Console.ResetColor();
+                    break;
+                case LogType.Warning:
+                    System.Console.ForegroundColor = ConsoleColor.Yellow;
+                    System.Console.WriteLine(message);
+                    System.Console.ResetColor();
+                    break;
+                case LogType.Assert:
+                case LogType.Log:
+                    System.Console.WriteLine(message);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(logType), logType, null);
+            }
+        }
 
-		private static void InitializeOutStream()
-		{
-			FileStream fs = CreateFileStream("CONOUT$", GENERIC_WRITE, FILE_SHARE_WRITE, FileAccess.Write);
-			if (fs == null) return;
-			
-			StreamWriter writer = new StreamWriter(fs) { AutoFlush = true };
-			System.Console.SetOut(writer);
-			System.Console.SetError(writer);
-		}
+        public void UpdateConsole()
+        {
+        }
 
-		private static void InitializeInStream()
-		{
-			FileStream fs = CreateFileStream("CONIN$", GENERIC_READ, FILE_SHARE_READ, FileAccess.Read);
-			if (fs != null)
-			{
-				System.Console.SetIn(new StreamReader(fs));
-			}
-		}
+        public bool IsOpen()
+        {
+            return true;
+        }
 
-		private static FileStream CreateFileStream(string name, uint win32DesiredAccess, uint win32ShareMode,
-			FileAccess dotNetFileAccess)
-		{
-			SafeFileHandle file = new SafeFileHandle(CreateFileW(name, win32DesiredAccess, win32ShareMode, IntPtr.Zero, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, IntPtr.Zero), true);
-			if (file.IsInvalid) return null;
-			
-			FileStream fs = new FileStream(file, dotNetFileAccess);
-			return fs;
-		}
-		
-		[DllImport("kernel32.dll", EntryPoint = "AllocConsole", SetLastError = true, CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
-		private static extern int AllocConsole();
+        private Task HandleInputs()
+        {
+            while (isRunning)
+            {
+                string input = System.Console.ReadLine();
+                executeCommand.Invoke(input);
+            }
 
-		[DllImport("kernel32.dll", EntryPoint = "SetConsoleTitle", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
-		private static extern bool SetConsoleTitle(string title);
+            return Task.CompletedTask;
+        }
 
-		[DllImport("kernel32.dll", EntryPoint = "CreateFileW", SetLastError = true, CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
-		private static extern IntPtr CreateFileW(
-			string lpFileName,
-			uint dwDesiredAccess,
-			uint dwShareMode,
-			IntPtr lpSecurityAttributes,
-			uint dwCreationDisposition,
-			uint dwFlagsAndAttributes,
-			IntPtr hTemplateFile
-		);
+        //"Borrowed" from: https://stackoverflow.com/a/48864902 
 
-		private const uint GENERIC_WRITE = 0x40000000;
-		private const uint GENERIC_READ = 0x80000000;
-		private const uint FILE_SHARE_READ = 0x00000001;
-		private const uint FILE_SHARE_WRITE = 0x00000002;
-		private const uint OPEN_EXISTING = 0x00000003;
-		private const uint FILE_ATTRIBUTE_NORMAL = 0x80;
-	}
+        private static void InitializeOutStream()
+        {
+            FileStream fs = CreateFileStream("CONOUT$", GenericAccessRights.GenericWrite, FileShare.Write, FileAccess.Write);
+            if (fs == null) return;
+
+            StreamWriter writer = new StreamWriter(fs) {AutoFlush = true};
+            System.Console.SetOut(writer);
+            System.Console.SetError(writer);
+        }
+
+        private static void InitializeInStream()
+        {
+            FileStream fs = CreateFileStream("CONIN$", GenericAccessRights.GenericRead, FileShare.Read, FileAccess.Read);
+            if (fs != null) System.Console.SetIn(new StreamReader(fs));
+        }
+
+        private static FileStream CreateFileStream(string name, GenericAccessRights desiredAccess, FileShare shareMode,
+            FileAccess dotNetFileAccess)
+        {
+            SafeFileHandle file =
+                new SafeFileHandle(
+                    CreateFileW(name, desiredAccess, shareMode, IntPtr.Zero, CreationDisposition.OpenExisting,
+                        FileFlagAttribute.AttributeNormal, IntPtr.Zero), true);
+            if (file.IsInvalid) return null;
+
+            FileStream fs = new FileStream(file, dotNetFileAccess);
+            return fs;
+        }
+
+        [DllImport("kernel32.dll", EntryPoint = "AllocConsole", CharSet = CharSet.Auto,
+            CallingConvention = CallingConvention.StdCall)]
+        private static extern bool AllocConsole();
+
+        [DllImport("kernel32.dll", EntryPoint = "SetConsoleTitle", CharSet = CharSet.Auto,
+            CallingConvention = CallingConvention.StdCall)]
+        private static extern bool SetConsoleTitle(string title);
+
+        [DllImport("kernel32.dll", EntryPoint = "CreateFileW", CharSet = CharSet.Auto,
+            CallingConvention = CallingConvention.StdCall)]
+        private static extern IntPtr CreateFileW(
+            string lpFileName,
+            GenericAccessRights dwDesiredAccess,
+            FileShare dwShareMode,
+            IntPtr lpSecurityAttributes,
+            CreationDisposition dwCreationDisposition,
+            FileFlagAttribute dwFlagsAndAttributes,
+            IntPtr hTemplateFile
+        );
+    }
 }
 
 #endif
