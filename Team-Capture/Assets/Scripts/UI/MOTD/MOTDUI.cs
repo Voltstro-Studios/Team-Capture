@@ -7,7 +7,7 @@
 using System;
 using Cysharp.Threading.Tasks;
 using Team_Capture.Core.Networking;
-using Team_Capture.Core.UserAccount;
+using Team_Capture.UserManagement;
 using TMPro;
 using UnityEngine;
 using UnityWebBrowser;
@@ -74,7 +74,7 @@ namespace Team_Capture.UI.MOTD
 
 		    string javaScriptCode =
 			    $"class UserDetails {{ constructor(username) {{ this.UserName = username; }} }}" +
-			    $"let userDetails = new UserDetails(\"{User.DefaultAccount.AccountName}\");";
+			    $"let userDetails = new UserDetails(\"{User.GetActiveUser().UserName}\");";
 
 		    webBrowserUI.ExecuteJs(javaScriptCode);
 	    } 

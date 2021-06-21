@@ -8,9 +8,9 @@ using System;
 using System.IO;
 using Steamworks;
 using Team_Capture.Core;
-using Team_Capture.Core.UserAccount;
 using Team_Capture.Helper;
 using Team_Capture.Logging;
+using Team_Capture.UserManagement;
 
 namespace Team_Capture.Integrations.Steamworks
 {
@@ -40,11 +40,23 @@ namespace Team_Capture.Integrations.Steamworks
 
 	    protected override void SingletonDestroyed()
 	    {
+		    if (Game.IsHeadless)
+		    {
+			    SteamServer.LogOff();
+			    SteamServer.Shutdown();
+		    }
+		    
 		    SteamClient.Shutdown();
 	    }
 
 	    private void Update()
 	    {
+		    if (Game.IsHeadless)
+		    {
+			    SteamServer.RunCallbacks();
+			    return;
+		    }
+		    
 		    SteamClient.RunCallbacks();
 	    }
 
@@ -60,13 +72,35 @@ namespace Team_Capture.Integrations.Steamworks
 
 	    private void Initialize()
 	    {
+		    //TODO: This will only run Steam server if we are in headless
+		    if (Game.IsHeadless)
+		    {
+			    //TODO: Properly set this up later
+			    SteamServerInit serverInit = new SteamServerInit("tc", "Team-Capture")
+			    {
+				    DedicatedServer = false
+			    };
+
+			    try
+			    {
+				    SteamServer.Init(settings.appDedicatedServerId, serverInit);
+				    SteamServer.LogOnAnonymous();
+			    }
+			    catch (Exception ex)
+			    {
+				    Logger.Error(ex, "Something went wrong while starting the Steam server integration!");
+			    }
+			    
+			    return;
+		    }
+		    
 		    try
 		    {
 			    SteamClient.Init(settings.appId);
 		    }
 		    catch (Exception ex)
 		    {
-				Logger.Error("Something went wrong while starting the Steam integration! {ExceptionMessage}", ex.Message);
+				Logger.Error(ex, "Something went wrong while starting the Steam integration!");
 				Destroy(gameObject);
 				return;
 		    }
@@ -78,14 +112,9 @@ namespace Team_Capture.Integrations.Steamworks
 				return;
 		    }
 
-			User.AddAccount(new Account
-			{
-				AccountProvider = AccountProvider.Steam,
-				AccountName = SteamClient.Name,
-				AccountId = SteamClient.SteamId.Value
-			});
+			User.AddUser(new SteamUser(SteamClient.SteamId, SteamClient.Name));
 
 			Logger.Info("Logged into Steam account {AccountName} with an ID of {AccountID}", SteamClient.Name, SteamClient.SteamId.Value);
 	    }
-    }
+	}
 }

@@ -101,6 +101,7 @@ namespace Team_Capture.Core.Networking
 		internal static void OnClientDisconnect(NetworkConnection conn)
 		{
 			status = ClientStatus.Offline;
+			netManager.tcAuthenticator.OnClientDisconnect();
 			netManager.StopClient();
 			Logger.Info($"Disconnected from server {conn.address}");
 		}

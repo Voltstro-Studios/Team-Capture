@@ -176,7 +176,7 @@ namespace Team_Capture.Player
 
 		public override void OnStartServer()
 		{
-			username = TCNetworkManager.Authenticator.GetAccount(netIdentity.connectionToClient.connectionId).AccountName;
+			username = TCNetworkManager.Authenticator.GetAccount(netIdentity.connectionToClient.connectionId).UserName;
 			Health = MaxHealth;
 			weaponManager = GetComponent<WeaponManager>();
 

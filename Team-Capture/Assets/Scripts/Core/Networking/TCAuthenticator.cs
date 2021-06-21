@@ -10,7 +10,7 @@ using System.Linq;
 using Cysharp.Threading.Tasks;
 using Mirror;
 using Team_Capture.Console;
-using Team_Capture.Core.UserAccount;
+using Team_Capture.UserManagement;
 using UnityCommandLineParser;
 using UnityEngine;
 using Logger = Team_Capture.Logging.Logger;
@@ -24,14 +24,14 @@ namespace Team_Capture.Core.Networking
 	{
 		[ConVar("sv_auth_method", "What account system to use to check clients")]
 		[CommandLineArgument("auth-method", "What account system to use to check clients")]
-		public static AccountProvider ServerAuthMethod = AccountProvider.Steam;
+		public static UserProvider ServerAuthMethod = UserProvider.Steam;
 
 		[ConVar("sv_auth_clean_names", "Will trim whitespace at the start and end of account names")]
 		public static bool CleanAccountNames = true;
 		
 		#region Server
 
-		private Dictionary<int, Account> authAccounts;
+		private Dictionary<int, IUser> authAccounts;
 
 		/// <summary>
 		///		Gets an account from their connection ID
@@ -39,31 +39,19 @@ namespace Team_Capture.Core.Networking
 		/// <param name="id"></param>
 		/// <returns></returns>
 		/// <exception cref="ArgumentException"></exception>
-		public Account GetAccount(int id)
+		public IUser GetAccount(int id)
 		{
-			Account account = authAccounts[id];
+			IUser account = authAccounts[id];
 			if (account == null)
 				throw new ArgumentException();
 
 			return account;
 		}
 
-		/// <summary>
-		///		Call when a client disconnects
-		/// </summary>
-		/// <param name="id"></param>
-		public void ClientDisconnect(int id)
-		{
-			authAccounts.Remove(id);
-		}
-
 		public override void OnStartServer()
 		{
-			//TODO: Support auth with other service providers
-			ServerAuthMethod = AccountProvider.Offline;
-
-			authAccounts = new Dictionary<int, Account>();
-			
+			ServerAuthMethod = UserProvider.Offline;
+			authAccounts = new Dictionary<int, IUser>();
 			NetworkServer.RegisterHandler<JoinRequestMessage>(OnRequestJoin, false);
 		}
 
@@ -89,7 +77,7 @@ namespace Team_Capture.Core.Networking
 			}
 
 			//Make sure they at least provided an account
-			if (msg.NetworkedAccounts.Length == 0)
+			if (msg.UserAccounts.Length == 0)
 			{
 				SendRequestResponseMessage(conn, HttpCode.Unauthorized, "No accounts provided!");
 				Logger.Warn("Client {Id} sent no user accounts. Rejecting connection.", conn.connectionId);
@@ -97,41 +85,41 @@ namespace Team_Capture.Core.Networking
 				RefuseClientConnection(conn);
 				return;
 			}
+			
+			Logger.Debug("Got {UserAccountsNum} user accounts from {UserId}", msg.UserAccounts.Length, conn.connectionId);
 
-			//Account auth
-			if (ServerAuthMethod != AccountProvider.Offline)
+			//Get the user account the server wants
+			IUser user = msg.UserAccounts.FirstOrDefault(x => x.UserProvider == ServerAuthMethod);
+			if (user == null)
 			{
+				SendRequestResponseMessage(conn, HttpCode.Unauthorized, "No valid user accounts sent!");
+				Logger.Warn("Client {Id} sent no valid user accounts!. Rejecting connection.", conn.connectionId);
+
+				RefuseClientConnection(conn);
+				return;
 			}
-			//We are running in Offline
-			else
-			{
-				NetworkedAccount offlineAccount =
-					msg.NetworkedAccounts.FirstOrDefault(x => x.AccountProvider == AccountProvider.Offline);
 
-				if (string.IsNullOrWhiteSpace(offlineAccount.AccountName.String))
+			try
+			{
+				if (!user.ServerIsClientAuthenticated())
 				{
-					SendRequestResponseMessage(conn, HttpCode.Unauthorized, "Username cannot be empty or white space!");
-					Logger.Warn("Client {Id} sent a blank username. Rejecting connection.", conn.connectionId);
-					
+					SendRequestResponseMessage(conn, HttpCode.Unauthorized, "Failed authorization!");
+					Logger.Warn("Client {Id} failed to authorize!. Rejecting connection.", conn.connectionId);
+
 					RefuseClientConnection(conn);
 					return;
 				}
-
-				//Make sure there are no duplicate names already on the server, otherwise add the number to the end
-				string accountName = offlineAccount.AccountName.String;
-				if (CleanAccountNames)
-					accountName = accountName.TrimStart().TrimEnd();
-				
-				int duplicates = authAccounts.Count(x => x.Value.AccountName == accountName);
-				if (duplicates != 0)
-					accountName += $" ({duplicates})";
-
-				authAccounts.Add(conn.connectionId, new Account
-				{
-					AccountProvider = AccountProvider.Offline,
-					AccountName = accountName
-				});
 			}
+			catch (Exception ex)
+			{
+				SendRequestResponseMessage(conn, HttpCode.InternalServerError, "An error occured with the server authorization!");
+				Logger.Error(ex, "An error occured on the server side with authorization");
+
+				RefuseClientConnection(conn);
+				return;
+			}
+
+			authAccounts.Add(conn.connectionId, user);
 
 			SendRequestResponseMessage(conn, HttpCode.Ok, "Ok");
 			ServerAccept(conn);
@@ -176,13 +164,37 @@ namespace Team_Capture.Core.Networking
 
 		public override void OnClientAuthenticate()
 		{
+			IUser[] users = User.GetUsers();
+			foreach (IUser user in users)
+			{
+				try
+				{
+					user.ClientStartAuthentication();
+				}
+				catch (Exception ex)
+				{
+					Logger.Error(ex, "An error occured while trying to authenticate on the client end!");
+					
+					ClientReject();
+					return;
+				}
+			}
+			
 			NetworkClient.connection.Send(new JoinRequestMessage
 			{
 				ApplicationVersion = Application.version,
-				NetworkedAccounts = User.GetAccountsAsNetworked()
+				UserAccounts = users
 			});
 		}
 
+		public void OnClientDisconnect()
+		{
+			foreach (IUser user in User.GetUsers())
+			{
+				user.ClientStopAuthentication();
+			}
+		}
+		
 		private void OnReceivedJoinRequestResponse(JoinRequestResponseMessage msg)
 		{
 			//We good to connect
@@ -209,7 +221,7 @@ namespace Team_Capture.Core.Networking
 		{
 			public string ApplicationVersion;
 
-			internal NetworkedAccount[] NetworkedAccounts;
+			internal IUser[] UserAccounts;
 		}
 
 		private struct JoinRequestResponseMessage : NetworkMessage

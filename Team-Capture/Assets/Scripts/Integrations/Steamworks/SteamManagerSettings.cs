@@ -15,5 +15,10 @@ namespace Team_Capture.Integrations.Steamworks
 		///		AppID for Steam to connect to
 		/// </summary>
 		public uint appId;
+
+		/// <summary>
+		///		Dedicated server app ID
+		/// </summary>
+		public uint appDedicatedServerId;
 	}
 }

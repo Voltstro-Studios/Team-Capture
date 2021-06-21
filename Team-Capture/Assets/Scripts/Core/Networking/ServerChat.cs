@@ -24,7 +24,7 @@ namespace Team_Capture.Core.Networking
         /// <param name="message"></param>
         internal static void ReceivedChatMessage(NetworkConnection conn, ChatMessage message)
         {
-            message.Player = TCNetworkManager.Authenticator.GetAccount(conn.connectionId).AccountName;
+            message.Player = TCNetworkManager.Authenticator.GetAccount(conn.connectionId).UserName;
             SendChatMessage(message);
         }
 

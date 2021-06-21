@@ -212,7 +212,7 @@ namespace Team_Capture.Core.Networking
 			Logger.Info(
 				"Client from '{Address}' connected with the connection ID of {ConnectionID}.",
 				conn.address, conn.connectionId);
-			ServerChat.SendChatMessage("<b>Join</b>", netManager.tcAuthenticator.GetAccount(conn.connectionId).AccountName);
+			ServerChat.SendChatMessage("<b>Join</b>", netManager.tcAuthenticator.GetAccount(conn.connectionId).UserName);
 		}
 
 		/// <summary>
@@ -222,8 +222,7 @@ namespace Team_Capture.Core.Networking
 		internal static void OnServerRemoveClient(NetworkConnection conn)
 		{
 			NetworkServer.DestroyPlayerForConnection(conn);
-			ServerChat.SendChatMessage("<b>Disconnect</b>", netManager.tcAuthenticator.GetAccount(conn.connectionId).AccountName);
-			netManager.tcAuthenticator.ClientDisconnect(conn.connectionId);
+			ServerChat.SendChatMessage("<b>Disconnect</b>", netManager.tcAuthenticator.GetAccount(conn.connectionId).UserName);
 			Logger.Info("Client '{ConnectionId}' disconnected from the server.", conn.connectionId);
 
 			//Our first connected client disconnected

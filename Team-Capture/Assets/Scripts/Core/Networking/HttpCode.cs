@@ -13,6 +13,9 @@ namespace Team_Capture.Core.Networking
         
         //Client
         Unauthorized = 401,
-        PreconditionFailed = 412
+        PreconditionFailed = 412,
+        
+        //Server
+        InternalServerError = 500
     }
 }
