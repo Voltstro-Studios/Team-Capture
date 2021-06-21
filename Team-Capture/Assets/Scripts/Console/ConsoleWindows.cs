@@ -8,6 +8,7 @@
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Win32.SafeHandles;
 using Team_Capture.Core;
@@ -71,7 +72,7 @@ namespace Team_Capture.Console
             SetConsoleTitle(consoleTitle);
             
             //Setup our console streams
-            InitializeOutStream();
+            System.Console.SetOut(new StreamWriter(System.Console.OpenStandardOutput()){ AutoFlush = true});
             InitializeInStream();
             
             //Start input system
@@ -131,16 +132,6 @@ namespace Team_Capture.Console
         }
 
         //"Borrowed" from: https://stackoverflow.com/a/48864902 
-
-        private static void InitializeOutStream()
-        {
-            FileStream fs = CreateFileStream("CONOUT$", GenericAccessRights.GenericWrite, FileShare.Write, FileAccess.Write);
-            if (fs == null) return;
-
-            StreamWriter writer = new StreamWriter(fs) {AutoFlush = true};
-            System.Console.SetOut(writer);
-            System.Console.SetError(writer);
-        }
 
         private static void InitializeInStream()
         {
