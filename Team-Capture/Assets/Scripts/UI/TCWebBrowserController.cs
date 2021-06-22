@@ -15,20 +15,29 @@ namespace Team_Capture.UI
 	[RequireComponent(typeof(WebBrowserUI))]
     public class TCWebBrowserController : MonoBehaviour
     {
-		[ConVar("cl_webbrowser_ipc_port", "The port that the game and the process will communicate on")]
+		[ConVar("cl_webbrowser_ipc_port", "The port that the game and the process will communicate on", true)]
 	    public static int WebBrowserPort = 5555;
 
-	    [ConVar("cl_webbrowser_polling_time", "Time between each ping event sent")]
+	    [ConVar("cl_webbrowser_polling_time", "Time between each ping event sent", true)]
 	    public static float WebBrowserPollingTime = 0.04f;
 
-		[ConVar("cl_webbrowser_debug", "Enable debug logging for the web browser")]
+		[ConVar("cl_webbrowser_debug", "Enable debug logging for the web browser", true)]
 	    public static bool WebBrowserDebugLog = false;
 
-		[ConVar("cl_webbrowser_js", "Enable or disable JS for the web browser (WARNING, may break a lot of websites)")]
+		[ConVar("cl_webbrowser_js", "Enable or disable JS for the web browser (WARNING, may break a lot of websites)", true)]
 	    public static bool WebBrowserJs = true;
 
-	    [ConVar("cl_webbrowser_cache", "Enable or disable the cache")]
+	    [ConVar("cl_webbrowser_cache", "Enable or disable the cache", true)]
 	    public static bool WebBrowserCache = true;
+
+	    [ConVar("cl_webbrowser_proxy", "Enable or disable the proxy server", true)]
+	    public static bool WebBrowserProxy = true;
+
+	    [ConVar("cl_webbrowser_proxy_username", "The username for the proxy", true)]
+	    public static string WebBrowserProxyUsername = string.Empty;
+	    
+	    [ConVar("cl_webbrowser_proxy_password", "The password for the proxy", true)]
+	    public static string WebBrowserProxyPassword = string.Empty;
 
 	    private void Start()
 	    {
@@ -39,6 +48,9 @@ namespace Team_Capture.UI
 		    webBrowser.browserClient.javascript = WebBrowserJs;
 		    webBrowser.browserClient.cache = WebBrowserCache;
 		    webBrowser.browserClient.LogPath = new FileInfo($"{Logger.LoggerConfig.LogDirectory}/cef.log");
+		    webBrowser.browserClient.proxySettings.noProxyServer = !WebBrowserProxy;
+		    webBrowser.browserClient.proxySettings.username = WebBrowserProxyUsername;
+		    webBrowser.browserClient.proxySettings.password = WebBrowserProxyPassword;
 			Destroy(this);
 	    }
     }
