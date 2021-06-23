@@ -260,8 +260,10 @@
       "version": "https://github.com/Voltstro-Studios/UnityCommandLineParser.git",
       "depth": 0,
       "source": "git",
-      "dependencies": {},
-      "hash": "9fe574fb858a6ba745358e20ab7b881dd1bdb752"
+      "dependencies": {
+        "org.nuget.mcmaster.extensions.commandlineutils": "3.1.0"
+      },
+      "hash": "42a3a11d9b3cb30021bf1c22518880df9e0b12ab"
     },
     "dev.voltstro.unitywebbrowser": {
       "version": "https://gitlab.com/Voltstro-Studios/WebBrowser/Package.git",
@@ -307,6 +309,15 @@
       },
       "url": "https://unitynuget-registry.azurewebsites.net"
     },
+    "org.nuget.mcmaster.extensions.commandlineutils": {
+      "version": "3.1.0",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {
+        "org.nuget.system.componentmodel.annotations": "5.0.0"
+      },
+      "url": "https://unitynuget-registry.azurewebsites.net"
+    },
     "org.nuget.system.buffers": {
       "version": "4.5.1",
       "depth": 0,
@@ -321,6 +332,13 @@
       "dependencies": {
         "org.nuget.system.memory": "4.5.4"
       },
+      "url": "https://unitynuget-registry.azurewebsites.net"
+    },
+    "org.nuget.system.componentmodel.annotations": {
+      "version": "5.0.0",
+      "depth": 2,
+      "source": "registry",
+      "dependencies": {},
       "url": "https://unitynuget-registry.azurewebsites.net"
     },
     "org.nuget.system.memory": {
