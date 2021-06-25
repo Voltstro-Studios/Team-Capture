@@ -4,9 +4,11 @@
 // This project is governed by the AGPLv3 License.
 // For more details see the LICENSE file.
 
+using System;
 using System.Diagnostics;
 using UnityCommandLineParser;
 using UnityEngine;
+using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.BootManagement
 {
@@ -23,8 +25,15 @@ namespace Team_Capture.BootManagement
         
         public override void OnBoot()
         {
-            if(setToHighPriority)
-                Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.High;
+            try
+            {
+                if (setToHighPriority)
+                    Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.High;
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex, "Failed to set current process to high priority!");
+            }
         }
     }
 }
