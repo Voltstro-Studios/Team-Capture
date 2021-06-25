@@ -18,7 +18,7 @@ namespace Team_Capture.BootManagement
 	/// <summary>
 	///		The base for a boot item
 	/// </summary>
-    internal class BootItem : ScriptableObject
+	public class BootItem : ScriptableObject
     {
 		/// <summary>
 		///		What do you want this to run on?
