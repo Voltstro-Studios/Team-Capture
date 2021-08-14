@@ -7,7 +7,7 @@
 using System;
 using System.Net;
 using Mirror;
-using Mirror.Discovery;
+using Mirror.Components.Discovery;
 using Team_Capture.Core.Compression;
 using Team_Capture.SceneManagement;
 using UnityEngine;
