@@ -51,6 +51,7 @@ namespace Team_Capture.Player.Movement
 			return new PlayerState
 			{
 				Position = Vector3.Lerp(from.Position, to.Position, t),
+				Velocity = Vector3.Lerp(from.Velocity, to.Velocity, t),
 				RotationX = Mathf.Lerp(from.RotationX, to.RotationX, t),
 				RotationY = Mathf.Lerp(from.RotationY, to.RotationY, t),
 				MoveNum = 0,
