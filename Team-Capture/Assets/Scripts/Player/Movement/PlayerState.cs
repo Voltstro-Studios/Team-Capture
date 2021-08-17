@@ -26,6 +26,8 @@ namespace Team_Capture.Player.Movement
 		public float RotationX;
 		public float RotationY;
 
+		public bool WishJump;
+
 		public int MoveNum;
 		public int Timestamp;
 
@@ -41,6 +43,7 @@ namespace Team_Capture.Player.Movement
 				Position = Vector3.zero,
 				RotationX = 0f,
 				RotationY = 0f,
+				WishJump = false,
 				MoveNum = 0,
 				Timestamp = 0
 			};
@@ -54,6 +57,7 @@ namespace Team_Capture.Player.Movement
 				Velocity = Vector3.Lerp(from.Velocity, to.Velocity, t),
 				RotationX = Mathf.Lerp(from.RotationX, to.RotationX, t),
 				RotationY = Mathf.Lerp(from.RotationY, to.RotationY, t),
+				WishJump = to.WishJump,
 				MoveNum = 0,
 				Timestamp = 0
 			};

@@ -213,23 +213,13 @@ namespace Team_Capture.Player.Movement
 			};
 
 			bool isGrounded = Physics.Raycast(groundCheck.position, Vector3.down, groundDistance, groundMask);
-
-			//Calculate velocity
-			Vector3 inputs = new Vector3(input.MoveDirections.x, 0f, input.MoveDirections.y) * moveSpeed;
-			playerState.Velocity = transform.TransformDirection(inputs);
-			playerState.Velocity.y = previous.Velocity.y;
-
-			//Gravity
-			if (!isGrounded)
-				playerState.Velocity.y -= gravityAmount * Time.deltaTime;
+			playerState.WishJump = input.Jump;
+			
+			if(isGrounded)
+				GroundMove(ref playerState, input);
 			else
-				playerState.Velocity.y = -2f;
+				AirMove(ref playerState, input);
 
-			//Jumping
-			if (input.Jump && isGrounded)
-				playerState.Velocity.y = jumpHeight;
-
-			//Apply velocity to position
 			playerState.Position += playerState.Velocity * Time.deltaTime;
 
 			//Mouse Movement
@@ -241,17 +231,149 @@ namespace Team_Capture.Player.Movement
 			return playerState;
 		}
 
+		private void GroundMove(ref PlayerState state, PlayerInputs input)
+		{
+			//Do not apply friction if the player is queueing up the next jump
+			if (!state.WishJump)
+				ApplyFriction(ref state, true, 1.0f);
+			else
+				ApplyFriction(ref state, true, 0f);
+
+			Vector3 wishDir = new Vector3(input.MoveDirections.x, 0f, input.MoveDirections.y);
+			wishDir = transform.TransformDirection(wishDir);
+			wishDir.Normalize();
+
+			float wishSpeed = wishDir.magnitude;
+			wishSpeed *= moveSpeed;
+
+			Accelerate(ref state, wishDir, wishSpeed, runAcceleration);
+
+			//Reset the gravity velocity
+			state.Velocity.y = -gravityAmount * Time.deltaTime;
+
+			if(state.WishJump)
+			{
+				state.Velocity.y = jumpHeight;
+				state.WishJump = false;
+			}
+		}
+
+		private void AirMove(ref PlayerState state, PlayerInputs input)
+		{
+			Vector3 wishDir = new Vector3(input.MoveDirections.x, 0f, input.MoveDirections.y);
+			wishDir = transform.TransformDirection(wishDir);
+
+			float wishSpeed = wishDir.magnitude;
+			wishSpeed *= moveSpeed;
+
+			wishDir.Normalize();
+
+			float wishSpeed2 = wishSpeed;
+			float accel = Vector3.Dot(state.Velocity, wishDir) < 0 ? airDecceleration : airAcceleration;
+			
+			//If the player is ONLY strafing left or right
+			if(input.MoveDirections.y == 0 && input.MoveDirections.x != 0)
+			{
+				if(wishSpeed > sideStrafeSpeed)
+					wishSpeed = sideStrafeSpeed;
+				
+				accel = sideStrafeAcceleration;
+			}
+
+			Accelerate(ref state, wishDir, wishSpeed, accel);
+			if(airControl > 0)
+				AirControl(ref state, input, wishDir, wishSpeed2);
+			
+			state.Velocity.y -= gravityAmount * Time.deltaTime;
+		}
+		
+		private void AirControl(ref PlayerState state, PlayerInputs input, Vector3 wishDir, float wishSpeed)
+		{
+			//Can't control movement if not moving forward or backward
+			if(Mathf.Abs(input.MoveDirections.y) < 0.001 || Mathf.Abs(wishSpeed) < 0.001)
+				return;
+			
+			float zSpeed = state.Velocity.y;
+			state.Velocity.y = 0;
+			
+			float speed = state.Velocity.magnitude;
+			state.Velocity.Normalize();
+
+			float dot = Vector3.Dot(state.Velocity, wishDir);
+			float k = 32;
+			k *= airControl * dot * dot * Time.deltaTime;
+
+			//Change direction while slowing down
+			if (dot > 0)
+			{
+				state.Velocity.x = state.Velocity.x * speed + wishDir.x * k;
+				state.Velocity.y = state.Velocity.y * speed + wishDir.y * k;
+				state.Velocity.z = state.Velocity.z * speed + wishDir.z * k;
+
+				state.Velocity.Normalize();
+			}
+
+			state.Velocity.x *= speed;
+			state.Velocity.y = zSpeed;
+			state.Velocity.z *= speed;
+		}
+		
+		private void ApplyFriction(ref PlayerState state, bool isGrounded, float t)
+		{
+			Vector3 vec = state.Velocity; 
+			vec.y = 0.0f;
+			
+			float speed = vec.magnitude;
+			float drop = 0.0f;
+			
+			if(isGrounded)
+			{
+				float control = speed < runDeacceleration ? runDeacceleration : speed;
+				drop = control * friction * Time.deltaTime * t;
+			}
+
+			float newSpeed = speed - drop;
+			if(newSpeed < 0)
+				newSpeed = 0;
+			if(speed > 0)
+				newSpeed /= speed;
+
+			state.Velocity.x *= newSpeed;
+			state.Velocity.z *= newSpeed;
+		}
+
+		private void Accelerate(ref PlayerState state, Vector3 wishDir, float wishSpeed, float accel)
+		{
+			float currentSpeed = Vector3.Dot(state.Velocity, wishDir);
+			float addSpeed = wishSpeed - currentSpeed;
+			if(addSpeed <= 0)
+				return;
+			
+			float accelSpeed = accel * Time.deltaTime * wishSpeed;
+			if(accelSpeed > addSpeed)
+				accelSpeed = addSpeed;
+
+			state.Velocity.x += accelSpeed * wishDir.x;
+			state.Velocity.z += accelSpeed * wishDir.z;
+		}
+
 		#endregion
 
 		#region Movement Controls
 
-		[Header("Movement Settings")] [SerializeField]
-		private float moveSpeed = 11.0f;
-
-		[SerializeField] private float jumpHeight = 3f;
-
-		[SerializeField] private float gravityAmount = 9.81f;
-
+		[Header("Movement Settings")] 
+		[SerializeField] private float moveSpeed = 14.0f;
+		[SerializeField] private float friction = 6;
+		[SerializeField] private float runAcceleration = 20.0f;
+		[SerializeField] private float runDeacceleration = 16.0f;
+		[SerializeField] private float airAcceleration = 3.0f;
+		[SerializeField] private float airDecceleration = 3.0f;
+		[SerializeField] private float airControl = 0.6f;
+		[SerializeField] private float sideStrafeAcceleration = 50.0f;
+		[SerializeField] private float sideStrafeSpeed = 1.5f;
+		[SerializeField] private float jumpHeight = 8.0f;
+		[SerializeField] private float gravityAmount = 24.0f;
+		
 		[SerializeField] private Transform cameraTransform;
 
 		#endregion
