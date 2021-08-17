@@ -34,7 +34,7 @@ jobs:
 
       #Setup cache, Unity without it's Library cache is really slow
       - name: Cache for ${{ matrix.targetPlatform }}
-        uses: actions/cache@v1.1.0
+        uses: actions/cache@v2.1.6
         with:
           path: ${{ matrix.projectPath }}/Library
           key: Library-${{ matrix.targetPlatform }}-v3
@@ -44,7 +44,7 @@ jobs:
 
       #Build the player using TC's CIBuilder.StartVoltBuilder
       - name: Build Player for ${{ matrix.targetPlatform }}
-        uses: game-ci/unity-builder@v2.0-alpha-10
+        uses: game-ci/unity-builder@v2.0-alpha-11
         env:
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
@@ -62,7 +62,7 @@ jobs:
 
       #Upload the build as an artifact
       - name: Upload Build
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v2.2.4
         with:
           name: '${{ env.gameName }}-${{ matrix.targetPlatform }}-${{ env.version }}-DevOpsBuild'
           path: '${{ matrix.projectPath }}/Builds/${{ matrix.targetPlatform }}-DevOpsBuild.zip'
