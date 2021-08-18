@@ -33,7 +33,7 @@ namespace Team_Capture.Player.Movement
 			character.State = PlayerState.Zero;
 		}
 
-		private void FixedUpdate()
+		private void Update()
 		{
 			serverTick++;
 

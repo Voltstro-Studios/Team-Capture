@@ -83,7 +83,7 @@ namespace Team_Capture.Player.Movement
 
 		private void Awake()
 		{
-			InputBufferSize = (int) (1 / 0.02f) / inputUpdateRate;
+			InputBufferSize = (int) (1 / Time.fixedDeltaTime) / inputUpdateRate;
 			playerManager = GetComponent<PlayerManager>();
 		}
 

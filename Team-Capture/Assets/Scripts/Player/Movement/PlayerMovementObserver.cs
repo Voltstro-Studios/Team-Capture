@@ -31,10 +31,8 @@ namespace Team_Capture.Player.Movement
 			AddState(character.State);
 		}
 
-		private void FixedUpdate()
+		private void Update()
 		{
-			clientTick++;
-			
 			int pastTick = clientTick - character.interpolationDelay;
 			LinkedListNode<PlayerState> fromNode = stateBuffer.First;
 			LinkedListNode<PlayerState> toNode = fromNode.Next;
@@ -49,6 +47,11 @@ namespace Team_Capture.Player.Movement
 			SetObservedState(toNode != null
 				? PlayerState.Interpolate(fromNode.Value, toNode.Value, pastTick)
 				: fromNode.Value);
+		}
+
+		private void FixedUpdate()
+		{
+			clientTick++;
 		}
 
 		private void OnDisable()
