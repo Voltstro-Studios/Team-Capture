@@ -122,7 +122,7 @@ namespace Team_Capture.Player.Movement
 			stateHandler = gameObject.AddComponent<PlayerMovementPredictor>();
 			playerInput = gameObject.AddComponent<PlayerMovementInput>();
 			cameraRoll = GetComponent<PlayerSetup>().GetPlayerCamera().gameObject.AddComponent<PlayerCameraRoll>();
-			cameraRoll.baseTransform = transform;
+			cameraRoll.SetBaseTransform(transform);
 		}
 		
 		public override void OnStartServer()

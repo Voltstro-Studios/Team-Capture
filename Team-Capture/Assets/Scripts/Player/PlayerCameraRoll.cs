@@ -1,17 +1,32 @@
-using Team_Capture.Helper.Extensions;
+using Team_Capture.Console;
 using UnityEngine;
 
 namespace Team_Capture.Player
 {
     internal class PlayerCameraRoll : MonoBehaviour
     {
-        [SerializeField] private float rollAngle = 2f;
-        [SerializeField] private float rollSpeed = 10f;
+        [ConVar("cl_rollangle", "Max view roll angle")]
+        public static float rollAngle = 1f;
+        
+        [ConVar("cl_rollspeed", "The speed of the view roll angle")]
+        public static float rollSpeed = 10f;
 
-        public Transform baseTransform;
-        
+        private Transform baseTransform;
         private Vector3 velocity;
+
+        /// <summary>
+        ///     Sets the base transform of the player
+        /// </summary>
+        /// <param name="newTransform"></param>
+        internal void SetBaseTransform(Transform newTransform)
+        {
+            baseTransform = newTransform;
+        }
         
+        /// <summary>
+        ///     Sets the velocity
+        /// </summary>
+        /// <param name="newVelocity"></param>
         internal void SetVelocity(Vector3 newVelocity)
         {
             velocity = newVelocity;
@@ -21,7 +36,13 @@ namespace Team_Capture.Player
         {
             transform.localRotation = Quaternion.Euler(0, 0, CalcRoll());
         }
+        
+        //Yes, more code stol-- borrowed from the Source Engine
 
+        /// <summary>
+        ///     Compute roll angle for a particular lateral velocity
+        /// </summary>
+        /// <returns></returns>
         private float CalcRoll()
         {
             //Get amount of lateral movement
@@ -38,13 +59,9 @@ namespace Team_Capture.Player
 
             //Hit 100% of rollAngle at rollSpeed. Below that get linear approx.
             if (side < rollSpeed)
-            {
                 side = side * value / rollSpeed;
-            }
             else
-            {
                 side = value;
-            }
 
             //Scale by right/left sign
             return side * sign;
