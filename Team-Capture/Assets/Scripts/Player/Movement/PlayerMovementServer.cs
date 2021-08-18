@@ -18,7 +18,7 @@ namespace Team_Capture.Player.Movement
 	/// <summary>
 	///     Handles processing inputs and performing movements on the server
 	/// </summary>
-	public sealed class PlayerMovementServer : MonoBehaviour
+	internal sealed class PlayerMovementServer : MonoBehaviour
 	{
 		private PlayerMovementManager character;
 		private Queue<PlayerInputs> inputBuffer;

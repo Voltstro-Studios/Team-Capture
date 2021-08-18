@@ -19,7 +19,7 @@ namespace Team_Capture.Player.Movement
 	/// <summary>
 	///     The inputs to send to the server
 	/// </summary>
-	public struct PlayerInputs : NetworkMessage
+	internal struct PlayerInputs : NetworkMessage
 	{
 		public PlayerInputs(Vector2 moveDirections, Vector2 lookDirections, bool jump, int inputNum)
 		{
@@ -38,23 +38,5 @@ namespace Team_Capture.Player.Movement
 
 		public static PlayerInputs Zero =>
 			new PlayerInputs(Vector2.zero, Vector2.zero, false, 0);
-	}
-
-	[Preserve]
-	public static class PlayerInputsReaderWriter
-	{
-		public static void WritePlayerInputs(this NetworkWriter writer, PlayerInputs inputs)
-		{
-			writer.WriteVector2(inputs.MoveDirections);
-			writer.WriteVector2(inputs.LookDirections);
-
-			writer.WriteBool(inputs.Jump);
-			writer.WriteInt(inputs.InputNum);
-		}
-
-		public static PlayerInputs ReaderPlayerInputs(this NetworkReader reader)
-		{
-			return new PlayerInputs(reader.ReadVector2(), reader.ReadVector2(), reader.ReadBool(), reader.ReadInt());
-		}
 	}
 }

@@ -79,6 +79,8 @@ namespace Team_Capture.Player.Movement
 		/// </summary>
 		public int InputBufferSize { get; private set; }
 
+		#region Unity Events
+
 		private void Awake()
 		{
 			InputBufferSize = (int) (1 / Time.fixedDeltaTime) / inputUpdateRate;
@@ -91,14 +93,7 @@ namespace Team_Capture.Player.Movement
 			if (!isLocalPlayer)
 				stateHandler = gameObject.AddComponent<PlayerMovementObserver>();
 		}
-
-		public override void OnStartLocalPlayer()
-		{
-			//Setup for local player
-			stateHandler = gameObject.AddComponent<PlayerMovementPredictor>();
-			playerInput = gameObject.AddComponent<PlayerMovementInput>();
-		}
-
+		
 		private void OnGUI()
 		{
 			if (!ShowPos) return;
@@ -113,7 +108,29 @@ namespace Team_Capture.Player.Movement
 			GUI.Label(new Rect(10, 70, 1000, 40),
 				$"IsGround: {Physics.Raycast(groundCheck.position, Vector3.down, groundDistance, groundMask)}");
 		}
+		
+		#endregion
 
+		#region Network Methods
+
+		public override void OnStartLocalPlayer()
+		{
+			//Setup for local player
+			stateHandler = gameObject.AddComponent<PlayerMovementPredictor>();
+			playerInput = gameObject.AddComponent<PlayerMovementInput>();
+		}
+		
+		public override void OnStartServer()
+		{
+			base.OnStartServer();
+			server = gameObject.AddComponent<PlayerMovementServer>();
+		}
+		
+		#endregion
+
+		/// <summary>
+		///		Disables the state handler
+		/// </summary>
 		public void DisableStateHandling()
 		{
 			stateHandler.enabled = false;
@@ -122,6 +139,9 @@ namespace Team_Capture.Player.Movement
 				playerInput.enabled = false;
 		}
 
+		/// <summary>
+		///		Enables the state handler
+		/// </summary>
 		public void EnableStateHandling()
 		{
 			stateHandler.enabled = true;
@@ -130,13 +150,11 @@ namespace Team_Capture.Player.Movement
 				playerInput.enabled = true;
 		}
 
-		public override void OnStartServer()
-		{
-			base.OnStartServer();
-			server = gameObject.AddComponent<PlayerMovementServer>();
-		}
-
-		public void SyncState(PlayerState overrideState)
+		/// <summary>
+		///		Syncs the state and moves the <see cref="CharacterController"/>
+		/// </summary>
+		/// <param name="overrideState"></param>
+		internal void SyncState(PlayerState overrideState)
 		{
 			if (playerManager.IsDead)
 				return;
@@ -150,15 +168,21 @@ namespace Team_Capture.Player.Movement
 			cameraTransform.rotation = Quaternion.Euler(overrideState.RotationX, overrideState.RotationY, 0);
 		}
 
-		public void OnServerStateChange(PlayerState oldState, PlayerState newState)
+		internal void OnServerStateChange(PlayerState oldState, PlayerState newState)
 		{
 			State = newState;
 			stateHandler?.OnStateChange(State);
 		}
 
+		/// <summary>
+		///		Adds <see cref="PlayerInputs"/> to the server's client input buffer
+		/// </summary>
+		/// <param name="inputs"></param>
 		[Command(channel = Channels.Reliable)]
-		public void CmdMove(PlayerInputs[] inputs)
+		internal void CmdMove(PlayerInputs[] inputs)
 		{
+			//TODO: Buffer protection
+			
 			server.AddInputs(inputs);
 		}
 
@@ -193,14 +217,16 @@ namespace Team_Capture.Player.Movement
 		// ReSharper disable once UnusedParameter.Local
 		private void TargetSetPosition(NetworkConnection conn, PlayerState newState)
 		{
+			if(playerManager.IsDead)
+				return;
+
 			transform.position = newState.Position;
-			transform.rotation = Quaternion.Euler(0, newState.RotationY, 0);
-			cameraTransform.rotation = Quaternion.Euler(newState.RotationX, newState.RotationY, 0);
+			SyncState(newState);
 		}
 
 		#region Movement Methods
 
-		public PlayerState Move(PlayerState previous, PlayerInputs input, int timestamp)
+		internal PlayerState Move(PlayerState previous, PlayerInputs input, int timestamp)
 		{
 			PlayerState playerState = new PlayerState
 			{
