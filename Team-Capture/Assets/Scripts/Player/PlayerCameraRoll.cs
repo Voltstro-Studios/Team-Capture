@@ -6,7 +6,7 @@ namespace Team_Capture.Player
     internal class PlayerCameraRoll : MonoBehaviour
     {
         [ConVar("cl_rollangle", "Max view roll angle")]
-        public static float rollAngle = 1f;
+        public static float rollAngle = 2f;
         
         [ConVar("cl_rollspeed", "The speed of the view roll angle")]
         public static float rollSpeed = 10f;
