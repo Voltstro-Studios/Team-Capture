@@ -74,6 +74,8 @@ namespace Team_Capture.Player.Movement
 		/// </summary>
 		private PlayerMovementInput playerInput;
 
+		private PlayerCameraRoll cameraRoll;
+
 		/// <summary>
 		///     Controls how many inputs are needed before sending update command
 		/// </summary>
@@ -100,12 +102,13 @@ namespace Team_Capture.Player.Movement
 
 			GUI.skin.label.fontSize = 20;
 
-			GUI.Box(new Rect(8, 10, 300, 90), "");
+			GUI.Box(new Rect(8, 10, 300, 115), "");
 
-			GUI.Label(new Rect(10, 10, 1000, 40), $"Velocity: {characterController.velocity}");
-			GUI.Label(new Rect(10, 30, 1000, 40), $"Position: {transform.position}");
-			GUI.Label(new Rect(10, 50, 1000, 40), $"LookingAt: {cameraTransform.rotation}");
-			GUI.Label(new Rect(10, 70, 1000, 40),
+			GUI.Label(new Rect(10, 10, 1000, 40), $"Velocity: {State.Velocity}");
+			GUI.Label(new Rect(10, 30, 1000, 40), $"WishDir: {State.WishDir}");
+			GUI.Label(new Rect(10, 50, 1000, 40), $"Position: {State.Position}");
+			GUI.Label(new Rect(10, 70, 1000, 40), $"LookingAt: {cameraTransform.rotation}");
+			GUI.Label(new Rect(10, 90, 1000, 40),
 				$"IsGround: {Physics.Raycast(groundCheck.position, Vector3.down, groundDistance, groundMask)}");
 		}
 		
@@ -118,6 +121,8 @@ namespace Team_Capture.Player.Movement
 			//Setup for local player
 			stateHandler = gameObject.AddComponent<PlayerMovementPredictor>();
 			playerInput = gameObject.AddComponent<PlayerMovementInput>();
+			cameraRoll = GetComponent<PlayerSetup>().GetPlayerCamera().gameObject.AddComponent<PlayerCameraRoll>();
+			cameraRoll.baseTransform = transform;
 		}
 		
 		public override void OnStartServer()
@@ -166,6 +171,9 @@ namespace Team_Capture.Player.Movement
 
 			transform.rotation = Quaternion.Euler(0, overrideState.RotationY, 0);
 			cameraTransform.rotation = Quaternion.Euler(overrideState.RotationX, overrideState.RotationY, 0);
+			
+			if(cameraRoll != null)
+				cameraRoll.SetVelocity(overrideState.Velocity);
 		}
 
 		internal void OnServerStateChange(PlayerState oldState, PlayerState newState)
@@ -268,6 +276,8 @@ namespace Team_Capture.Player.Movement
 			Vector3 wishDir = new Vector3(input.MoveDirections.x, 0f, input.MoveDirections.y);
 			wishDir = transform.TransformDirection(wishDir);
 			wishDir.Normalize();
+			
+			state.WishDir = wishDir;
 
 			float wishSpeed = wishDir.magnitude;
 			wishSpeed *= moveSpeed;
@@ -293,6 +303,7 @@ namespace Team_Capture.Player.Movement
 			wishSpeed *= moveSpeed;
 
 			wishDir.Normalize();
+			state.WishDir = wishDir;
 
 			float wishSpeed2 = wishSpeed;
 			float accel = Vector3.Dot(state.Velocity, wishDir) < 0 ? airDecceleration : airAcceleration;

@@ -22,6 +22,7 @@ namespace Team_Capture.Player.Movement
 	{
 		public Vector3 Position;
 		public Vector3 Velocity;
+		public Vector3 WishDir;
 
 		public float RotationX;
 		public float RotationY;
@@ -41,6 +42,7 @@ namespace Team_Capture.Player.Movement
 			new PlayerState
 			{
 				Position = Vector3.zero,
+				WishDir = Vector3.zero,
 				RotationX = 0f,
 				RotationY = 0f,
 				WishJump = false,
@@ -55,6 +57,7 @@ namespace Team_Capture.Player.Movement
 			{
 				Position = Vector3.Lerp(from.Position, to.Position, t),
 				Velocity = Vector3.Lerp(from.Velocity, to.Velocity, t),
+				WishDir = Vector3.Lerp(from.WishDir, to.WishDir, t),
 				RotationX = Mathf.Lerp(from.RotationX, to.RotationX, t),
 				RotationY = Mathf.Lerp(from.RotationY, to.RotationY, t),
 				WishJump = to.WishJump,
