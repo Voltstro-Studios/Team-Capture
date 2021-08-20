@@ -22,6 +22,10 @@ MonoBehaviour:
   respawnTime: 4
   stockWeapons:
   - {fileID: 11400000, guid: da803de1f5f09f247aac351f1c13c59a, type: 2}
+  traceEffectPrefab: {fileID: 5622775260631071782, guid: aeeb5910131c55e4cb505d9f7ebab423,
+    type: 3}
+  bulletHoleEffectPrefab: {fileID: 1323092306309459875, guid: 8741f47e93961d34f81bf7f96e1277ac,
+    type: 3}
   showStartTime: 1
   isMainMenu: 0
   largeImageKey: tc_icon

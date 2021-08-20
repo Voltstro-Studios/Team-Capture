@@ -7,9 +7,10 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using Mirror;
+using Team_Capture.Core;
 using Team_Capture.Helper;
 using Team_Capture.LagCompensation;
-using Team_Capture.UI;
+using Team_Capture.Pooling;
 using Team_Capture.Weapons;
 using UnityEngine;
 using Logger = Team_Capture.Logging.Logger;
@@ -36,6 +37,9 @@ namespace Team_Capture.Player
 		///     The <see cref="weaponManager" /> associated with this <see cref="PlayerWeaponShoot" />
 		/// </summary>
 		private WeaponManager weaponManager;
+
+		private GameObjectPool tracerPool;
+		private GameObjectPool bulletHolesPool;
 
 		#region Mirror Events
 
@@ -74,6 +78,9 @@ namespace Team_Capture.Player
 			weaponManager = GetComponent<WeaponManager>();
 			playerManager = GetComponent<PlayerManager>();
 			playerManager.PlayerDeath += PlayerDeath;
+
+			tracerPool = GameManager.Instance.tracersEffectsPool;
+			bulletHolesPool = GameManager.Instance.bulletHolePool;
 		}
 
 		private void PlayerDeath()
@@ -254,16 +261,17 @@ namespace Team_Capture.Player
 			for (int i = 0; i < hitTargets.Targets.Length; i++)
 			{
 				//Do bullet tracer
-				BulletTracer tracer =
-					Instantiate(weapon.bulletTracerEffect, weaponGraphics.bulletTracerPosition.position,
-						weaponGraphics.bulletTracerPosition.rotation).GetComponent<BulletTracer>();
+				GameObject tracerObject = tracerPool.GetPooledObject();
+				tracerObject.transform.position = weaponGraphics.bulletTracerPosition.position;
+				tracerObject.transform.rotation = weaponGraphics.bulletTracerPosition.rotation;
+				
+				BulletTracer tracer = tracerObject.GetComponent<BulletTracer>();
 				tracer.Play(hitTargets.Targets[i]);
 
 				//Do bullet holes
-				Instantiate(weapon.bulletHitEffectPrefab, hitTargets.Targets[i],
-					Quaternion.LookRotation(hitTargets.TargetNormals[i]));
-				Instantiate(weapon.bulletHolePrefab, hitTargets.Targets[i],
-					Quaternion.FromToRotation(Vector3.back, hitTargets.TargetNormals[i]));
+				GameObject bulletHole = bulletHolesPool.GetPooledObject();
+				bulletHole.transform.position = hitTargets.Targets[i];
+				bulletHole.transform.rotation = Quaternion.LookRotation(hitTargets.TargetNormals[i]);
 			}
 		}
 

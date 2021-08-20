@@ -9,6 +9,7 @@ using System.Linq;
 using Mirror;
 using Team_Capture.Console;
 using Team_Capture.Player;
+using Team_Capture.Pooling;
 using Team_Capture.SceneManagement;
 using UnityEngine;
 using Logger = Team_Capture.Logging.Logger;
@@ -71,6 +72,9 @@ namespace Team_Capture.Core
 				Logger.Error(
 					"The scene {@Scene} doesn't have a Camera with the tag `{@SceneCameraTag}` assigned to it!",
 					scene.scene, SceneCameraTag);
+
+			tracersEffectsPool = new GameObjectPool(scene.traceEffectPrefab);
+			bulletHolePool = new GameObjectPool(scene.bulletHoleEffectPrefab);
 		}
 
 		/// <summary>
@@ -157,6 +161,15 @@ namespace Team_Capture.Core
 		{
 			Players.Clear();
 		}
+
+		#endregion
+
+		#region Weapon Effects
+
+		//TODO: We should move stuff like all the scene and weapon effects pool into its own 'SceneManager' class or something like that
+
+		internal GameObjectPool tracersEffectsPool;
+		internal GameObjectPool bulletHolePool;
 
 		#endregion
 

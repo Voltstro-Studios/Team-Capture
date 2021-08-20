@@ -7,13 +7,13 @@
 using UnityEngine;
 using UnityEngine.Pool;
 
-namespace Team_Capture.Weapons
+namespace Team_Capture.Pooling
 {
-    internal sealed class WeaponEffectsPool
+    internal sealed class GameObjectPool
     {
         private readonly IObjectPool<GameObject> objectPool;
 
-        public WeaponEffectsPool(GameObject prefab)
+        public GameObjectPool(GameObject prefab)
         {
             objectPool = new LinkedPool<GameObject>(() => CreateObject(prefab), OnTakeObject, OnReturnObject, OnDestroyObject);
         }
@@ -30,7 +30,12 @@ namespace Team_Capture.Weapons
 
         private GameObject CreateObject(GameObject prefab)
         {
-            return Object.Instantiate(prefab);
+            GameObject newObj = Object.Instantiate(prefab);
+            PoolReturn returnComponent = newObj.GetComponent<PoolReturn>();
+            if(returnComponent != null)
+                returnComponent.Setup(this);
+
+            return newObj;
         }
 
         private void OnTakeObject(GameObject gameObject)

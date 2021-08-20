@@ -59,13 +59,19 @@ namespace Team_Capture.SceneManagement
 		/// <summary>
 		///     The time until the players respawn
 		/// </summary>
-		[Header("Game Settings")] [Tooltip("The time until the players respawn")]
+		[Header("Game Settings")] 
+		[Tooltip("The time until the players respawn")]
 		public float respawnTime = 4.0f;
 
 		/// <summary>
 		///     The stock weapons to add to player
 		/// </summary>
+		[Header("Weapon Settings")] 
 		public TCWeapon[] stockWeapons;
+
+		public GameObject traceEffectPrefab;
+
+		public GameObject bulletHoleEffectPrefab;
 
 		/// <summary>
 		///     The scene, but only its name (So no 'Assets/Scenes/*.unity' stuff)
