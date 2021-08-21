@@ -7,10 +7,10 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using Mirror;
-using Team_Capture.Core;
 using Team_Capture.Helper;
 using Team_Capture.LagCompensation;
 using Team_Capture.Pooling;
+using Team_Capture.SceneManagement;
 using Team_Capture.Weapons;
 using UnityEngine;
 using Logger = Team_Capture.Logging.Logger;
@@ -79,8 +79,8 @@ namespace Team_Capture.Player
 			playerManager = GetComponent<PlayerManager>();
 			playerManager.PlayerDeath += PlayerDeath;
 
-			tracerPool = GameManager.Instance.tracersEffectsPool;
-			bulletHolesPool = GameManager.Instance.bulletHolePool;
+			tracerPool = GameSceneManager.Instance.tracersEffectsPool;
+			bulletHolesPool = GameSceneManager.Instance.bulletHolePool;
 		}
 
 		private void PlayerDeath()

@@ -53,8 +53,6 @@ MonoBehaviour:
   runInBackground: 1
   autoStartServerBuild: 0
   serverTickRate: 128
-  serverBatching: 1
-  serverBatchInterval: 0
   offlineScene: Assets/Scenes/MainMenu.unity
   onlineScene: Assets/Scenes/dm_ditch.unity
   transport: {fileID: 1601811758747872243}
@@ -69,6 +67,8 @@ MonoBehaviour:
   playerSpawnMethod: 0
   spawnPrefabs: []
   gameMangerPrefab: {fileID: 5023681518765488030, guid: 924fec1313feb8346bd0bf297c02c3fb,
+    type: 3}
+  gameSceneManagerPrefab: {fileID: 7623168383795849458, guid: c3731f1259b842744b04204963a044ac,
     type: 3}
   motdUIPrefab: {fileID: 1451107585728086516, guid: a02253513dd58044e8caf924098aa371,
     type: 3}
@@ -156,12 +156,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Port: 7777
+  DualMode: 1
   NoDelay: 1
   Interval: 10
+  Timeout: 10000
   FastResend: 2
   CongestionWindow: 0
   SendWindowSize: 128
   ReceiveWindowSize: 128
+  NonAlloc: 1
   debugLog: 0
   statisticsGUI: 0
   statisticsLog: 0

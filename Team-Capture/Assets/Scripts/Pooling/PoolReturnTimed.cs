@@ -1,3 +1,4 @@
+using System.Threading;
 using Cysharp.Threading.Tasks;
 
 namespace Team_Capture.Pooling
@@ -5,7 +6,8 @@ namespace Team_Capture.Pooling
     public class PoolReturnTimed : PoolReturn
     {
         public int timeTillReturn = 5;
-        
+
+        private readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
         private GameObjectPool pool;
         
         private void OnEnable()
@@ -13,9 +15,18 @@ namespace Team_Capture.Pooling
             TimeTask().Forget();
         }
 
+        private void OnDestroy()
+        {
+            cancellationTokenSource.Cancel();
+        }
+
         private async UniTask TimeTask()
         {
-            await Integrations.UniTask.UniTask.Delay(timeTillReturn * 1000);
+            await Integrations.UniTask.UniTask.Delay(timeTillReturn * 1000, cancellationTokenSource.Token);
+            
+            if(cancellationTokenSource.IsCancellationRequested || pool == null)
+                return;
+            
             pool.ReturnPooledObject(gameObject);
         }
 

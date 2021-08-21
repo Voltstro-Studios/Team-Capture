@@ -9,32 +9,17 @@ using System.Linq;
 using Mirror;
 using Team_Capture.Console;
 using Team_Capture.Player;
-using Team_Capture.Pooling;
-using Team_Capture.SceneManagement;
 using UnityEngine;
 using Logger = Team_Capture.Logging.Logger;
-using SceneManager = UnityEngine.SceneManagement.SceneManager;
 
 namespace Team_Capture.Core
 {
 	public class GameManager : MonoBehaviour
 	{
-		private const string SceneCameraTag = "SceneCamera";
-
 		/// <summary>
 		///     The active <see cref="GameManager" />
 		/// </summary>
 		public static GameManager Instance;
-
-		/// <summary>
-		///     The active <see cref="TCScene" /> that this <see cref="GameManager" /> is running on
-		/// </summary>
-		public TCScene scene;
-
-		/// <summary>
-		///     The primary <see cref="Camera" /> <see cref="GameObject" /> that is in this scene
-		/// </summary>
-		public GameObject sceneCamera;
 
 		#region Gamemanager Handling Stuff
 
@@ -47,7 +32,6 @@ namespace Team_Capture.Core
 			else
 			{
 				Instance = this;
-				Setup();
 			}
 		}
 
@@ -55,44 +39,6 @@ namespace Team_Capture.Core
 		{
 			ClearAllPlayers();
 			Instance = null;
-		}
-
-		private void Setup()
-		{
-			scene = TCScenesManager.GetActiveScene();
-			if (scene == null)
-			{
-				Logger.Error("The scene '{@Scene}' doesn't have a TCScene assigned to it!",
-					SceneManager.GetActiveScene().name);
-				return;
-			}
-
-			sceneCamera = GameObject.FindWithTag(SceneCameraTag);
-			if (sceneCamera == null)
-				Logger.Error(
-					"The scene {@Scene} doesn't have a Camera with the tag `{@SceneCameraTag}` assigned to it!",
-					scene.scene, SceneCameraTag);
-
-			tracersEffectsPool = new GameObjectPool(scene.traceEffectPrefab);
-			bulletHolePool = new GameObjectPool(scene.bulletHoleEffectPrefab);
-		}
-
-		/// <summary>
-		///     Gets this scene's main camera
-		/// </summary>
-		/// <returns></returns>
-		public static GameObject GetActiveSceneCamera()
-		{
-			return Instance.sceneCamera;
-		}
-
-		/// <summary>
-		///     Gets the active <see cref="TCScene" /> running on this <see cref="GameManager" />
-		/// </summary>
-		/// <returns></returns>
-		public static TCScene GetActiveScene()
-		{
-			return Instance.scene;
 		}
 
 		#endregion
@@ -161,15 +107,6 @@ namespace Team_Capture.Core
 		{
 			Players.Clear();
 		}
-
-		#endregion
-
-		#region Weapon Effects
-
-		//TODO: We should move stuff like all the scene and weapon effects pool into its own 'SceneManager' class or something like that
-
-		internal GameObjectPool tracersEffectsPool;
-		internal GameObjectPool bulletHolePool;
 
 		#endregion
 

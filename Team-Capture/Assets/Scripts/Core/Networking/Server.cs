@@ -13,6 +13,7 @@ using Team_Capture.Console;
 using Team_Capture.Core.Compression;
 using Team_Capture.Helper;
 using Team_Capture.LagCompensation;
+using Team_Capture.SceneManagement;
 using Team_Capture.UI.Chat;
 using UnityEngine;
 using UnityCommandLineParser;
@@ -244,6 +245,12 @@ namespace Team_Capture.Core.Networking
 		/// <param name="sceneName"></param>
 		internal static void OnServerSceneChanging(string sceneName)
 		{
+			if (GameManager.Instance == null || GameSceneManager.Instance == null)
+				return;
+			
+			Object.Destroy(GameManager.Instance.gameObject);
+			Object.Destroy(GameSceneManager.Instance.gameObject);
+			
 			Logger.Info("Server is changing scene to {SceneName}...", sceneName);
 		}
 
@@ -255,6 +262,7 @@ namespace Team_Capture.Core.Networking
 		{
 			//Instantiate the new game manager
 			Object.Instantiate(netManager.gameMangerPrefab);
+			Object.Instantiate(netManager.gameSceneManagerPrefab);
 			Logger.Debug("Created GameManager object");
 
 			NetworkServer.SendToAll(TCNetworkManager.Instance.serverConfig);

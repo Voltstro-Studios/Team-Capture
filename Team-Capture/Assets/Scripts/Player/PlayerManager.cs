@@ -10,6 +10,7 @@ using Mirror;
 using Team_Capture.Core;
 using Team_Capture.Core.Networking;
 using Team_Capture.Player.Movement;
+using Team_Capture.SceneManagement;
 using Team_Capture.Weapons;
 using UnityEngine;
 using Logger = Team_Capture.Logging.Logger;
@@ -280,7 +281,7 @@ namespace Team_Capture.Player
 		internal IEnumerator ServerPlayerRespawn(bool skipRespawnTime = false)
 		{
 			if (!skipRespawnTime)
-				yield return new WaitForSeconds(GameManager.GetActiveScene().respawnTime);
+				yield return new WaitForSeconds(GameSceneManager.GetActiveScene().respawnTime);
 
 			characterController.enabled = true;
 			playerMovementManager.enabled = true;
@@ -318,7 +319,7 @@ namespace Team_Capture.Player
 				if (isLocalPlayer)
 				{
 					//Switch cams
-					GameManager.GetActiveSceneCamera().SetActive(true);
+					GameSceneManager.GetSceneCamera().SetActive(true);
 
 					//Disable the HUD
 					uiManager.SetHud(false);
@@ -355,7 +356,7 @@ namespace Team_Capture.Player
 				if (isLocalPlayer)
 				{
 					//Switch cams
-					GameManager.GetActiveSceneCamera().SetActive(false);
+					GameSceneManager.GetSceneCamera().SetActive(false);
 
 					//Enable our HUD
 					uiManager.SetHud(true);

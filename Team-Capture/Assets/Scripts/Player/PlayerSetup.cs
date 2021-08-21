@@ -7,6 +7,7 @@
 using Mirror;
 using Team_Capture.Core;
 using Team_Capture.Input;
+using Team_Capture.SceneManagement;
 using Team_Capture.UI;
 using UnityEngine;
 
@@ -53,7 +54,7 @@ namespace Team_Capture.Player
 			base.OnStartLocalPlayer();
 
 			//Set up scene stuff
-			GameManager.GetActiveSceneCamera().SetActive(false);
+			GameSceneManager.GetSceneCamera().SetActive(false);
 			localCamera.enabled = true;
 			localCamera.gameObject.AddComponent<AudioListener>();
 
@@ -107,7 +108,7 @@ namespace Team_Capture.Player
 			if (GameManager.Instance == null)
 				return;
 
-			GameManager.GetActiveSceneCamera().SetActive(true);
+			GameSceneManager.GetSceneCamera().SetActive(true);
 		}
 
 		#endregion

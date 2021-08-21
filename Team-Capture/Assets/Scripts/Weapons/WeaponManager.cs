@@ -9,8 +9,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Mirror;
-using Team_Capture.Core;
 using Team_Capture.Helper;
+using Team_Capture.SceneManagement;
 using UnityEngine;
 using Logger = Team_Capture.Logging.Logger;
 
@@ -252,7 +252,7 @@ namespace Team_Capture.Weapons
 		[Server]
 		public void AddStockWeapons()
 		{
-			foreach (TCWeapon weapon in GameManager.Instance.scene.stockWeapons)
+			foreach (TCWeapon weapon in GameSceneManager.GetActiveScene().stockWeapons)
 				AddWeapon(weapon.weapon);
 		}
 

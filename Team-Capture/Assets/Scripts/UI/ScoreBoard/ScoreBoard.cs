@@ -11,6 +11,7 @@ using Team_Capture.Core;
 using Team_Capture.Core.Networking;
 using Team_Capture.Localization;
 using Team_Capture.Player;
+using Team_Capture.SceneManagement;
 using TMPro;
 using UnityEngine;
 using Logger = Team_Capture.Logging.Logger;
@@ -182,7 +183,7 @@ namespace Team_Capture.UI.ScoreBoard
 		private void Start()
 		{
 			playerNameText.text = clientPlayer.username;
-			mapNameText.text = GameManager.GetActiveScene().DisplayNameLocalized;
+			mapNameText.text = GameSceneManager.GetActiveScene().DisplayNameLocalized;
 			gameNameText.text = TCNetworkManager.Instance.serverConfig.GameName.String;
 		}
 

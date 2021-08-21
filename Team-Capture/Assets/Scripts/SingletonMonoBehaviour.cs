@@ -126,6 +126,11 @@ namespace Team_Capture
 		#region Singleton Life-time Management
 
 		/// <summary>
+		///		Override and set to true to ensure that this object will still be destroyed on load
+		/// </summary>
+		protected virtual bool DoDestroyOnLoad { get; }
+		
+		/// <summary>
 		///     Unity3D Awake method.
 		/// </summary>
 		/// <remarks>
@@ -183,7 +188,8 @@ namespace Team_Capture
 			if (instance == null)
 			{
 				instance = thisInstance;
-				DontDestroyOnLoad(instance.gameObject);
+				if(!DoDestroyOnLoad)
+					DontDestroyOnLoad(instance.gameObject);
 			}
 
 			else if (thisInstance != instance)
@@ -197,6 +203,7 @@ namespace Team_Capture
 
 			SingletonAwakened();
 			IsAwakened = true;
+			IsDestroyed = false;
 		}
 
 		private void Start()
@@ -223,6 +230,8 @@ namespace Team_Capture
 			//is kept in the scene instead of being discarded after the game exists play mode.
 			//(Unity bug?)
 			IsDestroyed = true;
+			IsAwakened = false;
+			IsStarted = false;
 
 			SingletonDestroyed();
 		}

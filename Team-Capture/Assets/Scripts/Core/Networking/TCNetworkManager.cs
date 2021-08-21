@@ -9,6 +9,7 @@ using Mirror;
 using Team_Capture.Console;
 using Team_Capture.Core.Networking.Discovery;
 using Team_Capture.LagCompensation;
+using Team_Capture.SceneManagement;
 using UnityEngine;
 using Logger = Team_Capture.Logging.Logger;
 
@@ -31,6 +32,12 @@ namespace Team_Capture.Core.Networking
 		[Header("Team Capture")]
 		[Tooltip("The prefab for the GameManager")]
 		public GameObject gameMangerPrefab;
+
+		/// <summary>
+		///		The prefab for the <see cref="GameSceneManager"/>
+		/// </summary>
+		[Tooltip("The prefab for the GameSceneManager")]
+		public GameObject gameSceneManagerPrefab;
 
 		/// <summary>
 		///		The prefab for the MOTD

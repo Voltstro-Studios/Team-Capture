@@ -113,11 +113,12 @@ namespace Team_Capture.Core.Networking
 		internal static void OnClientSceneChanging(string newSceneName)
 		{
 			clientHasPlayer = false;
-			if (GameManager.Instance == null)
+			if (GameManager.Instance == null || GameSceneManager.Instance == null)
 				return;
 
 			Object.Destroy(GameManager.Instance.gameObject);
-			Logger.Info("The server has requested to change the scene to {@NewSceneName}", newSceneName);
+			Object.Destroy(GameSceneManager.Instance.gameObject);
+			Logger.Info("The server has requested to change the scene to {NewSceneName}", newSceneName);
 		}
 
 		/// <summary>
@@ -126,6 +127,7 @@ namespace Team_Capture.Core.Networking
 		internal static void OnClientSceneChanged()
 		{
 			Object.Instantiate(netManager.gameMangerPrefab);
+			Object.Instantiate(netManager.gameSceneManagerPrefab);
 			Logger.Info("The scene has been loaded to {Scene}", TCScenesManager.GetActiveScene().scene);
 
 			DisplayMotdAndOrCreatePlayer().Forget();

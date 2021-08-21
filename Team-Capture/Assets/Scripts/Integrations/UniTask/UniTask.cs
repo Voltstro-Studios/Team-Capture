@@ -5,6 +5,7 @@
 // For more details see the LICENSE file.
 
 using System;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using Team_Capture.Logging;
 using UnityEngine.LowLevel;
@@ -23,9 +24,9 @@ namespace Team_Capture.Integrations.UniTask
 		    }
 	    }
 
-	    public static Cysharp.Threading.Tasks.UniTask Delay(int milliseconds)
+	    public static Cysharp.Threading.Tasks.UniTask Delay(int milliseconds, CancellationToken cancellationToken = default)
 	    {
-		    return Cysharp.Threading.Tasks.UniTask.Delay(milliseconds);
+		    return Cysharp.Threading.Tasks.UniTask.Delay(milliseconds, cancellationToken: cancellationToken);
 	    }
 
 	    public static Cysharp.Threading.Tasks.UniTask WaitUntil(Func<bool> predicate)
