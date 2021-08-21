@@ -107,24 +107,6 @@ namespace Team_Capture.Weapons
 		public float spreadFactor = 0.05f;
 
 		/// <summary>
-		///     The bullet hole prefab that will be used
-		/// </summary>
-		[Header("Effects")] [Tooltip("The bullet hole prefab that will be used")]
-		public GameObject bulletHolePrefab;
-
-		/// <summary>
-		///     The bullet hit effect that will be used
-		/// </summary>
-		[Tooltip("The bullet hit effect that will be used")]
-		public GameObject bulletHitEffectPrefab;
-
-		/// <summary>
-		///     The bullet tracer effect that will be used
-		/// </summary>
-		[Tooltip("The bullet tracer effect that will be used")]
-		public GameObject bulletTracerEffect;
-
-		/// <summary>
 		///     The formatted name. This is what will show on HUDs
 		/// </summary>
 		public string WeaponFormattedNameLocalized =>
