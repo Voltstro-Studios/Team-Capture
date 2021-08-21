@@ -39,14 +39,6 @@ namespace Team_Capture.Settings.Controllers
 			ApplyVolumeSettings();
 		}
 
-		protected override void SingletonStarted()
-		{
-		}
-
-		protected override void SingletonDestroyed()
-		{
-		}
-
 		protected override void NotifyInstanceRepeated()
 		{
 			Destroy(gameObject);

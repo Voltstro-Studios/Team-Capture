@@ -149,10 +149,6 @@ namespace Team_Capture.UI
 			NetworkDiagnostics.OutMessageEvent -= AddOutMessage;
 		}
 
-		protected override void SingletonAwakened()
-		{
-		}
-
 		protected override void SingletonStarted()
 		{
 			version = $"Team-Capture {Application.version}";
@@ -165,11 +161,7 @@ namespace Team_Capture.UI
 			inputReader.DebugMenuToggle += () => DebugMenuOpen = !DebugMenuOpen;
 			inputReader.EnableDebugMenuInput();
 		}
-
-		protected override void SingletonDestroyed()
-		{
-		}
-
+		
 		private string GetNetworkingStatus()
 		{
 			if (NetworkManager.singleton == null)

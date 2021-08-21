@@ -41,10 +41,6 @@ namespace Team_Capture.Integrations.Discord
 			client?.RunCallbacks();
 		}
 
-		protected override void SingletonAwakened()
-		{
-		}
-
 		protected override void SingletonStarted()
 		{
 			if (Game.IsHeadless)

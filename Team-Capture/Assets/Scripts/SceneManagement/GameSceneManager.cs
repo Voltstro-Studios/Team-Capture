@@ -77,14 +77,5 @@ namespace Team_Capture.SceneManagement
             tracersEffectsPool = new GameObjectPool(activeScene.traceEffectPrefab);
             bulletHolePool = new GameObjectPool(activeScene.bulletHoleEffectPrefab);
         }
-
-        protected override void SingletonStarted()
-        {
-            
-        }
-
-        protected override void SingletonDestroyed()
-        {
-        }
     }
 }

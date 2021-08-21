@@ -30,11 +30,7 @@ namespace Team_Capture.UI.LoadingScreen
 		/// </summary>
 	    private static bool isSetup;
 
-	    protected override void SingletonAwakened()
-	    {
-	    }
-
-	    protected override void SingletonStarted()
+		protected override void SingletonStarted()
 	    {
 			//Make sure loadingScenePrefab isn't null
 			if (loadingScenePrefab == null)

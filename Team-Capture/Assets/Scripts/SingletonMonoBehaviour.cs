@@ -47,61 +47,7 @@ namespace Team_Capture
 		/// <summary>
 		///     Global access point to the unique instance of this class.
 		/// </summary>
-		public static T Instance
-		{
-			get
-			{
-				if (instance) return instance;
-
-				if (IsDestroyed)
-				{
-					Logger.Warn("Attempt to access destroyed {@Type} singleton", typeof(T));
-					return null;
-				}
-
-				Logger.Info("Singleton Instance of {@Type} not set", typeof(T));
-
-				//Finding an existing instance
-				{
-					T[] instances = FindObjectsOfType<T>();
-
-					// ReSharper disable once ConvertIfStatementToSwitchStatement
-					if (instances.Length == 0)
-					{
-						Logger.Warn(
-							"Singleton of type {@SingletonName} not found. Ensure that it is placed on a valid GameObject",
-							typeof(T).Name);
-
-						//Create a new instance
-						GameObject go = new GameObject(typeof(T).Name)
-						{
-							transform = {position = Vector3.zero, rotation = Quaternion.identity, parent = null}
-						};
-						return instance = go.AddComponent<T>();
-					}
-
-					//Only found one, all's fine
-					if (instances.Length == 1)
-						return instance = instances[0];
-
-					if (instances.Length > 1)
-					{
-						Logger.Warn(
-							"More than one singleton of type {@SingletonType} was found ({@InstancesCount}): {@AllInstances}",
-							typeof(T), instances.Length, instances);
-
-						//All but the first instance are duplicates
-						for (int i = 1; i < instances.Length; i++) instances[i].NotifyInstanceRepeated();
-						return instance = instances[0];
-					}
-				}
-
-				//Should never get here, but all code paths need to either return or throw
-				const string errorMessage = "Instance count checks";
-				Logger.Error(errorMessage);
-				throw new Exception(errorMessage);
-			}
-		}
+		public static T Instance => instance;
 
 		// ReSharper disable StaticMemberInGenericType
 		/// <summary>
@@ -129,7 +75,7 @@ namespace Team_Capture
 		///		Override and set to true to ensure that this object will still be destroyed on load
 		/// </summary>
 		protected virtual bool DoDestroyOnLoad { get; }
-		
+
 		/// <summary>
 		///     Unity3D Awake method.
 		/// </summary>
@@ -139,7 +85,9 @@ namespace Team_Capture
 		///     You can override this method in derived classes to customize the initialization of your
 		///     <see cref="MonoBehaviour" />
 		/// </remarks>
-		protected abstract void SingletonAwakened();
+		protected virtual void SingletonAwakened()
+		{
+		}
 
 		/// <summary>
 		///     Unity3D Start method.
@@ -150,7 +98,9 @@ namespace Team_Capture
 		///     You can override this method in derived classes to customize the initialization of your
 		///     <see cref="MonoBehaviour" />
 		/// </remarks>
-		protected abstract void SingletonStarted();
+		protected virtual void SingletonStarted()
+		{
+		}
 
 		/// <summary>
 		///     Unity3D OnDestroy method.
@@ -161,7 +111,9 @@ namespace Team_Capture
 		///     You can override this method in derived classes to customize the initialization of your
 		///     <see cref="MonoBehaviour" />
 		/// </remarks>
-		protected abstract void SingletonDestroyed();
+		protected virtual void SingletonDestroyed()
+		{
+		}
 
 		/// <summary>
 		///     If a duplicated instance of a Singleton <see cref="MonoBehaviour" /> is loaded into the scene

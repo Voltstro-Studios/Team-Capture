@@ -28,10 +28,6 @@ namespace Team_Capture.Integrations.Steamworks
 
 	    private AuthTicket authTicket;
 
-	    protected override void SingletonAwakened()
-	    {
-	    }
-
 	    protected override void SingletonStarted()
 	    {
 		    LoadSettings();

@@ -9,39 +9,18 @@ using System.Linq;
 using Mirror;
 using Team_Capture.Console;
 using Team_Capture.Player;
-using UnityEngine;
 using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.Core
 {
-	public class GameManager : MonoBehaviour
+	public class GameManager : SingletonMonoBehaviour<GameManager>
 	{
-		/// <summary>
-		///     The active <see cref="GameManager" />
-		/// </summary>
-		public static GameManager Instance;
+		protected override bool DoDestroyOnLoad => true;
 
-		#region Gamemanager Handling Stuff
-
-		private void Awake()
-		{
-			if (Instance != null)
-			{
-				Logger.Error("There is already an active GameManager running!");
-			}
-			else
-			{
-				Instance = this;
-			}
-		}
-
-		private void OnDestroy()
+		protected override void SingletonDestroyed()
 		{
 			ClearAllPlayers();
-			Instance = null;
 		}
-
-		#endregion
 
 		#region Player Tracking
 
