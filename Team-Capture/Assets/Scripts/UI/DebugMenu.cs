@@ -11,7 +11,7 @@ using Mirror;
 using Team_Capture.Console;
 using Team_Capture.Helper;
 using Team_Capture.Input;
-using Team_Capture.Player.Movement;
+using UImGui;
 using Unity.Profiling;
 using UnityEngine;
 
@@ -62,44 +62,6 @@ namespace Team_Capture.UI
 		private int outMessageCount;
 		private int inMessageBytes;
 		private int outMessageBytes;
-		
-		private void OnGUI()
-		{
-			if (!DebugMenuOpen)
-				return;
-
-			//Setup GUI
-			GUI.skin.label.fontSize = 20;
-
-			//Setup our initial yOffset;
-			float yOffset = 10;
-			if (NetworkManager.singleton != null && NetworkManager.singleton.mode == NetworkManagerMode.ClientOnly)
-				if (PlayerMovementManager.ShowPos)
-					yOffset = 120;
-
-			GUI.Box(new Rect(8, yOffset, 475, 420), "");
-			GUI.Label(new Rect(10, yOffset, 1000, 40), version);
-			GUI.Label(new Rect(10, yOffset += 20, 1000, 40), Spacer);
-
-			GUI.Label(new Rect(10, yOffset += 30, 1000, 40), $"Frame Time: {frameTime:F1}ms");
-			GUI.Label(new Rect(10, yOffset += 20, 1000, 40), $"FPS: {fps}");
-			GUI.Label(new Rect(10, yOffset += 20, 1000, 40), $"Total Memory: {totalMemoryUsed} MB");
-			GUI.Label(new Rect(10, yOffset += 20, 1000, 40), $"GC Reserved: {gcReserved} MB");
-			GUI.Label(new Rect(10, yOffset += 20, 1000, 40), $"Draw Calls: {drawCalls}");
-
-			GUI.Label(new Rect(10, yOffset += 30, 1000, 40), "Device Info");
-			GUI.Label(new Rect(10, yOffset += 20, 1000, 40), Spacer);
-			GUI.Label(new Rect(10, yOffset += 20, 1000, 40), cpu);
-			GUI.Label(new Rect(10, yOffset += 20, 1000, 40), gpu);
-			GUI.Label(new Rect(10, yOffset += 20, 1000, 40), ram);
-			GUI.Label(new Rect(10, yOffset += 20, 1000, 40), renderingApi);
-			GUI.Label(new Rect(10, yOffset += 30, 1000, 40), "Network");
-			GUI.Label(new Rect(10, yOffset += 20, 1000, 40), Spacer);
-			GUI.Label(new Rect(10, yOffset += 20, 1000, 40), ipAddress);
-			GUI.Label(new Rect(10, yOffset += 20, 1000, 40), $"Status: {GetNetworkingStatus()}");
-			GUI.Label(new Rect(10, yOffset += 20, 1000, 40), $"In Messages {inMessageCountFrame} ({inMessageBytesFrame / 1000} kb)");
-			GUI.Label(new Rect(10, yOffset += 20, 1000, 40), $"Out Message {outMessageCountFrame} ({outMessageBytesFrame / 1000} kb)");
-		}
 
 		private void Update()
 		{
@@ -136,6 +98,40 @@ namespace Team_Capture.UI
 
 			NetworkDiagnostics.InMessageEvent += AddInMessage;
 			NetworkDiagnostics.OutMessageEvent += AddOutMessage;
+			UImGuiUtility.Layout += OnLayout;
+		}
+
+		private void OnLayout(UImGui.UImGui obj)
+		{
+			if(!DebugMenuOpen)
+				return;
+			
+			ImGuiNET.ImGui.Begin("Stats");
+			{
+				ImGuiNET.ImGui.Text(version);
+				
+				ImGuiNET.ImGui.Spacing();
+				ImGuiNET.ImGui.Text($"Frame Time: {frameTime:F1}ms");
+				ImGuiNET.ImGui.Text($"FPS: {fps}");
+				ImGuiNET.ImGui.Text($"Total Memory: {totalMemoryUsed} MB");
+				ImGuiNET.ImGui.Text($"GC Reserved: {gcReserved} MB");
+				ImGuiNET.ImGui.Text($"Draw Calls: {drawCalls}");
+				
+				ImGuiNET.ImGui.Spacing();
+				ImGuiNET.ImGui.Text("Device Info");
+				ImGuiNET.ImGui.Text(cpu);
+				ImGuiNET.ImGui.Text(gpu);
+				ImGuiNET.ImGui.Text(ram);
+				ImGuiNET.ImGui.Text(renderingApi);
+				
+				ImGuiNET.ImGui.Spacing();
+				ImGuiNET.ImGui.Text("Network");
+				ImGuiNET.ImGui.Text(ipAddress);
+				ImGuiNET.ImGui.Text($"Status: {GetNetworkingStatus()}");
+				ImGuiNET.ImGui.Text($"In Messages {inMessageCountFrame} ({inMessageBytesFrame / 1000} kb)");
+				ImGuiNET.ImGui.Text($"Out Message {outMessageCountFrame} ({outMessageBytesFrame / 1000} kb)");
+			}
+			ImGuiNET.ImGui.End();
 		}
 
 		private void OnDisable()
@@ -207,7 +203,7 @@ namespace Team_Capture.UI
 		}
 
 		#region Info
-
+		
 		private string version;
 		private string cpu;
 		private string gpu;
