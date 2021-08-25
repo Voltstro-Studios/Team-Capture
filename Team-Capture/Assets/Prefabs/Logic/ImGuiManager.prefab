@@ -44,6 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3309ba0240fc3374ca5a6d3d67c5b5d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sceneCameraTag: SceneCamera
 --- !u!114 &1505679712167247584
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -61,7 +62,7 @@ MonoBehaviour:
     type: 2}
   _rendererType: 0
   _platformType: 1
-  _iniSettings: {fileID: 0}
+  _iniSettings: {fileID: 11400000, guid: 24359becf69da6c4c8b4a2c906680f6e, type: 2}
   _initialConfiguration:
     ImGuiConfig: 0
     DoubleClickTime: 0.3

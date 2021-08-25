@@ -54,7 +54,7 @@ namespace Team_Capture.Player
 			base.OnStartLocalPlayer();
 
 			//Set up scene stuff
-			GameSceneManager.GetSceneCamera().SetActive(false);
+			GameSceneManager.SwitchCameras(localCamera, false);
 			localCamera.enabled = true;
 			localCamera.gameObject.AddComponent<AudioListener>();
 
@@ -108,7 +108,7 @@ namespace Team_Capture.Player
 			if (GameManager.Instance == null)
 				return;
 
-			GameSceneManager.GetSceneCamera().SetActive(true);
+			GameSceneManager.SwitchCameras(localCamera, true);
 		}
 
 		#endregion

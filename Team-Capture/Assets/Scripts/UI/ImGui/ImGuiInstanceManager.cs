@@ -12,6 +12,8 @@ namespace Team_Capture.UI.ImGui
         private Camera uImguiCamera;
 
         public string sceneCameraTag = "SceneCamera";
+
+        private bool firstCameraSet = true;
         
         protected override void SingletonAwakened()
         {
@@ -38,6 +40,10 @@ namespace Team_Capture.UI.ImGui
         {
             uImguiCamera = renderCamera;
             uImGui.SetCamera(renderCamera);
+            if(!firstCameraSet)
+                uImGui.Reload();
+
+            firstCameraSet = false;
         }
 
         public void EnableUImgui()
@@ -60,7 +66,6 @@ namespace Team_Capture.UI.ImGui
             
             yield return new WaitForEndOfFrame();
             
-            uImGui.Reload();
             EnableUImgui();
         }
 

@@ -4,7 +4,10 @@
 // This project is governed by the AGPLv3 License.
 // For more details see the LICENSE file.
 
+using JetBrains.Annotations;
+using Team_Capture.Core;
 using Team_Capture.Pooling;
+using Team_Capture.UI.ImGui;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Logger = Team_Capture.Logging.Logger;
@@ -36,16 +39,36 @@ namespace Team_Capture.SceneManagement
 
         private const string SceneCameraTag = "SceneCamera";
         
-        private GameObject sceneCamera;
+        private Camera sceneCamera;
 
         /// <summary>
-        ///     This scene's 'overview' camera
+        ///     Switches to or from scene camera to <see cref="camera"/>
         /// </summary>
-        public GameObject SceneCamera => sceneCamera;
-
-        public static GameObject GetSceneCamera()
+        /// <param name="camera"></param>
+        /// <param name="sceneCamera"></param>
+        public static void SwitchCameras(Camera camera, bool sceneCamera)
         {
-            return Instance.sceneCamera;
+            GameSceneManager sceneManager = Instance;
+            if(sceneManager == null)
+                return;
+            
+            if (sceneCamera)
+            {
+                camera.gameObject.SetActive(false);
+                sceneManager.sceneCamera.gameObject.SetActive(true);
+                if (!Game.IsHeadless)
+                {
+                    ImGuiInstanceManager.Instance.SetInstanceCamera(Instance.sceneCamera);
+                }
+                return;
+            }
+            
+            camera.gameObject.SetActive(true);
+            sceneManager.sceneCamera.gameObject.SetActive(false);
+            if (!Game.IsHeadless)
+            {
+                ImGuiInstanceManager.Instance.SetInstanceCamera(camera);
+            }
         }
 
         #endregion
@@ -68,11 +91,15 @@ namespace Team_Capture.SceneManagement
                 return;
             }
 
-            sceneCamera = GameObject.FindWithTag(SceneCameraTag);
-            if (sceneCamera == null)
+            GameObject foundSceneCamera = GameObject.FindWithTag(SceneCameraTag);
+            if (foundSceneCamera == null)
                 Logger.Error(
                     "The scene {Scene} doesn't have a Camera with the tag `{SceneCameraTag}` assigned to it!",
                     activeScene.scene, SceneCameraTag);
+
+            sceneCamera = foundSceneCamera.GetComponent<Camera>();
+            if(sceneCamera == null)
+                Logger.Error("The scene {Scene} doesn't have a Camera attached to the object!", activeScene.scene);
             
             tracersEffectsPool = new GameObjectPool(activeScene.traceEffectPrefab);
             bulletHolePool = new GameObjectPool(activeScene.bulletHoleEffectPrefab);
