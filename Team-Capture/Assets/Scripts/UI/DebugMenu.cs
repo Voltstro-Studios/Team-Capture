@@ -28,6 +28,16 @@ namespace Team_Capture.UI
 		public InputReader inputReader;
 
 		/// <summary>
+		///		Icon texture
+		/// </summary>
+		public Texture iconTexture;
+
+		/// <summary>
+		///		Icon size
+		/// </summary>
+		public Vector2 iconSize = new Vector2(48, 48);
+
+		/// <summary>
 		///		How often to refresh the fps counter
 		/// </summary>
 		public float refreshRate = 1f;
@@ -108,7 +118,13 @@ namespace Team_Capture.UI
 			
 			ImGuiNET.ImGui.Begin("Stats");
 			{
-				ImGuiNET.ImGui.Text(version);
+				ImGuiNET.ImGui.BeginGroup();
+				{
+					ImGuiNET.ImGui.Image(UImGuiUtility.GetTextureId(iconTexture), iconSize);
+					ImGuiNET.ImGui.SameLine();
+					ImGuiNET.ImGui.Text(version);
+				}
+				ImGuiNET.ImGui.EndGroup();
 				
 				ImGuiNET.ImGui.Spacing();
 				ImGuiNET.ImGui.Text($"Frame Time: {frameTime:F1}ms");

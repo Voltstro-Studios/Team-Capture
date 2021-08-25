@@ -44,4 +44,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inputReader: {fileID: 11400000, guid: e233decf6e8ea7d4696452f4cd476d55, type: 2}
+  iconTexture: {fileID: 2800000, guid: 58afc2aaccfa3c345ba1f6128305250b, type: 3}
   refreshRate: 1
