@@ -71,14 +71,14 @@ namespace Team_Capture.UI.ImGui
             //Fall back to main camera if we can't find the scene camera
             if (cameraObj == null)
             {
-                Logger.Warn("Did not find scene camera! Falling back to Camera.main.");
+                Logger.Debug("Did not find scene camera! Falling back to Camera.main.");
                 return Camera.main;
             }
             
             Camera foundCam = cameraObj.GetComponent<Camera>();
             if (foundCam == null)
             {
-                Logger.Warn("Did not find scene camera! Falling back to Camera.main.");
+                Logger.Debug("Did not find scene camera! Falling back to Camera.main.");
                 return Camera.main;
             }
 
