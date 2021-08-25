@@ -3,6 +3,7 @@
     "com.cysharp.unitask": "2.2.5",
     "com.mirror-networking.mirror": "https://github.com/VoltUnityPackages/Mirror.git?path=/Assets/Mirror",
     "com.neuecc.messagepack": "2.3.74",
+    "com.psydack.uimgui": "https://github.com/Voltstro-Studios/uimgui.git",
     "com.unity.build-report-inspector": "0.2.2-preview",
     "com.unity.ext.nunit": "1.0.6",
     "com.unity.ide.rider": "3.0.7",

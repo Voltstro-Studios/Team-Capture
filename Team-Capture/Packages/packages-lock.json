@@ -24,6 +24,13 @@
       "dependencies": {},
       "url": "https://package.openupm.com"
     },
+    "com.psydack.uimgui": {
+      "version": "https://github.com/Voltstro-Studios/uimgui.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "b2625c7a68c2bc4ff75d8463d3c532ae93382f93"
+    },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
       "depth": 1,
