@@ -28,8 +28,10 @@
       "version": "https://github.com/Voltstro-Studios/uimgui.git",
       "depth": 0,
       "source": "git",
-      "dependencies": {},
-      "hash": "b2625c7a68c2bc4ff75d8463d3c532ae93382f93"
+      "dependencies": {
+        "org.nuget.system.runtime.compilerservices.unsafe": "5.0.0"
+      },
+      "hash": "1f5d5af9bd15fb59d47686086265af77b962cc8b"
     },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
