@@ -4,8 +4,10 @@
 // This project is governed by the AGPLv3 License.
 // For more details see the LICENSE file.
 
+using ImGuiNET;
 using Mirror;
 using Team_Capture.Console;
+using UImGui;
 using UnityEngine;
 
 namespace Team_Capture.Player.Movement
@@ -95,23 +97,26 @@ namespace Team_Capture.Player.Movement
 			if (!isLocalPlayer)
 				stateHandler = gameObject.AddComponent<PlayerMovementObserver>();
 		}
+
+		#endregion
 		
-		private void OnGUI()
+		#region Debug GUI
+
+		private void OnLayout(UImGui.UImGui obj)
 		{
 			if (!ShowPos) return;
-
-			GUI.skin.label.fontSize = 20;
-
-			GUI.Box(new Rect(8, 10, 300, 115), "");
-
-			GUI.Label(new Rect(10, 10, 1000, 40), $"Velocity: {State.Velocity}");
-			GUI.Label(new Rect(10, 30, 1000, 40), $"WishDir: {State.WishDir}");
-			GUI.Label(new Rect(10, 50, 1000, 40), $"Position: {State.Position}");
-			GUI.Label(new Rect(10, 70, 1000, 40), $"LookingAt: {cameraTransform.rotation}");
-			GUI.Label(new Rect(10, 90, 1000, 40),
-				$"IsGround: {Physics.Raycast(groundCheck.position, Vector3.down, groundDistance, groundMask)}");
+			
+			ImGui.Begin("Player Stats");
+			{
+				ImGui.Text($"Velocity: {State.Velocity}");
+				ImGui.Text($"Wish Dir: {State.WishDir}");
+				ImGui.Text($"Look Dir: {cameraTransform.rotation}");
+				ImGui.Text($"Position: {State.Position}");
+				ImGui.Text($"Is Ground: {Physics.Raycast(groundCheck.position, Vector3.down, groundDistance, groundMask)}");
+			}
+			ImGui.End();
 		}
-		
+
 		#endregion
 
 		#region Network Methods
@@ -123,8 +128,16 @@ namespace Team_Capture.Player.Movement
 			playerInput = gameObject.AddComponent<PlayerMovementInput>();
 			cameraRoll = GetComponent<PlayerSetup>().GetPlayerCamera().gameObject.AddComponent<PlayerCameraRoll>();
 			cameraRoll.SetBaseTransform(transform);
+			
+			UImGuiUtility.Layout += OnLayout;
 		}
-		
+
+		public override void OnStopClient()
+		{
+			if(isLocalPlayer)
+				UImGuiUtility.Layout -= OnLayout;
+		}
+
 		public override void OnStartServer()
 		{
 			base.OnStartServer();
