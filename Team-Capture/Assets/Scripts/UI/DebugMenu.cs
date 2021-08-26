@@ -122,7 +122,7 @@ namespace Team_Capture.UI
 				{
 					ImGuiNET.ImGui.Image(UImGuiUtility.GetTextureId(iconTexture), iconSize);
 					ImGuiNET.ImGui.SameLine();
-					ImGuiNET.ImGui.Text(version);
+					ImGuiNET.ImGui.Text(gameVersion);
 				}
 				ImGuiNET.ImGui.EndGroup();
 				
@@ -135,10 +135,15 @@ namespace Team_Capture.UI
 				
 				ImGuiNET.ImGui.Spacing();
 				ImGuiNET.ImGui.Text("Device Info");
+				ImGuiNET.ImGui.Text(operatingSystem);
 				ImGuiNET.ImGui.Text(cpu);
 				ImGuiNET.ImGui.Text(gpu);
 				ImGuiNET.ImGui.Text(ram);
 				ImGuiNET.ImGui.Text(renderingApi);
+				
+				ImGuiNET.ImGui.Spacing();
+				ImGuiNET.ImGui.Text("Build Info");
+				ImGuiNET.ImGui.Text(unityVersion);
 				
 				ImGuiNET.ImGui.Spacing();
 				ImGuiNET.ImGui.Text("Network");
@@ -163,7 +168,9 @@ namespace Team_Capture.UI
 
 		protected override void SingletonStarted()
 		{
-			version = $"Team-Capture {Application.version}";
+			gameVersion = $"Team-Capture {Application.version}";
+			operatingSystem = $"OS: {SystemInfo.operatingSystem}";
+			unityVersion = $"Unity: {Application.unityVersion}";
 			cpu = $"CPU: {SystemInfo.processorType}";
 			gpu = $"GPU: {SystemInfo.graphicsDeviceName}";
 			ram = $"RAM: {SystemInfo.systemMemorySize / 1000} GB";
@@ -220,7 +227,9 @@ namespace Team_Capture.UI
 
 		#region Info
 		
-		private string version;
+		private string gameVersion;
+		private string operatingSystem;
+		private string unityVersion;
 		private string cpu;
 		private string gpu;
 		private string ram;
