@@ -18,7 +18,7 @@ namespace Team_Capture.Integrations.Steamworks
     {
         private static Dictionary<SteamUser, AuthResult> authResults;
 
-        public static void StartServer()
+        public static void StartServer(Action onFail)
         {
             SteamServerInit serverInit = new SteamServerInit("Team-Capture", "Team-Capture")
             {
@@ -32,8 +32,7 @@ namespace Team_Capture.Integrations.Steamworks
             authResults = new Dictionary<SteamUser, AuthResult>();
 
             SteamServer.OnSteamServersConnected += () => Logger.Info("Server has connected to Steam game servers.");
-            SteamServer.OnSteamServerConnectFailure += (result, retry) =>
-                { Logger.Error("Server failed to connect to Steam game servers! Reason: {Reason} Retry: {Retry}", result, retry); };
+            SteamServer.OnSteamServerConnectFailure += (result, retry) => OnSteamConnectFail(result, onFail);
             SteamServer.OnValidateAuthTicketResponse += OnAuthResponse;
 
             try
@@ -44,7 +43,17 @@ namespace Team_Capture.Integrations.Steamworks
             catch (Exception ex)
             {
                 Logger.Error(ex, "Something went wrong while starting the steam game server integration!");
+                onFail.Invoke();
             }
+        }
+
+        private static void OnSteamConnectFail(Result result, Action onFail)
+        {
+            Logger.Error("Failed to connect to Steam game servers! Result: {Result}", result);
+            SteamServer.LogOff();
+            
+            //ShutdownServer();
+            onFail.Invoke();
         }
 
         private static void OnAuthResponse(SteamId steamId, SteamId ownerId, AuthResponse status)

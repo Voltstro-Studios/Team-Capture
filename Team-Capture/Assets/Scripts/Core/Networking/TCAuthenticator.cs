@@ -54,7 +54,11 @@ namespace Team_Capture.Core.Networking
 			if (ServerAuthMethod == UserProvider.Steam)
 			{
 				Logger.Info("Starting Steam game server integration...");
-				SteamServerManager.StartServer();
+				SteamServerManager.StartServer(() =>
+				{
+					Logger.Error("Falling back to offline mode!");
+					ServerAuthMethod = UserProvider.Offline;
+				});
 			}
 			
 			authAccounts = new Dictionary<int, IUser>();
