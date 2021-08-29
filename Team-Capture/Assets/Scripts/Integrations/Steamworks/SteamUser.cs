@@ -4,6 +4,8 @@
 // This project is governed by the AGPLv3 License.
 // For more details see the LICENSE file.
 
+using System;
+using Cysharp.Threading.Tasks;
 using Mirror;
 using Steamworks;
 using Team_Capture.UserManagement;
@@ -21,7 +23,7 @@ namespace Team_Capture.Integrations.Steamworks
         public SteamUser(SteamId id, byte[] authData)
         {
             UserId = id;
-            authTicket = new AuthTicket
+            AuthTicket = new AuthTicket
             {
                 Data = authData
             };
@@ -33,28 +35,28 @@ namespace Team_Capture.Integrations.Steamworks
         
         public ulong UserId { get; set; }
 
-        private AuthTicket authTicket;
+        public AuthTicket AuthTicket;
         
-        public bool ServerIsClientAuthenticated()
+        public void ServerIsClientAuthenticated(Action onSuccess, Action onFail)
         {
-            return SteamServer.BeginAuthSession(authTicket.Data, UserId);
+            SteamServerManager.BeginAuthUser(this, onSuccess, onFail);
         }
 
         public void ClientStartAuthentication()
         {
-            authTicket = global::Steamworks.SteamUser.GetAuthSessionTicket();
+            AuthTicket = global::Steamworks.SteamUser.GetAuthSessionTicket();
         }
 
         public void ClientStopAuthentication()
         {
-            authTicket.Cancel();
+            AuthTicket.Cancel();
         }
 
         public NetworkWriter WriteNetwork(NetworkWriter writer)
         {
             writer.WriteByte((byte)UserProvider);
             writer.WriteULong(UserId);
-            writer.WriteArray(authTicket.Data);
+            writer.WriteArray(AuthTicket.Data);
             return writer;
         }
 

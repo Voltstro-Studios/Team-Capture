@@ -46,7 +46,7 @@ namespace Team_Capture.Core.Networking
 		{
 			lastPingTime = Time.time - 1;
 			clientsPing = new Dictionary<int, ExponentialMovingAverage>();
-			NetworkServer.RegisterHandler<PingClientMessage>(OnReceiveClientPingMessage);
+			NetworkServer.RegisterHandler<PingClientMessage>(OnReceiveClientPingMessage, false);
 		}
 
 		/// <summary>
@@ -114,7 +114,7 @@ namespace Team_Capture.Core.Networking
 		/// </summary>
 		internal static void ClientSetup()
 		{
-			NetworkClient.RegisterHandler<PingServerMessage>(OnReceiveServerPingMessage);
+			NetworkClient.RegisterHandler<PingServerMessage>(OnReceiveServerPingMessage, false);
 		}
 
 		/// <summary>

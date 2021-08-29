@@ -4,6 +4,7 @@
 // This project is governed by the AGPLv3 License.
 // For more details see the LICENSE file.
 
+using System;
 using Mirror;
 using Team_Capture.Integrations.Steamworks;
 using UnityEngine.Scripting;
@@ -18,7 +19,7 @@ namespace Team_Capture.UserManagement
         
         public ulong UserId { get; set; }
 
-        public bool ServerIsClientAuthenticated();
+        public void ServerIsClientAuthenticated(Action onSuccess, Action onFail);
         
         public void ClientStartAuthentication();
         public void ClientStopAuthentication();

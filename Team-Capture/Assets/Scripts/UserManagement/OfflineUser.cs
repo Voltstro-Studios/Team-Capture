@@ -4,6 +4,7 @@
 // This project is governed by the AGPLv3 License.
 // For more details see the LICENSE file.
 
+using System;
 using Mirror;
 using Team_Capture.Console;
 using Team_Capture.Core.Networking;
@@ -32,10 +33,10 @@ namespace Team_Capture.UserManagement
         }
 
         public ulong UserId { get; set; } = 0;
-        
-        public bool ServerIsClientAuthenticated()
+
+        public void ServerIsClientAuthenticated(Action onSuccess, Action onFail)
         {
-            return true;
+            onSuccess();
         }
 
         public void ClientStartAuthentication()

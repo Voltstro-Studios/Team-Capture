@@ -10,6 +10,7 @@ using System.Linq;
 using Cysharp.Threading.Tasks;
 using Mirror;
 using Team_Capture.Console;
+using Team_Capture.Integrations.Steamworks;
 using Team_Capture.UserManagement;
 using UnityCommandLineParser;
 using UnityEngine;
@@ -50,7 +51,12 @@ namespace Team_Capture.Core.Networking
 
 		public override void OnStartServer()
 		{
-			ServerAuthMethod = UserProvider.Offline;
+			if (ServerAuthMethod == UserProvider.Steam)
+			{
+				Logger.Info("Starting Steam game server integration...");
+				SteamServerManager.StartServer();
+			}
+			
 			authAccounts = new Dictionary<int, IUser>();
 			NetworkServer.RegisterHandler<JoinRequestMessage>(OnRequestJoin, false);
 		}
@@ -58,6 +64,8 @@ namespace Team_Capture.Core.Networking
 		public override void OnStopServer()
 		{
 			NetworkServer.UnregisterHandler<JoinRequestMessage>();
+			
+			SteamServerManager.ShutdownServer();
 		}
 
 		public override void OnServerAuthenticate(NetworkConnection conn)
@@ -101,14 +109,20 @@ namespace Team_Capture.Core.Networking
 
 			try
 			{
-				if (!user.ServerIsClientAuthenticated())
+				user.ServerIsClientAuthenticated(() =>
+				{
+					authAccounts.Add(conn.connectionId, user);
+
+					SendRequestResponseMessage(conn, HttpCode.Ok, "Ok");
+					ServerAccept(conn);
+					Logger.Debug("Accepted client {Id}", conn.connectionId);
+				}, () =>
 				{
 					SendRequestResponseMessage(conn, HttpCode.Unauthorized, "Failed authorization!");
 					Logger.Warn("Client {Id} failed to authorize!. Rejecting connection.", conn.connectionId);
 
 					RefuseClientConnection(conn);
-					return;
-				}
+				});
 			}
 			catch (Exception ex)
 			{
@@ -116,14 +130,7 @@ namespace Team_Capture.Core.Networking
 				Logger.Error(ex, "An error occured on the server side with authorization");
 
 				RefuseClientConnection(conn);
-				return;
 			}
-
-			authAccounts.Add(conn.connectionId, user);
-
-			SendRequestResponseMessage(conn, HttpCode.Ok, "Ok");
-			ServerAccept(conn);
-			Logger.Debug("Accepted client {Id}", conn.connectionId);
 		}
 
 		private void RefuseClientConnection(NetworkConnection conn)
@@ -146,6 +153,14 @@ namespace Team_Capture.Core.Networking
 				Code = code,
 				Message = message
 			});
+		}
+
+		private void Update()
+		{
+			if (TCNetworkManager.IsServer)
+			{
+				SteamServerManager.RunCallbacks();
+			}
 		}
 
 		#endregion
