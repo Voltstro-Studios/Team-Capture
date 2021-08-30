@@ -52,16 +52,23 @@ namespace Team_Capture.Editor
 
 			//Make sure the run client script still exists
 			string buildDir = $"{GameBuilder.GetBuildDirectory()}Team-Capture-Quick/";
-			if (!File.Exists($"{buildDir}RunClient.ps1"))
+			
+#if UNITY_EDITOR_WIN
+			string appName = "Team-Capture.exe";
+#else
+			string appName = "Team-Capture";
+#endif
+			
+			if (!File.Exists($"{buildDir}{appName}"))
 			{
-				Debug.LogError("The build is missing the 'RunClient.ps1' script!");
+				Debug.LogError("There is no build!");
 				return;
 			}
 
 			Process.Start(new ProcessStartInfo
 			{
-				FileName = "pwsh",
-				Arguments = $"{buildDir}RunClient.ps1",
+				FileName = appName,
+				Arguments = "-novid -high",
 				WorkingDirectory = buildDir
 			});
 		}
