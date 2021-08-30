@@ -6,7 +6,6 @@
 
 using System;
 using Steamworks;
-using Team_Capture.Core;
 using Team_Capture.UserManagement;
 using Logger = Team_Capture.Logging.Logger;
 
@@ -17,9 +16,7 @@ namespace Team_Capture.Integrations.Steamworks
 	/// </summary>
     internal class SteamManager : SingletonMonoBehaviour<SteamManager>
 	{
-		private AuthTicket authTicket;
-
-	    protected override void SingletonStarted()
+		protected override void SingletonStarted()
 	    {
 		    Initialize();
 	    }
@@ -31,17 +28,11 @@ namespace Team_Capture.Integrations.Steamworks
 
 	    private void Update()
 	    {
-		    if (Game.IsHeadless)
-			    return;
-
 		    SteamClient.RunCallbacks();
 	    }
 
 	    private void Initialize()
 	    {
-		    if (Game.IsHeadless)
-			    return;
-
 		    try
 		    {
 			    SteamClient.Init(SteamSettings.SteamSettingsInstance.appId);

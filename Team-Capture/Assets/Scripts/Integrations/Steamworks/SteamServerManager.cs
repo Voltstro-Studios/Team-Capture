@@ -63,14 +63,14 @@ namespace Team_Capture.Integrations.Steamworks
             if (user.Equals(null))
                 return;
             
+            authResults.Remove(user.Key);
+            
             Logger.Info("Got client {ID} auth response back of: {status}", steamId, status);
 
             if (status == AuthResponse.OK)
                 user.Value.OnSuccess.Invoke();
             else
                 user.Value.OnFail.Invoke();
-
-            authResults.Remove(user.Key);
         }
 
         public static void ShutdownServer()
