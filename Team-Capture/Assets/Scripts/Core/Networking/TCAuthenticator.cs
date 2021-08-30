@@ -111,6 +111,15 @@ namespace Team_Capture.Core.Networking
 				return;
 			}
 
+			if (authAccounts.ContainsValue(user))
+			{
+				SendRequestResponseMessage(conn, HttpCode.Unauthorized, "User is already connected!");
+				Logger.Warn("Client {Id} tried to connect with the same account as an existing client!. Rejecting connection.", conn.connectionId);
+
+				RefuseClientConnection(conn);
+				return;
+			}
+
 			try
 			{
 				user.ServerIsClientAuthenticated(() =>

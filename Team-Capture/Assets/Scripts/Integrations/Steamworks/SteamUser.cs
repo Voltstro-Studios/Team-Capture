@@ -17,8 +17,8 @@ namespace Team_Capture.Integrations.Steamworks
         {
             UserId = id;
         }
-        
-        public SteamUser(SteamId id, byte[] authData)
+
+        private SteamUser(SteamId id, byte[] authData)
         {
             UserId = id;
             AuthTicket = new AuthTicket
@@ -90,6 +90,14 @@ namespace Team_Capture.Integrations.Steamworks
             {
                 UserProvider = UserProvider.Steam
             };
+        }
+        
+        public override bool Equals(object obj)
+        {
+            if (obj is SteamUser steamUser)
+                return steamUser.UserId == UserId;
+            
+            return false;
         }
     }
 }

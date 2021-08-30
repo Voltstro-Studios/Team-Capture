@@ -61,5 +61,15 @@ namespace Team_Capture.UserManagement
                 UserProvider = UserProvider.Offline
             };
         }
+        
+        public override bool Equals(object obj)
+        {
+            if (obj is OfflineUser offlineUser)
+            {
+                return offlineUser.UserName == UserName;
+            }
+
+            return false;
+        }
     }
 }
