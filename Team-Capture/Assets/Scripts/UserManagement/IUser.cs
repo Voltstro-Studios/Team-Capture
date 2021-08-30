@@ -13,9 +13,9 @@ namespace Team_Capture.UserManagement
 {
     public interface IUser
     {
-        public UserProvider UserProvider { get; set; }
+        public UserProvider UserProvider { get; }
         
-        public string UserName { get; set; }
+        public string UserName { get; }
         
         public ulong UserId { get; set; }
 
@@ -39,6 +39,7 @@ namespace Team_Capture.UserManagement
         {
             //We first need to figure out what account type we are dealing with
             UserProvider provider = (UserProvider)reader.ReadByte();
+            
             if (provider == UserProvider.Offline)
             {
                 return OfflineUser.Create(reader);

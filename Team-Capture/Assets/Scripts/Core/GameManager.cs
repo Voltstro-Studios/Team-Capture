@@ -132,7 +132,7 @@ namespace Team_Capture.Core
 
 			Logger.Info("== Connected Players ==");
 			foreach (PlayerManager playerManager in GetAllPlayers())
-				Logger.Info(" Name: {@PlayerName} - ID: {@PlayerNetID}", playerManager.username, playerManager.netId);
+				Logger.Info(" Name: {@PlayerName} - ID: {@PlayerNetID}", playerManager.User.UserName, playerManager.netId);
 		}
 
 		#endregion

@@ -11,6 +11,7 @@ using Team_Capture.Core;
 using Team_Capture.Core.Networking;
 using Team_Capture.Player.Movement;
 using Team_Capture.SceneManagement;
+using Team_Capture.UserManagement;
 using Team_Capture.Weapons;
 using UnityEngine;
 using Logger = Team_Capture.Logging.Logger;
@@ -71,9 +72,9 @@ namespace Team_Capture.Player
 		public bool IsDead { get; private set; } = true;
 
 		/// <summary>
-		///     The username of this player
+		///     The User
 		/// </summary>
-		[SyncVar] public string username = "Not Set";
+		[SyncVar] public IUser User;
 
 		/// <summary>
 		///     How much health does this player have
@@ -183,7 +184,7 @@ namespace Team_Capture.Player
 
 		public override void OnStartServer()
 		{
-			username = TCNetworkManager.Authenticator.GetAccount(netIdentity.connectionToClient.connectionId).UserName;
+			ChangeUserData(TCNetworkManager.Authenticator.GetAccount(netIdentity.connectionToClient.connectionId));
 			Health = MaxHealth;
 			weaponManager = GetComponent<WeaponManager>();
 
@@ -197,6 +198,13 @@ namespace Team_Capture.Player
 		}
 
 		#endregion
+
+		[Server]
+		public void ChangeUserData(IUser user)
+		{
+			Logger.Info($"Change username to {user.UserName}");
+			User = user;
+		}
 
 		#region Death, Respawn, Damage
 

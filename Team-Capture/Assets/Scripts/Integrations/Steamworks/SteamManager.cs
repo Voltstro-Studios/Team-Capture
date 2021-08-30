@@ -51,7 +51,7 @@ namespace Team_Capture.Integrations.Steamworks
 				return;
 		    }
 
-			User.AddUser(new SteamUser(SteamClient.SteamId, SteamClient.Name));
+			User.AddUser(new SteamUser(SteamClient.SteamId));
 
 			Logger.Info("Logged into Steam account {AccountName} with an ID of {AccountID}", SteamClient.Name, SteamClient.SteamId.Value);
 	    }

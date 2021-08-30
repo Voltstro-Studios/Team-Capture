@@ -182,7 +182,7 @@ namespace Team_Capture.UI.ScoreBoard
 
 		private void Start()
 		{
-			playerNameText.text = clientPlayer.username;
+			playerNameText.text = clientPlayer.User.UserName;
 			mapNameText.text = GameSceneManager.GetActiveScene().DisplayNameLocalized;
 			gameNameText.text = TCNetworkManager.Instance.serverConfig.GameName.String;
 		}

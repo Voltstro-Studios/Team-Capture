@@ -56,10 +56,13 @@ namespace Team_Capture.UI
 			PlayerManager killed = GameManager.GetPlayer(message.PlayerKilled);
 
 			GameObject newKillFeedItem = Instantiate(killFeedItem, killFeedItemsHolder, false);
-			newKillFeedItem.GetComponent<KillFeedItem>().SetupItem(killer.username, killed.username);
+			string killerUsername = killer.User.UserName;
+			string victimUsername = killed.User.UserName;
+			
+			newKillFeedItem.GetComponent<KillFeedItem>().SetupItem(killerUsername, victimUsername);
 			StartCoroutine(DestructInTime(newKillFeedItem));
 
-			Logger.Info($"`{killer.username}` killed `{killed.username}` using `{message.WeaponName}`.");
+			Logger.Info($"`{killerUsername}` killed `{victimUsername}` using `{message.WeaponName}`.");
 		}
 
 		private IEnumerator DestructInTime(Object killFeedItemToDestroy)

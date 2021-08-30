@@ -5,7 +5,6 @@
 // For more details see the LICENSE file.
 
 using System;
-using Cysharp.Threading.Tasks;
 using Mirror;
 using Steamworks;
 using Team_Capture.UserManagement;
@@ -14,10 +13,9 @@ namespace Team_Capture.Integrations.Steamworks
 {
     public class SteamUser : IUser
     {
-        public SteamUser(SteamId id, string userName)
+        public SteamUser(SteamId id)
         {
             UserId = id;
-            UserName = userName;
         }
         
         public SteamUser(SteamId id, byte[] authData)
@@ -30,9 +28,35 @@ namespace Team_Capture.Integrations.Steamworks
         }
         
         public UserProvider UserProvider { get; set; }
-        
-        public string UserName { get; set; }
-        
+
+        private string userName;
+        public string UserName
+        {
+            get
+            {
+                if (userName != null)
+                    return userName;
+
+                if (!SteamClient.IsLoggedOn)
+                {
+                    string userIdAsString = UserId.ToString();
+                    userName = userIdAsString;
+                    return userIdAsString;
+                }
+
+                if (UserId == SteamClient.SteamId)
+                {
+                    string steamClientName = SteamClient.Name;
+                    userName = steamClientName;
+                    return steamClientName;
+                }
+
+                string friendName = SteamFriends.GetFriendPersonaName(UserId);
+                userName = friendName;
+                return friendName;
+            }
+        }
+
         public ulong UserId { get; set; }
 
         public AuthTicket AuthTicket;

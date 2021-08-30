@@ -30,8 +30,9 @@ namespace Team_Capture.UI.ScoreBoard
 		public void UpdatePlayerStats()
 		{
 			//Check to see if the player name has changed
-			if (playerNameText.text != PlayerToTrack.username)
-				playerNameText.text = PlayerToTrack.username;
+			string userName = PlayerToTrack.User.UserName;
+			if (playerNameText.text != userName)
+				playerNameText.text = userName;
 
 			playerKillsText.text = PlayerToTrack.Kills.ToString();
 			playerDeathsText.text = PlayerToTrack.Deaths.ToString();
