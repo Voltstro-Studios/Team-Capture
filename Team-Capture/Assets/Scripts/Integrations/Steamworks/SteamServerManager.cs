@@ -14,11 +14,18 @@ using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.Integrations.Steamworks
 {
+    /// <summary>
+    ///     Integration with Steam game server
+    /// </summary>
     public static class SteamServerManager
     {
         private static Dictionary<SteamUser, AuthResult> authResults;
 
-        public static void StartServer(Action onFail)
+        /// <summary>
+        ///     Start Steam game server
+        /// </summary>
+        /// <param name="onFail"></param>
+        internal static void StartServer(Action onFail)
         {
             SteamServerInit serverInit = new SteamServerInit("Team-Capture", "Team-Capture")
             {
@@ -73,13 +80,22 @@ namespace Team_Capture.Integrations.Steamworks
                 user.Value.OnFail.Invoke();
         }
 
-        public static void ShutdownServer()
+        /// <summary>
+        ///     Shutdown Steam game server
+        /// </summary>
+        internal static void ShutdownServer()
         {
             Logger.Info("Shutting down connection for Steam game server...");
             SteamServer.LogOff();
             SteamServer.Shutdown();
         }
 
+        /// <summary>
+        ///     Begins <see cref="SteamServer.BeginAuthSession"/> on the <see cref="SteamUser"/>
+        /// </summary>
+        /// <param name="user">The user to auth</param>
+        /// <param name="onSuccess">Invoked if auth is a success</param>
+        /// <param name="onFail">Invoked if auth was a fail</param>
         public static void BeginAuthUser(SteamUser user, Action onSuccess, Action onFail)
         {
             Logger.Info("Begin client {ID} auth session...", user.UserId);
@@ -91,7 +107,10 @@ namespace Team_Capture.Integrations.Steamworks
             SteamServer.BeginAuthSession(user.AuthTicket.Data, user.UserId);
         }
 
-        public static void RunCallbacks()
+        /// <summary>
+        ///     Runs Steam game server callbacks
+        /// </summary>
+        internal static void RunCallbacks()
         {
             SteamServer.RunCallbacks();
         }
