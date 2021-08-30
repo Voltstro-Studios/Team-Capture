@@ -658,9 +658,12 @@
         </member>
         <member name="M:Steamworks.Data.Lobby.SendChatBytes(System.Byte[])">
             <summary>
-            Sends bytes the the chat room
-            this isn't exposed because there's no way to read raw bytes atm, 
-            and I figure people can send json if they want something more advanced
+            Sends bytes to the chat room
+            </summary>
+        </member>
+        <member name="M:Steamworks.Data.Lobby.SendChatBytesUnsafe(System.Byte*,System.Int32)">
+            <summary>
+            Sends bytes to the chat room from an unsafe buffer
             </summary>
         </member>
         <member name="M:Steamworks.Data.Lobby.Refresh">
@@ -683,20 +686,20 @@
         <member name="M:Steamworks.Data.Lobby.SetGameServer(Steamworks.SteamId)">
             <summary>
             [SteamID variant]
-            Allows the owner to set the game server associated with the lobby. Triggers the 
+            Allows the owner to set the game server associated with the lobby. Triggers the
             Steammatchmaking.OnLobbyGameCreated event.
             </summary>
         </member>
         <member name="M:Steamworks.Data.Lobby.SetGameServer(System.String,System.UInt16)">
             <summary>
             [IP/Port variant]
-            Allows the owner to set the game server associated with the lobby. Triggers the 
+            Allows the owner to set the game server associated with the lobby. Triggers the
             Steammatchmaking.OnLobbyGameCreated event.
             </summary>
         </member>
         <member name="M:Steamworks.Data.Lobby.GetGameServer(System.UInt32@,System.UInt16@,Steamworks.SteamId@)">
             <summary>
-            Gets the details of the lobby's game server, if set. Returns true if the lobby is 
+            Gets the details of the lobby's game server, if set. Returns true if the lobby is
             valid and has a server set, otherwise returns false.
             </summary>
         </member>
@@ -972,6 +975,34 @@
         <member name="M:Steamworks.ConnectionManager.OnDisconnected(Steamworks.Data.ConnectionInfo)">
             <summary>
             The connection has been closed remotely or disconnected locally. Check data.State for details.
+            </summary>
+        </member>
+        <member name="M:Steamworks.ConnectionManager.SendMessages(Steamworks.Data.Connection[],System.Int32,System.IntPtr,System.Int32,Steamworks.Data.SendType,Steamworks.Result[])">
+            <summary>
+            Sends a message to multiple connections.
+            </summary>
+            <param name="connections">The connections to send the message to.</param>
+            <param name="connectionCount">The number of connections to send the message to, to allow reusing the connections array.</param>
+            <param name="ptr">Pointer to the message data.</param>
+            <param name="size">Size of the message data.</param>
+            <param name="sendType">Flags to control delivery of the message.</param>
+            <param name="results">An optional array to hold the results of sending the messages for each connection.</param>
+        </member>
+        <member name="M:Steamworks.ConnectionManager.SendMessages(Steamworks.Data.Connection[],System.Int32,System.Byte[],Steamworks.Data.SendType,Steamworks.Result[])">
+            <summary>
+            Ideally should be using an IntPtr version unless you're being really careful with the byte[] array and 
+            you're not creating a new one every frame (like using .ToArray())
+            </summary>
+        </member>
+        <member name="M:Steamworks.ConnectionManager.SendMessages(Steamworks.Data.Connection[],System.Int32,System.Byte[],System.Int32,System.Int32,Steamworks.Data.SendType,Steamworks.Result[])">
+            <summary>
+            Ideally should be using an IntPtr version unless you're being really careful with the byte[] array and 
+            you're not creating a new one every frame (like using .ToArray())
+            </summary>
+        </member>
+        <member name="M:Steamworks.ConnectionManager.SendMessages(Steamworks.Data.Connection[],System.Int32,System.String,Steamworks.Data.SendType,Steamworks.Result[])">
+            <summary>
+            This creates a ton of garbage - so don't do anything with this beyond testing!
             </summary>
         </member>
         <member name="M:Steamworks.IConnectionManager.OnConnecting(Steamworks.Data.ConnectionInfo)">
@@ -1733,6 +1764,11 @@
             </summary>
         </member>
         <member name="M:Steamworks.SteamNetworking.IsP2PPacketAvailable(System.Int32)">
+            <summary>
+            Checks if a P2P packet is available to read.
+            </summary>
+        </member>
+        <member name="M:Steamworks.SteamNetworking.IsP2PPacketAvailable(System.UInt32@,System.Int32)">
             <summary>
             Checks if a P2P packet is available to read, and gets the size of the message if there is one.
             </summary>
