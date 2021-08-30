@@ -1,0 +1,1 @@
+./Team-Capture -batchmode -nographics -high
