@@ -12,8 +12,14 @@ using UnityCommandLineParser;
 
 namespace Team_Capture.UserManagement
 {
+    /// <summary>
+    ///     An offline <see cref="IUser"/>
+    /// </summary>
     public class OfflineUser : IUser
     {
+        /// <summary>
+        ///     Default username for offline accounts
+        /// </summary>
         [CommandLineArgument("name")] 
         [ConVar("name", "Sets the name", true)]
         public static string PlayerName = "NotSet";
@@ -28,9 +34,12 @@ namespace Team_Capture.UserManagement
         private readonly string serverName;
         public string UserName => TCNetworkManager.IsServer ? serverName : PlayerName;
 
-        public ulong UserId { get; set; } = 0;
+        /// <summary>
+        ///     <see cref="UserId"/> is unused for <see cref="OfflineUser"/>
+        /// </summary>
+        public ulong UserId => 0;
 
-        public void ServerIsClientAuthenticated(Action onSuccess, Action onFail)
+        public void ServerStartClientAuthentication(Action onSuccess, Action onFail)
         {
             onSuccess();
         }
@@ -43,11 +52,10 @@ namespace Team_Capture.UserManagement
         {
         }
 
-        public NetworkWriter WriteNetwork(NetworkWriter writer)
+        public void WriteNetwork(NetworkWriter writer)
         {
             writer.WriteByte((byte)UserProvider);
             writer.WriteString(UserName);
-            return writer;
         }
 
         internal static IUser Create(NetworkReader reader)

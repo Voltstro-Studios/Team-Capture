@@ -11,8 +11,15 @@ using Team_Capture.UserManagement;
 
 namespace Team_Capture.Integrations.Steamworks
 {
+    /// <summary>
+    ///     An <see cref="IUser"/> that uses Steamworks
+    /// </summary>
     public class SteamUser : IUser
     {
+        /// <summary>
+        ///     Creates a new <see cref="SteamUser"/> from the user's <see cref="SteamId"/>
+        /// </summary>
+        /// <param name="id"></param>
         public SteamUser(SteamId id)
         {
             UserId = id;
@@ -57,11 +64,17 @@ namespace Team_Capture.Integrations.Steamworks
             }
         }
 
+        /// <summary>
+        ///     The <see cref="SteamId"/> of the user
+        /// </summary>
         public ulong UserId { get; }
 
+        /// <summary>
+        ///     Steam <see cref="AuthTicket"/> of the user
+        /// </summary>
         public AuthTicket AuthTicket;
         
-        public void ServerIsClientAuthenticated(Action onSuccess, Action onFail)
+        public void ServerStartClientAuthentication(Action onSuccess, Action onFail)
         {
             SteamServerManager.BeginAuthUser(this, onSuccess, onFail);
         }
@@ -76,12 +89,11 @@ namespace Team_Capture.Integrations.Steamworks
             AuthTicket.Cancel();
         }
 
-        public NetworkWriter WriteNetwork(NetworkWriter writer)
+        public void WriteNetwork(NetworkWriter writer)
         {
             writer.WriteByte((byte)UserProvider);
             writer.WriteULong(UserId);
-            writer.WriteArray(AuthTicket.Data);
-            return writer;
+            writer.WriteArray(AuthTicket.Data); 
         }
 
         internal static IUser Create(NetworkReader reader)

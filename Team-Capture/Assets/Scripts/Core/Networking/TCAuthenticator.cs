@@ -123,7 +123,7 @@ namespace Team_Capture.Core.Networking
 
 			try
 			{
-				user.ServerIsClientAuthenticated(() =>
+				user.ServerStartClientAuthentication(() =>
 				{
 					authAccounts.Add(conn.connectionId, user);
 
