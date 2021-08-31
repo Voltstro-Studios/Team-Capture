@@ -7,6 +7,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.UserManagement
 {
@@ -23,6 +24,7 @@ namespace Team_Capture.UserManagement
 
         public static void AddUser(IUser user)
         {
+            Logger.Debug("Added user of type {Provider}", user.UserProvider);
             users.Add(user.UserProvider, user);
         }
         

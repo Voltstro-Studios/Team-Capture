@@ -70,6 +70,7 @@ namespace Team_Capture.Core.Networking
 			NetworkServer.UnregisterHandler<JoinRequestMessage>();
 			
 			SteamServerManager.ShutdownServer();
+			authAccounts.Clear();
 		}
 
 		public override void OnServerAuthenticate(NetworkConnection conn)
@@ -146,6 +147,12 @@ namespace Team_Capture.Core.Networking
 			}
 		}
 
+		public void OnServerClientDisconnect(NetworkConnection conn)
+		{
+			if (authAccounts.ContainsKey(conn.connectionId))
+				authAccounts.Remove(conn.connectionId);
+		}
+
 		private void RefuseClientConnection(NetworkConnection conn)
 		{
 			conn.isAuthenticated = false;
@@ -208,6 +215,7 @@ namespace Team_Capture.Core.Networking
 				}
 			}
 			
+			Logger.Debug("Sent a total of {Num} of user accounts to the server.", users.Length);
 			NetworkClient.connection.Send(new JoinRequestMessage
 			{
 				ApplicationVersion = Application.version,

@@ -26,8 +26,8 @@ namespace Team_Capture.Integrations.Steamworks
                 Data = authData
             };
         }
-        
-        public UserProvider UserProvider { get; set; }
+
+        public UserProvider UserProvider => UserProvider.Steam;
 
         private string userName;
         public string UserName
@@ -57,7 +57,7 @@ namespace Team_Capture.Integrations.Steamworks
             }
         }
 
-        public ulong UserId { get; set; }
+        public ulong UserId { get; }
 
         public AuthTicket AuthTicket;
         
@@ -86,10 +86,7 @@ namespace Team_Capture.Integrations.Steamworks
 
         internal static IUser Create(NetworkReader reader)
         {
-            return new SteamUser(reader.ReadULong(), reader.ReadArray<byte>())
-            {
-                UserProvider = UserProvider.Steam
-            };
+            return new SteamUser(reader.ReadULong(), reader.ReadArray<byte>());
         }
         
         public override bool Equals(object obj)
@@ -98,6 +95,11 @@ namespace Team_Capture.Integrations.Steamworks
                 return steamUser.UserId == UserId;
             
             return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return UserId.GetHashCode();
         }
     }
 }

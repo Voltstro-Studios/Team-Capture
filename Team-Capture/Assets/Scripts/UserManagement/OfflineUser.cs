@@ -20,17 +20,13 @@ namespace Team_Capture.UserManagement
 
         public OfflineUser(string userName = null)
         {
-            UserName = userName ?? PlayerName;
+            serverName = userName;
         }
         
-        public UserProvider UserProvider { get; set; } = UserProvider.Offline;
+        public UserProvider UserProvider => UserProvider.Offline;
 
-        private string serverUserName;
-        public string UserName
-        {
-            get => TCNetworkManager.IsServer ? serverUserName : PlayerName;
-            set => serverUserName = value;
-        }
+        private readonly string serverName;
+        public string UserName => TCNetworkManager.IsServer ? serverName : PlayerName;
 
         public ulong UserId { get; set; } = 0;
 
@@ -56,10 +52,7 @@ namespace Team_Capture.UserManagement
 
         internal static IUser Create(NetworkReader reader)
         {
-            return new OfflineUser(reader.ReadString())
-            {
-                UserProvider = UserProvider.Offline
-            };
+            return new OfflineUser(reader.ReadString());
         }
         
         public override bool Equals(object obj)
@@ -70,6 +63,11 @@ namespace Team_Capture.UserManagement
             }
 
             return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return UserName != null ? UserName.GetHashCode() : 0;
         }
     }
 }

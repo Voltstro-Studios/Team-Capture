@@ -17,7 +17,7 @@ namespace Team_Capture.UserManagement
         
         public string UserName { get; }
         
-        public ulong UserId { get; set; }
+        public ulong UserId { get; }
 
         public void ServerIsClientAuthenticated(Action onSuccess, Action onFail);
         

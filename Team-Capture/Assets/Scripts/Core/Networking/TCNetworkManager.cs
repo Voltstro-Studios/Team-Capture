@@ -69,7 +69,16 @@ namespace Team_Capture.Core.Networking
 		/// <summary>
 		///		Are we a server or not
 		/// </summary>
-		public static bool IsServer => Instance.mode == NetworkManagerMode.ServerOnly;
+		public static bool IsServer
+		{
+			get
+			{
+				if (Instance == null)
+					return false;
+
+				return Instance.mode == NetworkManagerMode.ServerOnly;
+			}
+		}
 
 		public static TCAuthenticator Authenticator
 		{

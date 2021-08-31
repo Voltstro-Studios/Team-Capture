@@ -224,6 +224,8 @@ namespace Team_Capture.Core.Networking
 		{
 			NetworkServer.DestroyPlayerForConnection(conn);
 			ServerChat.SendChatMessage("<b>Disconnect</b>", netManager.tcAuthenticator.GetAccount(conn.connectionId).UserName);
+			
+			netManager.tcAuthenticator.OnServerClientDisconnect(conn);
 			Logger.Info("Client '{ConnectionId}' disconnected from the server.", conn.connectionId);
 
 			//Our first connected client disconnected
