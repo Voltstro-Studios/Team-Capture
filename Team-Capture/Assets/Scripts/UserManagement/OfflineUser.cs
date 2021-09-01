@@ -44,6 +44,10 @@ namespace Team_Capture.UserManagement
             onSuccess();
         }
 
+        public void ServerCancelClientAuthentication()
+        {
+        }
+
         public void ClientStartAuthentication()
         {
         }

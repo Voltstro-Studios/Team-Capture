@@ -108,6 +108,16 @@ namespace Team_Capture.Integrations.Steamworks
         }
 
         /// <summary>
+        ///     Cancels authorization of a user
+        /// </summary>
+        /// <param name="user"></param>
+        public static void CancelAuthUser(SteamUser user)
+        {
+            if (authResults.ContainsKey(user))
+                authResults.Remove(user);
+        }
+
+        /// <summary>
         ///     Runs Steam game server callbacks
         /// </summary>
         internal static void RunCallbacks()

@@ -79,6 +79,11 @@ namespace Team_Capture.Integrations.Steamworks
             SteamServerManager.BeginAuthUser(this, onSuccess, onFail);
         }
 
+        public void ServerCancelClientAuthentication()
+        {
+            SteamServerManager.CancelAuthUser(this);
+        }
+
         public void ClientStartAuthentication()
         {
             AuthTicket = global::Steamworks.SteamUser.GetAuthSessionTicket();

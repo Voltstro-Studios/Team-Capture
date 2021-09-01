@@ -38,6 +38,11 @@ namespace Team_Capture.UserManagement
         /// <param name="onSuccess">Invoked when authentication is successful</param>
         /// <param name="onFail">Invoked when authentication fails</param>
         public void ServerStartClientAuthentication(Action onSuccess, Action onFail);
+
+        /// <summary>
+        ///     Cancels the authentication of a user
+        /// </summary>
+        public void ServerCancelClientAuthentication();
         
         /// <summary>
         ///     Starts authentication on the client end
