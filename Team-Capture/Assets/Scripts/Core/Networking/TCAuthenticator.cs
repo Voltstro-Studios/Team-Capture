@@ -27,9 +27,6 @@ namespace Team_Capture.Core.Networking
 		[CommandLineArgument("auth-method", "What account system to use to check clients")]
 		public static UserProvider ServerAuthMethod = UserProvider.Steam;
 
-		[ConVar("sv_auth_clean_names", "Will trim whitespace at the start and end of account names")]
-		public static bool CleanAccountNames = true;
-		
 		#region Server
 
 		private List<int> inProgressAuth;

@@ -23,10 +23,17 @@ namespace Team_Capture.UserManagement
         [CommandLineArgument("name")] 
         [ConVar("name", "Sets the name", true)]
         public static string PlayerName = "NotSet";
+        
+        [ConVar("sv_offline_trim_name", "Will trim whitespace at the start and end of account names. " +
+                                        "The local client will still see the untrimmed version.")]
+        public static bool TrimUserNames = true;
 
         public OfflineUser(string userName = null)
         {
-            serverName = userName;
+            if (userName == null) 
+                return;
+
+            serverName = TrimUserNames ? userName.TrimStart().TrimEnd() : userName;
         }
         
         public UserProvider UserProvider => UserProvider.Offline;
