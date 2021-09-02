@@ -7,6 +7,7 @@
 using System;
 using Mirror;
 using Team_Capture.Integrations.Steamworks;
+using UnityEngine;
 using UnityEngine.Scripting;
 
 namespace Team_Capture.UserManagement
@@ -31,6 +32,11 @@ namespace Team_Capture.UserManagement
         ///     <para>This my be unused depending on the <see cref="UserProvider"/></para>
         /// </summary>
         public ulong UserId { get; }
+        
+        /// <summary>
+        ///     <see cref="Texture"/> of the user's profile picture
+        /// </summary>
+        public Texture UserProfilePicture { get; }
 
         /// <summary>
         ///     Starts the authenticating the user

@@ -30,7 +30,7 @@ namespace Team_Capture.UserManagement
         
         public static IUser GetActiveUser()
         {
-            return users.ElementAt(users.Count).Value;
+            return users.FirstOrDefault().Value;
         }
 
         internal static IUser[] GetUsers()

@@ -8,6 +8,7 @@ using System;
 using Mirror;
 using Steamworks;
 using Team_Capture.UserManagement;
+using UnityEngine;
 
 namespace Team_Capture.Integrations.Steamworks
 {
@@ -68,6 +69,8 @@ namespace Team_Capture.Integrations.Steamworks
         ///     The <see cref="SteamId"/> of the user
         /// </summary>
         public ulong UserId { get; }
+
+        public Texture UserProfilePicture { get; }
 
         /// <summary>
         ///     Steam <see cref="AuthTicket"/> of the user
