@@ -11,6 +11,9 @@ using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.UserManagement
 {
+    /// <summary>
+    ///     Provides user management services
+    /// </summary>
     public static class User
     {
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
@@ -22,17 +25,29 @@ namespace Team_Capture.UserManagement
         
         private static SortedList<UserProvider, IUser> users;
 
+        /// <summary>
+        ///     Adds a user
+        /// </summary>
+        /// <param name="user"></param>
         public static void AddUser(IUser user)
         {
             Logger.Debug("Added user of type {Provider}", user.UserProvider);
             users.Add(user.UserProvider, user);
         }
         
+        /// <summary>
+        ///     Gets the active (main) <see cref="IUser"/>
+        /// </summary>
+        /// <returns></returns>
         public static IUser GetActiveUser()
         {
             return users.FirstOrDefault().Value;
         }
 
+        /// <summary>
+        ///     Gets all <see cref="IUser"/>s
+        /// </summary>
+        /// <returns></returns>
         internal static IUser[] GetUsers()
         {
             return users.Select(x => x.Value).ToArray();
