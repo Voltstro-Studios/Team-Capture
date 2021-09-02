@@ -5,8 +5,10 @@
 // For more details see the LICENSE file.
 
 using System;
+using System.Threading.Tasks;
 using Mirror;
 using Steamworks;
+using Steamworks.Data;
 using Team_Capture.UserManagement;
 using UnityEngine;
 
@@ -70,7 +72,38 @@ namespace Team_Capture.Integrations.Steamworks
         /// </summary>
         public ulong UserId { get; }
 
-        public Texture UserProfilePicture { get; }
+        private Texture2D userProfilePicture;
+
+        public Texture UserProfilePicture
+        {
+            get
+            {
+                if (userProfilePicture != null) 
+                    return userProfilePicture;
+                
+                if (SteamClient.IsLoggedOn)
+                {
+                    //TODO: Steam client avatar cache stuff
+                    //From my understanding of the Steamworks docs, if our client doesn't have a cache of the user avatar, it will go out and fetch it
+                    //and trigger an AvatarImageLoaded event in SteamFriends, of which then we need to call this again.
+                    Task<Image?> imageTask = SteamFriends.GetLargeAvatarAsync(UserId);
+                    imageTask.Wait();
+                    if (!imageTask.Result.HasValue)
+                        return null;
+
+                    Image image = imageTask.Result.Value;
+                    userProfilePicture = new Texture2D((int)image.Height, (int)image.Width, TextureFormat.RGBA32, false, false);
+                    userProfilePicture.LoadSteamworksImageIntoTexture2D(image);
+                }
+                else
+                {
+                    //If we do not have client abilities, just create a blank 512 texture
+                    userProfilePicture = new Texture2D(512, 512);
+                }
+
+                return userProfilePicture;
+            }
+        }
 
         /// <summary>
         ///     Steam <see cref="AuthTicket"/> of the user
