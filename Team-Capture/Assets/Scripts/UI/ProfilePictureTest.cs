@@ -22,7 +22,8 @@ namespace Team_Capture.UI
 
         private void SetTexture()
         {
-            rawImage.texture = User.GetActiveUser().UserProfilePicture;   
+            IUser user = User.GetActiveUser();
+            rawImage.texture = user.UserProfilePicture;   
         }
     }
 }

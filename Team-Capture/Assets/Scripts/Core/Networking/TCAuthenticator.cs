@@ -29,7 +29,7 @@ namespace Team_Capture.Core.Networking
 
 		#region Server
 
-		private List<int> inProgressAuth;
+		private Dictionary<int, IUser> inProgressAuth;
 		private Dictionary<int, IUser> authAccounts;
 
 		/// <summary>
@@ -59,7 +59,7 @@ namespace Team_Capture.Core.Networking
 				});
 			}
 
-			inProgressAuth = new List<int>();
+			inProgressAuth = new Dictionary<int, IUser>();
 			authAccounts = new Dictionary<int, IUser>();
 			NetworkServer.RegisterHandler<JoinRequestMessage>(OnRequestJoin, false);
 		}
@@ -122,7 +122,7 @@ namespace Team_Capture.Core.Networking
 
 			try
 			{
-				inProgressAuth.Add(conn.connectionId);
+				inProgressAuth.Add(conn.connectionId, user);
 				user.ServerStartClientAuthentication(() =>
 				{
 					inProgressAuth.Remove(conn.connectionId);
@@ -153,8 +153,11 @@ namespace Team_Capture.Core.Networking
 			if (authAccounts.ContainsKey(conn.connectionId))
 				authAccounts.Remove(conn.connectionId);
 
-			else if (inProgressAuth.Contains(conn.connectionId))
+			else if (inProgressAuth.ContainsKey(conn.connectionId))
+			{
+				inProgressAuth[conn.connectionId].ServerCancelClientAuthentication();
 				inProgressAuth.Remove(conn.connectionId);
+			}
 		}
 
 		private void RefuseClientConnection(NetworkConnection conn)
