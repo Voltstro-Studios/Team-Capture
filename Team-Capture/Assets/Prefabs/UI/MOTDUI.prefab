@@ -790,18 +790,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   browserClient:
+    browserEngine: UnityWebBrowser.Engine.Cef
     initialUrl: https://tc.voltstro.dev/motd
-    width: 1761
-    height: 838
+    resolution:
+      Width: 1761
+      Height: 838
     backgroundColor:
       serializedVersion: 2
       rgba: 4294967295
     javascript: 1
     cache: 1
-    port: 5555
-    eventPollingTime: 0.04
-    debugLog: 0
+    webRtc: 0
+    proxySettings:
+      Username: 
+      Password: 
+      ProxyServer: 0
+    remoteDebugging: 0
+    remoteDebuggingPort: 9022
+    ipcSettings:
+      preferPipes: 1
+      outPipeName: UnityWebBrowserOut
+      inPipeName: UnityWebBrowserIn
+      outPort: 5555
+      inPort: 5556
+      connectionTimeout: 100000
+    engineStartupTimeout: 100000
     logSeverity: 0
+  supportFullscreen: 1
+  hideOnFullscreen: []
 --- !u!114 &7181878127308309454
 MonoBehaviour:
   m_ObjectHideFlags: 0

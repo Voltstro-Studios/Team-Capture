@@ -2,7 +2,6 @@
   "dependencies": {
     "com.cysharp.unitask": "2.2.5",
     "com.mirror-networking.mirror": "https://github.com/VoltUnityPackages/Mirror.git?path=/Assets/Mirror",
-    "com.neuecc.messagepack": "2.3.74",
     "com.psydack.uimgui": "https://github.com/Voltstro-Studios/uimgui.git",
     "com.unity.build-report-inspector": "0.2.2-preview",
     "com.unity.ext.nunit": "1.0.6",
@@ -23,7 +22,9 @@
     "com.unity.ugui": "1.0.0",
     "com.unity.vectorgraphics": "2.0.0-preview.17",
     "dev.voltstro.unitycommandlineparser": "https://github.com/Voltstro-Studios/UnityCommandLineParser.git",
-    "dev.voltstro.unitywebbrowser": "https://gitlab.com/Voltstro-Studios/WebBrowser/Package.git",
+    "dev.voltstro.unitywebbrowser": "https://gitlab.com/Voltstro-Studios/WebBrowser/Package.git#2.x",
+    "dev.voltstro.unitywebbrowser.engine.cef": "https://gitlab.com/Voltstro-Studios/WebBrowser/Package.git#engine/cef/base",
+    "dev.voltstro.unitywebbrowser.engine.cef.win.x64": "https://gitlab.com/Voltstro-Studios/WebBrowser/Package.git#engine/cef/win-x64",
     "dev.voltstro.voltbuildertool": "https://github.com/VoltUnityPackages/VoltUnityBuilder.git",
     "nl.elraccoone.tweens": "1.9.4",
     "org.nuget.ben.demystifier": "0.4.1",

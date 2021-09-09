@@ -17,13 +17,6 @@
       },
       "hash": "618c1b7c55630817612dc4d8e3702def8d4bdf0f"
     },
-    "com.neuecc.messagepack": {
-      "version": "2.3.74",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://package.openupm.com"
-    },
     "com.psydack.uimgui": {
       "version": "https://github.com/Voltstro-Studios/uimgui.git",
       "depth": 0,
@@ -275,13 +268,29 @@
       "hash": "42a3a11d9b3cb30021bf1c22518880df9e0b12ab"
     },
     "dev.voltstro.unitywebbrowser": {
-      "version": "https://gitlab.com/Voltstro-Studios/WebBrowser/Package.git",
+      "version": "https://gitlab.com/Voltstro-Studios/WebBrowser/Package.git#2.x",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "b7bfb577ce3e8cd1a6a50e969239ea94ce704025"
+    },
+    "dev.voltstro.unitywebbrowser.engine.cef": {
+      "version": "https://gitlab.com/Voltstro-Studios/WebBrowser/Package.git#engine/cef/base",
       "depth": 0,
       "source": "git",
       "dependencies": {
-        "com.neuecc.messagepack": "2.3.58-alpha"
+        "dev.voltstro.unitywebbrowser": "2.0.0"
       },
-      "hash": "383a07e259989a735b547f8ad814618bb5149fe8"
+      "hash": "7c53b752ca96f3262a896b65dfb91d32e6d207c3"
+    },
+    "dev.voltstro.unitywebbrowser.engine.cef.win.x64": {
+      "version": "https://gitlab.com/Voltstro-Studios/WebBrowser/Package.git#engine/cef/win-x64",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "dev.voltstro.unitywebbrowser.engine.cef": "93.1.11"
+      },
+      "hash": "1de39d5050167ff9ff7c7452a08c1cdd8c13f255"
     },
     "dev.voltstro.voltbuildertool": {
       "version": "https://github.com/VoltUnityPackages/VoltUnityBuilder.git",
