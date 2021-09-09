@@ -16,7 +16,7 @@
     "com.unity.render-pipelines.universal": "11.0.0",
     "com.unity.settings-manager": "1.0.3",
     "com.unity.sharp-zip-lib": "1.2.2-preview.1",
-    "com.unity.test-framework": "1.1.27",
+    "com.unity.test-framework": "1.1.29",
     "com.unity.textmeshpro": "3.0.6",
     "com.unity.toolchain.linux-x86_64": "0.1.19-preview",
     "com.unity.ugui": "1.0.0",

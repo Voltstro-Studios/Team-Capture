@@ -67,7 +67,7 @@ We also upload [releases](https://github.com/Voltstro-Studios/Team-Capture/relea
 #### Prerequisites
 
 ```
-Unity 2021.1.18f1
+Unity 2021.1.20f1
 PowerShell Core
 Git
 ```
