@@ -272,7 +272,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "b7bfb577ce3e8cd1a6a50e969239ea94ce704025"
+      "hash": "d34f846f3b2ab4878cc92575717b17c6ab8ce35d"
     },
     "dev.voltstro.unitywebbrowser.engine.cef": {
       "version": "https://gitlab.com/Voltstro-Studios/WebBrowser/Package.git#engine/cef/base",
