@@ -19,8 +19,6 @@ jobs:
       matrix:
         projectPath:
           - Team-Capture
-        unityVersion:
-          - 2021.1.18f1
         targetPlatform:
           - StandaloneWindows64
           - StandaloneLinux64
@@ -51,7 +49,6 @@ jobs:
           UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
         with:
           projectPath: ${{ matrix.projectPath }}
-          unityVersion: ${{ matrix.unityVersion }}
           targetPlatform: ${{ matrix.targetPlatform }}
           buildName: ${{ env.gameName }}
           buildsPath: '${{ matrix.projectPath }}/Builds'
