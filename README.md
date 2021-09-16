@@ -156,3 +156,9 @@ And to:
 - Friends
 - Other fellow students and staff at school for suggestions, ideas and bug hunting.
 - And I suppose Unity, for both making an engine that is good but will drive you insane.
+
+# Links
+
+- [Website](https://tc.voltstro.dev)
+- [Source Code Repo](https://github.com/Voltstro-Studios/Team-Capture)
+- [Assets Source Repo](https://gitlab.com/Voltstro-Studios/TC/Team-Capture-Assets)
