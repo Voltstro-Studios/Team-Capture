@@ -9,11 +9,13 @@ using System.Globalization;
 using Team_Capture.Player;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Team_Capture.UI.ScoreBoard
 {
 	internal class ScoreBoardPlayer : MonoBehaviour
 	{
+		[SerializeField] private RawImage playerProfile;
 		[SerializeField] private TextMeshProUGUI playerDeathsText;
 		[SerializeField] private TextMeshProUGUI playerKillsText;
 		[SerializeField] private TextMeshProUGUI playerNameText;
@@ -34,6 +36,7 @@ namespace Team_Capture.UI.ScoreBoard
 			if (playerNameText.text != userName)
 				playerNameText.text = userName;
 
+			playerProfile.texture = PlayerToTrack.User.UserProfilePicture;
 			playerKillsText.text = PlayerToTrack.Kills.ToString();
 			playerDeathsText.text = PlayerToTrack.Deaths.ToString();
 			playerPingText.text = Math.Round(PlayerToTrack.latency).ToString(CultureInfo.InvariantCulture);

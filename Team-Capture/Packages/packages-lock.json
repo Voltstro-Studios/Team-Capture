@@ -72,17 +72,19 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.vscode": {
-      "version": "1.2.3",
+      "version": "1.2.4",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
     "com.unity.inputsystem": {
-      "version": "1.1.0-preview.3",
+      "version": "1.1.1",
       "depth": 0,
       "source": "registry",
-      "dependencies": {},
+      "dependencies": {
+        "com.unity.modules.uielements": "1.0.0"
+      },
       "url": "https://packages.unity.com"
     },
     "com.unity.mathematics": {
@@ -93,7 +95,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.memoryprofiler": {
-      "version": "0.2.10-preview.1",
+      "version": "0.4.1-preview.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -311,7 +313,7 @@
       "hash": "e4cec0fb9bf869e3f3241d915be9b330e3946d30"
     },
     "nl.elraccoone.tweens": {
-      "version": "1.9.4",
+      "version": "1.11.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
