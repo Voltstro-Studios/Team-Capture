@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 860389050439371566}
   - component: {fileID: 7106146875698764337}
   - component: {fileID: 978627271081786532}
-  - component: {fileID: 1402027830790034718}
   m_Layer: 0
   m_Name: ElectricPanel_LOD2
   m_TagString: Untagged
@@ -31,7 +30,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5369440531062097631}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &7106146875698764337
 MeshFilter:
@@ -83,20 +82,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &1402027830790034718
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1309419054393262631}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 7786996073681670398, guid: fda5817f095cdc841a57237923452734, type: 3}
 --- !u!1 &2176676594582889064
 GameObject:
   m_ObjectHideFlags: 0
@@ -108,7 +93,6 @@ GameObject:
   - component: {fileID: 4920065739684100616}
   - component: {fileID: 1687252046660805691}
   - component: {fileID: 2296445835831411720}
-  - component: {fileID: 3670070198745101732}
   m_Layer: 0
   m_Name: ElectricPanel_LOD3
   m_TagString: Untagged
@@ -128,7 +112,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5369440531062097631}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &1687252046660805691
 MeshFilter:
@@ -180,20 +164,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &3670070198745101732
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2176676594582889064}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 1360705146592411190, guid: fda5817f095cdc841a57237923452734, type: 3}
 --- !u!1 &4742225650020703333
 GameObject:
   m_ObjectHideFlags: 0
@@ -222,6 +192,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 4960843521611114135}
   - {fileID: 3008490694874303003}
   - {fileID: 4802621501433225350}
   - {fileID: 860389050439371566}
@@ -271,7 +242,6 @@ GameObject:
   - component: {fileID: 4802621501433225350}
   - component: {fileID: 2600651331484947349}
   - component: {fileID: 9197929682217319072}
-  - component: {fileID: 5745892502429899528}
   m_Layer: 0
   m_Name: ElectricPanel_LOD1
   m_TagString: Untagged
@@ -291,7 +261,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5369440531062097631}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &2600651331484947349
 MeshFilter:
@@ -343,20 +313,51 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &5745892502429899528
+--- !u!1 &5182349250681009359
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4960843521611114135}
+  - component: {fileID: 6154368948360181228}
+  m_Layer: 0
+  m_Name: Collisions
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4960843521611114135
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5182349250681009359}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0.7071068, w: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5369440531062097631}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 180}
+--- !u!64 &6154368948360181228
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4810887743498941844}
+  m_GameObject: {fileID: 5182349250681009359}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
   m_Convex: 0
   m_CookingOptions: 30
-  m_Mesh: {fileID: -4101499179353381360, guid: fda5817f095cdc841a57237923452734, type: 3}
+  m_Mesh: {fileID: 7672381529066968119, guid: fda5817f095cdc841a57237923452734, type: 3}
 --- !u!1 &5357103460351653847
 GameObject:
   m_ObjectHideFlags: 0
@@ -368,7 +369,6 @@ GameObject:
   - component: {fileID: 3008490694874303003}
   - component: {fileID: 8626077234402749183}
   - component: {fileID: 3608030836769425032}
-  - component: {fileID: 8423706924919547478}
   m_Layer: 0
   m_Name: ElectricPanel_LOD0
   m_TagString: Untagged
@@ -388,7 +388,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5369440531062097631}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: -180}
 --- !u!33 &8626077234402749183
 MeshFilter:
@@ -440,17 +440,3 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &8423706924919547478
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5357103460351653847}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 7672381529066968119, guid: fda5817f095cdc841a57237923452734, type: 3}

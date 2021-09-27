@@ -1,5 +1,50 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1180938970056815368
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3247612086821170878}
+  - component: {fileID: 2317690898453737241}
+  m_Layer: 0
+  m_Name: Collisions
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3247612086821170878
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1180938970056815368}
+  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 100, y: 100, z: 100}
+  m_Children: []
+  m_Father: {fileID: 2015847129202704876}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
+--- !u!64 &2317690898453737241
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1180938970056815368}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -4627568806284477942, guid: 59d92def7964eaf4ab3a8dcac7e37bc4, type: 3}
 --- !u!1 &1203141577999784790
 GameObject:
   m_ObjectHideFlags: 0
@@ -28,6 +73,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 3247612086821170878}
   - {fileID: 2180661781255544047}
   - {fileID: 8538377421078500196}
   - {fileID: 511273352113438097}
@@ -77,7 +123,6 @@ GameObject:
   - component: {fileID: 511273352113438097}
   - component: {fileID: 6693504983257082758}
   - component: {fileID: 5701183590584167462}
-  - component: {fileID: 2049985785429698077}
   m_Layer: 0
   m_Name: SmallAntenna_LOD2
   m_TagString: Untagged
@@ -97,7 +142,7 @@ Transform:
   m_LocalScale: {x: 100, y: 100, z: 100}
   m_Children: []
   m_Father: {fileID: 2015847129202704876}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!33 &6693504983257082758
 MeshFilter:
@@ -149,20 +194,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &2049985785429698077
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1404236495197003689}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 5677088143709757920, guid: 59d92def7964eaf4ab3a8dcac7e37bc4, type: 3}
 --- !u!1 &1756083879316208259
 GameObject:
   m_ObjectHideFlags: 0
@@ -174,7 +205,6 @@ GameObject:
   - component: {fileID: 5706372808434120425}
   - component: {fileID: 2438088461565829863}
   - component: {fileID: 7413984711661593108}
-  - component: {fileID: 2049985785429698076}
   m_Layer: 0
   m_Name: SmallAntenna_LOD3
   m_TagString: Untagged
@@ -194,7 +224,7 @@ Transform:
   m_LocalScale: {x: 100, y: 100, z: 100}
   m_Children: []
   m_Father: {fileID: 2015847129202704876}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!33 &2438088461565829863
 MeshFilter:
@@ -246,20 +276,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &2049985785429698076
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1756083879316208259}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 869627135288602171, guid: 59d92def7964eaf4ab3a8dcac7e37bc4, type: 3}
 --- !u!1 &4927552913373208998
 GameObject:
   m_ObjectHideFlags: 0
@@ -271,7 +287,6 @@ GameObject:
   - component: {fileID: 2180661781255544047}
   - component: {fileID: 903626061945356106}
   - component: {fileID: 625927215491845531}
-  - component: {fileID: 2049985785429698079}
   m_Layer: 0
   m_Name: SmallAntenna_LOD0
   m_TagString: Untagged
@@ -291,7 +306,7 @@ Transform:
   m_LocalScale: {x: 100, y: 100, z: 100}
   m_Children: []
   m_Father: {fileID: 2015847129202704876}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!33 &903626061945356106
 MeshFilter:
@@ -343,20 +358,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &2049985785429698079
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4927552913373208998}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -4627568806284477942, guid: 59d92def7964eaf4ab3a8dcac7e37bc4, type: 3}
 --- !u!1 &6916953627550143460
 GameObject:
   m_ObjectHideFlags: 0
@@ -368,7 +369,6 @@ GameObject:
   - component: {fileID: 8538377421078500196}
   - component: {fileID: 71971715569028698}
   - component: {fileID: 4998329580114199257}
-  - component: {fileID: 2049985785429698078}
   m_Layer: 0
   m_Name: SmallAntenna_LOD1
   m_TagString: Untagged
@@ -388,7 +388,7 @@ Transform:
   m_LocalScale: {x: 100, y: 100, z: 100}
   m_Children: []
   m_Father: {fileID: 2015847129202704876}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!33 &71971715569028698
 MeshFilter:
@@ -440,17 +440,3 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &2049985785429698078
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6916953627550143460}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -8365805222259463000, guid: 59d92def7964eaf4ab3a8dcac7e37bc4, type: 3}
