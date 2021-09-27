@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,93 +10,102 @@ namespace Team_Capture.Rope
 {
     [RequireComponent(typeof(LineRenderer))]
     [ExecuteInEditMode]
-    public class RopeLine : MonoBehaviour
+    internal class RopeLine : MonoBehaviour
     {
-        const float Dt = 0.02f;
-
-        LineRenderer lineRenderer;
-
 #if UNITY_EDITOR
+        
+        private const float Dt = 0.02f;
+        
+        private LineRenderer lineRenderer;
+        private Vector3[] currPositions = Array.Empty<Vector3>();
+        private Vector3[] prevPositions = Array.Empty<Vector3>();
 
+        /// <summary>
+        ///     Simulate this now?
+        /// </summary>
+        [Tooltip("Simulate this now?")]
         public bool simulate;
 
+        /// <summary>
+        ///     The list of <see cref="RopeAnchor"/> points
+        /// </summary>
+        [Tooltip("The list of rope anchor points")]
         public List<RopeAnchor> anchors = new List<RopeAnchor>();
 
-        void Start()
+        private void Start()
         {
             simulate = false;
             lineRenderer = GetComponent<LineRenderer>();
-            lineRenderer.useWorldSpace = false;
+            lineRenderer.useWorldSpace = true;
+            
             CheckRebuildPositionBuffers();
         }
 
         private void OnEnable()
         {
-            RopeLineRunner.s_Ropes.Add(this);
+            RopeLineRunner.Ropes.Add(this);
         }
 
         private void OnDisable()
         {
-            RopeLineRunner.s_Ropes.Remove(this);
+            RopeLineRunner.Ropes.Remove(this);
         }
 
-        Vector3[] currPositions = new Vector3[0];
-        Vector3[] prevPositions = new Vector3[0];
-
-        public void RebuildPositionBuffer(Vector3 startPos, Vector3 endPos, int firstPos, int numSegments)
+        private void RebuildPositionBuffer(Vector3 startPos, Vector3 endPos, int firstPos, int numSegments)
         {
-            var dir = endPos - startPos;
-            var length = dir.magnitude;
-            for (var i = 0; i < numSegments + 1; i++)
+            Vector3 dir = endPos - startPos;
+            for (int i = 0; i < numSegments + 1; i++)
             {
-                currPositions[i + firstPos] = startPos + dir * (float)i / numSegments;
+                currPositions[i + firstPos] = startPos + dir * i / numSegments;
                 prevPositions[i + firstPos] = currPositions[i + firstPos];
             }
         }
 
-        void CheckRebuildPositionBuffers()
+        private void CheckRebuildPositionBuffers()
         {
-            var children = GetComponentsInChildren<RopeAnchor>();
+            RopeAnchor[] children = GetComponentsInChildren<RopeAnchor>();
 
-            // Add new anchors from below this object
-            foreach (var a in children)
+            //Add new anchors from below this object
+            foreach (RopeAnchor a in children)
             {
-                if (!anchors.Contains(a))
+                if (anchors.Contains(a)) 
+                    continue;
+                
+                //When a new anchor is found, pick closest existing anchor point and insert next to it
+                float dist = float.MaxValue;
+                int best = 0;
+                for (int i = 0; i < anchors.Count; i++)
                 {
-                    // When a new anchor is found, pick closest existing anchor point and insert next to it
-                    float dist = float.MaxValue;
-                    int best = 0;
-                    for (int i = 0; i < anchors.Count; i++)
-                    {
-                        var d = Vector3.Distance(anchors[i].transform.position, a.transform.position);
-                        if (d < dist)
-                        {
-                            dist = d;
-                            best = i;
-                        }
-                    }
-
-                    anchors.Insert(best, a);
+                    float d = Vector3.Distance(anchors[i].transform.position, a.transform.position);
+                    if (!(d < dist)) 
+                        continue;
+                    
+                    dist = d;
+                    best = i;
                 }
+
+                anchors.Insert(best, a);
             }
 
-            // Remove anchors that were deleted
+            //Remove anchors that were deleted
             anchors.RemoveAll(x => x == null);
 
             if (anchors.Count < 2)
                 return;
 
-            // Segments and length on first anchor is unused
+            //Segments and length on first anchor is unused
             anchors[0].numSegments = 0;
             anchors[0].length = 0;
 
-            var totalSegments = 0;
-            foreach (var a in anchors)
+            int totalSegments = 0;
+            foreach (RopeAnchor a in anchors)
             {
                 if (a != anchors[0])
                 {
-                    if (a.numSegments < 3) a.numSegments = 3;
-                    if (a.length < 0.1f) a.length = 0.1f;
+                    if (a.numSegments < 3) 
+                        a.numSegments = 3;
+                    if (a.length < 0.1f) 
+                        a.length = 0.1f;
                 }
 
                 totalSegments += a.numSegments;
@@ -109,7 +119,7 @@ namespace Team_Capture.Rope
             lineRenderer.positionCount = totalSegments + 1;
 
             int idx = 0;
-            for (var i = 1; i < anchors.Count; i++)
+            for (int i = 1; i < anchors.Count; i++)
             {
                 RebuildPositionBuffer(anchors[i - 1].transform.position, anchors[i].transform.position, idx,
                     anchors[i].numSegments);
@@ -117,18 +127,19 @@ namespace Team_Capture.Rope
             }
         }
 
-        public void Simulate(float length, int firstPos, int numSegments)
+        private void Simulate(float length, int firstPos, int numSegments)
         {
-            var segmentLength = length / numSegments;
+            float segmentLength = length / numSegments;
 
-            for (var i = firstPos; i < firstPos + numSegments; i++)
+            for (int i = firstPos; i < firstPos + numSegments; i++)
             {
                 Vector3 d = currPositions[i + 1] - currPositions[i];
                 float dl = d.magnitude;
                 if (dl < segmentLength)
                     continue;
+                
                 float dif = (dl - segmentLength) / dl;
-                float b = (i == firstPos) ? 0.0f : (i == firstPos + numSegments - 1) ? 1.0f : 0.5f;
+                float b = i == firstPos ? 0.0f : i == firstPos + numSegments - 1 ? 1.0f : 0.5f;
                 currPositions[i] += d * b * dif;
                 currPositions[i + 1] -= d * (1.0f - b) * dif;
             }
@@ -147,28 +158,28 @@ namespace Team_Capture.Rope
             if (anchors.Count < 2)
                 return;
 
-            // Fix constraints
+            //Fix constraints
             int idx = 0;
-            foreach (var a in anchors)
+            foreach (RopeAnchor a in anchors)
             {
                 idx += a.numSegments;
                 currPositions[idx] = a.transform.position;
             }
 
-            // Simulate
+            //Simulate
             idx = 0;
-            foreach (var a in anchors)
+            foreach (RopeAnchor a in anchors)
             {
                 if (a.numSegments > 0)
                     Simulate(a.length, idx, a.numSegments);
                 idx += a.numSegments;
             }
 
-            // Apply gravity and copy to old pos
-            var down = transform.InverseTransformDirection(Vector3.down);
-            for (var i = 0; i < currPositions.Length; i++)
+            //Apply gravity and copy to old pos
+            Vector3 down = transform.InverseTransformDirection(Vector3.down);
+            for (int i = 0; i < currPositions.Length; i++)
             {
-                var old = currPositions[i];
+                Vector3 old = currPositions[i];
                 currPositions[i] = currPositions[i] + (currPositions[i] - prevPositions[i]) * 0.98f +
                                    10.0f * down * Dt * Dt;
                 prevPositions[i] = old;

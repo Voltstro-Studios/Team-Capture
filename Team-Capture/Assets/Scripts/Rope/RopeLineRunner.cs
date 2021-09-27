@@ -6,32 +6,32 @@ using UnityEditor;
 namespace Team_Capture.Rope
 {
     [InitializeOnLoad]
-    class RopeLineRunner
+    internal class RopeLineRunner
     {
+        public static readonly List<RopeLine> Ropes = new List<RopeLine>();
+        
         static RopeLineRunner()
         {
-        
-            // Always unregister to prevent double registring
+            //Always unregister to prevent double registring
             EditorApplication.update -= RopeLineRunnerUpdate;
             EditorApplication.update += RopeLineRunnerUpdate;
-            s_Ropes.Clear();
+            Ropes.Clear();
         }
 
-        public static void RopeLineRunnerUpdate()
+        private static void RopeLineRunnerUpdate()
         {
-            for(var i = s_Ropes.Count - 1; i >= 0; --i)
+            for(int i = Ropes.Count - 1; i >= 0; --i)
             {
-                var r = s_Ropes[i];
+                RopeLine r = Ropes[i];
                 if (r != null)
                 {
                     if (r.simulate)
                         r.Tick();
                 }
                 else
-                    s_Ropes.EraseSwap(i);
+                    Ropes.EraseSwap(i);
             }
         }
-        public static List<RopeLine> s_Ropes = new List<RopeLine>();
     }
 }
 #endif
