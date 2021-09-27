@@ -7,6 +7,7 @@
 using JetBrains.Annotations;
 using Team_Capture.Core;
 using Team_Capture.Pooling;
+using Team_Capture.Settings.Controllers;
 using Team_Capture.UI.ImGui;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -103,6 +104,15 @@ namespace Team_Capture.SceneManagement
             
             tracersEffectsPool = new GameObjectPool(activeScene.traceEffectPrefab);
             bulletHolePool = new GameObjectPool(activeScene.bulletHoleEffectPrefab);
+            
+            if(activeScene.overrideProfile != null)
+                VolumeSettingsController.Instance.ApplyVolumeOverride(activeScene.overrideProfile);
+        }
+
+        protected override void SingletonDestroyed()
+        {
+            if(VolumeSettingsController.IsCurrentlyOverriden)
+                VolumeSettingsController.Instance.RevertVolumeOverride();
         }
     }
 }

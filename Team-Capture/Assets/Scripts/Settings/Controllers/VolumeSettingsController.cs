@@ -4,6 +4,7 @@
 // This project is governed by the AGPLv3 License.
 // For more details see the LICENSE file.
 
+using System;
 using Team_Capture.Console;
 using Team_Capture.Core;
 using Team_Capture.Settings.SettingClasses;
@@ -25,6 +26,13 @@ namespace Team_Capture.Settings.Controllers
 		/// </summary>
 		public static Volume ActiveVolume;
 
+		/// <summary>
+		///		Is the <see cref="Volume"/> currently been overriden 
+		/// </summary>
+		public static bool IsCurrentlyOverriden { get; private set; }
+		
+		private VolumeComponent[] originalVolumeSettings; 
+
 		protected override void SingletonAwakened()
 		{
 			if (Game.IsHeadless || Game.IsGameQuitting)
@@ -42,6 +50,44 @@ namespace Team_Capture.Settings.Controllers
 		protected override void NotifyInstanceRepeated()
 		{
 			Destroy(gameObject);
+		}
+
+		internal void ApplyVolumeOverride(VolumeProfile overrideProfile)
+		{
+			if(IsCurrentlyOverriden)
+			{
+				Logger.Error("The volume is currently already overriden! You need to call RevertVolumeOverride first!");
+				return;
+			}
+
+			originalVolumeSettings = ActiveVolume.profile.components.ToArray();
+			IsCurrentlyOverriden = true;
+
+			foreach (VolumeComponent component in overrideProfile.components)
+			{
+				Type baseType = component.GetType();
+				if (ActiveVolume.profile.Has(baseType))
+					ActiveVolume.profile.Remove(baseType);
+				
+				ActiveVolume.profile.components.Add(component);
+			}
+		}
+
+		internal void RevertVolumeOverride()
+		{
+			if (!IsCurrentlyOverriden)
+			{
+				Logger.Error("The volume is not overriden!");
+				return;
+			}
+
+			ActiveVolume.profile.components.RemoveRange(0, ActiveVolume.profile.components.Count);
+			foreach (VolumeComponent component in originalVolumeSettings)
+			{
+				ActiveVolume.profile.components.Add(component);
+			}
+
+			IsCurrentlyOverriden = false;
 		}
 
 		private void ApplyVolumeSettings()

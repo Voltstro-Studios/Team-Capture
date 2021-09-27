@@ -19,6 +19,7 @@ MonoBehaviour:
   enabled: 1
   isOnlineScene: 1
   canLoadTo: 1
+  overrideProfile: {fileID: 11400000, guid: f4106fee459d9474b8fe5b4f6db5f248, type: 2}
   respawnTime: 4
   stockWeapons:
   - {fileID: 11400000, guid: da803de1f5f09f247aac351f1c13c59a, type: 2}

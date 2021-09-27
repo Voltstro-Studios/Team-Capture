@@ -11,6 +11,7 @@ using Team_Capture.Core;
 using Team_Capture.Localization;
 using Team_Capture.Weapons;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace Team_Capture.SceneManagement
 {
@@ -55,6 +56,12 @@ namespace Team_Capture.SceneManagement
 		/// </summary>
 		[Tooltip("Can this scene be loaded to directly (Using the scene command)")]
 		public bool canLoadTo = true;
+
+		/// <summary>
+		///		<see cref="VolumeProfile"/> containing overriding settings
+		///		<para>The settings are applied on top of the existing settings.</para>
+		/// </summary>
+		public VolumeProfile overrideProfile;
 
 		/// <summary>
 		///     The time until the players respawn
