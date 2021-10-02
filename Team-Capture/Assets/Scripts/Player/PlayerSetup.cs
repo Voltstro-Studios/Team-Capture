@@ -59,7 +59,7 @@ namespace Team_Capture.Player
 			localCamera.gameObject.AddComponent<AudioListener>();
 
 			//Player Input
-			gameObject.AddComponent<PlayerInput>().Setup(inputReader);
+			gameObject.AddComponent<PlayerInputManager>().Setup(inputReader);
 
 			//Lock the cursor
 			Cursor.visible = false;

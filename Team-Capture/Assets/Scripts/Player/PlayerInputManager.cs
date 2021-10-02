@@ -20,7 +20,7 @@ namespace Team_Capture.Player
 	/// <summary>
 	///     Handles input
 	/// </summary>
-	internal sealed class PlayerInput : NetworkBehaviour
+	internal sealed class PlayerInputManager : NetworkBehaviour
 	{
 		private PlayerMovementInput playerInput;
 		private PlayerManager playerManager;

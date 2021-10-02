@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Mirror;
 using Team_Capture.Helper;
+using Team_Capture.Player;
 using Team_Capture.SceneManagement;
 using UnityEngine;
 using Logger = Team_Capture.Logging.Logger;
@@ -44,7 +45,7 @@ namespace Team_Capture.Weapons
 		private Coroutine reloadingCoroutine;
 
 		/// <summary>
-		///		<see cref="Weapons.WeaponSway"/> script, for use by <see cref="Player.PlayerInput"/>
+		///		<see cref="Weapons.WeaponSway"/> script, for use by <see cref="PlayerInputManager"/>
 		/// </summary>
 		[NonSerialized] internal WeaponSway WeaponSway;
 
