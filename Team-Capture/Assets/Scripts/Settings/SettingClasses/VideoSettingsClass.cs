@@ -16,7 +16,7 @@ namespace Team_Capture.Settings.SettingClasses
 		public Resolution Resolution = Screen.currentResolution;
 
 		[SettingsPropertyDisplayText("Settings_VideoScreenMode")]
-		public FullScreenMode ScreenMode = FullScreenMode.FullScreenWindow;
+		public ScreenMode ScreenMode = ScreenMode.Fullscreen;
 
 		[SettingsPropertyDisplayText("Settings_VideoTextureQuality")]
 		public TextureQuality TextureQuality = TextureQuality.FullRes;
