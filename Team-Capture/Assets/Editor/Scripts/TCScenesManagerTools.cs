@@ -12,7 +12,7 @@ namespace Team_Capture.Editor
 {
     public static class TCScenesManagerTools
     {
-        [MenuItem("Team Capture/Scenes/List All Scenes")]
+        [MenuItem("Team-Capture/Scenes/List All Scenes")]
         private static void ListAllTCScenes()
         {
             Debug.Log($"{nameof(TCScene)}s found:");
@@ -20,7 +20,7 @@ namespace Team_Capture.Editor
                 Debug.Log($"{tcScene.scene} ({tcScene.DisplayNameLocalized})");
         }
 
-        [MenuItem("Team Capture/Scenes/List Enabled Scenes")]
+        [MenuItem("Team-Capture/Scenes/List Enabled Scenes")]
         private static void ListAllEnabledScenes()
         {
             Debug.Log($"Enabled {nameof(TCScene)}s found:");

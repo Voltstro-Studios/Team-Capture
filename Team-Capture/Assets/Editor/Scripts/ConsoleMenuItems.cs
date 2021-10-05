@@ -14,7 +14,7 @@ namespace Team_Capture.Editor
 {
 	public static class GetCommands
 	{
-		[MenuItem("Team Capture/Console/ConCommands list to markdown")]
+		[MenuItem("Team-Capture/Console/ConCommands list to markdown")]
 		public static void ConsoleCommandListToMarkdown()
 		{
 			Dictionary<ConCommand, MethodInfo> commands = ConsoleBackend.GetConCommands();
@@ -31,7 +31,7 @@ namespace Team_Capture.Editor
 			generator.SaveMarkdown("command-list");
 		}
 
-		[MenuItem("Team Capture/Console/ConVars list to markdown")]
+		[MenuItem("Team-Capture/Console/ConVars list to markdown")]
 		public static void ConsoleConVarListToMarkdown()
 		{
 			Dictionary<ConVar, FieldInfo> conVars = ConsoleBackend.GetConVars();

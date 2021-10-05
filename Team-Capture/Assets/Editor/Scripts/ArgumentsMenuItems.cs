@@ -14,7 +14,7 @@ namespace Team_Capture.Editor
 {
 	public static class ArgumentsMenuItems
 	{
-		[MenuItem("Team Capture/Arguments/Launch Arguments to Markdown")]
+		[MenuItem("Team-Capture/Arguments/Launch Arguments to Markdown")]
 		public static void LaunchArgumentsToMarkdown()
 		{
 			Dictionary<FieldInfo, CommandLineArgumentAttribute> launchArguments = CommandLineParser.GetCommandLineArguments();

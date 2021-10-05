@@ -4,8 +4,10 @@
 // This project is governed by the AGPLv3 License.
 // For more details see the LICENSE file.
 
+using System;
 using Team_Capture.Console;
 using Team_Capture.Core;
+using Team_Capture.Settings.Enums;
 using Team_Capture.Settings.SettingClasses;
 using UnityEngine;
 using Logger = Team_Capture.Logging.Logger;
@@ -29,8 +31,19 @@ namespace Team_Capture.Settings.Controllers
 			if (Game.IsHeadless) return;
 
 			VideoSettingsClass settings = GameSettings.VideoSettings;
-			Screen.SetResolution(settings.Resolution.width, settings.Resolution.height, settings.ScreenMode,
-				settings.Resolution.refreshRate);
+			switch (settings.ScreenMode)
+			{
+				case ScreenMode.Fullscreen:
+					Screen.SetResolution(settings.Resolution.width, settings.Resolution.height, true, settings.Resolution.refreshRate);
+					Screen.fullScreen = true;
+					break;
+				case ScreenMode.Windowed:
+					Screen.fullScreenMode = FullScreenMode.Windowed;
+					break;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
+
 			QualitySettings.masterTextureLimit = (int) settings.TextureQuality;
 			QualitySettings.vSyncCount = (int) settings.VSync;
 
@@ -75,7 +88,7 @@ namespace Team_Capture.Settings.Controllers
 		{
 			if (int.TryParse(args[0], out int screenModeIndex))
 			{
-				FullScreenMode screenMode = (FullScreenMode) screenModeIndex;
+				ScreenMode screenMode = (ScreenMode) screenModeIndex;
 
 				GameSettings.VideoSettings.ScreenMode = screenMode;
 				GameSettings.Save();

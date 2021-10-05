@@ -14,7 +14,7 @@ namespace Team_Capture.Editor
 {
 	public static class BuildMenuItems
 	{
-		[MenuItem("Team Capture/Build/Launch Player Server")]
+		[MenuItem("Team-Capture/Build/Launch Player Server")]
 		public static void LaunchPlayerServer()
 		{
 			//Make sure the build exists
@@ -40,7 +40,7 @@ namespace Team_Capture.Editor
 			});
 		}
 
-		[MenuItem("Team Capture/Build/Launch Player Client")]
+		[MenuItem("Team-Capture/Build/Launch Player Client")]
 		public static void LaunchPlayerClient()
 		{
 			//Make sure the build exists
