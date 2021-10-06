@@ -25,11 +25,32 @@ namespace Team_Capture.Editor
 		{
 			LaunchApp("-nographics -batchmode");
 		}
+		
+		[MenuItem("Team-Capture/Build/Launch Player Server (Offline)")]
+		public static void LaunchPlayerServerOffline()
+		{
+			LaunchApp("-nographics -batchmode -auth-mode Offline");
+		}
 
 		[MenuItem("Team-Capture/Build/Launch Player Client")]
 		public static void LaunchPlayerClient()
 		{
 			LaunchApp("-novid -high");
+		}
+		
+		[MenuItem("Team-Capture/Build/Launch Player Client (Offline)")]
+		public static void LaunchPlayerClientOffline()
+		{
+			LaunchApp("-novid -high -auth-mode Offline");
+		}
+
+		[MenuItem("Team-Capture/Build/Launch Player Server", true)]
+		[MenuItem("Team-Capture/Build/Launch Player Server (Offline)", true)]
+		[MenuItem("Team-Capture/Build/Launch Player Client", true)]
+		[MenuItem("Team-Capture/Build/Launch Player Client (Offline)", true)]
+		public static bool ValidateLaunch()
+		{
+			return GetBuildDir() != null;
 		}
 
 		private static void LaunchApp(string arguments)
