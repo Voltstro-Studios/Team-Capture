@@ -20,6 +20,8 @@ namespace Team_Capture.Integrations.Steamworks
     public static class SteamServerManager
     {
         private static Dictionary<SteamUser, AuthResult> authResults;
+        
+        internal static bool IsOnline { get; private set; }
 
         /// <summary>
         ///     Start Steam game server
@@ -46,10 +48,12 @@ namespace Team_Capture.Integrations.Steamworks
             {
                 SteamServer.Init(SteamSettings.SteamSettingsInstance.appDedicatedServerId, serverInit);
                 SteamServer.LogOnAnonymous();
+                IsOnline = true;
             }
             catch (Exception ex)
             {
                 Logger.Error(ex, "Something went wrong while starting the steam game server integration!");
+                IsOnline = false;
                 onFail.Invoke();
             }
         }
@@ -85,9 +89,13 @@ namespace Team_Capture.Integrations.Steamworks
         /// </summary>
         internal static void ShutdownServer()
         {
+            if(!IsOnline)
+                return;
+            
             Logger.Info("Shutting down connection for Steam game server...");
             SteamServer.LogOff();
             SteamServer.Shutdown();
+            IsOnline = false;
         }
 
         /// <summary>
@@ -122,6 +130,9 @@ namespace Team_Capture.Integrations.Steamworks
         /// </summary>
         internal static void RunCallbacks()
         {
+            if(!IsOnline)
+                return;
+            
             SteamServer.RunCallbacks();
         }
 

@@ -6,6 +6,7 @@
 
 using System;
 using Steamworks;
+using Team_Capture.Core.Networking;
 using Team_Capture.UserManagement;
 using Logger = Team_Capture.Logging.Logger;
 
@@ -18,6 +19,13 @@ namespace Team_Capture.Integrations.Steamworks
 	{
 		protected override void SingletonStarted()
 	    {
+		    //TODO: We should have a global 'offline' toggle
+		    if(TCAuthenticator.AuthMethod != UserProvider.Steam)
+		    {
+			    Destroy(gameObject);
+			    return;
+		    }
+		    
 		    Initialize();
 	    }
 
