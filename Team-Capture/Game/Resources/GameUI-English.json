@@ -24,6 +24,7 @@
     "Menu_GameNameDefault": "Team-Capture Game",
     "Menu_GameNamePlaceholder": "Enter Game Name",
     "Menu_MaxPlayers": "Max Players",
+    "Menu_AuthMode": "Auth Mode",
     "Menu_CreateServerWarning": "This will start up a new instance of TC in headless server mode.",
     "Menu_StartingServer": "Starting server...",
     "Menu_StartingServerFail": "The server process failed to start for some reason!\nSee the logs for more information.",

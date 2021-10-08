@@ -25,7 +25,7 @@ namespace Team_Capture.Core.Networking
 	{
 		[ConVar("sv_auth_method", "What account system to use to check clients")]
 		[CommandLineArgument("auth-method", "What account system to use to check clients")]
-		public static UserProvider ServerAuthMethod = UserProvider.Steam;
+		public static UserProvider AuthMethod = UserProvider.Steam;
 
 		#region Server
 
@@ -49,13 +49,13 @@ namespace Team_Capture.Core.Networking
 
 		public override void OnStartServer()
 		{
-			if (ServerAuthMethod == UserProvider.Steam)
+			if (AuthMethod == UserProvider.Steam)
 			{
 				Logger.Info("Starting Steam game server integration...");
 				SteamServerManager.StartServer(() =>
 				{
 					Logger.Error("Falling back to offline mode!");
-					ServerAuthMethod = UserProvider.Offline;
+					AuthMethod = UserProvider.Offline;
 				});
 			}
 
@@ -68,6 +68,7 @@ namespace Team_Capture.Core.Networking
 		{
 			NetworkServer.UnregisterHandler<JoinRequestMessage>();
 			
+			//TODO: Clean interface for other auth providers who need to start/shutdown
 			SteamServerManager.ShutdownServer();
 			authAccounts.Clear();
 		}
@@ -101,7 +102,7 @@ namespace Team_Capture.Core.Networking
 			Logger.Debug("Got {UserAccountsNum} user accounts from {UserId}", msg.UserAccounts.Length, conn.connectionId);
 
 			//Get the user account the server wants
-			IUser user = msg.UserAccounts.FirstOrDefault(x => x.UserProvider == ServerAuthMethod);
+			IUser user = msg.UserAccounts.FirstOrDefault(x => x.UserProvider == AuthMethod);
 			if (user == null)
 			{
 				SendRequestResponseMessage(conn, HttpCode.Unauthorized, "No valid user accounts sent!");

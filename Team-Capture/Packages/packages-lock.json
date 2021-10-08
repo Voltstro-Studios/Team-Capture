@@ -348,6 +348,40 @@
       },
       "url": "https://unitynuget-registry.azurewebsites.net"
     },
+    "org.nuget.serilog": {
+      "version": "2.10.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://unitynuget-registry.azurewebsites.net"
+    },
+    "org.nuget.serilog.sinks.async": {
+      "version": "1.5.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "org.nuget.serilog": "2.9.0"
+      },
+      "url": "https://unitynuget-registry.azurewebsites.net"
+    },
+    "org.nuget.serilog.sinks.console": {
+      "version": "4.0.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "org.nuget.serilog": "2.10.0"
+      },
+      "url": "https://unitynuget-registry.azurewebsites.net"
+    },
+    "org.nuget.serilog.sinks.file": {
+      "version": "5.0.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "org.nuget.serilog": "2.10.0"
+      },
+      "url": "https://unitynuget-registry.azurewebsites.net"
+    },
     "org.nuget.system.buffers": {
       "version": "4.5.1",
       "depth": 0,

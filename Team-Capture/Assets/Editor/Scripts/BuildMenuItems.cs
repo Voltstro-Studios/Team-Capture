@@ -14,78 +14,75 @@ namespace Team_Capture.Editor
 {
 	public static class BuildMenuItems
 	{
+#if UNITY_EDITOR_WIN
+		private const string ApplicationName = "Team-Capture.exe";
+#else
+		private const string ApplicationName = "Team-Capture";
+#endif
+		
 		[MenuItem("Team-Capture/Build/Launch Player Server")]
 		public static void LaunchPlayerServer()
 		{
-			//Make sure the build exists
-			if (!BuildExist())
-			{
-				Debug.LogError("No build exists! Build one using `Tools -> Volt Unity Builder -> Volt Builder -> Build Player`");
-				return;
-			}
-
-			//Make sure the run server script still exists
-			string buildDir = $"{GameBuilder.GetBuildDirectory()}Team-Capture-Quick/";
-			if (!File.Exists($"{buildDir}RunServer.ps1"))
-			{
-				Debug.LogError("The build is missing the 'RunServer.ps1' script!");
-				return;
-			}
-
-			Process.Start(new ProcessStartInfo
-			{
-				FileName = "pwsh",
-				Arguments = $"{buildDir}RunServer.ps1",
-				WorkingDirectory = buildDir
-			});
+			LaunchApp("-nographics -batchmode");
+		}
+		
+		[MenuItem("Team-Capture/Build/Launch Player Server (Offline)")]
+		public static void LaunchPlayerServerOffline()
+		{
+			LaunchApp("-nographics -batchmode -auth-mode Offline");
 		}
 
 		[MenuItem("Team-Capture/Build/Launch Player Client")]
 		public static void LaunchPlayerClient()
 		{
+			LaunchApp("-novid -high");
+		}
+		
+		[MenuItem("Team-Capture/Build/Launch Player Client (Offline)")]
+		public static void LaunchPlayerClientOffline()
+		{
+			LaunchApp("-novid -high -auth-mode Offline");
+		}
+
+		[MenuItem("Team-Capture/Build/Launch Player Server", true)]
+		[MenuItem("Team-Capture/Build/Launch Player Server (Offline)", true)]
+		[MenuItem("Team-Capture/Build/Launch Player Client", true)]
+		[MenuItem("Team-Capture/Build/Launch Player Client (Offline)", true)]
+		public static bool ValidateLaunch()
+		{
+			return GetBuildDir() != null;
+		}
+
+		private static void LaunchApp(string arguments)
+		{
 			//Make sure the build exists
-			if (!BuildExist())
+			string buildPath = GetBuildDir();
+			
+			if (buildPath == null)
 			{
 				Debug.LogError("No build exists! Build one using `Tools -> Volt Unity Builder -> Volt Builder -> Build Player`");
 				return;
 			}
-
-			//Make sure the run client script still exists
-			string buildDir = $"{GameBuilder.GetBuildDirectory()}Team-Capture-Quick/";
 			
-#if UNITY_EDITOR_WIN
-			string appName = "Team-Capture.exe";
-#else
-			string appName = "Team-Capture";
-#endif
-			
-			if (!File.Exists($"{buildDir}{appName}"))
-			{
-				Debug.LogError("There is no build!");
-				return;
-			}
+			string buildDirWorking = Path.GetDirectoryName(buildPath);
 
 			Process.Start(new ProcessStartInfo
 			{
-				FileName = appName,
-				Arguments = "-novid -high",
-				WorkingDirectory = buildDir
+				FileName = buildPath,
+				Arguments = arguments,
+				WorkingDirectory = buildDirWorking
 			});
 		}
 
-		private static bool BuildExist()
+		private static string GetBuildDir()
 		{
 			string buildDir = $"{GameBuilder.GetBuildDirectory()}Team-Capture-Quick/";
 			if (!Directory.Exists(buildDir))
-				return false;
+				return null;
 
-#if UNITY_EDITOR_WIN
-			string applicationName = "Team-Capture.exe";
-#else
-			string applicationName = "Team-Capture";
-#endif
+			string fullPath = $"{buildDir}{ApplicationName}";
 
-			return File.Exists($"{buildDir}{applicationName}");
+			return !File.Exists(fullPath) ? null : Path.GetFullPath(fullPath);
 		}
 	}
 }

@@ -15,6 +15,7 @@ using Team_Capture.Helper;
 using Team_Capture.LagCompensation;
 using Team_Capture.SceneManagement;
 using Team_Capture.UI.Chat;
+using Team_Capture.UserManagement;
 using UnityEngine;
 using UnityCommandLineParser;
 using UnityEngine.Scripting;
@@ -299,10 +300,11 @@ namespace Team_Capture.Core.Networking
 		///  <param name="gameName"></param>
 		///  <param name="sceneName"></param>
 		///  <param name="maxPlayers"></param>
+		///  <param name="userProvider"></param>
 		///  <param name="onServerStarted"></param>
 		///  <param name="onServerFailedToStart"></param>
 		internal static void CreateServerProcess(this NetworkManager workingNetManager, 
-			string gameName, string sceneName, int maxPlayers, Action onServerStarted, Action onServerFailedToStart = null)
+			string gameName, string sceneName, int maxPlayers, UserProvider userProvider, Action onServerStarted, Action onServerFailedToStart = null)
 		{
 #if UNITY_EDITOR
 			string serverOnlinePath =
@@ -322,7 +324,7 @@ namespace Team_Capture.Core.Networking
 			//Create and start the process
 			Process newTcServer = new Process
 			{
-				StartInfo = GetTCProcessStartInfo(gameName, sceneName, maxPlayers)
+				StartInfo = GetTCProcessStartInfo(gameName, sceneName, maxPlayers, userProvider)
 			};
 			newTcServer.Start();
 
@@ -402,7 +404,7 @@ namespace Team_Capture.Core.Networking
 			File.WriteAllText(motdPath, MotdDefaultText);
 		}
 
-		private static ProcessStartInfo GetTCProcessStartInfo(string gameName, string sceneName, int maxPlayers)
+		private static ProcessStartInfo GetTCProcessStartInfo(string gameName, string sceneName, int maxPlayers, UserProvider userProvider)
 		{
 			ProcessStartInfo startInfo = new ProcessStartInfo();
 
@@ -410,7 +412,7 @@ namespace Team_Capture.Core.Networking
 
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
 			startInfo.Arguments =
-				$"-batchmode -nographics -gamename \"{gameName}\" -scene {sceneName} -maxplayers {maxPlayers} -closeserveronfirstclientdisconnect -high";
+				$"-batchmode -nographics -gamename \"{gameName}\" -scene {sceneName} -maxplayers {maxPlayers} -auth-method {userProvider.ToString()} -closeserveronfirstclientdisconnect -high";
 #if UNITY_EDITOR_WIN
 			startInfo.FileName = $"{Voltstro.UnityBuilder.Build.GameBuilder.GetBuildDirectory()}Team-Capture-Quick/Team-Capture.exe";
 #elif UNITY_STANDALONE_WIN
@@ -431,7 +433,7 @@ namespace Team_Capture.Core.Networking
 			startInfo.FileName = "./Team-Capture";
 #endif
 			
-			startInfo.Arguments = $"-batchmode -nographics -gamename \"{gameName}\" -scene {sceneName} -maxplayers {maxPlayers} -closeserveronfirstclientdisconnect -high";
+			startInfo.Arguments = $"-batchmode -nographics -gamename \"{gameName}\" -scene {sceneName} -maxplayers {maxPlayers} -auth-method {userProvider.ToString()} -closeserveronfirstclientdisconnect -high";
 #endif
 
 			#endregion
