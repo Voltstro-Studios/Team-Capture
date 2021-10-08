@@ -244,6 +244,10 @@ namespace Team_Capture.Console
 		/// <param name="command"></param>
 		public static void ExecuteCommand(string command)
 		{
+			History[historyNextIndex % HistoryCount] = command;
+			historyNextIndex++;
+			historyIndex = historyNextIndex;
+			
 			List<string> tokens = Tokenize(command);
 			if (tokens.Count < 1)
 				return;
@@ -260,7 +264,7 @@ namespace Team_Capture.Console
 					case CommandRunPermission.ServerOnly when NetworkManager.singleton == null ||
 					                                          NetworkManager.singleton.mode !=
 					                                          NetworkManagerMode.ServerOnly:
-						Logger.Error("The command {@Command} can only be run in server mode!", tokens[0].ToLower());
+						Logger.Error("The command {Command} can only be run in server mode!", tokens[0].ToLower());
 						return;
 
 					//The command has a RunPermission of ClientOnly, so this command can only be executed as a client
@@ -298,9 +302,6 @@ namespace Team_Capture.Console
 				try
 				{
 					conCommand.CommandMethod.Invoke(arguments);
-					History[historyNextIndex % HistoryCount] = command;
-					historyNextIndex++;
-					historyIndex = historyNextIndex;
 				}
 				catch (Exception ex)
 				{
