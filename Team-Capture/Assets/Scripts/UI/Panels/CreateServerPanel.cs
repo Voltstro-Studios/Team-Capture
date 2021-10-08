@@ -13,6 +13,7 @@ using Cysharp.Threading.Tasks;
 using Team_Capture.Core.Networking;
 using Team_Capture.SceneManagement;
 using Team_Capture.UI.Menus;
+using Team_Capture.UserManagement;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -47,6 +48,12 @@ namespace Team_Capture.UI.Panels
 		/// </summary>
 		[Tooltip("Input for the max amount of players")]
 		public TMP_InputField maxPlayersText;
+
+		/// <summary>
+		///		Dropdown for Auth mode
+		/// </summary>
+		[Tooltip("Dropdown for Auth mode")]
+		public TMP_Dropdown authModeDropdown;
 
 		/// <summary>
 		///     The color to use when there is an error
@@ -99,6 +106,11 @@ namespace Team_Capture.UI.Panels
 			maxPlayersImageColor = maxPlayersImage.color;
 
 			menuController = GetComponentInParent<MenuController>();
+
+			string[] names = Enum.GetNames(typeof(UserProvider));
+			authModeDropdown.ClearOptions();
+			authModeDropdown.AddOptions(names.ToList());
+			authModeDropdown.RefreshShownValue();
 		}
 
 		/// <summary>
@@ -159,8 +171,10 @@ namespace Team_Capture.UI.Panels
 			cancelButton.interactable = false;
 			menuController.allowPanelToggling = false;
 
+			UserProvider userProvider = (UserProvider)authModeDropdown.value;
+
 			//Now start the server
-			netManager.CreateServerProcess(gameNameText.text, onlineTCScenes[mapsDropdown.value].SceneFileName, maxPlayers,
+			netManager.CreateServerProcess(gameNameText.text, onlineTCScenes[mapsDropdown.value].SceneFileName, maxPlayers, userProvider,
 				() => ConnectToCreatedServer().Forget(),
 				() =>
 				{
