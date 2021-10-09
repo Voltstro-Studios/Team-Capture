@@ -877,76 +877,6 @@
             Remove this server from our favourite list
             </summary>
         </member>
-        <member name="M:Steamworks.ISteamInventory.GetResultStatus(Steamworks.Data.SteamInventoryResult_t)">
-            <summary>
-            Find out the status of an asynchronous inventory result handle.
-            </summary>
-        </member>
-        <member name="M:Steamworks.ISteamInventory.GetResultItems(Steamworks.Data.SteamInventoryResult_t,Steamworks.Data.SteamItemDetails_t[],System.UInt32@)">
-            <summary>
-            Copies the contents of a result set into a flat array. The specific contents of the result set depend on which query which was used.
-            </summary>
-        </member>
-        <member name="M:Steamworks.ISteamInventory.GetResultTimestamp(Steamworks.Data.SteamInventoryResult_t)">
-            <summary>
-            Returns the server time at which the result was generated. Compare against the value of IClientUtils::GetServerRealTime() to determine age.
-            </summary>
-        </member>
-        <member name="M:Steamworks.ISteamInventory.CheckResultSteamID(Steamworks.Data.SteamInventoryResult_t,Steamworks.SteamId)">
-            <summary>
-            Returns true if the result belongs to the target steam ID or false if the result does not. This is important when using DeserializeResult to verify that a remote player is not pretending to have a different users inventory.
-            </summary>
-        </member>
-        <member name="M:Steamworks.ISteamInventory.DestroyResult(Steamworks.Data.SteamInventoryResult_t)">
-            <summary>
-            Destroys a result handle and frees all associated memory.
-            </summary>
-        </member>
-        <member name="M:Steamworks.ISteamInventory.GetAllItems(Steamworks.Data.SteamInventoryResult_t@)">
-            <summary>
-            Captures the entire state of the current users Steam inventory.
-            </summary>
-        </member>
-        <member name="M:Steamworks.ISteamInventory.GetItemsByID(Steamworks.Data.SteamInventoryResult_t@,Steamworks.Data.InventoryItemId@,System.UInt32)">
-            <summary>
-            Captures the state of a subset of the current users Steam inventory identified by an array of item instance IDs.
-            </summary>
-        </member>
-        <member name="M:Steamworks.ISteamInventory.GrantPromoItems(Steamworks.Data.SteamInventoryResult_t@)">
-            <summary>
-            GrantPromoItems() checks the list of promotional items for which the user may be eligible and grants the items (one time only).
-            </summary>
-        </member>
-        <member name="M:Steamworks.ISteamInventory.ConsumeItem(Steamworks.Data.SteamInventoryResult_t@,Steamworks.Data.InventoryItemId,System.UInt32)">
-            <summary>
-            ConsumeItem() removes items from the inventory permanently.
-            </summary>
-        </member>
-        <member name="M:Steamworks.ISteamInventory.SendItemDropHeartbeat">
-            <summary>
-            Deprecated method. Playtime accounting is performed on the Steam servers.
-            </summary>
-        </member>
-        <member name="M:Steamworks.ISteamInventory.TriggerItemDrop(Steamworks.Data.SteamInventoryResult_t@,Steamworks.Data.InventoryDefId)">
-            <summary>
-            Playtime credit must be consumed and turned into item drops by your game.
-            </summary>
-        </member>
-        <member name="M:Steamworks.ISteamInventory.LoadItemDefinitions">
-            <summary>
-            LoadItemDefinitions triggers the automatic load and refresh of item definitions.
-            </summary>
-        </member>
-        <member name="M:Steamworks.ISteamInventory.InspectItem(Steamworks.Data.SteamInventoryResult_t@,System.String)">
-            <summary>
-            Look up the given token and return a pseudo-Inventory item.
-            </summary>
-        </member>
-        <member name="M:Steamworks.ISteamUserStats.DownloadLeaderboardEntriesForUsers(Steamworks.Data.SteamLeaderboard_t,Steamworks.SteamId[],System.Int32)">
-            <summary>
-            Downloads leaderboard entries for an arbitrary set of users - ELeaderboardDataRequest is k_ELeaderboardDataRequestUsers
-            </summary>
-        </member>
         <member name="P:Steamworks.ConnectionManager.Interface">
             <summary>
             An optional interface to use instead of deriving
@@ -1488,6 +1418,20 @@
             <param name="controller"></param>
             <param name="action"></param>
             <returns></returns>
+        </member>
+        <member name="M:Steamworks.SteamInput.GetPngActionGlyph(Steamworks.Controller,System.String,Steamworks.GlyphSize)">
+            <summary>
+            Return an absolute path to the PNG image glyph for the provided digital action name. The current
+            action set in use for the controller will be used for the lookup. You should cache the result and
+            maintain your own list of loaded PNG assets.
+            </summary>
+        </member>
+        <member name="M:Steamworks.SteamInput.GetSvgActionGlyph(Steamworks.Controller,System.String)">
+            <summary>
+            Return an absolute path to the SVF image glyph for the provided digital action name. The current
+            action set in use for the controller will be used for the lookup. You should cache the result and
+            maintain your own list of loaded PNG assets.
+            </summary>
         </member>
         <member name="T:Steamworks.SteamInventory">
             <summary>
@@ -2391,10 +2335,10 @@
             Enabled by default.
             </summary>
         </member>
-        <member name="P:Steamworks.SteamServer.AutomaticHeartbeatRate">
+        <member name="P:Steamworks.SteamServer.AdvertiseServer">
             <summary>
-            Set heartbeat interval, if automatic heartbeats are enabled.
-            You can leave this at the default.
+            Enable or disable heartbeats, which are sent regularly to the master server.
+            Enabled by default.
             </summary>
         </member>
         <member name="M:Steamworks.SteamServer.ForceHeartbeat">
@@ -2524,6 +2468,11 @@
             Posted after Download call
             </summary>
         </member>
+        <member name="E:Steamworks.SteamUGC.OnItemSubscribed">
+            <summary>
+            Posted when new item is subscribed
+            </summary>
+        </member>
         <member name="M:Steamworks.SteamUGC.Download(Steamworks.Data.PublishedFileId,System.Boolean)">
             <summary>
             Start downloading this item. You'll get notified of completion via OnDownloadItemResult.
@@ -2557,6 +2506,16 @@
         <member name="M:Steamworks.SteamUGC.ResumeDownloads">
             <summary>
             Resumes all workshop downloads
+            </summary>
+        </member>
+        <member name="M:Steamworks.SteamUGC.ShowWorkshopEula">
+            <summary>
+            Show the app's latest Workshop EULA to the user in an overlay window, where they can accept it or not
+            </summary>
+        </member>
+        <member name="M:Steamworks.SteamUGC.GetWorkshopEulaStatus">
+            <summary>
+            Retrieve information related to the user's acceptance or not of the app's specific Workshop EULA
             </summary>
         </member>
         <member name="T:Steamworks.SteamUser">
@@ -3033,6 +2992,29 @@
             Returns whether this steam client is a Steam China specific client, vs the global client
             </summary>
         </member>
+        <member name="M:Steamworks.SteamUtils.InitFilterText">
+            <summary>
+            Initializes text filtering, loading dictionaries for the language the game is running in.
+            Users can customize the text filter behavior in their Steam Account preferences
+            </summary>
+        </member>
+        <member name="M:Steamworks.SteamUtils.FilterText(Steamworks.TextFilteringContext,Steamworks.SteamId,System.String)">
+            <summary>
+            Filters the provided input message and places the filtered result into pchOutFilteredText,
+            using legally required filtering and additional filtering based on the context and user settings.
+            </summary>
+        </member>
+        <member name="P:Steamworks.SteamUtils.IsRunningOnSteamDeck">
+            <summary>
+            returns true if Steam itself is running on the Steam Deck
+            </summary>
+        </member>
+        <member name="M:Steamworks.SteamUtils.SetGameLauncherMode(System.Boolean)">
+            <summary>
+            In game launchers that don't have controller support you can call this to have 
+            Steam Input translate the controller input into mouse/kb to navigate the launcher
+            </summary>
+        </member>
         <member name="T:Steamworks.SteamVideo">
             <summary>
             Undocumented Parental Settings
@@ -3438,11 +3420,6 @@
         <member name="F:Steamworks.SteamServerInit.DedicatedServer">
             <summary>
             Is a dedicated server
-            </summary>
-        </member>
-        <member name="M:Steamworks.SteamServerInit.WithRandomSteamPort">
-            <summary>
-            Set the Steam quert port 
             </summary>
         </member>
         <member name="M:Steamworks.SteamServerInit.WithQueryShareGamePort">
