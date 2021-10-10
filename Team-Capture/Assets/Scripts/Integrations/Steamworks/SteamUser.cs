@@ -5,12 +5,13 @@
 // For more details see the LICENSE file.
 
 using System;
-using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using Mirror;
 using Steamworks;
 using Steamworks.Data;
 using Team_Capture.UserManagement;
 using UnityEngine;
+using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.Integrations.Steamworks
 {
@@ -81,28 +82,30 @@ namespace Team_Capture.Integrations.Steamworks
                 if (userProfilePicture != null) 
                     return userProfilePicture;
                 
+                //The Steamworks API docs says that GetLargeFriendAvatar should be returning as 128*128 image.
+                //However I am getting 184*184 image... We will just resize the texture if it doesn't match
+                userProfilePicture = new Texture2D(184, 184, TextureFormat.RGBA32, false, false);
+                
                 if (SteamClient.IsLoggedOn)
-                {
-                    //TODO: Steam client avatar cache stuff
-                    //From my understanding of the Steamworks docs, if our client doesn't have a cache of the user avatar, it will go out and fetch it
-                    //and trigger an AvatarImageLoaded event in SteamFriends, of which then we need to call this again.
-                    Task<Image?> imageTask = SteamFriends.GetLargeAvatarAsync(UserId);
-                    imageTask.Wait();
-                    if (!imageTask.Result.HasValue)
-                        return null;
-
-                    Image image = imageTask.Result.Value;
-                    userProfilePicture = new Texture2D((int)image.Height, (int)image.Width, TextureFormat.RGBA32, false, false);
-                    userProfilePicture.LoadSteamworksImageIntoTexture2D(image);
-                }
-                else
-                {
-                    //If we do not have client abilities, just create a blank 512 texture
-                    userProfilePicture = new Texture2D(512, 512);
-                }
+                    LoadSteamAvatarAsync().Forget();
 
                 return userProfilePicture;
             }
+        }
+
+        private async UniTaskVoid LoadSteamAvatarAsync()
+        {
+            Image? imageTask = await SteamFriends.GetLargeAvatarAsync(UserId).AsUniTask();
+            if(!imageTask.HasValue)
+                return;
+
+            Image image = imageTask.Value;
+            Logger.Debug("Got Steam user profile image of {Height} x {Width}", image.Height, image.Width);
+
+            if (userProfilePicture.width != image.Width || userProfilePicture.height != image.Height)
+                userProfilePicture.Resize((int)image.Width, (int)image.Height);
+            
+            userProfilePicture.LoadSteamworksImageIntoTexture2D(image);
         }
 
         /// <summary>
