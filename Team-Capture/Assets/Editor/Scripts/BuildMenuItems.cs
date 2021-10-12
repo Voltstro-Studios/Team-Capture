@@ -29,7 +29,7 @@ namespace Team_Capture.Editor
 		[MenuItem("Team-Capture/Build/Launch Player Server (Offline)")]
 		public static void LaunchPlayerServerOffline()
 		{
-			LaunchApp("-nographics -batchmode -auth-mode Offline");
+			LaunchApp("-nographics -batchmode -auth-method Offline");
 		}
 
 		[MenuItem("Team-Capture/Build/Launch Player Client")]
@@ -41,7 +41,7 @@ namespace Team_Capture.Editor
 		[MenuItem("Team-Capture/Build/Launch Player Client (Offline)")]
 		public static void LaunchPlayerClientOffline()
 		{
-			LaunchApp("-novid -high -auth-mode Offline");
+			LaunchApp("-novid -high -auth-method Offline");
 		}
 
 		[MenuItem("Team-Capture/Build/Launch Player Server", true)]

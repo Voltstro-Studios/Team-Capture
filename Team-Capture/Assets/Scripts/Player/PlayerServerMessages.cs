@@ -20,6 +20,7 @@ namespace Team_Capture.Player
 		private void Awake()
 		{
 			//Register all our custom messages
+			NetworkClient.UnregisterHandler<ChatMessage>();
 			NetworkClient.RegisterHandler<PlayerDiedMessage>(PlayerDiedMessage);
 			NetworkClient.RegisterHandler<ChatMessage>(ChatMessage);
 

@@ -8,14 +8,13 @@
       "url": "https://package.openupm.com"
     },
     "com.mirror-networking.mirror": {
-      "version": "https://github.com/VoltUnityPackages/Mirror.git?path=/Assets/Mirror",
+      "version": "https://github.com/VoltUnityPackages/Mirror.git?path=/Assets/Mirror#newV",
       "depth": 0,
       "source": "git",
       "dependencies": {
-        "com.unity.nuget.mono-cecil": "1.10.1",
         "org.nuget.system.threading.tasks.extensions": "4.5.4"
       },
-      "hash": "618c1b7c55630817612dc4d8e3702def8d4bdf0f"
+      "hash": "5ea0cd8ee6bd422be80bd79527f776eb411aac9d"
     },
     "com.psydack.uimgui": {
       "version": "https://github.com/Voltstro-Studios/uimgui.git",
@@ -101,13 +100,6 @@
       "dependencies": {
         "com.unity.editorcoroutines": "1.0.0"
       },
-      "url": "https://packages.unity.com"
-    },
-    "com.unity.nuget.mono-cecil": {
-      "version": "1.10.1",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {},
       "url": "https://packages.unity.com"
     },
     "com.unity.nuget.newtonsoft-json": {
