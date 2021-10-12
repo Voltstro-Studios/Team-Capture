@@ -101,7 +101,7 @@ namespace Team_Capture.Player
 			//If the pause menu is open, set player movement direction to 0 and return
 			if (ClientUI.IsPauseMenuOpen || uiManager.IsChatOpen)
 			{
-				playerInput.SetInput(0, 0, 0, 0);
+				playerInput.SetInput(0, 0, 0, 0, false);
 				return;
 			}
 
@@ -117,17 +117,17 @@ namespace Team_Capture.Player
 				Vector2 look = InputReader.ReadPlayerLook();
 				if (reverseMouse)
 				{
-					rotationX = look.y * yMouseSensitivity * Time.deltaTime;
-					rotationY = look.x * xMouseSensitivity * Time.deltaTime;
+					rotationX = look.y * yMouseSensitivity * Time.fixedDeltaTime;
+					rotationY = look.x * xMouseSensitivity * Time.fixedDeltaTime;
 				}
 				else
 				{
-					rotationX = look.x * xMouseSensitivity * Time.deltaTime;
-					rotationY = look.y * yMouseSensitivity * Time.deltaTime;
+					rotationX = look.x * xMouseSensitivity * Time.fixedDeltaTime;
+					rotationY = look.y * yMouseSensitivity * Time.fixedDeltaTime;
 				}
 
 				//Send inputs
-				playerInput.SetInput(horizontal, vertical, rotationX, rotationY);
+				playerInput.SetInput(horizontal, vertical, rotationX, rotationY, wishToJump);
 				weaponManager.WeaponSway.SetInput(rotationX, rotationY);
 			}
 		}

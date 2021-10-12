@@ -286,9 +286,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  moveRate: 18
   cameraTransform: {fileID: 6438375964343202627}
   gfxObject: {fileID: 6438375964401219431}
+  moveSpeed: 15
+  friction: 12
+  runAcceleration: 22
+  runDeacceleration: 18
+  airAcceleration: 3
+  airDecceleration: 3
+  airControl: 0.6
+  sideStrafeAcceleration: 45
+  sideStrafeSpeed: 1.5
+  jumpHeight: 8
+  gravityAmount: 55
+  groundCheck: {fileID: 6479458552634705644}
+  groundDistance: 0.7
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 275
 --- !u!114 &2483786954560629083
 MonoBehaviour:
   m_ObjectHideFlags: 0

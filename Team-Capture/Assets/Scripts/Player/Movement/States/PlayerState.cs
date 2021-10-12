@@ -16,5 +16,7 @@ namespace Team_Capture.Player.Movement.States
         public Vector3 Position;
         public Vector2 Rotation;
         public Vector3 Velocity;
+
+        public bool WishJump;
     }
 }
