@@ -22,7 +22,7 @@ namespace Team_Capture.Player
 	/// </summary>
 	internal sealed class PlayerInputManager : NetworkBehaviour
 	{
-		private PlayerMovementInput playerInput;
+		private PlayerMovementManager playerInput;
 		private PlayerManager playerManager;
 		private PlayerWeaponShoot weaponShoot;
 		private PlayerUIManager uiManager;
@@ -42,7 +42,7 @@ namespace Team_Capture.Player
 			weaponManager = GetComponent<WeaponManager>();
 			playerManager = GetComponent<PlayerManager>();
 			weaponShoot = GetComponent<PlayerWeaponShoot>();
-			playerInput = GetComponent<PlayerMovementInput>();
+			playerInput = GetComponent<PlayerMovementManager>();
 			uiManager = GetComponent<PlayerUIManager>();
 
 			GameSettings.SettingsUpdated += UpdateSettings;
@@ -101,7 +101,7 @@ namespace Team_Capture.Player
 			//If the pause menu is open, set player movement direction to 0 and return
 			if (ClientUI.IsPauseMenuOpen || uiManager.IsChatOpen)
 			{
-				playerInput.SetInput(0, 0, 0, 0, false);
+				playerInput.SetInput(0, 0, 0, 0);
 				return;
 			}
 
@@ -127,7 +127,7 @@ namespace Team_Capture.Player
 				}
 
 				//Send inputs
-				playerInput.SetInput(horizontal, vertical, rotationX, rotationY, wishToJump);
+				playerInput.SetInput(horizontal, vertical, rotationX, rotationY);
 				weaponManager.WeaponSway.SetInput(rotationX, rotationY);
 			}
 		}

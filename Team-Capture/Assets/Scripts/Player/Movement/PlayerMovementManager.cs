@@ -1,431 +1,261 @@
-// Team-Capture
+﻿// Team-Capture
 // Copyright (C) 2019-2021 Voltstro-Studios
 // 
 // This project is governed by the AGPLv3 License.
 // For more details see the LICENSE file.
 
-using ImGuiNET;
+using System.Collections.Generic;
 using Mirror;
-using Team_Capture.Console;
-using UImGui;
+using Team_Capture.Core;
+using Team_Capture.Helper.Extensions;
+using Team_Capture.Player.Movement.States;
 using UnityEngine;
 
 namespace Team_Capture.Player.Movement
 {
-	//This code is built on unity-fastpacedmultiplayer
-	//https://github.com/JoaoBorks/unity-fastpacedmultiplayer
-	//
-	//MIT License
-	//Copyright (c) 2015 ultimatematchthree, 2017 Joao Borks [joao.borks@gmail.com]
-
-	[RequireComponent(typeof(CharacterController))]
-	[RequireComponent(typeof(PlayerManager))]
-	public sealed class PlayerMovementManager : NetworkBehaviour
-	{
-		#region Commands
-
-		[ConVar("cl_showpos", "Shows the position and other stuff like that of the player", true)]
-		public static bool ShowPos = false;
-
-		#endregion
-
-		[SerializeField] private Transform groundCheck;
-		[SerializeField] private float groundDistance = 0.7f;
-		[SerializeField] private LayerMask groundMask;
-
-		/// <summary>
-		///     Delay for interpolation
-		/// </summary>
-		[Header("Network")] [Range(1, 60)] [Tooltip("Delay for interpolation")]
-		public int interpolationDelay = 12;
-
-		/// <summary>
-		///     The rate for updating inputs
-		/// </summary>
-		[SerializeField] [Range(10, 50)] [Tooltip("The rate for updating inputs")]
-		private int inputUpdateRate = 10;
-
-		/// <summary>
-		///     The current state of the player
-		/// </summary>
-		[SyncVar(hook = nameof(OnServerStateChange))]
-		internal PlayerState State = PlayerState.Zero;
-
-		/// <summary>
-		///		The <see cref="PlayerManager"/>
-		/// </summary>
-		private PlayerManager playerManager;
-
-		/// <summary>
-		///     The <see cref="CharacterController" />
-		/// </summary>
-		private CharacterController characterController;
-
-		/// <summary>
-		///     The <see cref="PlayerMovementServer" /> (Only set on server)
-		/// </summary>
-		private PlayerMovementServer server;
-
-		/// <summary>
-		///     The state handler (Observer or predictor)
-		/// </summary>
-		private PlayerMovementStateHandler stateHandler;
-
-		/// <summary>
-		///		The <see cref="PlayerMovementInput"/> (Only set on local client)
-		/// </summary>
-		private PlayerMovementInput playerInput;
-
-		private PlayerCameraRoll cameraRoll;
-
-		/// <summary>
-		///     Controls how many inputs are needed before sending update command
-		/// </summary>
-		public int InputBufferSize { get; private set; }
-
-		#region Unity Events
-
-		private void Awake()
-		{
-			InputBufferSize = (int) (1 / Time.fixedDeltaTime) / inputUpdateRate;
-			playerManager = GetComponent<PlayerManager>();
-		}
-
-		private void Start()
-		{
-			characterController = GetComponent<CharacterController>();
-			if (!isLocalPlayer)
-				stateHandler = gameObject.AddComponent<PlayerMovementObserver>();
-		}
-
-		#endregion
-		
-		#region Debug GUI
-
-		private void OnLayout(UImGui.UImGui obj)
-		{
-			if (!ShowPos) return;
-			
-			ImGui.Begin("Player Stats");
-			{
-				ImGui.Text($"Velocity: {State.Velocity}");
-				ImGui.Text($"Wish Dir: {State.WishDir}");
-				ImGui.Text($"Look Dir: {cameraTransform.rotation}");
-				ImGui.Text($"Position: {State.Position}");
-				ImGui.Text($"Is Ground: {Physics.Raycast(groundCheck.position, Vector3.down, groundDistance, groundMask)}");
-			}
-			ImGui.End();
-		}
-
-		#endregion
-
-		#region Network Methods
-
-		public override void OnStartLocalPlayer()
-		{
-			//Setup for local player
-			stateHandler = gameObject.AddComponent<PlayerMovementPredictor>();
-			playerInput = gameObject.AddComponent<PlayerMovementInput>();
-			cameraRoll = GetComponent<PlayerSetup>().GetPlayerCamera().gameObject.AddComponent<PlayerCameraRoll>();
-			cameraRoll.SetBaseTransform(transform);
-			
-			UImGuiUtility.Layout += OnLayout;
-		}
-
-		public override void OnStopClient()
-		{
-			if(isLocalPlayer)
-				UImGuiUtility.Layout -= OnLayout;
-		}
-
-		public override void OnStartServer()
-		{
-			base.OnStartServer();
-			server = gameObject.AddComponent<PlayerMovementServer>();
-		}
-		
-		#endregion
-
-		/// <summary>
-		///		Disables the state handler
-		/// </summary>
-		public void DisableStateHandling()
-		{
-			stateHandler.enabled = false;
-
-			if (isLocalPlayer)
-				playerInput.enabled = false;
-		}
-
-		/// <summary>
-		///		Enables the state handler
-		/// </summary>
-		public void EnableStateHandling()
-		{
-			stateHandler.enabled = true;
-
-			if (isLocalPlayer)
-				playerInput.enabled = true;
-		}
-
-		/// <summary>
-		///		Syncs the state and moves the <see cref="CharacterController"/>
-		/// </summary>
-		/// <param name="overrideState"></param>
-		internal void SyncState(PlayerState overrideState)
-		{
-			if (playerManager.IsDead)
-				return;
-
-			if(characterController == null)
-				return;
-
-			characterController.Move(overrideState.Position - transform.position);
-
-			transform.rotation = Quaternion.Euler(0, overrideState.RotationY, 0);
-			cameraTransform.rotation = Quaternion.Euler(overrideState.RotationX, overrideState.RotationY, 0);
-			
-			if(cameraRoll != null)
-				cameraRoll.SetVelocity(overrideState.Velocity);
-		}
-
-		internal void OnServerStateChange(PlayerState oldState, PlayerState newState)
-		{
-			State = newState;
-			stateHandler?.OnStateChange(State);
-		}
-
-		/// <summary>
-		///		Adds <see cref="PlayerInputs"/> to the server's client input buffer
-		/// </summary>
-		/// <param name="inputs"></param>
-		[Command(channel = Channels.Reliable)]
-		internal void CmdMove(PlayerInputs[] inputs)
-		{
-			//TODO: Buffer protection
-			
-			server.AddInputs(inputs);
-		}
-
-		/// <summary>
-		///     Sets the player's position
-		/// </summary>
-		/// <param name="pos"></param>
-		/// <param name="rotationX"></param>
-		/// <param name="rotationY"></param>
-		/// <param name="resetVelocity"></param>
-		[Server]
-		public void SetCharacterPosition(Vector3 pos, float rotationX, float rotationY, bool resetVelocity = false)
-		{
-			PlayerState newState = new PlayerState
-			{
-				Position = pos,
-				RotationX = rotationX,
-				RotationY = rotationY,
-				Velocity = State.Velocity
-			};
-
-			if (resetVelocity)
-				newState.Velocity = Vector3.zero;
-
-			State = newState;
-			OnServerStateChange(State, newState);
-
-			TargetSetPosition(connectionToClient, State);
-		}
-
-		[TargetRpc]
-		// ReSharper disable once UnusedParameter.Local
-		private void TargetSetPosition(NetworkConnection conn, PlayerState newState)
-		{
-			if(playerManager.IsDead)
-				return;
-
-			transform.position = newState.Position;
-			SyncState(newState);
-		}
-
-		#region Movement Methods
-
-		internal PlayerState Move(PlayerState previous, PlayerInputs input, int timestamp)
-		{
-			PlayerState playerState = new PlayerState
-			{
-				MoveNum = previous.MoveNum + 1,
-				Timestamp = timestamp,
-				Position = previous.Position,
-				Velocity = previous.Velocity,
-				RotationX = previous.RotationX,
-				RotationY = previous.RotationY
-			};
-
-			bool isGrounded = Physics.Raycast(groundCheck.position, Vector3.down, groundDistance, groundMask);
-			playerState.WishJump = input.Jump;
-			
-			if(isGrounded)
-				GroundMove(ref playerState, input);
-			else
-				AirMove(ref playerState, input);
-
-			playerState.Position += playerState.Velocity * Time.deltaTime;
-
-			//Mouse Movement
-			playerState.RotationX -= input.LookDirections.y;
-			playerState.RotationY += input.LookDirections.x;
-
-			playerState.RotationX = Mathf.Clamp(playerState.RotationX, -90, 90);
-
-			return playerState;
-		}
-
-		private void GroundMove(ref PlayerState state, PlayerInputs input)
-		{
-			//Do not apply friction if the player is queueing up the next jump
-			if (!state.WishJump)
-				ApplyFriction(ref state, true, 1.0f);
-			else
-				ApplyFriction(ref state, true, 0f);
-
-			Vector3 wishDir = new Vector3(input.MoveDirections.x, 0f, input.MoveDirections.y);
-			wishDir = transform.TransformDirection(wishDir);
-			wishDir.Normalize();
-			
-			state.WishDir = wishDir;
-
-			float wishSpeed = wishDir.magnitude;
-			wishSpeed *= moveSpeed;
-
-			Accelerate(ref state, wishDir, wishSpeed, runAcceleration);
-
-			//Reset the gravity velocity
-			state.Velocity.y = -gravityAmount * Time.deltaTime;
-
-			if(state.WishJump)
-			{
-				state.Velocity.y = jumpHeight;
-				state.WishJump = false;
-			}
-		}
-
-		private void AirMove(ref PlayerState state, PlayerInputs input)
-		{
-			Vector3 wishDir = new Vector3(input.MoveDirections.x, 0f, input.MoveDirections.y);
-			wishDir = transform.TransformDirection(wishDir);
-
-			float wishSpeed = wishDir.magnitude;
-			wishSpeed *= moveSpeed;
-
-			wishDir.Normalize();
-			state.WishDir = wishDir;
-
-			float wishSpeed2 = wishSpeed;
-			float accel = Vector3.Dot(state.Velocity, wishDir) < 0 ? airDecceleration : airAcceleration;
-			
-			//If the player is ONLY strafing left or right
-			if(input.MoveDirections.y == 0 && input.MoveDirections.x != 0)
-			{
-				if(wishSpeed > sideStrafeSpeed)
-					wishSpeed = sideStrafeSpeed;
-				
-				accel = sideStrafeAcceleration;
-			}
-
-			Accelerate(ref state, wishDir, wishSpeed, accel);
-			if(airControl > 0)
-				AirControl(ref state, input, wishDir, wishSpeed2);
-			
-			state.Velocity.y -= gravityAmount * Time.deltaTime;
-		}
-		
-		private void AirControl(ref PlayerState state, PlayerInputs input, Vector3 wishDir, float wishSpeed)
-		{
-			//Can't control movement if not moving forward or backward
-			if(Mathf.Abs(input.MoveDirections.y) < 0.001 || Mathf.Abs(wishSpeed) < 0.001)
-				return;
-			
-			float zSpeed = state.Velocity.y;
-			state.Velocity.y = 0;
-			
-			float speed = state.Velocity.magnitude;
-			state.Velocity.Normalize();
-
-			float dot = Vector3.Dot(state.Velocity, wishDir);
-			float k = 32;
-			k *= airControl * dot * dot * Time.deltaTime;
-
-			//Change direction while slowing down
-			if (dot > 0)
-			{
-				state.Velocity.x = state.Velocity.x * speed + wishDir.x * k;
-				state.Velocity.y = state.Velocity.y * speed + wishDir.y * k;
-				state.Velocity.z = state.Velocity.z * speed + wishDir.z * k;
-
-				state.Velocity.Normalize();
-			}
-
-			state.Velocity.x *= speed;
-			state.Velocity.y = zSpeed;
-			state.Velocity.z *= speed;
-		}
-		
-		private void ApplyFriction(ref PlayerState state, bool isGrounded, float t)
-		{
-			Vector3 vec = state.Velocity; 
-			vec.y = 0.0f;
-			
-			float speed = vec.magnitude;
-			float drop = 0.0f;
-			
-			if(isGrounded)
-			{
-				float control = speed < runDeacceleration ? runDeacceleration : speed;
-				drop = control * friction * Time.deltaTime * t;
-			}
-
-			float newSpeed = speed - drop;
-			if(newSpeed < 0)
-				newSpeed = 0;
-			if(speed > 0)
-				newSpeed /= speed;
-
-			state.Velocity.x *= newSpeed;
-			state.Velocity.z *= newSpeed;
-		}
-
-		private void Accelerate(ref PlayerState state, Vector3 wishDir, float wishSpeed, float accel)
-		{
-			float currentSpeed = Vector3.Dot(state.Velocity, wishDir);
-			float addSpeed = wishSpeed - currentSpeed;
-			if(addSpeed <= 0)
-				return;
-			
-			float accelSpeed = accel * Time.deltaTime * wishSpeed;
-			if(accelSpeed > addSpeed)
-				accelSpeed = addSpeed;
-
-			state.Velocity.x += accelSpeed * wishDir.x;
-			state.Velocity.z += accelSpeed * wishDir.z;
-		}
-
-		#endregion
-
-		#region Movement Controls
-
-		[Header("Movement Settings")] 
-		[SerializeField] private float moveSpeed = 14.0f;
-		[SerializeField] private float friction = 6;
-		[SerializeField] private float runAcceleration = 20.0f;
-		[SerializeField] private float runDeacceleration = 16.0f;
-		[SerializeField] private float airAcceleration = 3.0f;
-		[SerializeField] private float airDecceleration = 3.0f;
-		[SerializeField] private float airControl = 0.6f;
-		[SerializeField] private float sideStrafeAcceleration = 50.0f;
-		[SerializeField] private float sideStrafeSpeed = 1.5f;
-		[SerializeField] private float jumpHeight = 8.0f;
-		[SerializeField] private float gravityAmount = 24.0f;
-		
-		[SerializeField] private Transform cameraTransform;
-
-		#endregion
-	}
+    internal class PlayerMovementManager : NetworkBehaviour
+    {
+        private const int MAXIMUM_RECEIVED_CLIENT_MOTOR_STATES = 10;
+        private const int PAST_STATES_TO_SEND = 3;
+        
+        [SerializeField] private float moveRate = 18f;
+        [SerializeField] private Transform cameraTransform;
+        [SerializeField] private GameObject gfxObject;
+        
+        private CharacterController characterController;
+        
+        private readonly List<PlayerInputs> clientMotorStates = new List<PlayerInputs>();
+        
+        private readonly Queue<PlayerInputs> receivedClientMotorStates = new Queue<PlayerInputs>();
+        
+        private uint lastClientStateReceived;
+        
+        private PlayerState? receivedServerMotorState;
+
+        private readonly InputData storedInput = new InputData();
+
+        private Vector3 velocity;
+        private float rotationX;
+        private float rotationY;
+
+        public override void OnStartServer()
+        {
+            Setup();
+        }
+
+        public override void OnStartClient()
+        {
+            Setup();
+        }
+
+        public override void OnStartAuthority()
+        {
+            gfxObject.AddComponent<SmoothToZero>();
+        }
+
+        private void OnEnable()
+        {
+            FixedUpdateManager.OnFixedUpdate += OnFixedUpdate;
+        }
+
+        private void OnDisable()
+        {
+            FixedUpdateManager.OnFixedUpdate -= OnFixedUpdate;
+        }
+        
+        private void OnFixedUpdate()
+        {
+            if (hasAuthority)
+            {
+                ProcessReceivedServerMotorState();
+                SendInputs();
+            }
+
+            if (isServer)
+            {
+                ProcessReceivedClientMotorState();
+            }
+        }
+        
+        private void Setup()
+        {
+            characterController = GetComponent<CharacterController>();
+            if (!isServer && !hasAuthority)
+                characterController.enabled = false;
+        }
+        
+        [Client]
+        private void ProcessReceivedServerMotorState()
+        {
+            if (receivedServerMotorState == null)
+                return;
+
+            PlayerState serverState = receivedServerMotorState.Value;
+            FixedUpdateManager.AddTiming(serverState.TimingStepChange);
+            receivedServerMotorState = null;
+
+            //Remove entries which have been handled by the server.
+            int index = clientMotorStates.FindIndex(x => x.FixedFrame == serverState.FixedFrame);
+            if (index != -1)
+                clientMotorStates.RemoveRange(0, index + 1);
+
+            //Snap motor to server values.
+            transform.position = serverState.Position;
+            transform.rotation = Quaternion.Euler(0, serverState.Rotation.y, 0);
+            cameraTransform.rotation = Quaternion.Euler(serverState.Rotation.x, serverState.Rotation.y, 0);
+            velocity = serverState.Velocity;
+            rotationX = serverState.Rotation.x;
+            rotationY = serverState.Rotation.y;
+            
+            Physics.SyncTransforms();
+
+            foreach (PlayerInputs clientState in clientMotorStates)
+                ProcessInputs(clientState);
+        }
+        
+        [Server]
+        private void ProcessReceivedClientMotorState()
+        {
+            if (isClient && hasAuthority)
+                return;
+
+            sbyte timingStepChange = 0;
+            
+            if (receivedClientMotorStates.Count == 0)
+                timingStepChange = -1;
+            else if (receivedClientMotorStates.Count > 1)
+                timingStepChange = 1;
+
+            //If there is input to process.
+            if (receivedClientMotorStates.Count > 0)
+            {
+                PlayerInputs state = receivedClientMotorStates.Dequeue();
+                //Process input of last received motor state.
+                ProcessInputs(state);
+
+                PlayerState responseState = new PlayerState
+                {
+                    FixedFrame = state.FixedFrame,
+                    Position = transform.position,
+                    Rotation = new Vector2(rotationX, rotationY),
+                    Velocity = velocity,
+                    TimingStepChange = timingStepChange
+                };
+
+                //Send results back to the owner.
+                TargetServerStateUpdate(base.connectionToClient, responseState);
+            }
+            //If there is no input to process.
+            else if (timingStepChange != 0)
+            {
+                //Send timing step change to owner.
+                TargetChangeTimingStep(base.connectionToClient, timingStepChange);
+            }
+        }
+        
+        private void ProcessInputs(PlayerInputs motorState)
+        {
+            motorState.MovementDir.x = motorState.MovementDir.x.PreciseSign();
+            motorState.MovementDir.y = motorState.MovementDir.y.PreciseSign();
+
+            rotationX -= motorState.LookDir.x;
+            rotationY += motorState.LookDir.y;
+
+            rotationX = Mathf.Clamp(rotationX, -90, 90);
+
+            //Add move direction.
+            Vector3 moveDirection = new Vector3(motorState.MovementDir.x, 0f, motorState.MovementDir.y) * moveRate;
+            moveDirection = transform.TransformDirection(moveDirection);
+            moveDirection *= Time.fixedDeltaTime;
+            
+            //Move character.
+            characterController.Move(moveDirection);
+            transform.rotation = Quaternion.Euler(0, rotationY, 0);
+            cameraTransform.rotation = Quaternion.Euler(rotationX, rotationY, 0);
+        }
+
+        public void SetInput(float horizontal, float vertical, float lookX, float lookY)
+        {
+            storedInput.MovementDir = new Vector2(horizontal, vertical);
+            storedInput.LookDir = new Vector2(lookY, lookX);
+        }
+        
+        [Client]
+        private void SendInputs()
+        {
+            PlayerInputs state = new PlayerInputs
+            {
+                FixedFrame = FixedUpdateManager.FixedFrame,
+                LookDir = storedInput.LookDir,
+                MovementDir = storedInput.MovementDir
+            };
+            clientMotorStates.Add(state);
+
+            //Only send at most up to client motor states count.
+            int targetArraySize = Mathf.Min(clientMotorStates.Count, 1 + PAST_STATES_TO_SEND);
+            //Resize array to accomodate 
+            PlayerInputs[] statesToSend = new PlayerInputs[targetArraySize];
+            
+            // Start at the end of cached inputs, and add to the end of inputs to send. This will add the older inputs first.
+            for (int i = 0; i < targetArraySize; i++)
+            {
+                //Add from the end of states first.
+                statesToSend[targetArraySize - 1 - i] = clientMotorStates[clientMotorStates.Count - 1 - i];
+            }
+
+            ProcessInputs(state);
+            CmdSendInputs(statesToSend);
+        }
+        
+        [Command(channel = Channels.Unreliable)]
+        private void CmdSendInputs(PlayerInputs[] states)
+        {
+            //No states to process.
+            if (states == null || states.Length == 0)
+                return;
+            
+            //Only for client host.
+            if (isClient && hasAuthority)
+                return;
+
+            /* Go through every new state and if the fixed frame
+             * for that state is newer than the last received
+             * fixed frame then add it to motor states. */
+            for (int i = 0; i < states.Length; i++)
+            {
+                if (states[i].FixedFrame > lastClientStateReceived)
+                {
+                    receivedClientMotorStates.Enqueue(states[i]);
+                    lastClientStateReceived = states[i].FixedFrame;
+                }
+            }
+
+            while (receivedClientMotorStates.Count > MAXIMUM_RECEIVED_CLIENT_MOTOR_STATES)
+                receivedClientMotorStates.Dequeue();
+        }
+        
+        [TargetRpc(channel = Channels.Unreliable)]
+        private void TargetServerStateUpdate(NetworkConnection conn, PlayerState state)
+        {
+            //Exit if received state is older than most current.
+            if (receivedServerMotorState != null && state.FixedFrame < receivedServerMotorState.Value.FixedFrame)
+                return;
+
+            receivedServerMotorState = state;
+        }
+        
+        [TargetRpc(channel = Channels.Unreliable)]
+        private void TargetChangeTimingStep(NetworkConnection conn, sbyte steps)
+        {
+            FixedUpdateManager.AddTiming(steps);
+        }
+        
+        private class InputData
+        {
+            public bool Jump;
+
+            public Vector2 LookDir;
+            public Vector2 MovementDir;
+        }
+    }
 }
