@@ -44,7 +44,7 @@ namespace Team_Capture.UserManagement
         public UserProvider UserProvider => UserProvider.Offline;
 
         private readonly string serverName;
-        public string UserName => TCNetworkManager.IsServer ? serverName : PlayerName;
+        public string UserName => serverName ?? PlayerName;
 
         /// <summary>
         ///     <see cref="UserId"/> is unused for <see cref="OfflineUser"/>
