@@ -221,6 +221,9 @@ MonoBehaviour:
   localCamera: {fileID: 3744526893959554477}
   clientUiPrefab: {fileID: 2142721828509503496, guid: 8f7e8441a5d36bf47babd28e6be83faf,
     type: 3}
+  gfxMeshes:
+  - {fileID: 6438375964401219426}
+  - {fileID: 8044104236902602707}
 --- !u!114 &5871886052252796697
 MonoBehaviour:
   m_ObjectHideFlags: 0
