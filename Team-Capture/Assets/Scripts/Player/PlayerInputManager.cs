@@ -130,6 +130,14 @@ namespace Team_Capture.Player
 				playerInput.SetInput(horizontal, vertical, rotationX, rotationY, wishToJump);
 				weaponManager.WeaponSway.SetInput(rotationX, rotationY);
 			}
+			else
+			{
+				wishToJump = false;
+				rotationX = 0f;
+				rotationY = 0f;
+				vertical = 0f;
+				horizontal = 0f;
+			}
 		}
 
 		#region Input Settings

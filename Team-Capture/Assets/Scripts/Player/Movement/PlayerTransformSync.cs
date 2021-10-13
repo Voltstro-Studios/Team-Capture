@@ -138,15 +138,10 @@ namespace Team_Capture.Player.Movement
                 UpdateClient();
         }
         
-        private void Reset()
+        internal void Reset()
         {
             clientBuffer.Clear();
             clientInterpolationTime = 0;
-        }
-
-        internal void SetLocation()
-        {
-            Reset();
         }
 
         private void OnDisable() => Reset();

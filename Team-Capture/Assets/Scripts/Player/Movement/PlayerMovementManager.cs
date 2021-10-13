@@ -56,34 +56,66 @@ namespace Team_Capture.Player.Movement
         private float rotationY;
         private bool wishJump;
 
-        public override void OnStartServer()
-        {
-            Setup();
-        }
-
-        public override void OnStartClient()
-        {
-            Setup();
-        }
+        private bool isReady;
 
         public override void OnStartAuthority()
         {
             gfxObject.AddComponent<SmoothToZero>();
         }
 
+        private void Awake()
+        {
+            characterController = GetComponent<CharacterController>();
+        }
+
         private void Start()
         {
-            transformSync = GetComponent<PlayerTransformSync>();
+            PlayerTransformSync sync = GetComponent<PlayerTransformSync>();
+            if(!isLocalPlayer)
+                transformSync = sync;
+            else
+                Destroy(sync);
+
+            isReady = true;
         }
 
         private void OnEnable()
         {
             FixedUpdateManager.OnFixedUpdate += OnFixedUpdate;
+            
+            characterController.enabled = true;
+
+            if(isReady && !isLocalPlayer)
+                transformSync.enabled = true;
         }
 
         private void OnDisable()
         {
             FixedUpdateManager.OnFixedUpdate -= OnFixedUpdate;
+
+            if (isLocalPlayer) //Local client
+            {
+                clientMotorStates.Clear();
+                receivedClientMotorStates.Clear();
+                lastClientStateReceived = 0;
+                receivedServerMotorState = null;
+                
+                storedInput.Jump = false;
+                storedInput.LookDir = Vector2.zero;
+                storedInput.MovementDir = Vector2.zero;
+            }
+            else //Observer or server
+            {
+                transformSync.Reset();
+                transformSync.enabled = false;
+            }
+            
+            velocity = Vector3.zero;
+            rotationX = 0f;
+            rotationY = 0f;
+            wishJump = false;
+            
+            characterController.enabled = false;
         }
         
         private void OnFixedUpdate()
@@ -98,13 +130,6 @@ namespace Team_Capture.Player.Movement
             {
                 ProcessReceivedClientMotorState();
             }
-        }
-        
-        private void Setup()
-        {
-            characterController = GetComponent<CharacterController>();
-            if (!isServer && !hasAuthority)
-                characterController.enabled = false;
         }
 
         [Server]
@@ -128,7 +153,7 @@ namespace Team_Capture.Player.Movement
             }
             else
             {
-                transformSync.SetLocation();
+                transformSync.Reset();
             }
             
             transform.position = location;
