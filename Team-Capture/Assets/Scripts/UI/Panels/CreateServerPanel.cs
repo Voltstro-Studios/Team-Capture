@@ -56,6 +56,12 @@ namespace Team_Capture.UI.Panels
 		public TMP_Dropdown authModeDropdown;
 
 		/// <summary>
+		///		Shut the server when the player disconnects
+		/// </summary>
+		[Tooltip("Shut the server when the player disconnects")]
+		public Toggle shutOnDisconnectToggle;
+
+		/// <summary>
 		///     The color to use when there is an error
 		/// </summary>
 		[Tooltip("The color to use when there is an error")]
@@ -175,6 +181,7 @@ namespace Team_Capture.UI.Panels
 
 			//Now start the server
 			netManager.CreateServerProcess(gameNameText.text, onlineTCScenes[mapsDropdown.value].SceneFileName, maxPlayers, userProvider,
+				shutOnDisconnectToggle.isOn,
 				() => ConnectToCreatedServer().Forget(),
 				() =>
 				{
