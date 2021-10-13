@@ -4,9 +4,9 @@
 // This project is governed by the AGPLv3 License.
 // For more details see the LICENSE file.
 
-using System;
 using System.Collections.Generic;
 using Mirror;
+using Team_Capture.Collections;
 using Team_Capture.Core;
 using Team_Capture.Helper.Extensions;
 using Team_Capture.Player.Movement.States;
@@ -101,7 +101,7 @@ namespace Team_Capture.Player.Movement
                 receivedServerMotorState = null;
                 
                 storedInput.Jump = false;
-                storedInput.LookDir = Vector2.zero;
+                storedInput.LookMovements.Clear();
                 storedInput.MovementDir = Vector2.zero;
             }
             else //Observer or server
@@ -117,7 +117,7 @@ namespace Team_Capture.Player.Movement
             
             characterController.enabled = false;
         }
-        
+
         private void OnFixedUpdate()
         {
             if (hasAuthority)
@@ -172,8 +172,8 @@ namespace Team_Capture.Player.Movement
         internal void SetInput(float horizontal, float vertical, float lookX, float lookY, bool jump)
         {
             storedInput.MovementDir = new Vector2(horizontal, vertical);
-            storedInput.LookDir = new Vector2(lookY, lookX);
             storedInput.Jump = jump;
+            storedInput.LookMovements.Push(new Vector2(lookY, lookX));
         }
         
         [Client]
@@ -250,10 +250,31 @@ namespace Team_Capture.Player.Movement
         [Client]
         private void SendInputs()
         {
+            //Calculate average of look movements
+            Vector2 lookMoveAverage = Vector2.zero;
+            foreach (Vector2 lookMovement in storedInput.LookMovements)
+            {
+                Vector2 movement = lookMovement;
+                if(float.IsNaN(lookMovement.x) || float.IsNaN(lookMovement.y))
+                    movement = Vector2.zero;
+
+                lookMoveAverage += movement;
+            }
+
+            lookMoveAverage /= storedInput.LookMovements.Count;
+            
+            //Sometimes is can be NaN
+            if (float.IsNaN(lookMoveAverage.x))
+                lookMoveAverage.x = 0;
+            if (float.IsNaN(lookMoveAverage.y))
+                lookMoveAverage.y = 0;
+            
+            storedInput.LookMovements.Clear();
+            
             PlayerInputs state = new PlayerInputs
             {
                 FixedFrame = FixedUpdateManager.FixedFrame,
-                LookDir = storedInput.LookDir,
+                LookDir = lookMoveAverage,
                 MovementDir = storedInput.MovementDir,
                 WishJump = storedInput.Jump
             };
@@ -476,9 +497,10 @@ namespace Team_Capture.Player.Movement
         private class InputData
         {
             public bool Jump;
-
-            public Vector2 LookDir;
+            
             public Vector2 MovementDir;
+
+            public SamplingStack<Vector2> LookMovements = new SamplingStack<Vector2>(64);
         }
     }
 }
