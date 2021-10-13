@@ -214,7 +214,9 @@ namespace Team_Capture.Core.Networking
 			Logger.Info(
 				"Client from '{Address}' connected with the connection ID of {ConnectionID}.",
 				conn.address, conn.connectionId);
-			ServerChat.SendChatMessage("<b>Join</b>", netManager.tcAuthenticator.GetAccount(conn.connectionId).UserName);
+			IUser user = netManager.tcAuthenticator.GetAccount(conn.connectionId);
+			if (user != null)
+				ServerChat.SendChatMessage("<b>Join</b>", user.UserName);
 		}
 
 		/// <summary>
@@ -224,17 +226,33 @@ namespace Team_Capture.Core.Networking
 		internal static void OnServerRemoveClient(NetworkConnection conn)
 		{
 			NetworkServer.DestroyPlayerForConnection(conn);
-			ServerChat.SendChatMessage("<b>Disconnect</b>", netManager.tcAuthenticator.GetAccount(conn.connectionId).UserName);
+			if (netManager == null)
+			{
+				CloseServerIfNecessary(conn);
+				return;
+			}
 			
+			if (netManager.tcAuthenticator != null)
+			{
+				IUser user = netManager.tcAuthenticator.GetAccount(conn.connectionId);
+				if (user != null)
+					ServerChat.SendChatMessage("<b>Disconnect</b>", user.UserName);
+			}
+
 			netManager.tcAuthenticator.OnServerClientDisconnect(conn);
 			Logger.Info("Client '{ConnectionId}' disconnected from the server.", conn.connectionId);
 
+			CloseServerIfNecessary(conn);
+		}
+
+		private static void CloseServerIfNecessary(NetworkConnection conn)
+		{
 			//Our first connected client disconnected
-			//TODO: I have no clue way but this has just stopped fucking working
 			if (closeServerOnFirstClientDisconnect && conn.connectionId == firstConnectionId)
 			{
 				Logger.Info("Shutting down server due to first client disconnecting...");
-				netManager.StopHost();
+				if(netManager != null)
+					netManager.StopHost();
 
 				//Quit the game if we are headless
 				if(Game.IsHeadless)

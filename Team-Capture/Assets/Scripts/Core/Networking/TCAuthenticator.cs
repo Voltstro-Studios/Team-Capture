@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Cysharp.Threading.Tasks;
+using JetBrains.Annotations;
 using Mirror;
 using Team_Capture.Console;
 using Team_Capture.Integrations.Steamworks;
@@ -37,13 +38,13 @@ namespace Team_Capture.Core.Networking
 		/// </summary>
 		/// <param name="id"></param>
 		/// <returns></returns>
-		/// <exception cref="ArgumentException"></exception>
+		[CanBeNull]
 		public IUser GetAccount(int id)
 		{
+			if (!authAccounts.ContainsKey(id))
+				return null;
+			
 			IUser account = authAccounts[id];
-			if (account == null)
-				throw new ArgumentException();
-
 			return account;
 		}
 
