@@ -1,4 +1,6 @@
+using System;
 using Team_Capture.Console;
+using Team_Capture.Core;
 using UnityEngine;
 
 namespace Team_Capture.Player
@@ -32,7 +34,17 @@ namespace Team_Capture.Player
             velocity = newVelocity;
         }
 
-        private void Update()
+        private void OnEnable()
+        {
+            FixedUpdateManager.OnFixedUpdate += OnFixedUpdate;
+        }
+
+        private void OnDisable()
+        {
+            FixedUpdateManager.OnFixedUpdate -= OnFixedUpdate;
+        }
+
+        private void OnFixedUpdate()
         {
             transform.localRotation = Quaternion.Euler(0, 0, CalcRoll());
         }
@@ -46,7 +58,7 @@ namespace Team_Capture.Player
         private float CalcRoll()
         {
             //Get amount of lateral movement
-            float side = Vector3.Dot(velocity * Time.deltaTime * 100f, baseTransform.TransformDirection(Vector3.right));
+            float side = Vector3.Dot(velocity * Time.fixedDeltaTime * 45f, baseTransform.TransformDirection(Vector3.right));
 
             //Right or left side?
             float sign = side < 0 ? 1 : -1;
