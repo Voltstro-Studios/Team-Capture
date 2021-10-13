@@ -280,8 +280,10 @@ namespace Team_Capture.Core.Networking
 		/// <param name="playerPrefab"></param>
 		internal static void ServerCreatePlayerObject(NetworkConnection conn, GameObject playerPrefab)
 		{
+			Transform spawnPoint = netManager.GetStartPosition();
+
 			//Create the player object
-			GameObject player = Object.Instantiate(playerPrefab);
+			GameObject player = Object.Instantiate(playerPrefab, spawnPoint.position, spawnPoint.rotation);
 			player.AddComponent<SimulationObject>();
 
 			//Add the connection for the player

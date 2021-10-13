@@ -4,6 +4,7 @@
 // This project is governed by the AGPLv3 License.
 // For more details see the LICENSE file.
 
+using System;
 using System.Collections.Generic;
 using Mirror;
 using Team_Capture.Core;
@@ -40,6 +41,7 @@ namespace Team_Capture.Player.Movement
         [SerializeField] private LayerMask groundMask;
         
         private CharacterController characterController;
+        private PlayerTransformSync transformSync;
         
         private readonly List<PlayerInputs> clientMotorStates = new List<PlayerInputs>();
         private readonly Queue<PlayerInputs> receivedClientMotorStates = new Queue<PlayerInputs>();
@@ -67,6 +69,11 @@ namespace Team_Capture.Player.Movement
         public override void OnStartAuthority()
         {
             gfxObject.AddComponent<SmoothToZero>();
+        }
+
+        private void Start()
+        {
+            transformSync = GetComponent<PlayerTransformSync>();
         }
 
         private void OnEnable()
@@ -98,6 +105,34 @@ namespace Team_Capture.Player.Movement
             characterController = GetComponent<CharacterController>();
             if (!isServer && !hasAuthority)
                 characterController.enabled = false;
+        }
+
+        [Server]
+        internal void SetLocation(Vector3 location)
+        {
+            transform.position = location;
+            Physics.SyncTransforms();
+
+            RpcSetLocation(location);
+        }
+
+        [ClientRpc]
+        private void RpcSetLocation(Vector3 location)
+        {
+            if (isLocalPlayer)
+            {
+                clientMotorStates.Clear();
+                receivedClientMotorStates.Clear();
+                lastClientStateReceived = 0;
+                receivedServerMotorState = null;
+            }
+            else
+            {
+                transformSync.SetLocation();
+            }
+            
+            transform.position = location;
+            Physics.SyncTransforms();
         }
 
         /// <summary>

@@ -144,6 +144,11 @@ namespace Team_Capture.Player.Movement
             clientInterpolationTime = 0;
         }
 
+        internal void SetLocation()
+        {
+            Reset();
+        }
+
         private void OnDisable() => Reset();
         private void OnEnable() => Reset();
 

@@ -9,6 +9,8 @@ using System.Linq;
 using Mirror;
 using Team_Capture.Console;
 using Team_Capture.Player;
+using Team_Capture.Player.Movement;
+using UnityEngine;
 using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.Core
@@ -119,6 +121,25 @@ namespace Team_Capture.Core
 				player.TakeDamage(result, playerId);
 			else
 				Logger.Error("The imputed damage to do isn't a number!");
+		}
+
+		[ConCommand("sv_set_player_all_pos", "Set the position of all players", CommandRunPermission.ServerOnly, 3, 3)]
+		public static void SetAllPlayerPos(string[] args)
+		{
+			if (Instance == null)
+			{
+				Logger.Error("A game isn't currently running!");
+				return;
+			}
+
+			float xPos = float.Parse(args[0]);
+			float yPos = float.Parse(args[1]);
+			float zPos = float.Parse(args[2]);
+
+			foreach (KeyValuePair<string,PlayerManager> playerManager in Players)
+			{
+				playerManager.Value.GetComponent<PlayerMovementManager>().SetLocation(new Vector3(xPos, yPos, zPos));
+			}
 		}
 
 		[ConCommand("players", "Gets a list of all the players")]
