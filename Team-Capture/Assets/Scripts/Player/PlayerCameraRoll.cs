@@ -46,7 +46,7 @@ namespace Team_Capture.Player
         private float CalcRoll()
         {
             //Get amount of lateral movement
-            float side = Vector3.Dot(velocity, baseTransform.TransformDirection(Vector3.right));
+            float side = Vector3.Dot(velocity * Time.deltaTime * 100f, baseTransform.TransformDirection(Vector3.right));
 
             //Right or left side?
             float sign = side < 0 ? 1 : -1;

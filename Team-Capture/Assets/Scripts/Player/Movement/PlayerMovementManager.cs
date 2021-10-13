@@ -42,6 +42,7 @@ namespace Team_Capture.Player.Movement
         
         private CharacterController characterController;
         private PlayerTransformSync transformSync;
+        private PlayerCameraRoll cameraRoll;
         
         private readonly List<PlayerInputs> clientMotorStates = new List<PlayerInputs>();
         private readonly Queue<PlayerInputs> receivedClientMotorStates = new Queue<PlayerInputs>();
@@ -74,7 +75,12 @@ namespace Team_Capture.Player.Movement
             if(!isLocalPlayer)
                 transformSync = sync;
             else
+            {
                 Destroy(sync);
+                
+                cameraRoll = GetComponent<PlayerSetup>().GetPlayerCamera().gameObject.AddComponent<PlayerCameraRoll>();
+                cameraRoll.SetBaseTransform(transform);
+            }
 
             isReady = true;
         }
@@ -364,6 +370,9 @@ namespace Team_Capture.Player.Movement
             characterController.Move(velocity * Time.fixedDeltaTime);
             transform.rotation = Quaternion.Euler(0, rotationY, 0);
             cameraTransform.rotation = Quaternion.Euler(rotationX, rotationY, 0);
+            
+            if(isLocalPlayer && cameraRoll != null)
+                cameraRoll.SetVelocity(velocity);
         }
         
         private void GroundMove(PlayerInputs input)
