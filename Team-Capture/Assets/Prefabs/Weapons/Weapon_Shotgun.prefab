@@ -78,6 +78,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   muzzleFlash: {fileID: 1670780750557070932}
   bulletTracerPosition: {fileID: 172823648596170290}
+  meshRenderers:
+  - {fileID: 3511138817171180709}
 --- !u!1001 &1580635011075824398
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -279,6 +281,12 @@ PrefabInstance:
 --- !u!4 &4023661446730165123 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 387b8085243736a4c9e218ae17c345b9,
+    type: 3}
+  m_PrefabInstance: {fileID: 3484752265753152616}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &3511138817171180709 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 64811399035388109, guid: 387b8085243736a4c9e218ae17c345b9,
     type: 3}
   m_PrefabInstance: {fileID: 3484752265753152616}
   m_PrefabAsset: {fileID: 0}

@@ -40,14 +40,14 @@ namespace Team_Capture.UI.LoadingScreen
 				return;
 			}
 
-			SceneManager.OnBeginSceneLoading += OnBeginSceneLoading;
+			MirrorSceneManager.OnBeginSceneLoading += OnBeginSceneLoading;
 			isSetup = true;
 	    }
 
 	    protected override void SingletonDestroyed()
 	    {
 		    if (isSetup)
-			    SceneManager.OnBeginSceneLoading -= OnBeginSceneLoading;
+			    MirrorSceneManager.OnBeginSceneLoading -= OnBeginSceneLoading;
 	    }
 
 	    private void OnBeginSceneLoading(AsyncOperation operation, string sceneName)

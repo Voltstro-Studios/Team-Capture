@@ -36,6 +36,8 @@ namespace Team_Capture.Player
 		[Header("Player UI")] [Tooltip("The prefab for the client's UI")] [SerializeField]
 		private GameObject clientUiPrefab;
 
+		[SerializeField] private MeshRenderer[] gfxMeshes;
+
 		/// <summary>
 		///     This client's <see cref="PlayerManager" />
 		/// </summary>
@@ -51,7 +53,8 @@ namespace Team_Capture.Player
 			//Allows for custom messages
 			gameObject.AddComponent<PlayerServerMessages>();
 
-			base.OnStartLocalPlayer();
+			foreach (MeshRenderer gfxMesh in gfxMeshes)
+				gfxMesh.enabled = false;
 
 			//Set up scene stuff
 			GameSceneManager.SwitchCameras(localCamera, false);

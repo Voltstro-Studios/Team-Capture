@@ -50,16 +50,11 @@ namespace Team_Capture.Player
 		public int MaxHealth { get; } = 100;
 
 		#region Movement
-
+		
 		/// <summary>
 		///     The player's <see cref="PlayerMovementManager" />
 		/// </summary>
 		private PlayerMovementManager playerMovementManager;
-
-		/// <summary>
-		///     The player's <see cref="CharacterController" />
-		/// </summary>
-		private CharacterController characterController;
 
 		#endregion
 
@@ -167,7 +162,6 @@ namespace Team_Capture.Player
 		private void Awake()
 		{
 			playerMovementManager = GetComponent<PlayerMovementManager>();
-			characterController = GetComponent<CharacterController>();
 		}
 
 		private void Start()
@@ -276,7 +270,6 @@ namespace Team_Capture.Player
 
 			//Disable movement
 			playerMovementManager.enabled = false;
-			characterController.enabled = false;
 
 			//Update the stats, for both players
 			PlayerManager killer = GameManager.GetPlayer(sourcePlayerId);
@@ -297,7 +290,6 @@ namespace Team_Capture.Player
 			if (!skipRespawnTime)
 				yield return new WaitForSeconds(GameSceneManager.GetActiveScene().respawnTime);
 
-			characterController.enabled = true;
 			playerMovementManager.enabled = true;
 
 			Health = MaxHealth;
@@ -310,7 +302,8 @@ namespace Team_Capture.Player
 			//Set position to spawn
 			Transform spawnPoint = NetworkManager.singleton.GetStartPosition();
 			Quaternion rotation = spawnPoint.rotation;
-			playerMovementManager.SetCharacterPosition(spawnPoint.position, rotation.x, rotation.y, true);
+			playerMovementManager.SetLocation(spawnPoint.position);
+			//playerMovementManager.SetCharacterPosition(spawnPoint.position, rotation.x, rotation.y, true);
 
 			IsDead = false;
 			IsInvincible = true;
@@ -327,7 +320,7 @@ namespace Team_Capture.Player
 		{
 			try
 			{
-				playerMovementManager.DisableStateHandling();
+				//playerMovementManager.DisableStateHandling();
 
 				//Disable the collider, or the Char controller
 				if (isLocalPlayer)
@@ -341,7 +334,6 @@ namespace Team_Capture.Player
 
 				//Disable movement
 				playerMovementManager.enabled = false;
-				characterController.enabled = false;
 
 				foreach (GameObject toDisable in disableGameObjectsOnDeath) toDisable.SetActive(false);
 			}
@@ -363,7 +355,6 @@ namespace Team_Capture.Player
 				foreach (GameObject toEnable in disableGameObjectsOnDeath) toEnable.SetActive(true);
 
 				//Enable movement
-				characterController.enabled = true;
 				playerMovementManager.enabled = true;
 
 				//Enable the collider, or the Char controller
@@ -376,7 +367,7 @@ namespace Team_Capture.Player
 					uiManager.SetHud(true);
 				}
 
-				playerMovementManager.EnableStateHandling();
+				//playerMovementManager.EnableStateHandling();
 			}
 			catch (Exception ex)
 			{

@@ -112,11 +112,12 @@ namespace Team_Capture.Core.Networking
 		{
 			//We are running in headless mode
 			if (Game.IsHeadless && !Game.IsGameQuitting)
+			{
+				Application.targetFrameRate = serverTickRate;
+				
 				//Start the server
 				StartServer();
-
-			//TODO: Make auth movement not server framerate dependent
-			Application.targetFrameRate = serverTickRate;
+			}
 		}
 
 		public void Update()

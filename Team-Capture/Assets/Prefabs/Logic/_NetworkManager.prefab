@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 1601811758747872255}
   - component: {fileID: 1601811758747872254}
   - component: {fileID: 1601811758747872249}
-  - component: {fileID: 1601811758747872253}
   - component: {fileID: 1601811758747872243}
   m_Layer: 0
   m_Name: _NetworkManager
@@ -49,17 +48,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dontDestroyOnLoad: 1
-  PersistNetworkManagerToOfflineScene: 0
+  PersistNetworkManagerToOfflineScene: 1
   runInBackground: 1
-  autoStartServerBuild: 0
-  serverTickRate: 128
+  autoStartServerBuild: 1
+  serverTickRate: 120
   offlineScene: Assets/Scenes/MainMenu.unity
   onlineScene: Assets/Scenes/dm_ditch.unity
   transport: {fileID: 1601811758747872243}
   networkAddress: localhost
   maxConnections: 16
-  disconnectInactiveConnections: 0
-  disconnectInactiveTimeout: 60
   authenticator: {fileID: 1601811758747872249}
   playerPrefab: {fileID: 6438375962803020343, guid: 7d1cd903e5d3d244b893e16deea4c93c,
     type: 3}
@@ -128,21 +125,6 @@ MonoBehaviour:
       m_Calls: []
   authenticator: {fileID: 1601811758747872254}
   timeout: 20
---- !u!114 &1601811758747872253
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1601811758747872240}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6442dc8070ceb41f094e44de0bf87274, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  showGUI: 0
-  offsetX: 0
-  offsetY: 0
 --- !u!114 &1601811758747872243
 MonoBehaviour:
   m_ObjectHideFlags: 0

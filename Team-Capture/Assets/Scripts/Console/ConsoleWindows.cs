@@ -9,6 +9,7 @@ using System;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Win32.SafeHandles;
 using Team_Capture.Core;
@@ -48,14 +49,14 @@ namespace Team_Capture.Console
 
         private readonly string consoleTitle;
 
-        private readonly Action<string> executeCommand;
+        private readonly SynchronizationContext unityThread;
         private bool isRunning;
 
         internal ConsoleWindows(string consoleTitle)
         {
             this.consoleTitle = consoleTitle;
 
-            executeCommand = ConsoleBackend.ExecuteCommand;
+            unityThread = SynchronizationContext.Current;
         }
 
         public void Init()
@@ -125,7 +126,7 @@ namespace Team_Capture.Console
             while (isRunning)
             {
                 string input = System.Console.ReadLine();
-                executeCommand.Invoke(input);
+                unityThread.Post(state => ConsoleBackend.ExecuteCommand(input), null);
             }
 
             return Task.CompletedTask;

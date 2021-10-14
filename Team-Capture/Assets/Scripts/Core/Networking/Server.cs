@@ -214,7 +214,9 @@ namespace Team_Capture.Core.Networking
 			Logger.Info(
 				"Client from '{Address}' connected with the connection ID of {ConnectionID}.",
 				conn.address, conn.connectionId);
-			ServerChat.SendChatMessage("<b>Join</b>", netManager.tcAuthenticator.GetAccount(conn.connectionId).UserName);
+			IUser user = netManager.tcAuthenticator.GetAccount(conn.connectionId);
+			if (user != null)
+				ServerChat.SendChatMessage("<b>Join</b>", user.UserName);
 		}
 
 		/// <summary>
@@ -224,17 +226,33 @@ namespace Team_Capture.Core.Networking
 		internal static void OnServerRemoveClient(NetworkConnection conn)
 		{
 			NetworkServer.DestroyPlayerForConnection(conn);
-			ServerChat.SendChatMessage("<b>Disconnect</b>", netManager.tcAuthenticator.GetAccount(conn.connectionId).UserName);
+			if (netManager == null)
+			{
+				CloseServerIfNecessary(conn);
+				return;
+			}
 			
+			if (netManager.tcAuthenticator != null)
+			{
+				IUser user = netManager.tcAuthenticator.GetAccount(conn.connectionId);
+				if (user != null)
+					ServerChat.SendChatMessage("<b>Disconnect</b>", user.UserName);
+			}
+
 			netManager.tcAuthenticator.OnServerClientDisconnect(conn);
 			Logger.Info("Client '{ConnectionId}' disconnected from the server.", conn.connectionId);
 
+			CloseServerIfNecessary(conn);
+		}
+
+		private static void CloseServerIfNecessary(NetworkConnection conn)
+		{
 			//Our first connected client disconnected
-			//TODO: I have no clue way but this has just stopped fucking working
 			if (closeServerOnFirstClientDisconnect && conn.connectionId == firstConnectionId)
 			{
 				Logger.Info("Shutting down server due to first client disconnecting...");
-				netManager.StopHost();
+				if(netManager != null)
+					netManager.StopHost();
 
 				//Quit the game if we are headless
 				if(Game.IsHeadless)
@@ -280,8 +298,10 @@ namespace Team_Capture.Core.Networking
 		/// <param name="playerPrefab"></param>
 		internal static void ServerCreatePlayerObject(NetworkConnection conn, GameObject playerPrefab)
 		{
+			Transform spawnPoint = netManager.GetStartPosition();
+
 			//Create the player object
-			GameObject player = Object.Instantiate(playerPrefab);
+			GameObject player = Object.Instantiate(playerPrefab, spawnPoint.position, spawnPoint.rotation);
 			player.AddComponent<SimulationObject>();
 
 			//Add the connection for the player
@@ -301,10 +321,11 @@ namespace Team_Capture.Core.Networking
 		///  <param name="sceneName"></param>
 		///  <param name="maxPlayers"></param>
 		///  <param name="userProvider"></param>
+		///  <param name="shutOnDisconnect"></param>
 		///  <param name="onServerStarted"></param>
 		///  <param name="onServerFailedToStart"></param>
 		internal static void CreateServerProcess(this NetworkManager workingNetManager, 
-			string gameName, string sceneName, int maxPlayers, UserProvider userProvider, Action onServerStarted, Action onServerFailedToStart = null)
+			string gameName, string sceneName, int maxPlayers, UserProvider userProvider, bool shutOnDisconnect, Action onServerStarted, Action onServerFailedToStart = null)
 		{
 #if UNITY_EDITOR
 			string serverOnlinePath =
@@ -324,7 +345,7 @@ namespace Team_Capture.Core.Networking
 			//Create and start the process
 			Process newTcServer = new Process
 			{
-				StartInfo = GetTCProcessStartInfo(gameName, sceneName, maxPlayers, userProvider)
+				StartInfo = GetTCProcessStartInfo(gameName, sceneName, maxPlayers, userProvider, shutOnDisconnect)
 			};
 			newTcServer.Start();
 
@@ -404,7 +425,7 @@ namespace Team_Capture.Core.Networking
 			File.WriteAllText(motdPath, MotdDefaultText);
 		}
 
-		private static ProcessStartInfo GetTCProcessStartInfo(string gameName, string sceneName, int maxPlayers, UserProvider userProvider)
+		private static ProcessStartInfo GetTCProcessStartInfo(string gameName, string sceneName, int maxPlayers, UserProvider userProvider, bool shutOnDisconnect)
 		{
 			ProcessStartInfo startInfo = new ProcessStartInfo();
 
@@ -412,7 +433,8 @@ namespace Team_Capture.Core.Networking
 
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
 			startInfo.Arguments =
-				$"-batchmode -nographics -gamename \"{gameName}\" -scene {sceneName} -maxplayers {maxPlayers} -auth-method {userProvider.ToString()} -closeserveronfirstclientdisconnect -high";
+				$"-batchmode -nographics -gamename \"{gameName}\" -scene {sceneName} -maxplayers {maxPlayers} -auth-method {userProvider.ToString()}" +
+				$"{(shutOnDisconnect ? " -closeserveronfirstclientdisconnect" : string.Empty)} -high";
 #if UNITY_EDITOR_WIN
 			startInfo.FileName = $"{Voltstro.UnityBuilder.Build.GameBuilder.GetBuildDirectory()}Team-Capture-Quick/Team-Capture.exe";
 #elif UNITY_STANDALONE_WIN
@@ -433,7 +455,8 @@ namespace Team_Capture.Core.Networking
 			startInfo.FileName = "./Team-Capture";
 #endif
 			
-			startInfo.Arguments = $"-batchmode -nographics -gamename \"{gameName}\" -scene {sceneName} -maxplayers {maxPlayers} -auth-method {userProvider.ToString()} -closeserveronfirstclientdisconnect -high";
+			startInfo.Arguments = $"-batchmode -nographics -gamename \"{gameName}\" -scene {sceneName} -maxplayers {maxPlayers} -auth-method {userProvider.ToString()}" + 
+$"{(shutOnDisconnect ? " -closeserveronfirstclientdisconnect" : string.Empty)} -high";
 #endif
 
 			#endregion

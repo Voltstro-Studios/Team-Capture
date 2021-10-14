@@ -22,7 +22,7 @@ namespace Team_Capture.Player
 	/// </summary>
 	internal sealed class PlayerInputManager : NetworkBehaviour
 	{
-		private PlayerMovementInput playerInput;
+		private PlayerMovementManager playerInput;
 		private PlayerManager playerManager;
 		private PlayerWeaponShoot weaponShoot;
 		private PlayerUIManager uiManager;
@@ -42,7 +42,7 @@ namespace Team_Capture.Player
 			weaponManager = GetComponent<WeaponManager>();
 			playerManager = GetComponent<PlayerManager>();
 			weaponShoot = GetComponent<PlayerWeaponShoot>();
-			playerInput = GetComponent<PlayerMovementInput>();
+			playerInput = GetComponent<PlayerMovementManager>();
 			uiManager = GetComponent<PlayerUIManager>();
 
 			GameSettings.SettingsUpdated += UpdateSettings;
@@ -117,18 +117,26 @@ namespace Team_Capture.Player
 				Vector2 look = InputReader.ReadPlayerLook();
 				if (reverseMouse)
 				{
-					rotationX = look.y * yMouseSensitivity * Time.deltaTime;
-					rotationY = look.x * xMouseSensitivity * Time.deltaTime;
+					rotationX = look.y * yMouseSensitivity * Time.fixedDeltaTime;
+					rotationY = look.x * xMouseSensitivity * Time.fixedDeltaTime;
 				}
 				else
 				{
-					rotationX = look.x * xMouseSensitivity * Time.deltaTime;
-					rotationY = look.y * yMouseSensitivity * Time.deltaTime;
+					rotationX = look.x * xMouseSensitivity * Time.fixedDeltaTime;
+					rotationY = look.y * yMouseSensitivity * Time.fixedDeltaTime;
 				}
 
 				//Send inputs
 				playerInput.SetInput(horizontal, vertical, rotationX, rotationY, wishToJump);
 				weaponManager.WeaponSway.SetInput(rotationX, rotationY);
+			}
+			else
+			{
+				wishToJump = false;
+				rotationX = 0f;
+				rotationY = 0f;
+				vertical = 0f;
+				horizontal = 0f;
 			}
 		}
 

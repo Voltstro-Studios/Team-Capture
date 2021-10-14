@@ -10,6 +10,7 @@ using Mirror;
 using Team_Capture.Console;
 using Team_Capture.SceneManagement;
 using Team_Capture.Settings;
+using Team_Capture.UI.Chat;
 using Team_Capture.UI.MOTD;
 using UnityEngine.Scripting;
 using Logger = Team_Capture.Logging.Logger;
@@ -65,6 +66,7 @@ namespace Team_Capture.Core.Networking
 
 			//We register for ServerConfigurationMessage, so we get server info
 			NetworkClient.RegisterHandler<ServerConfig>(OnReceivedServerConfig);
+			NetworkClient.RegisterHandler<ChatMessage>(message => {});
 
 			PingManager.ClientSetup();
 			Logger.Info("Started client.");

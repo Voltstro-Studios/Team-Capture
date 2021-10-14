@@ -15,11 +15,6 @@ namespace Team_Capture.UI
             SetTexture();
         }
 
-        private void OnEnable()
-        {
-            SetTexture();
-        }
-
         private void SetTexture()
         {
             IUser user = User.GetActiveUser();

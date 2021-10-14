@@ -81,8 +81,8 @@ namespace Team_Capture.Weapons
 					Instantiate(WeaponsResourceManager.GetWeapon(weapons[i].Weapon).baseWeaponPrefab,
 						weaponsHolderSpot);
 
-				if(isLocalPlayer)
-					LayersHelper.SetLayerRecursively(newWeapon, LayerMask.NameToLayer(weaponLayerName));
+				if (isLocalPlayer)
+					SetupWeaponObjectLocal(newWeapon);
 
 				newWeapon.SetActive(SelectedWeaponIndex == i);
 			}
@@ -287,12 +287,27 @@ namespace Team_Capture.Weapons
 		[ClientRpc(channel = Channels.Unreliable)]
 		private void RpcInstantiateWeaponOnClients(string weaponName)
 		{
-			if (weaponName == null) return;
+			if (weaponName == null) 
+				return;
 
 			GameObject newWeapon = Instantiate(WeaponsResourceManager.GetWeapon(weaponName).baseWeaponPrefab,
 				weaponsHolderSpot);
+			
 			if (isLocalPlayer)
-				LayersHelper.SetLayerRecursively(newWeapon, LayerMask.NameToLayer(weaponLayerName));
+				SetupWeaponObjectLocal(newWeapon);
+		}
+
+		private void SetupWeaponObjectLocal(GameObject weaponObject)
+		{
+			LayersHelper.SetLayerRecursively(weaponObject, LayerMask.NameToLayer(weaponLayerName));
+			WeaponGraphics weaponGraphics = weaponObject.GetComponent<WeaponGraphics>();
+			if (weaponGraphics == null)
+			{
+				Logger.Error("Newly created weapon doesn't have a weapon graphics!");
+				return;
+			}
+				
+			weaponGraphics.DisableMeshRenderersShadows();
 		}
 
 		#endregion

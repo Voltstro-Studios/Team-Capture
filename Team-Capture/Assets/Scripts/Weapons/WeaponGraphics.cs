@@ -9,6 +9,7 @@ using Team_Capture.Console;
 using Team_Capture.Settings;
 using Team_Capture.Settings.SettingClasses;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace Team_Capture.Weapons
 {
@@ -21,7 +22,9 @@ namespace Team_Capture.Weapons
 		public ParticleSystem muzzleFlash;
 		public Transform bulletTracerPosition;
 
-		public void OnEnable()
+		[SerializeField] private MeshRenderer[] meshRenderers;
+
+		private void OnEnable()
 		{
 			LightingChange += ChangeLighting;
 			GameSettings.SettingsUpdated += ApplySettings;
@@ -29,7 +32,7 @@ namespace Team_Capture.Weapons
 			ChangeLighting();
 		}
 
-		public void OnDisable()
+		private void OnDisable()
 		{
 			LightingChange -= ChangeLighting;
 			GameSettings.SettingsUpdated -= ApplySettings;
@@ -53,6 +56,12 @@ namespace Team_Capture.Weapons
 			MultiplayerSettingsClass multiplayerSettings = GameSettings.MultiplayerSettings;
 			MuzzleFlashLighting = multiplayerSettings.WeaponMuzzleFlashLighting;
 			ChangeLighting();
+		}
+
+		internal void DisableMeshRenderersShadows()
+		{
+			foreach (MeshRenderer meshRenderer in meshRenderers)
+				meshRenderer.shadowCastingMode = ShadowCastingMode.Off;
 		}
 	}
 }
