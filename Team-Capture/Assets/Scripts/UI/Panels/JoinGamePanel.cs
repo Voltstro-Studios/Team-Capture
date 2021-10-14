@@ -7,13 +7,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using Cysharp.Threading.Tasks;
 using Mirror;
 using Team_Capture.Core.Networking;
 using Team_Capture.Core.Networking.Discovery;
 using Team_Capture.UI.Elements;
+using Team_Capture.UI.Menus;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using Logger = Team_Capture.Logging.Logger;
+using UniTask = Team_Capture.Integrations.UniTask.UniTask;
 
 namespace Team_Capture.UI.Panels
 {
@@ -37,19 +41,31 @@ namespace Team_Capture.UI.Panels
 		///     Text for the current status
 		/// </summary>
 		public TextMeshProUGUI statusText;
+		
+		public JoiningServerPanel joiningServerPanel;
 
+		public Button refreshButton;
+		
 		private readonly List<TCServerResponse> servers = new List<TCServerResponse>();
 
+		private TCNetworkManager netManager;
 		private TCGameDiscovery gameDiscovery;
+		private MenuController menuController;
+
+		private bool isConnecting;
 
 		private void Awake()
 		{
-			gameDiscovery = TCNetworkManager.Instance.gameDiscovery;
+			netManager = TCNetworkManager.Instance;
+			gameDiscovery = netManager.gameDiscovery;
+			menuController = GetComponentInParent<MenuController>();
 		}
 
 		public override void OnEnable()
 		{
 			base.OnEnable();
+			
+			joiningServerPanel.gameObject.SetActive(false);
 
 			if (gameDiscovery == null) return;
 
@@ -73,13 +89,16 @@ namespace Team_Capture.UI.Panels
 		/// </summary>
 		public void RefreshServerList()
 		{
+			statusText.text = "Searching for games...";
+			statusText.gameObject.SetActive(true);
+		}
+
+		private void ClearList()
+		{
 			//Remove all servers
 			servers.Clear();
 			for (int i = 0; i < serverListTransform.childCount; i++)
 				Destroy(serverListTransform.GetChild(i).gameObject);
-
-			statusText.text = "Searching for games...";
-			statusText.gameObject.SetActive(true);
 		}
 
 		/// <summary>
@@ -89,7 +108,8 @@ namespace Team_Capture.UI.Panels
 		public void AddServer(TCServerResponse server)
 		{
 			//We are connecting to a server...
-			if (NetworkManager.singleton.mode == NetworkManagerMode.ClientOnly) return;
+			if (NetworkClient.isConnecting)
+				return;
 
 			//If the server already exists in the list then ignore it
 			if (servers.Any(x => Equals(x.EndPoint, server.EndPoint)))
@@ -110,6 +130,12 @@ namespace Team_Capture.UI.Panels
 		/// <param name="ip"></param>
 		public void ConnectToServer(IPEndPoint ip)
 		{
+			joiningServerPanel.gameObject.SetActive(true);
+
+			cancelButton.interactable = false;
+			refreshButton.interactable = false;
+			menuController.allowPanelToggling = false;
+			
 			//Tell Mirror to connect to the server's IP
 			NetworkManager.singleton.networkAddress = ip.Address.ToString();
 			NetworkManager.singleton.StartClient();
@@ -117,8 +143,27 @@ namespace Team_Capture.UI.Panels
 			//Set our status text
 			statusText.gameObject.SetActive(true);
 			statusText.text = $"Connecting to '{ip.Address}'...";
+			
+			ClearList();
+			
+			CheckConnection().Forget();
+		}
 
-			RefreshServerList();
+		private async UniTaskVoid CheckConnection()
+		{
+			while (NetworkClient.isConnecting)
+			{
+				await UniTask.Delay(25);
+			}
+			
+			if(!NetworkClient.isConnected)
+			{
+				joiningServerPanel.FailToJoin();
+				RefreshServerList();
+				cancelButton.interactable = true;
+				refreshButton.interactable = true;
+				menuController.allowPanelToggling = true;
+			}
 		}
 
 		private void AddServerItem(TCServerResponse server)

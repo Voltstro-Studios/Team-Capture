@@ -30,6 +30,8 @@
     "Menu_StartingServer": "Starting server...",
     "Menu_StartingServerFail": "The server process failed to start for some reason!\nSee the logs for more information.",
     "Menu_ConnectFail": "The client failed to connect to the started server for some reason!\nSee the logs for more information.",
+    "Menu_JoiningServer": "Joining Server...",
+    "Menu_JoiningFail": "Failed to join server!",
     "Menu_Start": "Start",
     "Menu_Next": "Next",
     "Settings_Mouse": "Mouse Settings",
