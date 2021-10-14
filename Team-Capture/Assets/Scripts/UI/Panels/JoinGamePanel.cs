@@ -136,6 +136,9 @@ namespace Team_Capture.UI.Panels
 			refreshButton.interactable = false;
 			menuController.allowPanelToggling = false;
 			
+			ClearList();
+			CheckConnection().Forget();
+			
 			//Tell Mirror to connect to the server's IP
 			NetworkManager.singleton.networkAddress = ip.Address.ToString();
 			NetworkManager.singleton.StartClient();
@@ -143,10 +146,6 @@ namespace Team_Capture.UI.Panels
 			//Set our status text
 			statusText.gameObject.SetActive(true);
 			statusText.text = $"Connecting to '{ip.Address}'...";
-			
-			ClearList();
-			
-			CheckConnection().Forget();
 		}
 
 		private async UniTaskVoid CheckConnection()
