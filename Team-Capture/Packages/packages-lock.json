@@ -103,7 +103,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.nuget.newtonsoft-json": {
-      "version": "2.0.0",
+      "version": "2.0.2",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
@@ -313,12 +313,11 @@
       "url": "https://unitynuget-registry.azurewebsites.net"
     },
     "org.nuget.k4os.compression.lz4": {
-      "version": "1.2.12",
+      "version": "1.2.13",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "org.nuget.system.memory": "4.5.4",
-        "org.nuget.system.runtime.compilerservices.unsafe": "5.0.0"
+        "org.nuget.system.memory": "4.5.4"
       },
       "url": "https://unitynuget-registry.azurewebsites.net"
     },
