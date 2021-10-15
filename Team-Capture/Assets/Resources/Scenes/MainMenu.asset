@@ -14,12 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scene: Assets/Scenes/MainMenu.unity
   displayName: Map_DisplayName
+  loadingScreenBackgroundImage: {fileID: 0}
   enabled: 1
   isOnlineScene: 0
   canLoadTo: 1
-  pickupsParent: 
   respawnTime: 0
   stockWeapons: []
+  traceEffectPrefab: {fileID: 0}
+  bulletHoleEffectPrefab: {fileID: 0}
   showStartTime: 0
   isMainMenu: 1
   largeImageKey: tc_icon
