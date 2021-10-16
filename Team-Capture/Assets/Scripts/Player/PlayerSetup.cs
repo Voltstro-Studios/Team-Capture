@@ -4,6 +4,7 @@
 // This project is governed by the AGPLv3 License.
 // For more details see the LICENSE file.
 
+using Cinemachine;
 using Mirror;
 using Team_Capture.Core;
 using Team_Capture.Input;
@@ -27,8 +28,8 @@ namespace Team_Capture.Player
 		/// <summary>
 		///     Player's local <see cref="Camera" />
 		/// </summary>
-		[Tooltip("Player's local Camera")] [SerializeField]
-		private Camera localCamera;
+		[Tooltip("Player's VCamera")] [SerializeField]
+		private CinemachineVirtualCamera playerVCam;
 
 		/// <summary>
 		///     The prefab for the client's UI
@@ -57,9 +58,7 @@ namespace Team_Capture.Player
 				gfxMesh.enabled = false;
 
 			//Set up scene stuff
-			GameSceneManager.SwitchCameras(localCamera, false);
-			localCamera.enabled = true;
-			localCamera.gameObject.AddComponent<AudioListener>();
+			playerVCam.enabled = true;
 
 			//Player Input
 			gameObject.AddComponent<PlayerInputManager>().Setup(inputReader);
@@ -67,15 +66,6 @@ namespace Team_Capture.Player
 			//Lock the cursor
 			Cursor.visible = false;
 			Cursor.lockState = CursorLockMode.Locked;
-		}
-
-		/// <summary>
-		///     Gets this player's local <see cref="Camera" />
-		/// </summary>
-		/// <returns></returns>
-		public Camera GetPlayerCamera()
-		{
-			return localCamera;
 		}
 
 		/// <summary>
@@ -106,12 +96,8 @@ namespace Team_Capture.Player
 			//Unlock the cursor
 			Cursor.visible = true;
 			Cursor.lockState = CursorLockMode.None;
-
-			//Go back to the scene camera
-			if (GameManager.Instance == null)
-				return;
-
-			GameSceneManager.SwitchCameras(localCamera, true);
+			
+			playerVCam.enabled = false;
 		}
 
 		#endregion

@@ -34,45 +34,7 @@ namespace Team_Capture.SceneManagement
         }
 
         #endregion
-
-        #region Scene Camera
-
-        private const string SceneCameraTag = "SceneCamera";
         
-        private Camera sceneCamera;
-
-        /// <summary>
-        ///     Switches to or from scene camera to <see cref="camera"/>
-        /// </summary>
-        /// <param name="camera"></param>
-        /// <param name="sceneCamera"></param>
-        public static void SwitchCameras(Camera camera, bool sceneCamera)
-        {
-            GameSceneManager sceneManager = Instance;
-            if(sceneManager == null)
-                return;
-            
-            if (sceneCamera)
-            {
-                camera.gameObject.SetActive(false);
-                sceneManager.sceneCamera.gameObject.SetActive(true);
-                if (!Game.IsHeadless)
-                {
-                    ImGuiInstanceManager.Instance.SetInstanceCamera(Instance.sceneCamera);
-                }
-                return;
-            }
-            
-            camera.gameObject.SetActive(true);
-            sceneManager.sceneCamera.gameObject.SetActive(false);
-            if (!Game.IsHeadless)
-            {
-                ImGuiInstanceManager.Instance.SetInstanceCamera(camera);
-            }
-        }
-
-        #endregion
-
         #region Pools
 
         internal GameObjectPool tracersEffectsPool;
@@ -91,16 +53,6 @@ namespace Team_Capture.SceneManagement
                 return;
             }
 
-            GameObject foundSceneCamera = GameObject.FindWithTag(SceneCameraTag);
-            if (foundSceneCamera == null)
-                Logger.Error(
-                    "The scene {Scene} doesn't have a Camera with the tag `{SceneCameraTag}` assigned to it!",
-                    activeScene.scene, SceneCameraTag);
-
-            sceneCamera = foundSceneCamera.GetComponent<Camera>();
-            if(sceneCamera == null)
-                Logger.Error("The scene {Scene} doesn't have a Camera attached to the object!", activeScene.scene);
-            
             tracersEffectsPool = new GameObjectPool(activeScene.traceEffectPrefab);
             bulletHolePool = new GameObjectPool(activeScene.bulletHoleEffectPrefab);
         }

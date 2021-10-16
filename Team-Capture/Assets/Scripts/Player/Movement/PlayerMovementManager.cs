@@ -19,7 +19,8 @@ namespace Team_Capture.Player.Movement
         private const int MAXIMUM_RECEIVED_CLIENT_MOTOR_STATES = 10;
         private const int PAST_STATES_TO_SEND = 3;
         
-        [SerializeField] private Transform cameraTransform;
+        [SerializeField] private Transform cameraHolderTransform;
+        [SerializeField] private GameObject cameraGameObject;
         [SerializeField] private GameObject gfxObject;
         
         [Header("Movement Settings")] 
@@ -78,7 +79,7 @@ namespace Team_Capture.Player.Movement
             {
                 Destroy(sync);
                 
-                cameraRoll = GetComponent<PlayerSetup>().GetPlayerCamera().gameObject.AddComponent<PlayerCameraRoll>();
+                cameraRoll = cameraGameObject.AddComponent<PlayerCameraRoll>();
                 cameraRoll.SetBaseTransform(transform);
             }
 
@@ -200,7 +201,7 @@ namespace Team_Capture.Player.Movement
             //Snap motor to server values.
             transform.position = serverState.Position;
             transform.rotation = Quaternion.Euler(0, serverState.Rotation.y, 0);
-            cameraTransform.rotation = Quaternion.Euler(serverState.Rotation.x, serverState.Rotation.y, 0);
+            cameraHolderTransform.rotation = Quaternion.Euler(serverState.Rotation.x, serverState.Rotation.y, 0);
             velocity = serverState.Velocity;
             rotationX = serverState.Rotation.x;
             rotationY = serverState.Rotation.y;
@@ -369,7 +370,7 @@ namespace Team_Capture.Player.Movement
             //Move character
             characterController.Move(velocity * Time.fixedDeltaTime);
             transform.rotation = Quaternion.Euler(0, rotationY, 0);
-            cameraTransform.rotation = Quaternion.Euler(rotationX, rotationY, 0);
+            cameraHolderTransform.rotation = Quaternion.Euler(rotationX, rotationY, 0);
             
             if(isLocalPlayer && cameraRoll != null)
                 cameraRoll.SetVelocity(velocity);

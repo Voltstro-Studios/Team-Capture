@@ -41,23 +41,12 @@ namespace Team_Capture.Player
 		private GameObjectPool tracerPool;
 		private GameObjectPool bulletHolesPool;
 
-		#region Mirror Events
-
-		public override void OnStartServer()
-		{
-			base.OnStartServer();
-
-			localPlayerCamera = gameObject.GetComponent<PlayerSetup>().GetPlayerCamera();
-		}
-
-		#endregion
-
 		#region Server Variables
 
 		/// <summary>
 		///     (Server only) The local player's camera
 		/// </summary>
-		private Camera localPlayerCamera;
+		[SerializeField] private Transform localPlayerCamera;
 
 		/// <summary>
 		///     (Server only) The last weapon this client used
@@ -186,7 +175,7 @@ namespace Team_Capture.Player
 			Stopwatch stopwatch = Stopwatch.StartNew();
 
 			//Get the direction the player was facing
-			Transform playerFacingDirection = localPlayerCamera.transform;
+			Transform playerFacingDirection = localPlayerCamera;
 
 			//Create a list here, so we know later where the bullets landed
 			List<Vector3> targets = new List<Vector3>();

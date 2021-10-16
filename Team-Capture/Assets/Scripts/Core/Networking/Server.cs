@@ -471,8 +471,16 @@ $"{(shutOnDisconnect ? " -closeserveronfirstclientdisconnect" : string.Empty)} -
 		{
 			NetworkManager networkManager = NetworkManager.singleton;
 			string scene = args[0];
-			networkManager.onlineScene = scene;
+			TCScene tcScene = TCScenesManager.FindSceneInfo(scene);
+			if (tcScene == null)
+			{
+				Logger.Error("That scene doesn't exist!");
+				return;
+			}
 
+			Scene = tcScene.scene;
+			networkManager.onlineScene = tcScene.scene;
+			
 			networkManager.StartServer();
 		}
 
