@@ -260,7 +260,7 @@ namespace Team_Capture.Player
 			weaponManager.RemoveAllWeapons();
 
 			//Call the client side code on each player
-			RpcClientPlayerDie();
+			RpcClientPlayerDie(sourcePlayerId);
 
 			//Disable movement
 			playerMovementManager.enabled = false;
@@ -310,7 +310,7 @@ namespace Team_Capture.Player
 		///     Disables components on each of the clients
 		/// </summary>
 		[ClientRpc]
-		private void RpcClientPlayerDie()
+		private void RpcClientPlayerDie(string killerPlayer)
 		{
 			try
 			{
@@ -319,7 +319,7 @@ namespace Team_Capture.Player
 				{
 					//Disable the HUD
 					uiManager.SetHud(false);
-					uiManager.SetDeathScreen(true);
+					uiManager.SetDeathScreen(GameManager.GetPlayer(killerPlayer), true);
 				}
 
 				//Disable movement
@@ -352,7 +352,7 @@ namespace Team_Capture.Player
 				{
 					//Enable our HUD
 					uiManager.SetHud(true);
-					uiManager.SetDeathScreen(false);
+					uiManager.SetDeathScreen(null, false);
 				}
 			}
 			catch (Exception ex)

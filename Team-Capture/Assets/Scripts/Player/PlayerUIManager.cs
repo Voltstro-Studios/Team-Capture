@@ -74,9 +74,9 @@ namespace Team_Capture.Player
 			ui.killFeed.AddKillfeedItem(message);
 		}
 
-		internal void SetDeathScreen(bool state)
+		internal void SetDeathScreen(PlayerManager killer, bool state)
 		{
-			ui.ActivateDeathScreen(state);
+			ui.ActivateDeathScreen(killer, state);
 		}
 
 		#region Chat

@@ -86,6 +86,7 @@ namespace Team_Capture.UI
 			scoreBoardObject.GetComponent<ScoreBoard.ScoreBoard>().clientPlayer = playerManager;
 
 			pauseMenu.Setup(TogglePauseMenu);
+			deathScreen.Setup(playerManager);
 
 			Logger.Debug("The ClientUI is now ready.");
 		}
@@ -155,10 +156,10 @@ namespace Team_Capture.UI
 			hud.gameObject.SetActive(state);
 		}
 
-		public void ActivateDeathScreen(bool state)
+		public void ActivateDeathScreen(PlayerManager killer, bool state)
 		{
 			deathScreen.gameObject.SetActive(state);
-			deathScreen.StartCountDown((int)GameSceneManager.Instance.ActiveScene.respawnTime);
+			deathScreen.StartCountDown(killer, (int)GameSceneManager.Instance.ActiveScene.respawnTime);
 		}
 	}
 }

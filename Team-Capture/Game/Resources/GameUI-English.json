@@ -65,5 +65,6 @@
     "ScoreBoard_Deaths": "Deaths",
     "ScoreBoard_Ping": "Ping",
     "Loading_OnUrWayTo": "You are on your way to:",
-    "Death_ReSpawningIn": "Re-Spawning In:"
+    "Death_ReSpawningIn": "Re-Spawning In:",
+    "Death_KilledBy": "Killed By:"
 }
