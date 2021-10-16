@@ -24,9 +24,13 @@ namespace Team_Capture.Integrations.UniTask
 		    }
 	    }
 
-	    public static Cysharp.Threading.Tasks.UniTask Delay(int milliseconds, CancellationToken cancellationToken = default)
+	    public static Cysharp.Threading.Tasks.UniTask Delay(int milliseconds, CancellationToken cancellationToken = default, DelayType delayType = DelayType.DeltaTime)
 	    {
-		    return Cysharp.Threading.Tasks.UniTask.Delay(milliseconds, cancellationToken: cancellationToken);
+#if UNITY_EDITOR
+		    delayType = DelayType.Realtime;
+#endif
+		    
+		    return Cysharp.Threading.Tasks.UniTask.Delay(milliseconds, delayType, cancellationToken: cancellationToken);
 	    }
 
 	    public static Cysharp.Threading.Tasks.UniTask WaitUntil(Func<bool> predicate)

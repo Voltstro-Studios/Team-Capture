@@ -7,6 +7,7 @@
 using System;
 using Team_Capture.Console;
 using Team_Capture.Player;
+using Team_Capture.SceneManagement;
 using Team_Capture.UI.Menus;
 using Team_Capture.Weapons;
 using UnityEngine;
@@ -38,6 +39,12 @@ namespace Team_Capture.UI
 		///     The pause menu
 		/// </summary>
 		[Tooltip("The pause menu")] public PauseMenu pauseMenu;
+
+		/// <summary>
+		///		The death screen
+		/// </summary>
+		[Tooltip("The death screen")]
+		public DeathScreen deathScreen;
 
 		/// <summary>
 		///		The chat
@@ -146,6 +153,12 @@ namespace Team_Capture.UI
 				return;
 
 			hud.gameObject.SetActive(state);
+		}
+
+		public void ActivateDeathScreen(bool state)
+		{
+			deathScreen.gameObject.SetActive(state);
+			deathScreen.StartCountDown((int)GameSceneManager.Instance.ActiveScene.respawnTime);
 		}
 	}
 }

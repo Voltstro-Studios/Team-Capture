@@ -314,13 +314,12 @@ namespace Team_Capture.Player
 		{
 			try
 			{
-				//playerMovementManager.DisableStateHandling();
-
 				//Disable the collider, or the Char controller
 				if (isLocalPlayer)
 				{
 					//Disable the HUD
 					uiManager.SetHud(false);
+					uiManager.SetDeathScreen(true);
 				}
 
 				//Disable movement
@@ -353,9 +352,8 @@ namespace Team_Capture.Player
 				{
 					//Enable our HUD
 					uiManager.SetHud(true);
+					uiManager.SetDeathScreen(false);
 				}
-
-				//playerMovementManager.EnableStateHandling();
 			}
 			catch (Exception ex)
 			{
