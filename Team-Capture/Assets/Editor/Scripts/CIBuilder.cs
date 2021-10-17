@@ -8,8 +8,8 @@ using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-using Voltstro.UnityBuilder.Build;
-using Voltstro.UnityBuilder.Settings;
+using UnityVoltBuilder.Build;
+using UnityVoltBuilder.Settings;
 
 namespace Team_Capture.Editor
 {
@@ -47,10 +47,8 @@ namespace Team_Capture.Editor
 
 			System.Console.WriteLine($"Building TC for {target} platform to {buildDir}");
 			
-			if(target == BuildTarget.StandaloneWindows64)
-				GameBuilder.BuildGame(buildDir, target, true);
-			else
-				GameBuilder.BuildGame(buildDir, target, false);
+			AddressablesBuilder.BuildAddressables();
+			GameBuilder.BuildGame(GameBuilder.ToGameBuildOptions(buildDir, false));
 
 	        SettingsManager.Instance.Set(ZipBuildKey, currentZipBuild);
         }

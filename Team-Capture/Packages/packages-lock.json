@@ -299,6 +299,15 @@
       },
       "hash": "42a3a11d9b3cb30021bf1c22518880df9e0b12ab"
     },
+    "dev.voltstro.unityvoltbuilder": {
+      "version": "https://github.com/Voltstro-Studios/UnityVoltBuilder.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.settings-manager": "1.0.3"
+      },
+      "hash": "2f0f2d1c2f2cc478e38175497fa95302a869a878"
+    },
     "dev.voltstro.unitywebbrowser": {
       "version": "https://gitlab.com/Voltstro-Studios/WebBrowser/Package.git#2.x",
       "depth": 0,
@@ -323,15 +332,6 @@
         "dev.voltstro.unitywebbrowser.engine.cef": "93.1.11"
       },
       "hash": "1de39d5050167ff9ff7c7452a08c1cdd8c13f255"
-    },
-    "dev.voltstro.voltbuildertool": {
-      "version": "https://github.com/VoltUnityPackages/VoltUnityBuilder.git",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {
-        "com.unity.settings-manager": "1.0.3"
-      },
-      "hash": "e4cec0fb9bf869e3f3241d915be9b330e3946d30"
     },
     "nl.elraccoone.tweens": {
       "version": "1.11.0",
