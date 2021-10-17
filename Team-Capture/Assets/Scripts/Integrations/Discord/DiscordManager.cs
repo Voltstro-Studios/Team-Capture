@@ -11,8 +11,9 @@ using Discord.GameSDK.Activities;
 using Discord.GameSDK.Users;
 using Team_Capture.Core;
 using Team_Capture.Helper;
-using Team_Capture.Logging;
 using Team_Capture.SceneManagement;
+using UnityEngine;
+using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.Integrations.Discord
 {
@@ -138,6 +139,8 @@ namespace Team_Capture.Integrations.Discord
 
 		private void PreparingSceneLoad(TCScene scene)
 		{
+			Debug.Log(scene.scene);
+			
 			//Update our RPC to show we are loading
 			if (client != null)
 				UpdateActivity(new Activity
@@ -145,7 +148,7 @@ namespace Team_Capture.Integrations.Discord
 					Assets = new ActivityAssets
 					{
 						LargeImage = scene.largeImageKey,
-						LargeText = scene.LargeImageKeyTextLocalized
+						LargeText = scene.LargeImageKeyText
 					},
 					Details = $"Loading into {scene.DisplayNameLocalized}",
 					State = "Loading..."
@@ -161,7 +164,7 @@ namespace Team_Capture.Integrations.Discord
 					Assets = new ActivityAssets
 					{
 						LargeImage = scene.largeImageKey,
-						LargeText = scene.LargeImageKeyTextLocalized
+						LargeText = scene.LargeImageKeyText
 					}
 				};
 

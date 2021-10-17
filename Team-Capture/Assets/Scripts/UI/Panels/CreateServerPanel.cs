@@ -73,12 +73,12 @@ namespace Team_Capture.UI.Panels
 		[Tooltip("The panel that is displayed when starting a server")]
 		public CreatingServerPanel onStartingServerPanel;
 
-		private Image gameNameImage;
+		public Image gameNameImage;
 
 		private Color gameNameImageColor;
 
 		private int maxPlayers = 16;
-		private Image maxPlayersImage;
+		public Image maxPlayersImage;
 		private Color maxPlayersImageColor;
 
 		private MenuController menuController;
@@ -105,7 +105,6 @@ namespace Team_Capture.UI.Panels
 
 			//Get the images that are in the input fields
 			gameNameImage = gameNameText.GetComponent<Image>();
-			maxPlayersImage = maxPlayersText.GetComponent<Image>();
 
 			//Get the existing colors of the input fields
 			gameNameImageColor = gameNameImage.color;

@@ -7,6 +7,7 @@
 using Team_Capture.Localization;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Localization;
 
 namespace Team_Capture.UI.Panels
 {
@@ -19,15 +20,19 @@ namespace Team_Capture.UI.Panels
 		///		Whats the locale to use for the starting message
 		/// </summary>
 		[Tooltip("Whats the locale to use for the starting message")]
-		public string startingMessageLocale = "Menu_StartingServer";
+		public CachedLocalizedString startingMessageLocale;
 
 		/// <summary>
 		///		Whats the locale to use for the failed to start message
 		/// </summary>
 		[Tooltip("Whats the locale to use for the failed to start message")]
-		public string failedToStartMessageLocale = "Menu_StartingServerFail";
+		public CachedLocalizedString failedToStartMessageLocale;
 
-		public string failedToConnectMessageLocale = "Menu_ConnectFail";
+		/// <summary>
+		///		<see cref="LocalizedString"/> for the failed to connect message
+		/// </summary>
+		[Tooltip("LocalizedString for the failed to connect message")]
+		public CachedLocalizedString failedToConnectMessageLocale;
 
 		/// <summary>
 		///		The text object of where the text will be placed
@@ -43,7 +48,7 @@ namespace Team_Capture.UI.Panels
 		{
 			base.OnEnable();
 			cancelButton.interactable = false;
-			messageText.text = GameUILocale.ResolveString(startingMessageLocale);
+			messageText.text = startingMessageLocale.Value;
 		}
 
 		/// <summary>
@@ -52,7 +57,7 @@ namespace Team_Capture.UI.Panels
 		public void FailedToStartMessage()
 		{
 			cancelButton.interactable = true;
-			messageText.text = GameUILocale.ResolveString(failedToStartMessageLocale);
+			messageText.text = failedToStartMessageLocale.Value;
 		}
 
 		/// <summary>
@@ -61,7 +66,7 @@ namespace Team_Capture.UI.Panels
 		public void FailedToConnectMessage()
 		{
 			cancelButton.interactable = true;
-			messageText.text = GameUILocale.ResolveString(failedToConnectMessageLocale);
+			messageText.text = failedToConnectMessageLocale.Value;
 		}
 	}
 }

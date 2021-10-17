@@ -16,7 +16,15 @@ MonoBehaviour:
     type: 3}
   darkenScreen: 1
   showTopBlackBar: 1
-  menuButtonText: Menu_CreateServer
+  menuButtonText:
+    m_TableReference:
+      m_TableCollectionName: GUID:34afaa7d41c0a49428742c07472e0e20
+    m_TableEntryReference:
+      m_KeyId: 5229586812928
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
   bottomNavBarButton: 0
-  isOpen: 0
-  activePanel: {fileID: 0}
+  references:
+    version: 1

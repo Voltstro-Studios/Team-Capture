@@ -15,6 +15,8 @@ using Team_Capture.UI.Elements.Settings;
 using Team_Capture.UI.Panels;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Localization;
+using UnityEngine.Localization.Tables;
 using UnityEngine.Scripting;
 using UnityEngine.UI;
 using Logger = Team_Capture.Logging.Logger;
@@ -31,12 +33,14 @@ namespace Team_Capture.UI
 	[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
 	internal class SettingsPropertyDisplayTextAttribute : PreserveAttribute
 	{
-		public SettingsPropertyDisplayTextAttribute(string menuFormat)
+		public SettingsPropertyDisplayTextAttribute(string table, string tableEntry)
 		{
-			MenuNameFormat = menuFormat;
+			tableReference = table;
+			tableEntryReference = tableEntry;
 		}
 
-		public string MenuNameFormat { get; }
+		internal readonly TableReference tableReference;
+		internal readonly TableEntryReference tableEntryReference;
 	}
 
 	/// <summary>
@@ -52,14 +56,14 @@ namespace Team_Capture.UI
 	/// <summary>
 	///     Generates a setting menu based on available options
 	/// </summary>
-	[RequireComponent(typeof(OptionsPanel))]
+	[RequireComponent(typeof(SettingsPanel))]
 	internal class DynamicSettingsUI : MonoBehaviour
 	{
-		private OptionsPanel optionsPanel;
+		private SettingsPanel settingsPanel;
 
 		private void Awake()
 		{
-			optionsPanel = GetComponent<OptionsPanel>();
+			settingsPanel = GetComponent<SettingsPanel>();
 		}
 
 		/// <summary>
@@ -70,7 +74,7 @@ namespace Team_Capture.UI
 		{
 			Stopwatch stopwatch = Stopwatch.StartNew();
 
-			optionsPanel.ClearPanels();
+			settingsPanel.ClearPanels();
 
 			//TODO: Holy fucking hell this is ugly
 			//Loop over each setting menu and all the sub-settings
@@ -87,7 +91,7 @@ namespace Team_Capture.UI
 
 				//Create a menu module
 				OptionsMenu optionOptionsMenu = new OptionsMenu(settingGroupName);
-				GameObject panel = optionsPanel.AddPanel(optionOptionsMenu);
+				GameObject panel = settingsPanel.AddPanel(optionOptionsMenu);
 
 				//Get each property in the settings
 				FieldInfo[] menuFields =
@@ -142,7 +146,7 @@ namespace Team_Capture.UI
 				return;
 			}
 
-			Slider slider = optionsPanel.AddSliderToPanel(panel, field.GetObjectDisplayText(), val, true, (int)rangeAttribute.min, (int)rangeAttribute.max);
+			Slider slider = settingsPanel.AddSliderToPanel(panel, field.GetObjectDisplayText(), val, true, (int)rangeAttribute.min, (int)rangeAttribute.max);
 			slider.onValueChanged.AddListener(f => field.SetValue(GetSettingObject(field), (int) f));
 		}
 
@@ -156,13 +160,13 @@ namespace Team_Capture.UI
 				return;
 			}
 
-			Slider slider = optionsPanel.AddSliderToPanel(panel, field.GetObjectDisplayText(), val, false, rangeAttribute.min, rangeAttribute.max);
+			Slider slider = settingsPanel.AddSliderToPanel(panel, field.GetObjectDisplayText(), val, false, rangeAttribute.min, rangeAttribute.max);
 			slider.onValueChanged.AddListener(f => field.SetValue(GetSettingObject(field), f));
 		}
 
 		private void CreateBoolToggle(bool val, FieldInfo field, GameObject panel)
 		{
-			Toggle toggle = optionsPanel.AddToggleToPanel(panel, field.GetObjectDisplayText(), val);
+			Toggle toggle = settingsPanel.AddToggleToPanel(panel, field.GetObjectDisplayText(), val);
 			toggle.onValueChanged.AddListener(b => field.SetValue(GetSettingObject(field), b));
 		}
 
@@ -189,7 +193,7 @@ namespace Team_Capture.UI
 
 			//Create the dropdown, with all of our resolutions
 			TMP_Dropdown dropdown =
-				optionsPanel.AddDropdownToPanel(panel, field.GetObjectDisplayText(), resolutionsText.ToArray(),
+				settingsPanel.AddDropdownToPanel(panel, field.GetObjectDisplayText(), resolutionsText.ToArray(),
 					activeResIndex);
 			dropdown.onValueChanged.AddListener(index =>
 			{
@@ -202,7 +206,7 @@ namespace Team_Capture.UI
 			string[] names = Enum.GetNames(field.FieldType);
 			val = names.ToList().IndexOf(Enum.GetName(field.FieldType, val));
 
-			TMP_Dropdown dropdown = optionsPanel.AddDropdownToPanel(panel, field.GetObjectDisplayText(), names, val);
+			TMP_Dropdown dropdown = settingsPanel.AddDropdownToPanel(panel, field.GetObjectDisplayText(), names, val);
 
 			dropdown.onValueChanged.AddListener(index =>
 			{
@@ -253,7 +257,9 @@ namespace Team_Capture.UI
 			string text = info.Name;
 			if (Attribute.GetCustomAttribute(info, typeof(SettingsPropertyDisplayTextAttribute)) is
 				SettingsPropertyDisplayTextAttribute attribute)
-				text = attribute.MenuNameFormat;
+			{
+				text = new LocalizedString(attribute.tableReference, attribute.tableEntryReference).GetLocalizedString();
+			}
 
 			return text;
 		}

@@ -13,14 +13,34 @@ MonoBehaviour:
   m_Name: StartVideo
   m_EditorClassIdentifier: 
   scene: Assets/Scenes/StartVideo.unity
-  displayName: Map_DisplayName
+  displayName:
+    m_TableReference:
+      m_TableCollectionName: GUID:34afaa7d41c0a49428742c07472e0e20
+    m_TableEntryReference:
+      m_KeyId: 94168154771456
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  loadingScreenBackgroundImage: {fileID: 0}
   enabled: 1
   isOnlineScene: 0
   canLoadTo: 1
-  pickupsParent: 
   respawnTime: 0
   stockWeapons: []
+  traceEffectPrefab: {fileID: 0}
+  bulletHoleEffectPrefab: {fileID: 0}
   showStartTime: 0
   isMainMenu: 0
   largeImageKey: tc_icon
-  largeImageKeyText: Discord_LargeImageKeyText
+  largeImageKeyText:
+    m_TableReference:
+      m_TableCollectionName: GUID:34afaa7d41c0a49428742c07472e0e20
+    m_TableEntryReference:
+      m_KeyId: 92286556442624
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  references:
+    version: 1

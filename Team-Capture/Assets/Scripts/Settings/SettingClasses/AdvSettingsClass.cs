@@ -13,49 +13,49 @@ namespace Team_Capture.Settings.SettingClasses
 {
 	internal sealed class AdvSettingsClass : Setting
 	{
-		[SettingsPropertyDisplayText("Settings_AdvMSAA")] 
+		[SettingsPropertyDisplayText("Text", "Settings_Adv_MSAA")] 
 		public MSAAQuality MsaaQuality = MSAAQuality.X4;
 		
-		[SettingsPropertyDisplayText("Settings_AdvPostProcessing")] 
+		[SettingsPropertyDisplayText("Text", "Settings_Adv_PostProcessing")] 
 		public bool PostProcessing = true;
 
-		[SettingsPropertyDisplayText("Settings_AdvHDR")]
+		[SettingsPropertyDisplayText("Text", "Settings_Adv_HDR")]
 		public bool HDR = true;
 
 		//Motion blur settings
-		[SettingsPropertyDisplayText("Settings_AdvMotionBlur")]
+		[SettingsPropertyDisplayText("Text", "Settings_Adv_MotionBlur")]
 		public bool MotionBlur = true;
 		[SettingsDontShow] public float MotionBlurIntensity = 0.06f;
 		[SettingsDontShow] public float MotionBlurClamp = 0.05f;
 
 		//Bloom settings
-		[SettingsPropertyDisplayText("Settings_AdvBloom")]
+		[SettingsPropertyDisplayText("Text", "Settings_Adv_Bloom")]
 		public bool Bloom = true;
 		[SettingsDontShow] public float BloomThreshold = 1.17f;
 		[SettingsDontShow] public float BloomIntensity = 0.02f;
 
 		//Vignette settings
-		[SettingsPropertyDisplayText("Settings_AdvVignette")]
+		[SettingsPropertyDisplayText("Text", "Settings_Adv_Vignette")]
 		public bool Vignette = true;
 		[SettingsDontShow] public float VignetteIntensity = 0.39f;
 		[SettingsDontShow] public float VignetteSmoothness = 0.2f;
 
-		[SettingsPropertyDisplayText("Settings_AdvRenderScale")]
+		[SettingsPropertyDisplayText("Text", "Settings_Adv_RenderScale")]
 		[Range(0, 2)]
 		public float RenderScale = 1.0f;
 
 		//Shadow settings
-		[SettingsPropertyDisplayText("Settings_AdvShadowDistance")] 
+		[SettingsPropertyDisplayText("Text", "Settings_Adv_ShadowDistance")] 
 		[Range(10, 100)] public int ShadowDistance = 45;
 
-		[SettingsPropertyDisplayText("Settings_AdvCascades")] 
+		[SettingsPropertyDisplayText("Text", "Settings_Adv_Cascades")] 
 		public ShadowCascadesCount ShadowCascades = ShadowCascadesCount.FourCascades;
 
 		//Camera Settings
-		[SettingsPropertyDisplayText("Settings_AdvFOV")] 
+		[SettingsPropertyDisplayText("Text", "Settings_Adv_FOV")] 
 		[Range(50, 100)] public int CameraFOV = 90;
 
-		[SettingsPropertyDisplayText("Settings_AdvAntialiasing")] 
+		[SettingsPropertyDisplayText("Text", "Settings_Adv_Antialiasing")] 
 		public AntialiasingMode CameraAntialiasing = AntialiasingMode.SubpixelMorphologicalAntiAliasing;
 
 		[SettingsDontShow] public AntialiasingQuality CameraAntialiasingQuality = AntialiasingQuality.High;

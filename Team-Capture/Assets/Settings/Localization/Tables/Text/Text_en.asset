@@ -1,0 +1,354 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: Text_en
+  m_EditorClassIdentifier: 
+  m_LocaleId:
+    m_Code: en
+  m_SharedData: {fileID: 11400000, guid: 34afaa7d41c0a49428742c07472e0e20, type: 2}
+  m_Metadata:
+    m_Items:
+    - id: 0
+  m_TableData:
+  - m_Id: 4723791499264
+    m_Localized: Cancel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4767609393152
+    m_Localized: Yes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4796768194560
+    m_Localized: Close
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4836941238272
+    m_Localized: Home
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4867974893568
+    m_Localized: Resume
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4905396473856
+    m_Localized: Refresh
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4950531379200
+    m_Localized: Apply
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4986996658176
+    m_Localized: Ok
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5229586812928
+    m_Localized: Create Server
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5445727686656
+    m_Localized: Team-Capture Server
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5647947665408
+    m_Localized: Enter Game Name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5719422799872
+    m_Localized: Max Players
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5840365555712
+    m_Localized: Auth-Mode
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5933944672256
+    m_Localized: Close On Disconnect?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6118317887488
+    m_Localized: This will start up a new instance of TC in headless server mode.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6416029585408
+    m_Localized: Starting server...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6511248674816
+    m_Localized: 'The server process failed to start for some reason!
+
+      See
+      the logs for more information.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6756829368320
+    m_Localized: 'Failed to connect to the started server for some reason!
+
+      See
+      the logs for more information.'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7659892379648
+    m_Localized: Join Server
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7872094801920
+    m_Localized: Server Name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7925907722240
+    m_Localized: Ping
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7969897582592
+    m_Localized: Players
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8014373982208
+    m_Localized: Map Name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8074063122432
+    m_Localized: Searching for servers...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8140215685120
+    m_Localized: Settings
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8226542850048
+    m_Localized: Settings Saved!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9952377311232
+    m_Localized: Start
+    m_Metadata:
+      m_Items: []
+  - m_Id: 57048824418304
+    m_Localized: Disconnect
+    m_Metadata:
+      m_Items: []
+  - m_Id: 57227191390208
+    m_Localized: Are you sure you want to disconnect?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 58319715307520
+    m_Localized: Joining Server {0}...
+    m_Metadata:
+      m_Items:
+      - id: 0
+  - m_Id: 60516830154752
+    m_Localized: 'You are on your way to:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 60638876012544
+    m_Localized: Loading...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 60911275085824
+    m_Localized: TIP
+    m_Metadata:
+      m_Items: []
+  - m_Id: 62603030827008
+    m_Localized: Settings have been applied and saved!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 66010202378240
+    m_Localized: Quit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 66035410145280
+    m_Localized: Are you sure you want to quit?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 67127325888512
+    m_Localized: Send
+    m_Metadata:
+      m_Items: []
+  - m_Id: 67151900315648
+    m_Localized: Enter message...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 67844908388352
+    m_Localized: Reloading...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 68281707401216
+    m_Localized: Next
+    m_Metadata:
+      m_Items: []
+  - m_Id: 68538499469312
+    m_Localized: Name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 68617868283904
+    m_Localized: Kills
+    m_Metadata:
+      m_Items: []
+  - m_Id: 68647752699904
+    m_Localized: Deaths
+    m_Metadata:
+      m_Items: []
+  - m_Id: 68680862535680
+    m_Localized: Ping
+    m_Metadata:
+      m_Items: []
+  - m_Id: 88387380449280
+    m_Localized: Failed to join server!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 92286556442624
+    m_Localized: Team-Capture
+    m_Metadata:
+      m_Items: []
+  - m_Id: 94120318734336
+    m_Localized: Bootloader
+    m_Metadata:
+      m_Items: []
+  - m_Id: 94168154771456
+    m_Localized: Start Video
+    m_Metadata:
+      m_Items: []
+  - m_Id: 94215546212352
+    m_Localized: Main Menu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 95938708901888
+    m_Localized: Mouse Settings
+    m_Metadata:
+      m_Items: []
+  - m_Id: 96011962421248
+    m_Localized: Mouse Sensitivity
+    m_Metadata:
+      m_Items: []
+  - m_Id: 96109991694336
+    m_Localized: Raw Axis
+    m_Metadata:
+      m_Items: []
+  - m_Id: 96125439315968
+    m_Localized: Reverse Mouse
+    m_Metadata:
+      m_Items: []
+  - m_Id: 96216476684288
+    m_Localized: Video Settings
+    m_Metadata:
+      m_Items: []
+  - m_Id: 96251012583424
+    m_Localized: Resolution
+    m_Metadata:
+      m_Items: []
+  - m_Id: 96303135199232
+    m_Localized: Screen Mode
+    m_Metadata:
+      m_Items: []
+  - m_Id: 96360714604544
+    m_Localized: Texture Quality
+    m_Metadata:
+      m_Items: []
+  - m_Id: 96410110922752
+    m_Localized: VSync
+    m_Metadata:
+      m_Items: []
+  - m_Id: 96442763579392
+    m_Localized: Advance Settings
+    m_Metadata:
+      m_Items: []
+  - m_Id: 96471683305472
+    m_Localized: MSAA
+    m_Metadata:
+      m_Items: []
+  - m_Id: 96505418092544
+    m_Localized: Post-Processing
+    m_Metadata:
+      m_Items: []
+  - m_Id: 96544156684288
+    m_Localized: HDR
+    m_Metadata:
+      m_Items: []
+  - m_Id: 96574456336384
+    m_Localized: Motion Blur
+    m_Metadata:
+      m_Items: []
+  - m_Id: 96616642646016
+    m_Localized: Bloom
+    m_Metadata:
+      m_Items: []
+  - m_Id: 96648880066560
+    m_Localized: Vignette
+    m_Metadata:
+      m_Items: []
+  - m_Id: 96676453421056
+    m_Localized: Render Scale
+    m_Metadata:
+      m_Items: []
+  - m_Id: 96720908849152
+    m_Localized: Shadow Distance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 96768551948288
+    m_Localized: Cascades
+    m_Metadata:
+      m_Items: []
+  - m_Id: 96798776102912
+    m_Localized: FOV
+    m_Metadata:
+      m_Items: []
+  - m_Id: 96837598580736
+    m_Localized: Antialiasing
+    m_Metadata:
+      m_Items: []
+  - m_Id: 96866975485952
+    m_Localized: Multiplayer Settings
+    m_Metadata:
+      m_Items: []
+  - m_Id: 96905974124544
+    m_Localized: Muzzle Flash Lighting
+    m_Metadata:
+      m_Items: []
+  - m_Id: 96943366344704
+    m_Localized: Weapon Sway
+    m_Metadata:
+      m_Items: []
+  - m_Id: 96957597618176
+    m_Localized: Weapon Sway Amount
+    m_Metadata:
+      m_Items: []
+  - m_Id: 96979420581888
+    m_Localized: MOTD Mode
+    m_Metadata:
+      m_Items: []
+  - m_Id: 99408191033344
+    m_Localized: 'Killed By:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 99491577991168
+    m_Localized: 'Re-Spawning In:'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 106540911169536
+    m_Localized: Console
+    m_Metadata:
+      m_Items: []
+  - m_Id: 106626286227456
+    m_Localized: Submit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 106809145298944
+    m_Localized: Enter command...
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 1
+    00000000:
+      type: {class: SmartFormatTag, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
+      data:
+        m_Entries: 0010ea9d0a350000

@@ -1,16 +1,22 @@
-#Unity files that shouldn't be included
+# Unity files that shouldn't be included
 [Ll]ibrary/
 [Tt]emp/
 [Oo]bj/
 [Bb]uild/
 [Bb]uilds/
 [Uu]ser[Ss]ettings/
+[Mm]emoryCaptures/
 Assets/AssetStoreTools*
 
-Team-Capture/Game/Screenshots/*
+# Packed Addressables
+Team-Capture/[Aa]ssets/AddressableAssetsdata/*/*.bin*
 
-# Unity Memory Profiler
-Team-Capture/MemoryCaptures/*
+# Temporary auto-generated Android Assets
+Team-Capture/[Aa]ssets/[Ss]treamingAssets/aa.meta
+Team-Capture/[Aa]ssets/[Ss]treamingAssets/aa/*
+
+# TC Screenshots
+Team-Capture/Game/Screenshots/*
 
 # Unity Build Report Inspector
 Team-Capture/Assets/BuildReports/*
@@ -33,13 +39,16 @@ ExportedObj/
 *.booproj
 *.svd
 *.pdb
+*.mdb
 *.opendb
+*.VC.db
 
 # Unity3D generated meta files
 *.pidb.meta
 *.pdb.meta
+*.mdb.meta
 
-#Plugin files
+# TC Plugin files that we want to keep
 !Team-Capture/Assets/Plugins/**/*.pdb
 !Team-Capture/Assets/Plugins/**/*.pdb.meta
 
@@ -48,23 +57,17 @@ sysinfo.txt
 
 # Builds
 *.apk
+*.aab
 *.unitypackage
 
-#Rider
+# Rider
 .idea/
 [Ss]aved/
 
-#Logs related
+# Logs Related
 [Ll]ogs/
-enet_log.txt
 debug.log
 
-#Blender backup files
+# Blender backup files
 *.blend1
 *.blend1.meta
-
-#MessagePack
-Team-Capture/MessagePack/MessagePackProject/bin/*
-Team-Capture/MessagePack/MessagePackProject/obj/*
-Team-Capture/MessagePack/MessagePackProject/MessagePack.xml
-!Team-Capture/MessagePack/MessagePackProject/MessagePack.csproj

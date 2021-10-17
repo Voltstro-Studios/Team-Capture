@@ -934,11 +934,22 @@ MonoBehaviour:
   bottomButtonPrefab: {fileID: 6369731504798250186, guid: 89043bbcb42587049ab129f25e632baf,
     type: 3}
   inputReader: {fileID: 11400000, guid: e233decf6e8ea7d4696452f4cd476d55, type: 2}
+  menuHomeText:
+    m_TableReference:
+      m_TableCollectionName: GUID:34afaa7d41c0a49428742c07472e0e20
+    m_TableEntryReference:
+      m_KeyId: 4836941238272
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
   menuPanels:
   - {fileID: 11400000, guid: 28cdc30fea405604d8606f47dce57ea2, type: 2}
   - {fileID: 11400000, guid: f472b36e4e05d0441ae031cff19e576d, type: 2}
   - {fileID: 11400000, guid: 453728d24005aff4a80d5f5bfca1bc91, type: 2}
   - {fileID: 11400000, guid: 501c13d390213f647b2cc936a29e1c40, type: 2}
+  references:
+    version: 1
 --- !u!1 &352522260
 GameObject:
   m_ObjectHideFlags: 0
@@ -1376,7 +1387,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh57162
+  m_Name: pb_Mesh41382
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -2464,7 +2475,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh57174
+  m_Name: pb_Mesh41394
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -2628,7 +2639,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh57132
+  m_Name: pb_Mesh41346
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -2792,7 +2803,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh57082
+  m_Name: pb_Mesh41290
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -3140,7 +3151,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh57146
+  m_Name: pb_Mesh41360
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2

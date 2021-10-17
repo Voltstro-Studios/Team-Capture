@@ -4,6 +4,8 @@
 // This project is governed by the AGPLv3 License.
 // For more details see the LICENSE file.
 
+using UnityEngine.Localization;
+
 namespace Team_Capture.UI.Menus
 {
     /// <summary>
@@ -11,11 +13,13 @@ namespace Team_Capture.UI.Menus
     /// </summary>
     internal class MainMenu : MenuController
     {
+        public LocalizedString menuHomeText;
+        
         public MenuPanel[] menuPanels;
         
         private void Start()
         {
-            CreateButton(topButtonPrefab, topNavBar, "Menu_Home", CloseActivePanel, 52f, true);
+            CreateButton(topButtonPrefab, topNavBar, menuHomeText.GetLocalizedString(), CloseActivePanel, 52f, true);
             
             AddPanels(menuPanels);
         }

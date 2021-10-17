@@ -275,6 +275,17 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 453728d24005aff4a80d5f5bfca1bc91, type: 2}
   - {fileID: 11400000, guid: 501c13d390213f647b2cc936a29e1c40, type: 2}
   - {fileID: 11400000, guid: d89cb19e3e3417f4d934e3bf309dc51e, type: 2}
+  menuResumeText:
+    m_TableReference:
+      m_TableCollectionName: GUID:34afaa7d41c0a49428742c07472e0e20
+    m_TableEntryReference:
+      m_KeyId: 4867974893568
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  references:
+    version: 1
 --- !u!1 &6105876273985751419
 GameObject:
   m_ObjectHideFlags: 0

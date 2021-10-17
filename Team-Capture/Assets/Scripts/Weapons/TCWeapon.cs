@@ -4,9 +4,6 @@
 // This project is governed by the AGPLv3 License.
 // For more details see the LICENSE file.
 
-using System;
-using Team_Capture.Core;
-using Team_Capture.Localization;
 using UnityEngine;
 
 namespace Team_Capture.Weapons
@@ -105,27 +102,5 @@ namespace Team_Capture.Weapons
 		/// </summary>
 		[Header("Spread")] [Tooltip("How much spread will this weapon have")]
 		public float spreadFactor = 0.05f;
-
-		/// <summary>
-		///     The formatted name. This is what will show on HUDs
-		/// </summary>
-		public string WeaponFormattedNameLocalized =>
-			weaponFormattedName ?? (weaponFormattedName = ResolveWeaponString(weaponFormattedName));
-
-		#region Locales
-
-		[NonSerialized] private string weaponFormattedNameLocalized;
-
-		private Locale mapLocale;
-
-		public string ResolveWeaponString(string id)
-		{
-			if (mapLocale == null)
-				mapLocale = new Locale($"{Game.GetGameExecutePath()}/Resources/Maps/{weapon}-%LANG%.json");
-
-			return mapLocale.ResolveString(id);
-		}
-
-		#endregion
 	}
 }
