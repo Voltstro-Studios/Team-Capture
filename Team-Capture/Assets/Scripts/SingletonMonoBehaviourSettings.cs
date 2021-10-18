@@ -47,5 +47,10 @@ namespace Team_Capture
             }
             Logger.Debug("Loaded settings from '{Path}'.", SettingsPath);
         }
+
+        protected override void SingletonDestroyed()
+        {
+            Destroy(Settings);
+        }
     }
 }
