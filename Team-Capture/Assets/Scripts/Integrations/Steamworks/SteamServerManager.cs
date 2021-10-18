@@ -46,7 +46,7 @@ namespace Team_Capture.Integrations.Steamworks
 
             try
             {
-                SteamServer.Init(SteamSettings.SteamSettingsInstance.appDedicatedServerId, serverInit);
+                SteamServer.Init(SteamManager.Instance.SteamSettings.appDedicatedServerId, serverInit);
                 SteamServer.LogOnAnonymous();
                 IsOnline = true;
             }

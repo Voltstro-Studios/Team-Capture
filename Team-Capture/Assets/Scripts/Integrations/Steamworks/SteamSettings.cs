@@ -9,30 +9,13 @@ using System.IO;
 using Newtonsoft.Json;
 using Team_Capture.Core;
 using Team_Capture.Helper;
+using UnityEngine;
 
 namespace Team_Capture.Integrations.Steamworks
 {
-	[Serializable]
-	internal class SteamSettings
+	[CreateAssetMenu(fileName = "Steam Settings", menuName = "Team Capture/Steam Settings")]
+	internal class SteamSettings : ScriptableObject
 	{
-		/// <summary>
-		///     Where to load the settings from
-		/// </summary>
-		private const string SettingsLocation = "/Resources/Integrations/Steam.json";
-		
-		private static SteamSettings steamSettings;
-		
-		[JsonIgnore]
-		public static SteamSettings SteamSettingsInstance
-		{
-			get
-			{
-				return steamSettings ??= ObjectSerializer.LoadJson<SteamSettings>(
-					Path.GetDirectoryName($"{Game.GetGameExecutePath()}{SettingsLocation}"),
-					$"/{Path.GetFileNameWithoutExtension(SettingsLocation)}");
-			}
-		}
-		
 		/// <summary>
 		///		AppID for Steam to connect to
 		/// </summary>

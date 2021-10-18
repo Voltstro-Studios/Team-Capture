@@ -15,8 +15,12 @@ namespace Team_Capture.Integrations.Steamworks
 	/// <summary>
 	///		Handles connecting to Steam
 	/// </summary>
-    internal class SteamManager : SingletonMonoBehaviour<SteamManager>
+    internal class SteamManager : SingletonMonoBehaviourSettings<SteamManager, SteamSettings>
 	{
+		protected override string SettingsPath => "Assets/Settings/Integrations/SteamSettings.asset";
+
+		internal SteamSettings SteamSettings => Settings;
+		
 		protected override void SingletonStarted()
 	    {
 		    //TODO: We should have a global 'offline' toggle
@@ -43,7 +47,7 @@ namespace Team_Capture.Integrations.Steamworks
 	    {
 		    try
 		    {
-			    SteamClient.Init(SteamSettings.SteamSettingsInstance.appId);
+			    SteamClient.Init(Settings.appId);
 		    }
 		    catch (Exception ex)
 		    {

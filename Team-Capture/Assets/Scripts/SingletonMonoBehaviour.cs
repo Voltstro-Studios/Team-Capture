@@ -4,10 +4,8 @@
 // This project is governed by the AGPLv3 License.
 // For more details see the LICENSE file.
 
-using System;
 using JetBrains.Annotations;
 using UnityEngine;
-using Logger = Team_Capture.Logging.Logger;
 
 //From https://github.com/EternalClickbait/LibEternal/blob/Dev/LibEternal.Unity/SingletonMonoBehaviour.cs
 

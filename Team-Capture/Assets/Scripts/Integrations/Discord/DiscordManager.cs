@@ -5,7 +5,6 @@
 // For more details see the LICENSE file.
 
 using System;
-using System.IO;
 using Discord.GameSDK;
 using Discord.GameSDK.Activities;
 using Discord.GameSDK.Users;
@@ -20,17 +19,9 @@ namespace Team_Capture.Integrations.Discord
 	/// <summary>
 	///     Handles communicating with Discord's game SDK
 	/// </summary>
-	internal class DiscordManager : SingletonMonoBehaviour<DiscordManager>
+	internal class DiscordManager : SingletonMonoBehaviourSettings<DiscordManager, DiscordManagerSettings>
 	{
-		/// <summary>
-		///     Where to load the settings from
-		/// </summary>
-		public string settingsLocation = "/Resources/Integrations/DiscordRPC.json";
-
-		/// <summary>
-		///     Settings for the Discord manager to use
-		/// </summary>
-		public DiscordManagerSettings settings;
+		protected override string SettingsPath => "Assets/Settings/Integrations/DiscordSettings.asset";
 
 		private ActivityManager activityManager;
 		private UserManager userManager;
@@ -49,8 +40,7 @@ namespace Team_Capture.Integrations.Discord
 				Destroy(gameObject);
 				return;
 			}
-
-			LoadSettings();
+			
 			Initialize();
 		}
 
@@ -72,7 +62,7 @@ namespace Team_Capture.Integrations.Discord
 
 			try
 			{
-				client = new global::Discord.GameSDK.Discord(long.Parse(settings.clientId), CreateFlags.NoRequireDiscord);
+				client = new global::Discord.GameSDK.Discord(long.Parse(Settings.clientId), CreateFlags.NoRequireDiscord);
 				client.Init();
 			}
 			catch (ResultException ex)
@@ -83,7 +73,7 @@ namespace Team_Capture.Integrations.Discord
 				return;
 			}
 
-			client?.SetLogHook(settings.logLevel, (level, message) =>
+			client?.SetLogHook(Settings.logLevel, (level, message) =>
 			{
 				switch (level)
 				{
@@ -110,16 +100,6 @@ namespace Team_Capture.Integrations.Discord
 			TCScenesManager.OnSceneLoadedEvent += SceneLoaded;
 
 			SceneLoaded(TCScenesManager.GetActiveScene());
-		}
-
-		private void LoadSettings()
-		{
-			if (string.IsNullOrWhiteSpace(settingsLocation))
-				return;
-
-			settings = ObjectSerializer.LoadJson<DiscordManagerSettings>(
-				Path.GetDirectoryName($"{Game.GetGameExecutePath()}{settingsLocation}"),
-				$"/{Path.GetFileNameWithoutExtension(settingsLocation)}");
 		}
 
 		/// <summary>
