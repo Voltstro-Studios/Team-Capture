@@ -19,15 +19,9 @@ MonoBehaviour:
   damage: 10
   fireRate: 2
   fireMode: 1
+  reloadMode: 1
   bulletsPerShot: 6
   maxBullets: 6
   range: 100
-  reloadTime: 3.5
+  reloadTime: 0.75
   spreadFactor: 0.1
-  bulletHolePrefab: {fileID: 1323092306309459875, guid: 8741f47e93961d34f81bf7f96e1277ac,
-    type: 3}
-  bulletHitEffectPrefab: {fileID: 1617700753897852, guid: 2fc51477906b5d44b93e53cc25b2d012,
-    type: 3}
-  bulletTracerEffect: {fileID: 5622775260631071782, guid: aeeb5910131c55e4cb505d9f7ebab423,
-    type: 3}
-  isReloading: 0

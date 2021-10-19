@@ -186,6 +186,7 @@ namespace Team_Capture.Weapons
 		/// <summary>
 		///     Requests the server to reload the current weapon
 		/// </summary>
+		[Client]
 		internal void ClientReloadWeapon()
 		{
 			//Ask the server kindly to reload the weapon
@@ -199,8 +200,8 @@ namespace Team_Capture.Weapons
 		private void CmdReloadPlayerWeapon()
 		{
 			NetworkedWeapon weapon = GetActiveWeapon();
-
-			if (weapon.IsReloading)
+			
+			if(weapon.IsReloading)
 				return;
 
 			if (weapon.CurrentBulletAmount == weapon.GetTCWeapon().maxBullets)
@@ -217,30 +218,61 @@ namespace Team_Capture.Weapons
 		internal IEnumerator ServerReloadPlayerWeapon()
 		{
 			Logger.Debug($"Reloading player `{transform.name}`'s active weapon");
-
+			
 			//Get our players weapon
 			NetworkedWeapon networkedWeapon = GetActiveWeapon();
+			TCWeapon weapon = networkedWeapon.GetTCWeapon();
 			networkedWeapon.IsReloading = true;
-			networkedWeapon.CurrentBulletAmount = 0;
-
+			
 			TargetSendWeaponStatus(GetClientConnection, networkedWeapon);
 
 			int weaponIndex = SelectedWeaponIndex;
+			
+			switch(weapon.reloadMode)
+			{
+				case TCWeapon.WeaponReloadMode.Clip:
+					yield return new WaitForSeconds(weapon.reloadTime);
+					
+					FinishReload(networkedWeapon, weaponIndex);
+					break;
+				case TCWeapon.WeaponReloadMode.Shells:
+					yield return TimeHelper.CountUp(weapon.maxBullets - networkedWeapon.CurrentBulletAmount, weapon.reloadTime, tick =>
+					{
+						//Backup
+						if(networkedWeapon.CurrentBulletAmount == weapon.maxBullets)
+							return;
+						
+						//Increase bullets
+						networkedWeapon.CurrentBulletAmount++;
+						TargetSendWeaponStatus(GetClientConnection, networkedWeapon);
+					});
 
-			TCWeapon weapon = networkedWeapon.GetTCWeapon();
-
-			yield return new WaitForSeconds(weapon.reloadTime);
-			FinishReload(networkedWeapon, weaponIndex);
+					FinishReload(networkedWeapon, weaponIndex);
+					break;
+			}
 		}
 
 		[Server]
 		private void FinishReload(NetworkedWeapon weapon, int weaponIndex)
 		{
+			reloadingCoroutine = null;
 			weapon.Reload();
 
 			//Update player's UI
-			if (SelectedWeaponIndex != weaponIndex) return;
+			if (SelectedWeaponIndex != weaponIndex) 
+				return;
 			TargetSendWeaponStatus(GetClientConnection, weapon);
+		}
+
+		[Server]
+		internal void CancelReload()
+		{
+			if(reloadingCoroutine == null)
+				return;
+			
+			Logger.Debug("Cancelling {Name}'s reload...", transform.name);
+			StopCoroutine(reloadingCoroutine);
+			reloadingCoroutine = null;
 		}
 
 		#endregion
@@ -346,9 +378,8 @@ namespace Team_Capture.Weapons
 		{
 			if (weapons.ElementAt(index) == null)
 				return;
-
+			
 			Logger.Debug($"Player `{transform.name}` set their weapon index to `{index}`.");
-
 			SetClientWeaponIndex(index);
 		}
 
@@ -360,15 +391,15 @@ namespace Team_Capture.Weapons
 		private void SetClientWeaponIndex(int index)
 		{
 			//Stop reloading
-			if (reloadingCoroutine != null)
-				StopCoroutine(reloadingCoroutine);
+			CancelReload();
+			weapons[index].IsReloading = false;
 
 			//Set the selected weapon index and update the visible gameobject
 			SelectedWeaponIndex = index;
 
-			//Start reloading weapon if it was reloading before
-			if (weapons[index].IsReloading)
-				StartCoroutine(ServerReloadPlayerWeapon());
+			//Start reloading weapon if the weapon has no bullets left
+			if (weapons[index].CurrentBulletAmount == 0)
+				reloadingCoroutine = StartCoroutine(ServerReloadPlayerWeapon());
 
 			RpcSelectWeapon(index);
 

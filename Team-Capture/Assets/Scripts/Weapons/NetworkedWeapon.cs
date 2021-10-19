@@ -39,13 +39,15 @@ namespace Team_Capture.Weapons
 			Weapon = weapon.weapon;
 
 			if (setMaxBullets)
-				Reload();
+				Reload(true);
 		}
 
 		/// <inheritdoc />
-		public void Reload()
+		public void Reload(bool setMaxBullets = false)
 		{
-			CurrentBulletAmount = associatedTCWeapon.maxBullets;
+			if(setMaxBullets || associatedTCWeapon.reloadMode == TCWeapon.WeaponReloadMode.Clip)
+				CurrentBulletAmount = associatedTCWeapon.maxBullets;
+			
 			IsReloading = false;
 		}
 

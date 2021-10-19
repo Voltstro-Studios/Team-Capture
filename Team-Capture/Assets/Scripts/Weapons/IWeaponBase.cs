@@ -14,6 +14,6 @@ namespace Team_Capture.Weapons
 		/// <summary>
 		///     Reloads the current weapon
 		/// </summary>
-		void Reload();
+		void Reload(bool setMaxBullets = false);
 	}
 }

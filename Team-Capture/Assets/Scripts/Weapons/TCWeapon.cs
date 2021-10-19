@@ -35,6 +35,22 @@ namespace Team_Capture.Weapons
 			/// </summary>
 			Semi
 		}
+		
+		/// <summary>
+		///		How to reload a weapon
+		/// </summary>
+		public enum WeaponReloadMode : byte
+		{
+			/// <summary>
+			///		Reload the entire clip each time
+			/// </summary>
+			Clip,
+			
+			/// <summary>
+			///		Reload each shell individually
+			/// </summary>
+			Shells
+		}
 
 		/// <summary>
 		///     The weapon's name, this will be sent across networks so make it short
@@ -72,6 +88,12 @@ namespace Team_Capture.Weapons
 		/// </summary>
 		[Tooltip("The fire-mode that this weapon will use")]
 		public WeaponFireMode fireMode;
+
+		/// <summary>
+		///		The reload-mode that this weapon will use
+		/// </summary>
+		[Tooltip("The reload-mode that this weapon will use")]
+		public WeaponReloadMode reloadMode;
 
 		/// <summary>
 		///     How many bullets will come out per shot

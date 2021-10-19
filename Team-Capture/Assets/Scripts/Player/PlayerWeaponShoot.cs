@@ -127,17 +127,28 @@ namespace Team_Capture.Player
 				nextTimeToFire = 0;
 				lastWeapon = activeWeapon.Weapon;
 			}
-
-			//If our player is dead, or reloading, then return
-			if (activeWeapon.IsReloading || playerManager.IsDead || Time.time < nextTimeToFire)
-				return;
-
+			
+			//If our clip is empty, then reload
 			if (activeWeapon.CurrentBulletAmount <= 0)
 			{
 				//Reload
 				StartCoroutine(weaponManager.ServerReloadPlayerWeapon());
 				return;
 			}
+
+			//If we are currently reloading, and we still got bullets left, cancel the reload
+			if (activeWeapon.IsReloading)
+			{
+				if(activeWeapon.CurrentBulletAmount == 0)
+					return;
+				
+				weaponManager.CancelReload();
+				activeWeapon.IsReloading = false;
+			}
+			
+			//If our player is dead, or we haven't reached our next time to fire, then return
+			if (playerManager.IsDead || Time.time < nextTimeToFire)
+				return;
 
 			ServerShootWeapon(activeWeapon);
 

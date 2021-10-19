@@ -5,8 +5,10 @@
 // For more details see the LICENSE file.
 
 using System;
+using System.Collections;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using UnityEngine;
 
 namespace Team_Capture.Helper
 {
@@ -38,6 +40,18 @@ namespace Team_Capture.Helper
 				
 				currentCountDownTime--;
 				onTick?.Invoke(currentCountDownTime);
+			}
+		}
+
+		public static IEnumerator CountUp(int counts, float time, Action<int> onTick = null)
+		{
+			int currentCount = 0;
+			while (currentCount != counts)
+			{
+				yield return new WaitForSeconds(time);
+				
+				currentCount++;
+				onTick?.Invoke(currentCount);
 			}
 		}
 	}
