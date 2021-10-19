@@ -9,7 +9,7 @@
 Assets/AssetStoreTools*
 
 # Packed Addressables
-Team-Capture/[Aa]ssets/AddressableAssetsdata/*/*.bin*
+Team-Capture/[Aa]ssets/AddressableAssetsData/*/*.bin*
 
 # Temporary auto-generated Android Assets
 Team-Capture/[Aa]ssets/[Ss]treamingAssets/aa.meta
