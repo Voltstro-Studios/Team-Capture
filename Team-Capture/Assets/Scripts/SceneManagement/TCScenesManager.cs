@@ -9,6 +9,7 @@ using System.Linq;
 using Mirror;
 using Team_Capture.Console;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.SceneManagement;
 using Logger = Team_Capture.Logging.Logger;
 using SceneManager = UnityEngine.SceneManagement.SceneManager;
@@ -20,14 +21,16 @@ namespace Team_Capture.SceneManagement
 	/// </summary>
 	public static class TCScenesManager
 	{
-		private static List<TCScene> scenes = new List<TCScene>();
+		private const string SceneLabel = "Scene";
+		
+		private static IList<TCScene> scenes;
 
 		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
 		private static void InitTcSceneManager()
 		{
 			SceneManager.sceneLoaded += UnitySceneManagerLoaded;
 
-			scenes = GetAllEnabledTCScenesInfo().ToList();
+			LoadAllScenes();
 		}
 
 		[ConCommand("scene", "Loads a scene", CommandRunPermission.Both, 1, 1)]
@@ -130,33 +133,19 @@ namespace Team_Capture.SceneManagement
 
 		#region Getting Scene
 
-		/// <summary>
-		///     Returns a list of all <see cref="TCScene" /> objects in the build (as long as they were in the resources folder).
-		///     Includes disabled scenes
-		/// </summary>
-		/// <returns></returns>
-		//FindObjectsOfType iss around 3x faster than LoadAll<T> (190ms vs 500ms), but might not work in the build
-		public static IEnumerable<TCScene> GetAllTCScenesInfo()
+		private static void LoadAllScenes()
 		{
-			return Resources.LoadAll<TCScene>("");
+			scenes = Addressables.LoadAssetsAsync<TCScene>(SceneLabel, null).WaitForCompletion();
 		}
 
-		/// <summary>
-		///     Gets all enabled scenes in the build
-		/// </summary>
-		/// <returns></returns>
-		public static IEnumerable<TCScene> GetAllEnabledTCScenesInfo()
+		public static IList<TCScene> GetAllScenes()
 		{
-			return GetAllTCScenesInfo().Where(s => s.enabled);
+			return scenes;
 		}
 
-		/// <summary>
-		///     Gets all enabled, online scenes
-		/// </summary>
-		/// <returns></returns>
-		public static IEnumerable<TCScene> GetAllEnabledOnlineScenesInfo()
+		public static List<TCScene> GetAllOnlineScenes()
 		{
-			return GetAllEnabledTCScenesInfo().Where(s => s.isOnlineScene);
+			return GetAllScenes().Where(x => x.isOnlineScene).ToList();
 		}
 
 		/// <summary>

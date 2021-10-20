@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Team-Capture-Media
+  m_EditorClassIdentifier: 
+  m_GroupName: Team-Capture-Media
+  m_Data:
+    m_SerializedData: []
+  m_GUID: fa5ebe5eb4389354ca4fa83fbe0b8c62
+  m_SerializeEntries:
+  - m_GUID: 14969ddeb2ea3d04b980ef4eefbf939f
+    m_Address: Assets/Media/TC-Start-Up.webm
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 31dc88cf5cd9dc44ead1cd2deab1bc53, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: ce0c21b3861785f458b9a252b898d13c, type: 2}
+    - {fileID: 11400000, guid: fe5147de3669eb64f9b8a31f01c17e11, type: 2}

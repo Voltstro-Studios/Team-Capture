@@ -40,11 +40,6 @@ namespace Team_Capture.Player
 		[SerializeField] private float playerLatencyUpdateTime = 2.0f;
 
 		/// <summary>
-		///		The camera
-		/// </summary>
-		private Camera playerCamera;
-
-		/// <summary>
 		///     The max health
 		/// </summary>
 		public int MaxHealth { get; } = 100;
@@ -169,7 +164,6 @@ namespace Team_Capture.Player
 			if (!isLocalPlayer) return;
 
 			uiManager = GetComponent<PlayerUIManager>();
-			playerCamera = GetComponent<PlayerSetup>().GetPlayerCamera();
 		}
 
 		#endregion
@@ -266,7 +260,7 @@ namespace Team_Capture.Player
 			weaponManager.RemoveAllWeapons();
 
 			//Call the client side code on each player
-			RpcClientPlayerDie();
+			RpcClientPlayerDie(sourcePlayerId);
 
 			//Disable movement
 			playerMovementManager.enabled = false;
@@ -316,20 +310,16 @@ namespace Team_Capture.Player
 		///     Disables components on each of the clients
 		/// </summary>
 		[ClientRpc]
-		private void RpcClientPlayerDie()
+		private void RpcClientPlayerDie(string killerPlayer)
 		{
 			try
 			{
-				//playerMovementManager.DisableStateHandling();
-
 				//Disable the collider, or the Char controller
 				if (isLocalPlayer)
 				{
-					//Switch cams
-					GameSceneManager.SwitchCameras(playerCamera, true);
-
 					//Disable the HUD
 					uiManager.SetHud(false);
+					uiManager.SetDeathScreen(GameManager.GetPlayer(killerPlayer), true);
 				}
 
 				//Disable movement
@@ -360,14 +350,10 @@ namespace Team_Capture.Player
 				//Enable the collider, or the Char controller
 				if (isLocalPlayer)
 				{
-					//Switch cams
-					GameSceneManager.SwitchCameras(playerCamera, false);
-
 					//Enable our HUD
 					uiManager.SetHud(true);
+					uiManager.SetDeathScreen(null, false);
 				}
-
-				//playerMovementManager.EnableStateHandling();
 			}
 			catch (Exception ex)
 			{

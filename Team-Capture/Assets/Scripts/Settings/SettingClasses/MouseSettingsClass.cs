@@ -11,10 +11,10 @@ namespace Team_Capture.Settings.SettingClasses
 {
 	internal class MouseSettingsClass : Setting
 	{
-		[Range(50, 200)] [SettingsPropertyDisplayText("Settings_MouseSensitivity")]
+		[Range(50, 200)] [SettingsPropertyDisplayText("Text", "Settings_Mouse_Sensitivity")]
 		public int MouseSensitivity = 100;
 
-		[SettingsPropertyDisplayText("Settings_MouseReverse")]
+		[SettingsPropertyDisplayText("Text", "Settings_Mouse_Reverse")]
 		public bool ReverseMouse;
 	}
 }

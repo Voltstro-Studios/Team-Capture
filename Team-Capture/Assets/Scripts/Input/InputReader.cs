@@ -271,6 +271,22 @@ namespace Team_Capture.Input
 
 	    #endregion
 
+	    #region Player Death Cam
+
+	    public Vector2 ReadPlayerDeathCamLook() => gameInput.PlayerDeathCam.Look.ReadValue<Vector2>();
+
+	    public void EnablePlayerDeathCamInput()
+	    {
+		    gameInput.PlayerDeathCam.Enable();
+	    }
+
+	    public void DisablePlayerDeathCamInput()
+	    {
+		    gameInput.PlayerDeathCam.Disable();
+	    }
+
+	    #endregion
+
 	    #region Chat
 
 	    public event Action ChatToggle;

@@ -121,10 +121,10 @@ namespace Team_Capture.UI.Menus
 
 				//Create the button for it
 				if (menuPanel.bottomNavBarButton)
-					CreateButton(bottomButtonPrefab, bottomNavBar, menuPanel.menuButtonText,
+					CreateButton(bottomButtonPrefab, bottomNavBar, menuPanel.menuButtonText.GetLocalizedString(),
 						delegate { TogglePanel(menuPanel.name); });
 				else
-					CreateButton(topButtonPrefab, topNavBar, menuPanel.menuButtonText,
+					CreateButton(topButtonPrefab, topNavBar, menuPanel.menuButtonText.GetLocalizedString(),
 						delegate { TogglePanel(menuPanel.name); });
 			}
 			
@@ -197,7 +197,6 @@ namespace Team_Capture.UI.Menus
 				tmpText.fontStyle = FontStyles.Bold;
 			button.GetComponent<Button>().onClick.AddListener(action);
 			button.name = $"{text} Button";
-			tmpText.gameObject.AddComponent<GameUITMPResolver>();
 		}
 
 		private void DestroyButtons()

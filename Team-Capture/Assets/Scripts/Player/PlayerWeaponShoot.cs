@@ -41,23 +41,12 @@ namespace Team_Capture.Player
 		private GameObjectPool tracerPool;
 		private GameObjectPool bulletHolesPool;
 
-		#region Mirror Events
-
-		public override void OnStartServer()
-		{
-			base.OnStartServer();
-
-			localPlayerCamera = gameObject.GetComponent<PlayerSetup>().GetPlayerCamera();
-		}
-
-		#endregion
-
 		#region Server Variables
 
 		/// <summary>
 		///     (Server only) The local player's camera
 		/// </summary>
-		private Camera localPlayerCamera;
+		[SerializeField] private Transform localPlayerCamera;
 
 		/// <summary>
 		///     (Server only) The last weapon this client used
@@ -138,17 +127,28 @@ namespace Team_Capture.Player
 				nextTimeToFire = 0;
 				lastWeapon = activeWeapon.Weapon;
 			}
-
-			//If our player is dead, or reloading, then return
-			if (activeWeapon.IsReloading || playerManager.IsDead || Time.time < nextTimeToFire)
-				return;
-
+			
+			//If our clip is empty, then reload
 			if (activeWeapon.CurrentBulletAmount <= 0)
 			{
 				//Reload
 				StartCoroutine(weaponManager.ServerReloadPlayerWeapon());
 				return;
 			}
+
+			//If we are currently reloading, and we still got bullets left, cancel the reload
+			if (activeWeapon.IsReloading)
+			{
+				if(activeWeapon.CurrentBulletAmount == 0)
+					return;
+				
+				weaponManager.CancelReload();
+				activeWeapon.IsReloading = false;
+			}
+			
+			//If our player is dead, or we haven't reached our next time to fire, then return
+			if (playerManager.IsDead || Time.time < nextTimeToFire)
+				return;
 
 			ServerShootWeapon(activeWeapon);
 
@@ -186,7 +186,7 @@ namespace Team_Capture.Player
 			Stopwatch stopwatch = Stopwatch.StartNew();
 
 			//Get the direction the player was facing
-			Transform playerFacingDirection = localPlayerCamera.transform;
+			Transform playerFacingDirection = localPlayerCamera;
 
 			//Create a list here, so we know later where the bullets landed
 			List<Vector3> targets = new List<Vector3>();

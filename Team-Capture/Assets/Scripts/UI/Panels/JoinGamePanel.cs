@@ -4,6 +4,7 @@
 // This project is governed by the AGPLv3 License.
 // For more details see the LICENSE file.
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -11,6 +12,7 @@ using Cysharp.Threading.Tasks;
 using Mirror;
 using Team_Capture.Core.Networking;
 using Team_Capture.Core.Networking.Discovery;
+using Team_Capture.Localization;
 using Team_Capture.UI.Elements;
 using Team_Capture.UI.Menus;
 using TMPro;
@@ -42,9 +44,19 @@ namespace Team_Capture.UI.Panels
 		/// </summary>
 		public TextMeshProUGUI statusText;
 		
+		/// <summary>
+		///		The <see cref="JoiningServerPanel"/> panel
+		/// </summary>
 		public JoiningServerPanel joiningServerPanel;
-
+		
+		/// <summary>
+		///		Button for refreshing the list
+		/// </summary>
 		public Button refreshButton;
+
+		public CachedLocalizedString searchingServersText;
+
+		public CachedLocalizedString connectingToServerText;
 		
 		private readonly List<TCServerResponse> servers = new List<TCServerResponse>();
 
@@ -61,13 +73,19 @@ namespace Team_Capture.UI.Panels
 			menuController = GetComponentInParent<MenuController>();
 		}
 
+		private void Start()
+		{
+			statusText.text = searchingServersText.Value;
+		}
+
 		public override void OnEnable()
 		{
 			base.OnEnable();
 			
 			joiningServerPanel.gameObject.SetActive(false);
 
-			if (gameDiscovery == null) return;
+			if (gameDiscovery == null) 
+				return;
 
 			//Add a listener to the game discovery for when a server is found
 			gameDiscovery.OnServerFound.AddListener(AddServer);
@@ -89,7 +107,7 @@ namespace Team_Capture.UI.Panels
 		/// </summary>
 		public void RefreshServerList()
 		{
-			statusText.text = "Searching for games...";
+			statusText.text = searchingServersText.Value;
 			statusText.gameObject.SetActive(true);
 		}
 
@@ -137,15 +155,16 @@ namespace Team_Capture.UI.Panels
 			menuController.allowPanelToggling = false;
 			
 			ClearList();
-			CheckConnection().Forget();
-			
+
 			//Tell Mirror to connect to the server's IP
 			NetworkManager.singleton.networkAddress = ip.Address.ToString();
 			NetworkManager.singleton.StartClient();
+			
+			CheckConnection().Forget();
 
 			//Set our status text
 			statusText.gameObject.SetActive(true);
-			statusText.text = $"Connecting to '{ip.Address}'...";
+			statusText.text = string.Format(connectingToServerText.Value, ip);
 		}
 
 		private async UniTaskVoid CheckConnection()

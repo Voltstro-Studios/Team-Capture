@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a692c30e14efcc94f80cd287f38164f9, type: 3}
+  m_Name: MainMenu
+  m_EditorClassIdentifier: 
+  scene: Assets/Scenes/MainMenu.unity
+  displayName:
+    m_TableReference:
+      m_TableCollectionName: GUID:34afaa7d41c0a49428742c07472e0e20
+    m_TableEntryReference:
+      m_KeyId: 94215546212352
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  loadingScreenBackgroundImage: {fileID: 0}
+  enabled: 1
+  isOnlineScene: 0
+  canLoadTo: 1
+  overrideProfile: {fileID: 11400000, guid: f4106fee459d9474b8fe5b4f6db5f248, type: 2}
+  respawnTime: 0
+  stockWeapons: []
+  traceEffectPrefab: {fileID: 0}
+  bulletHoleEffectPrefab: {fileID: 0}
+  showStartTime: 0
+  isMainMenu: 1
+  largeImageKey: tc_icon
+  largeImageKeyText:
+    m_TableReference:
+      m_TableCollectionName: GUID:34afaa7d41c0a49428742c07472e0e20
+    m_TableEntryReference:
+      m_KeyId: 92286556442624
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  references:
+    version: 1

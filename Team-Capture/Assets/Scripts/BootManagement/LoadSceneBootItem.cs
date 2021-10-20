@@ -6,6 +6,7 @@
 
 using Team_Capture.SceneManagement;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace Team_Capture.BootManagement
 {
@@ -19,11 +20,12 @@ namespace Team_Capture.BootManagement
 		///		The scene you want to load to
 		/// </summary>
 		[Tooltip("The scene you want to load to")]
-	    [SerializeField] private TCScene sceneToLoadTo;
+	    [SerializeField] private AssetReference sceneToLoadTo;
 
 	    public override void OnBoot()
 	    {
-		    TCScenesManager.LoadScene(sceneToLoadTo);
+		    TCScene scene = sceneToLoadTo.LoadAssetAsync<TCScene>().WaitForCompletion();
+		    TCScenesManager.LoadScene(scene);
 	    }
     }
 }

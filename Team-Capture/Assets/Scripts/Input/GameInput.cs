@@ -540,6 +540,34 @@ namespace Team_Capture.Input
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""PlayerDeathCam"",
+            ""id"": ""93f268be-e27d-4637-a03b-d1c6e1462395"",
+            ""actions"": [
+                {
+                    ""name"": ""Look"",
+                    ""type"": ""Value"",
+                    ""id"": ""77c04bca-fa1f-47bd-83d7-74b12b39cbed"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": ""ScaleVector2(x=0.5,y=0.5)"",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""8d359f78-62bb-48ba-a294-738ad70a6058"",
+                    ""path"": ""<Mouse>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Look"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -592,6 +620,9 @@ namespace Team_Capture.Input
             m_Chat = asset.FindActionMap("Chat", throwIfNotFound: true);
             m_Chat_ToggleChat = m_Chat.FindAction("ToggleChat", throwIfNotFound: true);
             m_Chat_SubmitChat = m_Chat.FindAction("SubmitChat", throwIfNotFound: true);
+            // PlayerDeathCam
+            m_PlayerDeathCam = asset.FindActionMap("PlayerDeathCam", throwIfNotFound: true);
+            m_PlayerDeathCam_Look = m_PlayerDeathCam.FindAction("Look", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -949,6 +980,39 @@ namespace Team_Capture.Input
             }
         }
         public ChatActions @Chat => new ChatActions(this);
+
+        // PlayerDeathCam
+        private readonly InputActionMap m_PlayerDeathCam;
+        private IPlayerDeathCamActions m_PlayerDeathCamActionsCallbackInterface;
+        private readonly InputAction m_PlayerDeathCam_Look;
+        public struct PlayerDeathCamActions
+        {
+            private @GameInput m_Wrapper;
+            public PlayerDeathCamActions(@GameInput wrapper) { m_Wrapper = wrapper; }
+            public InputAction @Look => m_Wrapper.m_PlayerDeathCam_Look;
+            public InputActionMap Get() { return m_Wrapper.m_PlayerDeathCam; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(PlayerDeathCamActions set) { return set.Get(); }
+            public void SetCallbacks(IPlayerDeathCamActions instance)
+            {
+                if (m_Wrapper.m_PlayerDeathCamActionsCallbackInterface != null)
+                {
+                    @Look.started -= m_Wrapper.m_PlayerDeathCamActionsCallbackInterface.OnLook;
+                    @Look.performed -= m_Wrapper.m_PlayerDeathCamActionsCallbackInterface.OnLook;
+                    @Look.canceled -= m_Wrapper.m_PlayerDeathCamActionsCallbackInterface.OnLook;
+                }
+                m_Wrapper.m_PlayerDeathCamActionsCallbackInterface = instance;
+                if (instance != null)
+                {
+                    @Look.started += instance.OnLook;
+                    @Look.performed += instance.OnLook;
+                    @Look.canceled += instance.OnLook;
+                }
+            }
+        }
+        public PlayerDeathCamActions @PlayerDeathCam => new PlayerDeathCamActions(this);
         private int m_KeyboardMouseSchemeIndex = -1;
         public InputControlScheme KeyboardMouseScheme
         {
@@ -994,6 +1058,10 @@ namespace Team_Capture.Input
         {
             void OnToggleChat(InputAction.CallbackContext context);
             void OnSubmitChat(InputAction.CallbackContext context);
+        }
+        public interface IPlayerDeathCamActions
+        {
+            void OnLook(InputAction.CallbackContext context);
         }
     }
 }

@@ -4,9 +4,6 @@
 // This project is governed by the AGPLv3 License.
 // For more details see the LICENSE file.
 
-using System;
-using Team_Capture.Core;
-using Team_Capture.Localization;
 using UnityEngine;
 
 namespace Team_Capture.Weapons
@@ -37,6 +34,22 @@ namespace Team_Capture.Weapons
 			///     shot.
 			/// </summary>
 			Semi
+		}
+		
+		/// <summary>
+		///		How to reload a weapon
+		/// </summary>
+		public enum WeaponReloadMode : byte
+		{
+			/// <summary>
+			///		Reload the entire clip each time
+			/// </summary>
+			Clip,
+			
+			/// <summary>
+			///		Reload each shell individually
+			/// </summary>
+			Shells
 		}
 
 		/// <summary>
@@ -77,6 +90,12 @@ namespace Team_Capture.Weapons
 		public WeaponFireMode fireMode;
 
 		/// <summary>
+		///		The reload-mode that this weapon will use
+		/// </summary>
+		[Tooltip("The reload-mode that this weapon will use")]
+		public WeaponReloadMode reloadMode;
+
+		/// <summary>
 		///     How many bullets will come out per shot
 		/// </summary>
 		[Tooltip("How many bullets will come out per shot")]
@@ -105,27 +124,5 @@ namespace Team_Capture.Weapons
 		/// </summary>
 		[Header("Spread")] [Tooltip("How much spread will this weapon have")]
 		public float spreadFactor = 0.05f;
-
-		/// <summary>
-		///     The formatted name. This is what will show on HUDs
-		/// </summary>
-		public string WeaponFormattedNameLocalized =>
-			weaponFormattedName ?? (weaponFormattedName = ResolveWeaponString(weaponFormattedName));
-
-		#region Locales
-
-		[NonSerialized] private string weaponFormattedNameLocalized;
-
-		private Locale mapLocale;
-
-		public string ResolveWeaponString(string id)
-		{
-			if (mapLocale == null)
-				mapLocale = new Locale($"{Game.GetGameExecutePath()}/Resources/Maps/{weapon}-%LANG%.json");
-
-			return mapLocale.ResolveString(id);
-		}
-
-		#endregion
 	}
 }

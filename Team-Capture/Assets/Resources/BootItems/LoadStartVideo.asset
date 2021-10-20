@@ -13,4 +13,8 @@ MonoBehaviour:
   m_Name: LoadStartVideo
   m_EditorClassIdentifier: 
   runOn: 0
-  sceneToLoadTo: {fileID: 11400000, guid: 471b24a2f0e2fda498c460d76acfa1e5, type: 2}
+  sceneToLoadTo:
+    m_AssetGUID: 471b24a2f0e2fda498c460d76acfa1e5
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 0

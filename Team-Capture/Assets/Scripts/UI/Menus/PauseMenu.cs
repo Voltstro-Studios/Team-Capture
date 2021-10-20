@@ -5,6 +5,7 @@
 // For more details see the LICENSE file.
 
 using System;
+using UnityEngine.Localization;
 
 namespace Team_Capture.UI.Menus
 {
@@ -14,6 +15,8 @@ namespace Team_Capture.UI.Menus
     internal class PauseMenu : MenuController
     {
         public MenuPanel[] menuPanels;
+
+        public LocalizedString menuResumeText;
         
         private Action togglePauseMenu;
         
@@ -21,7 +24,7 @@ namespace Team_Capture.UI.Menus
         {
             togglePauseMenu = toggleMenu;
             
-            CreateButton(topButtonPrefab, topNavBar, "Menu_Resume", ClosePauseMenu, 52f, true);
+            CreateButton(topButtonPrefab, topNavBar, menuResumeText.GetLocalizedString(), ClosePauseMenu, 52f, true);
             
             AddPanels(menuPanels);
         }

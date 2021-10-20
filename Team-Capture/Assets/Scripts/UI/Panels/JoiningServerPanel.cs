@@ -8,8 +8,8 @@ namespace Team_Capture.UI.Panels
     {
         public TMP_Text messageText;
         
-        public string joiningServerLocale = "Menu_JoiningServer";
-        public string failToJoinLocale = "Menu_JoiningFail";
+        public CachedLocalizedString joiningServerLocale;
+        public CachedLocalizedString failToJoinLocale;
 
         private void Start()
         {
@@ -20,13 +20,13 @@ namespace Team_Capture.UI.Panels
         {
             base.OnEnable();
             cancelButton.interactable = false;
-            messageText.text = GameUILocale.ResolveString(joiningServerLocale);
+            messageText.text = joiningServerLocale.Value;
         }
 
         public void FailToJoin()
         {
             cancelButton.interactable = true;
-            messageText.text = GameUILocale.ResolveString(failToJoinLocale);
+            messageText.text = failToJoinLocale.Value;
         }
     }
 }

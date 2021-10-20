@@ -4,11 +4,13 @@
 // This project is governed by the AGPLv3 License.
 // For more details see the LICENSE file.
 
+using System;
 using Team_Capture.Input;
 using Team_Capture.SceneManagement;
 using UnityEngine;
 using UnityEngine.Video;
 using UnityCommandLineParser;
+using UnityEngine.AddressableAssets;
 using UnityEngine.Scripting;
 
 namespace Team_Capture.StartUpVideo
@@ -20,9 +22,11 @@ namespace Team_Capture.StartUpVideo
 	[RequireComponent(typeof(Camera))]
 	internal class StartUpVideo : MonoBehaviour
 	{
+		private VideoClip videoClip;
 		private VideoPlayer startUpVideo;
-
+		private TCScene scene;
 		private Camera mainCamera;
+		private static bool skipVideo;
 
 		[CommandLineCommand("novid")]
 		[Preserve]
@@ -30,8 +34,6 @@ namespace Team_Capture.StartUpVideo
 		{
 			skipVideo = true;
 		}
-		
-		private static bool skipVideo;
 
 		/// <summary>
 		///		Handles reading inputs
@@ -41,18 +43,26 @@ namespace Team_Capture.StartUpVideo
 		/// <summary>
 		///     Video clip to play
 		/// </summary>
-		[Tooltip("Video clip to play")] public VideoClip startUpVideoClip;
+		[Tooltip("Video clip to play")] 
+		public AssetReference startUpVideoClip;
 
-		public TCScene nextScene;
+		/// <summary>
+		///		The next <see cref="TCScene"/> to load
+		/// </summary>
+		public AssetReference nextScene;
 
 		private void Start()
 		{
+			scene = nextScene.LoadAssetAsync<TCScene>().WaitForCompletion();
+			
 			if (skipVideo)
 			{
 				ChangeScene();
 				return;
 			}
 
+			videoClip = startUpVideoClip.LoadAssetAsync<VideoClip>().WaitForCompletion();
+			
 			inputReader.StartVideoSkip += SkipStartVideo;
 			inputReader.EnableStartVideoInput();
 			Play();
@@ -75,12 +85,19 @@ namespace Team_Capture.StartUpVideo
 
 		private void VideoEnd(VideoPlayer source)
 		{
+			startUpVideo.clip = null;
+			Destroy(videoClip);
 			ChangeScene();
 		}
 
 		private void ChangeScene()
 		{
-			TCScenesManager.LoadScene(nextScene);
+			TCScenesManager.LoadScene(scene);
+		}
+
+		private void OnDestroy()
+		{
+			scene = null;
 		}
 
 		public void Setup()
@@ -99,7 +116,7 @@ namespace Team_Capture.StartUpVideo
 				}
 
 				startUpVideo.source = VideoSource.VideoClip;
-				startUpVideo.clip = startUpVideoClip;
+				startUpVideo.clip = videoClip;
 				startUpVideo.renderMode = VideoRenderMode.CameraNearPlane;
 				startUpVideo.playOnAwake = false;
 				startUpVideo.waitForFirstFrame = true;

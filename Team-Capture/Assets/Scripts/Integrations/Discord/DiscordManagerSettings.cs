@@ -4,19 +4,18 @@
 // This project is governed by the AGPLv3 License.
 // For more details see the LICENSE file.
 
-using System;
 using Discord.GameSDK;
 using UnityEngine;
 
 namespace Team_Capture.Integrations.Discord
 {
-	[Serializable]
-	internal class DiscordManagerSettings
+	[CreateAssetMenu(fileName = "Discord Settings", menuName = "Team Capture/Discord Settings")]
+	internal class DiscordManagerSettings : ScriptableObject
 	{
 		/// <summary>
 		///     The client ID that we will use
 		/// </summary>
-		[Tooltip("The client ID that we will use")] [SerializeField]
+		[Tooltip("The client ID that we will use")]
 		public string clientId;
 
 		/// <summary>
@@ -40,6 +39,7 @@ namespace Team_Capture.Integrations.Discord
 		/// <summary>
 		///     The log level to use
 		/// </summary>
-		[Tooltip("The log level to use")] public LogLevel logLevel = LogLevel.Warn;
+		[Tooltip("The log level to use")]
+		public LogLevel logLevel = LogLevel.Warn;
 	}
 }

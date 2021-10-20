@@ -8,9 +8,9 @@ using System;
 using System.IO;
 using Mirror;
 using Team_Capture.Core;
-using Team_Capture.Localization;
 using Team_Capture.Weapons;
 using UnityEngine;
+using UnityEngine.Localization;
 using UnityEngine.Rendering;
 
 namespace Team_Capture.SceneManagement
@@ -31,7 +31,7 @@ namespace Team_Capture.SceneManagement
 		///     The display name, the name that will be shown to the user
 		/// </summary>
 		[Tooltip("The display name, the name that will be shown to the user")] [SerializeField]
-		private string displayName = "Map_DisplayName";
+		private LocalizedString displayName;
 
 		/// <summary>
 		///		Image that will be displayed while loading
@@ -88,54 +88,35 @@ namespace Team_Capture.SceneManagement
 		/// <summary>
 		///     The display name, the name that will be shown to the user (Localized)
 		/// </summary>
-		public string DisplayNameLocalized =>
-			displayNameLocalized ?? (displayNameLocalized = ResolveMapString(displayName));
+		public string DisplayNameLocalized => displayName.GetLocalizedString();
 
 		#region Discord RPC
 
 		/// <summary>
 		///     Do you want to show the start time on Discord RPC
 		/// </summary>
-		[Header("Discord RPC")] public bool showStartTime = true;
+		[Header("Discord RPC")] 
+		public bool showStartTime = true;
 
 		/// <summary>
 		///     Is this the main menu?
 		/// </summary>
-		[Tooltip("Is this the main menu?")] public bool isMainMenu;
+		[Tooltip("Is this the main menu?")] 
+		public bool isMainMenu;
 
 		/// <summary>
 		///     What large image to use
 		/// </summary>
-		[Tooltip("What large image to use")] public string largeImageKey = "tc_icon";
+		[Tooltip("What large image to use")] 
+		public string largeImageKey = "tc_icon";
 
 		/// <summary>
-		///     What text will the large image have
+		///		Discord large image key text
 		/// </summary>
-		[Tooltip("What text will the large image have")] [SerializeField]
-		private string largeImageKeyText = "Discord_LargeImageKeyText";
+		[Tooltip("Discord large image key text")]
+		[SerializeField] private LocalizedString largeImageKeyText;
 
-		/// <summary>
-		///     Gets the localized version of <see cref="largeImageKeyText" />
-		/// </summary>
-		public string LargeImageKeyTextLocalized => largeImageKeyTextLocalized ??
-		                                            (largeImageKeyTextLocalized = ResolveMapString(largeImageKeyText));
-
-		#endregion
-
-		#region Locales
-
-		[NonSerialized] private string largeImageKeyTextLocalized;
-		[NonSerialized] private string displayNameLocalized;
-
-		private Locale sceneLocale;
-
-		public string ResolveMapString(string id)
-		{
-			if (sceneLocale == null)
-				sceneLocale = new Locale($"{Game.GetGameExecutePath()}/Resources/Maps/{SceneFileName}-%LANG%.json");
-
-			return sceneLocale.ResolveString(id);
-		}
+		public string LargeImageKeyText => largeImageKeyText.GetLocalizedString();
 
 		#endregion
 	}

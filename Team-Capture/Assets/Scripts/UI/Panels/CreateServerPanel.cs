@@ -73,12 +73,12 @@ namespace Team_Capture.UI.Panels
 		[Tooltip("The panel that is displayed when starting a server")]
 		public CreatingServerPanel onStartingServerPanel;
 
-		private Image gameNameImage;
+		public Image gameNameImage;
 
 		private Color gameNameImageColor;
 
 		private int maxPlayers = 16;
-		private Image maxPlayersImage;
+		public Image maxPlayersImage;
 		private Color maxPlayersImageColor;
 
 		private MenuController menuController;
@@ -93,7 +93,7 @@ namespace Team_Capture.UI.Panels
 			mapsDropdown.ClearOptions();
 
 			//Then get all online scenes
-			onlineTCScenes = TCScenesManager.GetAllEnabledOnlineScenesInfo().ToList();
+			onlineTCScenes = TCScenesManager.GetAllOnlineScenes().ToList();
 
 			//And all the scenes to the map dropdown
 			List<string> scenes = onlineTCScenes.Select(scene => scene.DisplayNameLocalized).ToList();
@@ -105,7 +105,6 @@ namespace Team_Capture.UI.Panels
 
 			//Get the images that are in the input fields
 			gameNameImage = gameNameText.GetComponent<Image>();
-			maxPlayersImage = maxPlayersText.GetComponent<Image>();
 
 			//Get the existing colors of the input fields
 			gameNameImageColor = gameNameImage.color;
@@ -126,7 +125,7 @@ namespace Team_Capture.UI.Panels
 		{
 #if UNITY_EDITOR
 			//If we are running as the editor, then we to check to see if an existing build already exists and use that instead
-			if (!Directory.Exists($"{Voltstro.UnityBuilder.Build.GameBuilder.GetBuildDirectory()}Team-Capture-Quick/"))
+			if (!Directory.Exists($"{UnityVoltBuilder.Build.GameBuilder.GetBuildDirectory()}Team-Capture-Quick/"))
 			{
 				Debug.LogError("There is no pre-existing build of Team-Capture! Build the game using VoltBuild.");
 				return;

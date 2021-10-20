@@ -12,17 +12,17 @@ namespace Team_Capture.Settings.SettingClasses
 {
 	internal class MultiplayerSettingsClass : Setting
 	{
-		[SettingsPropertyDisplayText("Settings_MultiplayerMuzzleFlashLighting")]
+		[SettingsPropertyDisplayText("Text", "Settings_Multiplayer_MuzzleFlashLighting")]
 		public bool WeaponMuzzleFlashLighting = true;
 
-		[SettingsPropertyDisplayText("Settings_MultiplayerWeaponSway")]
+		[SettingsPropertyDisplayText("Text", "Settings_Multiplayer_WeaponSway")]
 		public bool WeaponSwayEnabled = true;
 
 		[Range(0, 15)]
-		[SettingsPropertyDisplayText("Settings_MultiplayerWeaponSwayAmount")]
+		[SettingsPropertyDisplayText("Text", "Settings_Multiplayer_WeaponSwayAmount")]
 		public float WeaponSwayAmount = 0.1f;
 
-		[SettingsPropertyDisplayText("Settings_MultiplayerMOTDMode")]
+		[SettingsPropertyDisplayText("Text", "Settings_Multiplayer_MOTDMode")]
 		public Client.ClientMOTDMode MOTDMode = Client.ClientMOTDMode.WebSupport;
 	}
 }

@@ -7,6 +7,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.Weapons
 {
@@ -15,18 +17,15 @@ namespace Team_Capture.Weapons
 	/// </summary>
 	public static class WeaponsResourceManager
 	{
-		private static List<TCWeapon> weapons;
+		private static IList<TCWeapon> weapons;
+
+		private const string WeaponLabel = "Weapon";
 
 		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
 		private static void Init()
 		{
-			weapons = GetAllTCWeapons().ToList();
-			//Logger.Log("Got all weapons", LogVerbosity.Debug);
-		}
-
-		private static IEnumerable<TCWeapon> GetAllTCWeapons()
-		{
-			return Resources.LoadAll<TCWeapon>("");
+			weapons = Addressables.LoadAssetsAsync<TCWeapon>(WeaponLabel, null).WaitForCompletion();
+			Logger.Debug("Loaded {WeaponCount} weapons.", weapons.Count);
 		}
 
 		/// <summary>

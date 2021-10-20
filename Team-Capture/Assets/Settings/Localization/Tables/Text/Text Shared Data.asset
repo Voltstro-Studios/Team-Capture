@@ -1,0 +1,352 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: Text Shared Data
+  m_EditorClassIdentifier: 
+  m_TableCollectionName: Text
+  m_TableCollectionNameGuidString: 34afaa7d41c0a49428742c07472e0e20
+  m_Entries:
+  - m_Id: 4723791499264
+    m_Key: Menu_Cancel
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4767609393152
+    m_Key: Menu_Yes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4796768194560
+    m_Key: Menu_Close
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4836941238272
+    m_Key: Menu_Home
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4867974893568
+    m_Key: Menu_Resume
+    m_Metadata:
+      m_Items: []
+  - m_Id: 68281707401216
+    m_Key: Menu_Next
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4905396473856
+    m_Key: Menu_Refresh
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4950531379200
+    m_Key: Menu_Apply
+    m_Metadata:
+      m_Items: []
+  - m_Id: 4986996658176
+    m_Key: Menu_Ok
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5229586812928
+    m_Key: Menu_CreateServer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5445727686656
+    m_Key: Menu_CreateServer_DefaultName
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5647947665408
+    m_Key: Menu_CreateServer_Placeholder
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5719422799872
+    m_Key: Menu_CreateServer_MaxPlayers
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5840365555712
+    m_Key: Menu_CreateServer_AuthMode
+    m_Metadata:
+      m_Items: []
+  - m_Id: 5933944672256
+    m_Key: Menu_CreateServer_CloseOnDisconnect
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6118317887488
+    m_Key: Menu_CreateServer_Warning
+    m_Metadata:
+      m_Items: []
+  - m_Id: 9952377311232
+    m_Key: Menu_CreateServer_Start
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6416029585408
+    m_Key: Menu_CreateServer_Starting
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6511248674816
+    m_Key: Menu_CreateServer_Fail
+    m_Metadata:
+      m_Items: []
+  - m_Id: 88142328238080
+    m_Key: Menu_CreateServer_Fail_Start
+    m_Metadata:
+      m_Items: []
+  - m_Id: 6756829368320
+    m_Key: Menu_CreateServer_Fail_Connect
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7659892379648
+    m_Key: Menu_JoinServer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7872094801920
+    m_Key: "Menu_JoinServer_ServerName\t"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7925907722240
+    m_Key: Menu_JoinServer_Ping
+    m_Metadata:
+      m_Items: []
+  - m_Id: 7969897582592
+    m_Key: Menu_JoinServer_Players
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8014373982208
+    m_Key: Menu_JoinServer_MapName
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8074063122432
+    m_Key: "Menu_JoinServer_Searching\t"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 58319715307520
+    m_Key: Menu_JoinServer_Joining
+    m_Metadata:
+      m_Items: []
+  - m_Id: 88387380449280
+    m_Key: Menu_JoinServer_Joining_Fail
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8140215685120
+    m_Key: Menu_Settings
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8226542850048
+    m_Key: Menu_Settings_Saved
+    m_Metadata:
+      m_Items: []
+  - m_Id: 62603030827008
+    m_Key: Menu_Settings_Saved_Message
+    m_Metadata:
+      m_Items: []
+  - m_Id: 57048824418304
+    m_Key: Menu_Disconnect
+    m_Metadata:
+      m_Items: []
+  - m_Id: 57227191390208
+    m_Key: Menu_Disconnect_Message
+    m_Metadata:
+      m_Items: []
+  - m_Id: 66010202378240
+    m_Key: Menu_Quit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 66035410145280
+    m_Key: Menu_Quit_Message
+    m_Metadata:
+      m_Items: []
+  - m_Id: 60516830154752
+    m_Key: Loading_OnUrWayTo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 60638876012544
+    m_Key: Loading_Loading
+    m_Metadata:
+      m_Items: []
+  - m_Id: 60911275085824
+    m_Key: Loading_Tip
+    m_Metadata:
+      m_Items: []
+  - m_Id: 67127325888512
+    m_Key: Chat_Send
+    m_Metadata:
+      m_Items: []
+  - m_Id: 67151900315648
+    m_Key: Chat_Placeholder
+    m_Metadata:
+      m_Items: []
+  - m_Id: 67844908388352
+    m_Key: Hud_Reloading
+    m_Metadata:
+      m_Items: []
+  - m_Id: 68538499469312
+    m_Key: ScoreBoard_Name
+    m_Metadata:
+      m_Items: []
+  - m_Id: 68617868283904
+    m_Key: ScoreBoard_Kills
+    m_Metadata:
+      m_Items: []
+  - m_Id: 68647752699904
+    m_Key: ScoreBoard_Deaths
+    m_Metadata:
+      m_Items: []
+  - m_Id: 68680862535680
+    m_Key: ScoreBoard_Ping
+    m_Metadata:
+      m_Items: []
+  - m_Id: 92286556442624
+    m_Key: Discord_LargeImageKetText
+    m_Metadata:
+      m_Items: []
+  - m_Id: 94120318734336
+    m_Key: Map_Included_Bootloader
+    m_Metadata:
+      m_Items: []
+  - m_Id: 94168154771456
+    m_Key: Map_Included_StartVideo
+    m_Metadata:
+      m_Items: []
+  - m_Id: 94215546212352
+    m_Key: Map_Included_MainMenu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 95938708901888
+    m_Key: Settings_Mouse
+    m_Metadata:
+      m_Items: []
+  - m_Id: 96011962421248
+    m_Key: Settings_Mouse_Sensitivity
+    m_Metadata:
+      m_Items: []
+  - m_Id: 96109991694336
+    m_Key: Settings_Mouse_RawAxis
+    m_Metadata:
+      m_Items: []
+  - m_Id: 96125439315968
+    m_Key: Settings_Mouse_Reverse
+    m_Metadata:
+      m_Items: []
+  - m_Id: 96216476684288
+    m_Key: Settings_Video
+    m_Metadata:
+      m_Items: []
+  - m_Id: 96251012583424
+    m_Key: Settings_Video_Resolution
+    m_Metadata:
+      m_Items: []
+  - m_Id: 96303135199232
+    m_Key: Settings_Video_ScreenMode
+    m_Metadata:
+      m_Items: []
+  - m_Id: 96360714604544
+    m_Key: Settings_Video_TextureQuality
+    m_Metadata:
+      m_Items: []
+  - m_Id: 96410110922752
+    m_Key: Settings_Video_VSync
+    m_Metadata:
+      m_Items: []
+  - m_Id: 96442763579392
+    m_Key: Settings_Adv
+    m_Metadata:
+      m_Items: []
+  - m_Id: 96471683305472
+    m_Key: Settings_Adv_MSAA
+    m_Metadata:
+      m_Items: []
+  - m_Id: 96505418092544
+    m_Key: Settings_Adv_PostProcessing
+    m_Metadata:
+      m_Items: []
+  - m_Id: 96544156684288
+    m_Key: Settings_Adv_HDR
+    m_Metadata:
+      m_Items: []
+  - m_Id: 96574456336384
+    m_Key: Settings_Adv_MotionBlur
+    m_Metadata:
+      m_Items: []
+  - m_Id: 96616642646016
+    m_Key: Settings_Adv_Bloom
+    m_Metadata:
+      m_Items: []
+  - m_Id: 96648880066560
+    m_Key: Settings_Adv_Vignette
+    m_Metadata:
+      m_Items: []
+  - m_Id: 96676453421056
+    m_Key: Settings_Adv_RenderScale
+    m_Metadata:
+      m_Items: []
+  - m_Id: 96720908849152
+    m_Key: Settings_Adv_ShadowDistance
+    m_Metadata:
+      m_Items: []
+  - m_Id: 96768551948288
+    m_Key: Settings_Adv_Cascades
+    m_Metadata:
+      m_Items: []
+  - m_Id: 96798776102912
+    m_Key: Settings_Adv_FOV
+    m_Metadata:
+      m_Items: []
+  - m_Id: 96837598580736
+    m_Key: Settings_Adv_Antialiasing
+    m_Metadata:
+      m_Items: []
+  - m_Id: 96866975485952
+    m_Key: Settings_Multiplayer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 96905974124544
+    m_Key: Settings_Multiplayer_MuzzleFlashLighting
+    m_Metadata:
+      m_Items: []
+  - m_Id: 96943366344704
+    m_Key: Settings_Multiplayer_WeaponSway
+    m_Metadata:
+      m_Items: []
+  - m_Id: 96957597618176
+    m_Key: Settings_Multiplayer_WeaponSwayAmount
+    m_Metadata:
+      m_Items: []
+  - m_Id: 96979420581888
+    m_Key: Settings_Multiplayer_MOTDMode
+    m_Metadata:
+      m_Items: []
+  - m_Id: 99408191033344
+    m_Key: Death_KilledBy
+    m_Metadata:
+      m_Items: []
+  - m_Id: 99491577991168
+    m_Key: Death_ReSpawningIn
+    m_Metadata:
+      m_Items: []
+  - m_Id: 106540911169536
+    m_Key: Console_Console
+    m_Metadata:
+      m_Items: []
+  - m_Id: 106626286227456
+    m_Key: Console_Submit
+    m_Metadata:
+      m_Items: []
+  - m_Id: 106809145298944
+    m_Key: Console_Placeholder
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    id: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables,
+        asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1634443173486

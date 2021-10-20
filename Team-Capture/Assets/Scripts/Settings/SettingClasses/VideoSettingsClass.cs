@@ -12,16 +12,16 @@ namespace Team_Capture.Settings.SettingClasses
 {
 	internal sealed class VideoSettingsClass : Setting
 	{
-		[SettingsPropertyDisplayText("Settings_VideoResolution")]
+		[SettingsPropertyDisplayText("Text", "Settings_Video_Resolution")]
 		public Resolution Resolution = Screen.currentResolution;
 
-		[SettingsPropertyDisplayText("Settings_VideoScreenMode")]
+		[SettingsPropertyDisplayText("Text", "Settings_Video_ScreenMode")]
 		public ScreenMode ScreenMode = ScreenMode.Fullscreen;
 
-		[SettingsPropertyDisplayText("Settings_VideoTextureQuality")]
+		[SettingsPropertyDisplayText("Text", "Settings_Video_TextureQuality")]
 		public TextureQuality TextureQuality = TextureQuality.FullRes;
 
-		[SettingsPropertyDisplayText("Settings_VideoVSync")]
+		[SettingsPropertyDisplayText("Text", "Settings_Video_VSync")]
 		public VSync VSync = VSync.Disable;
 	}
 }

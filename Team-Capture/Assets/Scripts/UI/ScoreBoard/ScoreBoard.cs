@@ -9,11 +9,11 @@ using System.Diagnostics;
 using System.Linq;
 using Team_Capture.Core;
 using Team_Capture.Core.Networking;
-using Team_Capture.Localization;
 using Team_Capture.Player;
 using Team_Capture.SceneManagement;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Localization;
 using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.UI.ScoreBoard
@@ -67,13 +67,23 @@ namespace Team_Capture.UI.ScoreBoard
 		[Tooltip("The player list transform")] [SerializeField]
 		private Transform playerListTransform;
 
+		/// <summary>
+		///		<see cref="LocalizedString"/> for the death text
+		/// </summary>
+		[Tooltip("Localized String for the death text")]
+		[SerializeField] private LocalizedString deathText;
+
+		/// <summary>
+		///		<see cref="LocalizedString"/> for the kills text
+		/// </summary>
+		[Tooltip("Localized String for the kills text")]
+		[SerializeField] private LocalizedString killsText;
+
 		private readonly List<ScoreBoardPlayer> playerItems = new List<ScoreBoardPlayer>();
-
-		private string deathsTextLocale;
-
-		private string killsTextLocale;
-
 		private List<PlayerManager> players;
+
+		private string deathTextCache;
+		private string killsTextCache;
 
 		/// <summary>
 		///     Generate the list from scratch
@@ -156,7 +166,7 @@ namespace Team_Capture.UI.ScoreBoard
 		{
 			killDeathRatioText.text = $"{clientPlayer.Kills}/{clientPlayer.Deaths}";
 			playerStatsText.text =
-				$"{killsTextLocale}: {clientPlayer.Kills}\n{deathsTextLocale}: {clientPlayer.Deaths}";
+				$"{killsTextCache}: {clientPlayer.Kills}\n{deathTextCache}: {clientPlayer.Deaths}";
 		}
 
 		private class PlayerListComparer : IComparer<PlayerManager>
@@ -174,12 +184,6 @@ namespace Team_Capture.UI.ScoreBoard
 
 		#region Unity Callbacks
 
-		private void Awake()
-		{
-			killsTextLocale = GameUILocale.ResolveString("ScoreBoard_Kills");
-			deathsTextLocale = GameUILocale.ResolveString("ScoreBoard_Deaths");
-		}
-
 		private void Start()
 		{
 			playerNameText.text = clientPlayer.User.UserName;
@@ -194,11 +198,17 @@ namespace Team_Capture.UI.ScoreBoard
 			GameManager.PlayerAdded += OnPlayerAdded;
 			GameManager.PlayerRemoved += OnPlayerRemoved;
 
+			killsText.StringChanged += OnKillsTextChange;
+			deathText.StringChanged += OnDeathsTextChange;
+
+			killsText.RefreshString();
+			deathText.RefreshString();
+
 			clientPlayer.PlayerKill += ClientPlayerUpdateUI;
 			clientPlayer.PlayerDeath += ClientPlayerUpdateUI;
 			ClientPlayerUpdateUI();
 		}
-
+		
 		private void OnDisable()
 		{
 			players.Clear();
@@ -206,6 +216,9 @@ namespace Team_Capture.UI.ScoreBoard
 
 			GameManager.PlayerAdded -= OnPlayerAdded;
 			GameManager.PlayerRemoved -= OnPlayerRemoved;
+			
+			killsText.StringChanged -= OnKillsTextChange;
+			deathText.StringChanged -= OnDeathsTextChange;
 
 			clientPlayer.PlayerKill -= ClientPlayerUpdateUI;
 			clientPlayer.PlayerDeath -= ClientPlayerUpdateUI;
@@ -224,6 +237,21 @@ namespace Team_Capture.UI.ScoreBoard
 		{
 			SetPlayerList();
 		}
+
+		#endregion
+
+		#region Localized String Updates
+
+		private void OnKillsTextChange(string value)
+		{
+			killsTextCache = value;
+		}
+
+		private void OnDeathsTextChange(string value)
+		{
+			deathTextCache = value;
+		}
+
 
 		#endregion
 	}

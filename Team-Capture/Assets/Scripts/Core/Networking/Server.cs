@@ -329,7 +329,7 @@ namespace Team_Capture.Core.Networking
 		{
 #if UNITY_EDITOR
 			string serverOnlinePath =
-				$"{Voltstro.UnityBuilder.Build.GameBuilder.GetBuildDirectory()}Team-Capture-Quick/{ServerOnlineFile}";
+				$"{UnityVoltBuilder.Build.GameBuilder.GetBuildDirectory()}Team-Capture-Quick/{ServerOnlineFile}";
 #else
 			string serverOnlinePath = $"{Game.GetGameExecutePath()}/{ServerOnlineFile}";
 #endif
@@ -436,7 +436,7 @@ namespace Team_Capture.Core.Networking
 				$"-batchmode -nographics -gamename \"{gameName}\" -scene {sceneName} -maxplayers {maxPlayers} -auth-method {userProvider.ToString()}" +
 				$"{(shutOnDisconnect ? " -closeserveronfirstclientdisconnect" : string.Empty)} -high";
 #if UNITY_EDITOR_WIN
-			startInfo.FileName = $"{Voltstro.UnityBuilder.Build.GameBuilder.GetBuildDirectory()}Team-Capture-Quick/Team-Capture.exe";
+			startInfo.FileName = $"{UnityVoltBuilder.Build.GameBuilder.GetBuildDirectory()}Team-Capture-Quick/Team-Capture.exe";
 #elif UNITY_STANDALONE_WIN
 			startInfo.FileName = $"Team-Capture.exe";
 			startInfo.WorkingDirectory = Game.GetGameExecutePath();
@@ -450,7 +450,7 @@ namespace Team_Capture.Core.Networking
 #if UNITY_EDITOR_LINUX || UNITY_STANDALONE_LINUX
 
 #if UNITY_EDITOR
-			startInfo.FileName = $"{Voltstro.UnityBuilder.Build.GameBuilder.GetBuildDirectory()}Team-Capture-Quick/Team-Capture";
+			startInfo.FileName = $"{UnityVoltBuilder.Build.GameBuilder.GetBuildDirectory()}Team-Capture-Quick/Team-Capture";
 #else
 			startInfo.FileName = "./Team-Capture";
 #endif
@@ -471,8 +471,16 @@ $"{(shutOnDisconnect ? " -closeserveronfirstclientdisconnect" : string.Empty)} -
 		{
 			NetworkManager networkManager = NetworkManager.singleton;
 			string scene = args[0];
-			networkManager.onlineScene = scene;
+			TCScene tcScene = TCScenesManager.FindSceneInfo(scene);
+			if (tcScene == null)
+			{
+				Logger.Error("That scene doesn't exist!");
+				return;
+			}
 
+			Scene = tcScene.scene;
+			networkManager.onlineScene = tcScene.scene;
+			
 			networkManager.StartServer();
 		}
 

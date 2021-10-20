@@ -20,23 +20,35 @@ Please remember that this project is still in early development!
 
 - In-Game Console
     - With commands!
-- Headless/Console mode (Windows/Linux)
-- Working weapon shooting
-- Working pickups (Weapons/Health)
+- Working weapon shooting/reloading
 - Working weapon switching
+- Working pickups (Weapons/Health)
 - Lag Compensation
-- Auth Movement
+- Server Auth Movement
 - Dynamic settings UI
 - Dynamic settings save system
-- Discord RPC integration
+- Discord Game RPC integration
 - Steam integration
-    - Steam Auth
+    - Steam Server Auth
 - Server MOTDs (HTML or regular text)
-- Offline play
+- Full offline play
 - Cross-platform play (Windows, Linux)
+    - Both headless server and player
 - Well documented API
 
 For a roadmap of what is either being worked on, or planed to come, check out the [projects](https://github.com/Voltstro-Studios/Team-Capture/projects) tab.
+
+### Unity Technologies Used
+
+Unity has a lot of first-party packages, here are some that we use:
+
+- [Addressables](https://docs.unity3d.com/Packages/com.unity.addressables@latest/manual/index.html)
+- [Cinemachine](https://docs.unity3d.com/Packages/com.unity.cinemachine@latest/index.html)
+- [Localization](https://docs.unity3d.com/Packages/com.unity.localization@latest/manual/index.html)
+- [Input System](https://docs.unity3d.com/Packages/com.unity.inputsystem@latest/manual/index.html)
+- [Universal Render Pipeline](https://docs.unity3d.com/Packages/com.unity.render-pipelines.universal@latest/manual/index.html)
+
+We will usually always use whatever is the latest release version of a package for the current Unity version we are using.
 
 ## Team
 
@@ -67,7 +79,7 @@ We also upload [releases](https://github.com/Voltstro-Studios/Team-Capture/relea
 #### Prerequisites
 
 ```
-Unity 2021.1.23f1
+Unity 2021.1.25f1
 PowerShell Core
 Git
 ```
@@ -85,22 +97,24 @@ Once you have PowerShell ready:
 2. Open the project up in Unity
 
     - When opening the project for the first time, it can take awhile to open!
+    - There might be some errors and warnings at first, but should be safe to ignore
 
-3. There might be some errors and warnings at first, but should be safe to ignore
+3. You need to build the Addressables and a player build to play and test, goto Tools **->** Volt Unity Builder **->** Volt Builder
 
-4. You need to build a player build to play and test, goto Tools **->** Volt Unity Builder **->** Volt Builder **->** Build Player
+4. Click 'Build Addressables'
+
+5. Click 'Build Player'
 
     - Building for the first time may take awhile (30~ mins), once the cache is built it takes about 90~ secs. This all depends on your computer.
-
-    - We suggest docking Volt Unity Builder somewhere for easy access. Always use this tool to build the game!
+    - We suggest docking Unity Volt Builder somewhere for easy access. Always use this tool to build the game!
 
 #### Testing the project
 
 While working on the project, remember that if you alter code that runs on the server you will need to recompile the player build. You will need to also re-build the player build if you alter the scene in any major way.
 
-You can run a server from either the command line with the `startserver` command, start a server from in the in-game 'Create Server' menu, launch the Team-Capture exe with `-batchmode -nographics`, or via running the PowerShell scripts in the build directory.
+You can run a server from either the command line with the `startserver` command, start a server from in the in-game 'Create Server' menu, launch the Team-Capture exe with `-batchmode -nographics`, or via running the PowerShell script in the build directory.
 
-You can also test the build from the editor by going to Team Capture **->** Build **->** Launch Player *etc*.
+You can also test the build from the editor by going to Team-Capture **->** Build **->** Launch Player *etc*.
 
 Check out the [Command Line Arguments Wiki page](https://github.com/Voltstro-Studios/Team-Capture/wiki/Command-Line-Arguments) for more info on the command line arguments in this project.
 

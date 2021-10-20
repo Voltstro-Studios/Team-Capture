@@ -5,6 +5,7 @@
 // For more details see the LICENSE file.
 
 using UnityEngine;
+using UnityEngine.Localization;
 
 namespace Team_Capture.UI.Menus
 {
@@ -35,8 +36,9 @@ namespace Team_Capture.UI.Menus
 		/// <summary>
 		///     The text that the button will display to open this menu
 		/// </summary>
-		[Header("Button Options")] [Tooltip("The text that the button will display to open this menu")]
-		public string menuButtonText;
+		[Header("Button Options")]
+		[Tooltip("The text that the button will display to open this menu")]
+		public LocalizedString menuButtonText;
 
 		/// <summary>
 		///     Will this button be placed on the bottom nav bar
