@@ -155,11 +155,12 @@ namespace Team_Capture.UI.Panels
 			menuController.allowPanelToggling = false;
 			
 			ClearList();
-			CheckConnection().Forget();
-			
+
 			//Tell Mirror to connect to the server's IP
 			NetworkManager.singleton.networkAddress = ip.Address.ToString();
 			NetworkManager.singleton.StartClient();
+			
+			CheckConnection().Forget();
 
 			//Set our status text
 			statusText.gameObject.SetActive(true);
