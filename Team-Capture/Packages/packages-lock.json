@@ -60,7 +60,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.cinemachine": {
-      "version": "2.7.8",
+      "version": "2.7.9",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
@@ -125,8 +125,8 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.mathematics": {
-      "version": "1.2.1",
-      "depth": 1,
+      "version": "1.2.4",
+      "depth": 0,
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"
@@ -187,8 +187,8 @@
       }
     },
     "com.unity.scriptablebuildpipeline": {
-      "version": "1.19.2",
-      "depth": 1,
+      "version": "1.19.3",
+      "depth": 0,
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"
@@ -217,7 +217,7 @@
       }
     },
     "com.unity.sharp-zip-lib": {
-      "version": "1.2.2-preview.1",
+      "version": "1.2.2-preview.2",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
@@ -240,7 +240,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.test-framework": {
-      "version": "1.1.29",
+      "version": "1.1.30",
       "depth": 0,
       "source": "registry",
       "dependencies": {
