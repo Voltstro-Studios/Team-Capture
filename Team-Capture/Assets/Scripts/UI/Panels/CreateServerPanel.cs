@@ -93,7 +93,7 @@ namespace Team_Capture.UI.Panels
 			mapsDropdown.ClearOptions();
 
 			//Then get all online scenes
-			onlineTCScenes = TCScenesManager.GetAllEnabledOnlineScenesInfo().ToList();
+			onlineTCScenes = TCScenesManager.GetAllOnlineScenes().ToList();
 
 			//And all the scenes to the map dropdown
 			List<string> scenes = onlineTCScenes.Select(scene => scene.DisplayNameLocalized).ToList();

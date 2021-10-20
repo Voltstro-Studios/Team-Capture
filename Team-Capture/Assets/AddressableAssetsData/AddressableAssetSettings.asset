@@ -91,7 +91,8 @@ MonoBehaviour:
     - Locale-en
     - Preload
     - Locale
-    - TCScene
+    - Scene
+    - Weapon
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: ca2c558c1a497104c997d4f6327687eb, type: 2}

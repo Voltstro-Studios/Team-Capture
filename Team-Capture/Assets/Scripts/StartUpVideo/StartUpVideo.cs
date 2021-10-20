@@ -24,6 +24,7 @@ namespace Team_Capture.StartUpVideo
 	{
 		private VideoClip videoClip;
 		private VideoPlayer startUpVideo;
+		private TCScene scene;
 		private Camera mainCamera;
 		private static bool skipVideo;
 
@@ -48,10 +49,12 @@ namespace Team_Capture.StartUpVideo
 		/// <summary>
 		///		The next <see cref="TCScene"/> to load
 		/// </summary>
-		public TCScene nextScene;
+		public AssetReference nextScene;
 
 		private void Start()
 		{
+			scene = nextScene.LoadAssetAsync<TCScene>().WaitForCompletion();
+			
 			if (skipVideo)
 			{
 				ChangeScene();
@@ -89,7 +92,12 @@ namespace Team_Capture.StartUpVideo
 
 		private void ChangeScene()
 		{
-			TCScenesManager.LoadScene(nextScene);
+			TCScenesManager.LoadScene(scene);
+		}
+
+		private void OnDestroy()
+		{
+			scene = null;
 		}
 
 		public void Setup()

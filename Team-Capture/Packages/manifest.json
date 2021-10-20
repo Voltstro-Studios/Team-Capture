@@ -4,6 +4,7 @@
     "com.mirror-networking.mirror": "https://github.com/VoltUnityPackages/Mirror.git?path=/Assets/Mirror#newV",
     "com.psydack.uimgui": "https://github.com/Voltstro-Studios/uimgui.git",
     "com.unity.addressables": "1.18.16",
+    "com.unity.assetbundlebrowser": "1.7.0",
     "com.unity.build-report-inspector": "0.2.2-preview",
     "com.unity.cinemachine": "2.7.8",
     "com.unity.ext.nunit": "1.0.6",
