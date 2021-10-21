@@ -12,22 +12,20 @@ namespace Team_Capture.Editor
 {
     public static class TCScenesManagerTools
     {
-        /*
         [MenuItem("Team-Capture/Scenes/List All Scenes")]
         private static void ListAllTCScenes()
         {
             Debug.Log($"{nameof(TCScene)}s found:");
-            foreach (TCScene tcScene in TCScenesManager.GetAllTCScenesInfo())
-                Debug.Log($"{tcScene.scene} ({tcScene.DisplayNameLocalized})");
+            foreach (TCScene tcScene in TCScenesManager.GetAllScenes())
+                Debug.Log($"{tcScene.scene} ({tcScene.SceneFileName})");
         }
-
-        [MenuItem("Team-Capture/Scenes/List Enabled Scenes")]
+        
+        [MenuItem("Team-Capture/Scenes/List Online Scenes")]
         private static void ListAllEnabledScenes()
         {
-            Debug.Log($"Enabled {nameof(TCScene)}s found:");
-            foreach (TCScene tcScene in TCScenesManager.GetAllEnabledTCScenesInfo())
-                Debug.Log($"{tcScene.scene} ({tcScene.DisplayNameLocalized})");
+            Debug.Log($"Online {nameof(TCScene)}s found:");
+            foreach (TCScene tcScene in TCScenesManager.GetAllOnlineScenes())
+                Debug.Log($"{tcScene.scene} ({tcScene.SceneFileName})");
         }
-        */
     }
 }

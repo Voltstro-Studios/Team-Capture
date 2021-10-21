@@ -140,11 +140,17 @@ namespace Team_Capture.SceneManagement
 
 		public static IList<TCScene> GetAllScenes()
 		{
+			if(scenes == null)
+				LoadAllScenes();
+			
 			return scenes;
 		}
 
 		public static List<TCScene> GetAllOnlineScenes()
 		{
+			if(scenes == null)
+				LoadAllScenes();
+			
 			return GetAllScenes().Where(x => x.isOnlineScene).ToList();
 		}
 
