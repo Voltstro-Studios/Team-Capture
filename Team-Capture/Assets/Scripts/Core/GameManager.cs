@@ -47,7 +47,7 @@ namespace Team_Capture.Core
 			Players.Add(playerId, playerManager);
 
 			PlayerAdded?.Invoke(playerId);
-			Logger.Debug("Added player {@PlayerId}.", playerId);
+			Logger.Debug("Added player {PlayerId}.", playerId);
 		}
 
 		/// <summary>
@@ -59,7 +59,7 @@ namespace Team_Capture.Core
 			Players.Remove(playerId);
 
 			PlayerRemoved?.Invoke(playerId);
-			Logger.Debug("Removed player {@PlayerId}", playerId);
+			Logger.Debug("Removed player {PlayerId}", playerId);
 		}
 
 		/// <summary>
@@ -102,12 +102,6 @@ namespace Team_Capture.Core
 				return;
 			}
 
-			if (NetworkManager.singleton.mode != NetworkManagerMode.ServerOnly)
-			{
-				Logger.Error("You can only run this command on a server!");
-				return;
-			}
-
 			string playerId = args[0];
 			PlayerManager player = GetPlayer(playerId);
 			if (player == null)
@@ -132,9 +126,23 @@ namespace Team_Capture.Core
 				return;
 			}
 
-			float xPos = float.Parse(args[0]);
-			float yPos = float.Parse(args[1]);
-			float zPos = float.Parse(args[2]);
+			if (!float.TryParse(args[0], out float xPos))
+			{
+				Logger.Error("XPos can only be a float number!");
+				return;
+			}
+
+			if (!float.TryParse(args[1], out float yPos))
+			{
+				Logger.Error("YPos can only be a float number!");
+				return;
+			}
+
+			if (!float.TryParse(args[2], out float zPos))
+			{
+				Logger.Error("ZPos can only be a float number!");
+				return;
+			}
 
 			foreach (KeyValuePair<string,PlayerManager> playerManager in Players)
 			{
@@ -153,7 +161,7 @@ namespace Team_Capture.Core
 
 			Logger.Info("== Connected Players ==");
 			foreach (PlayerManager playerManager in GetAllPlayers())
-				Logger.Info(" Name: {@PlayerName} - ID: {@PlayerNetID}", playerManager.User.UserName, playerManager.netId);
+				Logger.Info(" Name: {PlayerName} - ID: {PlayerNetID}", playerManager.User.UserName, playerManager.netId);
 		}
 
 		#endregion
