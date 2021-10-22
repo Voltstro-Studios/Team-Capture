@@ -4,7 +4,6 @@
 // This project is governed by the AGPLv3 License.
 // For more details see the LICENSE file.
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -19,7 +18,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Logger = Team_Capture.Logging.Logger;
-using UniTask = Team_Capture.Integrations.UniTask.UniTask;
 
 namespace Team_Capture.UI.Panels
 {

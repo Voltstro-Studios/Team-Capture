@@ -170,7 +170,7 @@ namespace Team_Capture.Core.Networking
 
 		private async UniTask DisconnectClientDelayed(NetworkConnection conn)
 		{
-			await Integrations.UniTask.UniTask.Delay(1000);
+			await UniTask.Delay(1000);
 
 			ServerReject(conn);
 		}

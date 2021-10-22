@@ -253,7 +253,7 @@ namespace Team_Capture.Weapons
 			switch(weapon.reloadMode)
 			{
 				case TCWeapon.WeaponReloadMode.Clip:
-					await Integrations.UniTask.UniTask.Delay(weapon.reloadTime, cancellationToken);
+					await UniTask.Delay(weapon.reloadTime, cancellationToken: cancellationToken);
 
 					FinishReload(networkedWeapon, weaponIndex);
 					break;

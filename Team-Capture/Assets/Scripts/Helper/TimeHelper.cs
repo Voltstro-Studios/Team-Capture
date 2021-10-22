@@ -33,7 +33,7 @@ namespace Team_Capture.Helper
 
 			while (currentCountDownTime != 0)
 			{
-				await Integrations.UniTask.UniTask.Delay(1000, cancellationToken);
+				await UniTask.Delay(1000, cancellationToken: cancellationToken);
 				
 				if(cancellationToken.IsCancellationRequested)
 					return;
@@ -48,7 +48,7 @@ namespace Team_Capture.Helper
 			int currentCount = 0;
 			while (currentCount != counts)
 			{
-				await Integrations.UniTask.UniTask.Delay(milliseconds, cancellationToken);
+				await UniTask.Delay(milliseconds, cancellationToken: cancellationToken);
 				
 				if(cancellationToken.IsCancellationRequested)
 					return;

@@ -22,7 +22,7 @@ namespace Team_Capture.Pooling
 
         private async UniTask TimeTask()
         {
-            await Integrations.UniTask.UniTask.Delay(timeTillReturn * 1000, cancellationTokenSource.Token);
+            await UniTask.Delay(timeTillReturn * 1000, cancellationToken: cancellationTokenSource.Token);
             
             if(cancellationTokenSource.IsCancellationRequested || pool == null)
                 return;
