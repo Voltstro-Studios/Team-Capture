@@ -80,43 +80,31 @@ We also upload [releases](https://github.com/Voltstro-Studios/Team-Capture/relea
 
 ```
 Unity 2021.1.25f1
-PowerShell Core
-Git
 ```
-
-#### Pre Setup
-
-You may want [PowerShell Core](https://github.com/PowerShell/PowerShell#get-powershell) installed on your system if you want to use the scripts as well as some other features. This is however optional.
 
 #### Setup
 
-Once you have PowerShell ready:
+Open up the project in Unity, and goto Tools **->** Volt Unity Builder **->** Volt Builder
 
-1. Fork and clone the project
+<img src="media/VoltBuilderScreenshot.png" align="left"/>
 
-2. Open the project up in Unity
+1. Get use to Volt Builder, you gonna need it. We suggest docking it somewhere for convenience.
 
-    - When opening the project for the first time, it can take awhile to open!
-    - There might be some errors and warnings at first, but should be safe to ignore
+2. Click 'Build Addressables'
 
-3. You need to build the Addressables and a player build to play and test, goto Tools **->** Volt Unity Builder **->** Volt Builder
-
-4. Click 'Build Addressables'
-
-5. Click 'Build Player'
+3. Click 'Build Player'
 
     - Building for the first time may take awhile (30~ mins), once the cache is built it takes about 90~ secs. This all depends on your computer.
-    - We suggest docking Unity Volt Builder somewhere for easy access. Always use this tool to build the game!
 
-#### Testing the project
+<br clear="left"/>
+
+#### Launching the project
 
 While working on the project, remember that if you alter code that runs on the server you will need to recompile the player build. You will need to also re-build the player build if you alter the scene in any major way.
 
-You can run a server from either the command line with the `startserver` command, start a server from in the in-game 'Create Server' menu, launch the Team-Capture exe with `-batchmode -nographics`, or via running the PowerShell script in the build directory.
+To launch the player, click on 'Start' in Volt Builder. By default, two instances of the player should start, one being the server and the other is the client. The client will also connect automatically to the server. You can now run around and get some frags.
 
-You can also test the build from the editor by going to Team-Capture **->** Build **->** Launch Player *etc*.
-
-Check out the [Command Line Arguments Wiki page](https://github.com/Voltstro-Studios/Team-Capture/wiki/Command-Line-Arguments) for more info on the command line arguments in this project.
+You can launch a build from the editor by going to Team-Capture **->** Build **->** Launch Player *etc*.
 
 ### Platform Support
 
@@ -162,8 +150,7 @@ See [`thirdpartylegalcode.txt`](/thirdpartylegalcode.txt) and [`thirdpartylegala
 
 To these projects:
 - [Mirror](https://mirror-networking.com/) - Networking Code
-- [Serilog](https://serilog.net/) - Logger
-- [FPSSample](https://github.com/Unity-Technologies/FPSSample) - Lots of code design inspiration, console backbone code.
+- [FPSSample](https://github.com/Unity-Technologies/FPSSample) - Lots of code design inspiration, console backbone code and other stuff.
 
 And to:
 - Family
