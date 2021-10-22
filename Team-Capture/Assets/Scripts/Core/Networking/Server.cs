@@ -126,6 +126,22 @@ namespace Team_Capture.Core.Networking
 			netManager = workingNetManager;
 
 			Logger.Info("Starting server...");
+			
+			//Get the online scene
+			TCScene onlineScene = TCScenesManager.FindSceneInfo(Scene);
+			if (onlineScene == null)
+				throw new FileNotFoundException($"Scene {Scene} not found!");
+			
+			//Setup the server's config
+			SetupServerConfig();
+			
+			//Make some adjustments to scenes config if we are running headless
+			if (Game.IsHeadless)
+			{
+				netManager.offlineScene = null;
+				netManager.onlineScene = Scene;
+				TCScenesManager.LoadScene(onlineScene);
+			}
 
 			//Set what network address to use and start to advertise the server on lan
 			netManager.networkAddress = NetHelper.LocalIpAddress();
@@ -137,9 +153,6 @@ namespace Team_Capture.Core.Networking
 			//Run the server autoexec config
 			ConsoleBackend.ExecuteFile("server-autoexec");
 
-			//Setup the server's config
-			SetupServerConfig();
-			
 			//Server chat
 			NetworkServer.RegisterHandler<ChatMessage>(ServerChat.ReceivedChatMessage);
 

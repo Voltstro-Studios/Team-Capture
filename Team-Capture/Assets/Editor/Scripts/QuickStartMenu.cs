@@ -199,7 +199,7 @@ namespace Team_Capture.Editor
                 new QuickStartEntry
                 {
                     server = false,
-                    additionalArguments = "-novid -high"
+                    additionalArguments = "-novid -high -connect localhost"
                 }
             };
         }

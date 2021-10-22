@@ -10,6 +10,7 @@ using Team_Capture.Console;
 using Team_Capture.Core.Networking.Discovery;
 using Team_Capture.LagCompensation;
 using Team_Capture.SceneManagement;
+using UnityCommandLineParser;
 using UnityEngine;
 using Logger = Team_Capture.Logging.Logger;
 
@@ -118,6 +119,12 @@ namespace Team_Capture.Core.Networking
 				//Start the server
 				StartServer();
 			}
+
+			if (!Game.IsHeadless && autoConnectIpAddress != null)
+			{
+				networkAddress = autoConnectIpAddress;
+				StartClient();
+			}
 		}
 
 		public void Update()
@@ -180,6 +187,9 @@ namespace Team_Capture.Core.Networking
 
 		#endregion
 
+		[CommandLineArgument("connect")]
+		private static string autoConnectIpAddress;
+		
 		[ConCommand("stop", "Stops the current game, whether that is disconnecting or stopping the server")]
 		public static void StopCommand(string[] args)
 		{
