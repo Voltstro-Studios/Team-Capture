@@ -14,14 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scene: Assets/Scenes/dm_ditch.unity
   displayName:
-    m_TableReference:
-      m_TableCollectionName: GUID:a839c4e8771a89944950e881792fa51a
-    m_TableEntryReference:
-      m_KeyId: 7783190528
-      m_Key: 
-    m_FallbackState: 0
-    m_WaitForCompletion: 0
-    m_LocalVariables: []
+    localizedString:
+      m_TableReference:
+        m_TableCollectionName: GUID:a839c4e8771a89944950e881792fa51a
+      m_TableEntryReference:
+        m_KeyId: 7783190528
+        m_Key: 
+      m_FallbackState: 0
+      m_WaitForCompletion: 0
+      m_LocalVariables: []
   loadingScreenBackgroundImage: {fileID: 2800000, guid: 8556b8fe6a721f04ab7ea14c1f4b82de,
     type: 3}
   enabled: 1

@@ -17,7 +17,26 @@ namespace Team_Capture.Localization
 
         private string cachedValue;
 
-        public string Value => cachedValue ??= localizedString.GetLocalizedString();
+        private bool isWaitingForLoad = false;
+
+        public string Value
+        {
+            get
+            {
+                if (isWaitingForLoad)
+                    return string.Empty;
+                
+                if (cachedValue == null)
+                {
+                    isWaitingForLoad = true;
+                    cachedValue = localizedString.GetLocalizedString();
+                    isWaitingForLoad = false;
+                }
+                    
+                return cachedValue;
+                
+            }
+        }
 
         public override string ToString()
         {

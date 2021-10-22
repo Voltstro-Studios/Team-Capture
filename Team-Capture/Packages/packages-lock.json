@@ -313,7 +313,7 @@
       "dependencies": {
         "com.unity.settings-manager": "1.0.3"
       },
-      "hash": "cab106f97e8cd61d61dd651dae5048689cc76a33"
+      "hash": "c8c338d61d7a4c1229273f46bb2aafb9d8ed7d41"
     },
     "dev.voltstro.unitywebbrowser": {
       "version": "https://gitlab.com/Voltstro-Studios/WebBrowser/Package.git#2.x",

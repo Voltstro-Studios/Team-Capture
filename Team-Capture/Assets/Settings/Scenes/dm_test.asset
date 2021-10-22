@@ -14,14 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scene: Assets/Scenes/dm_test.unity
   displayName:
-    m_TableReference:
-      m_TableCollectionName: GUID:d8f2b660806af1f43bd0b56aa914e2a8
-    m_TableEntryReference:
-      m_KeyId: 65475842048
-      m_Key: 
-    m_FallbackState: 0
-    m_WaitForCompletion: 0
-    m_LocalVariables: []
+    localizedString:
+      m_TableReference:
+        m_TableCollectionName: GUID:d8f2b660806af1f43bd0b56aa914e2a8
+      m_TableEntryReference:
+        m_KeyId: 65475842048
+        m_Key: 
+      m_FallbackState: 0
+      m_WaitForCompletion: 0
+      m_LocalVariables: []
   loadingScreenBackgroundImage: {fileID: 0}
   enabled: 1
   isOnlineScene: 1

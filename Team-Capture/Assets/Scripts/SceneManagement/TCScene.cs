@@ -8,6 +8,7 @@ using System;
 using System.IO;
 using Mirror;
 using Team_Capture.Core;
+using Team_Capture.Localization;
 using Team_Capture.Weapons;
 using UnityEngine;
 using UnityEngine.Localization;
@@ -30,7 +31,7 @@ namespace Team_Capture.SceneManagement
 		///     The display name, the name that will be shown to the user
 		/// </summary>
 		[Tooltip("The display name, the name that will be shown to the user")] [SerializeField]
-		private LocalizedString displayName;
+		private CachedLocalizedString displayName;
 
 		/// <summary>
 		///		Image that will be displayed while loading
@@ -81,7 +82,7 @@ namespace Team_Capture.SceneManagement
 		/// <summary>
 		///     The display name, the name that will be shown to the user (Localized)
 		/// </summary>
-		public string DisplayNameLocalized => displayName.GetLocalizedString();
+		public string DisplayNameLocalized => displayName.Value;
 
 		#region Discord RPC
 
