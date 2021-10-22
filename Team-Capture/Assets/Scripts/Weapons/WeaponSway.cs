@@ -42,9 +42,6 @@ namespace Team_Capture.Weapons
 			if (!SwayEnabled)
 				return;
 
-			if (ClientUI.IsPauseMenuOpen)
-				return;
-
 			float fx = -axisX * SwayAmount;
 			float fy = -axisY * (SwayAmount - 0.05f);
 

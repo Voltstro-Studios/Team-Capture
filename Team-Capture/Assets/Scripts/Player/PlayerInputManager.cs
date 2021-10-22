@@ -101,6 +101,7 @@ namespace Team_Capture.Player
 			//If the pause menu is open, set player movement direction to 0 and return
 			if (ClientUI.IsPauseMenuOpen || uiManager.IsChatOpen)
 			{
+				weaponManager.WeaponSway.SetInput(0, 0);
 				playerInput.SetInput(0, 0, 0, 0, false);
 				return;
 			}
