@@ -8,12 +8,13 @@ using System;
 using System.Diagnostics;
 using UnityCommandLineParser;
 using UnityEngine;
+using UnityEngine.Scripting;
 using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.BootManagement
 {
-    [CreateAssetMenu(fileName = "Process Priority", menuName = "BootManager/Process Priority")]
-    internal class ProcessPriority : BootItem
+    [Preserve]
+    internal static class ProcessPriority
     {
         private static bool setToHighPriority;
 
@@ -23,12 +24,16 @@ namespace Team_Capture.BootManagement
             setToHighPriority = true;
         }
         
-        public override void OnBoot()
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        private static void Init()
         {
             try
             {
                 if (setToHighPriority)
+                {
                     Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.High;
+                    Logger.Debug("Process was set to high priority.");
+                }
             }
             catch (Exception ex)
             {

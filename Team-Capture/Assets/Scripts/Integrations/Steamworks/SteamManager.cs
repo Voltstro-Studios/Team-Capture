@@ -6,8 +6,10 @@
 
 using System;
 using Steamworks;
+using Team_Capture.Core;
 using Team_Capture.Core.Networking;
 using Team_Capture.UserManagement;
+using UnityEngine;
 using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.Integrations.Steamworks
@@ -20,6 +22,13 @@ namespace Team_Capture.Integrations.Steamworks
 		protected override string SettingsPath => "Assets/Settings/Integrations/SteamSettings.asset";
 
 		internal SteamSettings SteamSettings => Settings;
+		
+		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+		private static void Init()
+		{
+			GameObject go = new GameObject("SteamManager");
+			go.AddComponent<SteamManager>();
+		}
 		
 		protected override void SingletonStarted()
 	    {

@@ -28,6 +28,16 @@ namespace Team_Capture.Integrations.Discord
 
 		private global::Discord.GameSDK.Discord client;
 
+		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+		private static void Init()
+		{
+			if(Game.IsHeadless)
+				return;
+			
+			GameObject go = new GameObject("DiscordManager");
+			go.AddComponent<DiscordManager>();
+		}
+
 		private void Update()
 		{
 			client?.RunCallbacks();

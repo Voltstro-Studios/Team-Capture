@@ -155,6 +155,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_MoveRepeatDelay: 0.5
   m_MoveRepeatRate: 0.1
+  m_XRTrackingOrigin: {fileID: 0}
   m_ActionsAsset: {fileID: -944628639613478452, guid: ca9f5fa95ffab41fb9a615ab714db018,
     type: 3}
   m_PointAction: {fileID: 1054132383583890850, guid: ca9f5fa95ffab41fb9a615ab714db018,
@@ -240,12 +241,8 @@ MonoBehaviour:
   delayBetweenItems: 0.1
   bootItems:
   - {fileID: 11400000, guid: 9552ef012c7e322489a49d3a5582fb0d, type: 2}
-  - {fileID: 11400000, guid: 57207d352a564354a9b38ed42944d290, type: 2}
   - {fileID: 11400000, guid: ab9edc7a3fed029429747b9d7ef4f9e9, type: 2}
   - {fileID: 11400000, guid: ec850a8cc7dac164cbc95fdea673effc, type: 2}
-  - {fileID: 11400000, guid: b8d08fa0acad8bb42bc8eb04434bd0d4, type: 2}
-  - {fileID: 11400000, guid: 675efc9adeeb3b24ba59320a4f1e6907, type: 2}
-  - {fileID: 11400000, guid: 0ed180b8cea360c48b9a312333f1b580, type: 2}
   - {fileID: 11400000, guid: a942251de94ea02479cdb01c529aecf9, type: 2}
   - {fileID: 11400000, guid: 517d52e4e8e109f45ae3ccad4a93bc34, type: 2}
   - {fileID: 11400000, guid: d2f5df61cd22a654c979e385990a7bb9, type: 2}
