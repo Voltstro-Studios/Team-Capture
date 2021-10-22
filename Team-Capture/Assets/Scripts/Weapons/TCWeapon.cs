@@ -117,7 +117,7 @@ namespace Team_Capture.Weapons
 		///     The time it takes to reload the weapon
 		/// </summary>
 		[Tooltip("The time it takes to reload the weapon")]
-		public float reloadTime = 2.0f;
+		public int reloadTime = 2000;
 
 		/// <summary>
 		///     How much spread will this weapon have

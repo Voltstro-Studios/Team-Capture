@@ -43,12 +43,15 @@ namespace Team_Capture.Helper
 			}
 		}
 
-		public static IEnumerator CountUp(int counts, float time, Action<int> onTick = null)
+		public static async UniTask CountUp(int counts, int milliseconds, Action<int> onTick = null, CancellationToken cancellationToken = default)
 		{
 			int currentCount = 0;
 			while (currentCount != counts)
 			{
-				yield return new WaitForSeconds(time);
+				await Integrations.UniTask.UniTask.Delay(milliseconds, cancellationToken);
+				
+				if(cancellationToken.IsCancellationRequested)
+					return;
 				
 				currentCount++;
 				onTick?.Invoke(currentCount);

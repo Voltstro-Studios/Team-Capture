@@ -23,5 +23,5 @@ MonoBehaviour:
   bulletsPerShot: 6
   maxBullets: 6
   range: 100
-  reloadTime: 0.75
+  reloadTime: 750
   spreadFactor: 0.1

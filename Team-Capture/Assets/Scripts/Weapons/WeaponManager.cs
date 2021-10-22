@@ -5,9 +5,10 @@
 // For more details see the LICENSE file.
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using Mirror;
 using Team_Capture.Helper;
 using Team_Capture.Player;
@@ -40,9 +41,9 @@ namespace Team_Capture.Weapons
 		private readonly SyncList<NetworkedWeapon> weapons = new SyncList<NetworkedWeapon>();
 
 		/// <summary>
-		///     The active reloading coroutine
+		///     <see cref="CancellationTokenSource"/> for canceling a weapon reload
 		/// </summary>
-		private Coroutine reloadingCoroutine;
+		private CancellationTokenSource reloadCancellation;
 
 		/// <summary>
 		///		<see cref="Weapons.WeaponSway"/> script, for use by <see cref="PlayerInputManager"/>
@@ -143,6 +144,11 @@ namespace Team_Capture.Weapons
 			WeaponSway = weaponsHolderSpot.gameObject.AddComponent<WeaponSway>();
 		}
 
+		public override void OnStopServer()
+		{
+			CancelReload();
+		}
+
 		#endregion
 
 		#region Weapon List Management
@@ -207,7 +213,23 @@ namespace Team_Capture.Weapons
 			if (weapon.CurrentBulletAmount == weapon.GetTCWeapon().maxBullets)
 				return;
 
-			reloadingCoroutine = StartCoroutine(ServerReloadPlayerWeapon());
+			StartReloadPlayerWeapon();
+		}
+
+		/// <summary>
+		///		Starts to reload the player's weapon
+		/// </summary>
+		[Server]
+		internal void StartReloadPlayerWeapon()
+		{
+			if (reloadCancellation is { IsCancellationRequested: false })
+			{
+				reloadCancellation.Cancel();
+				reloadCancellation.Dispose();
+			}
+
+			reloadCancellation = new CancellationTokenSource();
+			ServerReloadPlayerWeapon(reloadCancellation.Token).Forget();
 		}
 
 		/// <summary>
@@ -215,7 +237,7 @@ namespace Team_Capture.Weapons
 		/// </summary>
 		/// <returns></returns>
 		[Server]
-		internal IEnumerator ServerReloadPlayerWeapon()
+		private async UniTask ServerReloadPlayerWeapon(CancellationToken cancellationToken)
 		{
 			Logger.Debug($"Reloading player `{transform.name}`'s active weapon");
 			
@@ -231,22 +253,22 @@ namespace Team_Capture.Weapons
 			switch(weapon.reloadMode)
 			{
 				case TCWeapon.WeaponReloadMode.Clip:
-					yield return new WaitForSeconds(weapon.reloadTime);
-					
+					await Integrations.UniTask.UniTask.Delay(weapon.reloadTime, cancellationToken);
+
 					FinishReload(networkedWeapon, weaponIndex);
 					break;
 				case TCWeapon.WeaponReloadMode.Shells:
-					yield return TimeHelper.CountUp(weapon.maxBullets - networkedWeapon.CurrentBulletAmount, weapon.reloadTime, tick =>
-					{
-						//Backup
-						if(networkedWeapon.CurrentBulletAmount == weapon.maxBullets)
-							return;
-						
-						//Increase bullets
-						networkedWeapon.CurrentBulletAmount++;
-						TargetSendWeaponStatus(GetClientConnection, networkedWeapon);
-					});
+					await TimeHelper.CountUp(
+						weapon.maxBullets - networkedWeapon.CurrentBulletAmount, weapon.reloadTime, tick =>
+						{
+							//Backup
+							if (networkedWeapon.CurrentBulletAmount == weapon.maxBullets)
+								return;
 
+							//Increase bullets
+							networkedWeapon.CurrentBulletAmount++;
+							TargetSendWeaponStatus(GetClientConnection, networkedWeapon);
+						}, cancellationToken);
 					FinishReload(networkedWeapon, weaponIndex);
 					break;
 			}
@@ -255,24 +277,27 @@ namespace Team_Capture.Weapons
 		[Server]
 		private void FinishReload(NetworkedWeapon weapon, int weaponIndex)
 		{
-			reloadingCoroutine = null;
+			reloadCancellation.Dispose();
+			reloadCancellation = null;
 			weapon.Reload();
 
 			//Update player's UI
 			if (SelectedWeaponIndex != weaponIndex) 
 				return;
+			
 			TargetSendWeaponStatus(GetClientConnection, weapon);
 		}
 
 		[Server]
 		internal void CancelReload()
 		{
-			if(reloadingCoroutine == null)
-				return;
-			
-			Logger.Debug("Cancelling {Name}'s reload...", transform.name);
-			StopCoroutine(reloadingCoroutine);
-			reloadingCoroutine = null;
+			if (reloadCancellation is { IsCancellationRequested: false })
+			{
+				Logger.Debug("Cancelling {Name}'s reload...", transform.name);
+				reloadCancellation.Cancel();
+				reloadCancellation.Dispose();
+				reloadCancellation = null;
+			}
 		}
 
 		#endregion
@@ -399,7 +424,7 @@ namespace Team_Capture.Weapons
 
 			//Start reloading weapon if the weapon has no bullets left
 			if (weapons[index].CurrentBulletAmount == 0)
-				reloadingCoroutine = StartCoroutine(ServerReloadPlayerWeapon());
+				StartReloadPlayerWeapon();
 
 			RpcSelectWeapon(index);
 

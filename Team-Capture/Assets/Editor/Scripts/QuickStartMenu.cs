@@ -182,7 +182,6 @@ namespace Team_Capture.Editor
             EditorGUILayout.EndVertical();
         }
         
-        //TODO: Allow the client to connect to a server on start
         [Serializable]
         private class QuickstartData
         {

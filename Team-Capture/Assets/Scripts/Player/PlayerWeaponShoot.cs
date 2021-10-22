@@ -132,7 +132,7 @@ namespace Team_Capture.Player
 			if (activeWeapon.CurrentBulletAmount <= 0)
 			{
 				//Reload
-				StartCoroutine(weaponManager.ServerReloadPlayerWeapon());
+				weaponManager.StartReloadPlayerWeapon();
 				return;
 			}
 
