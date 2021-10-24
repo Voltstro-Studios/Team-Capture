@@ -319,8 +319,11 @@
       "version": "https://gitlab.com/Voltstro-Studios/WebBrowser/Package.git#2.x",
       "depth": 0,
       "source": "git",
-      "dependencies": {},
-      "hash": "d34f846f3b2ab4878cc92575717b17c6ab8ce35d"
+      "dependencies": {
+        "org.nuget.voltrpc": "1.1.1",
+        "org.nuget.voltrpc.communication.pipes": "1.1.0"
+      },
+      "hash": "26b061d95f678fed506edce51be8d0725ea46f3d"
     },
     "dev.voltstro.unitywebbrowser.engine.cef": {
       "version": "https://gitlab.com/Voltstro-Studios/WebBrowser/Package.git#engine/cef/base",
@@ -329,16 +332,16 @@
       "dependencies": {
         "dev.voltstro.unitywebbrowser": "2.0.0"
       },
-      "hash": "7c53b752ca96f3262a896b65dfb91d32e6d207c3"
+      "hash": "a4e667a66abcc411ab19afbcdf7a397edbb171d2"
     },
     "dev.voltstro.unitywebbrowser.engine.cef.win.x64": {
       "version": "https://gitlab.com/Voltstro-Studios/WebBrowser/Package.git#engine/cef/win-x64",
       "depth": 0,
       "source": "git",
       "dependencies": {
-        "dev.voltstro.unitywebbrowser.engine.cef": "93.1.11"
+        "dev.voltstro.unitywebbrowser.engine.cef": "95.7.10"
       },
-      "hash": "1de39d5050167ff9ff7c7452a08c1cdd8c13f255"
+      "hash": "a5f30f29505b13543e93b24d785e5d6456e8de90"
     },
     "nl.elraccoone.tweens": {
       "version": "1.11.0",
@@ -472,6 +475,22 @@
       "source": "registry",
       "dependencies": {
         "org.nuget.system.runtime.compilerservices.unsafe": "4.5.3"
+      },
+      "url": "https://unitynuget-registry.azurewebsites.net"
+    },
+    "org.nuget.voltrpc": {
+      "version": "1.1.1",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://unitynuget-registry.azurewebsites.net"
+    },
+    "org.nuget.voltrpc.communication.pipes": {
+      "version": "1.1.0",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {
+        "org.nuget.voltrpc": "1.1.0"
       },
       "url": "https://unitynuget-registry.azurewebsites.net"
     },

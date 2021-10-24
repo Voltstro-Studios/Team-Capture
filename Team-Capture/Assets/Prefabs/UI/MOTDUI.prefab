@@ -816,7 +816,7 @@ MonoBehaviour:
       connectionTimeout: 100000
     engineStartupTimeout: 100000
     logSeverity: 0
-  supportFullscreen: 1
+  supportFullscreen: 0
   hideOnFullscreen: []
 --- !u!114 &7181878127308309454
 MonoBehaviour:
