@@ -8,8 +8,9 @@
 [Mm]emoryCaptures/
 Assets/AssetStoreTools*
 
-# Packed Addressables
+# Addressables
 Team-Capture/[Aa]ssets/AddressableAssetsData/*/*.bin*
+Team-Capture/[Aa]ssets/AddressableAssetsData/link.*
 
 # Temporary auto-generated Android Assets
 Team-Capture/[Aa]ssets/[Ss]treamingAssets/aa.meta

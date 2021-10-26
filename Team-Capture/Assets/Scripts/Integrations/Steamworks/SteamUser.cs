@@ -103,7 +103,7 @@ namespace Team_Capture.Integrations.Steamworks
             Logger.Debug("Got Steam user profile image of {Height} x {Width}", image.Height, image.Width);
 
             if (userProfilePicture.width != image.Width || userProfilePicture.height != image.Height)
-                userProfilePicture.Resize((int)image.Width, (int)image.Height);
+                userProfilePicture.Reinitialize((int)image.Width, (int)image.Height);
             
             userProfilePicture.LoadSteamworksImageIntoTexture2D(image);
         }
