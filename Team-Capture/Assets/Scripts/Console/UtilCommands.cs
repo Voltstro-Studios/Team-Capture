@@ -20,8 +20,6 @@ namespace Team_Capture.Console
 	/// </summary>
 	internal static class UtilCommands
 	{
-		private const string SplashScreenResourceFile = "Resources/console-splashscreen.txt";
-
 		[ConCommand("quit", "Quits the game")]
 		public static void QuitGameCommand(string[] args)
 		{
@@ -53,21 +51,6 @@ ___________
 	        \/     \/|__|                           \/ 
 ";
 			Logger.Info(asciiArt);
-		}
-
-		[ConCommand("splashmessage", "Shows a random splash message")]
-		public static void SplashMessageCommand(string[] args)
-		{
-			//Random splash message
-			string splashMessagesPath = $"{Game.GetGameExecutePath()}/{SplashScreenResourceFile}";
-			if (File.Exists(splashMessagesPath))
-			{
-				string[] lines = File.ReadAllLines(splashMessagesPath);
-
-				//Select random number
-				int index = Random.Range(0, lines.Length);
-				Logger.Info($"	{lines[index]}");
-			}
 		}
 
 #if UNITY_EDITOR || DEVELOPMENT_BUILD

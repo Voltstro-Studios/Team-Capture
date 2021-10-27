@@ -7,7 +7,7 @@
 using System;
 using UnityEngine.Localization;
 
-namespace Team_Capture.Localization
+namespace Team_Capture.AddressablesAddons
 {
     [Serializable]
     public class CachedLocalizedString

@@ -12,7 +12,6 @@ using Mirror;
 using Team_Capture.Core;
 using Team_Capture.Helper.Extensions;
 using Team_Capture.Input;
-using Team_Capture.Localization;
 using Team_Capture.Tweens;
 using Team_Capture.UI.Panels;
 using TMPro;

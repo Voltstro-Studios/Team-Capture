@@ -1,5 +1,5 @@
 using System;
-using Team_Capture.Localization;
+using Team_Capture.AddressablesAddons;
 using TMPro;
 
 namespace Team_Capture.UI.Panels

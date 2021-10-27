@@ -4,7 +4,7 @@
 // This project is governed by the AGPLv3 License.
 // For more details see the LICENSE file.
 
-using Team_Capture.Localization;
+using Team_Capture.AddressablesAddons;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Localization;

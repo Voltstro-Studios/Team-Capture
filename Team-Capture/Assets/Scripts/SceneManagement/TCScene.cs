@@ -7,8 +7,8 @@
 using System;
 using System.IO;
 using Mirror;
+using Team_Capture.AddressablesAddons;
 using Team_Capture.Core;
-using Team_Capture.Localization;
 using Team_Capture.Weapons;
 using UnityEngine;
 using UnityEngine.Localization;

@@ -1,0 +1,194 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7cab03f9d0eb4495bf3af4502e7da211, type: 3}
+  m_Name: SplashMessages
+  m_EditorClassIdentifier: 
+  messages:
+  - XML comments make EternalClickbait orgasm
+  - Comments? What are comments?
+  - Unity, now with 100% more retardation
+  - Fuck you
+  - Team-Capture, now with even less comments.
+  - Pink fluffy unicorns.
+  - Donkey Dong
+  - Nani
+  - "Dost bl\xEDzko k ru\u0161tin\u011B"
+  - boom - Fred, 2019
+  - AWWW MAN
+  - Don't put your base next to spawn next time...
+  - Cling-wrap is great protection.
+  - Get a haircut Harro
+  - I'm a predator
+  - Bathroom Spy Camera
+  - Rick rolling since 1987
+  - Still better code then YandereDev
+  - Hello? How is it going?
+  - Random crit kunai.
+  - Imagine being a torch head
+  - I was having a good day. Then I saw Robert.
+  - Joshua My-garry
+  - America - Shooting up schools since 1776
+  - Imagine paying for health care
+  - Who needs encryption?
+  - SQL? More like Shitty Query Language
+  - Your laptop is about to take off
+  - A live girlfriend would be a nice change
+  - 2D girls aren't as bossy.
+  - Do you like traps?
+  - 207770
+  - RGB, makes your PC run faster.
+  - Data or Data
+  - I code with Notepad++
+  - I code with Microsoft Word
+  - I edge to Microsoft edge
+  - Go burn a cat
+  - I use VGA for my display.
+  - How much dedicated ram do I need for my Minecraft server?
+  - But can it run Minecraft with raytracing?
+  - 'ME: How much RAM do need? MINECRAFT: Yes'
+  - I didn't steal the code... I borrowed it
+  - Pootis-Bot
+  - Don't spend diamonds on a hoe.
+  - Thots are temporary, but Doom is eternal.
+  - 'Judge: Did you touch the 3-year-old. VSauce: Well first we''re going to have
+    to define ''touch''.'
+  - There is no Covid-19 second wave if you don't overcome the first one
+  - "UwU, what\u2019s this? *Notices bulge*."
+  - 'Boys coming out of quarantine: STRONG ARM MACHINE'
+  - hamir editour
+  - Master Skywalker? More like Main Skywalker -GitHub
+  - '*Other Devs* Use professional manner. *Voltstro Studios*: FUCK YOU, YOU PIECE
+    OF CUNT ASS SHIT HOLE, YOU FUCKING WANKER'
+  - Nice
+  - Press Alt-F4 for better performance.
+  - 'What were the devs on while writing console-spalshscreen.txt? Us: Yes'
+  - When your dad has a better computer then you and all he does is play Minecraft...
+  - Built by boxing kangaroos
+  - '*Me*: Owns a blog, *Also Me*: Doesn''t ever use it.'
+  - I wonder how many people will read this.
+  - For free TC-Coins, send your Mummy's Credit Card Number, the expiry date, the
+    name and the three numbers on the back to me@voltstro.dev
+  - R teaches you patience. PHP teaches you anger management.
+  - Welcome to JavaScript, where []]][][[[[[][][][][][][]]]]] is valid code (probably).
+  - Oh and also, `('b' + 'a' + + 'a' + 'a').toLowerCase()` is a banana
+  - 'if(Me.WillGetGirlfriend) //Error: Expression is always false'
+  - https://www.youtube.com/watch?v=dQw4w9WgXcQ
+  - What's the best thing about fucking 21-year-olds? There's 20 of them.
+  - For free money, just send your bank details to your nearest Nigerian prince.
+    We're happy to help
+  - Can we ban yo momma jokes? They've been done by everyone 50 times. JUST LIKE
+    YO MOMMA!
+  - '9-year old: *Exist*. Yemen: *You have lost virginity privileges*'
+  - 'Everybody: *Has pets*. China: *Ching Chong your dog is gone*'
+  - FUCKCKCKCKC OK_ its still white screen
+  - Neither of my parents attended my birth.
+  - 'If you email me your email password it automatically hides it. See: ***************'
+  - Moody brightness in Minecraft is almost as dark as my basement
+  - ISP = "Internet Sucks, People"
+  - Imagine having a life
+  - The only pussy you've ever touched is your mum's when she gave birth
+  - Tiananmen Square? You mean that place where nothing happened on 1989?
+  - When the deep fake looks better than you do *Cries in EternalClickbait*
+  - "Welcome to Team-Capture, now with 69420% more \u0253\u1EEF\u01E7\u0161"
+  - Dennis is almost as dark as my humour.
+  - I'm always the coolest person in the room. You know why? Because of my cold,
+    cold heart.
+  - Hotter than infinity is technically colder than infinitely cold.
+  - JetBrains Chan is great at sex - she's the best Rider
+  - Allocate 128GB RAM per Chrome tab
+  - FIIIIIIRRRREEEEEEEFFFFOOOOOOOXXXXX
+  - I cum faster than big boy took to explode
+  - The bass dropped harder than the bomb on Nagasaki
+  - Sean, Shawn, Shaun, Shawne or Shaughn
+  - I have a knowledge fetish. I just came to that realization
+  - Who the hell reads these messages?
+  - I'm not getting paid enough for this.
+  - Robert is the butt of most of our jokes, while his ass is the butt of a joke.
+  - Fortnite's game engine is *Unreal*
+  - Also, where are my DIAMOOOOOOONDS
+  - Voltstro doing comments? Not possible
+  - We should add Unity-Chan to TC
+  - Also, I wonder what hello would think of these if she saw them
+  - Someone is gonna complain about this file, but who cares lol
+  - This is gonna become the most committed to file
+  - My daily exercise routine is programming, anime and masturbating
+  - Taste the gay!
+  - I gave people PTSD!
+  - I would let Zero Two ride me 3 times.
+  - Gamer Girl Bath Water
+  - Twitter is cancer.
+  - Makise Kurisu is the greatest waifu.
+  - When your first diamonds in Minecraft is from a friend.
+  - Oh shit! A rat!
+  - "You feel amazing inside of me \u2661"
+  - Even my waifu dumped me.
+  - I LIKE GOLD.
+  - Another day in the office.
+  - ROCK AND STONE.
+  - Hello darkness my old friend.
+  - I could be sucking EternalClickbait or Voltstro's dick, but I am no micro-biologist.
+  - 'Girl: *Watches anime* Everyone else: Impossible'
+  - HelloHowsItGoing's tits are flatter than my grandma's heartbeat.
+  - I'm gonna get reported for sexual harassment.
+  - Even a linear line is curvier than HelloHowIsItGoing.
+  - When you're roasting a chick you've never even met
+  - Gamer Girl? More like Gay-mer girl.
+  - '@Hello? Is it me you''re looking for?'
+  - When your theme is whiter than you are.
+  - My dick is so small that when I try to fuck a girl, her immune system thinks
+    it's a virus
+  - ALL DEVICES AT HALF MAKS PLEASE!
+  - DON'T FORGET TO LIKE, SUBSCRIBE AND RING THAT NOTIFICATION BELL!
+  - Can't have errors if your code doesn't compile. *Taps head*
+  - When year 7's are better at programming than your year 12 classmates.
+  - WhATs An IdE?? DoES iT wRItE tHe coDe For ME?
+  - I finish faster than HelloHowIsItGoing thinks.
+  - Ching Chong your free speech is gone.
+  - The bass dropped so hard it dropped my SQL database
+  - "The beat hits harder than my dad\u2019s belt"
+  - I think Robbo and I are finally half-friends now!
+  - "Roses are red, Violets aint fucking blue, They're a shade of purple, F\xFAck
+    you."
+  - 40%
+  - The meaning of life is 42. The meaning of mine is undefined.
+  - I'd say my life is a joke, but people actually enjoy jokes
+  - 177013
+  - "Congratulations for being this sexy today \U0001F44D"
+  - WHeN ArE yoU gOing To moDEL THe piSToL?
+  - This line intentionally left blank
+  - Better safe than sorry
+  - I use dark theme because light attracts bugs.
+  - 'Girl: *Sees this splashmessages file* OMG it''s so big'
+  - Kids have crushes. Men have girlfriends. I have Gromit Mug.
+  - These jokes are darker than the kids in essential maths
+  - 'People: *Talking about their relationships. Me: *Cries in developer*'
+  - What's the least spoken language? Sign Language
+  - '`return new FunnySplashScreenMessage().ToString();`'
+  - Kids have crushes. Teens have girlfriends. Men have partners. I have crippling
+    depression.
+  - Even @Voltstro can do more push ups than he has girlfriends
+  - "Me (Looking at a girl\u2019s cat): \"That's a really nice...pussy you got there\""
+  - When the song lasts longer than you
+  - I once tied a world record...for being the youngest person alive
+  - Someone out there wants you, even it's so that they can kill you.
+  - Harro off to the abyss bar to get spiral power so he can go deeper into the abyss.
+  - I was gonna tell you guys a joke about UDP. But you might not get it.
+  - WELCOME TO THE CUM ZONE. ONLY CUM INSIDE ANIME GIRLS.
+  - "What you mean my pussy isn\u2019t poggers?"
+  - Ever Given? More like Ever Stuck.
+  - Taiwan? Whats that? +5 Social Credit Score.
+  - Hastune Miku, the singer from the future.
+  - Administrator Gaming.
+  - Team-Capture Gaming.
+  - Linux 4ever, fuck Windows.
+  - You like her because she's a shark, right? So you're a selachimorphaphile.
+  - THIS IS THE DRILL THAT WILL PIERCE THE HEAVENS!
