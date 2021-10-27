@@ -6,6 +6,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using Team_Capture.Console;
 using UnityEngine;
 using Logger = Team_Capture.Logging.Logger;
 
@@ -23,6 +24,13 @@ namespace Team_Capture.UserManagement
         {
             users = new SortedList<UserProvider, IUser>(new UserProviderComparer());
             AddUser(new OfflineUser());
+        }
+
+        [ConCommand("whoami", "Gets who you are")]
+        private static void WhoAmICommand(string[] args)
+        {
+            IUser user = GetActiveUser();
+            Logger.Info("{UserName} ({ID}) provided by {Provider}", user.UserName, user.UserId, user.UserProvider);
         }
 
         /// <summary>

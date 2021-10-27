@@ -50,7 +50,7 @@ namespace Team_Capture.UserManagement
         /// <summary>
         ///     <see cref="UserId" /> is unused for <see cref="OfflineUser" />
         /// </summary>
-        public ulong UserId => 0;
+        public ulong UserId => 9; //Baka, Baka!
 
         public Texture UserProfilePicture
         {
