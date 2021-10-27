@@ -16,530 +16,540 @@ using Team_Capture.LagCompensation;
 using Team_Capture.SceneManagement;
 using Team_Capture.UI.Chat;
 using Team_Capture.UserManagement;
-using UnityEngine;
 using UnityCommandLineParser;
+using UnityEngine;
 using UnityEngine.Scripting;
 using Logger = Team_Capture.Logging.Logger;
 using Object = UnityEngine.Object;
+#if UNITY_EDITOR
+using UnityVoltBuilder.Build;
+#endif
 
 namespace Team_Capture.Core.Networking
 {
-	/// <summary>
-	///		A class for handling stuff on the server
-	/// </summary>
-	internal static class Server
-	{
-		/// <summary>
-		///		The timeout time to wait while creating a server from the UI
-		/// </summary>
-		[ConVar("sv_serverstarttimeout", "The timeout time to wait while creating a server from the UI")]
-		private static int TimeOutServerTime = 25;
+    /// <summary>
+    ///     A class for handling stuff on the server
+    /// </summary>
+    internal static class Server
+    {
+        //MOTD related Variables
 
-		//MOTD related Variables
+        /// <summary>
+        ///     The base path to the MOTD
+        /// </summary>
+        private const string MotdPath = "/Resources/motd.txt";
 
-		/// <summary>
-		///		The base path to the MOTD
-		/// </summary>
-		private const string MotdPath = "/Resources/motd.txt";
+        /// <summary>
+        ///     Whats the default text in the MOTD
+        /// </summary>
+        private const string MotdDefaultText = "<style=\"Title\">Welcome to Team-Capture!</style>\n\n" +
+                                               "<style=\"h2\">Map Rotation</style>\n" +
+                                               "Here is our map rotation:\n" +
+                                               "    dm_ditch\n\n" +
+                                               "<style=\"h2\">Rules</style>\n" +
+                                               "    - No cheating\n" +
+                                               "    - Have fun!";
 
-		/// <summary>
-		///		Whats the default text in the MOTD
-		/// </summary>
-		private const string MotdDefaultText = "<style=\"Title\">Welcome to Team-Capture!</style>\n\n" +
-		                                       "<style=\"h2\">Map Rotation</style>\n" +
-		                                       "Here is our map rotation:\n" +
-		                                       "    dm_ditch\n\n" +
-		                                       "<style=\"h2\">Rules</style>\n" +
-		                                       "    - No cheating\n" +
-		                                       "    - Have fun!";
+        //Server online file related variables
 
-		//Server online file related variables
+        /// <summary>
+        ///     Server online file name
+        /// </summary>
+        private const string ServerOnlineFile = "SERVERONLINE";
 
-		/// <summary>
-		///		Server online file name
-		/// </summary>
-		private const string ServerOnlineFile = "SERVERONLINE";
+        /// <summary>
+        ///     The timeout time to wait while creating a server from the UI
+        /// </summary>
+        [ConVar("sv_serverstarttimeout", "The timeout time to wait while creating a server from the UI")]
+        private static readonly int TimeOutServerTime = 25;
 
-		/// <summary>
-		///		The message to put in the server online file (Done as a joke)
-		/// </summary>
-		private static readonly byte[] ServerOnlineFileMessage = {65, 32, 45, 71, 97, 119, 114, 32, 71, 117, 114, 97};
+        /// <summary>
+        ///     The message to put in the server online file (Done as a joke)
+        /// </summary>
+        private static readonly byte[] ServerOnlineFileMessage = {65, 32, 45, 71, 97, 119, 114, 32, 71, 117, 114, 97};
 
-		/// <summary>
-		///		Runtime path to the server online file
-		/// </summary>
-		private static string serverOnlineFilePath;
+        /// <summary>
+        ///     Runtime path to the server online file
+        /// </summary>
+        private static string serverOnlineFilePath;
 
-		/// <summary>
-		///		The <see cref="FileStream"/> for the server online file
-		/// </summary>
-		private static FileStream serverOnlineFileStream;
+        /// <summary>
+        ///     The <see cref="FileStream" /> for the server online file
+        /// </summary>
+        private static FileStream serverOnlineFileStream;
 
-		/// <summary>
-		///		Who was the first connected ID
-		///		<para>KCP just seems to assign random connection IDs, so we just hope the first person never has <see cref="int.MaxValue"/> as their ID</para>
-		/// </summary>
-		private static int firstConnectionId = int.MaxValue;
+        /// <summary>
+        ///     Who was the first connected ID
+        ///     <para>
+        ///         KCP just seems to assign random connection IDs, so we just hope the first person never has
+        ///         <see cref="int.MaxValue" /> as their ID
+        ///     </para>
+        /// </summary>
+        private static int firstConnectionId = int.MaxValue;
 
-		/// <summary>
-		///		The working <see cref="TCNetworkManager"/>, set on <see cref="OnStartServer"/>
-		/// </summary>
-		private static TCNetworkManager netManager;
+        /// <summary>
+        ///     The working <see cref="TCNetworkManager" />, set on <see cref="OnStartServer" />
+        /// </summary>
+        private static TCNetworkManager netManager;
 
-		/// <summary>
-		///		MOTD mode that a server is using
-		/// </summary>
-		internal enum ServerMOTDMode : byte
-		{
-			/// <summary>
-			///		The server's MOTD is disabled
-			/// </summary>
-			Disabled,
+        /// <summary>
+        ///     Call this when the server is started
+        /// </summary>
+        internal static void OnStartServer(TCNetworkManager workingNetManager)
+        {
+            serverOnlineFilePath = $"{Game.GetGameExecutePath()}/{ServerOnlineFile}";
 
-			/// <summary>
-			///		The server only has a text based MOTD
-			/// </summary>
-			TextOnly,
+            if (File.Exists(serverOnlineFilePath))
+                throw new Exception("Server is already online!");
 
-			/// <summary>
-			///		The server only has a web based MOTD
-			/// </summary>
-			WebOnly,
+            netManager = workingNetManager;
 
-			/// <summary>
-			///		The server supports both web and text MOTDs
-			/// </summary>
-			WebWithTextBackup
-		}
+            Logger.Info("Starting server...");
 
-		/// <summary>
-		///		Call this when the server is started
-		/// </summary>
-		internal static void OnStartServer(TCNetworkManager workingNetManager)
-		{
-			serverOnlineFilePath = $"{Game.GetGameExecutePath()}/{ServerOnlineFile}";
+            //Get the online scene
+            TCScene onlineScene = TCScenesManager.FindSceneInfo(Scene);
+            if (onlineScene == null)
+                throw new FileNotFoundException($"Scene {Scene} not found!");
 
-			if (File.Exists(serverOnlineFilePath))
-				throw new Exception("Server is already online!");
+            //Setup the server's config
+            SetupServerConfig();
 
-			netManager = workingNetManager;
+            //Make some adjustments to scenes config if we are running headless
+            if (Game.IsHeadless)
+            {
+                netManager.offlineScene = null;
+                netManager.onlineScene = Scene;
+                TCScenesManager.LoadScene(onlineScene);
+            }
 
-			Logger.Info("Starting server...");
-			
-			//Get the online scene
-			TCScene onlineScene = TCScenesManager.FindSceneInfo(Scene);
-			if (onlineScene == null)
-				throw new FileNotFoundException($"Scene {Scene} not found!");
-			
-			//Setup the server's config
-			SetupServerConfig();
-			
-			//Make some adjustments to scenes config if we are running headless
-			if (Game.IsHeadless)
-			{
-				netManager.offlineScene = null;
-				netManager.onlineScene = Scene;
-				TCScenesManager.LoadScene(onlineScene);
-			}
+            //Set what network address to use and start to advertise the server on lan
+            netManager.networkAddress = NetHelper.LocalIpAddress();
+            netManager.gameDiscovery.AdvertiseServer();
 
-			//Set what network address to use and start to advertise the server on lan
-			netManager.networkAddress = NetHelper.LocalIpAddress();
-			netManager.gameDiscovery.AdvertiseServer();
+            //Start ping service
+            PingManager.ServerSetup();
 
-			//Start ping service
-			PingManager.ServerSetup();
+            //Run the server autoexec config
+            ConsoleBackend.ExecuteFile("server-autoexec");
 
-			//Run the server autoexec config
-			ConsoleBackend.ExecuteFile("server-autoexec");
+            //Server chat
+            NetworkServer.RegisterHandler<ChatMessage>(ServerChat.ReceivedChatMessage);
 
-			//Server chat
-			NetworkServer.RegisterHandler<ChatMessage>(ServerChat.ReceivedChatMessage);
+            //Create server online file
+            try
+            {
+                serverOnlineFileStream = File.Create(serverOnlineFilePath, 128, FileOptions.DeleteOnClose);
+                serverOnlineFileStream.Write(ServerOnlineFileMessage, 0, ServerOnlineFileMessage.Length);
+                serverOnlineFileStream.Flush();
+                File.SetAttributes(serverOnlineFilePath, FileAttributes.Hidden);
+            }
+            catch (IOException ex)
+            {
+                Logger.Error(ex, "An error occurred while setting up the server!");
+                netManager.StopHost();
 
-			//Create server online file
-			try
-			{
-				serverOnlineFileStream = File.Create(serverOnlineFilePath, 128, FileOptions.DeleteOnClose);
-				serverOnlineFileStream.Write(ServerOnlineFileMessage, 0, ServerOnlineFileMessage.Length);
-				serverOnlineFileStream.Flush();
-				File.SetAttributes(serverOnlineFilePath, FileAttributes.Hidden);
-			}
-			catch (IOException ex)
-			{
-				Logger.Error(ex, "An error occurred while setting up the server!");
-				netManager.StopHost();
+                return;
+            }
 
-				return;
-			}
+            Logger.Info("Server has started and is running on '{Address}' with max connections of {MaxPlayers}!",
+                netManager.networkAddress, netManager.maxConnections);
+        }
 
-			Logger.Info("Server has started and is running on '{Address}' with max connections of {MaxPlayers}!",
-				netManager.networkAddress, netManager.maxConnections);
-		}
+        /// <summary>
+        ///     Call this when the server is stopped
+        /// </summary>
+        internal static void OnStopServer()
+        {
+            Logger.Info("Stopping server...");
+            PingManager.ServerShutdown();
 
-		/// <summary>
-		///		Call this when the server is stopped
-		/// </summary>
-		internal static void OnStopServer()
-		{
-			Logger.Info("Stopping server...");
-			PingManager.ServerShutdown();
+            //Stop advertising the server when the server stops
+            netManager.gameDiscovery.StopDiscovery();
 
-			//Stop advertising the server when the server stops
-			netManager.gameDiscovery.StopDiscovery();
-			
-			//Close server chat
-			NetworkServer.UnregisterHandler<ChatMessage>();
+            //Close server chat
+            NetworkServer.UnregisterHandler<ChatMessage>();
 
-			//Close server online file stream
-			try
-			{
-				serverOnlineFileStream.Close();
-				serverOnlineFileStream.Dispose();
-				serverOnlineFileStream = null;
-			}
-			catch (Exception ex)
-			{
-				Logger.Error(ex, "An error occurred while shutting down the server!");
-			}
-			
-			netManager = null;
+            //Close server online file stream
+            try
+            {
+                serverOnlineFileStream.Close();
+                serverOnlineFileStream.Dispose();
+                serverOnlineFileStream = null;
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex, "An error occurred while shutting down the server!");
+            }
 
-			//Double check that the file is deleted
-			if(File.Exists(serverOnlineFilePath))
-				File.Delete(serverOnlineFilePath);
+            netManager = null;
 
-			Logger.Info("Server stopped!");
-		}
+            //Double check that the file is deleted
+            if (File.Exists(serverOnlineFilePath))
+                File.Delete(serverOnlineFilePath);
 
-		/// <summary>
-		///		Call when a client connects
-		/// </summary>
-		/// <param name="conn"></param>
-		internal static void OnServerAddClient(NetworkConnection conn)
-		{
-			//Sent to client the server config
-			conn.Send(TCNetworkManager.Instance.serverConfig);
+            Logger.Info("Server stopped!");
+        }
 
-			//Lets just hope our transport never assigns the first connection max value of int
-			if (closeServerOnFirstClientDisconnect && firstConnectionId == int.MaxValue)
-				firstConnectionId = conn.connectionId;
+        /// <summary>
+        ///     Call when a client connects
+        /// </summary>
+        /// <param name="conn"></param>
+        internal static void OnServerAddClient(NetworkConnection conn)
+        {
+            //Sent to client the server config
+            conn.Send(TCNetworkManager.Instance.serverConfig);
 
-			Logger.Info(
-				"Client from '{Address}' connected with the connection ID of {ConnectionID}.",
-				conn.address, conn.connectionId);
-			IUser user = netManager.tcAuthenticator.GetAccount(conn.connectionId);
-			if (user != null)
-				ServerChat.SendChatMessage("<b>Join</b>", user.UserName);
-		}
+            //Lets just hope our transport never assigns the first connection max value of int
+            if (closeServerOnFirstClientDisconnect && firstConnectionId == int.MaxValue)
+                firstConnectionId = conn.connectionId;
 
-		/// <summary>
-		///		Call when a client disconnects
-		/// </summary>
-		/// <param name="conn"></param>
-		internal static void OnServerRemoveClient(NetworkConnection conn)
-		{
-			NetworkServer.DestroyPlayerForConnection(conn);
-			if (netManager == null)
-			{
-				CloseServerIfNecessary(conn);
-				return;
-			}
-			
-			if (netManager.tcAuthenticator != null)
-			{
-				IUser user = netManager.tcAuthenticator.GetAccount(conn.connectionId);
-				if (user != null)
-					ServerChat.SendChatMessage("<b>Disconnect</b>", user.UserName);
-			}
+            Logger.Info(
+                "Client from '{Address}' connected with the connection ID of {ConnectionID}.",
+                conn.address, conn.connectionId);
+            IUser user = netManager.tcAuthenticator.GetAccount(conn.connectionId);
+            if (user != null)
+                ServerChat.SendChatMessage("<b>Join</b>", user.UserName);
+        }
 
-			netManager.tcAuthenticator.OnServerClientDisconnect(conn);
-			Logger.Info("Client '{ConnectionId}' disconnected from the server.", conn.connectionId);
+        /// <summary>
+        ///     Call when a client disconnects
+        /// </summary>
+        /// <param name="conn"></param>
+        internal static void OnServerRemoveClient(NetworkConnection conn)
+        {
+            NetworkServer.DestroyPlayerForConnection(conn);
+            if (netManager == null)
+            {
+                CloseServerIfNecessary(conn);
+                return;
+            }
 
-			CloseServerIfNecessary(conn);
-		}
+            if (netManager.tcAuthenticator != null)
+            {
+                IUser user = netManager.tcAuthenticator.GetAccount(conn.connectionId);
+                if (user != null)
+                    ServerChat.SendChatMessage("<b>Disconnect</b>", user.UserName);
+            }
 
-		private static void CloseServerIfNecessary(NetworkConnection conn)
-		{
-			//Our first connected client disconnected
-			if (closeServerOnFirstClientDisconnect && conn.connectionId == firstConnectionId)
-			{
-				Logger.Info("Shutting down server due to first client disconnecting...");
-				if(netManager != null)
-					netManager.StopHost();
+            netManager.tcAuthenticator.OnServerClientDisconnect(conn);
+            Logger.Info("Client '{ConnectionId}' disconnected from the server.", conn.connectionId);
 
-				//Quit the game if we are headless
-				if(Game.IsHeadless)
-					Game.QuitGame();
-			}
-		}
+            CloseServerIfNecessary(conn);
+        }
 
-		/// <summary>
-		///		Called when a scene is about to be changed
-		/// </summary>
-		/// <param name="sceneName"></param>
-		internal static void OnServerSceneChanging(string sceneName)
-		{
-			if (GameManager.Instance == null || GameSceneManager.Instance == null)
-				return;
-			
-			Object.Destroy(GameManager.Instance.gameObject);
-			Object.Destroy(GameSceneManager.Instance.gameObject);
-			
-			Logger.Info("Server is changing scene to {SceneName}...", sceneName);
-		}
+        private static void CloseServerIfNecessary(NetworkConnection conn)
+        {
+            //Our first connected client disconnected
+            if (closeServerOnFirstClientDisconnect && conn.connectionId == firstConnectionId)
+            {
+                Logger.Info("Shutting down server due to first client disconnecting...");
+                if (netManager != null)
+                    netManager.StopHost();
 
-		/// <summary>
-		///		Called after the scene changes
-		/// </summary>
-		/// <param name="sceneName"></param>
-		internal static void OnServerChangedScene(string sceneName)
-		{
-			//Instantiate the new game manager
-			Object.Instantiate(netManager.gameMangerPrefab);
-			Object.Instantiate(netManager.gameSceneManagerPrefab);
-			Logger.Debug("Created GameManager object");
+                //Quit the game if we are headless
+                if (Game.IsHeadless)
+                    Game.QuitGame();
+            }
+        }
 
-			NetworkServer.SendToAll(TCNetworkManager.Instance.serverConfig);
+        /// <summary>
+        ///     Called when a scene is about to be changed
+        /// </summary>
+        /// <param name="sceneName"></param>
+        internal static void OnServerSceneChanging(string sceneName)
+        {
+            if (GameManager.Instance == null || GameSceneManager.Instance == null)
+                return;
 
-			Logger.Info("Server changed scene to {SceneName}", sceneName);
-		}
+            Object.Destroy(GameManager.Instance.gameObject);
+            Object.Destroy(GameSceneManager.Instance.gameObject);
 
-		/// <summary>
-		///		Called when a client request for a player object
-		/// </summary>
-		/// <param name="conn"></param>
-		/// <param name="playerPrefab"></param>
-		internal static void ServerCreatePlayerObject(NetworkConnection conn, GameObject playerPrefab)
-		{
-			Transform spawnPoint = netManager.GetStartPosition();
+            Logger.Info("Server is changing scene to {SceneName}...", sceneName);
+        }
 
-			//Create the player object
-			GameObject player = Object.Instantiate(playerPrefab, spawnPoint.position, spawnPoint.rotation);
-			player.AddComponent<SimulationObject>();
+        /// <summary>
+        ///     Called after the scene changes
+        /// </summary>
+        /// <param name="sceneName"></param>
+        internal static void OnServerChangedScene(string sceneName)
+        {
+            //Instantiate the new game manager
+            Object.Instantiate(netManager.gameMangerPrefab);
+            Object.Instantiate(netManager.gameSceneManagerPrefab);
+            Logger.Debug("Created GameManager object");
 
-			//Add the connection for the player
-			NetworkServer.AddPlayerForConnection(conn, player);
+            NetworkServer.SendToAll(TCNetworkManager.Instance.serverConfig);
 
-			//Make initial ping
-			PingManager.PingClient(conn);
+            Logger.Info("Server changed scene to {SceneName}", sceneName);
+        }
 
-			Logger.Info("Created player object for {NetID}", conn.identity.netId);
-		}
+        /// <summary>
+        ///     Called when a client request for a player object
+        /// </summary>
+        /// <param name="conn"></param>
+        /// <param name="playerPrefab"></param>
+        internal static void ServerCreatePlayerObject(NetworkConnection conn, GameObject playerPrefab)
+        {
+            Transform spawnPoint = netManager.GetStartPosition();
 
-		///  <summary>
-		/// 		Creates a new server process
-		///  </summary>
-		///  <param name="workingNetManager"></param>
-		///  <param name="gameName"></param>
-		///  <param name="sceneName"></param>
-		///  <param name="maxPlayers"></param>
-		///  <param name="userProvider"></param>
-		///  <param name="shutOnDisconnect"></param>
-		///  <param name="onServerStarted"></param>
-		///  <param name="onServerFailedToStart"></param>
-		internal static void CreateServerProcess(this NetworkManager workingNetManager, 
-			string gameName, string sceneName, int maxPlayers, UserProvider userProvider, bool shutOnDisconnect, Action onServerStarted, Action onServerFailedToStart = null)
-		{
+            //Create the player object
+            GameObject player = Object.Instantiate(playerPrefab, spawnPoint.position, spawnPoint.rotation);
+            player.AddComponent<SimulationObject>();
+
+            //Add the connection for the player
+            NetworkServer.AddPlayerForConnection(conn, player);
+
+            //Make initial ping
+            PingManager.PingClient(conn);
+
+            Logger.Info("Created player object for {NetID}", conn.identity.netId);
+        }
+
+        /// <summary>
+        ///     Creates a new server process
+        /// </summary>
+        /// <param name="workingNetManager"></param>
+        /// <param name="gameName"></param>
+        /// <param name="sceneName"></param>
+        /// <param name="maxPlayers"></param>
+        /// <param name="userProvider"></param>
+        /// <param name="shutOnDisconnect"></param>
+        /// <param name="onServerStarted"></param>
+        /// <param name="onServerFailedToStart"></param>
+        internal static void CreateServerProcess(this NetworkManager workingNetManager,
+            string gameName, string sceneName, int maxPlayers, UserProvider userProvider, bool shutOnDisconnect,
+            Action onServerStarted, Action onServerFailedToStart = null)
+        {
 #if UNITY_EDITOR
-			string serverOnlinePath =
-				$"{UnityVoltBuilder.Build.GameBuilder.GetBuildDirectory()}Team-Capture-Quick/{ServerOnlineFile}";
+            string serverOnlinePath =
+                $"{GameBuilder.GetBuildDirectory()}Team-Capture-Quick/{ServerOnlineFile}";
 #else
 			string serverOnlinePath = $"{Game.GetGameExecutePath()}/{ServerOnlineFile}";
 #endif
 
-			//Check to make sure the server online file doesn't already exist
-			if (File.Exists(serverOnlinePath))
-			{
-				onServerFailedToStart?.Invoke();
-				Logger.Error("A server is already running!");
-				return;
-			}
-			
-			//Create and start the process
-			Process newTcServer = new Process
-			{
-				StartInfo = GetTCProcessStartInfo(gameName, sceneName, maxPlayers, userProvider, shutOnDisconnect)
-			};
-			newTcServer.Start();
+            //Check to make sure the server online file doesn't already exist
+            if (File.Exists(serverOnlinePath))
+            {
+                onServerFailedToStart?.Invoke();
+                Logger.Error("A server is already running!");
+                return;
+            }
 
-			//We need to wait for the server online file, and to not cause the game to freeze we run it async
-			WaitForServerOnlineFile(serverOnlinePath, onServerStarted, onServerFailedToStart).Forget();
-		}
+            //Create and start the process
+            Process newTcServer = new()
+            {
+                StartInfo = GetTCProcessStartInfo(gameName, sceneName, maxPlayers, userProvider, shutOnDisconnect)
+            };
+            newTcServer.Start();
 
-		private static async UniTaskVoid WaitForServerOnlineFile(string serverOnlinePath, 
-			Action onServerStart = null,
-			Action onServerFailToStart = null)
-		{
-			float timeUntilCancel = Time.time + TimeOutServerTime;
+            //We need to wait for the server online file, and to not cause the game to freeze we run it async
+            WaitForServerOnlineFile(serverOnlinePath, onServerStarted, onServerFailedToStart).Forget();
+        }
 
-			//Wait until the server online file exist
-			while (!File.Exists(serverOnlinePath))
-			{
-				//If we hit the timeout time, then fail it
-				if (Time.time >= timeUntilCancel)
-				{
-					Logger.Error("Server process did not start for some reason! Not connecting.");
-					onServerFailToStart?.Invoke();
-					return;
-				}
+        private static async UniTaskVoid WaitForServerOnlineFile(string serverOnlinePath,
+            Action onServerStart = null,
+            Action onServerFailToStart = null)
+        {
+            float timeUntilCancel = Time.time + TimeOutServerTime;
 
-				await UniTask.Delay(100);
-			}
+            //Wait until the server online file exist
+            while (!File.Exists(serverOnlinePath))
+            {
+                //If we hit the timeout time, then fail it
+                if (Time.time >= timeUntilCancel)
+                {
+                    Logger.Error("Server process did not start for some reason! Not connecting.");
+                    onServerFailToStart?.Invoke();
+                    return;
+                }
 
-			onServerStart?.Invoke();
-		}
+                await UniTask.Delay(100);
+            }
 
-		private static void SetupServerConfig()
-		{
-			//Setup configuration with our launch arguments
-			netManager.serverConfig = new ServerConfig(GameName, ServerMotdMode, null, ServerMotdUrl);
-			netManager.maxConnections = MaxPlayers;
-			netManager.onlineScene = Scene;
+            onServerStart?.Invoke();
+        }
 
-			//Setup MOTD
-			string gamePath = Game.GetGameExecutePath();
+        private static void SetupServerConfig()
+        {
+            //Setup configuration with our launch arguments
+            netManager.serverConfig = new ServerConfig(GameName, ServerMotdMode, null, ServerMotdUrl);
+            netManager.maxConnections = MaxPlayers;
+            netManager.onlineScene = Scene;
 
-			if (netManager.serverConfig.MotdMode == ServerMOTDMode.TextOnly || netManager.serverConfig.MotdMode == ServerMOTDMode.WebWithTextBackup)
-			{
-				string motdGamePath = $"{gamePath}{MotdPath}";
-				string motdData;
+            //Setup MOTD
+            string gamePath = Game.GetGameExecutePath();
 
-				//If the MOTD file doesn't exist, create it
-				if (!File.Exists(motdGamePath))
-				{
-					WriteDefaultMotd(motdGamePath);
-					motdData = MotdDefaultText;
-				}
-				else //The file exists
-				{
-					motdData = File.ReadAllText(motdGamePath);
-					if (string.IsNullOrWhiteSpace(motdData))
-					{
-						WriteDefaultMotd(motdGamePath);
-						motdData = MotdDefaultText;
-					}
-				}
+            if (netManager.serverConfig.MotdMode == ServerMOTDMode.TextOnly ||
+                netManager.serverConfig.MotdMode == ServerMOTDMode.WebWithTextBackup)
+            {
+                string motdGamePath = $"{gamePath}{MotdPath}";
+                string motdData;
 
-				//Check to make sure the MOTD text isn't beyond what is allowed to be sent over
-				//(As of writing this its 32,768, sooo probs long enough for anyone lol)
-				if (motdData.Length == NetworkWriter.MaxStringLength)
-				{
-					Logger.Error("The MOTD text is longer then the max allowed text length! ({MaxStringLength})", NetworkWriter.MaxStringLength);
-					return;
-				}
+                //If the MOTD file doesn't exist, create it
+                if (!File.Exists(motdGamePath))
+                {
+                    WriteDefaultMotd(motdGamePath);
+                    motdData = MotdDefaultText;
+                }
+                else //The file exists
+                {
+                    motdData = File.ReadAllText(motdGamePath);
+                    if (string.IsNullOrWhiteSpace(motdData))
+                    {
+                        WriteDefaultMotd(motdGamePath);
+                        motdData = MotdDefaultText;
+                    }
+                }
 
-				netManager.serverConfig.MotdText = new CompressedNetworkString(motdData);
-			}
-		}
+                //Check to make sure the MOTD text isn't beyond what is allowed to be sent over
+                //(As of writing this its 32,768, sooo probs long enough for anyone lol)
+                if (motdData.Length == NetworkWriter.MaxStringLength)
+                {
+                    Logger.Error("The MOTD text is longer then the max allowed text length! ({MaxStringLength})",
+                        NetworkWriter.MaxStringLength);
+                    return;
+                }
 
-		private static void WriteDefaultMotd(string motdPath)
-		{
-			Logger.Warn("Created new default MOTD.");
-			File.WriteAllText(motdPath, MotdDefaultText);
-		}
+                netManager.serverConfig.MotdText = new CompressedNetworkString(motdData);
+            }
+        }
 
-		private static ProcessStartInfo GetTCProcessStartInfo(string gameName, string sceneName, int maxPlayers, UserProvider userProvider, bool shutOnDisconnect)
-		{
-			ProcessStartInfo startInfo = new ProcessStartInfo();
+        private static void WriteDefaultMotd(string motdPath)
+        {
+            Logger.Warn("Created new default MOTD.");
+            File.WriteAllText(motdPath, MotdDefaultText);
+        }
 
-			#region Windows StartInfo
+        private static ProcessStartInfo GetTCProcessStartInfo(string gameName, string sceneName, int maxPlayers,
+            UserProvider userProvider, bool shutOnDisconnect)
+        {
+            ProcessStartInfo startInfo = new();
+
+            #region Windows StartInfo
 
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
 			startInfo.Arguments =
 				$"-batchmode -nographics -gamename \"{gameName}\" -scene {sceneName} -maxplayers {maxPlayers} -auth-method {userProvider.ToString()}" +
 				$"{(shutOnDisconnect ? " -closeserveronfirstclientdisconnect" : string.Empty)} -high";
 #if UNITY_EDITOR_WIN
-			startInfo.FileName = $"{UnityVoltBuilder.Build.GameBuilder.GetBuildDirectory()}Team-Capture-Quick/Team-Capture.exe";
+			startInfo.FileName =
+                $"{GameBuilder.GetBuildDirectory()}Team-Capture-Quick/Team-Capture.exe";
 #elif UNITY_STANDALONE_WIN
 			startInfo.FileName = $"Team-Capture.exe";
 			startInfo.WorkingDirectory = Game.GetGameExecutePath();
 #endif
 #endif
-			#endregion
 
-			#region Linux StartInfo
-			
-			//TODO: Other terminals?
+            #endregion
+
+            #region Linux StartInfo
+
+            //TODO: Other terminals?
 #if UNITY_EDITOR_LINUX || UNITY_STANDALONE_LINUX
 
 #if UNITY_EDITOR
-			startInfo.FileName = $"{UnityVoltBuilder.Build.GameBuilder.GetBuildDirectory()}Team-Capture-Quick/Team-Capture";
+            startInfo.FileName = $"{GameBuilder.GetBuildDirectory()}Team-Capture-Quick/Team-Capture";
 #else
 			startInfo.FileName = "./Team-Capture";
 #endif
-			
-			startInfo.Arguments = $"-batchmode -nographics -gamename \"{gameName}\" -scene {sceneName} -maxplayers {maxPlayers} -auth-method {userProvider.ToString()}" + 
-$"{(shutOnDisconnect ? " -closeserveronfirstclientdisconnect" : string.Empty)} -high";
+
+            startInfo.Arguments =
+                $"-batchmode -nographics -gamename \"{gameName}\" -scene {sceneName} -maxplayers {maxPlayers} -auth-method {userProvider.ToString()}" +
+                $"{(shutOnDisconnect ? " -closeserveronfirstclientdisconnect" : string.Empty)} -high";
 #endif
 
-			#endregion
+            #endregion
 
-			return startInfo;
-		}
+            return startInfo;
+        }
 
-		#region Console Commands
+        /// <summary>
+        ///     MOTD mode that a server is using
+        /// </summary>
+        internal enum ServerMOTDMode : byte
+        {
+            /// <summary>
+            ///     The server's MOTD is disabled
+            /// </summary>
+            Disabled,
 
-		[ConCommand("startserver", "Starts a server", CommandRunPermission.ClientOnly, 1, 1)]
-		public static void StartServerCommand(string[] args)
-		{
-			NetworkManager networkManager = NetworkManager.singleton;
-			string scene = args[0];
-			TCScene tcScene = TCScenesManager.FindSceneInfo(scene);
-			if (tcScene == null)
-			{
-				Logger.Error("That scene doesn't exist!");
-				return;
-			}
+            /// <summary>
+            ///     The server only has a text based MOTD
+            /// </summary>
+            TextOnly,
 
-			Scene = tcScene.scene;
-			networkManager.onlineScene = tcScene.scene;
-			
-			networkManager.StartServer();
-		}
+            /// <summary>
+            ///     The server only has a web based MOTD
+            /// </summary>
+            WebOnly,
 
-		[ConCommand("gamename", "Sets the game name", CommandRunPermission.ServerOnly)]
-		public static void SetGameNameCommand(string[] args)
-		{
-			TCNetworkManager.Instance.serverConfig.GameName.String = string.Join(" ", args);
-			Logger.Info("Game name was set to {Name}", TCNetworkManager.Instance.serverConfig.GameName.String);
-		}
+            /// <summary>
+            ///     The server supports both web and text MOTDs
+            /// </summary>
+            WebWithTextBackup
+        }
 
-		[ConCommand("sv_address", "Sets the server's address", CommandRunPermission.ServerOnly, 1, 1)]
-		public static void SetAddressCommand(string[] args)
-		{
-			NetworkManager.singleton.networkAddress = args[0];
-			Logger.Info("Server's address was set to {Address}", args[0]);
-		}
+        #region Console Commands
 
-		[ConVar("sv_gamename", "Sets the game name")]
-		[CommandLineArgument("gamename")] 
-		public static string GameName = "Team-Capture Game";
+        [ConCommand("startserver", "Starts a server", CommandRunPermission.ClientOnly, 1, 1)]
+        public static void StartServerCommand(string[] args)
+        {
+            NetworkManager networkManager = NetworkManager.singleton;
+            string scene = args[0];
+            TCScene tcScene = TCScenesManager.FindSceneInfo(scene);
+            if (tcScene == null)
+            {
+                Logger.Error("That scene doesn't exist!");
+                return;
+            }
 
-		[ConVar("sv_maxplayers", "How many players do we support")]
-		[CommandLineArgument("maxplayers")] 
-		public static int MaxPlayers = 16;
+            Scene = tcScene.scene;
+            networkManager.onlineScene = tcScene.scene;
 
-		[ConVar("sv_scene", "Sets what scene to use on the server")]
-		[CommandLineArgument("scene")] 
-		public static string Scene = "dm_ditch";
+            networkManager.StartServer();
+        }
 
-		[ConVar("sv_motd_mode", "Set what MOTD mode to use on the server")] 
-		public static ServerMOTDMode ServerMotdMode = ServerMOTDMode.WebWithTextBackup;
+        [ConCommand("gamename", "Sets the game name", CommandRunPermission.ServerOnly)]
+        public static void SetGameNameCommand(string[] args)
+        {
+            TCNetworkManager.Instance.serverConfig.GameName.String = string.Join(" ", args);
+            Logger.Info("Game name was set to {Name}", TCNetworkManager.Instance.serverConfig.GameName.String);
+        }
 
-		[ConVar("sv_motd_url", "Sets what URL for the MOTD to use")] 
-		public static string ServerMotdUrl = "https://tc.voltstro.dev/motd";
-		
-		[CommandLineCommand("closeserveronfirstclientdisconnect")]
-		[Preserve]
-		private static void SetCloseServerOnFirstClientDisconnect()
-		{
-			closeServerOnFirstClientDisconnect = true;
-		}
+        [ConCommand("sv_address", "Sets the server's address", CommandRunPermission.ServerOnly, 1, 1)]
+        public static void SetAddressCommand(string[] args)
+        {
+            NetworkManager.singleton.networkAddress = args[0];
+            Logger.Info("Server's address was set to {Address}", args[0]);
+        }
 
-		/// <summary>
-		///		Will make the server shutdown when the first connected player disconnects
-		/// </summary>
-		private static bool closeServerOnFirstClientDisconnect;
+        [ConVar("sv_gamename", "Sets the game name")] [CommandLineArgument("gamename")]
+        public static string GameName = "Team-Capture Game";
 
-		#endregion
-	}
+        [ConVar("sv_maxplayers", "How many players do we support")] [CommandLineArgument("maxplayers")]
+        public static int MaxPlayers = 16;
+
+        [ConVar("sv_scene", "Sets what scene to use on the server")] [CommandLineArgument("scene")]
+        public static string Scene = "dm_ditch";
+
+        [ConVar("sv_motd_mode", "Set what MOTD mode to use on the server")]
+        public static ServerMOTDMode ServerMotdMode = ServerMOTDMode.WebWithTextBackup;
+
+        [ConVar("sv_motd_url", "Sets what URL for the MOTD to use")]
+        public static string ServerMotdUrl = "https://tc.voltstro.dev/motd";
+
+        [CommandLineCommand("closeserveronfirstclientdisconnect")]
+        [Preserve]
+        private static void SetCloseServerOnFirstClientDisconnect()
+        {
+            closeServerOnFirstClientDisconnect = true;
+        }
+
+        /// <summary>
+        ///     Will make the server shutdown when the first connected player disconnects
+        /// </summary>
+        private static bool closeServerOnFirstClientDisconnect;
+
+        #endregion
+    }
 }

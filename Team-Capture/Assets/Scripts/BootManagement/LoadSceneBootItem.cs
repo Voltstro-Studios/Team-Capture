@@ -11,21 +11,21 @@ using UnityEngine.AddressableAssets;
 namespace Team_Capture.BootManagement
 {
 	/// <summary>
-	///		Loads a scene on boot, this is generally the last thing you want to do
+	///     Loads a scene on boot, this is generally the last thing you want to do
 	/// </summary>
 	[CreateAssetMenu(fileName = "Scene Boot Item", menuName = "Team-Capture/Boot Manager/Scene Boot Item")]
     internal sealed class LoadSceneBootItem : BootItem
     {
-		/// <summary>
-		///		The scene you want to load to
-		/// </summary>
-		[Tooltip("The scene you want to load to")]
-	    [SerializeField] private AssetReference sceneToLoadTo;
+	    /// <summary>
+	    ///     The scene you want to load to
+	    /// </summary>
+	    [Tooltip("The scene you want to load to")] [SerializeField]
+        private AssetReference sceneToLoadTo;
 
-	    public override void OnBoot()
-	    {
-		    TCScene scene = sceneToLoadTo.LoadAssetAsync<TCScene>().WaitForCompletion();
-		    TCScenesManager.LoadScene(scene);
-	    }
+        public override void OnBoot()
+        {
+            TCScene scene = sceneToLoadTo.LoadAssetAsync<TCScene>().WaitForCompletion();
+            TCScenesManager.LoadScene(scene);
+        }
     }
 }

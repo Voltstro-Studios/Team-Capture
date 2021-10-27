@@ -23,7 +23,7 @@ namespace Team_Capture.BootManagement
         {
             setToHighPriority = true;
         }
-        
+
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void Init()
         {

@@ -20,261 +20,260 @@ using Logger = Team_Capture.Logging.Logger;
 namespace Team_Capture.Core.Networking
 {
 	/// <summary>
-	///		<see cref="NetworkAuthenticator"/> for Team-Capture
+	///     <see cref="NetworkAuthenticator" /> for Team-Capture
 	/// </summary>
 	internal class TCAuthenticator : NetworkAuthenticator
-	{
-		[ConVar("sv_auth_method", "What account system to use to check clients")]
-		[CommandLineArgument("auth-method", "What account system to use to check clients")]
-		public static UserProvider AuthMethod = UserProvider.Steam;
+    {
+        [ConVar("sv_auth_method", "What account system to use to check clients")]
+        [CommandLineArgument("auth-method", "What account system to use to check clients")]
+        public static UserProvider AuthMethod = UserProvider.Steam;
 
-		#region Server
+        #region Server
 
-		private Dictionary<int, IUser> inProgressAuth;
-		private Dictionary<int, IUser> authAccounts;
+        private Dictionary<int, IUser> inProgressAuth;
+        private Dictionary<int, IUser> authAccounts;
 
-		/// <summary>
-		///		Gets an account from their connection ID
-		/// </summary>
-		/// <param name="id"></param>
-		/// <returns></returns>
-		[CanBeNull]
-		public IUser GetAccount(int id)
-		{
-			if (!authAccounts.ContainsKey(id))
-				return null;
-			
-			IUser account = authAccounts[id];
-			return account;
-		}
+        /// <summary>
+        ///     Gets an account from their connection ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [CanBeNull]
+        public IUser GetAccount(int id)
+        {
+            if (!authAccounts.ContainsKey(id))
+                return null;
 
-		public override void OnStartServer()
-		{
-			if (AuthMethod == UserProvider.Steam)
-			{
-				Logger.Info("Starting Steam game server integration...");
-				SteamServerManager.StartServer(() =>
-				{
-					Logger.Error("Falling back to offline mode!");
-					AuthMethod = UserProvider.Offline;
-				});
-			}
+            IUser account = authAccounts[id];
+            return account;
+        }
 
-			inProgressAuth = new Dictionary<int, IUser>();
-			authAccounts = new Dictionary<int, IUser>();
-			NetworkServer.RegisterHandler<JoinRequestMessage>(OnRequestJoin, false);
-		}
+        public override void OnStartServer()
+        {
+            if (AuthMethod == UserProvider.Steam)
+            {
+                Logger.Info("Starting Steam game server integration...");
+                SteamServerManager.StartServer(() =>
+                {
+                    Logger.Error("Falling back to offline mode!");
+                    AuthMethod = UserProvider.Offline;
+                });
+            }
 
-		public override void OnStopServer()
-		{
-			NetworkServer.UnregisterHandler<JoinRequestMessage>();
-			
-			//TODO: Clean interface for other auth providers who need to start/shutdown
-			SteamServerManager.ShutdownServer();
-			authAccounts.Clear();
-		}
+            inProgressAuth = new Dictionary<int, IUser>();
+            authAccounts = new Dictionary<int, IUser>();
+            NetworkServer.RegisterHandler<JoinRequestMessage>(OnRequestJoin, false);
+        }
 
-		public override void OnServerAuthenticate(NetworkConnection conn)
-		{
-		}
+        public override void OnStopServer()
+        {
+            NetworkServer.UnregisterHandler<JoinRequestMessage>();
 
-		private void OnRequestJoin(NetworkConnection conn, JoinRequestMessage msg)
-		{
-			//Check versions
-			if (msg.ApplicationVersion != Application.version)
-			{
-				SendRequestResponseMessage(conn, HttpCode.PreconditionFailed, "Server and client versions mismatch!");
-				Logger.Warn("Client {Id} had mismatched versions with the server! Rejecting connection.", conn.connectionId);
+            //TODO: Clean interface for other auth providers who need to start/shutdown
+            SteamServerManager.ShutdownServer();
+            authAccounts.Clear();
+        }
 
-				RefuseClientConnection(conn);
-				return;
-			}
+        public override void OnServerAuthenticate(NetworkConnection conn)
+        {
+        }
 
-			//Make sure they at least provided an account
-			if (msg.UserAccounts.Length == 0)
-			{
-				SendRequestResponseMessage(conn, HttpCode.Unauthorized, "No accounts provided!");
-				Logger.Warn("Client {Id} sent no user accounts. Rejecting connection.", conn.connectionId);
+        private void OnRequestJoin(NetworkConnection conn, JoinRequestMessage msg)
+        {
+            //Check versions
+            if (msg.ApplicationVersion != Application.version)
+            {
+                SendRequestResponseMessage(conn, HttpCode.PreconditionFailed, "Server and client versions mismatch!");
+                Logger.Warn("Client {Id} had mismatched versions with the server! Rejecting connection.",
+                    conn.connectionId);
 
-				RefuseClientConnection(conn);
-				return;
-			}
-			
-			Logger.Debug("Got {UserAccountsNum} user accounts from {UserId}", msg.UserAccounts.Length, conn.connectionId);
+                RefuseClientConnection(conn);
+                return;
+            }
 
-			//Get the user account the server wants
-			IUser user = msg.UserAccounts.FirstOrDefault(x => x.UserProvider == AuthMethod);
-			if (user == null)
-			{
-				SendRequestResponseMessage(conn, HttpCode.Unauthorized, "No valid user accounts sent!");
-				Logger.Warn("Client {Id} sent no valid user accounts!. Rejecting connection.", conn.connectionId);
+            //Make sure they at least provided an account
+            if (msg.UserAccounts.Length == 0)
+            {
+                SendRequestResponseMessage(conn, HttpCode.Unauthorized, "No accounts provided!");
+                Logger.Warn("Client {Id} sent no user accounts. Rejecting connection.", conn.connectionId);
 
-				RefuseClientConnection(conn);
-				return;
-			}
+                RefuseClientConnection(conn);
+                return;
+            }
 
-			if (authAccounts.ContainsValue(user))
-			{
-				SendRequestResponseMessage(conn, HttpCode.Unauthorized, "User is already connected!");
-				Logger.Warn("Client {Id} tried to connect with the same account as an existing client!. Rejecting connection.", conn.connectionId);
+            Logger.Debug("Got {UserAccountsNum} user accounts from {UserId}", msg.UserAccounts.Length,
+                conn.connectionId);
 
-				RefuseClientConnection(conn);
-				return;
-			}
+            //Get the user account the server wants
+            IUser user = msg.UserAccounts.FirstOrDefault(x => x.UserProvider == AuthMethod);
+            if (user == null)
+            {
+                SendRequestResponseMessage(conn, HttpCode.Unauthorized, "No valid user accounts sent!");
+                Logger.Warn("Client {Id} sent no valid user accounts!. Rejecting connection.", conn.connectionId);
 
-			try
-			{
-				inProgressAuth.Add(conn.connectionId, user);
-				user.ServerStartClientAuthentication(() =>
-				{
-					inProgressAuth.Remove(conn.connectionId);
-					authAccounts.Add(conn.connectionId, user);
+                RefuseClientConnection(conn);
+                return;
+            }
 
-					SendRequestResponseMessage(conn, HttpCode.Ok, "Ok");
-					ServerAccept(conn);
-					Logger.Debug("Accepted client {Id}", conn.connectionId);
-				}, () =>
-				{
-					SendRequestResponseMessage(conn, HttpCode.Unauthorized, "Failed authorization!");
-					Logger.Warn("Client {Id} failed to authorize!. Rejecting connection.", conn.connectionId);
+            if (authAccounts.ContainsValue(user))
+            {
+                SendRequestResponseMessage(conn, HttpCode.Unauthorized, "User is already connected!");
+                Logger.Warn(
+                    "Client {Id} tried to connect with the same account as an existing client!. Rejecting connection.",
+                    conn.connectionId);
 
-					RefuseClientConnection(conn);
-				});
-			}
-			catch (Exception ex)
-			{
-				SendRequestResponseMessage(conn, HttpCode.InternalServerError, "An error occured with the server authorization!");
-				Logger.Error(ex, "An error occured on the server side with authorization");
+                RefuseClientConnection(conn);
+                return;
+            }
 
-				RefuseClientConnection(conn);
-			}
-		}
+            try
+            {
+                inProgressAuth.Add(conn.connectionId, user);
+                user.ServerStartClientAuthentication(() =>
+                {
+                    inProgressAuth.Remove(conn.connectionId);
+                    authAccounts.Add(conn.connectionId, user);
 
-		public void OnServerClientDisconnect(NetworkConnection conn)
-		{
-			if (authAccounts.ContainsKey(conn.connectionId))
-				authAccounts.Remove(conn.connectionId);
+                    SendRequestResponseMessage(conn, HttpCode.Ok, "Ok");
+                    ServerAccept(conn);
+                    Logger.Debug("Accepted client {Id}", conn.connectionId);
+                }, () =>
+                {
+                    SendRequestResponseMessage(conn, HttpCode.Unauthorized, "Failed authorization!");
+                    Logger.Warn("Client {Id} failed to authorize!. Rejecting connection.", conn.connectionId);
 
-			else if (inProgressAuth.ContainsKey(conn.connectionId))
-			{
-				inProgressAuth[conn.connectionId].ServerCancelClientAuthentication();
-				inProgressAuth.Remove(conn.connectionId);
-			}
-		}
+                    RefuseClientConnection(conn);
+                });
+            }
+            catch (Exception ex)
+            {
+                SendRequestResponseMessage(conn, HttpCode.InternalServerError,
+                    "An error occured with the server authorization!");
+                Logger.Error(ex, "An error occured on the server side with authorization");
 
-		private void RefuseClientConnection(NetworkConnection conn)
-		{
-			conn.isAuthenticated = false;
-			DisconnectClientDelayed(conn).Forget();
-		}
+                RefuseClientConnection(conn);
+            }
+        }
 
-		private async UniTask DisconnectClientDelayed(NetworkConnection conn)
-		{
-			await UniTask.Delay(1000);
+        public void OnServerClientDisconnect(NetworkConnection conn)
+        {
+            if (authAccounts.ContainsKey(conn.connectionId))
+            {
+                authAccounts.Remove(conn.connectionId);
+            }
 
-			ServerReject(conn);
-		}
+            else if (inProgressAuth.ContainsKey(conn.connectionId))
+            {
+                inProgressAuth[conn.connectionId].ServerCancelClientAuthentication();
+                inProgressAuth.Remove(conn.connectionId);
+            }
+        }
 
-		private void SendRequestResponseMessage(NetworkConnection conn, HttpCode code, string message)
-		{
-			conn.Send(new JoinRequestResponseMessage
-			{
-				Code = code,
-				Message = message
-			});
-		}
+        private void RefuseClientConnection(NetworkConnection conn)
+        {
+            conn.isAuthenticated = false;
+            DisconnectClientDelayed(conn).Forget();
+        }
 
-		private void Update()
-		{
-			if (TCNetworkManager.IsServer)
-			{
-				SteamServerManager.RunCallbacks();
-			}
-		}
+        private async UniTask DisconnectClientDelayed(NetworkConnection conn)
+        {
+            await UniTask.Delay(1000);
 
-		#endregion
+            ServerReject(conn);
+        }
 
-		#region Client
+        private void SendRequestResponseMessage(NetworkConnection conn, HttpCode code, string message)
+        {
+            conn.Send(new JoinRequestResponseMessage
+            {
+                Code = code,
+                Message = message
+            });
+        }
 
-		public override void OnStartClient()
-		{
-			NetworkClient.RegisterHandler<JoinRequestResponseMessage>(OnReceivedJoinRequestResponse, false);
-		}
+        private void Update()
+        {
+            if (TCNetworkManager.IsServer) SteamServerManager.RunCallbacks();
+        }
 
-		public override void OnStopClient()
-		{
-			NetworkClient.UnregisterHandler<JoinRequestResponseMessage>();
-		}
+        #endregion
 
-		public override void OnClientAuthenticate()
-		{
-			IUser[] users = User.GetUsers();
-			foreach (IUser user in users)
-			{
-				try
-				{
-					user.ClientStartAuthentication();
-				}
-				catch (Exception ex)
-				{
-					Logger.Error(ex, "An error occured while trying to authenticate on the client end!");
-					
-					ClientReject();
-					return;
-				}
-			}
-			
-			Logger.Debug("Sent a total of {Num} of user accounts to the server.", users.Length);
-			NetworkClient.connection.Send(new JoinRequestMessage
-			{
-				ApplicationVersion = Application.version,
-				UserAccounts = users
-			});
-		}
+        #region Client
 
-		public void OnClientDisconnect()
-		{
-			foreach (IUser user in User.GetUsers())
-			{
-				user.ClientStopAuthentication();
-			}
-		}
-		
-		private void OnReceivedJoinRequestResponse(JoinRequestResponseMessage msg)
-		{
-			//We good to connect
-			if (msg.Code == HttpCode.Ok)
-			{
-				Logger.Info("Join request was accepted! {Message} ({Code})", msg.Message, (int)msg.Code);
+        public override void OnStartClient()
+        {
+            NetworkClient.RegisterHandler<JoinRequestResponseMessage>(OnReceivedJoinRequestResponse, false);
+        }
 
-				ClientAccept();
-			}
-			//Something fucked up
-			else
-			{
-				Logger.Error("Failed to connect! Error: {Message} ({Code})", msg.Message, (int)msg.Code);
+        public override void OnStopClient()
+        {
+            NetworkClient.UnregisterHandler<JoinRequestResponseMessage>();
+        }
 
-				ClientReject();
-			}
-		}
+        public override void OnClientAuthenticate()
+        {
+            var users = User.GetUsers();
+            foreach (IUser user in users)
+                try
+                {
+                    user.ClientStartAuthentication();
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error(ex, "An error occured while trying to authenticate on the client end!");
 
-		#endregion
+                    ClientReject();
+                    return;
+                }
 
-		#region Messages
+            Logger.Debug("Sent a total of {Num} of user accounts to the server.", users.Length);
+            NetworkClient.connection.Send(new JoinRequestMessage
+            {
+                ApplicationVersion = Application.version,
+                UserAccounts = users
+            });
+        }
 
-		private struct JoinRequestMessage : NetworkMessage
-		{
-			public string ApplicationVersion;
+        public void OnClientDisconnect()
+        {
+            foreach (IUser user in User.GetUsers()) user.ClientStopAuthentication();
+        }
 
-			internal IUser[] UserAccounts;
-		}
+        private void OnReceivedJoinRequestResponse(JoinRequestResponseMessage msg)
+        {
+            //We good to connect
+            if (msg.Code == HttpCode.Ok)
+            {
+                Logger.Info("Join request was accepted! {Message} ({Code})", msg.Message, (int) msg.Code);
 
-		private struct JoinRequestResponseMessage : NetworkMessage
-		{
-			public HttpCode Code;
-			public string Message;
-		}
+                ClientAccept();
+            }
+            //Something fucked up
+            else
+            {
+                Logger.Error("Failed to connect! Error: {Message} ({Code})", msg.Message, (int) msg.Code);
 
-		#endregion
-	}
+                ClientReject();
+            }
+        }
+
+        #endregion
+
+        #region Messages
+
+        private struct JoinRequestMessage : NetworkMessage
+        {
+            public string ApplicationVersion;
+
+            internal IUser[] UserAccounts;
+        }
+
+        private struct JoinRequestResponseMessage : NetworkMessage
+        {
+            public HttpCode Code;
+            public string Message;
+        }
+
+        #endregion
+    }
 }

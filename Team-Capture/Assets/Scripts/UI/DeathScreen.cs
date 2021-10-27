@@ -24,13 +24,19 @@ namespace Team_Capture.UI
         [SerializeField] private TMP_Text killedByHealthText;
         [SerializeField] private RawImage killedByProfileImage;
         [SerializeField] private int playerDeathCamTime = 10;
-        
-        private CancellationTokenSource cancellationTokenSource;
 
-        private PlayerManager playerManager;
+        private CancellationTokenSource cancellationTokenSource;
         private PlayerDeathCam playerDeathCam;
 
+        private PlayerManager playerManager;
+
         private int stopDeathCamTime;
+
+        private void OnDisable()
+        {
+            cancellationTokenSource.Cancel();
+            panelsObject.SetActive(false);
+        }
 
         internal void Setup(PlayerManager setPlayerManager)
         {
@@ -41,7 +47,7 @@ namespace Team_Capture.UI
 
         public void StartCountDown(PlayerManager killer, int time)
         {
-            if(killer == null)
+            if (killer == null)
                 return;
 
             stopDeathCamTime = time - playerDeathCamTime;
@@ -58,17 +64,17 @@ namespace Team_Capture.UI
             killedByText.text = killer.User.UserName;
             killedByHealthText.text = $"{killer.Health.ToString()} HP Left.";
             killedByProfileImage.texture = playerManager.User.UserProfilePicture;
-            
 
-            if(killer != playerManager)
+
+            if (killer != playerManager)
                 playerDeathCam.StartTrackingPlayer(killer);
-            
+
             if (cancellationTokenSource != null)
             {
                 cancellationTokenSource.Cancel();
                 cancellationTokenSource.Dispose();
             }
-            
+
             cancellationTokenSource = new CancellationTokenSource();
 
             TimeHelper.CountDown(time, OnCountdownTick, cancellationTokenSource.Token).ContinueWith(
@@ -88,14 +94,8 @@ namespace Team_Capture.UI
                 panelsObject.SetActive(true);
                 killedByPanel.SetActive(false);
             }
-            
-            countDownText.text = tick.ToString();
-        }
 
-        private void OnDisable()
-        {
-            cancellationTokenSource.Cancel();
-            panelsObject.SetActive(false);
+            countDownText.text = tick.ToString();
         }
     }
 }

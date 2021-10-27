@@ -6,21 +6,21 @@
 
 namespace Team_Capture.UserManagement
 {
-	//TODO: We should do this as auth methods or something like that, and have it as a flag to allow other 
-	
-	/// <summary>
-	///		Who provides this account
-	/// </summary>
-	public enum UserProvider : byte
-	{
-		/// <summary>
-		///		Account details are from Steam
-		/// </summary>
-		Steam,
-		
-		/// <summary>
-		///		Its an offline account, all details comes from us
-		/// </summary>
-		Offline
-	}
+    //TODO: We should do this as auth methods or something like that, and have it as a flag to allow other 
+
+    /// <summary>
+    ///     Who provides this account
+    /// </summary>
+    public enum UserProvider : byte
+    {
+	    /// <summary>
+	    ///     Account details are from Steam
+	    /// </summary>
+	    Steam,
+
+	    /// <summary>
+	    ///     Its an offline account, all details comes from us
+	    /// </summary>
+	    Offline
+    }
 }

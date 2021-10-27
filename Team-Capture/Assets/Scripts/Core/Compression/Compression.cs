@@ -19,24 +19,24 @@ namespace Team_Capture.Core.Compression
     public static class Compression
     {
         private static readonly Encoding Encoder = Encoding.UTF8;
-        
+
         /// <summary>
-        ///     Encodes a <see cref="string"/> and compresses it
+        ///     Encodes a <see cref="string" /> and compresses it
         /// </summary>
-        /// <param name="string">The <see cref="string"/> to compress</param>
+        /// <param name="string">The <see cref="string" /> to compress</param>
         /// <param name="length">The length of the uncompressed data</param>
         /// <returns></returns>
         public static Span<byte> CompressString([NotNull] string @string, out int length)
         {
             if (@string == null)
                 throw new ArgumentNullException(nameof(@string));
-            
+
             ReadOnlySpan<byte> data = Encoder.GetBytes(@string);
             return Compress(data, out length);
         }
 
         /// <summary>
-        ///     Compresses a <see cref="ReadOnlySpan{T}"/> of data
+        ///     Compresses a <see cref="ReadOnlySpan{T}" /> of data
         /// </summary>
         /// <param name="data">The data to compress</param>
         /// <param name="length">The length of the uncompressed data</param>
@@ -46,13 +46,13 @@ namespace Team_Capture.Core.Compression
             length = data.Length;
             Span<byte> target = new byte[LZ4Codec.MaximumOutputSize(data.Length)];
             int compressedLength = LZ4Codec.Encode(data, target);
-            Span<byte> compressed = target.Slice(0, compressedLength);
+            var compressed = target.Slice(0, compressedLength);
             Logger.Debug("Compressed data from {UncompressedSize} to {CompressedSize}", length, compressed.Length);
             return compressed;
         }
 
         /// <summary>
-        ///     Decompresses and decodes a <see cref="string"/>
+        ///     Decompresses and decodes a <see cref="string" />
         /// </summary>
         /// <param name="data">The compressed string</param>
         /// <param name="length">The length of the uncompressed data</param>
@@ -63,7 +63,7 @@ namespace Team_Capture.Core.Compression
         }
 
         /// <summary>
-        ///     Decompresses a <see cref="ReadOnlySpan{T}"/>
+        ///     Decompresses a <see cref="ReadOnlySpan{T}" />
         /// </summary>
         /// <param name="data">The data to decompress</param>
         /// <param name="length">The length of the uncompressed data</param>

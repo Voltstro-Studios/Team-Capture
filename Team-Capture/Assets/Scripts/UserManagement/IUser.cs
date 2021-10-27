@@ -13,7 +13,7 @@ using UnityEngine.Scripting;
 namespace Team_Capture.UserManagement
 {
     /// <summary>
-    ///     An <see cref="IUser"/> contains details and methods about a user
+    ///     An <see cref="IUser" /> contains details and methods about a user
     /// </summary>
     public interface IUser
     {
@@ -21,20 +21,20 @@ namespace Team_Capture.UserManagement
         ///     Who provides this user
         /// </summary>
         public UserProvider UserProvider { get; }
-        
+
         /// <summary>
         ///     The username of this user
         /// </summary>
         public string UserName { get; }
-        
+
         /// <summary>
         ///     The ID of the user
-        ///     <para>This my be unused depending on the <see cref="UserProvider"/></para>
+        ///     <para>This my be unused depending on the <see cref="UserProvider" /></para>
         /// </summary>
         public ulong UserId { get; }
-        
+
         /// <summary>
-        ///     <see cref="Texture"/> of the user's profile picture
+        ///     <see cref="Texture" /> of the user's profile picture
         /// </summary>
         public Texture UserProfilePicture { get; }
 
@@ -49,19 +49,19 @@ namespace Team_Capture.UserManagement
         ///     Cancels the authentication of a user
         /// </summary>
         public void ServerCancelClientAuthentication();
-        
+
         /// <summary>
         ///     Starts authentication on the client end
         /// </summary>
         public void ClientStartAuthentication();
-        
+
         /// <summary>
         ///     Stops authentication on the client end
         /// </summary>
         public void ClientStopAuthentication();
 
         /// <summary>
-        ///     Write what you need to the <see cref="NetworkWriter"/>
+        ///     Write what you need to the <see cref="NetworkWriter" />
         /// </summary>
         /// <param name="writer"></param>
         /// <returns></returns>
@@ -79,16 +79,11 @@ namespace Team_Capture.UserManagement
         public static IUser Read(this NetworkReader reader)
         {
             //We first need to figure out what account type we are dealing with
-            UserProvider provider = (UserProvider)reader.ReadByte();
-            
+            UserProvider provider = (UserProvider) reader.ReadByte();
+
             if (provider == UserProvider.Offline)
-            {
                 return OfflineUser.Create(reader);
-            }
-            else
-            {
-                return SteamUser.Create(reader);
-            }
+            return SteamUser.Create(reader);
         }
     }
 }

@@ -16,7 +16,7 @@ namespace Team_Capture.Integrations.Steamworks
     public static class SteamUtils
     {
         /// <summary>
-        ///     Loads data from a <see cref="Image"/> into a <see cref="Texture2D"/>
+        ///     Loads data from a <see cref="Image" /> into a <see cref="Texture2D" />
         /// </summary>
         /// <param name="texture2D"></param>
         /// <param name="image"></param>
@@ -26,7 +26,7 @@ namespace Team_Capture.Integrations.Steamworks
             for (int y = 0; y < image.Height; y++)
             {
                 Color p = image.GetPixel(x, y);
-                texture2D.SetPixel(x, (int)image.Height - y, 
+                texture2D.SetPixel(x, (int) image.Height - y,
                     new UnityEngine.Color(p.r / 255.0f, p.g / 255.0f, p.b / 255.0f, p.a / 255.0f));
             }
 

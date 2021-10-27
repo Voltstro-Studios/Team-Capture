@@ -8,7 +8,7 @@ namespace Team_Capture.UI
     public class ProfilePictureTest : MonoBehaviour
     {
         private RawImage rawImage;
-        
+
         private void Start()
         {
             rawImage = GetComponent<RawImage>();
@@ -18,7 +18,7 @@ namespace Team_Capture.UI
         private void SetTexture()
         {
             IUser user = User.GetActiveUser();
-            rawImage.texture = user.UserProfilePicture;   
+            rawImage.texture = user.UserProfilePicture;
         }
     }
 }

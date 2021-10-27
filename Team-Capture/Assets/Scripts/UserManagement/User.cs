@@ -16,14 +16,14 @@ namespace Team_Capture.UserManagement
     /// </summary>
     public static class User
     {
+        private static SortedList<UserProvider, IUser> users;
+
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         internal static void Init()
         {
             users = new SortedList<UserProvider, IUser>(new UserProviderComparer());
             AddUser(new OfflineUser());
         }
-        
-        private static SortedList<UserProvider, IUser> users;
 
         /// <summary>
         ///     Adds a user
@@ -34,9 +34,9 @@ namespace Team_Capture.UserManagement
             Logger.Debug("Added user of type {Provider}", user.UserProvider);
             users.Add(user.UserProvider, user);
         }
-        
+
         /// <summary>
-        ///     Gets the active (main) <see cref="IUser"/>
+        ///     Gets the active (main) <see cref="IUser" />
         /// </summary>
         /// <returns></returns>
         public static IUser GetActiveUser()
@@ -45,14 +45,14 @@ namespace Team_Capture.UserManagement
         }
 
         /// <summary>
-        ///     Gets all <see cref="IUser"/>s
+        ///     Gets all <see cref="IUser" />s
         /// </summary>
         /// <returns></returns>
         internal static IUser[] GetUsers()
         {
             return users.Select(x => x.Value).ToArray();
         }
-        
+
         private class UserProviderComparer : IComparer<UserProvider>
         {
             public int Compare(UserProvider x, UserProvider y)

@@ -13,18 +13,19 @@ namespace Team_Capture.Pickups
     [DisallowMultipleComponent]
     internal class PickupSpawner : MonoBehaviour
     {
-	    public GameObject pickupToSpawn;
+        public GameObject pickupToSpawn;
 
-	    private void Start()
+        private void Start()
         {
-	        if (TCNetworkManager.IsServer)
-	        {
-		        Transform pickupSpawnerTransform = transform;
-		        GameObject newPickup = Instantiate(pickupToSpawn, pickupSpawnerTransform.position, pickupSpawnerTransform.rotation, pickupSpawnerTransform);
-				NetworkServer.Spawn(newPickup);
-	        }
+            if (TCNetworkManager.IsServer)
+            {
+                Transform pickupSpawnerTransform = transform;
+                GameObject newPickup = Instantiate(pickupToSpawn, pickupSpawnerTransform.position,
+                    pickupSpawnerTransform.rotation, pickupSpawnerTransform);
+                NetworkServer.Spawn(newPickup);
+            }
 
-			Destroy(this);
+            Destroy(this);
         }
     }
 }

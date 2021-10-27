@@ -8,18 +8,17 @@ namespace Team_Capture.UI.ImGui
     [RequireComponent(typeof(UImGui.UImGui))]
     public class ImGuiInstanceManager : SingletonMonoBehaviour<ImGuiInstanceManager>
     {
-        private UImGui.UImGui uImGui;
-        private Camera uImguiCamera;
-
         public string sceneCameraTag = "SceneCamera";
 
         private bool firstCameraSet = true;
-        
+        private UImGui.UImGui uImGui;
+        private Camera uImguiCamera;
+
         protected override void SingletonAwakened()
         {
             TCScenesManager.PreparingSceneLoadEvent += OnScenePreparingToLoad;
             TCScenesManager.OnSceneLoadedEvent += OnSceneLoaded;
-            
+
             uImGui = GetComponent<UImGui.UImGui>();
             SetInstanceCamera(Camera.main);
             EnableUImgui();
@@ -40,7 +39,7 @@ namespace Team_Capture.UI.ImGui
         {
             uImguiCamera = renderCamera;
             uImGui.SetCamera(renderCamera);
-            if(!firstCameraSet)
+            if (!firstCameraSet)
                 uImGui.Reload();
 
             firstCameraSet = false;
@@ -63,23 +62,23 @@ namespace Team_Capture.UI.ImGui
 
             Camera sceneDefaultCam = FindMainCamera();
             SetInstanceCamera(sceneDefaultCam);
-            
+
             yield return new WaitForEndOfFrame();
-            
+
             EnableUImgui();
         }
 
         private Camera FindMainCamera()
         {
             GameObject cameraObj = GameObject.FindWithTag(sceneCameraTag);
-            
+
             //Fall back to main camera if we can't find the scene camera
             if (cameraObj == null)
             {
                 Logger.Debug("Did not find scene camera! Falling back to Camera.main.");
                 return Camera.main;
             }
-            
+
             Camera foundCam = cameraObj.GetComponent<Camera>();
             if (foundCam == null)
             {

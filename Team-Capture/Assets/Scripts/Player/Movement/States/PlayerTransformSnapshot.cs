@@ -16,8 +16,9 @@ namespace Team_Capture.Player.Movement.States
 
         public Vector3 position;
         public Vector2 rotation;
-        
-        public PlayerTransformSnapshot(double remoteTimestamp, double localTimestamp, Vector3 position, Vector2 rotation)
+
+        public PlayerTransformSnapshot(double remoteTimestamp, double localTimestamp, Vector3 position,
+            Vector2 rotation)
         {
             this.remoteTimestamp = remoteTimestamp;
             this.localTimestamp = localTimestamp;
@@ -25,11 +26,12 @@ namespace Team_Capture.Player.Movement.States
             this.rotation = rotation;
         }
 
-        public static PlayerTransformSnapshot Interpolate(PlayerTransformSnapshot from, PlayerTransformSnapshot to, double t)
+        public static PlayerTransformSnapshot Interpolate(PlayerTransformSnapshot from, PlayerTransformSnapshot to,
+            double t)
         {
             return new PlayerTransformSnapshot(0, 0,
-                Vector3.LerpUnclamped(from.position, to.position, (float)t),
-                Vector2.LerpUnclamped(from.rotation, to.rotation, (float)t));
+                Vector3.LerpUnclamped(from.position, to.position, (float) t),
+                Vector2.LerpUnclamped(from.rotation, to.rotation, (float) t));
         }
     }
 }

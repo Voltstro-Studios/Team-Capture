@@ -9,7 +9,6 @@ using System.IO;
 using Jdenticon;
 using Mirror;
 using Team_Capture.Console;
-using Team_Capture.Core.Networking;
 using UnityCommandLineParser;
 using UnityEngine;
 using Logger = Team_Capture.Logging.Logger;
@@ -18,61 +17,61 @@ using Object = UnityEngine.Object;
 namespace Team_Capture.UserManagement
 {
     /// <summary>
-    ///     An offline <see cref="IUser"/>
+    ///     An offline <see cref="IUser" />
     /// </summary>
     public class OfflineUser : IUser
     {
         /// <summary>
         ///     Default username for offline accounts
         /// </summary>
-        [CommandLineArgument("name")] 
-        [ConVar("name", "Sets the name", true)]
+        [CommandLineArgument("name")] [ConVar("name", "Sets the name", true)]
         public static string PlayerName = "NotSet";
-        
+
         [ConVar("sv_offline_trim_name", "Will trim whitespace at the start and end of account names. " +
                                         "The local client will still see the untrimmed version.")]
         public static bool TrimUserNames = true;
 
+        private readonly string serverName;
+
+        private string userProfileLastName;
+        private Texture2D userProfilePicture;
+
         public OfflineUser(string userName = null)
         {
-            if (userName == null) 
+            if (userName == null)
                 return;
 
             serverName = TrimUserNames ? userName.TrimStart().TrimEnd() : userName;
         }
-        
-        public UserProvider UserProvider => UserProvider.Offline;
 
-        private readonly string serverName;
+        public UserProvider UserProvider => UserProvider.Offline;
         public string UserName => serverName ?? PlayerName;
 
         /// <summary>
-        ///     <see cref="UserId"/> is unused for <see cref="OfflineUser"/>
+        ///     <see cref="UserId" /> is unused for <see cref="OfflineUser" />
         /// </summary>
         public ulong UserId => 0;
 
-        private string userProfileLastName;
-        private Texture2D userProfilePicture;
         public Texture UserProfilePicture
         {
             get
             {
-                if (userProfilePicture != null && userProfileLastName == PlayerName) 
+                if (userProfilePicture != null && userProfileLastName == PlayerName)
                     return userProfilePicture;
-                
+
                 //Delete the old version of the profile picture if it exists
                 if (userProfilePicture != null)
                 {
                     Logger.Debug("Regenerating user profile picture...");
                     Object.Destroy(userProfilePicture);
-                }              
-                    
+                }
+
                 userProfileLastName = UserName;
                 userProfilePicture = new Texture2D(512, 512);
-                
-                MemoryStream iconStream = new MemoryStream();
+
+                MemoryStream iconStream = new();
                 Identicon.FromValue(UserName, 512).SaveAsPng(iconStream);
-                    
+
                 //Reset the icon stream
                 iconStream.Flush();
                 iconStream.Position = 0;
@@ -109,7 +108,7 @@ namespace Team_Capture.UserManagement
 
         public void WriteNetwork(NetworkWriter writer)
         {
-            writer.WriteByte((byte)UserProvider);
+            writer.WriteByte((byte) UserProvider);
             writer.WriteString(UserName);
         }
 
@@ -117,13 +116,10 @@ namespace Team_Capture.UserManagement
         {
             return new OfflineUser(reader.ReadString());
         }
-        
+
         public override bool Equals(object obj)
         {
-            if (obj is OfflineUser offlineUser)
-            {
-                return offlineUser.UserName == UserName;
-            }
+            if (obj is OfflineUser offlineUser) return offlineUser.UserName == UserName;
 
             return false;
         }

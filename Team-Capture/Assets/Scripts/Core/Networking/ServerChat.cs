@@ -29,7 +29,7 @@ namespace Team_Capture.Core.Networking
         }
 
         /// <summary>
-        ///     Sends a <see cref="ChatMessage"/> to all clients
+        ///     Sends a <see cref="ChatMessage" /> to all clients
         /// </summary>
         /// <param name="message"></param>
         public static void SendChatMessage(ChatMessage message)
@@ -39,7 +39,7 @@ namespace Team_Capture.Core.Networking
         }
 
         /// <summary>
-        ///     Sends a <see cref="ChatMessage"/> to all clients
+        ///     Sends a <see cref="ChatMessage" /> to all clients
         /// </summary>
         /// <param name="name"></param>
         /// <param name="message"></param>
@@ -51,7 +51,7 @@ namespace Team_Capture.Core.Networking
                 Message = new CompressedNetworkString(message)
             });
         }
-        
+
         [ConCommand("send", "Sends a message to the chat", CommandRunPermission.ServerOnly)]
         internal static void SendMessageCommand(string[] args)
         {

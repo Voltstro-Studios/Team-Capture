@@ -1,4 +1,3 @@
-using System;
 using Team_Capture.AddressablesAddons;
 using TMPro;
 
@@ -7,7 +6,7 @@ namespace Team_Capture.UI.Panels
     internal class JoiningServerPanel : PanelBase
     {
         public TMP_Text messageText;
-        
+
         public CachedLocalizedString joiningServerLocale;
         public CachedLocalizedString failToJoinLocale;
 

@@ -17,16 +17,16 @@ namespace Team_Capture.UI.Chat
     public struct ChatMessage : NetworkMessage
     {
         internal ChatMessage(string message)
-        : this()
+            : this()
         {
             Message = new CompressedNetworkString(message);
         }
-        
+
         /// <summary>
         ///     The player or thing that sent this message
         /// </summary>
         public string Player;
-        
+
         /// <summary>
         ///     Their message
         /// </summary>
@@ -44,7 +44,7 @@ namespace Team_Capture.UI.Chat
 
         public static ChatMessage ReadChatMessage(this NetworkReader reader)
         {
-            ChatMessage message = new ChatMessage
+            ChatMessage message = new()
             {
                 Player = reader.ReadString(),
                 Message = TCNetworkManager.IsServer

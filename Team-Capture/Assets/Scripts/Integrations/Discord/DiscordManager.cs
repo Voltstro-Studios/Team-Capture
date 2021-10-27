@@ -16,176 +16,176 @@ using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.Integrations.Discord
 {
-	/// <summary>
-	///     Handles communicating with Discord's game SDK
-	/// </summary>
-	internal class DiscordManager : SingletonMonoBehaviourSettings<DiscordManager, DiscordManagerSettings>
-	{
-		protected override string SettingsPath => "Assets/Settings/Integrations/DiscordSettings.asset";
+    /// <summary>
+    ///     Handles communicating with Discord's game SDK
+    /// </summary>
+    internal class DiscordManager : SingletonMonoBehaviourSettings<DiscordManager, DiscordManagerSettings>
+    {
+        private ActivityManager activityManager;
 
-		private ActivityManager activityManager;
-		private UserManager userManager;
+        private global::Discord.GameSDK.Discord client;
+        private UserManager userManager;
+        protected override string SettingsPath => "Assets/Settings/Integrations/DiscordSettings.asset";
 
-		private global::Discord.GameSDK.Discord client;
+        private void Update()
+        {
+            client?.RunCallbacks();
+        }
 
-		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-		private static void Init()
-		{
-			if(Game.IsHeadless)
-				return;
-			
-			GameObject go = new GameObject("DiscordManager");
-			go.AddComponent<DiscordManager>();
-		}
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        private static void Init()
+        {
+            if (Game.IsHeadless)
+                return;
 
-		private void Update()
-		{
-			client?.RunCallbacks();
-		}
+            GameObject go = new("DiscordManager");
+            go.AddComponent<DiscordManager>();
+        }
 
-		protected override void SingletonStarted()
-		{
-			if (Game.IsHeadless)
-			{
-				Destroy(gameObject);
-				return;
-			}
-			
-			Initialize();
-		}
+        protected override void SingletonStarted()
+        {
+            if (Game.IsHeadless)
+            {
+                Destroy(gameObject);
+                return;
+            }
 
-		protected override void SingletonDestroyed()
-		{
-			//Using Null Propagation seems to crash Unity...
-			// ReSharper disable once UseNullPropagation
-			if (client != null)
-				client.Dispose();
-		}
+            Initialize();
+        }
 
-		private void Initialize()
-		{
-			if (client != null)
-			{
-				Logger.Error("The discord client is already running!");
-				return;
-			}
+        protected override void SingletonDestroyed()
+        {
+            //Using Null Propagation seems to crash Unity...
+            // ReSharper disable once UseNullPropagation
+            if (client != null)
+                client.Dispose();
+        }
 
-			try
-			{
-				client = new global::Discord.GameSDK.Discord(long.Parse(Settings.clientId), CreateFlags.NoRequireDiscord);
-				client.Init();
-			}
-			catch (ResultException ex)
-			{
-				Logger.Error("Failed to connect with Discord! {@Message} {@ResultCode}", ex.Message, ex.Result);
-				client = null;
-				Destroy(gameObject);
-				return;
-			}
+        private void Initialize()
+        {
+            if (client != null)
+            {
+                Logger.Error("The discord client is already running!");
+                return;
+            }
 
-			client?.SetLogHook(Settings.logLevel, (level, message) =>
-			{
-				switch (level)
-				{
-					case LogLevel.Error:
-						Logger.Error(message);
-						break;
-					case LogLevel.Warn:
-						Logger.Warn(message);
-						break;
-					case LogLevel.Info:
-						Logger.Info(message);
-						break;
-					case LogLevel.Debug:
-						Logger.Debug(message);
-						break;
-					default:
-						throw new ArgumentOutOfRangeException(nameof(level), level, null);
-				}
-			});
-			activityManager = client?.GetActivityManager();
-			userManager = client?.GetUserManager();
+            try
+            {
+                client = new global::Discord.GameSDK.Discord(long.Parse(Settings.clientId),
+                    CreateFlags.NoRequireDiscord);
+                client.Init();
+            }
+            catch (ResultException ex)
+            {
+                Logger.Error("Failed to connect with Discord! {@Message} {@ResultCode}", ex.Message, ex.Result);
+                client = null;
+                Destroy(gameObject);
+                return;
+            }
 
-			TCScenesManager.PreparingSceneLoadEvent += PreparingSceneLoad;
-			TCScenesManager.OnSceneLoadedEvent += SceneLoaded;
+            client?.SetLogHook(Settings.logLevel, (level, message) =>
+            {
+                switch (level)
+                {
+                    case LogLevel.Error:
+                        Logger.Error(message);
+                        break;
+                    case LogLevel.Warn:
+                        Logger.Warn(message);
+                        break;
+                    case LogLevel.Info:
+                        Logger.Info(message);
+                        break;
+                    case LogLevel.Debug:
+                        Logger.Debug(message);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(level), level, null);
+                }
+            });
+            activityManager = client?.GetActivityManager();
+            userManager = client?.GetUserManager();
 
-			SceneLoaded(TCScenesManager.GetActiveScene());
-		}
+            TCScenesManager.PreparingSceneLoadEvent += PreparingSceneLoad;
+            TCScenesManager.OnSceneLoadedEvent += SceneLoaded;
 
-		/// <summary>
-		///     Updates the active Discord activity that is shown (AkA the Rich Presence)
-		/// </summary>
-		/// <param name="activity"></param>
-		public static void UpdateActivity(Activity activity)
-		{
-			if (Instance == null) return;
-			if (Instance.client == null) return;
+            SceneLoaded(TCScenesManager.GetActiveScene());
+        }
 
-			Instance.activityManager.UpdateActivity(activity,
-				result => { Logger.Debug($"[Discord Presence] Updated activity: {result}"); });
-		}
+        /// <summary>
+        ///     Updates the active Discord activity that is shown (AkA the Rich Presence)
+        /// </summary>
+        /// <param name="activity"></param>
+        public static void UpdateActivity(Activity activity)
+        {
+            if (Instance == null) return;
+            if (Instance.client == null) return;
 
-		#region Scene Discord RPC Stuff
+            Instance.activityManager.UpdateActivity(activity,
+                result => { Logger.Debug($"[Discord Presence] Updated activity: {result}"); });
+        }
 
-		private void PreparingSceneLoad(TCScene scene)
-		{
-			Debug.Log(scene.scene);
-			
-			//Update our RPC to show we are loading
-			if (client != null)
-				UpdateActivity(new Activity
-				{
-					Assets = new ActivityAssets
-					{
-						LargeImage = scene.largeImageKey,
-						LargeText = scene.LargeImageKeyText
-					},
-					Details = $"Loading into {scene.DisplayNameLocalized}",
-					State = "Loading..."
-				});
-		}
+        #region Scene Discord RPC Stuff
 
-		private void SceneLoaded(TCScene scene)
-		{
-			if (client != null)
-			{
-				Activity presence = new Activity
-				{
-					Assets = new ActivityAssets
-					{
-						LargeImage = scene.largeImageKey,
-						LargeText = scene.LargeImageKeyText
-					}
-				};
+        private void PreparingSceneLoad(TCScene scene)
+        {
+            Debug.Log(scene.scene);
 
-				if (scene.showStartTime)
-					presence.Timestamps = new ActivityTimestamps
-					{
-						Start = TimeHelper.UnixTimeNow()
-					};
+            //Update our RPC to show we are loading
+            if (client != null)
+                UpdateActivity(new Activity
+                {
+                    Assets = new ActivityAssets
+                    {
+                        LargeImage = scene.largeImageKey,
+                        LargeText = scene.LargeImageKeyText
+                    },
+                    Details = $"Loading into {scene.DisplayNameLocalized}",
+                    State = "Loading..."
+                });
+        }
 
-				if (scene.isOnlineScene)
-				{
-					presence.Details = TCScenesManager.GetActiveScene().DisplayNameLocalized;
-					presence.State = "Team Capture";
-				}
-				else if (scene.isMainMenu)
-				{
-					presence.Details = "Main Menu";
-				}
-				else if (!scene.isMainMenu && !scene.isOnlineScene)
-				{
-					presence.Details = "Loading...";
-				}
-				else
-				{
-					Logger.Error("You CANNOT have an online scene and a main menu scene!");
-				}
+        private void SceneLoaded(TCScene scene)
+        {
+            if (client != null)
+            {
+                Activity presence = new()
+                {
+                    Assets = new ActivityAssets
+                    {
+                        LargeImage = scene.largeImageKey,
+                        LargeText = scene.LargeImageKeyText
+                    }
+                };
 
-				UpdateActivity(presence);
-			}
-		}
+                if (scene.showStartTime)
+                    presence.Timestamps = new ActivityTimestamps
+                    {
+                        Start = TimeHelper.UnixTimeNow()
+                    };
 
-		#endregion
-	}
+                if (scene.isOnlineScene)
+                {
+                    presence.Details = TCScenesManager.GetActiveScene().DisplayNameLocalized;
+                    presence.State = "Team Capture";
+                }
+                else if (scene.isMainMenu)
+                {
+                    presence.Details = "Main Menu";
+                }
+                else if (!scene.isMainMenu && !scene.isOnlineScene)
+                {
+                    presence.Details = "Loading...";
+                }
+                else
+                {
+                    Logger.Error("You CANNOT have an online scene and a main menu scene!");
+                }
+
+                UpdateActivity(presence);
+            }
+        }
+
+        #endregion
+    }
 }

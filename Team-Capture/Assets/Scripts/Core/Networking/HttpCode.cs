@@ -10,11 +10,11 @@ namespace Team_Capture.Core.Networking
     {
         //Success
         Ok = 200,
-        
+
         //Client
         Unauthorized = 401,
         PreconditionFailed = 412,
-        
+
         //Server
         InternalServerError = 500
     }

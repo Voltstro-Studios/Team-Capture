@@ -11,30 +11,30 @@ using Team_Capture.Logging;
 namespace Team_Capture.Core.Compression
 {
     /// <summary>
-    ///     A <see cref="string"/> designed to be sent over the network.
+    ///     A <see cref="string" /> designed to be sent over the network.
     ///     <para>
-    ///         This can be very handy for <see cref="string"/>s that are quite long.
-    ///         Shorter <see cref="string"/>s may actually be larger due to the overhead.
+    ///         This can be very handy for <see cref="string" />s that are quite long.
+    ///         Shorter <see cref="string" />s may actually be larger due to the overhead.
     ///     </para>
     ///     <para>Uses LZ4 compression.</para>
     /// </summary>
     public struct CompressedNetworkString
     {
         /// <summary>
-        ///     Creates a new <see cref="CompressedNetworkString"/> instance
+        ///     Creates a new <see cref="CompressedNetworkString" /> instance
         /// </summary>
-        /// <param name="string">The <see cref="string"/> to compress</param>
+        /// <param name="string">The <see cref="string" /> to compress</param>
         public CompressedNetworkString(string @string)
-        : this()
+            : this()
         {
             String = @string;
         }
 
         private byte[] compressedString;
         private string @string;
-        
+
         /// <summary>
-        ///     Gets the uncompressed <see cref="string"/>
+        ///     Gets the uncompressed <see cref="string" />
         ///     or sets sets the compressed string
         /// </summary>
         public string String
@@ -51,14 +51,15 @@ namespace Team_Capture.Core.Compression
                     Logger.Error(ex, "An error occured while compressing data!");
                     return;
                 }
+
                 @string = value;
             }
         }
 
         /// <summary>
-        ///     Writes the <see cref="CompressedNetworkString"/>
+        ///     Writes the <see cref="CompressedNetworkString" />
         /// </summary>
-        /// <param name="writer"><see cref="NetworkWriter"/> to write to</param>
+        /// <param name="writer"><see cref="NetworkWriter" /> to write to</param>
         public void Write(NetworkWriter writer)
         {
             writer.WriteArray(compressedString);
@@ -66,11 +67,11 @@ namespace Team_Capture.Core.Compression
         }
 
         /// <summary>
-        ///     Reads the <see cref="CompressedNetworkString"/>
+        ///     Reads the <see cref="CompressedNetworkString" />
         /// </summary>
-        /// <param name="reader"><see cref="NetworkReader"/> to read from</param>
+        /// <param name="reader"><see cref="NetworkReader" /> to read from</param>
         /// <param name="reCompressString">
-        ///     Will assign <see cref="CompressedNetworkString.compressedString"/>. Use for security reasons,
+        ///     Will assign <see cref="CompressedNetworkString.compressedString" />. Use for security reasons,
         ///     such as if you want to send data to the server, then to all the clients, like a message.
         /// </param>
         /// <returns></returns>
@@ -80,19 +81,17 @@ namespace Team_Capture.Core.Compression
             {
                 string rawString = Compression.DecompressString(reader.ReadArray<byte>(), reader.ReadInt());
                 CompressedNetworkString compressedNetworkString;
-                
+
                 //You might want to do this in-case a client sends data, and that data goes to every client.
                 //So in-case the client sending the data sends fucky data, we will probs catch it here.
                 if (reCompressString)
                     compressedNetworkString = new CompressedNetworkString(rawString);
                 else
-                {
                     compressedNetworkString = new CompressedNetworkString
                     {
                         @string = rawString
                     };
-                }
-                
+
                 return compressedNetworkString;
             }
             catch (Exception ex)
@@ -100,7 +99,7 @@ namespace Team_Capture.Core.Compression
                 Logger.Error(ex, "An error occured while decompressing data!");
                 return new CompressedNetworkString
                 {
-                    @String = null
+                    String = null
                 };
             }
         }

@@ -17,252 +17,250 @@ using UnityEngine;
 
 namespace Team_Capture.Player
 {
-	/// <summary>
-	///     Handles input
-	/// </summary>
-	internal sealed class PlayerInputManager : NetworkBehaviour
-	{
-		private PlayerMovementManager playerInput;
-		private PlayerManager playerManager;
-		private PlayerWeaponShoot weaponShoot;
-		private PlayerUIManager uiManager;
+    /// <summary>
+    ///     Handles input
+    /// </summary>
+    internal sealed class PlayerInputManager : NetworkBehaviour
+    {
+        [Header("Player Movement")] [SerializeField]
+        private float xMouseSensitivity = 100.0f;
 
-		private WeaponManager weaponManager;
+        [SerializeField] private float yMouseSensitivity = 100.0f;
 
-		[NonSerialized] public InputReader InputReader;
+        [SerializeField] private bool reverseMouse;
 
-		[Header("Player Movement")]
-		[SerializeField] private float xMouseSensitivity = 100.0f;
-		[SerializeField] private float yMouseSensitivity = 100.0f;
+        [NonSerialized] public InputReader InputReader;
+        private PlayerMovementManager playerInput;
+        private PlayerManager playerManager;
+        private PlayerUIManager uiManager;
 
-		[SerializeField] private bool reverseMouse;
+        private WeaponManager weaponManager;
+        private PlayerWeaponShoot weaponShoot;
 
-		private void Start()
-		{
-			weaponManager = GetComponent<WeaponManager>();
-			playerManager = GetComponent<PlayerManager>();
-			weaponShoot = GetComponent<PlayerWeaponShoot>();
-			playerInput = GetComponent<PlayerMovementManager>();
-			uiManager = GetComponent<PlayerUIManager>();
+        private void Start()
+        {
+            weaponManager = GetComponent<WeaponManager>();
+            playerManager = GetComponent<PlayerManager>();
+            weaponShoot = GetComponent<PlayerWeaponShoot>();
+            playerInput = GetComponent<PlayerMovementManager>();
+            uiManager = GetComponent<PlayerUIManager>();
 
-			GameSettings.SettingsUpdated += UpdateSettings;
+            GameSettings.SettingsUpdated += UpdateSettings;
 
-			UpdateSettings();
-		}
+            UpdateSettings();
+        }
 
-		public void Setup(InputReader reader)
-		{
-			InputReader = reader;
+        private void Update()
+        {
+            //Make sure mouse lock/visibility is correct
+            HandleMouseLock();
 
-			//Setup player input
-			InputReader.PlayerScoreboard += OnPlayerScoreBoard;
-			InputReader.PlayerSuicide += OnPlayerSuicidePress;
-			InputReader.PlayerJump += OnPlayerJump;
-			InputReader.PlayerPause += OnPlayerPause;
-			InputReader.PlayerWeaponSelection += OnPlayerWeaponSelection;
-			InputReader.PlayerWeaponShoot += OnPlayerWeaponShoot;
-			InputReader.PlayerWeaponReload += OnPlayerWeaponReload;
+            if (ConsoleSetup.ConsoleUI != null)
+                if (ConsoleSetup.ConsoleUI.IsOpen())
+                    uiManager.SetPauseMenu(true);
 
-			InputReader.ChatSubmit += OnChatSubmit;
-			InputReader.ChatToggle += OnChatToggle;
+            //If the pause menu is open, set player movement direction to 0 and return
+            if (ClientUI.IsPauseMenuOpen || uiManager.IsChatOpen)
+            {
+                weaponManager.WeaponSway.SetInput(0, 0);
+                playerInput.SetInput(0, 0, 0, 0, false);
+                return;
+            }
 
-			InputReader.EnablePlayerInput();
-			InputReader.EnableChatInput();
-		}
+            //Don't want to move if the player is dead
+            if (!playerManager.IsDead)
+            {
+                //Movement
+                Vector2 movement = InputReader.ReadPlayerMove();
+                horizontal = movement.x;
+                vertical = movement.y;
 
-		private void OnDisable()
-		{
-			InputReader.DisablePlayerInput();
-			InputReader.DisableChatInput();
+                //Look
+                Vector2 look = InputReader.ReadPlayerLook();
+                if (reverseMouse)
+                {
+                    rotationX = look.y * yMouseSensitivity * Time.fixedDeltaTime;
+                    rotationY = look.x * xMouseSensitivity * Time.fixedDeltaTime;
+                }
+                else
+                {
+                    rotationX = look.x * xMouseSensitivity * Time.fixedDeltaTime;
+                    rotationY = look.y * yMouseSensitivity * Time.fixedDeltaTime;
+                }
 
-			InputReader.PlayerScoreboard -= OnPlayerScoreBoard;
-			InputReader.PlayerSuicide -= OnPlayerSuicidePress;
-			InputReader.PlayerJump -= OnPlayerJump;
-			InputReader.PlayerPause -= OnPlayerPause;
-			InputReader.PlayerWeaponSelection -= OnPlayerWeaponSelection;
-			InputReader.PlayerWeaponShoot -= OnPlayerWeaponShoot;
-			InputReader.PlayerWeaponReload -= OnPlayerWeaponReload;
-			
-			InputReader.ChatSubmit -= OnChatSubmit;
-			InputReader.ChatToggle -= OnChatToggle;
-		}
+                //Send inputs
+                playerInput.SetInput(horizontal, vertical, rotationX, rotationY, wishToJump);
+                weaponManager.WeaponSway.SetInput(rotationX, rotationY);
+            }
+            else
+            {
+                wishToJump = false;
+                rotationX = 0f;
+                rotationY = 0f;
+                vertical = 0f;
+                horizontal = 0f;
+            }
+        }
 
-		private void Update()
-		{
-			//Make sure mouse lock/visibility is correct
-			HandleMouseLock();
+        private void OnDisable()
+        {
+            InputReader.DisablePlayerInput();
+            InputReader.DisableChatInput();
 
-			if (ConsoleSetup.ConsoleUI != null)
-				if (ConsoleSetup.ConsoleUI.IsOpen())
-				{
-					uiManager.SetPauseMenu(true);
-				}
+            InputReader.PlayerScoreboard -= OnPlayerScoreBoard;
+            InputReader.PlayerSuicide -= OnPlayerSuicidePress;
+            InputReader.PlayerJump -= OnPlayerJump;
+            InputReader.PlayerPause -= OnPlayerPause;
+            InputReader.PlayerWeaponSelection -= OnPlayerWeaponSelection;
+            InputReader.PlayerWeaponShoot -= OnPlayerWeaponShoot;
+            InputReader.PlayerWeaponReload -= OnPlayerWeaponReload;
 
-			//If the pause menu is open, set player movement direction to 0 and return
-			if (ClientUI.IsPauseMenuOpen || uiManager.IsChatOpen)
-			{
-				weaponManager.WeaponSway.SetInput(0, 0);
-				playerInput.SetInput(0, 0, 0, 0, false);
-				return;
-			}
+            InputReader.ChatSubmit -= OnChatSubmit;
+            InputReader.ChatToggle -= OnChatToggle;
+        }
 
-			//Don't want to move if the player is dead
-			if (!playerManager.IsDead)
-			{
-				//Movement
-				Vector2 movement = InputReader.ReadPlayerMove();
-				horizontal = movement.x;
-				vertical = movement.y;
+        public void Setup(InputReader reader)
+        {
+            InputReader = reader;
 
-				//Look
-				Vector2 look = InputReader.ReadPlayerLook();
-				if (reverseMouse)
-				{
-					rotationX = look.y * yMouseSensitivity * Time.fixedDeltaTime;
-					rotationY = look.x * xMouseSensitivity * Time.fixedDeltaTime;
-				}
-				else
-				{
-					rotationX = look.x * xMouseSensitivity * Time.fixedDeltaTime;
-					rotationY = look.y * yMouseSensitivity * Time.fixedDeltaTime;
-				}
+            //Setup player input
+            InputReader.PlayerScoreboard += OnPlayerScoreBoard;
+            InputReader.PlayerSuicide += OnPlayerSuicidePress;
+            InputReader.PlayerJump += OnPlayerJump;
+            InputReader.PlayerPause += OnPlayerPause;
+            InputReader.PlayerWeaponSelection += OnPlayerWeaponSelection;
+            InputReader.PlayerWeaponShoot += OnPlayerWeaponShoot;
+            InputReader.PlayerWeaponReload += OnPlayerWeaponReload;
 
-				//Send inputs
-				playerInput.SetInput(horizontal, vertical, rotationX, rotationY, wishToJump);
-				weaponManager.WeaponSway.SetInput(rotationX, rotationY);
-			}
-			else
-			{
-				wishToJump = false;
-				rotationX = 0f;
-				rotationY = 0f;
-				vertical = 0f;
-				horizontal = 0f;
-			}
-		}
+            InputReader.ChatSubmit += OnChatSubmit;
+            InputReader.ChatToggle += OnChatToggle;
 
-		#region Input Settings
+            InputReader.EnablePlayerInput();
+            InputReader.EnableChatInput();
+        }
 
-		private void UpdateSettings()
-		{
-			MouseSettingsClass mouseSettings = GameSettings.MouseSettings;
-			xMouseSensitivity = mouseSettings.MouseSensitivity;
-			yMouseSensitivity = mouseSettings.MouseSensitivity;
-			reverseMouse = mouseSettings.ReverseMouse;
-		}
+        #region Input Settings
 
-		#endregion
+        private void UpdateSettings()
+        {
+            MouseSettingsClass mouseSettings = GameSettings.MouseSettings;
+            xMouseSensitivity = mouseSettings.MouseSensitivity;
+            yMouseSensitivity = mouseSettings.MouseSensitivity;
+            reverseMouse = mouseSettings.ReverseMouse;
+        }
 
-		#region Inputs to send
+        #endregion
 
-		private float rotationX;
-		private float rotationY;
+        #region Inputs to send
 
-		private float vertical;
-		private float horizontal;
+        private float rotationX;
+        private float rotationY;
 
-		private bool wishToJump;
+        private float vertical;
+        private float horizontal;
 
-		#endregion
+        private bool wishToJump;
 
-		#region Input Functions
+        #endregion
 
-		private void HandleMouseLock()
-		{
-			if (ClientUI.IsPauseMenuOpen || uiManager.IsChatOpen)
-			{
-				if (!Cursor.visible)
-					Cursor.visible = true;
+        #region Input Functions
 
-				if (Cursor.lockState != CursorLockMode.None)
-					Cursor.lockState = CursorLockMode.None;
+        private void HandleMouseLock()
+        {
+            if (ClientUI.IsPauseMenuOpen || uiManager.IsChatOpen)
+            {
+                if (!Cursor.visible)
+                    Cursor.visible = true;
 
-				return;
-			}
+                if (Cursor.lockState != CursorLockMode.None)
+                    Cursor.lockState = CursorLockMode.None;
 
-			if (Cursor.visible)
-				Cursor.visible = false;
+                return;
+            }
 
-			if (Cursor.lockState != CursorLockMode.Locked)
-				Cursor.lockState = CursorLockMode.Locked;
-		}
+            if (Cursor.visible)
+                Cursor.visible = false;
 
-		private void OnPlayerScoreBoard()
-		{
-			uiManager.ToggleScoreboard();
-		}
+            if (Cursor.lockState != CursorLockMode.Locked)
+                Cursor.lockState = CursorLockMode.Locked;
+        }
 
-		private void OnPlayerSuicidePress()
-		{
-			if(!playerManager.IsDead)
-				playerManager.CmdSuicide();
-		}
+        private void OnPlayerScoreBoard()
+        {
+            uiManager.ToggleScoreboard();
+        }
 
-		private void OnPlayerJump(bool jump)
-		{
-			if (!playerManager.IsDead)
-				wishToJump = jump;
-		}
+        private void OnPlayerSuicidePress()
+        {
+            if (!playerManager.IsDead)
+                playerManager.CmdSuicide();
+        }
 
-		private void OnPlayerPause()
-		{
-			uiManager.TogglePauseMenu();
-		}
+        private void OnPlayerJump(bool jump)
+        {
+            if (!playerManager.IsDead)
+                wishToJump = jump;
+        }
 
-		private void OnPlayerWeaponSelection(float value)
-		{
-			if(ClientUI.IsPauseMenuOpen || uiManager.IsChatOpen)
-				return;
+        private void OnPlayerPause()
+        {
+            uiManager.TogglePauseMenu();
+        }
 
-			int selectedWeaponIndex = weaponManager.SelectedWeaponIndex;
-			int weaponHolderChildCount = weaponManager.WeaponHolderSpotChildCount - 1;
+        private void OnPlayerWeaponSelection(float value)
+        {
+            if (ClientUI.IsPauseMenuOpen || uiManager.IsChatOpen)
+                return;
 
-			if (value > 0f)
-			{
-				if (selectedWeaponIndex >= weaponHolderChildCount)
-					selectedWeaponIndex = 0;
-				else
-					selectedWeaponIndex++;
-			}
+            int selectedWeaponIndex = weaponManager.SelectedWeaponIndex;
+            int weaponHolderChildCount = weaponManager.WeaponHolderSpotChildCount - 1;
 
-			if (value < 0f)
-			{
-				if (selectedWeaponIndex <= 0)
-					selectedWeaponIndex = weaponHolderChildCount;
-				else
-					selectedWeaponIndex--;
-			}
+            if (value > 0f)
+            {
+                if (selectedWeaponIndex >= weaponHolderChildCount)
+                    selectedWeaponIndex = 0;
+                else
+                    selectedWeaponIndex++;
+            }
 
-			if (selectedWeaponIndex == weaponManager.SelectedWeaponIndex) return;
-			weaponManager.CmdSetWeapon(selectedWeaponIndex);
-		}
+            if (value < 0f)
+            {
+                if (selectedWeaponIndex <= 0)
+                    selectedWeaponIndex = weaponHolderChildCount;
+                else
+                    selectedWeaponIndex--;
+            }
 
-		private void OnPlayerWeaponShoot(bool button)
-		{
-			if(ClientUI.IsPauseMenuOpen || uiManager.IsChatOpen)
-				return;
-			
-			weaponShoot.ShootWeapon(button);
-		}
+            if (selectedWeaponIndex == weaponManager.SelectedWeaponIndex) return;
+            weaponManager.CmdSetWeapon(selectedWeaponIndex);
+        }
 
-		private void OnPlayerWeaponReload()
-		{
-			if(ClientUI.IsPauseMenuOpen || uiManager.IsChatOpen)
-				return;
+        private void OnPlayerWeaponShoot(bool button)
+        {
+            if (ClientUI.IsPauseMenuOpen || uiManager.IsChatOpen)
+                return;
 
-			weaponManager.ClientReloadWeapon();
-		}
+            weaponShoot.ShootWeapon(button);
+        }
 
-		private void OnChatSubmit()
-		{
-			uiManager.SubmitChatMessage();
-		}
-		
-		private void OnChatToggle()
-		{
-			uiManager.ToggleChat();
-		}
+        private void OnPlayerWeaponReload()
+        {
+            if (ClientUI.IsPauseMenuOpen || uiManager.IsChatOpen)
+                return;
 
-		#endregion
-	}
+            weaponManager.ClientReloadWeapon();
+        }
+
+        private void OnChatSubmit()
+        {
+            uiManager.SubmitChatMessage();
+        }
+
+        private void OnChatToggle()
+        {
+            uiManager.ToggleChat();
+        }
+
+        #endregion
+    }
 }

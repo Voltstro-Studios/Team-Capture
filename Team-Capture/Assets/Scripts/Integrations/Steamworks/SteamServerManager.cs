@@ -20,7 +20,7 @@ namespace Team_Capture.Integrations.Steamworks
     public static class SteamServerManager
     {
         private static Dictionary<SteamUser, AuthResult> authResults;
-        
+
         internal static bool IsOnline { get; private set; }
 
         /// <summary>
@@ -29,7 +29,7 @@ namespace Team_Capture.Integrations.Steamworks
         /// <param name="onFail"></param>
         internal static void StartServer(Action onFail)
         {
-            SteamServerInit serverInit = new SteamServerInit("Team-Capture", "Team-Capture")
+            SteamServerInit serverInit = new("Team-Capture", "Team-Capture")
             {
                 DedicatedServer = true,
                 Secure = true,
@@ -37,7 +37,7 @@ namespace Team_Capture.Integrations.Steamworks
                 IpAddress = IPAddress.Any,
                 GamePort = 7777
             };
-            
+
             authResults = new Dictionary<SteamUser, AuthResult>();
 
             SteamServer.OnSteamServersConnected += () => Logger.Info("Server has connected to Steam game servers.");
@@ -62,7 +62,7 @@ namespace Team_Capture.Integrations.Steamworks
         {
             Logger.Error("Failed to connect to Steam game servers! Result: {Result}", result);
             SteamServer.LogOff();
-            
+
             //ShutdownServer();
             onFail.Invoke();
         }
@@ -70,12 +70,12 @@ namespace Team_Capture.Integrations.Steamworks
         private static void OnAuthResponse(SteamId steamId, SteamId ownerId, AuthResponse status)
         {
             //TODO: If the user cancels their auth ticket, we need to disconnect them
-            KeyValuePair<SteamUser, AuthResult> user = authResults.FirstOrDefault(x => x.Key.UserId == steamId);
+            var user = authResults.FirstOrDefault(x => x.Key.UserId == steamId);
             if (user.Equals(null))
                 return;
-            
+
             authResults.Remove(user.Key);
-            
+
             Logger.Info("Got client {ID} auth response back of: {status}", steamId, status);
 
             if (status == AuthResponse.OK)
@@ -89,9 +89,9 @@ namespace Team_Capture.Integrations.Steamworks
         /// </summary>
         internal static void ShutdownServer()
         {
-            if(!IsOnline)
+            if (!IsOnline)
                 return;
-            
+
             Logger.Info("Shutting down connection for Steam game server...");
             SteamServer.LogOff();
             SteamServer.Shutdown();
@@ -99,7 +99,7 @@ namespace Team_Capture.Integrations.Steamworks
         }
 
         /// <summary>
-        ///     Begins <see cref="SteamServer.BeginAuthSession"/> on the <see cref="SteamUser"/>
+        ///     Begins <see cref="SteamServer.BeginAuthSession" /> on the <see cref="SteamUser" />
         /// </summary>
         /// <param name="user">The user to auth</param>
         /// <param name="onSuccess">Invoked if auth is a success</param>
@@ -130,16 +130,16 @@ namespace Team_Capture.Integrations.Steamworks
         /// </summary>
         internal static void RunCallbacks()
         {
-            if(!IsOnline)
+            if (!IsOnline)
                 return;
-            
+
             SteamServer.RunCallbacks();
         }
 
         private class AuthResult
         {
-            public Action OnSuccess;
             public Action OnFail;
+            public Action OnSuccess;
         }
     }
 }

@@ -12,21 +12,21 @@ namespace Team_Capture.Pickups
 {
     internal class WeaponPickup : Pickup
     {
-	    /// <summary>
-	    ///     The weapon to give
-	    /// </summary>
-	    [Tooltip("The weapon to give")] public TCWeapon weapon;
+        /// <summary>
+        ///     The weapon to give
+        /// </summary>
+        [Tooltip("The weapon to give")] public TCWeapon weapon;
 
-	    protected override void OnPlayerPickup(PlayerManager player)
-	    {
-		    WeaponManager weaponManager = player.GetComponent<WeaponManager>();
+        protected override void OnPlayerPickup(PlayerManager player)
+        {
+            WeaponManager weaponManager = player.GetComponent<WeaponManager>();
 
-		    //Don't want to pickup the same weapon
-		    if (weaponManager.GetWeapon(weapon.weapon) != null) return;
+            //Don't want to pickup the same weapon
+            if (weaponManager.GetWeapon(weapon.weapon) != null) return;
 
-		    weaponManager.AddWeapon(weapon.weapon);
+            weaponManager.AddWeapon(weapon.weapon);
 
-		    base.OnPlayerPickup(player);
-	    }
+            base.OnPlayerPickup(player);
+        }
     }
 }

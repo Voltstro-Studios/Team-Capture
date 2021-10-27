@@ -16,12 +16,21 @@ using Logger = Team_Capture.Logging.Logger;
 namespace Team_Capture.Integrations.Steamworks
 {
     /// <summary>
-    ///     An <see cref="IUser"/> that uses Steamworks
+    ///     An <see cref="IUser" /> that uses Steamworks
     /// </summary>
     public class SteamUser : IUser
     {
         /// <summary>
-        ///     Creates a new <see cref="SteamUser"/> from the user's <see cref="SteamId"/>
+        ///     Steam <see cref="AuthTicket" /> of the user
+        /// </summary>
+        public AuthTicket AuthTicket;
+
+        private string userName;
+
+        private Texture2D userProfilePicture;
+
+        /// <summary>
+        ///     Creates a new <see cref="SteamUser" /> from the user's <see cref="SteamId" />
         /// </summary>
         /// <param name="id"></param>
         public SteamUser(SteamId id)
@@ -40,7 +49,6 @@ namespace Team_Capture.Integrations.Steamworks
 
         public UserProvider UserProvider => UserProvider.Steam;
 
-        private string userName;
         public string UserName
         {
             get
@@ -69,23 +77,21 @@ namespace Team_Capture.Integrations.Steamworks
         }
 
         /// <summary>
-        ///     The <see cref="SteamId"/> of the user
+        ///     The <see cref="SteamId" /> of the user
         /// </summary>
         public ulong UserId { get; }
-
-        private Texture2D userProfilePicture;
 
         public Texture UserProfilePicture
         {
             get
             {
-                if (userProfilePicture != null) 
+                if (userProfilePicture != null)
                     return userProfilePicture;
-                
+
                 //The Steamworks API docs says that GetLargeFriendAvatar should be returning as 128*128 image.
                 //However I am getting 184*184 image... We will just resize the texture if it doesn't match
                 userProfilePicture = new Texture2D(184, 184, TextureFormat.RGBA32, false, false);
-                
+
                 if (SteamClient.IsLoggedOn)
                     LoadSteamAvatarAsync().Forget();
 
@@ -93,26 +99,6 @@ namespace Team_Capture.Integrations.Steamworks
             }
         }
 
-        private async UniTaskVoid LoadSteamAvatarAsync()
-        {
-            Image? imageTask = await SteamFriends.GetLargeAvatarAsync(UserId).AsUniTask();
-            if(!imageTask.HasValue)
-                return;
-
-            Image image = imageTask.Value;
-            Logger.Debug("Got Steam user profile image of {Height} x {Width}", image.Height, image.Width);
-
-            if (userProfilePicture.width != image.Width || userProfilePicture.height != image.Height)
-                userProfilePicture.Reinitialize((int)image.Width, (int)image.Height);
-            
-            userProfilePicture.LoadSteamworksImageIntoTexture2D(image);
-        }
-
-        /// <summary>
-        ///     Steam <see cref="AuthTicket"/> of the user
-        /// </summary>
-        public AuthTicket AuthTicket;
-        
         public void ServerStartClientAuthentication(Action onSuccess, Action onFail)
         {
             SteamServerManager.BeginAuthUser(this, onSuccess, onFail);
@@ -135,21 +121,36 @@ namespace Team_Capture.Integrations.Steamworks
 
         public void WriteNetwork(NetworkWriter writer)
         {
-            writer.WriteByte((byte)UserProvider);
+            writer.WriteByte((byte) UserProvider);
             writer.WriteULong(UserId);
-            writer.WriteArray(AuthTicket.Data); 
+            writer.WriteArray(AuthTicket.Data);
+        }
+
+        private async UniTaskVoid LoadSteamAvatarAsync()
+        {
+            var imageTask = await SteamFriends.GetLargeAvatarAsync(UserId).AsUniTask();
+            if (!imageTask.HasValue)
+                return;
+
+            Image image = imageTask.Value;
+            Logger.Debug("Got Steam user profile image of {Height} x {Width}", image.Height, image.Width);
+
+            if (userProfilePicture.width != image.Width || userProfilePicture.height != image.Height)
+                userProfilePicture.Reinitialize((int) image.Width, (int) image.Height);
+
+            userProfilePicture.LoadSteamworksImageIntoTexture2D(image);
         }
 
         internal static IUser Create(NetworkReader reader)
         {
             return new SteamUser(reader.ReadULong(), reader.ReadArray<byte>());
         }
-        
+
         public override bool Equals(object obj)
         {
             if (obj is SteamUser steamUser)
                 return steamUser.UserId == UserId;
-            
+
             return false;
         }
 

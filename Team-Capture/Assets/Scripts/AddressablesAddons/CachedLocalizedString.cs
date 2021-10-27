@@ -17,7 +17,7 @@ namespace Team_Capture.AddressablesAddons
 
         private string cachedValue;
 
-        private bool isWaitingForLoad = false;
+        private bool isWaitingForLoad;
 
         public string Value
         {
@@ -25,16 +25,15 @@ namespace Team_Capture.AddressablesAddons
             {
                 if (isWaitingForLoad)
                     return string.Empty;
-                
+
                 if (cachedValue == null)
                 {
                     isWaitingForLoad = true;
                     cachedValue = localizedString.GetLocalizedString();
                     isWaitingForLoad = false;
                 }
-                    
+
                 return cachedValue;
-                
             }
         }
 

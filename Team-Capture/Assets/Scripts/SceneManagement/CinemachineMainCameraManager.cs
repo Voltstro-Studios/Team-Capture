@@ -13,7 +13,7 @@ namespace Team_Capture.SceneManagement
     public class CinemachineMainCameraManager : MonoBehaviour
     {
         [SerializeField] private bool handleAudioListeners = true;
-        
+
         private UniversalAdditionalCameraData cameraData;
 
         private void Start()
@@ -23,18 +23,18 @@ namespace Team_Capture.SceneManagement
                 Destroy(this);
                 return;
             }
-            
+
             CinemachineBrain brain = GetComponent<CinemachineBrain>();
-            if(handleAudioListeners)
+            if (handleAudioListeners)
                 brain.m_CameraActivatedEvent.AddListener(OnCameraActivated);
-            
+
             cameraData = GetComponent<UniversalAdditionalCameraData>();
 
             GameSettings.SettingsUpdated += UpdateSettings;
 
             UpdateSettings();
         }
-        
+
         private void OnDestroy()
         {
             GameSettings.SettingsUpdated -= UpdateSettings;
@@ -42,7 +42,7 @@ namespace Team_Capture.SceneManagement
 
         private void OnCameraActivated(ICinemachineCamera toCam, ICinemachineCamera fromCam)
         {
-            if(toCam == null)
+            if (toCam == null)
                 return;
 
             //To cam audio listener
@@ -50,21 +50,21 @@ namespace Team_Capture.SceneManagement
             if (toCamAudioListener != null)
                 toCamAudioListener.enabled = true;
 
-            if(fromCam == null)
+            if (fromCam == null)
                 return;
 
             AudioListener fromCamAudioListener = fromCam.VirtualCameraGameObject.GetComponent<AudioListener>();
             if (fromCamAudioListener != null)
                 fromCamAudioListener.enabled = false;
         }
-        
+
         private void UpdateSettings()
         {
             cameraData.renderPostProcessing = GameSettings.AdvSettings.PostProcessing;
             cameraData.antialiasing = GameSettings.AdvSettings.CameraAntialiasing;
             cameraData.antialiasingQuality = GameSettings.AdvSettings.CameraAntialiasingQuality;
         }
-        
+
         [ConCommand("r_antialiasing", "Changes the antialiasing mode", CommandRunPermission.ClientOnly, 1, 1, true)]
         public static void AntialiasingModeCommand(string[] args)
         {

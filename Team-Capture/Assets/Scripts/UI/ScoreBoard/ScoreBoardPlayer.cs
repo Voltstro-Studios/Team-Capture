@@ -13,33 +13,33 @@ using UnityEngine.UI;
 
 namespace Team_Capture.UI.ScoreBoard
 {
-	internal class ScoreBoardPlayer : MonoBehaviour
-	{
-		[SerializeField] private RawImage playerProfile;
-		[SerializeField] private TextMeshProUGUI playerDeathsText;
-		[SerializeField] private TextMeshProUGUI playerKillsText;
-		[SerializeField] private TextMeshProUGUI playerNameText;
-		[SerializeField] private TextMeshProUGUI playerPingText;
+    internal class ScoreBoardPlayer : MonoBehaviour
+    {
+        [SerializeField] private RawImage playerProfile;
+        [SerializeField] private TextMeshProUGUI playerDeathsText;
+        [SerializeField] private TextMeshProUGUI playerKillsText;
+        [SerializeField] private TextMeshProUGUI playerNameText;
+        [SerializeField] private TextMeshProUGUI playerPingText;
 
-		internal PlayerManager PlayerToTrack;
+        internal PlayerManager PlayerToTrack;
 
-		public void SetupPlayerInfo(PlayerManager player)
-		{
-			PlayerToTrack = player;
-			UpdatePlayerStats();
-		}
+        public void SetupPlayerInfo(PlayerManager player)
+        {
+            PlayerToTrack = player;
+            UpdatePlayerStats();
+        }
 
-		public void UpdatePlayerStats()
-		{
-			//Check to see if the player name has changed
-			string userName = PlayerToTrack.User.UserName;
-			if (playerNameText.text != userName)
-				playerNameText.text = userName;
+        public void UpdatePlayerStats()
+        {
+            //Check to see if the player name has changed
+            string userName = PlayerToTrack.User.UserName;
+            if (playerNameText.text != userName)
+                playerNameText.text = userName;
 
-			playerProfile.texture = PlayerToTrack.User.UserProfilePicture;
-			playerKillsText.text = PlayerToTrack.Kills.ToString();
-			playerDeathsText.text = PlayerToTrack.Deaths.ToString();
-			playerPingText.text = Math.Round(PlayerToTrack.latency).ToString(CultureInfo.InvariantCulture);
-		}
-	}
+            playerProfile.texture = PlayerToTrack.User.UserProfilePicture;
+            playerKillsText.text = PlayerToTrack.Kills.ToString();
+            playerDeathsText.text = PlayerToTrack.Deaths.ToString();
+            playerPingText.text = Math.Round(PlayerToTrack.latency).ToString(CultureInfo.InvariantCulture);
+        }
+    }
 }

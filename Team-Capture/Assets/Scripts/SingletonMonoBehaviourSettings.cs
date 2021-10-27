@@ -12,17 +12,17 @@ using Logger = Team_Capture.Logging.Logger;
 namespace Team_Capture
 {
     /// <summary>
-    ///     A <see cref="SingletonMonoBehaviour{T}"/> but with settings.
+    ///     A <see cref="SingletonMonoBehaviour{T}" /> but with settings.
     /// </summary>
-    public abstract class SingletonMonoBehaviourSettings<TBaseType, TSettingsType> : SingletonMonoBehaviour<TBaseType> 
+    public abstract class SingletonMonoBehaviourSettings<TBaseType, TSettingsType> : SingletonMonoBehaviour<TBaseType>
         where TBaseType : SingletonMonoBehaviour<TBaseType>
         where TSettingsType : ScriptableObject
     {
         /// <summary>
-        ///     Loaded <see cref="TSettingsType"/>
+        ///     Loaded <see cref="TSettingsType" />
         /// </summary>
         [NonSerialized] protected TSettingsType Settings;
-        
+
         /// <summary>
         ///     Addressable path to where the settings are
         /// </summary>
@@ -45,6 +45,7 @@ namespace Team_Capture
             {
                 Logger.Error(ex, "Failed to load settings!");
             }
+
             Logger.Debug("Loaded settings from '{Path}'.", SettingsPath);
         }
 

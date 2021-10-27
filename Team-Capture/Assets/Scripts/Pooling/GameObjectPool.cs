@@ -15,7 +15,8 @@ namespace Team_Capture.Pooling
 
         public GameObjectPool(GameObject prefab)
         {
-            objectPool = new LinkedPool<GameObject>(() => CreateObject(prefab), OnTakeObject, OnReturnObject, OnDestroyObject);
+            objectPool = new LinkedPool<GameObject>(() => CreateObject(prefab), OnTakeObject, OnReturnObject,
+                OnDestroyObject);
         }
 
         public GameObject GetPooledObject()
@@ -32,7 +33,7 @@ namespace Team_Capture.Pooling
         {
             GameObject newObj = Object.Instantiate(prefab);
             PoolReturn returnComponent = newObj.GetComponent<PoolReturn>();
-            if(returnComponent != null)
+            if (returnComponent != null)
                 returnComponent.Setup(this);
 
             return newObj;

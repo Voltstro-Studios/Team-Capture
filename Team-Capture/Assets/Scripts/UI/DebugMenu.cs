@@ -17,225 +17,227 @@ using UnityEngine;
 
 namespace Team_Capture.UI
 {
-	/// <summary>
-	///     A UI used for debugging purposes
-	/// </summary>
-	internal class DebugMenu : SingletonMonoBehaviour<DebugMenu>
-	{
-		/// <summary>
-		///     Reads input
-		/// </summary>
-		public InputReader inputReader;
+    /// <summary>
+    ///     A UI used for debugging purposes
+    /// </summary>
+    internal class DebugMenu : SingletonMonoBehaviour<DebugMenu>
+    {
+        private const string Spacer = "===================";
 
-		/// <summary>
-		///		Icon texture
-		/// </summary>
-		public Texture iconTexture;
+        /// <summary>
+        ///     Is the debug menu open?
+        /// </summary>
+        [ConVar("cl_debugmenu", "Shows the debug menu", true)]
+        public static bool DebugMenuOpen;
 
-		/// <summary>
-		///		Icon size
-		/// </summary>
-		public Vector2 iconSize = new Vector2(48, 48);
+        /// <summary>
+        ///     Reads input
+        /// </summary>
+        public InputReader inputReader;
 
-		/// <summary>
-		///		How often to refresh the fps counter
-		/// </summary>
-		public float refreshRate = 1f;
+        /// <summary>
+        ///     Icon texture
+        /// </summary>
+        public Texture iconTexture;
 
-		/// <summary>
-		///     Is the debug menu open?
-		/// </summary>
-		[ConVar("cl_debugmenu", "Shows the debug menu", true)]
-		public static bool DebugMenuOpen;
+        /// <summary>
+        ///     Icon size
+        /// </summary>
+        public Vector2 iconSize = new(48, 48);
 
-		private const string Spacer = "===================";
+        /// <summary>
+        ///     How often to refresh the fps counter
+        /// </summary>
+        public float refreshRate = 1f;
 
-		private ProfilerRecorder mainThreadRecorder;
-		private ProfilerRecorder totalMemoryUsedRecorder;
-		private ProfilerRecorder gcReservedMemoryRecorder;
-		private ProfilerRecorder totalDrawCallsRecorder;
+        private int drawCalls;
+        private int fps;
 
-		private float timer;
+        private double frameTime;
+        private int gcReserved;
+        private ProfilerRecorder gcReservedMemoryRecorder;
+        private int inMessageBytes;
+        private int inMessageBytesFrame;
 
-		private double frameTime;
-		private int fps;
-		private int totalMemoryUsed;
-		private int gcReserved;
-		private int drawCalls;
-		
-		private int inMessageCountFrame;
-		private int outMessageCountFrame;
-		private int inMessageBytesFrame;
-		private int outMessageBytesFrame;
-		
-		private int inMessageCount;
-		private int outMessageCount;
-		private int inMessageBytes;
-		private int outMessageBytes;
+        private int inMessageCount;
 
-		private void Update()
-		{
-			if (!(Time.unscaledTime > timer)) return;
+        private int inMessageCountFrame;
 
-			frameTime = GetRecorderFrameTimeAverage(mainThreadRecorder) * 1e-6f;
-			fps = (int) (1f / Time.unscaledDeltaTime);
+        private ProfilerRecorder mainThreadRecorder;
+        private int outMessageBytes;
+        private int outMessageBytesFrame;
+        private int outMessageCount;
+        private int outMessageCountFrame;
 
-			totalMemoryUsed = (int) totalMemoryUsedRecorder.LastValue / (1024 * 1024);
-			gcReserved = (int) gcReservedMemoryRecorder.LastValue / (1024 * 1024);
-			drawCalls = (int) totalDrawCallsRecorder.LastValue;
+        private float timer;
+        private ProfilerRecorder totalDrawCallsRecorder;
+        private int totalMemoryUsed;
+        private ProfilerRecorder totalMemoryUsedRecorder;
 
-			inMessageCountFrame = inMessageCount;
-			outMessageCountFrame = outMessageCount;
-			inMessageBytesFrame = inMessageBytes;
-			outMessageBytesFrame = outMessageBytes;
+        private void Update()
+        {
+            if (!(Time.unscaledTime > timer)) return;
 
-			inMessageCount = 0;
-			inMessageBytes = 0;
-			outMessageCount = 0;
-			outMessageBytes = 0;
-			
-			timer = Time.unscaledTime + refreshRate;
-		}
+            frameTime = GetRecorderFrameTimeAverage(mainThreadRecorder) * 1e-6f;
+            fps = (int) (1f / Time.unscaledDeltaTime);
 
-		private void OnEnable()
-		{
-			timer = Time.unscaledTime;
+            totalMemoryUsed = (int) totalMemoryUsedRecorder.LastValue / (1024 * 1024);
+            gcReserved = (int) gcReservedMemoryRecorder.LastValue / (1024 * 1024);
+            drawCalls = (int) totalDrawCallsRecorder.LastValue;
 
-			mainThreadRecorder = ProfilerRecorder.StartNew(ProfilerCategory.Internal, "Main Thread", 15);
-			totalMemoryUsedRecorder = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "Total Used Memory");
-			gcReservedMemoryRecorder = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "GC Reserved Memory");
-			totalDrawCallsRecorder = ProfilerRecorder.StartNew(ProfilerCategory.Render, "Draw Calls Count");
+            inMessageCountFrame = inMessageCount;
+            outMessageCountFrame = outMessageCount;
+            inMessageBytesFrame = inMessageBytes;
+            outMessageBytesFrame = outMessageBytes;
 
-			NetworkDiagnostics.InMessageEvent += AddInMessage;
-			NetworkDiagnostics.OutMessageEvent += AddOutMessage;
-			UImGuiUtility.Layout += OnLayout;
-		}
+            inMessageCount = 0;
+            inMessageBytes = 0;
+            outMessageCount = 0;
+            outMessageBytes = 0;
 
-		private void OnLayout(UImGui.UImGui obj)
-		{
-			if(!DebugMenuOpen)
-				return;
-			
-			ImGuiNET.ImGui.Begin("Stats");
-			{
-				ImGuiNET.ImGui.BeginGroup();
-				{
-					ImGuiNET.ImGui.Image(UImGuiUtility.GetTextureId(iconTexture), iconSize);
-					ImGuiNET.ImGui.SameLine();
-					ImGuiNET.ImGui.Text(gameVersion);
-				}
-				ImGuiNET.ImGui.EndGroup();
-				
-				ImGuiNET.ImGui.Spacing();
-				ImGuiNET.ImGui.Text($"Frame Time: {frameTime:F1}ms");
-				ImGuiNET.ImGui.Text($"FPS: {fps}");
-				ImGuiNET.ImGui.Text($"Total Memory: {totalMemoryUsed} MB");
-				ImGuiNET.ImGui.Text($"GC Reserved: {gcReserved} MB");
-				ImGuiNET.ImGui.Text($"Draw Calls: {drawCalls}");
-				
-				ImGuiNET.ImGui.Spacing();
-				ImGuiNET.ImGui.Text("Device Info");
-				ImGuiNET.ImGui.Text(operatingSystem);
-				ImGuiNET.ImGui.Text(cpu);
-				ImGuiNET.ImGui.Text(gpu);
-				ImGuiNET.ImGui.Text(ram);
-				ImGuiNET.ImGui.Text(renderingApi);
-				
-				ImGuiNET.ImGui.Spacing();
-				ImGuiNET.ImGui.Text("Build Info");
-				ImGuiNET.ImGui.Text(unityVersion);
-				
-				ImGuiNET.ImGui.Spacing();
-				ImGuiNET.ImGui.Text("Network");
-				ImGuiNET.ImGui.Text(ipAddress);
-				ImGuiNET.ImGui.Text($"Status: {GetNetworkingStatus()}");
-				ImGuiNET.ImGui.Text($"In Messages {inMessageCountFrame} ({inMessageBytesFrame / 1000} kb)");
-				ImGuiNET.ImGui.Text($"Out Message {outMessageCountFrame} ({outMessageBytesFrame / 1000} kb)");
-			}
-			ImGuiNET.ImGui.End();
-		}
+            timer = Time.unscaledTime + refreshRate;
+        }
 
-		private void OnDisable()
-		{
-			mainThreadRecorder.Dispose();
-			totalMemoryUsedRecorder.Dispose();
-			gcReservedMemoryRecorder.Dispose();
-			totalDrawCallsRecorder.Dispose();
-			
-			NetworkDiagnostics.InMessageEvent -= AddInMessage;
-			NetworkDiagnostics.OutMessageEvent -= AddOutMessage;
-		}
+        private void OnEnable()
+        {
+            timer = Time.unscaledTime;
 
-		protected override void SingletonStarted()
-		{
-			gameVersion = $"Team-Capture {Application.version}";
-			operatingSystem = $"OS: {SystemInfo.operatingSystem}";
-			unityVersion = $"Unity: {Application.unityVersion}";
-			cpu = $"CPU: {SystemInfo.processorType}";
-			gpu = $"GPU: {SystemInfo.graphicsDeviceName}";
-			ram = $"RAM: {SystemInfo.systemMemorySize / 1000} GB";
-			renderingApi = $"Rendering API: {SystemInfo.graphicsDeviceType}";
-			ipAddress = $"IP: {NetHelper.LocalIpAddress()}";
+            mainThreadRecorder = ProfilerRecorder.StartNew(ProfilerCategory.Internal, "Main Thread", 15);
+            totalMemoryUsedRecorder = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "Total Used Memory");
+            gcReservedMemoryRecorder = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "GC Reserved Memory");
+            totalDrawCallsRecorder = ProfilerRecorder.StartNew(ProfilerCategory.Render, "Draw Calls Count");
 
-			inputReader.DebugMenuToggle += () => DebugMenuOpen = !DebugMenuOpen;
-			inputReader.EnableDebugMenuInput();
-		}
-		
-		private string GetNetworkingStatus()
-		{
-			if (NetworkManager.singleton == null)
-				return "Networking not active!";
+            NetworkDiagnostics.InMessageEvent += AddInMessage;
+            NetworkDiagnostics.OutMessageEvent += AddOutMessage;
+            UImGuiUtility.Layout += OnLayout;
+        }
 
-			switch (NetworkManager.singleton.mode)
-			{
-				case NetworkManagerMode.Offline:
-					return "Not Connected";
-				case NetworkManagerMode.ServerOnly:
-					return "Server active";
-				case NetworkManagerMode.ClientOnly:
-					return $"Connected ({NetworkManager.singleton.networkAddress})";
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
-		}
+        private void OnDisable()
+        {
+            mainThreadRecorder.Dispose();
+            totalMemoryUsedRecorder.Dispose();
+            gcReservedMemoryRecorder.Dispose();
+            totalDrawCallsRecorder.Dispose();
 
-		private double GetRecorderFrameTimeAverage(ProfilerRecorder recorder)
-		{
-			int samplesCount = recorder.Capacity;
-			if (samplesCount == 0)
-				return 0;
+            NetworkDiagnostics.InMessageEvent -= AddInMessage;
+            NetworkDiagnostics.OutMessageEvent -= AddOutMessage;
+        }
 
-			List<ProfilerRecorderSample> samples = new List<ProfilerRecorderSample>(samplesCount);
-			recorder.CopyTo(samples);
-			double r = samples.Aggregate<ProfilerRecorderSample, double>(0, (current, sample) => current + sample.Value);
-			r /= samplesCount;
+        private void OnLayout(UImGui.UImGui obj)
+        {
+            if (!DebugMenuOpen)
+                return;
 
-			return r;
-		}
+            ImGuiNET.ImGui.Begin("Stats");
+            {
+                ImGuiNET.ImGui.BeginGroup();
+                {
+                    ImGuiNET.ImGui.Image(UImGuiUtility.GetTextureId(iconTexture), iconSize);
+                    ImGuiNET.ImGui.SameLine();
+                    ImGuiNET.ImGui.Text(gameVersion);
+                }
+                ImGuiNET.ImGui.EndGroup();
 
-		private void AddInMessage(NetworkDiagnostics.MessageInfo info)
-		{
-			inMessageCount++;
-			inMessageBytes += info.bytes;
-		}
+                ImGuiNET.ImGui.Spacing();
+                ImGuiNET.ImGui.Text($"Frame Time: {frameTime:F1}ms");
+                ImGuiNET.ImGui.Text($"FPS: {fps}");
+                ImGuiNET.ImGui.Text($"Total Memory: {totalMemoryUsed} MB");
+                ImGuiNET.ImGui.Text($"GC Reserved: {gcReserved} MB");
+                ImGuiNET.ImGui.Text($"Draw Calls: {drawCalls}");
 
-		private void AddOutMessage(NetworkDiagnostics.MessageInfo info)
-		{
-			outMessageCount++;
-			outMessageBytes += info.bytes;
-		}
+                ImGuiNET.ImGui.Spacing();
+                ImGuiNET.ImGui.Text("Device Info");
+                ImGuiNET.ImGui.Text(operatingSystem);
+                ImGuiNET.ImGui.Text(cpu);
+                ImGuiNET.ImGui.Text(gpu);
+                ImGuiNET.ImGui.Text(ram);
+                ImGuiNET.ImGui.Text(renderingApi);
 
-		#region Info
-		
-		private string gameVersion;
-		private string operatingSystem;
-		private string unityVersion;
-		private string cpu;
-		private string gpu;
-		private string ram;
-		private string renderingApi;
-		private string ipAddress;
+                ImGuiNET.ImGui.Spacing();
+                ImGuiNET.ImGui.Text("Build Info");
+                ImGuiNET.ImGui.Text(unityVersion);
 
-		#endregion
-	}
+                ImGuiNET.ImGui.Spacing();
+                ImGuiNET.ImGui.Text("Network");
+                ImGuiNET.ImGui.Text(ipAddress);
+                ImGuiNET.ImGui.Text($"Status: {GetNetworkingStatus()}");
+                ImGuiNET.ImGui.Text($"In Messages {inMessageCountFrame} ({inMessageBytesFrame / 1000} kb)");
+                ImGuiNET.ImGui.Text($"Out Message {outMessageCountFrame} ({outMessageBytesFrame / 1000} kb)");
+            }
+            ImGuiNET.ImGui.End();
+        }
+
+        protected override void SingletonStarted()
+        {
+            gameVersion = $"Team-Capture {Application.version}";
+            operatingSystem = $"OS: {SystemInfo.operatingSystem}";
+            unityVersion = $"Unity: {Application.unityVersion}";
+            cpu = $"CPU: {SystemInfo.processorType}";
+            gpu = $"GPU: {SystemInfo.graphicsDeviceName}";
+            ram = $"RAM: {SystemInfo.systemMemorySize / 1000} GB";
+            renderingApi = $"Rendering API: {SystemInfo.graphicsDeviceType}";
+            ipAddress = $"IP: {NetHelper.LocalIpAddress()}";
+
+            inputReader.DebugMenuToggle += () => DebugMenuOpen = !DebugMenuOpen;
+            inputReader.EnableDebugMenuInput();
+        }
+
+        private string GetNetworkingStatus()
+        {
+            if (NetworkManager.singleton == null)
+                return "Networking not active!";
+
+            switch (NetworkManager.singleton.mode)
+            {
+                case NetworkManagerMode.Offline:
+                    return "Not Connected";
+                case NetworkManagerMode.ServerOnly:
+                    return "Server active";
+                case NetworkManagerMode.ClientOnly:
+                    return $"Connected ({NetworkManager.singleton.networkAddress})";
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        private double GetRecorderFrameTimeAverage(ProfilerRecorder recorder)
+        {
+            int samplesCount = recorder.Capacity;
+            if (samplesCount == 0)
+                return 0;
+
+            var samples = new List<ProfilerRecorderSample>(samplesCount);
+            recorder.CopyTo(samples);
+            double r = samples.Aggregate<ProfilerRecorderSample, double>(0,
+                (current, sample) => current + sample.Value);
+            r /= samplesCount;
+
+            return r;
+        }
+
+        private void AddInMessage(NetworkDiagnostics.MessageInfo info)
+        {
+            inMessageCount++;
+            inMessageBytes += info.bytes;
+        }
+
+        private void AddOutMessage(NetworkDiagnostics.MessageInfo info)
+        {
+            outMessageCount++;
+            outMessageBytes += info.bytes;
+        }
+
+        #region Info
+
+        private string gameVersion;
+        private string operatingSystem;
+        private string unityVersion;
+        private string cpu;
+        private string gpu;
+        private string ram;
+        private string renderingApi;
+        private string ipAddress;
+
+        #endregion
+    }
 }

@@ -16,195 +16,216 @@ using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.Core.Networking
 {
-	/// <summary>
-	///     The networking manager for Team-Capture
-	/// </summary>
-	[RequireComponent(typeof(TCGameDiscovery))]
-	internal class TCNetworkManager : NetworkManager
-	{
-		/// <summary>
-		///     The active <see cref="TCNetworkManager" />
-		/// </summary>
-		public static TCNetworkManager Instance;
+    /// <summary>
+    ///     The networking manager for Team-Capture
+    /// </summary>
+    [RequireComponent(typeof(TCGameDiscovery))]
+    internal class TCNetworkManager : NetworkManager
+    {
+        /// <summary>
+        ///     The active <see cref="TCNetworkManager" />
+        /// </summary>
+        public static TCNetworkManager Instance;
 
-		/// <summary>
-		///     The prefab for the <see cref="GameManager" />
-		/// </summary>
-		[Header("Team Capture")]
-		[Tooltip("The prefab for the GameManager")]
-		public GameObject gameMangerPrefab;
+        [CommandLineArgument("connect")] private static string autoConnectIpAddress;
 
-		/// <summary>
-		///		The prefab for the <see cref="GameSceneManager"/>
-		/// </summary>
-		[Tooltip("The prefab for the GameSceneManager")]
-		public GameObject gameSceneManagerPrefab;
+        /// <summary>
+        ///     The prefab for the <see cref="GameManager" />
+        /// </summary>
+        [Header("Team Capture")] [Tooltip("The prefab for the GameManager")]
+        public GameObject gameMangerPrefab;
 
-		/// <summary>
-		///		The prefab for the MOTD
-		/// </summary>
-		[Tooltip("The prefab for the MOTD")]
-		public GameObject motdUIPrefab;
+        /// <summary>
+        ///     The prefab for the <see cref="GameSceneManager" />
+        /// </summary>
+        [Tooltip("The prefab for the GameSceneManager")]
+        public GameObject gameSceneManagerPrefab;
 
-		/// <summary>
-		///     How many frames to keep
-		/// </summary>
-		[Tooltip("How many frames to keep")]
-		public int maxFrameCount = 128;
-		
-		/// <summary>
-		///		Team-Capture's authenticator
-		/// </summary>
-		[NonSerialized] public TCAuthenticator tcAuthenticator;
+        /// <summary>
+        ///     The prefab for the MOTD
+        /// </summary>
+        [Tooltip("The prefab for the MOTD")] public GameObject motdUIPrefab;
 
-		/// <summary>
-		///     The active <see cref="TCGameDiscovery" />
-		/// </summary>
-		[HideInInspector] public TCGameDiscovery gameDiscovery;
+        /// <summary>
+        ///     How many frames to keep
+        /// </summary>
+        [Tooltip("How many frames to keep")] public int maxFrameCount = 128;
 
-		/// <summary>
-		///     The config for the server
-		/// </summary>
-		[NonSerialized] public ServerConfig serverConfig;
+        /// <summary>
+        ///     The active <see cref="TCGameDiscovery" />
+        /// </summary>
+        [HideInInspector] public TCGameDiscovery gameDiscovery;
 
-		/// <summary>
-		///		Are we a server or not
-		/// </summary>
-		public static bool IsServer
-		{
-			get
-			{
-				if (Instance == null)
-					return false;
+        /// <summary>
+        ///     The config for the server
+        /// </summary>
+        [NonSerialized] public ServerConfig serverConfig;
 
-				return Instance.mode == NetworkManagerMode.ServerOnly;
-			}
-		}
+        /// <summary>
+        ///     Team-Capture's authenticator
+        /// </summary>
+        [NonSerialized] public TCAuthenticator tcAuthenticator;
 
-		public static TCAuthenticator Authenticator
-		{
-			get
-			{
-				if (Instance == null)
-					throw new ArgumentNullException();
+        /// <summary>
+        ///     Are we a server or not
+        /// </summary>
+        public static bool IsServer
+        {
+            get
+            {
+                if (Instance == null)
+                    return false;
 
-				return Instance.tcAuthenticator;
-			}
-		}
+                return Instance.mode == NetworkManagerMode.ServerOnly;
+            }
+        }
 
-		public override void Awake()
-		{
-			if (Instance != null)
-			{
-				Destroy(gameObject);
-				return;
-			}
+        public static TCAuthenticator Authenticator
+        {
+            get
+            {
+                if (Instance == null)
+                    throw new ArgumentNullException();
 
-			//Replace Mirror's logger with ours
-			//LogFactory.ReplaceLogHandler(new TCUnityLogger());
+                return Instance.tcAuthenticator;
+            }
+        }
 
-			base.Awake();
+        public override void Awake()
+        {
+            if (Instance != null)
+            {
+                Destroy(gameObject);
+                return;
+            }
 
-			Instance = this;
-			tcAuthenticator = GetComponent<TCAuthenticator>();
-		}
+            //Replace Mirror's logger with ours
+            //LogFactory.ReplaceLogHandler(new TCUnityLogger());
 
-		public override void Start()
-		{
-			//We are running in headless mode
-			if (Game.IsHeadless && !Game.IsGameQuitting)
-			{
-				Application.targetFrameRate = serverTickRate;
-				
-				//Start the server
-				StartServer();
-			}
+            base.Awake();
 
-			if (!Game.IsHeadless && autoConnectIpAddress != null)
-			{
-				networkAddress = autoConnectIpAddress;
-				StartClient();
-			}
-		}
+            Instance = this;
+            tcAuthenticator = GetComponent<TCAuthenticator>();
+        }
 
-		public void Update()
-		{
-			if (mode == NetworkManagerMode.ServerOnly) PingManager.ServerPingUpdate();
-		}
+        public override void Start()
+        {
+            //We are running in headless mode
+            if (Game.IsHeadless && !Game.IsGameQuitting)
+            {
+                Application.targetFrameRate = serverTickRate;
 
-		public void FixedUpdate()
-		{
-			//If we are the server then update simulated objects
-			if (mode == NetworkManagerMode.ServerOnly) SimulationHelper.UpdateSimulationObjectData();
-		}
+                //Start the server
+                StartServer();
+            }
 
-		#region Server Events
+            if (!Game.IsHeadless && autoConnectIpAddress != null)
+            {
+                networkAddress = autoConnectIpAddress;
+                StartClient();
+            }
+        }
 
-		public override void OnStartServer() 
-			=> Server.OnStartServer(this);
+        public void Update()
+        {
+            if (mode == NetworkManagerMode.ServerOnly) PingManager.ServerPingUpdate();
+        }
 
-		public override void OnStopServer()
-			=> Server.OnStopServer();
+        public void FixedUpdate()
+        {
+            //If we are the server then update simulated objects
+            if (mode == NetworkManagerMode.ServerOnly) SimulationHelper.UpdateSimulationObjectData();
+        }
 
-		public override void OnServerConnect(NetworkConnection conn) 
-			=> Server.OnServerAddClient(conn);
+        [ConCommand("stop", "Stops the current game, whether that is disconnecting or stopping the server")]
+        public static void StopCommand(string[] args)
+        {
+            NetworkManager networkManager = singleton;
+            if (networkManager.mode == NetworkManagerMode.Offline)
+            {
+                Logger.Error("You are not in a game!");
+                return;
+            }
 
-		public override void OnServerDisconnect(NetworkConnection conn)
-			=> Server.OnServerRemoveClient(conn);
+            networkManager.StopHost();
 
-		public override void OnServerAddPlayer(NetworkConnection conn) 
-			=> Server.ServerCreatePlayerObject(conn, playerPrefab);
+            //Quit the game if we are headless
+            if (Game.IsHeadless)
+                Game.QuitGame();
+        }
 
-		public override void OnServerChangeScene(string newSceneName)
-			=> Server.OnServerSceneChanging(newSceneName);
+        #region Server Events
 
-		public override void OnServerSceneChanged(string sceneName) 
-			=> Server.OnServerChangedScene(sceneName);
+        public override void OnStartServer()
+        {
+            Server.OnStartServer(this);
+        }
 
+        public override void OnStopServer()
+        {
+            Server.OnStopServer();
+        }
 
-		#endregion
+        public override void OnServerConnect(NetworkConnection conn)
+        {
+            Server.OnServerAddClient(conn);
+        }
 
-		#region Client Events
+        public override void OnServerDisconnect(NetworkConnection conn)
+        {
+            Server.OnServerRemoveClient(conn);
+        }
 
-		public override void OnStartClient()
-			=> Client.OnClientStart(this);
+        public override void OnServerAddPlayer(NetworkConnection conn)
+        {
+            Server.ServerCreatePlayerObject(conn, playerPrefab);
+        }
 
-		public override void OnStopClient()
-			=> Client.OnClientStop();
+        public override void OnServerChangeScene(string newSceneName)
+        {
+            Server.OnServerSceneChanging(newSceneName);
+        }
 
-		public override void OnClientConnect(NetworkConnection conn)
-			=> Client.OnClientConnect(conn);
+        public override void OnServerSceneChanged(string sceneName)
+        {
+            Server.OnServerChangedScene(sceneName);
+        }
 
-		public override void OnClientDisconnect(NetworkConnection conn)
-			=> Client.OnClientDisconnect(conn);
+        #endregion
 
-		public override void OnClientSceneChanged(NetworkConnection conn)
-			=> Client.OnClientSceneChanged();
+        #region Client Events
 
-		public override void OnClientChangeScene(string newSceneName, SceneOperation sceneOperation,
-			bool customHandling)
-			=> Client.OnClientSceneChanging(newSceneName);
+        public override void OnStartClient()
+        {
+            Client.OnClientStart(this);
+        }
 
-		#endregion
+        public override void OnStopClient()
+        {
+            Client.OnClientStop();
+        }
 
-		[CommandLineArgument("connect")]
-		private static string autoConnectIpAddress;
-		
-		[ConCommand("stop", "Stops the current game, whether that is disconnecting or stopping the server")]
-		public static void StopCommand(string[] args)
-		{
-			NetworkManager networkManager = singleton;
-			if (networkManager.mode == NetworkManagerMode.Offline)
-			{
-				Logger.Error("You are not in a game!");
-				return;
-			}
+        public override void OnClientConnect(NetworkConnection conn)
+        {
+            Client.OnClientConnect(conn);
+        }
 
-			networkManager.StopHost();
+        public override void OnClientDisconnect(NetworkConnection conn)
+        {
+            Client.OnClientDisconnect(conn);
+        }
 
-			//Quit the game if we are headless
-			if(Game.IsHeadless)
-				Game.QuitGame();
-		}
-	}
+        public override void OnClientSceneChanged(NetworkConnection conn)
+        {
+            Client.OnClientSceneChanged();
+        }
+
+        public override void OnClientChangeScene(string newSceneName, SceneOperation sceneOperation,
+            bool customHandling)
+        {
+            Client.OnClientSceneChanging(newSceneName);
+        }
+
+        #endregion
+    }
 }

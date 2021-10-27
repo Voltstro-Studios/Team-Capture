@@ -21,172 +21,172 @@ using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.UI.Panels
 {
-	/// <summary>
-	///     A panel for joining games
-	/// </summary>
-	internal class JoinGamePanel : PanelBase
-	{
-		/// <summary>
-		///     The prefab for a server button
-		/// </summary>
-		[Tooltip("The prefab for a server button")]
-		public GameObject serverItemPrefab;
+    /// <summary>
+    ///     A panel for joining games
+    /// </summary>
+    internal class JoinGamePanel : PanelBase
+    {
+        /// <summary>
+        ///     The prefab for a server button
+        /// </summary>
+        [Tooltip("The prefab for a server button")]
+        public GameObject serverItemPrefab;
 
-		/// <summary>
-		///     The <see cref="Transform" /> for the server list
-		/// </summary>
-		public Transform serverListTransform;
+        /// <summary>
+        ///     The <see cref="Transform" /> for the server list
+        /// </summary>
+        public Transform serverListTransform;
 
-		/// <summary>
-		///     Text for the current status
-		/// </summary>
-		public TextMeshProUGUI statusText;
-		
-		/// <summary>
-		///		The <see cref="JoiningServerPanel"/> panel
-		/// </summary>
-		public JoiningServerPanel joiningServerPanel;
-		
-		/// <summary>
-		///		Button for refreshing the list
-		/// </summary>
-		public Button refreshButton;
+        /// <summary>
+        ///     Text for the current status
+        /// </summary>
+        public TextMeshProUGUI statusText;
 
-		public CachedLocalizedString searchingServersText;
+        /// <summary>
+        ///     The <see cref="JoiningServerPanel" /> panel
+        /// </summary>
+        public JoiningServerPanel joiningServerPanel;
 
-		public CachedLocalizedString connectingToServerText;
-		
-		private readonly List<TCServerResponse> servers = new List<TCServerResponse>();
+        /// <summary>
+        ///     Button for refreshing the list
+        /// </summary>
+        public Button refreshButton;
 
-		private TCNetworkManager netManager;
-		private TCGameDiscovery gameDiscovery;
-		private MenuController menuController;
+        public CachedLocalizedString searchingServersText;
 
-		private bool isConnecting;
+        public CachedLocalizedString connectingToServerText;
 
-		private void Awake()
-		{
-			netManager = TCNetworkManager.Instance;
-			gameDiscovery = netManager.gameDiscovery;
-			menuController = GetComponentInParent<MenuController>();
-		}
+        private readonly List<TCServerResponse> servers = new();
+        private TCGameDiscovery gameDiscovery;
 
-		private void Start()
-		{
-			statusText.text = searchingServersText.Value;
-		}
+        private bool isConnecting;
+        private MenuController menuController;
 
-		public override void OnEnable()
-		{
-			base.OnEnable();
-			
-			joiningServerPanel.gameObject.SetActive(false);
+        private TCNetworkManager netManager;
 
-			if (gameDiscovery == null) 
-				return;
+        private void Awake()
+        {
+            netManager = TCNetworkManager.Instance;
+            gameDiscovery = netManager.gameDiscovery;
+            menuController = GetComponentInParent<MenuController>();
+        }
 
-			//Add a listener to the game discovery for when a server is found
-			gameDiscovery.OnServerFound.AddListener(AddServer);
-			gameDiscovery.StartDiscovery();
-		}
+        private void Start()
+        {
+            statusText.text = searchingServersText.Value;
+        }
 
-		private void OnDisable()
-		{
-			if (gameDiscovery == null) return;
+        public override void OnEnable()
+        {
+            base.OnEnable();
 
-			//Remove the game discovery for when a server is found
-			gameDiscovery.OnServerFound.RemoveListener(AddServer);
-			gameDiscovery.StopDiscovery();
-			RefreshServerList();
-		}
+            joiningServerPanel.gameObject.SetActive(false);
 
-		/// <summary>
-		///     Refreshes the server by removing all servers
-		/// </summary>
-		public void RefreshServerList()
-		{
-			statusText.text = searchingServersText.Value;
-			statusText.gameObject.SetActive(true);
-		}
+            if (gameDiscovery == null)
+                return;
 
-		private void ClearList()
-		{
-			//Remove all servers
-			servers.Clear();
-			for (int i = 0; i < serverListTransform.childCount; i++)
-				Destroy(serverListTransform.GetChild(i).gameObject);
-		}
+            //Add a listener to the game discovery for when a server is found
+            gameDiscovery.OnServerFound.AddListener(AddServer);
+            gameDiscovery.StartDiscovery();
+        }
 
-		/// <summary>
-		///     Adds a <see cref="TCServerResponse" /> to the list of servers
-		/// </summary>
-		/// <param name="server"></param>
-		public void AddServer(TCServerResponse server)
-		{
-			//We are connecting to a server...
-			if (NetworkClient.isConnecting)
-				return;
+        private void OnDisable()
+        {
+            if (gameDiscovery == null) return;
 
-			//If the server already exists in the list then ignore it
-			if (servers.Any(x => Equals(x.EndPoint, server.EndPoint)))
-				return;
+            //Remove the game discovery for when a server is found
+            gameDiscovery.OnServerFound.RemoveListener(AddServer);
+            gameDiscovery.StopDiscovery();
+            RefreshServerList();
+        }
 
-			//Add the server to the list
-			servers.Add(server);
-			AddServerItem(server);
+        /// <summary>
+        ///     Refreshes the server by removing all servers
+        /// </summary>
+        public void RefreshServerList()
+        {
+            statusText.text = searchingServersText.Value;
+            statusText.gameObject.SetActive(true);
+        }
 
-			statusText.gameObject.SetActive(false);
+        private void ClearList()
+        {
+            //Remove all servers
+            servers.Clear();
+            for (int i = 0; i < serverListTransform.childCount; i++)
+                Destroy(serverListTransform.GetChild(i).gameObject);
+        }
 
-			Logger.Debug("Found server at {Address}", server.EndPoint.Address);
-		}
+        /// <summary>
+        ///     Adds a <see cref="TCServerResponse" /> to the list of servers
+        /// </summary>
+        /// <param name="server"></param>
+        public void AddServer(TCServerResponse server)
+        {
+            //We are connecting to a server...
+            if (NetworkClient.isConnecting)
+                return;
 
-		/// <summary>
-		///     Connects to a server
-		/// </summary>
-		/// <param name="ip"></param>
-		public void ConnectToServer(IPEndPoint ip)
-		{
-			joiningServerPanel.gameObject.SetActive(true);
+            //If the server already exists in the list then ignore it
+            if (servers.Any(x => Equals(x.EndPoint, server.EndPoint)))
+                return;
 
-			cancelButton.interactable = false;
-			refreshButton.interactable = false;
-			menuController.allowPanelToggling = false;
-			
-			ClearList();
+            //Add the server to the list
+            servers.Add(server);
+            AddServerItem(server);
 
-			//Tell Mirror to connect to the server's IP
-			NetworkManager.singleton.networkAddress = ip.Address.ToString();
-			NetworkManager.singleton.StartClient();
-			
-			CheckConnection().Forget();
+            statusText.gameObject.SetActive(false);
 
-			//Set our status text
-			statusText.gameObject.SetActive(true);
-			statusText.text = string.Format(connectingToServerText.Value, ip);
-		}
+            Logger.Debug("Found server at {Address}", server.EndPoint.Address);
+        }
 
-		private async UniTaskVoid CheckConnection()
-		{
-			while (NetworkClient.isConnecting)
-			{
-				await UniTask.Delay(25);
-			}
-			
-			if(!NetworkClient.isConnected)
-			{
-				joiningServerPanel.FailToJoin();
-				RefreshServerList();
-				cancelButton.interactable = true;
-				refreshButton.interactable = true;
-				menuController.allowPanelToggling = true;
-			}
-		}
+        /// <summary>
+        ///     Connects to a server
+        /// </summary>
+        /// <param name="ip"></param>
+        public void ConnectToServer(IPEndPoint ip)
+        {
+            joiningServerPanel.gameObject.SetActive(true);
 
-		private void AddServerItem(TCServerResponse server)
-		{
-			//Instantiate a new button for a server
-			GameObject newItem = Instantiate(serverItemPrefab, serverListTransform, false);
-			newItem.GetComponent<JoinServerButton>().SetupConnectButton(server, () => ConnectToServer(server.EndPoint));
-		}
-	}
+            cancelButton.interactable = false;
+            refreshButton.interactable = false;
+            menuController.allowPanelToggling = false;
+
+            ClearList();
+
+            //Tell Mirror to connect to the server's IP
+            NetworkManager.singleton.networkAddress = ip.Address.ToString();
+            NetworkManager.singleton.StartClient();
+
+            CheckConnection().Forget();
+
+            //Set our status text
+            statusText.gameObject.SetActive(true);
+            statusText.text = string.Format(connectingToServerText.Value, ip);
+        }
+
+        private async UniTaskVoid CheckConnection()
+        {
+            while (NetworkClient.isConnecting)
+            {
+                await UniTask.Delay(25);
+            }
+
+            if (!NetworkClient.isConnected)
+            {
+                joiningServerPanel.FailToJoin();
+                RefreshServerList();
+                cancelButton.interactable = true;
+                refreshButton.interactable = true;
+                menuController.allowPanelToggling = true;
+            }
+        }
+
+        private void AddServerItem(TCServerResponse server)
+        {
+            //Instantiate a new button for a server
+            GameObject newItem = Instantiate(serverItemPrefab, serverListTransform, false);
+            newItem.GetComponent<JoinServerButton>().SetupConnectButton(server, () => ConnectToServer(server.EndPoint));
+        }
+    }
 }

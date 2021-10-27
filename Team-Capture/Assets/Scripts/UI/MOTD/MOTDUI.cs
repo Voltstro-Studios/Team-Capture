@@ -15,64 +15,68 @@ using UnityWebBrowser;
 namespace Team_Capture.UI.MOTD
 {
 	/// <summary>
-	///		UI for displaying MOTDs
+	///     UI for displaying MOTDs
 	/// </summary>
-    internal class MOTDUI : MonoBehaviour
+	internal class MOTDUI : MonoBehaviour
     {
-	    [SerializeField] private TextMeshProUGUI motdTitleText;
-	    [SerializeField] private TextMeshProUGUI motdText;
+        [SerializeField] private TextMeshProUGUI motdTitleText;
+        [SerializeField] private TextMeshProUGUI motdText;
 
-	    [SerializeField] private GameObject motdTextScroll;
-	    [SerializeField] private WebBrowserUI webBrowserUI;
+        [SerializeField] private GameObject motdTextScroll;
+        [SerializeField] private WebBrowserUI webBrowserUI;
 
-	    private Action onCloseAction;
+        private Action onCloseAction;
 
-		/// <summary>
-		///		Setup the MOTD UI
-		/// </summary>
-		/// <param name="serverConfig"></param>
-		/// <param name="onClose"></param>
-	    internal void Setup(ServerConfig serverConfig, Action onClose)
-	    {
-		    motdTitleText.text = $"{serverConfig.GameName.String}'s MOTD.";
+        /// <summary>
+        ///     Setup the MOTD UI
+        /// </summary>
+        /// <param name="serverConfig"></param>
+        /// <param name="onClose"></param>
+        internal void Setup(ServerConfig serverConfig, Action onClose)
+        {
+            motdTitleText.text = $"{serverConfig.GameName.String}'s MOTD.";
 
-		    if (serverConfig.MotdMode == Server.ServerMOTDMode.WebOnly || serverConfig.MotdMode == Server.ServerMOTDMode.WebWithTextBackup && Client.ClientMotdMode == Client.ClientMOTDMode.WebSupport)
-		    {
-			    webBrowserUI.browserClient.Logger = new TCWebBrowserLogger();
-			    webBrowserUI.browserClient.initialUrl = serverConfig.MotdUrl.String;
-			    webBrowserUI.browserClient.OnLoadFinish += OnLoadFinish;
+            if (serverConfig.MotdMode == Server.ServerMOTDMode.WebOnly ||
+                serverConfig.MotdMode == Server.ServerMOTDMode.WebWithTextBackup &&
+                Client.ClientMotdMode == Client.ClientMOTDMode.WebSupport)
+            {
+                webBrowserUI.browserClient.Logger = new TCWebBrowserLogger();
+                webBrowserUI.browserClient.initialUrl = serverConfig.MotdUrl.String;
+                webBrowserUI.browserClient.OnLoadFinish += OnLoadFinish;
 
-			    motdTextScroll.SetActive(false);
-			    webBrowserUI.gameObject.SetActive(true);
-		    }
+                motdTextScroll.SetActive(false);
+                webBrowserUI.gameObject.SetActive(true);
+            }
 
-		    else if (serverConfig.MotdMode == Server.ServerMOTDMode.TextOnly || serverConfig.MotdMode == Server.ServerMOTDMode.WebWithTextBackup)
-		    {
-			    if (string.IsNullOrWhiteSpace(serverConfig.MotdText.String))
-				    throw new InvalidMOTDSettings("The server's MOTD was set to text, however the sent over text contained nothing!");
+            else if (serverConfig.MotdMode == Server.ServerMOTDMode.TextOnly ||
+                     serverConfig.MotdMode == Server.ServerMOTDMode.WebWithTextBackup)
+            {
+                if (string.IsNullOrWhiteSpace(serverConfig.MotdText.String))
+                    throw new InvalidMOTDSettings(
+                        "The server's MOTD was set to text, however the sent over text contained nothing!");
 
-				motdTextScroll.SetActive(true);
-				webBrowserUI.gameObject.SetActive(false);
+                motdTextScroll.SetActive(true);
+                webBrowserUI.gameObject.SetActive(false);
 
-			    motdText.text = serverConfig.MotdText.String;
-		    }
+                motdText.text = serverConfig.MotdText.String;
+            }
 
-		    onCloseAction = onClose;
-	    }
+            onCloseAction = onClose;
+        }
 
-		private void OnLoadFinish(string url)
-		{
-			string javaScriptCode =
-				$"class UserDetails {{ constructor(username) {{ this.UserName = username; }} }}" +
-				$"let userDetails = new UserDetails(\"{User.GetActiveUser().UserName}\");";
+        private void OnLoadFinish(string url)
+        {
+            string javaScriptCode =
+                "class UserDetails { constructor(username) { this.UserName = username; } }" +
+                $"let userDetails = new UserDetails(\"{User.GetActiveUser().UserName}\");";
 
-			webBrowserUI.ExecuteJs(javaScriptCode);
-		}
+            webBrowserUI.ExecuteJs(javaScriptCode);
+        }
 
-		public void CloseMOTD()
-	    {
-			onCloseAction.Invoke();
-			Destroy(gameObject);
-	    }
+        public void CloseMOTD()
+        {
+            onCloseAction.Invoke();
+            Destroy(gameObject);
+        }
     }
 }

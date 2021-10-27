@@ -136,7 +136,8 @@ namespace Team_Capture.Console
 
         private static void InitializeInStream()
         {
-            FileStream fs = CreateFileStream("CONIN$", GenericAccessRights.GenericRead, FileShare.Read, FileAccess.Read);
+            FileStream fs =
+ CreateFileStream("CONIN$", GenericAccessRights.GenericRead, FileShare.Read, FileAccess.Read);
             if (fs != null) System.Console.SetIn(new StreamReader(fs));
         }
 

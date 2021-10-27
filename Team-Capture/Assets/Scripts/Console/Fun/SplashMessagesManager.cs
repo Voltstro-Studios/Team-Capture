@@ -24,9 +24,9 @@ namespace Team_Capture.Console.Fun
         public static void SplashMessageCommand(string[] args)
         {
             SplashMessages settings = SplashMessage.Value;
-            if(settings == null)
+            if (settings == null)
                 return;
-            
+
             //Select random splash message
             int index = Random.Range(0, settings.messages.Length);
             Logger.Info($"	{settings.messages[index]}");

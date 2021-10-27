@@ -13,9 +13,9 @@ namespace Team_Capture.AddressablesAddons
     public class CachedFile<T> where T : Object
     {
         private readonly string addressablePath;
-        
+
         private T cachedItem;
-        private bool isWaitingForLoad = false;
+        private bool isWaitingForLoad;
 
         public CachedFile(string addressablePath)
         {
@@ -28,14 +28,14 @@ namespace Team_Capture.AddressablesAddons
             {
                 if (isWaitingForLoad)
                     return null;
-                
+
                 if (cachedItem == null)
                 {
                     isWaitingForLoad = true;
                     cachedItem = Addressables.LoadAssetAsync<T>(addressablePath).WaitForCompletion();
                     isWaitingForLoad = false;
                 }
-                    
+
                 return cachedItem;
             }
         }

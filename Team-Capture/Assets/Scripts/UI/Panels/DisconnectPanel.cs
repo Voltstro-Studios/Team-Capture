@@ -8,17 +8,17 @@ using Mirror;
 
 namespace Team_Capture.UI.Panels
 {
-	/// <summary>
-	///     The panel for the disconnect dialog
-	/// </summary>
-	internal class DisconnectPanel : PanelBase
-	{
-		/// <summary>
-		///     Disconnects from the current game
-		/// </summary>
-		public void DisconnectGame()
-		{
-			NetworkManager.singleton.StopHost();
-		}
-	}
+    /// <summary>
+    ///     The panel for the disconnect dialog
+    /// </summary>
+    internal class DisconnectPanel : PanelBase
+    {
+        /// <summary>
+        ///     Disconnects from the current game
+        /// </summary>
+        public void DisconnectGame()
+        {
+            NetworkManager.singleton.StopHost();
+        }
+    }
 }

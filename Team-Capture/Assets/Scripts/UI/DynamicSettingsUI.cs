@@ -23,251 +23,253 @@ using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.UI
 {
-	#region Attributes
+    #region Attributes
 
-	/// <summary>
-	///     Tells the <see cref="DynamicSettingsUI" /> what the text should say next to the element, instead of just using
-	///     property
-	///     name.
-	/// </summary>
-	[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
-	internal class SettingsPropertyDisplayTextAttribute : PreserveAttribute
-	{
-		public SettingsPropertyDisplayTextAttribute(string table, string tableEntry)
-		{
-			tableReference = table;
-			tableEntryReference = tableEntry;
-		}
+    /// <summary>
+    ///     Tells the <see cref="DynamicSettingsUI" /> what the text should say next to the element, instead of just using
+    ///     property
+    ///     name.
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
+    internal class SettingsPropertyDisplayTextAttribute : PreserveAttribute
+    {
+        internal readonly TableEntryReference tableEntryReference;
 
-		internal readonly TableReference tableReference;
-		internal readonly TableEntryReference tableEntryReference;
-	}
+        internal readonly TableReference tableReference;
 
-	/// <summary>
-	///     Tells the <see cref="DynamicSettingsUI" /> not to show this object
-	/// </summary>
-	[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Class)]
-	internal class SettingsDontShowAttribute : PreserveAttribute
-	{
-	}
+        public SettingsPropertyDisplayTextAttribute(string table, string tableEntry)
+        {
+            tableReference = table;
+            tableEntryReference = tableEntry;
+        }
+    }
 
-	#endregion
+    /// <summary>
+    ///     Tells the <see cref="DynamicSettingsUI" /> not to show this object
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Class)]
+    internal class SettingsDontShowAttribute : PreserveAttribute
+    {
+    }
 
-	/// <summary>
-	///     Generates a setting menu based on available options
-	/// </summary>
-	[RequireComponent(typeof(SettingsPanel))]
-	internal class DynamicSettingsUI : MonoBehaviour
-	{
-		private SettingsPanel settingsPanel;
+    #endregion
 
-		private void Awake()
-		{
-			settingsPanel = GetComponent<SettingsPanel>();
-		}
+    /// <summary>
+    ///     Generates a setting menu based on available options
+    /// </summary>
+    [RequireComponent(typeof(SettingsPanel))]
+    internal class DynamicSettingsUI : MonoBehaviour
+    {
+        private SettingsPanel settingsPanel;
 
-		/// <summary>
-		///     Generates the settings menu
-		/// </summary>
-		//TODO: The sub-functions need to update the UI element based on the reflected value on startup/settings reload
-		public void UpdateUI()
-		{
-			Stopwatch stopwatch = Stopwatch.StartNew();
+        private void Awake()
+        {
+            settingsPanel = GetComponent<SettingsPanel>();
+        }
 
-			settingsPanel.ClearPanels();
+        /// <summary>
+        ///     Generates the settings menu
+        /// </summary>
+        //TODO: The sub-functions need to update the UI element based on the reflected value on startup/settings reload
+        public void UpdateUI()
+        {
+            Stopwatch stopwatch = Stopwatch.StartNew();
 
-			//TODO: Holy fucking hell this is ugly
-			//Loop over each setting menu and all the sub-settings
-			foreach (PropertyInfo settingInfo in GameSettings.GetSettingClasses())
-			{
-				//If it has the don't show attribute, then, well... don't show it
-				if (settingInfo.DontShowObject())
-					continue;
+            settingsPanel.ClearPanels();
 
-				object settingGroupInstance = settingInfo.GetStaticValue<object>();
+            //TODO: Holy fucking hell this is ugly
+            //Loop over each setting menu and all the sub-settings
+            foreach (PropertyInfo settingInfo in GameSettings.GetSettingClasses())
+            {
+                //If it has the don't show attribute, then, well... don't show it
+                if (settingInfo.DontShowObject())
+                    continue;
 
-				//Get display text
-				string settingGroupName = settingInfo.GetObjectDisplayText();
+                object settingGroupInstance = settingInfo.GetStaticValue<object>();
 
-				//Create a menu module
-				OptionsMenu optionOptionsMenu = new OptionsMenu(settingGroupName);
-				GameObject panel = settingsPanel.AddPanel(optionOptionsMenu);
+                //Get display text
+                string settingGroupName = settingInfo.GetObjectDisplayText();
 
-				//Get each property in the settings
-				FieldInfo[] menuFields =
-					settingInfo.PropertyType.GetFields(BindingFlags.Instance | BindingFlags.Public |
-					                                   BindingFlags.NonPublic);
-				foreach (FieldInfo settingField in menuFields)
-				{
-					//If it has the don't show attribute, then, well... don't show it
-					if (settingField.DontShowObject())
-						continue;
+                //Create a menu module
+                OptionsMenu optionOptionsMenu = new(settingGroupName);
+                GameObject panel = settingsPanel.AddPanel(optionOptionsMenu);
 
-					Type fieldType = settingField.FieldType;
+                //Get each property in the settings
+                var menuFields =
+                    settingInfo.PropertyType.GetFields(BindingFlags.Instance | BindingFlags.Public |
+                                                       BindingFlags.NonPublic);
+                foreach (FieldInfo settingField in menuFields)
+                {
+                    //If it has the don't show attribute, then, well... don't show it
+                    if (settingField.DontShowObject())
+                        continue;
 
-					if (fieldType == typeof(int))
-						CreateIntSlider(settingField.GetValue<int>(settingGroupInstance), settingField, panel);
-					else if (fieldType == typeof(float))
-						CreateFloatSlider(settingField.GetValue<float>(settingGroupInstance), settingField, panel);
-					else if (fieldType == typeof(bool))
-						CreateBoolToggle(settingField.GetValue<bool>(settingGroupInstance), settingField, panel);
-					else if (fieldType == typeof(string))
-						CreateStringField(settingField.GetValue<string>(settingGroupInstance), settingField,
-							optionOptionsMenu);
-					else if (fieldType == typeof(Resolution))
-						CreateResolutionDropdown(settingField.GetValue<Resolution>(settingGroupInstance), settingField,
-							panel);
-					else if (fieldType.IsEnum)
-						CreateEnumDropdown(settingField.GetValue<int>(settingGroupInstance), settingField, panel);
-					else
-						Logger.Error("UI Element for setting of type {FullName} is not supported!",
-							fieldType.FullName);
-				}
-			}
+                    Type fieldType = settingField.FieldType;
 
-			stopwatch.Stop();
-			Logger.Debug("Time taken to update settings UI: {TotalMilliseconds}ms",
-				stopwatch.Elapsed.TotalMilliseconds);
-		}
+                    if (fieldType == typeof(int))
+                        CreateIntSlider(settingField.GetValue<int>(settingGroupInstance), settingField, panel);
+                    else if (fieldType == typeof(float))
+                        CreateFloatSlider(settingField.GetValue<float>(settingGroupInstance), settingField, panel);
+                    else if (fieldType == typeof(bool))
+                        CreateBoolToggle(settingField.GetValue<bool>(settingGroupInstance), settingField, panel);
+                    else if (fieldType == typeof(string))
+                        CreateStringField(settingField.GetValue<string>(settingGroupInstance), settingField,
+                            optionOptionsMenu);
+                    else if (fieldType == typeof(Resolution))
+                        CreateResolutionDropdown(settingField.GetValue<Resolution>(settingGroupInstance), settingField,
+                            panel);
+                    else if (fieldType.IsEnum)
+                        CreateEnumDropdown(settingField.GetValue<int>(settingGroupInstance), settingField, panel);
+                    else
+                        Logger.Error("UI Element for setting of type {FullName} is not supported!",
+                            fieldType.FullName);
+                }
+            }
 
-		#region Graphic designer functions
+            stopwatch.Stop();
+            Logger.Debug("Time taken to update settings UI: {TotalMilliseconds}ms",
+                stopwatch.Elapsed.TotalMilliseconds);
+        }
 
-		// ReSharper disable ParameterHidesMember
-		// ReSharper disable MemberCanBeMadeStatic.Local
-		// ReSharper disable UnusedParameter.Local
+        #region Graphic designer functions
 
-		private void CreateIntSlider(int val, FieldInfo field, GameObject panel)
-		{
-			//If it's an int or a float, we need to check if it has a range attribute
-			RangeAttribute rangeAttribute = field.GetFieldRange();
-			if (rangeAttribute == null)
-			{
-				Logger.Error("{SettingField} doesn't have a Range attribute!", field.Name);
-				return;
-			}
+        // ReSharper disable ParameterHidesMember
+        // ReSharper disable MemberCanBeMadeStatic.Local
+        // ReSharper disable UnusedParameter.Local
 
-			Slider slider = settingsPanel.AddSliderToPanel(panel, field.GetObjectDisplayText(), val, true, (int)rangeAttribute.min, (int)rangeAttribute.max);
-			slider.onValueChanged.AddListener(f => field.SetValue(GetSettingObject(field), (int) f));
-		}
+        private void CreateIntSlider(int val, FieldInfo field, GameObject panel)
+        {
+            //If it's an int or a float, we need to check if it has a range attribute
+            RangeAttribute rangeAttribute = field.GetFieldRange();
+            if (rangeAttribute == null)
+            {
+                Logger.Error("{SettingField} doesn't have a Range attribute!", field.Name);
+                return;
+            }
 
-		private void CreateFloatSlider(float val, FieldInfo field, GameObject panel)
-		{
-			//If it's an int or a float, we need to check if it has a range attribute
-			RangeAttribute rangeAttribute = field.GetFieldRange();
-			if (rangeAttribute == null)
-			{
-				Logger.Error("{SettingField} doesn't have a Range attribute!", field.Name);
-				return;
-			}
+            Slider slider = settingsPanel.AddSliderToPanel(panel, field.GetObjectDisplayText(), val, true,
+                (int) rangeAttribute.min, (int) rangeAttribute.max);
+            slider.onValueChanged.AddListener(f => field.SetValue(GetSettingObject(field), (int) f));
+        }
 
-			Slider slider = settingsPanel.AddSliderToPanel(panel, field.GetObjectDisplayText(), val, false, rangeAttribute.min, rangeAttribute.max);
-			slider.onValueChanged.AddListener(f => field.SetValue(GetSettingObject(field), f));
-		}
+        private void CreateFloatSlider(float val, FieldInfo field, GameObject panel)
+        {
+            //If it's an int or a float, we need to check if it has a range attribute
+            RangeAttribute rangeAttribute = field.GetFieldRange();
+            if (rangeAttribute == null)
+            {
+                Logger.Error("{SettingField} doesn't have a Range attribute!", field.Name);
+                return;
+            }
 
-		private void CreateBoolToggle(bool val, FieldInfo field, GameObject panel)
-		{
-			Toggle toggle = settingsPanel.AddToggleToPanel(panel, field.GetObjectDisplayText(), val);
-			toggle.onValueChanged.AddListener(b => field.SetValue(GetSettingObject(field), b));
-		}
+            Slider slider = settingsPanel.AddSliderToPanel(panel, field.GetObjectDisplayText(), val, false,
+                rangeAttribute.min, rangeAttribute.max);
+            slider.onValueChanged.AddListener(f => field.SetValue(GetSettingObject(field), f));
+        }
 
-		private void CreateStringField(string val, FieldInfo field, OptionsMenu optionsMenu)
-		{
-			Logger.Debug($"\tCreating string field for {field.Name} in {optionsMenu.Name}. Current is {val}");
-			//            new TMP_InputField().onValueChanged.AddListener(s => field.SetValue(GetSettingObject(field), s));
-		}
+        private void CreateBoolToggle(bool val, FieldInfo field, GameObject panel)
+        {
+            Toggle toggle = settingsPanel.AddToggleToPanel(panel, field.GetObjectDisplayText(), val);
+            toggle.onValueChanged.AddListener(b => field.SetValue(GetSettingObject(field), b));
+        }
 
-		private void CreateResolutionDropdown(Resolution currentRes, FieldInfo field, GameObject panel)
-		{
-			Resolution[] resolutions = Screen.resolutions;
-			List<string> resolutionsText = new List<string>();
-			int activeResIndex = 0;
+        private void CreateStringField(string val, FieldInfo field, OptionsMenu optionsMenu)
+        {
+            Logger.Debug($"\tCreating string field for {field.Name} in {optionsMenu.Name}. Current is {val}");
+            //            new TMP_InputField().onValueChanged.AddListener(s => field.SetValue(GetSettingObject(field), s));
+        }
 
-			//Find the active current resolution, as well as add each resolution option to the list of resolutions text
-			for (int i = 0; i < resolutions.Length; i++)
-			{
-				if (resolutions[i].width == currentRes.width && resolutions[i].width == currentRes.width)
-					activeResIndex = i;
+        private void CreateResolutionDropdown(Resolution currentRes, FieldInfo field, GameObject panel)
+        {
+            var resolutions = Screen.resolutions;
+            var resolutionsText = new List<string>();
+            int activeResIndex = 0;
 
-				resolutionsText.Add(resolutions[i].ToString());
-			}
+            //Find the active current resolution, as well as add each resolution option to the list of resolutions text
+            for (int i = 0; i < resolutions.Length; i++)
+            {
+                if (resolutions[i].width == currentRes.width && resolutions[i].width == currentRes.width)
+                    activeResIndex = i;
 
-			//Create the dropdown, with all of our resolutions
-			TMP_Dropdown dropdown =
-				settingsPanel.AddDropdownToPanel(panel, field.GetObjectDisplayText(), resolutionsText.ToArray(),
-					activeResIndex);
-			dropdown.onValueChanged.AddListener(index =>
-			{
-				field.SetValue(GetSettingObject(field), resolutions[index]);
-			});
-		}
+                resolutionsText.Add(resolutions[i].ToString());
+            }
 
-		private void CreateEnumDropdown(int val, FieldInfo field, GameObject panel)
-		{
-			string[] names = Enum.GetNames(field.FieldType);
-			val = names.ToList().IndexOf(Enum.GetName(field.FieldType, val));
+            //Create the dropdown, with all of our resolutions
+            TMP_Dropdown dropdown =
+                settingsPanel.AddDropdownToPanel(panel, field.GetObjectDisplayText(), resolutionsText.ToArray(),
+                    activeResIndex);
+            dropdown.onValueChanged.AddListener(index =>
+            {
+                field.SetValue(GetSettingObject(field), resolutions[index]);
+            });
+        }
 
-			TMP_Dropdown dropdown = settingsPanel.AddDropdownToPanel(panel, field.GetObjectDisplayText(), names, val);
+        private void CreateEnumDropdown(int val, FieldInfo field, GameObject panel)
+        {
+            string[] names = Enum.GetNames(field.FieldType);
+            val = names.ToList().IndexOf(Enum.GetName(field.FieldType, val));
 
-			dropdown.onValueChanged.AddListener(index =>
-			{
-				// ReSharper disable once LocalVariableHidesMember
-				string name = dropdown.options[index].text;
-				int value = (int) Enum.Parse(field.FieldType, name);
-				field.SetValue(GetSettingObject(field), value);
-			});
-		}
+            TMP_Dropdown dropdown = settingsPanel.AddDropdownToPanel(panel, field.GetObjectDisplayText(), names, val);
 
-		private object GetSettingObject(FieldInfo field)
-		{
-			//Find the first setting group where the group type matches that of the field's declaring type
-			PropertyInfo settingGroup =
-				GameSettings.GetSettingClasses().First(p => p.PropertyType == field.DeclaringType);
-			return settingGroup.GetValue(null);
-		}
+            dropdown.onValueChanged.AddListener(index =>
+            {
+                // ReSharper disable once LocalVariableHidesMember
+                string name = dropdown.options[index].text;
+                int value = (int) Enum.Parse(field.FieldType, name);
+                field.SetValue(GetSettingObject(field), value);
+            });
+        }
 
-		// ReSharper restore UnusedParameter.Local
-		// ReSharper restore MemberCanBeMadeStatic.Local
-		// ReSharper restore ParameterHidesMember
+        private object GetSettingObject(FieldInfo field)
+        {
+            //Find the first setting group where the group type matches that of the field's declaring type
+            PropertyInfo settingGroup =
+                GameSettings.GetSettingClasses().First(p => p.PropertyType == field.DeclaringType);
+            return settingGroup.GetValue(null);
+        }
 
-		#endregion
-	}
+        // ReSharper restore UnusedParameter.Local
+        // ReSharper restore MemberCanBeMadeStatic.Local
+        // ReSharper restore ParameterHidesMember
 
-	/// <summary>
-	///		Helper functions for <see cref="DynamicSettingsUI"/>
-	/// </summary>
-	internal static class DynamicSettingsUIHelper
-	{
-		/// <summary>
-		///		Don't show this object
-		/// </summary>
-		/// <param name="info"></param>
-		/// <returns></returns>
-		public static bool DontShowObject(this MemberInfo info)
-		{
-			return Attribute.GetCustomAttribute(info, typeof(SettingsDontShowAttribute)) != null;
-		}
+        #endregion
+    }
 
-		/// <summary>
-		///		Gets the display text
-		/// </summary>
-		/// <param name="info"></param>
-		/// <returns></returns>
-		public static string GetObjectDisplayText(this MemberInfo info)
-		{
-			string text = info.Name;
-			if (Attribute.GetCustomAttribute(info, typeof(SettingsPropertyDisplayTextAttribute)) is
-				SettingsPropertyDisplayTextAttribute attribute)
-			{
-				text = new LocalizedString(attribute.tableReference, attribute.tableEntryReference).GetLocalizedString();
-			}
+    /// <summary>
+    ///     Helper functions for <see cref="DynamicSettingsUI" />
+    /// </summary>
+    internal static class DynamicSettingsUIHelper
+    {
+	    /// <summary>
+	    ///     Don't show this object
+	    /// </summary>
+	    /// <param name="info"></param>
+	    /// <returns></returns>
+	    public static bool DontShowObject(this MemberInfo info)
+        {
+            return Attribute.GetCustomAttribute(info, typeof(SettingsDontShowAttribute)) != null;
+        }
 
-			return text;
-		}
+	    /// <summary>
+	    ///     Gets the display text
+	    /// </summary>
+	    /// <param name="info"></param>
+	    /// <returns></returns>
+	    public static string GetObjectDisplayText(this MemberInfo info)
+        {
+            string text = info.Name;
+            if (Attribute.GetCustomAttribute(info, typeof(SettingsPropertyDisplayTextAttribute)) is
+                SettingsPropertyDisplayTextAttribute attribute)
+                text = new LocalizedString(attribute.tableReference, attribute.tableEntryReference)
+                    .GetLocalizedString();
 
-		public static RangeAttribute GetFieldRange(this FieldInfo field)
-		{
-			RangeAttribute rangeAttribute = field.GetCustomAttribute<RangeAttribute>();
-			return rangeAttribute;
-		}
-	}
+            return text;
+        }
+
+        public static RangeAttribute GetFieldRange(this FieldInfo field)
+        {
+            RangeAttribute rangeAttribute = field.GetCustomAttribute<RangeAttribute>();
+            return rangeAttribute;
+        }
+    }
 }

@@ -17,22 +17,22 @@ namespace Team_Capture.UI.Menus
         public MenuPanel[] menuPanels;
 
         public LocalizedString menuResumeText;
-        
+
         private Action togglePauseMenu;
-        
+
         public void Setup(Action toggleMenu)
         {
             togglePauseMenu = toggleMenu;
-            
+
             CreateButton(topButtonPrefab, topNavBar, menuResumeText.GetLocalizedString(), ClosePauseMenu, 52f, true);
-            
+
             AddPanels(menuPanels);
         }
 
         private void ClosePauseMenu()
         {
             CloseActivePanel();
-            
+
             togglePauseMenu.Invoke();
         }
     }

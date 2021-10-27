@@ -18,241 +18,240 @@ using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.UI.ScoreBoard
 {
-	/// <summary>
-	///     The scoreboard controller
-	/// </summary>
-	internal class ScoreBoard : MonoBehaviour
-	{
-		[HideInInspector] public PlayerManager clientPlayer;
+    /// <summary>
+    ///     The scoreboard controller
+    /// </summary>
+    internal class ScoreBoard : MonoBehaviour
+    {
+        [HideInInspector] public PlayerManager clientPlayer;
 
-		/// <summary>
-		///     The map text element
-		/// </summary>
-		[Header("Scoreboard Settings")] [Tooltip("The map text element")] [SerializeField]
-		private TextMeshProUGUI mapNameText;
+        /// <summary>
+        ///     The map text element
+        /// </summary>
+        [Header("Scoreboard Settings")] [Tooltip("The map text element")] [SerializeField]
+        private TextMeshProUGUI mapNameText;
 
-		/// <summary>
-		///     The game name text element
-		/// </summary>
-		[Tooltip("The game name text element")] [SerializeField]
-		private TextMeshProUGUI gameNameText;
+        /// <summary>
+        ///     The game name text element
+        /// </summary>
+        [Tooltip("The game name text element")] [SerializeField]
+        private TextMeshProUGUI gameNameText;
 
-		/// <summary>
-		///     The kill death ratio text element
-		/// </summary>
-		[Tooltip("The kill death ratio text element")] [SerializeField]
-		private TextMeshProUGUI killDeathRatioText;
+        /// <summary>
+        ///     The kill death ratio text element
+        /// </summary>
+        [Tooltip("The kill death ratio text element")] [SerializeField]
+        private TextMeshProUGUI killDeathRatioText;
 
-		/// <summary>
-		///     The prefab used for players on the scoreboard
-		/// </summary>
-		[Tooltip("The prefab used for players on the scoreboard")] [SerializeField]
-		private GameObject playerItemPrefab;
+        /// <summary>
+        ///     The prefab used for players on the scoreboard
+        /// </summary>
+        [Tooltip("The prefab used for players on the scoreboard")] [SerializeField]
+        private GameObject playerItemPrefab;
 
-		/// <summary>
-		///     The player name text element
-		/// </summary>
-		[Header("Player List Settings")] [Tooltip("The player name text element")] [SerializeField]
-		private TextMeshProUGUI playerNameText;
+        /// <summary>
+        ///     The player name text element
+        /// </summary>
+        [Header("Player List Settings")] [Tooltip("The player name text element")] [SerializeField]
+        private TextMeshProUGUI playerNameText;
 
-		/// <summary>
-		///     The player stats text element
-		/// </summary>
-		[Tooltip("The player stats text element")] [SerializeField]
-		private TextMeshProUGUI playerStatsText;
+        /// <summary>
+        ///     The player stats text element
+        /// </summary>
+        [Tooltip("The player stats text element")] [SerializeField]
+        private TextMeshProUGUI playerStatsText;
 
-		/// <summary>
-		///     The player list <see cref="Transform" />
-		/// </summary>
-		[Tooltip("The player list transform")] [SerializeField]
-		private Transform playerListTransform;
+        /// <summary>
+        ///     The player list <see cref="Transform" />
+        /// </summary>
+        [Tooltip("The player list transform")] [SerializeField]
+        private Transform playerListTransform;
 
-		/// <summary>
-		///		<see cref="LocalizedString"/> for the death text
-		/// </summary>
-		[Tooltip("Localized String for the death text")]
-		[SerializeField] private LocalizedString deathText;
+        /// <summary>
+        ///     <see cref="LocalizedString" /> for the death text
+        /// </summary>
+        [Tooltip("Localized String for the death text")] [SerializeField]
+        private LocalizedString deathText;
 
-		/// <summary>
-		///		<see cref="LocalizedString"/> for the kills text
-		/// </summary>
-		[Tooltip("Localized String for the kills text")]
-		[SerializeField] private LocalizedString killsText;
+        /// <summary>
+        ///     <see cref="LocalizedString" /> for the kills text
+        /// </summary>
+        [Tooltip("Localized String for the kills text")] [SerializeField]
+        private LocalizedString killsText;
 
-		private readonly List<ScoreBoardPlayer> playerItems = new List<ScoreBoardPlayer>();
-		private List<PlayerManager> players;
+        private readonly List<ScoreBoardPlayer> playerItems = new();
 
-		private string deathTextCache;
-		private string killsTextCache;
+        private string deathTextCache;
+        private string killsTextCache;
+        private List<PlayerManager> players;
 
-		/// <summary>
-		///     Generate the list from scratch
-		///     <para>Should only need to do this when a player is added or removed, or when the panel is opened</para>
-		/// </summary>
-		private void SetPlayerList()
-		{
-			Stopwatch stopwatch = Stopwatch.StartNew();
+        /// <summary>
+        ///     Generate the list from scratch
+        ///     <para>Should only need to do this when a player is added or removed, or when the panel is opened</para>
+        /// </summary>
+        private void SetPlayerList()
+        {
+            Stopwatch stopwatch = Stopwatch.StartNew();
 
-			players = GameManager.GetAllPlayers().ToList();
-			SortPlayerList();
-			SetScoreBoardPlayerItems();
-			UpdateUIPositions();
+            players = GameManager.GetAllPlayers().ToList();
+            SortPlayerList();
+            SetScoreBoardPlayerItems();
+            UpdateUIPositions();
 
-			stopwatch.Stop();
-			Logger.Debug($"Took {stopwatch.Elapsed.TotalMilliseconds}ms to update scoreboard player items.");
-		}
+            stopwatch.Stop();
+            Logger.Debug($"Took {stopwatch.Elapsed.TotalMilliseconds}ms to update scoreboard player items.");
+        }
 
-		/// <summary>
-		///     Sorts the <see cref="players" /> list
-		/// </summary>
-		private void SortPlayerList()
-		{
-			players.Sort(new PlayerListComparer());
-		}
+        /// <summary>
+        ///     Sorts the <see cref="players" /> list
+        /// </summary>
+        private void SortPlayerList()
+        {
+            players.Sort(new PlayerListComparer());
+        }
 
-		/// <summary>
-		///     Generate the player scoreboard items from scratch
-		/// </summary>
-		private void SetScoreBoardPlayerItems()
-		{
-			ClearScoreBoardPlayerItems();
-			foreach (PlayerManager player in players)
-			{
-				GameObject playerItem = Instantiate(playerItemPrefab, playerListTransform, false);
-				ScoreBoardPlayer scoreBoardPlayer = playerItem.GetComponent<ScoreBoardPlayer>();
+        /// <summary>
+        ///     Generate the player scoreboard items from scratch
+        /// </summary>
+        private void SetScoreBoardPlayerItems()
+        {
+            ClearScoreBoardPlayerItems();
+            foreach (PlayerManager player in players)
+            {
+                GameObject playerItem = Instantiate(playerItemPrefab, playerListTransform, false);
+                ScoreBoardPlayer scoreBoardPlayer = playerItem.GetComponent<ScoreBoardPlayer>();
 
-				scoreBoardPlayer.SetupPlayerInfo(player);
-				playerItems.Add(scoreBoardPlayer);
+                scoreBoardPlayer.SetupPlayerInfo(player);
+                playerItems.Add(scoreBoardPlayer);
 
-				player.PlayerDeath += PlayerKilled;
-			}
-		}
+                player.PlayerDeath += PlayerKilled;
+            }
+        }
 
-		/// <summary>
-		///     Clears all the player scoreboard items
-		/// </summary>
-		private void ClearScoreBoardPlayerItems()
-		{
-			playerItems.Clear();
+        /// <summary>
+        ///     Clears all the player scoreboard items
+        /// </summary>
+        private void ClearScoreBoardPlayerItems()
+        {
+            playerItems.Clear();
 
-			for (int i = 0; i < playerListTransform.childCount; i++)
-			{
-				GameObject item = playerListTransform.GetChild(i).gameObject;
-				item.GetComponent<ScoreBoardPlayer>().PlayerToTrack.PlayerDeath -= PlayerKilled;
+            for (int i = 0; i < playerListTransform.childCount; i++)
+            {
+                GameObject item = playerListTransform.GetChild(i).gameObject;
+                item.GetComponent<ScoreBoardPlayer>().PlayerToTrack.PlayerDeath -= PlayerKilled;
 
-				Destroy(item);
-			}
-		}
+                Destroy(item);
+            }
+        }
 
-		/// <summary>
-		///     Updates the UI positions of the player scoreboard items
-		/// </summary>
-		private void UpdateUIPositions()
-		{
-			foreach (ScoreBoardPlayer scoreBoardPlayer in playerItems)
-				scoreBoardPlayer.transform.SetSiblingIndex(players.IndexOf(scoreBoardPlayer.PlayerToTrack));
-		}
+        /// <summary>
+        ///     Updates the UI positions of the player scoreboard items
+        /// </summary>
+        private void UpdateUIPositions()
+        {
+            foreach (ScoreBoardPlayer scoreBoardPlayer in playerItems)
+                scoreBoardPlayer.transform.SetSiblingIndex(players.IndexOf(scoreBoardPlayer.PlayerToTrack));
+        }
 
-		private void PlayerKilled()
-		{
-			SortPlayerList();
-			UpdateUIPositions();
+        private void PlayerKilled()
+        {
+            SortPlayerList();
+            UpdateUIPositions();
 
-			foreach (ScoreBoardPlayer scoreBoardPlayer in playerItems)
-				scoreBoardPlayer.UpdatePlayerStats();
-		}
+            foreach (ScoreBoardPlayer scoreBoardPlayer in playerItems)
+                scoreBoardPlayer.UpdatePlayerStats();
+        }
 
-		private void ClientPlayerUpdateUI()
-		{
-			killDeathRatioText.text = $"{clientPlayer.Kills}/{clientPlayer.Deaths}";
-			playerStatsText.text =
-				$"{killsTextCache}: {clientPlayer.Kills}\n{deathTextCache}: {clientPlayer.Deaths}";
-		}
+        private void ClientPlayerUpdateUI()
+        {
+            killDeathRatioText.text = $"{clientPlayer.Kills}/{clientPlayer.Deaths}";
+            playerStatsText.text =
+                $"{killsTextCache}: {clientPlayer.Kills}\n{deathTextCache}: {clientPlayer.Deaths}";
+        }
 
-		private class PlayerListComparer : IComparer<PlayerManager>
-		{
-			public int Compare(PlayerManager x, PlayerManager y)
-			{
-				// ReSharper disable PossibleNullReferenceException
-				if (x.Kills == 0 && y.Kills == 0)
-					return 0;
+        private class PlayerListComparer : IComparer<PlayerManager>
+        {
+            public int Compare(PlayerManager x, PlayerManager y)
+            {
+                // ReSharper disable PossibleNullReferenceException
+                if (x.Kills == 0 && y.Kills == 0)
+                    return 0;
 
-				return y.Kills.CompareTo(x.Kills);
-				// ReSharper enable PossibleNullReferenceException
-			}
-		}
+                return y.Kills.CompareTo(x.Kills);
+                // ReSharper enable PossibleNullReferenceException
+            }
+        }
 
-		#region Unity Callbacks
+        #region Unity Callbacks
 
-		private void Start()
-		{
-			playerNameText.text = clientPlayer.User.UserName;
-			mapNameText.text = GameSceneManager.GetActiveScene().DisplayNameLocalized;
-			gameNameText.text = TCNetworkManager.Instance.serverConfig.GameName.String;
-		}
+        private void Start()
+        {
+            playerNameText.text = clientPlayer.User.UserName;
+            mapNameText.text = GameSceneManager.GetActiveScene().DisplayNameLocalized;
+            gameNameText.text = TCNetworkManager.Instance.serverConfig.GameName.String;
+        }
 
-		private void OnEnable()
-		{
-			SetPlayerList();
+        private void OnEnable()
+        {
+            SetPlayerList();
 
-			GameManager.PlayerAdded += OnPlayerAdded;
-			GameManager.PlayerRemoved += OnPlayerRemoved;
+            GameManager.PlayerAdded += OnPlayerAdded;
+            GameManager.PlayerRemoved += OnPlayerRemoved;
 
-			killsText.StringChanged += OnKillsTextChange;
-			deathText.StringChanged += OnDeathsTextChange;
+            killsText.StringChanged += OnKillsTextChange;
+            deathText.StringChanged += OnDeathsTextChange;
 
-			killsText.RefreshString();
-			deathText.RefreshString();
+            killsText.RefreshString();
+            deathText.RefreshString();
 
-			clientPlayer.PlayerKill += ClientPlayerUpdateUI;
-			clientPlayer.PlayerDeath += ClientPlayerUpdateUI;
-			ClientPlayerUpdateUI();
-		}
-		
-		private void OnDisable()
-		{
-			players.Clear();
-			ClearScoreBoardPlayerItems();
+            clientPlayer.PlayerKill += ClientPlayerUpdateUI;
+            clientPlayer.PlayerDeath += ClientPlayerUpdateUI;
+            ClientPlayerUpdateUI();
+        }
 
-			GameManager.PlayerAdded -= OnPlayerAdded;
-			GameManager.PlayerRemoved -= OnPlayerRemoved;
-			
-			killsText.StringChanged -= OnKillsTextChange;
-			deathText.StringChanged -= OnDeathsTextChange;
+        private void OnDisable()
+        {
+            players.Clear();
+            ClearScoreBoardPlayerItems();
 
-			clientPlayer.PlayerKill -= ClientPlayerUpdateUI;
-			clientPlayer.PlayerDeath -= ClientPlayerUpdateUI;
-		}
+            GameManager.PlayerAdded -= OnPlayerAdded;
+            GameManager.PlayerRemoved -= OnPlayerRemoved;
 
-		#endregion
+            killsText.StringChanged -= OnKillsTextChange;
+            deathText.StringChanged -= OnDeathsTextChange;
 
-		#region GameManager Callbacks
+            clientPlayer.PlayerKill -= ClientPlayerUpdateUI;
+            clientPlayer.PlayerDeath -= ClientPlayerUpdateUI;
+        }
 
-		private void OnPlayerAdded(string playerId)
-		{
-			SetPlayerList();
-		}
+        #endregion
 
-		private void OnPlayerRemoved(string playerId)
-		{
-			SetPlayerList();
-		}
+        #region GameManager Callbacks
 
-		#endregion
+        private void OnPlayerAdded(string playerId)
+        {
+            SetPlayerList();
+        }
 
-		#region Localized String Updates
+        private void OnPlayerRemoved(string playerId)
+        {
+            SetPlayerList();
+        }
 
-		private void OnKillsTextChange(string value)
-		{
-			killsTextCache = value;
-		}
+        #endregion
 
-		private void OnDeathsTextChange(string value)
-		{
-			deathTextCache = value;
-		}
+        #region Localized String Updates
 
+        private void OnKillsTextChange(string value)
+        {
+            killsTextCache = value;
+        }
 
-		#endregion
-	}
+        private void OnDeathsTextChange(string value)
+        {
+            deathTextCache = value;
+        }
+
+        #endregion
+    }
 }

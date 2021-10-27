@@ -12,50 +12,50 @@ using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.Settings.Controllers
 {
-	/// <summary>
-	///     Handles controlling the <see cref="Camera" />'s settings.
-	/// </summary>
-	[RequireComponent(typeof(CinemachineVirtualCamera))]
-	internal class CameraSettingsController : MonoBehaviour
-	{
-		private CinemachineVirtualCamera cameraToChange;
+    /// <summary>
+    ///     Handles controlling the <see cref="Camera" />'s settings.
+    /// </summary>
+    [RequireComponent(typeof(CinemachineVirtualCamera))]
+    internal class CameraSettingsController : MonoBehaviour
+    {
+        private CinemachineVirtualCamera cameraToChange;
 
-		private void Start()
-		{
-			if (Game.IsHeadless)
-			{
-				Destroy(this);
-				return;
-			}
-			
-			cameraToChange = GetComponent<CinemachineVirtualCamera>();
+        private void Start()
+        {
+            if (Game.IsHeadless)
+            {
+                Destroy(this);
+                return;
+            }
 
-			GameSettings.SettingsUpdated += UpdateSettings;
-			UpdateSettings();
-		}
+            cameraToChange = GetComponent<CinemachineVirtualCamera>();
 
-		private void OnDestroy()
-		{
-			GameSettings.SettingsUpdated -= UpdateSettings;
-		}
+            GameSettings.SettingsUpdated += UpdateSettings;
+            UpdateSettings();
+        }
 
-		private void UpdateSettings()
-		{
-			cameraToChange.m_Lens.FieldOfView = GameSettings.AdvSettings.CameraFOV;
-		}
+        private void OnDestroy()
+        {
+            GameSettings.SettingsUpdated -= UpdateSettings;
+        }
 
-		[ConCommand("cl_fov", "FOV of the camera", CommandRunPermission.ClientOnly, 1, 1, true)]
-		public static void CameraFovCommand(string[] args)
-		{
-			if (int.TryParse(args[0], out int cameraFov))
-			{
-				GameSettings.AdvSettings.CameraFOV = cameraFov;
-				GameSettings.Save();
+        private void UpdateSettings()
+        {
+            cameraToChange.m_Lens.FieldOfView = GameSettings.AdvSettings.CameraFOV;
+        }
 
-				return;
-			}
+        [ConCommand("cl_fov", "FOV of the camera", CommandRunPermission.ClientOnly, 1, 1, true)]
+        public static void CameraFovCommand(string[] args)
+        {
+            if (int.TryParse(args[0], out int cameraFov))
+            {
+                GameSettings.AdvSettings.CameraFOV = cameraFov;
+                GameSettings.Save();
 
-			Logger.Error("Invalid input!");
-		}
-	}
+                return;
+            }
+
+            Logger.Error("Invalid input!");
+        }
+    }
 }

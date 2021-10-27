@@ -27,39 +27,39 @@ namespace Team_Capture.UI.Chat
         ///     How long until the preview text stays for
         /// </summary>
         public float previewTextDestroyDelayTime = 8.0f;
-        
+
         /// <summary>
         ///     The prefab for the text
         /// </summary>
         public GameObject chatTextPrefab;
 
         /// <summary>
-        ///     Preview <see cref="GameObject"/>
+        ///     Preview <see cref="GameObject" />
         /// </summary>
         public GameObject preview;
-        
+
         /// <summary>
-        ///     Main view <see cref="GameObject"/>
+        ///     Main view <see cref="GameObject" />
         /// </summary>
         public GameObject mainView;
 
         /// <summary>
-        ///     Preview <see cref="ScrollRect"/>
+        ///     Preview <see cref="ScrollRect" />
         /// </summary>
         public ScrollRect previewScroll;
-        
+
         /// <summary>
-        ///     Main view <see cref="ScrollRect"/>
+        ///     Main view <see cref="ScrollRect" />
         /// </summary>
         public ScrollRect mainViewScroll;
-        
+
         /// <summary>
-        ///     Preview content <see cref="Transform"/>
+        ///     Preview content <see cref="Transform" />
         /// </summary>
         public Transform previewTextViewport;
-        
+
         /// <summary>
-        ///     Main view content <see cref="Transform"/>
+        ///     Main view content <see cref="Transform" />
         /// </summary>
         public Transform mainViewTextViewport;
 
@@ -99,7 +99,7 @@ namespace Team_Capture.UI.Chat
             TMP_Text previewText = Instantiate(chatTextPrefab, previewTextViewport, false).GetComponent<TMP_Text>();
             previewText.text = formattedMessage;
             previewText.gameObject.AddComponent<TimedDestroyer>().destroyDelayTime = previewTextDestroyDelayTime;
-            
+
             Canvas.ForceUpdateCanvases();
             mainViewScroll.normalizedPosition = new Vector2(0, 0);
             previewScroll.normalizedPosition = new Vector2(0, 0);
@@ -108,7 +108,7 @@ namespace Team_Capture.UI.Chat
         }
 
         /// <summary>
-        ///     Sends a <see cref="ChatMessage"/> to the server
+        ///     Sends a <see cref="ChatMessage" /> to the server
         /// </summary>
         /// <param name="message"></param>
         internal void SendChatMessage(ChatMessage message)
@@ -121,9 +121,9 @@ namespace Team_Capture.UI.Chat
         /// </summary>
         internal void ToggleChat()
         {
-            if(inputField.isFocused && IsChatOpen)
+            if (inputField.isFocused && IsChatOpen)
                 return;
-            
+
             ActivateChat(!IsChatOpen);
         }
 
@@ -135,12 +135,12 @@ namespace Team_Capture.UI.Chat
         {
             mainView.SetActive(state);
             preview.SetActive(!state);
-            
+
             mainViewScroll.normalizedPosition = new Vector2(0, 0);
             previewScroll.normalizedPosition = new Vector2(0, 0);
 
             if (!state) return;
-            
+
             inputField.Select();
             inputField.ActivateInputField();
         }

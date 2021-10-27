@@ -4,57 +4,53 @@
 // This project is governed by the AGPLv3 License.
 // For more details see the LICENSE file.
 
-using System;
-using System.IO;
 using Mirror;
-using Team_Capture.AddressablesAddons;
 using Team_Capture.Core;
 using TMPro;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-using Random = UnityEngine.Random;
 
 namespace Team_Capture.UI.Panels
 {
-	internal class QuitPanel : PanelBase
-	{
-		public AssetReference quitMessagesAsset;
-		
-		/// <summary>
-		///     The text for where the quit messages will go
-		/// </summary>
-		[Tooltip("The text for where the quit messages will go")]
-		public TextMeshProUGUI quitSentenceText;
+    internal class QuitPanel : PanelBase
+    {
+        public AssetReference quitMessagesAsset;
 
-		private QuitMessages quitMessages;
+        /// <summary>
+        ///     The text for where the quit messages will go
+        /// </summary>
+        [Tooltip("The text for where the quit messages will go")]
+        public TextMeshProUGUI quitSentenceText;
 
-		private void Awake()
-		{
-			quitMessages = quitMessagesAsset.LoadAssetAsync<QuitMessages>().WaitForCompletion();
-		}
+        private QuitMessages quitMessages;
 
-		public override void OnEnable()
-		{
-			base.OnEnable();
-			
-			if (quitMessages != null)
-			{
-				quitSentenceText.text = quitMessages.quitMessages[Random.Range(0, quitMessages.quitMessages.Length)];
-				return;
-			}
+        private void Awake()
+        {
+            quitMessages = quitMessagesAsset.LoadAssetAsync<QuitMessages>().WaitForCompletion();
+        }
 
-			quitSentenceText.text = "When you are missing quit messages...";
-		}
+        public override void OnEnable()
+        {
+            base.OnEnable();
 
-		/// <summary>
-		///     Quits from the game
-		/// </summary>
-		public void Quit()
-		{
-			if (NetworkManager.singleton.isNetworkActive)
-				NetworkManager.singleton.StopHost();
+            if (quitMessages != null)
+            {
+                quitSentenceText.text = quitMessages.quitMessages[Random.Range(0, quitMessages.quitMessages.Length)];
+                return;
+            }
 
-			Game.QuitGame();
-		}
-	}
+            quitSentenceText.text = "When you are missing quit messages...";
+        }
+
+        /// <summary>
+        ///     Quits from the game
+        /// </summary>
+        public void Quit()
+        {
+            if (NetworkManager.singleton.isNetworkActive)
+                NetworkManager.singleton.StopHost();
+
+            Game.QuitGame();
+        }
+    }
 }

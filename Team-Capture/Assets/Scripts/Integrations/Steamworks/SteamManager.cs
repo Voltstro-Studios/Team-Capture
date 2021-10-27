@@ -6,7 +6,6 @@
 
 using System;
 using Steamworks;
-using Team_Capture.Core;
 using Team_Capture.Core.Networking;
 using Team_Capture.UserManagement;
 using UnityEngine;
@@ -15,66 +14,67 @@ using Logger = Team_Capture.Logging.Logger;
 namespace Team_Capture.Integrations.Steamworks
 {
 	/// <summary>
-	///		Handles connecting to Steam
+	///     Handles connecting to Steam
 	/// </summary>
-    internal class SteamManager : SingletonMonoBehaviourSettings<SteamManager, SteamSettings>
-	{
-		protected override string SettingsPath => "Assets/Settings/Integrations/SteamSettings.asset";
+	internal class SteamManager : SingletonMonoBehaviourSettings<SteamManager, SteamSettings>
+    {
+        protected override string SettingsPath => "Assets/Settings/Integrations/SteamSettings.asset";
 
-		internal SteamSettings SteamSettings => Settings;
-		
-		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-		private static void Init()
-		{
-			GameObject go = new GameObject("SteamManager");
-			go.AddComponent<SteamManager>();
-		}
-		
-		protected override void SingletonStarted()
-	    {
-		    //TODO: We should have a global 'offline' toggle
-		    if(TCAuthenticator.AuthMethod != UserProvider.Steam)
-		    {
-			    Destroy(gameObject);
-			    return;
-		    }
-		    
-		    Initialize();
-	    }
+        internal SteamSettings SteamSettings => Settings;
 
-	    protected override void SingletonDestroyed()
-	    {
-		    SteamClient.Shutdown();
-	    }
+        private void Update()
+        {
+            SteamClient.RunCallbacks();
+        }
 
-	    private void Update()
-	    {
-		    SteamClient.RunCallbacks();
-	    }
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        private static void Init()
+        {
+            GameObject go = new("SteamManager");
+            go.AddComponent<SteamManager>();
+        }
 
-	    private void Initialize()
-	    {
-		    try
-		    {
-			    SteamClient.Init(Settings.appId);
-		    }
-		    catch (Exception ex)
-		    {
-				Logger.Error(ex, "Something went wrong while starting the Steam integration!");
-				Destroy(gameObject);
-				return;
-		    }
+        protected override void SingletonStarted()
+        {
+            //TODO: We should have a global 'offline' toggle
+            if (TCAuthenticator.AuthMethod != UserProvider.Steam)
+            {
+                Destroy(gameObject);
+                return;
+            }
 
-		    if (!SteamClient.IsLoggedOn)
-		    {
-				Logger.Error("Could not connect to Steam!");
-				Destroy(gameObject);
-				return;
-		    }
-		    
-			User.AddUser(new SteamUser(SteamClient.SteamId));
+            Initialize();
+        }
 
-			Logger.Info("Logged into Steam account {AccountName} with an ID of {AccountID}", SteamClient.Name, SteamClient.SteamId.Value);
-	    }
-	}
+        protected override void SingletonDestroyed()
+        {
+            SteamClient.Shutdown();
+        }
+
+        private void Initialize()
+        {
+            try
+            {
+                SteamClient.Init(Settings.appId);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex, "Something went wrong while starting the Steam integration!");
+                Destroy(gameObject);
+                return;
+            }
+
+            if (!SteamClient.IsLoggedOn)
+            {
+                Logger.Error("Could not connect to Steam!");
+                Destroy(gameObject);
+                return;
+            }
+
+            User.AddUser(new SteamUser(SteamClient.SteamId));
+
+            Logger.Info("Logged into Steam account {AccountName} with an ID of {AccountID}", SteamClient.Name,
+                SteamClient.SteamId.Value);
+        }
+    }
 }

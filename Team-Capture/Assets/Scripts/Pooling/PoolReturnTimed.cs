@@ -7,9 +7,9 @@ namespace Team_Capture.Pooling
     {
         public int timeTillReturn = 5;
 
-        private readonly CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+        private readonly CancellationTokenSource cancellationTokenSource = new();
         private GameObjectPool pool;
-        
+
         private void OnEnable()
         {
             TimeTask().Forget();
@@ -23,10 +23,10 @@ namespace Team_Capture.Pooling
         private async UniTask TimeTask()
         {
             await UniTask.Delay(timeTillReturn * 1000, cancellationToken: cancellationTokenSource.Token);
-            
-            if(cancellationTokenSource.IsCancellationRequested || pool == null)
+
+            if (cancellationTokenSource.IsCancellationRequested || pool == null)
                 return;
-            
+
             pool.ReturnPooledObject(gameObject);
         }
 

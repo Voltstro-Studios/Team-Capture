@@ -15,151 +15,148 @@ using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.UI
 {
-	/// <summary>
-	///     Controller for the client UI
-	/// </summary>
-	internal class ClientUI : MonoBehaviour
-	{
-		/// <summary>
-		///     Is the pause menu open
-		/// </summary>
-		public static bool IsPauseMenuOpen;
+    /// <summary>
+    ///     Controller for the client UI
+    /// </summary>
+    internal class ClientUI : MonoBehaviour
+    {
+        /// <summary>
+        ///     Is the pause menu open
+        /// </summary>
+        public static bool IsPauseMenuOpen;
 
-		/// <summary>
-		///     The hud
-		/// </summary>
-		[Tooltip("The hud")] public Hud hud;
+        /// <summary>
+        ///     The hud
+        /// </summary>
+        [Tooltip("The hud")] public Hud hud;
 
-		/// <summary>
-		///     The killfeed
-		/// </summary>
-		[Tooltip("The killfeed")] public KillFeed killFeed;
+        /// <summary>
+        ///     The killfeed
+        /// </summary>
+        [Tooltip("The killfeed")] public KillFeed killFeed;
 
-		/// <summary>
-		///     The pause menu
-		/// </summary>
-		[Tooltip("The pause menu")] public PauseMenu pauseMenu;
+        /// <summary>
+        ///     The pause menu
+        /// </summary>
+        [Tooltip("The pause menu")] public PauseMenu pauseMenu;
 
-		/// <summary>
-		///		The death screen
-		/// </summary>
-		[Tooltip("The death screen")]
-		public DeathScreen deathScreen;
+        /// <summary>
+        ///     The death screen
+        /// </summary>
+        [Tooltip("The death screen")] public DeathScreen deathScreen;
 
-		/// <summary>
-		///		The chat
-		/// </summary>
-		[Tooltip("The chat")] public Chat.Chat chat;
+        /// <summary>
+        ///     The chat
+        /// </summary>
+        [Tooltip("The chat")] public Chat.Chat chat;
 
-		/// <summary>
-		///     The scoreboard gameobject
-		/// </summary>
-		[Tooltip("The scoreboard gameobject")] public GameObject scoreBoardObject;
+        /// <summary>
+        ///     The scoreboard gameobject
+        /// </summary>
+        [Tooltip("The scoreboard gameobject")] public GameObject scoreBoardObject;
 
-		/// <summary>
-		///     The <see cref="Team_Capture.Player.PlayerManager" />
-		/// </summary>
-		[NonSerialized] public PlayerManager PlayerManager;
+        /// <summary>
+        ///     The <see cref="Team_Capture.Player.PlayerManager" />
+        /// </summary>
+        [NonSerialized] public PlayerManager PlayerManager;
 
-		/// <summary>
-		///     The <see cref="Weapons.WeaponManager" />
-		/// </summary>
-		[NonSerialized] public WeaponManager WeaponManager;
+        /// <summary>
+        ///     The <see cref="Weapons.WeaponManager" />
+        /// </summary>
+        [NonSerialized] public WeaponManager WeaponManager;
 
-		/// <summary>
-		///     Sets up the UI
-		/// </summary>
-		/// <param name="playerManager"></param>
-		public void SetupUI(PlayerManager playerManager)
-		{
-			//Reset this
-			IsPauseMenuOpen = false;
+        /// <summary>
+        ///     Sets up the UI
+        /// </summary>
+        /// <param name="playerManager"></param>
+        public void SetupUI(PlayerManager playerManager)
+        {
+            //Reset this
+            IsPauseMenuOpen = false;
 
-			hud.Setup(this);
+            hud.Setup(this);
 
-			PlayerManager = playerManager;
-			WeaponManager = playerManager.GetComponent<WeaponManager>();
+            PlayerManager = playerManager;
+            WeaponManager = playerManager.GetComponent<WeaponManager>();
 
-			pauseMenu.gameObject.SetActive(false);
+            pauseMenu.gameObject.SetActive(false);
 
-			scoreBoardObject.SetActive(false);
-			scoreBoardObject.GetComponent<ScoreBoard.ScoreBoard>().clientPlayer = playerManager;
+            scoreBoardObject.SetActive(false);
+            scoreBoardObject.GetComponent<ScoreBoard.ScoreBoard>().clientPlayer = playerManager;
 
-			pauseMenu.Setup(TogglePauseMenu);
-			deathScreen.Setup(playerManager);
+            pauseMenu.Setup(TogglePauseMenu);
+            deathScreen.Setup(playerManager);
 
-			Logger.Debug("The ClientUI is now ready.");
-		}
+            Logger.Debug("The ClientUI is now ready.");
+        }
 
-		/// <summary>
-		///     Toggles the pause menu
-		/// </summary>
-		public void TogglePauseMenu()
-		{
-			ActivatePauseMenu(!IsPauseMenuOpen);
-		}
+        /// <summary>
+        ///     Toggles the pause menu
+        /// </summary>
+        public void TogglePauseMenu()
+        {
+            ActivatePauseMenu(!IsPauseMenuOpen);
+        }
 
-		/// <summary>
-		///     Activate a pause menu
-		/// </summary>
-		/// <param name="state"></param>
-		public void ActivatePauseMenu(bool state)
-		{
-			if (pauseMenu.gameObject.activeSelf && ConsoleSetup.ConsoleUI != null)
-			{
-				if(ConsoleSetup.ConsoleUI.IsOpen())
-					return;
-			}
+        /// <summary>
+        ///     Activate a pause menu
+        /// </summary>
+        /// <param name="state"></param>
+        public void ActivatePauseMenu(bool state)
+        {
+            if (pauseMenu.gameObject.activeSelf && ConsoleSetup.ConsoleUI != null)
+                if (ConsoleSetup.ConsoleUI.IsOpen())
+                    return;
 
-			IsPauseMenuOpen = state;
+            IsPauseMenuOpen = state;
 
-			Cursor.visible = IsPauseMenuOpen;
-			Cursor.lockState = state ? CursorLockMode.None : CursorLockMode.Locked;
+            Cursor.visible = IsPauseMenuOpen;
+            Cursor.lockState = state ? CursorLockMode.None : CursorLockMode.Locked;
 
-			pauseMenu.gameObject.SetActive(state);
-			killFeed.killFeedItemsHolder.gameObject.SetActive(!state);
+            pauseMenu.gameObject.SetActive(state);
+            killFeed.killFeedItemsHolder.gameObject.SetActive(!state);
 
-			if (state)
-			{
-				scoreBoardObject.SetActive(false);
-				if(chat.IsChatOpen)
-					chat.ActivateChat(false);
-				
-				chat.gameObject.SetActive(false);
-			}
-			else
-			{
-				chat.gameObject.SetActive(true);
-			}
+            if (state)
+            {
+                scoreBoardObject.SetActive(false);
+                if (chat.IsChatOpen)
+                    chat.ActivateChat(false);
 
-			if (PlayerManager.IsDead) return;
-			ActivateHud(!state);
-		}
+                chat.gameObject.SetActive(false);
+            }
+            else
+            {
+                chat.gameObject.SetActive(true);
+            }
 
-		/// <summary>
-		///     Toggles the score board
-		/// </summary>
-		public void ToggleScoreBoard()
-		{
-			scoreBoardObject.SetActive(!scoreBoardObject.activeSelf);
-		}
+            if (PlayerManager.IsDead) return;
+            ActivateHud(!state);
+        }
 
-		/// <summary>
-		///		Activates the hud
-		/// </summary>
-		/// <param name="state"></param>
-		public void ActivateHud(bool state)
-		{
-			if(IsPauseMenuOpen && PlayerManager.IsDead)
-				return;
+        /// <summary>
+        ///     Toggles the score board
+        /// </summary>
+        public void ToggleScoreBoard()
+        {
+            scoreBoardObject.SetActive(!scoreBoardObject.activeSelf);
+        }
 
-			hud.gameObject.SetActive(state);
-		}
+        /// <summary>
+        ///     Activates the hud
+        /// </summary>
+        /// <param name="state"></param>
+        public void ActivateHud(bool state)
+        {
+            if (IsPauseMenuOpen && PlayerManager.IsDead)
+                return;
 
-		public void ActivateDeathScreen(PlayerManager killer, bool state)
-		{
-			deathScreen.gameObject.SetActive(state);
-			deathScreen.StartCountDown(killer, (int)GameSceneManager.Instance.ActiveScene.respawnTime);
-		}
-	}
+            hud.gameObject.SetActive(state);
+        }
+
+        public void ActivateDeathScreen(PlayerManager killer, bool state)
+        {
+            deathScreen.gameObject.SetActive(state);
+            deathScreen.StartCountDown(killer, (int) GameSceneManager.Instance.ActiveScene.respawnTime);
+        }
+    }
 }

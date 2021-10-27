@@ -14,69 +14,69 @@ namespace Team_Capture.Core
     public class FixedUpdateManager : MonoBehaviour
     {
         /// <summary>
-        /// Maximum percentage timing may vary from the FixedDeltaTime.
+        ///     Maximum percentage timing may vary from the FixedDeltaTime.
         /// </summary>
         private const float MAXIMUM_OFFSET_PERCENT = 0.35f;
-        
+
         /// <summary>
-        /// How quickly timing can recover to it's default value.
+        ///     How quickly timing can recover to it's default value.
         /// </summary>
         private const float TIMING_RECOVER_RATE = 0.0025f;
-        
+
         /// <summary>
-        /// Percentage of FixedDeltaTime to modify timing by when a step must occur.
+        ///     Percentage of FixedDeltaTime to modify timing by when a step must occur.
         /// </summary>
         public const float TimingStepPercent = 0.015f;
-        
+
         /// <summary>
-        /// Dispatched before a simulated fixed update occurs.
-        /// </summary>
-        public static event Action OnPreFixedUpdate;
-        
-        /// <summary>
-        /// Dispatched when a simulated fixed update occurs.
-        /// </summary>
-        public static event Action OnFixedUpdate;
-        
-        /// <summary>
-        /// Dispatched after a simulated fixed update occurs. Physics would have simulated prior to this event.
-        /// </summary>
-        public static event Action OnPostFixedUpdate;
-        
-        /// <summary>
-        /// Current fixed frame. Applied before any events are invoked.
-        /// </summary>
-        public static uint FixedFrame { get; private set; } = 0;
-        
-        /// <summary>
-        /// Ticks applied from updates.
-        /// </summary>
-        private float updateTicks = 0f;
-        
-        /// <summary>
-        /// Range which the timing may reside within.
+        ///     Range which the timing may reside within.
         /// </summary>
         private static float[] timingRange;
-        
+
         /// <summary>
-        /// Value to change timing per step.
+        ///     Value to change timing per step.
         /// </summary>
         private static float timingPerStep;
-        
+
         /// <summary>
-        /// Current FixedUpdate timing.
+        ///     Current FixedUpdate timing.
         /// </summary>
         private static float adjustedFixedUpdate;
+
+        /// <summary>
+        ///     Ticks applied from updates.
+        /// </summary>
+        private float updateTicks;
+
+        /// <summary>
+        ///     Current fixed frame. Applied before any events are invoked.
+        /// </summary>
+        public static uint FixedFrame { get; private set; }
 
         private void Update()
         {
             UpdateTicks(Time.deltaTime);
         }
-        
+
+        /// <summary>
+        ///     Dispatched before a simulated fixed update occurs.
+        /// </summary>
+        public static event Action OnPreFixedUpdate;
+
+        /// <summary>
+        ///     Dispatched when a simulated fixed update occurs.
+        /// </summary>
+        public static event Action OnFixedUpdate;
+
+        /// <summary>
+        ///     Dispatched after a simulated fixed update occurs. Physics would have simulated prior to this event.
+        /// </summary>
+        public static event Action OnPostFixedUpdate;
+
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void Init()
         {
-            GameObject go = new GameObject("Fixed Update Manager");
+            GameObject go = new("Fixed Update Manager");
             go.AddComponent<FixedUpdateManager>();
             DontDestroyOnLoad(go);
 
@@ -85,7 +85,7 @@ namespace Team_Capture.Core
 
             adjustedFixedUpdate = Time.fixedDeltaTime;
             timingPerStep = Time.fixedDeltaTime * TimingStepPercent;
-            timingRange = new []
+            timingRange = new[]
             {
                 Time.fixedDeltaTime * (1f - MAXIMUM_OFFSET_PERCENT),
                 Time.fixedDeltaTime * (1f + MAXIMUM_OFFSET_PERCENT)
@@ -101,7 +101,8 @@ namespace Team_Capture.Core
             if (steps == 0)
                 return;
 
-            adjustedFixedUpdate = Mathf.Clamp(adjustedFixedUpdate + (steps * timingPerStep), timingRange[0], timingRange[1]);
+            adjustedFixedUpdate =
+                Mathf.Clamp(adjustedFixedUpdate + steps * timingPerStep, timingRange[0], timingRange[1]);
         }
 
         /// <summary>
@@ -113,13 +114,13 @@ namespace Team_Capture.Core
             while (updateTicks >= adjustedFixedUpdate)
             {
                 updateTicks -= adjustedFixedUpdate;
-                
+
                 //If at maximum value then reset fixed frame.
                 //This would probably break the game but even at 128t/s
                 //it would take over a year of the server running straight to ever reach this value!
                 if (FixedFrame == uint.MaxValue)
                     FixedFrame = 0;
-                
+
                 FixedFrame++;
 
                 OnPreFixedUpdate?.Invoke();
@@ -132,7 +133,8 @@ namespace Team_Capture.Core
             }
 
             //Recover timing towards default fixedDeltaTime.
-            adjustedFixedUpdate = Mathf.MoveTowards(adjustedFixedUpdate, Time.fixedDeltaTime, TIMING_RECOVER_RATE * deltaTime);
+            adjustedFixedUpdate =
+                Mathf.MoveTowards(adjustedFixedUpdate, Time.fixedDeltaTime, TIMING_RECOVER_RATE * deltaTime);
         }
     }
 }

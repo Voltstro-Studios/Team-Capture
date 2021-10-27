@@ -14,13 +14,13 @@ namespace Team_Capture.UI.Menus
     internal class MainMenu : MenuController
     {
         public LocalizedString menuHomeText;
-        
+
         public MenuPanel[] menuPanels;
-        
+
         private void Start()
         {
             CreateButton(topButtonPrefab, topNavBar, menuHomeText.GetLocalizedString(), CloseActivePanel, 52f, true);
-            
+
             AddPanels(menuPanels);
         }
     }

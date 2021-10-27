@@ -4,20 +4,18 @@
 // This project is governed by the AGPLv3 License.
 // For more details see the LICENSE file.
 
-using UnityEngine.Localization.Tables;
-
 namespace Team_Capture.UI.Elements.Settings
 {
-	/// <summary>
-	///     Represents a menu for the options
-	/// </summary>
-	internal class OptionsMenu
-	{
-		internal readonly string Name;
+    /// <summary>
+    ///     Represents a menu for the options
+    /// </summary>
+    internal class OptionsMenu
+    {
+        internal readonly string Name;
 
-		internal OptionsMenu(string name)
-		{
-			Name = name;
-		}
-	}
+        internal OptionsMenu(string name)
+        {
+            Name = name;
+        }
+    }
 }
