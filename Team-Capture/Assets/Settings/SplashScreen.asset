@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8aa29bf140e44c1f80c2dcf31a9c94a2, type: 3}
+  m_Name: SplashScreen
+  m_EditorClassIdentifier: 
+  splashScreen: "\n___________                    \n\\__    ___/___ _____    _____ 
+    \n  |    |_/ __ \\\\__  \\  /     \\ \n  |    |\\  ___/ / __ \\|  Y Y  \\\n 
+    |____| \\___  >____  /__|_|  /\n             \\/     \\/      \\/ \n\t_________               
+    __                        \n\t\\_   ___ \\_____  _______/  |_ __ _________  
+    ____  \n\t/    \\  \\/\\__  \\ \\____ \\   __\\  |  \\_  __ \\_/ __ \\ \n\t\\    
+    \\____/ __ \\|  |_> >  | |  |  /|  | \\/\\  ___/ \n\t \\______  (____  /   __/|__|
+    |____/ |__|    \\___  >\n\t        \\/     \\/|__|                          
+    \\/ \n"

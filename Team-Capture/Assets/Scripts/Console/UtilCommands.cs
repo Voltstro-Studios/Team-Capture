@@ -32,27 +32,6 @@ namespace Team_Capture.Console
 			Logger.Info(string.Join(" ", args));
 		}
 
-		[ConCommand("asciiart", "Shows Team-Capture ascii art")]
-		public static void AsciiArtCommand(string[] args)
-		{
-			//Ascii art, fuck you
-			const string asciiArt = @"
-___________                    
-\__    ___/___ _____    _____  
-  |    |_/ __ \\__  \  /     \ 
-  |    |\  ___/ / __ \|  Y Y  \
-  |____| \___  >____  /__|_|  /
-             \/     \/      \/ 
-	_________                __                        
-	\_   ___ \_____  _______/  |_ __ _________   ____  
-	/    \  \/\__  \ \____ \   __\  |  \_  __ \_/ __ \ 
-	\     \____/ __ \|  |_> >  | |  |  /|  | \/\  ___/ 
-	 \______  (____  /   __/|__| |____/ |__|    \___  >
-	        \/     \/|__|                           \/ 
-";
-			Logger.Info(asciiArt);
-		}
-
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
 
 		[ConCommand("exception", "Manually causes an exception", CommandRunPermission.Both, 0, 1000)]
