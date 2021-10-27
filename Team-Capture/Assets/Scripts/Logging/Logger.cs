@@ -12,6 +12,7 @@ using Team_Capture.Console;
 using Team_Capture.Exceptions;
 using Team_Capture.Logging.Unity;
 using UnityEngine;
+using UnityEngine.Scripting;
 using ILogger = UnityEngine.ILogger;
 
 namespace Team_Capture.Logging
@@ -124,6 +125,7 @@ namespace Team_Capture.Logging
 			Application.quitting -= Shutdown;
 		}
 
+		[Preserve]
 		private static void DebugLogModeCallback()
 		{
 			level.MinimumLevel = DebugLogMode ? LogEventLevel.Debug : LogEventLevel.Information;
