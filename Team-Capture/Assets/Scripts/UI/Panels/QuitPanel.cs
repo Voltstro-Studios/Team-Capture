@@ -4,47 +4,46 @@
 // This project is governed by the AGPLv3 License.
 // For more details see the LICENSE file.
 
+using System;
 using System.IO;
 using Mirror;
+using Team_Capture.AddressablesAddons;
 using Team_Capture.Core;
 using TMPro;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using Random = UnityEngine.Random;
 
 namespace Team_Capture.UI.Panels
 {
 	internal class QuitPanel : PanelBase
 	{
-		/// <summary>
-		///     The location of where the quit messages are
-		/// </summary>
-		[Tooltip("The location of where the quit messages are")]
-		public string quitMessagesLocation = "Resources/quit-messages.txt";
-
+		public AssetReference quitMessagesAsset;
+		
 		/// <summary>
 		///     The text for where the quit messages will go
 		/// </summary>
 		[Tooltip("The text for where the quit messages will go")]
 		public TextMeshProUGUI quitSentenceText;
 
-		private string[] quitSentences;
+		private QuitMessages quitMessages;
 
 		private void Awake()
 		{
-			if (File.Exists($"{Game.GetGameExecutePath()}/{quitMessagesLocation}"))
-				quitSentences = File.ReadAllLines($"{Game.GetGameExecutePath()}/{quitMessagesLocation}");
+			quitMessages = quitMessagesAsset.LoadAssetAsync<QuitMessages>().WaitForCompletion();
 		}
 
 		public override void OnEnable()
 		{
 			base.OnEnable();
-
-			if (quitSentences != null)
+			
+			if (quitMessages != null)
 			{
-				quitSentenceText.text = quitSentences[Random.Range(0, quitSentences.Length)];
+				quitSentenceText.text = quitMessages.quitMessages[Random.Range(0, quitMessages.quitMessages.Length)];
 				return;
 			}
 
-			quitSentenceText.text = $"When you are missing {quitMessagesLocation}";
+			quitSentenceText.text = "When you are missing quit messages...";
 		}
 
 		/// <summary>

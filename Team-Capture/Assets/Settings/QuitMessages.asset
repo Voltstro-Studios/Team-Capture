@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef96ae768d7c460285a890a0cfb3959c, type: 3}
+  m_Name: QuitMessages
+  m_EditorClassIdentifier: 
+  quitMessages:
+  - Are you saying that desktop is better than me?
+  - Bruh, are you leaving?
+  - Shutting down, attempting shutdown!
+  - NOOOOOO
+  - How could you leave me?
+  - Off to kill myself! Watch and learn.
+  - There is another player around the corner!
+  - You cannot leave.
+  - Alt-F4 for faster performance.
+  - STOP, you violated the law!
