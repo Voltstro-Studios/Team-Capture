@@ -18,7 +18,7 @@ namespace Team_Capture.SceneManagement
 	/// <summary>
 	///     Represents a Team-Capture scene data
 	/// </summary>
-	[CreateAssetMenu(fileName = "New TC Scene", menuName = "Team Capture/TCScene")]
+	[CreateAssetMenu(fileName = "New TC Scene", menuName = "Team-Capture/TCScene")]
 	public class TCScene : ScriptableObject
 	{
 		/// <summary>

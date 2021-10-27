@@ -20,7 +20,7 @@ namespace Team_Capture.Input
 	/// <summary>
 	///		Handles reading inputs
 	/// </summary>
-	[CreateAssetMenu(fileName = "InputReader", menuName = "Team Capture/Input Reader")]
+	[CreateAssetMenu(fileName = "InputReader", menuName = "Team-Capture/Input Reader")]
     public class InputReader : ScriptableObject
     {
 	    private static GameInput gameInput;

@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace Team_Capture.Integrations.Discord
 {
-	[CreateAssetMenu(fileName = "Discord Settings", menuName = "Team Capture/Discord Settings")]
+	[CreateAssetMenu(fileName = "Discord Settings", menuName = "Team-Capture/Settings/Integrations/Discord Settings")]
 	internal class DiscordManagerSettings : ScriptableObject
 	{
 		/// <summary>

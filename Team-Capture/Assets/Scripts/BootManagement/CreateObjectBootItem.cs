@@ -11,7 +11,7 @@ namespace Team_Capture.BootManagement
 	/// <summary>
 	///		Creates an object on boot
 	/// </summary>
-	[CreateAssetMenu(fileName = "Create Object Boot Item", menuName = "BootManager/Create Object Boot Item")]
+	[CreateAssetMenu(fileName = "Create Object Boot Item", menuName = "Team-Capture/Boot Manager/Create Object Boot Item")]
     internal sealed class CreateObjectBootItem : BootItem
     {
 		/// <summary>

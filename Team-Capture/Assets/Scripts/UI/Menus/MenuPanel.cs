@@ -12,7 +12,7 @@ namespace Team_Capture.UI.Menus
 	/// <summary>
 	///     A panel for a main menu
 	/// </summary>
-	[CreateAssetMenu(fileName = "New Menu Panel", menuName = "Team Capture/MainMenuPanel")]
+	[CreateAssetMenu(fileName = "New Menu Panel", menuName = "Team-Capture/Menu Panel")]
 	internal class MenuPanel : ScriptableObject
 	{
 		/// <summary>

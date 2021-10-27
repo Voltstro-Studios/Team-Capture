@@ -11,7 +11,7 @@ namespace Team_Capture.Weapons
 	/// <summary>
 	///     A weapon for Team-Capture
 	/// </summary>
-	[CreateAssetMenu(fileName = "New TC Weapon", menuName = "Team Capture/TCWeapon")]
+	[CreateAssetMenu(fileName = "New TC Weapon", menuName = "Team-Capture/TCWeapon")]
 	public class TCWeapon : ScriptableObject
 	{
 		/// <summary>

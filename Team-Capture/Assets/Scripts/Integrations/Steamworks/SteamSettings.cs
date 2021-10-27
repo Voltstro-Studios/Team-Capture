@@ -13,7 +13,7 @@ using UnityEngine;
 
 namespace Team_Capture.Integrations.Steamworks
 {
-	[CreateAssetMenu(fileName = "Steam Settings", menuName = "Team Capture/Steam Settings")]
+	[CreateAssetMenu(fileName = "Steam Settings", menuName = "Team-Capture/Settings/Integrations/Steam Settings")]
 	internal class SteamSettings : ScriptableObject
 	{
 		/// <summary>

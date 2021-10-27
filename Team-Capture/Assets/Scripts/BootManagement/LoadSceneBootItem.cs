@@ -13,7 +13,7 @@ namespace Team_Capture.BootManagement
 	/// <summary>
 	///		Loads a scene on boot, this is generally the last thing you want to do
 	/// </summary>
-	[CreateAssetMenu(fileName = "Scene Boot Item", menuName = "BootManager/Scene Boot Item")]
+	[CreateAssetMenu(fileName = "Scene Boot Item", menuName = "Team-Capture/Boot Manager/Scene Boot Item")]
     internal sealed class LoadSceneBootItem : BootItem
     {
 		/// <summary>

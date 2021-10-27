@@ -11,7 +11,7 @@ namespace Team_Capture.Tweens
 	/// <summary>
 	///     A tween for a UI element
 	/// </summary>
-	[CreateAssetMenu(fileName = "UITweenEvent", menuName = "Tweening/UITweenEvent")]
+	[CreateAssetMenu(fileName = "UITweenEvent", menuName = "Team-Capture/Tweening/UITweenEvent")]
 	internal class UITweenEvent : TweenEvent
 	{
 		/// <summary>
