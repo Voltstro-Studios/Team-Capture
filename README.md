@@ -1,4 +1,4 @@
-![Logo](tc-banner.png)
+![Logo](media/tc-banner.png)
 
 # Team-Capture
 [![License](https://img.shields.io/github/license/Voltstro-Studios/Team-Capture.svg)](/LICENSE)

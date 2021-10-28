@@ -9,19 +9,19 @@
 Assets/AssetStoreTools*
 
 # Addressables
-Team-Capture/[Aa]ssets/AddressableAssetsData/*/*.bin*
-Team-Capture/[Aa]ssets/AddressableAssetsData/link.*
+src/Team-Capture/[Aa]ssets/AddressableAssetsData/*/*.bin*
+src/Team-Capture/[Aa]ssets/AddressableAssetsData/link.*
 
 # Temporary auto-generated Android Assets
-Team-Capture/[Aa]ssets/[Ss]treamingAssets/aa.meta
-Team-Capture/[Aa]ssets/[Ss]treamingAssets/aa/*
+src/Team-Capture/[Aa]ssets/[Ss]treamingAssets/aa.meta
+src/Team-Capture/[Aa]ssets/[Ss]treamingAssets/aa/*
 
 # TC Screenshots
-Team-Capture/Game/Screenshots/*
+src/Team-Capture/Game/Screenshots/*
 
 # Unity Build Report Inspector
-Team-Capture/Assets/BuildReports/*
-Team-Capture/Assets/BuildReports.meta
+src/Team-Capture/Assets/BuildReports/*
+src/Team-Capture/Assets/BuildReports.meta
 
 # Visual Studio cache directory
 .vs/
@@ -50,8 +50,8 @@ ExportedObj/
 *.mdb.meta
 
 # TC Plugin files that we want to keep
-!Team-Capture/Assets/Plugins/**/*.pdb
-!Team-Capture/Assets/Plugins/**/*.pdb.meta
+!src/Team-Capture/Assets/Plugins/**/*.pdb
+!src/Team-Capture/Assets/Plugins/**/*.pdb.meta
 
 # Unity3D Generated File On Crash Reports
 sysinfo.txt

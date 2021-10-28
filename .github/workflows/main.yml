@@ -18,7 +18,7 @@ jobs:
     strategy:
       matrix:
         projectPath:
-          - Team-Capture
+          - src/Team-Capture
         targetPlatform:
           - StandaloneWindows64
           - StandaloneLinux64
