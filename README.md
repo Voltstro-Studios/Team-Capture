@@ -80,7 +80,14 @@ We also upload [releases](https://github.com/Voltstro-Studios/Team-Capture/relea
 
 ```
 Unity 2021.2.0f1
+.NET 5+
 ```
+
+### Pre-Setup
+
+We first need to build Team-Capture's .NET Source generator, which as the name suggests is responsible for generating some TC specific code.
+
+Open up [`src/Team-Capture.sln`](src/Team-Capture/Team-Capture.sln) in your IDE of choice and build the solution. The generator will be copied to the correct location on successful build. You can close the solution now and continue on.
 
 #### Setup
 
@@ -88,7 +95,7 @@ Open up the project in Unity, and goto Tools **->** Volt Unity Builder **->** Vo
 
 <img src="media/VoltBuilderScreenshot.png" align="left"/>
 
-1. Get use to Volt Builder, you gonna need it. We suggest docking it somewhere for convenience.
+1. Get use to Volt Builder, you are gonna need it. We suggest docking it somewhere for convenience.
 
 2. Click 'Build Addressables'
 
