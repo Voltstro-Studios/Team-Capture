@@ -19,7 +19,8 @@ namespace Team_Capture.Integrations.Discord
     /// <summary>
     ///     Handles communicating with Discord's game SDK
     /// </summary>
-    internal class DiscordManager : SingletonMonoBehaviourSettings<DiscordManager, DiscordManagerSettings>
+    [CreateOnInit]
+    internal partial class DiscordManager : SingletonMonoBehaviourSettings<DiscordManager, DiscordManagerSettings>
     {
         private ActivityManager activityManager;
 
@@ -30,16 +31,6 @@ namespace Team_Capture.Integrations.Discord
         private void Update()
         {
             client?.RunCallbacks();
-        }
-
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-        private static void Init()
-        {
-            if (Game.IsHeadless)
-                return;
-
-            GameObject go = new("DiscordManager");
-            go.AddComponent<DiscordManager>();
         }
 
         protected override void SingletonStarted()

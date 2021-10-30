@@ -7,11 +7,13 @@
 using System;
 using UnityEngine;
 using UnityEngine.Scripting;
+using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.Core
 {
     [Preserve]
-    public class FixedUpdateManager : MonoBehaviour
+    [CreateOnInit(CallOnInit = nameof(OnInit))]
+    public partial class FixedUpdateManager : MonoBehaviour
     {
         /// <summary>
         ///     Maximum percentage timing may vary from the FixedDeltaTime.
@@ -52,7 +54,7 @@ namespace Team_Capture.Core
         ///     Current fixed frame. Applied before any events are invoked.
         /// </summary>
         public static uint FixedFrame { get; private set; }
-
+        
         private void Update()
         {
             UpdateTicks(Time.deltaTime);
@@ -73,13 +75,8 @@ namespace Team_Capture.Core
         /// </summary>
         public static event Action OnPostFixedUpdate;
 
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-        private static void Init()
+        private static void OnInit()
         {
-            GameObject go = new("Fixed Update Manager");
-            go.AddComponent<FixedUpdateManager>();
-            DontDestroyOnLoad(go);
-
             Physics.autoSimulation = false;
             Physics2D.simulationMode = SimulationMode2D.Script;
 
@@ -90,6 +87,7 @@ namespace Team_Capture.Core
                 Time.fixedDeltaTime * (1f - MAXIMUM_OFFSET_PERCENT),
                 Time.fixedDeltaTime * (1f + MAXIMUM_OFFSET_PERCENT)
             };
+            Logger.Debug("Init fixed update manager.");
         }
 
         /// <summary>

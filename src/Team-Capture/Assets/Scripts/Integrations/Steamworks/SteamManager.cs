@@ -16,7 +16,8 @@ namespace Team_Capture.Integrations.Steamworks
 	/// <summary>
 	///     Handles connecting to Steam
 	/// </summary>
-	internal class SteamManager : SingletonMonoBehaviourSettings<SteamManager, SteamSettings>
+	[CreateOnInit]
+    internal partial class SteamManager : SingletonMonoBehaviourSettings<SteamManager, SteamSettings>
     {
         protected override string SettingsPath => "Assets/Settings/Integrations/SteamSettings.asset";
 
@@ -25,13 +26,6 @@ namespace Team_Capture.Integrations.Steamworks
         private void Update()
         {
             SteamClient.RunCallbacks();
-        }
-
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-        private static void Init()
-        {
-            GameObject go = new("SteamManager");
-            go.AddComponent<SteamManager>();
         }
 
         protected override void SingletonStarted()
