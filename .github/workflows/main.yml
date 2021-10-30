@@ -30,6 +30,10 @@ jobs:
         with:
           lfs: true
 
+      #Build external solution
+      - name: Build External Solution
+        run: dotnet build src/Team-Capture.sln -c Release
+
       #Setup cache, Unity without it's Library cache is really slow
       - name: Cache for ${{ matrix.targetPlatform }}
         uses: actions/cache@v2.1.6
