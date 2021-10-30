@@ -32,7 +32,7 @@ jobs:
 
       #Build external solution
       - name: Build External Solution
-        run: dotnet build src/Team-Capture.sln -c Release
+        run: dotnet build src/Team-Capture.Generator/Team-Capture.Generator.csproj -c Release
 
       #Setup cache, Unity without it's Library cache is really slow
       - name: Cache for ${{ matrix.targetPlatform }}
