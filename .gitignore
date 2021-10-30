@@ -23,6 +23,8 @@ src/Team-Capture/Game/Screenshots/*
 src/Team-Capture/Assets/BuildReports/*
 src/Team-Capture/Assets/BuildReports.meta
 
+bin/
+
 # Visual Studio cache directory
 .vs/
 
