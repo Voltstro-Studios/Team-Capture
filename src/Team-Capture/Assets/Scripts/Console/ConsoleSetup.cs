@@ -6,6 +6,7 @@
 
 using Team_Capture.Core;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.Console
@@ -13,12 +14,14 @@ namespace Team_Capture.Console
     /// <summary>
     ///     Sets up what console to use (if it is in-game GUI, or a terminal)
     /// </summary>
-    internal class ConsoleSetup : MonoBehaviour
+    [CreateOnInit]
+    internal partial class ConsoleSetup : MonoBehaviour
     {
+        private const string ConsoleUiPrefabPath = "Assets/Prefabs/UI/ConsoleGUI.prefab";
+        
         internal static IConsoleUI ConsoleUI;
-        [SerializeField] private GameObject consoleUiPrefab;
 
-        public void Awake()
+        private void Start()
         {
             if (ConsoleUI != null)
             {
@@ -26,8 +29,6 @@ namespace Team_Capture.Console
                 Logger.Warn("You should only ever load this script on a bootloader scene!");
                 return;
             }
-
-            DontDestroyOnLoad(gameObject);
 
             //If we are headless we need to create a console UI using the OS's terminal
             //I really which Unity would have this included...
@@ -43,6 +44,9 @@ namespace Team_Capture.Console
             }
             else
             {
+                GameObject consoleUiPrefab =
+                    Addressables.LoadAssetAsync<GameObject>(ConsoleUiPrefabPath).WaitForCompletion();
+                
                 //Create in-game console GUI
                 ConsoleUI = Instantiate(consoleUiPrefab, transform).GetComponent<ConsoleGUI>();
             }

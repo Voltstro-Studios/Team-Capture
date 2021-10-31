@@ -77,6 +77,10 @@ MonoBehaviour:
     m_Address: Assets/Settings/QuitMessages.asset
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: 5f6ed9e4996ff504e845787b05563f99
+    m_Address: Assets/Prefabs/UI/ConsoleGUI.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 31dc88cf5cd9dc44ead1cd2deab1bc53, type: 2}
   m_SchemaSet:

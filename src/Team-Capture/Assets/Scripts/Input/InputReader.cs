@@ -24,7 +24,7 @@ namespace Team_Capture.Input
     {
         private static GameInput gameInput;
 
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         private static void Init()
         {
             if (gameInput == null)
