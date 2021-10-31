@@ -20,12 +20,12 @@ namespace Team_Capture.Input
     /// <summary>
     ///     Handles reading inputs
     /// </summary>
-    [CreateAssetMenu(fileName = "InputReader", menuName = "Team-Capture/Input Reader")]
-    public class InputReader : ScriptableObject
+    public static class InputReader
     {
         private static GameInput gameInput;
 
-        public void OnEnable()
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+        private static void Init()
         {
             if (gameInput == null)
             {
@@ -64,7 +64,7 @@ namespace Team_Capture.Input
             }
         }
 
-        public void ShutdownInput()
+        private static void ShutdownInput()
         {
             gameInput.Disable();
 
@@ -104,43 +104,43 @@ namespace Team_Capture.Input
 
         #region Console
 
-        public event Action ConsoleToggle;
-        public event Action ConsoleAutoComplete;
-        public event Action ConsoleHistoryUp;
-        public event Action ConsoleHistoryDown;
-        public event Action ConsoleSubmitInput;
+        public static event Action ConsoleToggle;
+        public static event Action ConsoleAutoComplete;
+        public static event Action ConsoleHistoryUp;
+        public static event Action ConsoleHistoryDown;
+        public static event Action ConsoleSubmitInput;
 
-        private void OnToggleConsole(InputAction.CallbackContext context)
+        private static void OnToggleConsole(InputAction.CallbackContext context)
         {
             ConsoleToggle?.Invoke();
         }
 
-        private void OnAutoComplete(InputAction.CallbackContext context)
+        private static void OnAutoComplete(InputAction.CallbackContext context)
         {
             ConsoleAutoComplete?.Invoke();
         }
 
-        private void OnHistoryUp(InputAction.CallbackContext context)
+        private static void OnHistoryUp(InputAction.CallbackContext context)
         {
             ConsoleHistoryUp?.Invoke();
         }
 
-        private void OnHistoryDown(InputAction.CallbackContext context)
+        private static void OnHistoryDown(InputAction.CallbackContext context)
         {
             ConsoleHistoryDown?.Invoke();
         }
 
-        private void OnSubmitInput(InputAction.CallbackContext context)
+        private static void OnSubmitInput(InputAction.CallbackContext context)
         {
             ConsoleSubmitInput?.Invoke();
         }
 
-        public void EnableConsoleInput()
+        public static void EnableConsoleInput()
         {
             gameInput.Console.Enable();
         }
 
-        public void DisableConsoleInput()
+        public static void DisableConsoleInput()
         {
             gameInput.Console.Disable();
         }
@@ -149,19 +149,19 @@ namespace Team_Capture.Input
 
         #region MenuController
 
-        public event Action MenuClose;
+        public static event Action MenuClose;
 
-        private void OnMenuClose(InputAction.CallbackContext context)
+        private static void OnMenuClose(InputAction.CallbackContext context)
         {
             MenuClose?.Invoke();
         }
 
-        public void EnableMenuControllerInput()
+        public static void EnableMenuControllerInput()
         {
             gameInput.MenuController.Enable();
         }
 
-        public void DisableMenuControllerInput()
+        public static void DisableMenuControllerInput()
         {
             gameInput.MenuController.Disable();
         }
@@ -170,19 +170,19 @@ namespace Team_Capture.Input
 
         #region StartVideo
 
-        public event Action StartVideoSkip;
+        public static event Action StartVideoSkip;
 
-        private void OnStartVideoSkip(InputAction.CallbackContext context)
+        private static void OnStartVideoSkip(InputAction.CallbackContext context)
         {
             StartVideoSkip?.Invoke();
         }
 
-        public void EnableStartVideoInput()
+        public static void EnableStartVideoInput()
         {
             gameInput.StartVideo.Enable();
         }
 
-        public void DisableStartVideoInput()
+        public static void DisableStartVideoInput()
         {
             gameInput.StartVideo.Disable();
         }
@@ -191,19 +191,19 @@ namespace Team_Capture.Input
 
         #region DebugMenu
 
-        public event Action DebugMenuToggle;
+        public static event Action DebugMenuToggle;
 
-        private void OnDebugMenuToggle(InputAction.CallbackContext context)
+        private static void OnDebugMenuToggle(InputAction.CallbackContext context)
         {
             DebugMenuToggle?.Invoke();
         }
 
-        public void EnableDebugMenuInput()
+        public static void EnableDebugMenuInput()
         {
             gameInput.DebugMenu.Enable();
         }
 
-        public void DisableDebugMenuInput()
+        public static void DisableDebugMenuInput()
         {
             gameInput.DebugMenu.Disable();
         }
@@ -212,65 +212,65 @@ namespace Team_Capture.Input
 
         #region Player
 
-        public event Action PlayerScoreboard;
-        public event Action PlayerSuicide;
-        public event Action<bool> PlayerJump;
-        public event Action PlayerPause;
-        public event Action<float> PlayerWeaponSelection;
-        public event Action<bool> PlayerWeaponShoot;
-        public event Action PlayerWeaponReload;
+        public static event Action PlayerScoreboard;
+        public static event Action PlayerSuicide;
+        public static event Action<bool> PlayerJump;
+        public static event Action PlayerPause;
+        public static event Action<float> PlayerWeaponSelection;
+        public static event Action<bool> PlayerWeaponShoot;
+        public static event Action PlayerWeaponReload;
 
-        private void OnPlayerScoreBoard(InputAction.CallbackContext context)
+        private static void OnPlayerScoreBoard(InputAction.CallbackContext context)
         {
             PlayerScoreboard?.Invoke();
         }
 
-        private void OnPlayerSuicide(InputAction.CallbackContext context)
+        private static void OnPlayerSuicide(InputAction.CallbackContext context)
         {
             PlayerSuicide?.Invoke();
         }
 
-        private void OnPlayerJump(InputAction.CallbackContext context)
+        private static void OnPlayerJump(InputAction.CallbackContext context)
         {
             PlayerJump?.Invoke(context.ReadValueAsButton());
         }
 
-        private void OnPlayerPause(InputAction.CallbackContext context)
+        private static void OnPlayerPause(InputAction.CallbackContext context)
         {
             PlayerPause?.Invoke();
         }
 
-        public Vector2 ReadPlayerMove()
+        public static Vector2 ReadPlayerMove()
         {
             return gameInput.Player.Move.ReadValue<Vector2>();
         }
 
-        public Vector2 ReadPlayerLook()
+        public static Vector2 ReadPlayerLook()
         {
             return gameInput.Player.Look.ReadValue<Vector2>();
         }
 
-        private void OnPlayerWeaponSelection(InputAction.CallbackContext context)
+        private static void OnPlayerWeaponSelection(InputAction.CallbackContext context)
         {
             PlayerWeaponSelection?.Invoke(context.ReadValue<float>());
         }
 
-        private void OnPlayerWeaponShoot(InputAction.CallbackContext context)
+        private static void OnPlayerWeaponShoot(InputAction.CallbackContext context)
         {
             PlayerWeaponShoot?.Invoke(context.ReadValueAsButton());
         }
 
-        private void OnPlayerReloadWeapon(InputAction.CallbackContext context)
+        private static void OnPlayerReloadWeapon(InputAction.CallbackContext context)
         {
             PlayerWeaponReload?.Invoke();
         }
 
-        public void EnablePlayerInput()
+        public static void EnablePlayerInput()
         {
             gameInput.Player.Enable();
         }
 
-        public void DisablePlayerInput()
+        public static void DisablePlayerInput()
         {
             gameInput.Player.Disable();
         }
@@ -279,17 +279,17 @@ namespace Team_Capture.Input
 
         #region Player Death Cam
 
-        public Vector2 ReadPlayerDeathCamLook()
+        public static Vector2 ReadPlayerDeathCamLook()
         {
             return gameInput.PlayerDeathCam.Look.ReadValue<Vector2>();
         }
 
-        public void EnablePlayerDeathCamInput()
+        public static void EnablePlayerDeathCamInput()
         {
             gameInput.PlayerDeathCam.Enable();
         }
 
-        public void DisablePlayerDeathCamInput()
+        public static void DisablePlayerDeathCamInput()
         {
             gameInput.PlayerDeathCam.Disable();
         }
@@ -298,25 +298,25 @@ namespace Team_Capture.Input
 
         #region Chat
 
-        public event Action ChatToggle;
-        public event Action ChatSubmit;
+        public static event Action ChatToggle;
+        public static event Action ChatSubmit;
 
-        private void OnChatToggle(InputAction.CallbackContext context)
+        private static void OnChatToggle(InputAction.CallbackContext context)
         {
             ChatToggle?.Invoke();
         }
 
-        private void OnChatSubmit(InputAction.CallbackContext context)
+        private static void OnChatSubmit(InputAction.CallbackContext context)
         {
             ChatSubmit?.Invoke();
         }
 
-        public void EnableChatInput()
+        public static void EnableChatInput()
         {
             gameInput.Chat.Enable();
         }
 
-        public void DisableChatInput()
+        public static void DisableChatInput()
         {
             gameInput.Chat.Disable();
         }

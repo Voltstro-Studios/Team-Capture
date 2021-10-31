@@ -23,7 +23,9 @@ namespace Team_Capture.Console
 
         internal ConsoleLinux(string consoleTitle)
         {
+#if !DEVELOPMENT_BUILD
             Debug.unityLogger.logEnabled = false;
+#endif
             this.consoleTitle = consoleTitle;
         }
 

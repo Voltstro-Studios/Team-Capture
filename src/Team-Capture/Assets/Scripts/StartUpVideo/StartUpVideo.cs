@@ -24,11 +24,6 @@ namespace Team_Capture.StartUpVideo
         private static bool skipVideo;
 
         /// <summary>
-        ///     Handles reading inputs
-        /// </summary>
-        public InputReader inputReader;
-
-        /// <summary>
         ///     Video clip to play
         /// </summary>
         [Tooltip("Video clip to play")] public AssetReference startUpVideoClip;
@@ -55,8 +50,8 @@ namespace Team_Capture.StartUpVideo
 
             videoClip = startUpVideoClip.LoadAssetAsync<VideoClip>().WaitForCompletion();
 
-            inputReader.StartVideoSkip += SkipStartVideo;
-            inputReader.EnableStartVideoInput();
+            InputReader.StartVideoSkip += SkipStartVideo;
+            InputReader.EnableStartVideoInput();
             Play();
         }
 
@@ -74,8 +69,8 @@ namespace Team_Capture.StartUpVideo
 
         private void SkipStartVideo()
         {
-            inputReader.DisableStartVideoInput();
-            inputReader.StartVideoSkip -= SkipStartVideo;
+            InputReader.DisableStartVideoInput();
+            InputReader.StartVideoSkip -= SkipStartVideo;
 
             startUpVideo.Pause();
             ChangeScene();

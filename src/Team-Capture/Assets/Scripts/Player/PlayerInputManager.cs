@@ -28,8 +28,7 @@ namespace Team_Capture.Player
         [SerializeField] private float yMouseSensitivity = 100.0f;
 
         [SerializeField] private bool reverseMouse;
-
-        [NonSerialized] public InputReader InputReader;
+        
         private PlayerMovementManager playerInput;
         private PlayerManager playerManager;
         private PlayerUIManager uiManager;
@@ -119,10 +118,8 @@ namespace Team_Capture.Player
             InputReader.ChatToggle -= OnChatToggle;
         }
 
-        public void Setup(InputReader reader)
+        public void Setup()
         {
-            InputReader = reader;
-
             //Setup player input
             InputReader.PlayerScoreboard += OnPlayerScoreBoard;
             InputReader.PlayerSuicide += OnPlayerSuicidePress;

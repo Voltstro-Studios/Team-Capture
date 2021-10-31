@@ -31,7 +31,6 @@ namespace Team_Capture.Console
         [SerializeField] private TextMeshProUGUI consoleTextArea;
         [SerializeField] private ScrollRect consoleScrollRect;
         [SerializeField] private GameObject consolePanel;
-        [SerializeField] private InputReader inputReader;
 
         private readonly List<string> lines = new();
         private float defaultFontSize;
@@ -45,22 +44,24 @@ namespace Team_Capture.Console
 
             Logger.Info("Console in-game GUI ready!");
 
-            inputReader.ConsoleToggle += ToggleConsole;
-            inputReader.ConsoleAutoComplete += AutoCompleteConsole;
-            inputReader.ConsoleHistoryUp += HistoryUp;
-            inputReader.ConsoleHistoryDown += HistoryDown;
-            inputReader.ConsoleSubmitInput += SubmitInput;
+            InputReader.ConsoleToggle += ToggleConsole;
+            InputReader.ConsoleAutoComplete += AutoCompleteConsole;
+            InputReader.ConsoleHistoryUp += HistoryUp;
+            InputReader.ConsoleHistoryDown += HistoryDown;
+            InputReader.ConsoleSubmitInput += SubmitInput;
 
-            inputReader.EnableConsoleInput();
+            InputReader.EnableConsoleInput();
         }
 
         public void Shutdown()
         {
-            inputReader.ConsoleToggle -= ToggleConsole;
-            inputReader.ConsoleAutoComplete -= AutoCompleteConsole;
-            inputReader.ConsoleHistoryUp -= HistoryUp;
-            inputReader.ConsoleHistoryDown -= HistoryDown;
-            inputReader.ConsoleSubmitInput -= SubmitInput;
+            InputReader.DisableConsoleInput();
+            
+            InputReader.ConsoleToggle -= ToggleConsole;
+            InputReader.ConsoleAutoComplete -= AutoCompleteConsole;
+            InputReader.ConsoleHistoryUp -= HistoryUp;
+            InputReader.ConsoleHistoryDown -= HistoryDown;
+            InputReader.ConsoleSubmitInput -= SubmitInput;
         }
 
         public void UpdateConsole()

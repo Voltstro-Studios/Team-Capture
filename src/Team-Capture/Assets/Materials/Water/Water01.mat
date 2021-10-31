@@ -58,6 +58,8 @@ Material:
     - _Depth: 0.63
     - _Displacement: 0.15
     - _NormalStength: 0.25
+    - _QueueControl: 0
+    - _QueueOffset: 0
     - _Smoothness: 1
     - _Strength: 1.02
     m_Colors:

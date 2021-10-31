@@ -31,11 +31,6 @@ namespace Team_Capture.UI
         public static bool DebugMenuOpen;
 
         /// <summary>
-        ///     Reads input
-        /// </summary>
-        public InputReader inputReader;
-
-        /// <summary>
         ///     Icon texture
         /// </summary>
         public Texture iconTexture;
@@ -114,6 +109,8 @@ namespace Team_Capture.UI
 
         private void OnDisable()
         {
+            InputReader.DisableDebugMenuInput();
+            
             mainThreadRecorder.Dispose();
             totalMemoryUsedRecorder.Dispose();
             gcReservedMemoryRecorder.Dispose();
@@ -178,8 +175,8 @@ namespace Team_Capture.UI
             renderingApi = $"Rendering API: {SystemInfo.graphicsDeviceType}";
             ipAddress = $"IP: {NetHelper.LocalIpAddress()}";
 
-            inputReader.DebugMenuToggle += () => DebugMenuOpen = !DebugMenuOpen;
-            inputReader.EnableDebugMenuInput();
+            InputReader.DebugMenuToggle += () => DebugMenuOpen = !DebugMenuOpen;
+            InputReader.EnableDebugMenuInput();
         }
 
         private string GetNetworkingStatus()

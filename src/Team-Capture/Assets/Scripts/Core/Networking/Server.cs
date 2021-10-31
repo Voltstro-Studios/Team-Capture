@@ -109,7 +109,10 @@ namespace Team_Capture.Core.Networking
             //Get the online scene
             TCScene onlineScene = TCScenesManager.FindSceneInfo(Scene);
             if (onlineScene == null)
+            {
+                Logger.Error($"Failed to find scene {Scene}!");
                 throw new FileNotFoundException($"Scene {Scene} not found!");
+            }
 
             //Setup the server's config
             SetupServerConfig();
@@ -118,7 +121,7 @@ namespace Team_Capture.Core.Networking
             if (Game.IsHeadless)
             {
                 netManager.offlineScene = null;
-                netManager.onlineScene = Scene;
+                netManager.onlineScene = onlineScene.scene;
                 TCScenesManager.LoadScene(onlineScene);
             }
 
@@ -417,6 +420,11 @@ namespace Team_Capture.Core.Networking
         private static void WriteDefaultMotd(string motdPath)
         {
             Logger.Warn("Created new default MOTD.");
+
+            string directory = Path.GetDirectoryName(motdPath);
+            if (!Directory.Exists(directory))
+                Directory.CreateDirectory(directory);
+            
             File.WriteAllText(motdPath, MotdDefaultText);
         }
 
@@ -503,7 +511,7 @@ namespace Team_Capture.Core.Networking
                 return;
             }
 
-            Scene = tcScene.scene;
+            Scene = tcScene.SceneFileName;
             networkManager.onlineScene = tcScene.scene;
 
             networkManager.StartServer();

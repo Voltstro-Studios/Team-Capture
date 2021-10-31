@@ -18,12 +18,6 @@ namespace Team_Capture.Player
     /// </summary>
     internal sealed class PlayerSetup : NetworkBehaviour
     {
-	    /// <summary>
-	    ///     Handles reading inputs
-	    /// </summary>
-	    [Tooltip("Handles reading inputs")] [SerializeField]
-        private InputReader inputReader;
-
         /// <summary>
         ///     Player's local <see cref="Camera" />
         /// </summary>
@@ -60,20 +54,11 @@ namespace Team_Capture.Player
             playerVCam.enabled = true;
 
             //Player Input
-            gameObject.AddComponent<PlayerInputManager>().Setup(inputReader);
+            gameObject.AddComponent<PlayerInputManager>().Setup();
 
             //Lock the cursor
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
-        }
-
-        /// <summary>
-        ///     Gets the input reader
-        /// </summary>
-        /// <returns></returns>
-        public InputReader GetInputReader()
-        {
-            return inputReader;
         }
 
         #region Unity Methods

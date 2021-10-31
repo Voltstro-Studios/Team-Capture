@@ -55,11 +55,6 @@ namespace Team_Capture.UI.Menus
         /// </summary>
         [Tooltip("The bottom button prefab")] public GameObject bottomButtonPrefab;
 
-        /// <summary>
-        ///     Handles reading input
-        /// </summary>
-        public InputReader inputReader;
-
         private readonly Dictionary<MenuPanel, GameObject> activeMenuPanels = new();
 
         [NonSerialized] public bool allowPanelToggling = true;
@@ -74,8 +69,8 @@ namespace Team_Capture.UI.Menus
 
         private void OnEnable()
         {
-            inputReader.MenuClose += CloseActivePanel;
-            inputReader.EnableMenuControllerInput();
+            InputReader.MenuClose += CloseActivePanel;
+            InputReader.EnableMenuControllerInput();
 
             tweeningManager.GetTweenObject("TopNavBar").PlayAllEvents();
             tweeningManager.GetTweenObject("BottomNavBar").PlayAllEvents();
@@ -83,8 +78,8 @@ namespace Team_Capture.UI.Menus
 
         private void OnDisable()
         {
-            inputReader.MenuClose -= CloseActivePanel;
-            inputReader.DisableMenuControllerInput();
+            InputReader.MenuClose -= CloseActivePanel;
+            InputReader.DisableMenuControllerInput();
         }
 
         private void OnDestroy()

@@ -7,7 +7,6 @@ namespace Team_Capture.Player
     [RequireComponent(typeof(CinemachineVirtualCamera))]
     internal class PlayerDeathCam : MonoBehaviour
     {
-        [SerializeField] private InputReader inputReader;
         [SerializeField] private float lookSensitivity = 100f;
         private PlayerManager playerManager;
 
@@ -31,7 +30,7 @@ namespace Team_Capture.Player
                 return;
             }
 
-            Vector2 look = inputReader.ReadPlayerDeathCamLook() * Time.deltaTime * lookSensitivity;
+            Vector2 look = InputReader.ReadPlayerDeathCamLook() * Time.deltaTime * lookSensitivity;
             rotationX -= look.y;
             rotationY += look.x;
 
@@ -42,14 +41,14 @@ namespace Team_Capture.Player
 
         private void OnEnable()
         {
-            inputReader.EnablePlayerDeathCamInput();
+            InputReader.EnablePlayerDeathCamInput();
         }
 
         private void OnDisable()
         {
             rotationX = 0;
             rotationY = 0;
-            inputReader.DisablePlayerDeathCamInput();
+            InputReader.DisablePlayerDeathCamInput();
         }
 
         internal void StartTrackingPlayer(PlayerManager playerToTrack)
