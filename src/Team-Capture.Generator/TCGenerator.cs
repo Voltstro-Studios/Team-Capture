@@ -68,6 +68,12 @@ namespace Team_Capture.Generator
                 
                 TypedConstant loadTypeData =
                     attributeData.NamedArguments.SingleOrDefault(kvp => kvp.Key == "LoadType").Value;
+
+                TypedConstant objectNameOverride = attributeData.NamedArguments
+                    .SingleOrDefault(kvp => kvp.Key == "ObjectNameOverride").Value;
+                string objectName = classSymbol.Name;
+                if (!objectNameOverride.IsNull)
+                    objectName = objectNameOverride.Value.ToString();
                 
                 //Generate code
                 string code = "using UnityEngine;\n" +
@@ -90,7 +96,7 @@ namespace Team_Capture.Generator
                 code += ")]\n" +
                             "private static void Init()\n" +
                             "{\n" +
-                            $"   GameObject go = new(\"{classSymbol.Name}\");\n" +
+                            $"   GameObject go = new(\"{objectName}\");\n" +
                             $"   go.AddComponent<{classSymbol.Name}>();" +
                             "   DontDestroyOnLoad(go);\n";
 

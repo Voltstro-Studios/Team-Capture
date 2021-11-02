@@ -27,12 +27,6 @@ namespace Team_Capture.Settings.Controllers
 
         protected override void SingletonAwakened()
         {
-            if (Game.IsHeadless || Game.IsGameQuitting)
-            {
-                Destroy(gameObject);
-                return;
-            }
-
             ActiveVolume = GetComponent<Volume>();
 
             GameSettings.SettingsUpdated += ApplyVolumeSettings;

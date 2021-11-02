@@ -17,6 +17,7 @@ namespace Team_Capture
     internal class CreateOnInit : Attribute
     {
         public string CallOnInit { get; set; }
+        public string ObjectNameOverride { get; set; }
         public RuntimeInitializeLoadType LoadType { get; set; }
     }
 }

@@ -14,7 +14,7 @@ namespace Team_Capture.Console
     /// <summary>
     ///     Sets up what console to use (if it is in-game GUI, or a terminal)
     /// </summary>
-    [CreateOnInit]
+    [CreateOnInit(ObjectNameOverride = "Console")]
     internal partial class ConsoleSetup : MonoBehaviour
     {
         private const string ConsoleUiPrefabPath = "Assets/Prefabs/UI/ConsoleGUI.prefab";
