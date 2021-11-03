@@ -22,7 +22,7 @@ namespace Team_Capture.Settings
                 Destroy(gameObject);
                 return;
             }
-            
+
             Volume newVolume = gameObject.AddComponent<Volume>();
             VolumeProfile defaultProfile = Addressables.LoadAssetAsync<VolumeProfile>(DefaultVolumeProfilePath)
                 .WaitForCompletion();

@@ -4,18 +4,22 @@
         <TargetFramework>netstandard2.0</TargetFramework>
         <RootNamespace>Team_Capture.Generator</RootNamespace>
         <Version>1.0.0</Version>
+        <PackageScribanIncludeSource>true</PackageScribanIncludeSource>
+        <LangVersion>9</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.9.0" PrivateAssets="all" />
         <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.2">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.9.0" PrivateAssets="all"/>
+        <PackageReference Include="Scriban" Version="5.0.0" IncludeAssets="Build" />
     </ItemGroup>
 
     <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-        <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFiles="../Team-Capture/Assets/Editor/Plugins/$(AssemblyName).dll"/>
+        <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFiles="../Team-Capture/Assets/Editor/Plugins/$(AssemblyName).dll" />
     </Target>
 
 </Project>
