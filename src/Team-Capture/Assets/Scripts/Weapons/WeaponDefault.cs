@@ -23,24 +23,61 @@ using Random = UnityEngine.Random;
 
 namespace Team_Capture.Weapons
 {
+    /// <summary>
+    ///     A simple type of weapon that uses ray casting to know who it hits
+    /// </summary>
     [CreateAssetMenu(fileName = "New Default Type Weapon", menuName = "Team-Capture/Weapons/Default (Raycast)")]
     public class WeaponDefault : WeaponBase
     {
+        /// <summary>
+        ///     How much damage the weapon does
+        /// </summary>
+        [Tooltip("How much damage the weapon does")]
         public int weaponDamage = 15;
 
+        /// <summary>
+        ///     The fire rate of the weapon
+        /// </summary>
+        [Tooltip("The fire rate of the weapon")]
         public float weaponFireRate = 10;
         
         //TODO: Lets remove range and add damage dropoff
         public int range = 50;
 
+        /// <summary>
+        ///     How many bullets to do when the weapon is shot
+        /// </summary>
+        [Tooltip("How many bullets to do when the weapon is shot")]
         public int bulletsPerShot = 1;
         
+        /// <summary>
+        ///     The max amount of bullets to hold
+        /// </summary>
+        [Tooltip("The max amount of bullets to hold")]
         public int maxBullets = 16;
 
+        /// <summary>
+        ///     The weapon's spread factor
+        /// </summary>
+        [Tooltip("The weapon's spread factor")]
         public float spreadFactor = 0.05f;
+        
+        /// <summary>
+        ///     The <see cref="WeaponFireMode"/>
+        /// </summary>
+        [Tooltip("The weapon's fire mode")]
         public WeaponFireMode weaponFireMode;
 
+        /// <summary>
+        ///     How long it takes for the weapon to reload (in milliseconds)
+        /// </summary>
+        [Tooltip("How long it takes for the weapon to reload (in milliseconds)")]
         public int weaponReloadTime = 2000;
+        
+        /// <summary>
+        ///     What the weapon's <see cref="WeaponReloadMode"/> is
+        /// </summary>
+        [Tooltip("What the weapon's reload mode is")]
         public WeaponReloadMode weaponReloadMode;
 
         private int currentBulletCount;
@@ -77,44 +114,7 @@ namespace Team_Capture.Weapons
                 }
             }
         }
-
-        private void ShootWeapon()
-        {
-            //We out of bullets, reload
-            if (currentBulletCount <= 0)
-            {
-                if(isReloading)
-                    return;
-                
-                OnReload();
-                return;
-            }
-
-            if(Time.time < nextTimeToFire)
-                return;
-            
-            if (isReloading)
-            {
-                if(currentBulletCount <= 0)
-                    return;
-                
-                CancelReload();
-            }
-
-            nextTimeToFire = Time.time + 1f / weaponFireRate;
-            currentBulletCount--;
-            try
-            {
-                SimulationHelper.SimulateCommand(weaponManager.playerManager, WeaponRayCast);
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex, "Error occured while simulating weapon shooting!");
-            }
-            
-            UpdateUI();
-        }
-
+        
         public override void OnReload()
         {
             if(isReloading)
@@ -126,59 +126,6 @@ namespace Team_Capture.Weapons
             isReloading = true;
             reloadCancellation = new CancellationTokenSource();
             ReloadTask().Forget();
-        }
-        
-        private void CancelReload()
-        {
-            isReloading = false;
-
-            if (reloadCancellation is {IsCancellationRequested: false})
-            {
-                reloadCancellation.Cancel();
-                reloadCancellation.Dispose();
-                reloadCancellation = null;
-            }
-        }
-
-        private async UniTask ReloadTask()
-        {
-            Logger.Debug("Reloading player's weapon.");
-            UpdateUI();
-
-            switch (weaponReloadMode)
-            {
-                case WeaponReloadMode.Clip:
-                    await UniTask.Delay(weaponReloadTime, cancellationToken: reloadCancellation.Token);
-
-                    currentBulletCount = maxBullets;
-                    FinishReload();
-                    break;
-                case WeaponReloadMode.Shells:
-                    await TimeHelper.CountUp(
-                        maxBullets - currentBulletCount, weaponReloadTime, tick =>
-                        {
-                            //Backup
-                            if (currentBulletCount == maxBullets)
-                                return;
-
-                            //Increase bullets
-                            currentBulletCount++;
-                            UpdateUI();
-                        }, reloadCancellation.Token);
-                    
-                    FinishReload();
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-        }
-
-        private void FinishReload()
-        {
-            isReloading = false;
-            UpdateUI();
-            reloadCancellation.Dispose();
-            reloadCancellation = null;
         }
 
         public override void OnWeaponEffects(IEffectsMessage effectsMessage)
@@ -259,6 +206,46 @@ namespace Team_Capture.Weapons
             CancelReload();
         }
 
+        #region Weapon Shooting
+
+        [Server]
+        private void ShootWeapon()
+        {
+            //We out of bullets, reload
+            if (currentBulletCount <= 0)
+            {
+                if(isReloading)
+                    return;
+                
+                OnReload();
+                return;
+            }
+
+            if(Time.time < nextTimeToFire)
+                return;
+            
+            if (isReloading)
+            {
+                if(currentBulletCount <= 0)
+                    return;
+                
+                CancelReload();
+            }
+
+            nextTimeToFire = Time.time + 1f / weaponFireRate;
+            currentBulletCount--;
+            try
+            {
+                SimulationHelper.SimulateCommand(weaponManager.playerManager, WeaponRayCast);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex, "Error occured while simulating weapon shooting!");
+            }
+            
+            UpdateUI();
+        }
+
         [Server]
         private void WeaponRayCast()
         {
@@ -304,7 +291,70 @@ namespace Team_Capture.Weapons
             stopwatch.Stop();
             Logger.Debug("Took {Milliseconds} to fire weapon.", stopwatch.Elapsed.TotalMilliseconds);
         }
+        
+        #endregion
 
+        #region Weapon Reloading
+        
+        [Server]
+        private async UniTask ReloadTask()
+        {
+            Logger.Debug("Reloading player's weapon.");
+            UpdateUI();
+
+            switch (weaponReloadMode)
+            {
+                case WeaponReloadMode.Clip:
+                    await UniTask.Delay(weaponReloadTime, cancellationToken: reloadCancellation.Token);
+
+                    currentBulletCount = maxBullets;
+                    FinishReload();
+                    break;
+                case WeaponReloadMode.Shells:
+                    await TimeHelper.CountUp(
+                        maxBullets - currentBulletCount, weaponReloadTime, tick =>
+                        {
+                            //Backup
+                            if (currentBulletCount == maxBullets)
+                                return;
+
+                            //Increase bullets
+                            currentBulletCount++;
+                            UpdateUI();
+                        }, reloadCancellation.Token);
+                    
+                    FinishReload();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        [Server]
+        private void FinishReload()
+        {
+            isReloading = false;
+            UpdateUI();
+            reloadCancellation.Dispose();
+            reloadCancellation = null;
+        }
+        
+        [Server]
+        private void CancelReload()
+        {
+            isReloading = false;
+
+            if (reloadCancellation is {IsCancellationRequested: false})
+            {
+                reloadCancellation.Cancel();
+                reloadCancellation.Dispose();
+                reloadCancellation = null;
+            }
+        }
+
+        #endregion
+
+        [Server]
         private void UpdateUI()
         {
             DefaultHudUpdateMessage message = new(weaponId, currentBulletCount, isReloading);
