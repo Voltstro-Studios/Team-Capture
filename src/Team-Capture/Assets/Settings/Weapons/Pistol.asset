@@ -16,7 +16,7 @@ MonoBehaviour:
   weaponObjectPrefab: {fileID: 2985817369304730979, guid: 5f5edb97b2388714ca78daa416284087,
     type: 3}
   weaponDamage: 15
-  weaponFireRate: 8
+  weaponFireRate: 6
   range: 30
   bulletsPerShot: 1
   maxBullets: 18

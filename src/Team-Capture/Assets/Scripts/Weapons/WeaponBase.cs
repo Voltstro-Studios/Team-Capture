@@ -28,8 +28,6 @@ namespace Team_Capture.Weapons
         protected bool isLocalClient;
 
         protected HudAmmoControls HudAmmoControls => weaponManager.playerManager.PlayerUIManager.HudAmmoControls;
-
-        #region Weapon Perform Helper
         
         protected void DoWeaponEffects(IEffectsMessage effectsMessage)
         {
@@ -40,8 +38,6 @@ namespace Team_Capture.Weapons
         {
             weaponManager.RpcUpdateUI(hudUpdateMessage);
         }
-
-        #endregion
 
         internal void Setup(WeaponManager weaponMan, bool server, bool localClient, GameObject objectInstance)
         {

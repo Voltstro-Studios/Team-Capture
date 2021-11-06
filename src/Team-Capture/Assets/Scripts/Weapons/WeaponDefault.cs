@@ -47,8 +47,10 @@ namespace Team_Capture.Weapons
         private bool isReloading;
         
         private float nextTimeToFire;
-        private CancellationTokenSource reloadCancellation;
         private WeaponGraphics weaponGraphics;
+        
+        private CancellationTokenSource reloadCancellation;
+        private CancellationTokenSource shootRepeatedlyCancellation;
 
         private GameObjectPool tracerPool;
         private GameObjectPool bulletHolesPool;
@@ -57,23 +59,27 @@ namespace Team_Capture.Weapons
 
         public override void OnPerform(bool buttonDown)
         {
-            if(buttonDown)
-                ShootWeapon();
-            
-            /*
             if(buttonDown && weaponFireMode == WeaponFireMode.Semi)
                 ShootWeapon();
-            if(buttonDown && weaponFireMode == WeaponFireMode.Auto)
-                PerformServerRepeatedly(0f, 1f / weaponFireRate);
-            if(!buttonDown && weaponFireMode == WeaponFireMode.Auto)
-                CancelPerformServerRepeatedly();
-                */
+            if (buttonDown && weaponFireMode == WeaponFireMode.Auto)
+            {
+                shootRepeatedlyCancellation?.Cancel();
+                shootRepeatedlyCancellation = new CancellationTokenSource();
+                TimeHelper.InvokeRepeatedly(ShootWeapon, 1f / weaponFireRate, shootRepeatedlyCancellation.Token).Forget();
+            }
+
+            if (!buttonDown && weaponFireMode == WeaponFireMode.Auto)
+            {
+                if (shootRepeatedlyCancellation != null)
+                {
+                    shootRepeatedlyCancellation.Cancel();
+                    shootRepeatedlyCancellation = null;
+                }
+            }
         }
 
         private void ShootWeapon()
         {
-            Logger.Debug("Pew");
-            
             //We out of bullets, reload
             if (currentBulletCount <= 0)
             {
@@ -221,6 +227,7 @@ namespace Team_Capture.Weapons
         public override void OnSwitchOff()
         {
             CancelReload();
+            shootRepeatedlyCancellation?.Cancel();
         }
 
         protected override void OnAdd()
@@ -248,6 +255,7 @@ namespace Team_Capture.Weapons
 
         public override void OnRemove()
         {
+            shootRepeatedlyCancellation?.Cancel();
             CancelReload();
         }
 
@@ -299,7 +307,7 @@ namespace Team_Capture.Weapons
 
         private void UpdateUI()
         {
-            DefaultHudUpdateMessage message = new DefaultHudUpdateMessage(weaponId, currentBulletCount, isReloading);
+            DefaultHudUpdateMessage message = new(weaponId, currentBulletCount, isReloading);
             Logger.Debug("Sent client UI weapon update: {@Message}", message);
             DoPlayerUIUpdate(message);
         }

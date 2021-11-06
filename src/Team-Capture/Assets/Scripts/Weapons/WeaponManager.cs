@@ -95,6 +95,11 @@ namespace Team_Capture.Weapons
 
         #endregion
 
+        public override void OnStopServer()
+        {
+            RemoveAllWeapons();
+        }
+
         /// <summary>
         ///     Server callback for when <see cref="weapons" /> is modified
         /// </summary>
@@ -244,9 +249,10 @@ namespace Team_Capture.Weapons
             if (weapon == null)
                 return;
 
-            GameObject weaponObject = CreateNewWeaponModel(weapon);
-            weapon.Setup(this, true, false, weaponObject);
-            weapons.Add(weapon);
+            WeaponBase newWeapon = Instantiate(weapon);
+            GameObject weaponObject = CreateNewWeaponModel(newWeapon);
+            newWeapon.Setup(this, true, false, weaponObject);
+            weapons.Add(newWeapon);
 
             if (weapons.Count > 1) 
                 SetClientWeaponIndex(weapons.Count - 1);
