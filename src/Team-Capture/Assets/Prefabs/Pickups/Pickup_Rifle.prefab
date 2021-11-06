@@ -28,6 +28,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7376966039164624314}
   m_Father: {fileID: 0}
@@ -49,7 +50,6 @@ MonoBehaviour:
   syncInterval: 0.1
   pickupRespawnTime: 4
   triggerRadius: 1.3
-  pickupMaterials: []
   weapon: {fileID: 11400000, guid: 7f2272658027c3c4088001bda3a587b5, type: 2}
 --- !u!114 &6344015274723330416
 MonoBehaviour:
@@ -65,11 +65,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneId: 0
   serverOnly: 0
-  m_AssetId: 
+  visible: 0
+  m_AssetId: 1cb2406c378873a439e6d27fee28a882
   hasSpawned: 0
 --- !u!95 &9104049653474934505
 Animator:
-  serializedVersion: 3
+  serializedVersion: 4
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -82,6 +83,7 @@ Animator:
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
