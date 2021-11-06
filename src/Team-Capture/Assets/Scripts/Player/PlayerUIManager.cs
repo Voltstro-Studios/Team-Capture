@@ -23,12 +23,16 @@ namespace Team_Capture.Player
         ///     Sets up <see cref="PlayerUIManager" />
         /// </summary>
         /// <param name="clientUI"></param>
-        public void Setup(ClientUI clientUI)
+        internal void Setup(ClientUI clientUI)
         {
             ui = clientUI;
             GetComponent<PlayerManager>().PlayerDamaged += OnPlayerDamaged;
-            //GetComponent<WeaponManager>().WeaponUpdated += OnWeaponUpdated;
         }
+
+        /// <summary>
+        ///     Controls for the hud's ammo
+        /// </summary>
+        internal HudAmmoControls HudAmmoControls => ui.hud.HudAmmoControls;
 
         /// <summary>
         ///     Toggles the pause menu
@@ -74,27 +78,28 @@ namespace Team_Capture.Player
             ui.killFeed.AddKillfeedItem(message);
         }
 
+        /// <summary>
+        ///     Sets the death screen
+        /// </summary>
+        /// <param name="killer"></param>
+        /// <param name="state"></param>
         internal void SetDeathScreen(PlayerManager killer, bool state)
         {
             ui.ActivateDeathScreen(killer, state);
         }
 
+        /// <summary>
+        ///     Triggers the UI to update the player's health UI
+        /// </summary>
         private void OnPlayerDamaged()
         {
             ui.hud.UpdateHealthUI();
         }
 
-        /*
-        private void OnWeaponUpdated(NetworkedWeapon weapon)
-        {
-            ui.hud.UpdateAmmoUI(weapon);
-        }
-        */
-
         #region Chat
 
         /// <summary>
-        ///     Is the chat opened
+        ///     Is the chat opened?
         /// </summary>
         internal bool IsChatOpen => ui.chat.IsChatOpen;
 

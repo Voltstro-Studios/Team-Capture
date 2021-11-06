@@ -14,6 +14,7 @@ using Team_Capture.Helper;
 using Team_Capture.Player;
 using Team_Capture.SceneManagement;
 using Team_Capture.Weapons.Effects;
+using Team_Capture.Weapons.UI;
 using UnityEngine;
 using Logger = Team_Capture.Logging.Logger;
 
@@ -80,7 +81,7 @@ namespace Team_Capture.Weapons
             for (int i = 0; i < weapons.Count; i++)
             {
                 GameObject newWeapon = CreateNewWeaponModel(weapons[i]);
-                weapons[i].Setup(this, isServer, newWeapon);
+                weapons[i].Setup(this, isServer, isLocalPlayer, newWeapon);
 
                 if (isLocalPlayer)
                     SetupWeaponObjectLocal(newWeapon);
@@ -111,7 +112,7 @@ namespace Team_Capture.Weapons
                         break;
                     
                     GameObject newWeaponModel = CreateNewWeaponModel(newWeapon);
-                    newWeapon.Setup(this, isServer, newWeaponModel);
+                    newWeapon.Setup(this, isServer, isLocalPlayer, newWeaponModel);
                     Logger.Info("On add weapon");
                     break;
                 case SyncList<WeaponBase>.Operation.OP_CLEAR:
@@ -143,6 +144,20 @@ namespace Team_Capture.Weapons
         }
 
         /// <summary>
+        ///     Gets a weapon from the list based off its ID
+        /// </summary>
+        /// <param name="weaponId"></param>
+        /// <returns></returns>
+        internal WeaponBase GetWeaponFromId(string weaponId)
+        {
+            IEnumerable<WeaponBase> result = from a in weapons
+                where a.weaponId == weaponId
+                select a;
+
+            return WeaponsResourceManager.GetWeapon(result.FirstOrDefault()?.weaponId);
+        }
+
+        /// <summary>
         ///     Gets a weapon from the list
         /// </summary>
         /// <param name="weapon"></param>
@@ -159,6 +174,15 @@ namespace Team_Capture.Weapons
         #endregion
 
         #region Weapon Shooting
+
+        [TargetRpc(channel = Channels.Unreliable)]
+        internal void RpcUpdateUI(IHudUpdateMessage hudUpdateMessage)
+        {
+            string weaponId = hudUpdateMessage.WeaponId;
+            WeaponBase weapon = GetWeaponFromId(weaponId);
+            if(weapon != null)
+                weapon.OnUIUpdate(hudUpdateMessage);
+        }
 
         [Command(channel = Channels.Unreliable)]
         internal void CmdShootWeapon(bool buttonDown)
@@ -221,7 +245,7 @@ namespace Team_Capture.Weapons
                 return;
 
             GameObject weaponObject = CreateNewWeaponModel(weapon);
-            weapon.Setup(this, true, weaponObject);
+            weapon.Setup(this, true, false, weaponObject);
             weapons.Add(weapon);
 
             if (weapons.Count > 1) 
@@ -308,9 +332,11 @@ namespace Team_Capture.Weapons
         [Server]
         private void SetClientWeaponIndex(int index)
         {
-            weapons[SelectedWeaponIndex].OnSwitchOff();
+            GetActiveWeapon().OnSwitchOff();
+            
             SelectedWeaponIndex = index;
-            weapons[index].OnSwitchOnTo();
+            
+            GetActiveWeapon().OnSwitchOnTo();
             
             RpcSelectWeapon(index);
         }

@@ -55,6 +55,11 @@ namespace Team_Capture.Player
         /// </summary>
         private PlayerUIManager uiManager;
 
+        /// <summary>
+        ///     Gets the <see cref="PlayerUIManager"/>
+        /// </summary>
+        internal PlayerUIManager PlayerUIManager => uiManager;
+
         #endregion
 
         /// <summary>

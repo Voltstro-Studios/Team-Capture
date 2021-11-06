@@ -16,32 +16,31 @@ namespace Team_Capture.UI
     internal class Hud : MonoBehaviour
     {
         /// <summary>
-        ///     The ammo text
+        ///     Controls for ammo
         /// </summary>
-        [Tooltip("The ammo text")] public TextMeshProUGUI ammoText;
-
-        /// <summary>
-        ///     The max ammo text
-        /// </summary>
-        [Tooltip("The max ammo text")] public TextMeshProUGUI maxAmmoText;
-
-        /// <summary>
-        ///     The reload text
-        /// </summary>
-        [Tooltip("The reload text")] public GameObject reloadTextGameObject;
+        [Tooltip("Controls for ammo")]
+        [SerializeField]
+        private HudAmmoControls hudAmmoControls;
 
         /// <summary>
         ///     The health text
         /// </summary>
-        [Tooltip("The health text")] public TextMeshProUGUI healthText;
+        [Tooltip("The health text")] 
+        [SerializeField]
+        private TextMeshProUGUI healthText;
 
         private ClientUI clientUI;
+
+        /// <summary>
+        ///     Controls for ammo
+        /// </summary>
+        internal HudAmmoControls HudAmmoControls => hudAmmoControls;
 
         /// <summary>
         ///     Sets up the <see cref="Hud" />
         /// </summary>
         /// <param name="ui"></param>
-        public void Setup(ClientUI ui)
+        internal void Setup(ClientUI ui)
         {
             clientUI = ui;
         }
@@ -49,27 +48,9 @@ namespace Team_Capture.UI
         /// <summary>
         ///     Updates the health text
         /// </summary>
-        public void UpdateHealthUI()
+        internal void UpdateHealthUI()
         {
             healthText.text = clientUI.PlayerManager.Health.ToString();
         }
-
-        /*
-        /// <summary>
-        ///     Updates ammo text
-        /// </summary>
-        /// <param name="netWeapon"></param>
-        public void UpdateAmmoUI(NetworkedWeapon netWeapon)
-        {
-            if (clientUI == null || clientUI.WeaponManager == null)
-                return;
-
-            TCWeapon weapon = netWeapon.GetTCWeapon();
-
-            ammoText.text = netWeapon.CurrentBulletAmount.ToString();
-            maxAmmoText.text = weapon.maxBullets.ToString();
-            reloadTextGameObject.SetActive(netWeapon.IsReloading);
-        }
-        */
     }
 }

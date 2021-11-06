@@ -16,6 +16,7 @@ using Team_Capture.Player;
 using Team_Capture.Pooling;
 using Team_Capture.SceneManagement;
 using Team_Capture.Weapons.Effects;
+using Team_Capture.Weapons.UI;
 using UnityEngine;
 using Logger = Team_Capture.Logging.Logger;
 using Random = UnityEngine.Random;
@@ -42,8 +43,8 @@ namespace Team_Capture.Weapons
         public int weaponReloadTime = 2000;
         public WeaponReloadMode weaponReloadMode;
 
-        [NonSerialized] public int currentBulletCount;
-        [NonSerialized] public bool isReloading;
+        private int currentBulletCount;
+        private bool isReloading;
         
         private float nextTimeToFire;
         private CancellationTokenSource reloadCancellation;
@@ -104,6 +105,8 @@ namespace Team_Capture.Weapons
             {
                 Logger.Error(ex, "Error occured while simulating weapon shooting!");
             }
+            
+            UpdateUI();
         }
 
         public override void OnReload()
@@ -134,6 +137,7 @@ namespace Team_Capture.Weapons
         private async UniTask ReloadTask()
         {
             Logger.Debug("Reloading player's weapon.");
+            UpdateUI();
 
             switch (weaponReloadMode)
             {
@@ -153,7 +157,7 @@ namespace Team_Capture.Weapons
 
                             //Increase bullets
                             currentBulletCount++;
-                            //TODO: Update UI
+                            UpdateUI();
                         }, reloadCancellation.Token);
                     
                     FinishReload();
@@ -166,6 +170,7 @@ namespace Team_Capture.Weapons
         private void FinishReload()
         {
             isReloading = false;
+            UpdateUI();
             reloadCancellation.Dispose();
             reloadCancellation = null;
         }
@@ -194,11 +199,23 @@ namespace Team_Capture.Weapons
             }
         }
 
+        public override void OnUIUpdate(IHudUpdateMessage hudUpdateMessage)
+        {
+            if (hudUpdateMessage is DefaultHudUpdateMessage defaultHudUpdateMessage)
+            {
+                HudAmmoControls.ammoText.text = defaultHudUpdateMessage.CurrentBullets.ToString();
+                HudAmmoControls.maxAmmoText.text = maxBullets.ToString();
+                HudAmmoControls.reloadTextGameObject.SetActive(defaultHudUpdateMessage.IsReloading);
+            }
+        }
+
         public override void OnSwitchOnTo()
         {
             //Start reloading again if we switch to and we our out of bullets
             if (currentBulletCount <= 0)
                 OnReload();
+            
+            UpdateUI();
         }
 
         public override void OnSwitchOff()
@@ -213,6 +230,12 @@ namespace Team_Capture.Weapons
                 nextTimeToFire = 0f;
                 currentBulletCount = maxBullets;
                 isReloading = false;
+                UpdateUI();
+            }
+
+            if (isLocalClient)
+            {
+                OnUIUpdate(new DefaultHudUpdateMessage(null, currentBulletCount, isReloading));
             }
 
             tracerPool = GameSceneManager.Instance.tracersEffectsPool;
@@ -272,6 +295,13 @@ namespace Team_Capture.Weapons
             
             stopwatch.Stop();
             Logger.Debug("Took {Milliseconds} to fire weapon.", stopwatch.Elapsed.TotalMilliseconds);
+        }
+
+        private void UpdateUI()
+        {
+            DefaultHudUpdateMessage message = new DefaultHudUpdateMessage(weaponId, currentBulletCount, isReloading);
+            Logger.Debug("Sent client UI weapon update: {@Message}", message);
+            DoPlayerUIUpdate(message);
         }
 
         #region Networking
