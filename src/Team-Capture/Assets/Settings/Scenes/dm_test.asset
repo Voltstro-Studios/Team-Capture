@@ -47,4 +47,5 @@ MonoBehaviour:
     m_WaitForCompletion: 0
     m_LocalVariables: []
   references:
-    version: 1
+    version: 2
+    RefIds: []

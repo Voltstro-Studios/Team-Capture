@@ -64,7 +64,7 @@ namespace Team_Capture.SceneManagement
         /// <summary>
         ///     The stock weapons to add to player
         /// </summary>
-        [Header("Weapon Settings")] public TCWeapon[] stockWeapons;
+        [Header("Weapon Settings")] public WeaponBase[] stockWeapons;
 
         public GameObject traceEffectPrefab;
 

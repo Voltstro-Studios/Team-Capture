@@ -1,4 +1,4 @@
-﻿// Team-Capture
+// Team-Capture
 // Copyright (C) 2019-2021 Voltstro-Studios
 // 
 // This project is governed by the AGPLv3 License.
@@ -7,13 +7,13 @@
 namespace Team_Capture.Weapons
 {
     /// <summary>
-    ///     Base for a weapon
+    ///     What type of weapon is this
     /// </summary>
-    public interface IWeaponBase
+    public enum WeaponType : byte
     {
         /// <summary>
-        ///     Reloads the current weapon
+        ///     'Default' ray-casting gun
         /// </summary>
-        void Reload(bool setMaxBullets = false);
+        Default
     }
 }

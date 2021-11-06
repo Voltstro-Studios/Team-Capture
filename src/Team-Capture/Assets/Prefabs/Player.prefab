@@ -26,6 +26,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.372, y: -0.367, z: 0.93}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3166049507595539325}
   m_RootOrder: 0
@@ -58,6 +59,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.483, z: 0.418}
   m_LocalScale: {x: 0.73467, y: 0.21657036, z: 0.24528}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6438375964401219428}
   m_RootOrder: 0
@@ -138,6 +140,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6438375962803020341}
   m_RootOrder: 2
@@ -153,7 +156,6 @@ GameObject:
   - component: {fileID: 6438375962803020341}
   - component: {fileID: 3448369259278931532}
   - component: {fileID: 4790435715656838203}
-  - component: {fileID: 5871886052252796697}
   - component: {fileID: 6221254021302100361}
   - component: {fileID: 2723952240922035333}
   - component: {fileID: 5434402702686751145}
@@ -176,6 +178,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6438375964343202627}
   - {fileID: 6438375964401219428}
@@ -217,31 +220,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  inputReader: {fileID: 11400000, guid: e233decf6e8ea7d4696452f4cd476d55, type: 2}
   playerVCam: {fileID: 2875055674057562374}
   clientUiPrefab: {fileID: 2142721828509503496, guid: 8f7e8441a5d36bf47babd28e6be83faf,
     type: 3}
   gfxMeshes:
   - {fileID: 6438375964401219426}
   - {fileID: 8044104236902602707}
---- !u!114 &5871886052252796697
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6438375962803020343}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b07ab6d790a5cca4a85d12523bf6aa58, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  raycastLayerMask:
-    serializedVersion: 2
-    m_Bits: 307
-  localPlayerCamera: {fileID: 3166049507595539325}
 --- !u!114 &6221254021302100361
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -258,6 +242,10 @@ MonoBehaviour:
   syncInterval: 0
   weaponLayerName: LocalWeapon
   weaponsHolderSpot: {fileID: 8771585192178499609}
+  localPlayerCamera: {fileID: 6438375964343202627}
+  raycastLayerMask:
+    serializedVersion: 2
+    m_Bits: 19
 --- !u!143 &2723952240922035333
 CharacterController:
   m_ObjectHideFlags: 0
@@ -375,6 +363,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.576, z: 0.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3166049507595539325}
   m_Father: {fileID: 6438375962803020341}
@@ -408,6 +397,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3836760247835259434}
   m_Father: {fileID: 6438375962803020341}
@@ -492,6 +482,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8771585192178499609}
   - {fileID: 6013800411311380701}
@@ -583,6 +574,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: -0.576, z: -0.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3166049507595539325}
   m_RootOrder: 1

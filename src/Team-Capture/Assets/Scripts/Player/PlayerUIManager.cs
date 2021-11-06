@@ -27,7 +27,7 @@ namespace Team_Capture.Player
         {
             ui = clientUI;
             GetComponent<PlayerManager>().PlayerDamaged += OnPlayerDamaged;
-            GetComponent<WeaponManager>().WeaponUpdated += OnWeaponUpdated;
+            //GetComponent<WeaponManager>().WeaponUpdated += OnWeaponUpdated;
         }
 
         /// <summary>
@@ -84,10 +84,12 @@ namespace Team_Capture.Player
             ui.hud.UpdateHealthUI();
         }
 
+        /*
         private void OnWeaponUpdated(NetworkedWeapon weapon)
         {
             ui.hud.UpdateAmmoUI(weapon);
         }
+        */
 
         #region Chat
 

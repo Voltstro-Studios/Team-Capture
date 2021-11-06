@@ -253,7 +253,7 @@ namespace Team_Capture.Player
             {
                 PlayerKilled = transform.name,
                 PlayerKiller = sourcePlayerId,
-                WeaponName = weaponManager.GetActiveWeapon().Weapon
+                WeaponName = weaponManager.GetActiveWeapon().weaponId
             }, 3);
 
             //Remove all the weapons on the player

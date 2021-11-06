@@ -9,19 +9,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d1747c1ef55c3549b1304650c765215, type: 3}
+  m_Script: {fileID: 11500000, guid: f0159f4eea794e00aab1cd482c1a59c6, type: 3}
   m_Name: Rifle
   m_EditorClassIdentifier: 
-  weapon: rifle
-  weaponFormattedName: Rifle
-  baseWeaponPrefab: {fileID: 7149728806574001806, guid: f4d0c2754ceeacc43bdc51d9f4d15d71,
+  weaponId: Rifle
+  weaponObjectPrefab: {fileID: 7149728806574001806, guid: f4d0c2754ceeacc43bdc51d9f4d15d71,
     type: 3}
-  damage: 15
-  fireRate: 15
-  fireMode: 0
-  reloadMode: 0
+  weaponDamage: 15
+  weaponFireRate: 15
+  range: 60
   bulletsPerShot: 1
   maxBullets: 45
-  range: 60
-  reloadTime: 3000
   spreadFactor: 0.05
+  weaponFireMode: 0
+  weaponReloadTime: 3000
+  weaponReloadMode: 0

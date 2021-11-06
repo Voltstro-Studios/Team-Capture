@@ -54,6 +54,7 @@ namespace Team_Capture.UI
             healthText.text = clientUI.PlayerManager.Health.ToString();
         }
 
+        /*
         /// <summary>
         ///     Updates ammo text
         /// </summary>
@@ -69,5 +70,6 @@ namespace Team_Capture.UI
             maxAmmoText.text = weapon.maxBullets.ToString();
             reloadTextGameObject.SetActive(netWeapon.IsReloading);
         }
+        */
     }
 }

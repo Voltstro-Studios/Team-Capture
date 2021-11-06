@@ -18,23 +18,23 @@ namespace Team_Capture.Weapons
     public static class WeaponsResourceManager
     {
         private const string WeaponLabel = "Weapon";
-        private static IList<TCWeapon> weapons;
+        private static IList<WeaponBase> weapons;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         private static void Init()
         {
-            weapons = Addressables.LoadAssetsAsync<TCWeapon>(WeaponLabel, null).WaitForCompletion();
+            weapons = Addressables.LoadAssetsAsync<WeaponBase>(WeaponLabel, null).WaitForCompletion();
             Logger.Debug("Loaded {WeaponCount} weapons.", weapons.Count);
         }
 
         /// <summary>
-        ///     Gets a <see cref="TCWeapon" />
+        ///     Gets a <see cref="WeaponBase" />
         /// </summary>
-        /// <param name="weaponName"></param>
+        /// <param name="weaponId"></param>
         /// <returns></returns>
-        public static TCWeapon GetWeapon(string weaponName)
+        public static WeaponBase GetWeapon(string weaponId)
         {
-            return weapons.FirstOrDefault(w => w.weapon == weaponName);
+            return weapons.FirstOrDefault(w => w.weaponId == weaponId);
         }
     }
 }

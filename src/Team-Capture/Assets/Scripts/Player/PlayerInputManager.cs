@@ -32,15 +32,12 @@ namespace Team_Capture.Player
         private PlayerMovementManager playerInput;
         private PlayerManager playerManager;
         private PlayerUIManager uiManager;
-
         private WeaponManager weaponManager;
-        private PlayerWeaponShoot weaponShoot;
 
         private void Start()
         {
             weaponManager = GetComponent<WeaponManager>();
             playerManager = GetComponent<PlayerManager>();
-            weaponShoot = GetComponent<PlayerWeaponShoot>();
             playerInput = GetComponent<PlayerMovementManager>();
             uiManager = GetComponent<PlayerUIManager>();
 
@@ -229,7 +226,7 @@ namespace Team_Capture.Player
             }
 
             if (selectedWeaponIndex == weaponManager.SelectedWeaponIndex) return;
-            weaponManager.CmdSetWeapon(selectedWeaponIndex);
+            weaponManager.CmdSetWeaponIndex(selectedWeaponIndex);
         }
 
         private void OnPlayerWeaponShoot(bool button)
@@ -237,7 +234,7 @@ namespace Team_Capture.Player
             if (ClientUI.IsPauseMenuOpen || uiManager.IsChatOpen)
                 return;
 
-            weaponShoot.ShootWeapon(button);
+            weaponManager.CmdShootWeapon(button);
         }
 
         private void OnPlayerWeaponReload()

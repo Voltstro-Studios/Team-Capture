@@ -5,6 +5,7 @@
 // For more details see the LICENSE file.
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Cysharp.Threading.Tasks;
@@ -12,6 +13,7 @@ using Mirror;
 using Team_Capture.Helper;
 using Team_Capture.Player;
 using Team_Capture.SceneManagement;
+using Team_Capture.Weapons.Effects;
 using UnityEngine;
 using Logger = Team_Capture.Logging.Logger;
 
@@ -22,8 +24,6 @@ namespace Team_Capture.Weapons
     /// </summary>
     public class WeaponManager : NetworkBehaviour
     {
-        public delegate void WeaponUpdatedDelegate(NetworkedWeapon weapon);
-
         /// <summary>
         ///     The layer to use when creating our weapons (for local weapons)
         /// </summary>
@@ -35,14 +35,19 @@ namespace Team_Capture.Weapons
         [SerializeField] private Transform weaponsHolderSpot;
 
         /// <summary>
-        ///     A synced list of all the weapons this client has
+        ///     Player's camera
         /// </summary>
-        private readonly SyncList<NetworkedWeapon> weapons = new();
+        [SerializeField] internal Transform localPlayerCamera;
 
         /// <summary>
-        ///     <see cref="CancellationTokenSource" /> for canceling a weapon reload
+        ///     Whats layers to include in raycasting
         /// </summary>
-        private CancellationTokenSource reloadCancellation;
+        [SerializeField] internal LayerMask raycastLayerMask;
+
+        /// <summary>
+        ///     A synced list of all the weapons this client has
+        /// </summary>
+        private readonly SyncList<WeaponBase> weapons = new();
 
         /// <summary>
         ///     <see cref="Weapons.WeaponSway" /> script, for use by <see cref="PlayerInputManager" />
@@ -60,35 +65,34 @@ namespace Team_Capture.Weapons
         /// </summary>
         public int WeaponHolderSpotChildCount => weaponsHolderSpot.childCount;
 
-        /// <summary>
-        ///     Gets the server's connection to this client
-        /// </summary>
-        private NetworkConnection GetClientConnection => netIdentity.connectionToClient;
+        [NonSerialized] public PlayerManager playerManager;
 
         #region Unity Event Functions
+
+        private void Awake()
+        {
+            playerManager = GetComponent<PlayerManager>();
+        }
 
         private void Start()
         {
             //Create all existing weapons on start
             for (int i = 0; i < weapons.Count; i++)
             {
-                GameObject newWeapon =
-                    Instantiate(WeaponsResourceManager.GetWeapon(weapons[i].Weapon).baseWeaponPrefab,
-                        weaponsHolderSpot);
+                GameObject newWeapon = CreateNewWeaponModel(weapons[i]);
+                weapons[i].Setup(this, isServer, newWeapon);
 
                 if (isLocalPlayer)
                     SetupWeaponObjectLocal(newWeapon);
 
                 newWeapon.SetActive(SelectedWeaponIndex == i);
             }
+            
+            //Setup our add weapon callback
+            weapons.Callback += WeaponListCallback;
         }
 
         #endregion
-
-        /// <summary>
-        ///     Invoked when the client's weapon is updated
-        /// </summary>
-        public event WeaponUpdatedDelegate WeaponUpdated;
 
         /// <summary>
         ///     Server callback for when <see cref="weapons" /> is modified
@@ -97,55 +101,32 @@ namespace Team_Capture.Weapons
         /// <param name="itemIndex"></param>
         /// <param name="oldWeapon"></param>
         /// <param name="newWeapon"></param>
-        [Server]
-        private void ServerWeaponCallback(SyncList<NetworkedWeapon>.Operation op, int itemIndex,
-            NetworkedWeapon oldWeapon, NetworkedWeapon newWeapon)
+        private void WeaponListCallback(SyncList<WeaponBase>.Operation op, int itemIndex,
+            WeaponBase oldWeapon, WeaponBase newWeapon)
         {
             switch (op)
             {
-                case SyncList<NetworkedWeapon>.Operation.OP_ADD when newWeapon == null:
-                    Logger.Error("Passed in weapon to be added is null!");
-                    weapons.Remove(weapons[itemIndex]);
-                    return;
-                case SyncList<NetworkedWeapon>.Operation.OP_ADD:
-                    RpcInstantiateWeaponOnClients(newWeapon.Weapon);
+                case SyncList<WeaponBase>.Operation.OP_ADD:
+                    if(isServer)
+                        break;
+                    
+                    GameObject newWeaponModel = CreateNewWeaponModel(newWeapon);
+                    newWeapon.Setup(this, isServer, newWeaponModel);
+                    Logger.Info("On add weapon");
                     break;
-                case SyncList<NetworkedWeapon>.Operation.OP_CLEAR:
-                    RpcRemoveAllActiveWeapons();
+                case SyncList<WeaponBase>.Operation.OP_CLEAR:
+                    RemoveAllWeaponsModels();
                     break;
             }
         }
-
-        #region Client Stuff
-
-        [TargetRpc(channel = Channels.Unreliable)]
-        internal void TargetSendWeaponStatus(NetworkConnection conn, NetworkedWeapon weaponStatus)
-        {
-            WeaponUpdated?.Invoke(weaponStatus);
-        }
-
-        #endregion
-
+        
         #region Network Overrides
-
-        public override void OnStartServer()
-        {
-            base.OnStartServer();
-
-            //Setup our add weapon callback
-            weapons.Callback += ServerWeaponCallback;
-        }
 
         public override void OnStartLocalPlayer()
         {
             base.OnStartLocalPlayer();
 
             WeaponSway = weaponsHolderSpot.gameObject.AddComponent<WeaponSway>();
-        }
-
-        public override void OnStopServer()
-        {
-            CancelReload();
         }
 
         #endregion
@@ -156,18 +137,9 @@ namespace Team_Capture.Weapons
         ///     Get the active weapon
         /// </summary>
         /// <returns></returns>
-        internal NetworkedWeapon GetActiveWeapon()
+        internal WeaponBase GetActiveWeapon()
         {
             return weapons.Count == 0 ? null : weapons[SelectedWeaponIndex];
-        }
-
-        /// <summary>
-        ///     Gets the active weapon's graphics
-        /// </summary>
-        /// <returns></returns>
-        internal WeaponGraphics GetActiveWeaponGraphics()
-        {
-            return weaponsHolderSpot.GetChild(SelectedWeaponIndex).GetComponent<WeaponGraphics>();
         }
 
         /// <summary>
@@ -175,17 +147,33 @@ namespace Team_Capture.Weapons
         /// </summary>
         /// <param name="weapon"></param>
         /// <returns></returns>
-        internal TCWeapon GetWeapon(string weapon)
+        internal WeaponBase GetWeapon(WeaponBase weapon)
         {
-            var result = from a in weapons
-                where a.Weapon == weapon
+            IEnumerable<WeaponBase> result = from a in weapons
+                where a == weapon
                 select a;
 
-            return WeaponsResourceManager.GetWeapon(result.FirstOrDefault()?.Weapon);
+            return WeaponsResourceManager.GetWeapon(result.FirstOrDefault()?.weaponId);
         }
 
         #endregion
 
+        #region Weapon Shooting
+
+        [Command(channel = Channels.Unreliable)]
+        internal void CmdShootWeapon(bool buttonDown)
+        {
+            GetActiveWeapon().OnPerform(buttonDown);
+        }
+
+        [ClientRpc(channel = Channels.Unreliable)]
+        internal void RpcDoWeaponEffects(IEffectsMessage effectsMessage)
+        {
+            GetActiveWeapon().OnWeaponEffects(effectsMessage);
+        }
+
+        #endregion
+        
         #region Weapon Reloading
 
         /// <summary>
@@ -204,101 +192,10 @@ namespace Team_Capture.Weapons
         [Command(channel = Channels.Unreliable)]
         private void CmdReloadPlayerWeapon()
         {
-            NetworkedWeapon weapon = GetActiveWeapon();
-
-            if (weapon.IsReloading)
-                return;
-
-            if (weapon.CurrentBulletAmount == weapon.GetTCWeapon().maxBullets)
-                return;
-
-            StartReloadPlayerWeapon();
+            WeaponBase weapon = GetActiveWeapon();
+            weapon.OnReload();
         }
-
-        /// <summary>
-        ///     Starts to reload the player's weapon
-        /// </summary>
-        [Server]
-        internal void StartReloadPlayerWeapon()
-        {
-            if (reloadCancellation is {IsCancellationRequested: false})
-            {
-                reloadCancellation.Cancel();
-                reloadCancellation.Dispose();
-            }
-
-            reloadCancellation = new CancellationTokenSource();
-            ServerReloadPlayerWeapon(reloadCancellation.Token).Forget();
-        }
-
-        /// <summary>
-        ///     Reloads clients current weapon
-        /// </summary>
-        /// <returns></returns>
-        [Server]
-        private async UniTask ServerReloadPlayerWeapon(CancellationToken cancellationToken)
-        {
-            Logger.Debug($"Reloading player `{transform.name}`'s active weapon");
-
-            //Get our players weapon
-            NetworkedWeapon networkedWeapon = GetActiveWeapon();
-            TCWeapon weapon = networkedWeapon.GetTCWeapon();
-            networkedWeapon.IsReloading = true;
-
-            TargetSendWeaponStatus(GetClientConnection, networkedWeapon);
-
-            int weaponIndex = SelectedWeaponIndex;
-
-            switch (weapon.reloadMode)
-            {
-                case TCWeapon.WeaponReloadMode.Clip:
-                    await UniTask.Delay(weapon.reloadTime, cancellationToken: cancellationToken);
-
-                    FinishReload(networkedWeapon, weaponIndex);
-                    break;
-                case TCWeapon.WeaponReloadMode.Shells:
-                    await TimeHelper.CountUp(
-                        weapon.maxBullets - networkedWeapon.CurrentBulletAmount, weapon.reloadTime, tick =>
-                        {
-                            //Backup
-                            if (networkedWeapon.CurrentBulletAmount == weapon.maxBullets)
-                                return;
-
-                            //Increase bullets
-                            networkedWeapon.CurrentBulletAmount++;
-                            TargetSendWeaponStatus(GetClientConnection, networkedWeapon);
-                        }, cancellationToken);
-                    FinishReload(networkedWeapon, weaponIndex);
-                    break;
-            }
-        }
-
-        [Server]
-        private void FinishReload(NetworkedWeapon weapon, int weaponIndex)
-        {
-            reloadCancellation.Dispose();
-            reloadCancellation = null;
-            weapon.Reload();
-
-            //Update player's UI
-            if (SelectedWeaponIndex != weaponIndex)
-                return;
-
-            TargetSendWeaponStatus(GetClientConnection, weapon);
-        }
-
-        [Server]
-        internal void CancelReload()
-        {
-            if (reloadCancellation is {IsCancellationRequested: false})
-            {
-                Logger.Debug("Cancelling {Name}'s reload...", transform.name);
-                reloadCancellation.Cancel();
-                reloadCancellation.Dispose();
-                reloadCancellation = null;
-            }
-        }
-
+        
         #endregion
 
         #region Add Weapons
@@ -309,8 +206,8 @@ namespace Team_Capture.Weapons
         [Server]
         public void AddStockWeapons()
         {
-            foreach (TCWeapon weapon in GameSceneManager.GetActiveScene().stockWeapons)
-                AddWeapon(weapon.weapon);
+            foreach (WeaponBase weapon in GameSceneManager.GetActiveScene().stockWeapons)
+                AddWeapon(weapon);
         }
 
         /// <summary>
@@ -318,39 +215,34 @@ namespace Team_Capture.Weapons
         /// </summary>
         /// <param name="weapon">The weapon to add</param>
         [Server]
-        internal void AddWeapon(string weapon)
+        internal void AddWeapon(WeaponBase weapon)
         {
-            TCWeapon tcWeapon = WeaponsResourceManager.GetWeapon(weapon);
-
-            if (tcWeapon == null)
+            if (weapon == null)
                 return;
 
-            NetworkedWeapon netWeapon = new(tcWeapon);
-            weapons.Add(netWeapon);
+            GameObject weaponObject = CreateNewWeaponModel(weapon);
+            weapon.Setup(this, true, weaponObject);
+            weapons.Add(weapon);
 
-            Logger.Debug($"Added weapon {weapon} for {transform.name} with {tcWeapon.maxBullets} bullets");
-
-            //Setup the new added weapon, and stop any reloading going on with the current weapon
-            TargetSendWeaponStatus(GetClientConnection, netWeapon);
-
-            if (weapons.Count > 1) SetClientWeaponIndex(weapons.Count - 1);
+            if (weapons.Count > 1) 
+                SetClientWeaponIndex(weapons.Count - 1);
         }
 
         /// <summary>
         ///     Instantiates a weapon model in all clients
         /// </summary>
-        /// <param name="weaponName"></param>
-        [ClientRpc(channel = Channels.Unreliable)]
-        private void RpcInstantiateWeaponOnClients(string weaponName)
+        /// <param name="weapon"></param>
+        private GameObject CreateNewWeaponModel(WeaponBase weapon)
         {
-            if (weaponName == null)
-                return;
+            if (weapon == null)
+                return null;
 
-            GameObject newWeapon = Instantiate(WeaponsResourceManager.GetWeapon(weaponName).baseWeaponPrefab,
-                weaponsHolderSpot);
+            GameObject newWeapon = Instantiate(weapon.weaponObjectPrefab, weaponsHolderSpot);
 
             if (isLocalPlayer)
                 SetupWeaponObjectLocal(newWeapon);
+
+            return newWeapon;
         }
 
         private void SetupWeaponObjectLocal(GameObject weaponObject)
@@ -376,6 +268,9 @@ namespace Team_Capture.Weapons
         [Server]
         public void RemoveAllWeapons()
         {
+            foreach (WeaponBase weapon in weapons)
+                weapon.OnRemove();
+            
             SelectedWeaponIndex = 0;
             weapons.Clear();
         }
@@ -383,8 +278,7 @@ namespace Team_Capture.Weapons
         /// <summary>
         ///     Removes all weapons on the client
         /// </summary>
-        [ClientRpc(channel = Channels.Unreliable)]
-        private void RpcRemoveAllActiveWeapons()
+        private void RemoveAllWeaponsModels()
         {
             for (int i = 0; i < weaponsHolderSpot.childCount; i++) Destroy(weaponsHolderSpot.GetChild(i).gameObject);
         }
@@ -398,7 +292,7 @@ namespace Team_Capture.Weapons
         /// </summary>
         /// <param name="index"></param>
         [Command(channel = Channels.Unreliable)]
-        public void CmdSetWeapon(int index)
+        public void CmdSetWeaponIndex(int index)
         {
             if (weapons.ElementAt(index) == null)
                 return;
@@ -414,20 +308,11 @@ namespace Team_Capture.Weapons
         [Server]
         private void SetClientWeaponIndex(int index)
         {
-            //Stop reloading
-            CancelReload();
-            weapons[index].IsReloading = false;
-
-            //Set the selected weapon index and update the visible gameobject
+            weapons[SelectedWeaponIndex].OnSwitchOff();
             SelectedWeaponIndex = index;
-
-            //Start reloading weapon if the weapon has no bullets left
-            if (weapons[index].CurrentBulletAmount == 0)
-                StartReloadPlayerWeapon();
-
+            weapons[index].OnSwitchOnTo();
+            
             RpcSelectWeapon(index);
-
-            TargetSendWeaponStatus(GetClientConnection, weapons[SelectedWeaponIndex]);
         }
 
         /// <summary>
