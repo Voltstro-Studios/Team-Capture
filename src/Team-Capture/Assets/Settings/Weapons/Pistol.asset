@@ -16,11 +16,43 @@ MonoBehaviour:
   weaponObjectPrefab: {fileID: 2985817369304730979, guid: 5f5edb97b2388714ca78daa416284087,
     type: 3}
   weaponDamage: 15
+  weaponDamageDropOff:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 8
+      value: 1
+      inSlope: 0
+      outSlope: -0.01403509
+      tangentMode: 0
+      weightedMode: 3
+      inWeight: 0.5
+      outWeight: 0.322204
+    - serializedVersion: 3
+      time: 65
+      value: 0.2
+      inSlope: -0.01403509
+      outSlope: -0.01377508
+      tangentMode: 0
+      weightedMode: 3
+      inWeight: 0.3634869
+      outWeight: 0.5
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   weaponFireRate: 6
-  range: 30
   bulletsPerShot: 1
-  maxBullets: 18
-  spreadFactor: 0.025
+  maxBullets: 16
+  spreadFactor: 0.02
   weaponFireMode: 0
   weaponReloadTime: 2000
   weaponReloadMode: 0

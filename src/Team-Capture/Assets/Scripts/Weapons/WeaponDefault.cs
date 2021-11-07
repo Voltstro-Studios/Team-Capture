@@ -34,15 +34,28 @@ namespace Team_Capture.Weapons
         /// </summary>
         [Tooltip("How much damage the weapon does")]
         public int weaponDamage = 15;
+        
+        /// <summary>
+        ///     Based on distance, what is the weapon's damage dropoff.
+        ///     <para>
+        ///         Dropoff is calculated by a curve that is evaluated.
+        ///         The evaluated value is then multiplied with the weapon's damage.
+        ///     </para>
+        ///     <para>X is distance. Y is multiplier.</para>
+        /// </summary>
+        [Tooltip("Based on distance, what is the weapon's damage dropoff.\n" +
+                 "Dropoff is calculated by a curve that is evaluated. The evaluated value is then multiplied with the weapon's damage.\n" +
+                 "X is distance. Y is multiplier.")]
+        public AnimationCurve weaponDamageDropOff = new(
+            new Keyframe(0, 1, 0, 0),
+            new Keyframe(8, 1, 0, -0.01403509f, 0.5f, 0.322204f),
+            new Keyframe(65, 0.2f, -0.01403509f, -0.01377508f, 0.3634869f, 0.5f));
 
         /// <summary>
         ///     The fire rate of the weapon
         /// </summary>
         [Tooltip("The fire rate of the weapon")]
         public float weaponFireRate = 10;
-        
-        //TODO: Lets remove range and add damage dropoff
-        public int range = 50;
 
         /// <summary>
         ///     How many bullets to do when the weapon is shot
@@ -254,19 +267,26 @@ namespace Team_Capture.Weapons
             Transform playerFacingDirection = weaponManager.localPlayerCamera;
             List<Vector3> targets = new();
             List<Vector3> targetsNormal = new();
+            
+            //Calculate directions first
+            Vector3[] directions = new Vector3[bulletsPerShot];
+            for (int i = 0; i < bulletsPerShot; i++)
+            {
+                directions[i] = new Vector3(
+                    Random.Range(-spreadFactor, spreadFactor),
+                    Random.Range(-spreadFactor, spreadFactor),
+                    Random.Range(-spreadFactor, spreadFactor));
+            }
 
             for (int i = 0; i < bulletsPerShot; i++)
             {
                 //Calculate random spread
                 Vector3 direction = playerFacingDirection.forward;
-                direction += playerFacingDirection.TransformDirection(new Vector3(
-                    Random.Range(-spreadFactor, spreadFactor),
-                    Random.Range(-spreadFactor, spreadFactor),
-                    Random.Range(-spreadFactor, spreadFactor)));
+                direction += playerFacingDirection.TransformDirection(directions[i]);
                 
                 //Do our raycast
                 RaycastHit[] hits = RaycastHelper.RaycastAllSorted(playerFacingDirection.position, direction,
-                    range, weaponManager.raycastLayerMask);
+                    float.MaxValue, weaponManager.raycastLayerMask);
                 foreach (RaycastHit hit in hits)
                 {
                     //Don't count if we hit the shooting player
@@ -279,9 +299,14 @@ namespace Team_Capture.Weapons
 
                     //So if we hit a player then do damage
                     PlayerManager hitPlayer = hit.collider.GetComponent<PlayerManager>();
-                    if (hitPlayer == null) break;
+                    if (hitPlayer == null) 
+                        break;
+                    
+                    //Calculate damage
+                    float damageMultiplier = weaponDamageDropOff.Evaluate(hit.distance);
+                    int damage = Mathf.FloorToInt(weaponDamage * damageMultiplier);
 
-                    hitPlayer.TakeDamage(weaponDamage, weaponManager.transform.name);
+                    hitPlayer.TakeDamage(damage, weaponManager.transform.name);
                     break;
                 }
             }
