@@ -4,9 +4,10 @@
 // This project is governed by the AGPLv3 License.
 // For more details see the LICENSE file.
 
-using System.Linq;
+using System.Collections.Generic;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
+using NetFabric.Hyperlinq;
 
 namespace Team_Capture.Helper
 {
@@ -30,8 +31,8 @@ namespace Team_Capture.Helper
                 return "localhost";
 
             //Get all the network interfaces
-            var networkInterfaces = NetworkInterface.GetAllNetworkInterfaces();
-            var activeNetworkInterfaces = networkInterfaces.Where(networkInterface =>
+            NetworkInterface[] networkInterfaces = NetworkInterface.GetAllNetworkInterfaces();
+            List<NetworkInterface> activeNetworkInterfaces = networkInterfaces.AsValueEnumerable().Where(networkInterface =>
                 networkInterface.OperationalStatus == OperationalStatus.Up && !networkInterface.IsReceiveOnly).ToList();
 
             //If there is more then one network interface, default to local host
@@ -40,9 +41,14 @@ namespace Team_Capture.Helper
 
             //Get the address
             NetworkInterface activeInterface = activeNetworkInterfaces[0];
-            foreach (IPAddressInformation information in activeInterface.GetIPProperties().AnycastAddresses)
+            IPAddressInformationCollection addresses = activeInterface.GetIPProperties().AnycastAddresses;
+            // ReSharper disable once ForCanBeConvertedToForeach
+            for (int i = 0; i < addresses.Count; i++)
+            {
+                IPAddressInformation information = addresses[i];
                 if (information.Address.AddressFamily == AddressFamily.InterNetwork)
                     return information.Address.ToString();
+            }
 
             //Fuck Do I know what to do if we hit here
             return "localhost";

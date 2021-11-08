@@ -269,6 +269,7 @@ namespace Team_Capture.Weapons
             List<Vector3> targetsNormal = new();
             
             //Calculate directions first
+            Stopwatch directionSetup = Stopwatch.StartNew();
             Vector3[] directions = new Vector3[bulletsPerShot];
             for (int i = 0; i < bulletsPerShot; i++)
             {
@@ -277,6 +278,8 @@ namespace Team_Capture.Weapons
                     Random.Range(-spreadFactor, spreadFactor),
                     Random.Range(-spreadFactor, spreadFactor));
             }
+            directionSetup.Stop();
+            Logger.Debug("Took {Milliseconds} to setup directions.", directionSetup.Elapsed.TotalMilliseconds);
 
             for (int i = 0; i < bulletsPerShot; i++)
             {

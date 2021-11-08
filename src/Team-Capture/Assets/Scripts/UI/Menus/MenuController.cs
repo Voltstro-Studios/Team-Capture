@@ -7,8 +7,8 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using Mirror;
+using NetFabric.Hyperlinq;
 using Team_Capture.Core;
 using Team_Capture.Helper.Extensions;
 using Team_Capture.Input;
@@ -205,11 +205,11 @@ namespace Team_Capture.UI.Menus
 
         private KeyValuePair<MenuPanel, GameObject> GetMenuPanel(string panelName)
         {
-            var result = from a in activeMenuPanels
-                where a.Key.name == panelName
-                select a;
-
-            return result.FirstOrDefault();
+            Option<KeyValuePair<MenuPanel, GameObject>> result = activeMenuPanels.AsValueEnumerable()
+                .Where(x => x.Key.name == panelName)
+                .First();
+            
+            return result.Value;
         }
 
         /// <summary>
@@ -218,11 +218,11 @@ namespace Team_Capture.UI.Menus
         /// <returns></returns>
         public KeyValuePair<MenuPanel, GameObject> GetActivePanel()
         {
-            var result = from a in activeMenuPanels
-                where a.Value.activeSelf
-                select a;
-
-            return result.FirstOrDefault();
+            Option<KeyValuePair<MenuPanel, GameObject>> result = activeMenuPanels.AsValueEnumerable()
+                .Where(x => x.Value.activeSelf)
+                .First();
+            
+            return result.Value;
         }
 
         #endregion

@@ -5,8 +5,8 @@
 // For more details see the LICENSE file.
 
 using System;
-using System.Linq;
 using ElRaccoone.Tweens;
+using NetFabric.Hyperlinq;
 using Team_Capture.Core;
 using UnityEngine;
 using UnityEngine.UI;
@@ -41,15 +41,15 @@ namespace Team_Capture.Tweens
         /// <param name="eventName"></param>
         public void PlayEvent(string eventName)
         {
-            TweenEvent tweenEvent = eventsToPlay.FirstOrDefault(x => x.name == eventName);
-            if (tweenEvent == null)
+            Option<TweenEvent> tweenEvent = eventsToPlay.AsValueEnumerable().Where(x => x.name == eventName).First();
+            if (tweenEvent.IsNone)
             {
                 Logger.Error("There is no tween event called {EventName} on tween object {ObjectName}!", eventName,
                     objectToTween.name);
                 return;
             }
 
-            PlayTween(tweenEvent);
+            PlayTween(tweenEvent.Value);
         }
 
         /// <summary>

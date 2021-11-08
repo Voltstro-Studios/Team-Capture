@@ -5,7 +5,7 @@
 // For more details see the LICENSE file.
 
 using System.Collections.Generic;
-using System.Linq;
+using NetFabric.Hyperlinq;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using Logger = Team_Capture.Logging.Logger;
@@ -34,7 +34,9 @@ namespace Team_Capture.Weapons
         /// <returns></returns>
         public static WeaponBase GetWeapon(string weaponId)
         {
-            return weapons.FirstOrDefault(w => w.weaponId == weaponId);
+            return weapons.AsValueEnumerable()
+                .Where(w => w.weaponId == weaponId)
+                .First().Value;
         }
     }
 }

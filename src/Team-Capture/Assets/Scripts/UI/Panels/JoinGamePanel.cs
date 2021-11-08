@@ -5,10 +5,10 @@
 // For more details see the LICENSE file.
 
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using Cysharp.Threading.Tasks;
 using Mirror;
+using NetFabric.Hyperlinq;
 using Team_Capture.AddressablesAddons;
 using Team_Capture.Core.Networking;
 using Team_Capture.Core.Networking.Discovery;
@@ -128,7 +128,7 @@ namespace Team_Capture.UI.Panels
                 return;
 
             //If the server already exists in the list then ignore it
-            if (servers.Any(x => Equals(x.EndPoint, server.EndPoint)))
+            if (servers.AsValueEnumerable().Any(x => Equals(x.EndPoint, server.EndPoint)))
                 return;
 
             //Add the server to the list

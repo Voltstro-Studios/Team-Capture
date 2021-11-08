@@ -6,8 +6,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
+using NetFabric.Hyperlinq;
 using Steamworks;
 using UnityEngine;
 using Logger = Team_Capture.Logging.Logger;
@@ -70,18 +70,22 @@ namespace Team_Capture.Integrations.Steamworks
         private static void OnAuthResponse(SteamId steamId, SteamId ownerId, AuthResponse status)
         {
             //TODO: If the user cancels their auth ticket, we need to disconnect them
-            var user = authResults.FirstOrDefault(x => x.Key.UserId == steamId);
-            if (user.Equals(null))
+            Option<KeyValuePair<SteamUser, AuthResult>> result = authResults.AsValueEnumerable().Where(x => x.Key.UserId == steamId).First();
+            if(result.IsNone)
+                return;
+            
+            (SteamUser key, AuthResult authResult) = result.Value;
+            if (key.Equals(null))
                 return;
 
-            authResults.Remove(user.Key);
+            authResults.Remove(key);
 
             Logger.Info("Got client {ID} auth response back of: {status}", steamId, status);
 
             if (status == AuthResponse.OK)
-                user.Value.OnSuccess.Invoke();
+                authResult.OnSuccess.Invoke();
             else
-                user.Value.OnFail.Invoke();
+                authResult.OnFail.Invoke();
         }
 
         /// <summary>

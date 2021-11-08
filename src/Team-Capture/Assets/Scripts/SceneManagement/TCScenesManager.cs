@@ -5,8 +5,8 @@
 // For more details see the LICENSE file.
 
 using System.Collections.Generic;
-using System.Linq;
 using Mirror;
+using NetFabric.Hyperlinq;
 using Team_Capture.Console;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -145,12 +145,12 @@ namespace Team_Capture.SceneManagement
             return scenes;
         }
 
-        public static List<TCScene> GetAllOnlineScenes()
+        public static IReadOnlyList<TCScene> GetAllOnlineScenes()
         {
             if (scenes == null)
                 LoadAllScenes();
 
-            return GetAllScenes().Where(x => x.isOnlineScene).ToList();
+            return scenes.AsValueEnumerable().Where(x => x.isOnlineScene).ToArray();
         }
 
         /// <summary>
@@ -160,7 +160,11 @@ namespace Team_Capture.SceneManagement
         /// <returns></returns>
         public static TCScene FindSceneInfo(string name)
         {
-            return scenes.FirstOrDefault(s => s.name == name);
+            Option<TCScene> result = scenes.AsValueEnumerable().Where(s => s.name == name).First();
+            if (result.IsNone)
+                return null;
+
+            return result.Value;
         }
 
         /// <summary>

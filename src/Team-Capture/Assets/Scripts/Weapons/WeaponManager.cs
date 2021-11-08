@@ -5,11 +5,8 @@
 // For more details see the LICENSE file.
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using Cysharp.Threading.Tasks;
 using Mirror;
+using NetFabric.Hyperlinq;
 using Team_Capture.Helper;
 using Team_Capture.Player;
 using Team_Capture.SceneManagement;
@@ -155,11 +152,11 @@ namespace Team_Capture.Weapons
         /// <returns></returns>
         internal WeaponBase GetWeaponFromId(string weaponId)
         {
-            IEnumerable<WeaponBase> result = from a in weapons
-                where a.weaponId == weaponId
-                select a;
+            Option<WeaponBase> result = weapons.AsValueEnumerable()
+                .Where(a => a.weaponId == weaponId)
+                .First();
 
-            return WeaponsResourceManager.GetWeapon(result.FirstOrDefault()?.weaponId);
+            return result.IsNone ? null : WeaponsResourceManager.GetWeapon(result.Value.weaponId);
         }
 
         /// <summary>
@@ -169,11 +166,11 @@ namespace Team_Capture.Weapons
         /// <returns></returns>
         internal WeaponBase GetWeapon(WeaponBase weapon)
         {
-            IEnumerable<WeaponBase> result = from a in weapons
-                where a == weapon
-                select a;
+            Option<WeaponBase> result = weapons.AsValueEnumerable()
+                .Where(a => a == weapon)
+                .First();
 
-            return WeaponsResourceManager.GetWeapon(result.FirstOrDefault()?.weaponId);
+            return result.IsNone ? null : WeaponsResourceManager.GetWeapon(result.Value.weaponId);
         }
 
         #endregion
@@ -298,9 +295,9 @@ namespace Team_Capture.Weapons
         [Server]
         public void RemoveAllWeapons()
         {
-            foreach (WeaponBase weapon in weapons)
-                weapon.OnRemove();
-            
+            for (int i = 0; i < weapons.Count; i++)
+                weapons[i].OnRemove();
+
             SelectedWeaponIndex = 0;
             weapons.Clear();
         }
@@ -324,7 +321,9 @@ namespace Team_Capture.Weapons
         [Command(channel = Channels.Unreliable)]
         public void CmdSetWeaponIndex(int index)
         {
-            if (weapons.ElementAt(index) == null)
+            Option<WeaponBase> result = weapons.AsValueEnumerable().ElementAt(index);
+            
+            if (result.IsNone)
                 return;
 
             Logger.Debug($"Player `{transform.name}` set their weapon index to `{index}`.");

@@ -116,8 +116,9 @@ namespace Team_Capture.UI.ScoreBoard
         private void SetScoreBoardPlayerItems()
         {
             ClearScoreBoardPlayerItems();
-            foreach (PlayerManager player in players)
+            for (int i = 0; i < players.Count; i++)
             {
+                PlayerManager player = players[i];
                 GameObject playerItem = Instantiate(playerItemPrefab, playerListTransform, false);
                 ScoreBoardPlayer scoreBoardPlayer = playerItem.GetComponent<ScoreBoardPlayer>();
 
@@ -149,8 +150,8 @@ namespace Team_Capture.UI.ScoreBoard
         /// </summary>
         private void UpdateUIPositions()
         {
-            foreach (ScoreBoardPlayer scoreBoardPlayer in playerItems)
-                scoreBoardPlayer.transform.SetSiblingIndex(players.IndexOf(scoreBoardPlayer.PlayerToTrack));
+            for (int i = 0; i < playerItems.Count; i++)
+                playerItems[i].transform.SetSiblingIndex(players.IndexOf(playerItems[i].PlayerToTrack));
         }
 
         private void PlayerKilled()
@@ -158,8 +159,8 @@ namespace Team_Capture.UI.ScoreBoard
             SortPlayerList();
             UpdateUIPositions();
 
-            foreach (ScoreBoardPlayer scoreBoardPlayer in playerItems)
-                scoreBoardPlayer.UpdatePlayerStats();
+            for (int i = 0; i < playerItems.Count; i++)
+                playerItems[i].UpdatePlayerStats();
         }
 
         private void ClientPlayerUpdateUI()

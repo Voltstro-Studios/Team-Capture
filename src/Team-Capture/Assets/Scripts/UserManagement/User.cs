@@ -5,7 +5,7 @@
 // For more details see the LICENSE file.
 
 using System.Collections.Generic;
-using System.Linq;
+using NetFabric.Hyperlinq;
 using Team_Capture.Console;
 using UnityEngine;
 using Logger = Team_Capture.Logging.Logger;
@@ -49,7 +49,8 @@ namespace Team_Capture.UserManagement
         /// <returns></returns>
         public static IUser GetActiveUser()
         {
-            return users.FirstOrDefault().Value;
+            Option<KeyValuePair<UserProvider, IUser>> result = users.AsValueEnumerable().First();
+            return result.IsNone ? null : result.Value.Value;
         }
 
         /// <summary>
@@ -58,7 +59,9 @@ namespace Team_Capture.UserManagement
         /// <returns></returns>
         internal static IUser[] GetUsers()
         {
-            return users.Select(x => x.Value).ToArray();
+            return users.AsValueEnumerable()
+                .Select(x => x.Value)
+                .ToArray();
         }
 
         private class UserProviderComparer : IComparer<UserProvider>

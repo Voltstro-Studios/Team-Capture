@@ -55,7 +55,7 @@ namespace Team_Capture.Editor
             else
             {
                 //Get all TC scenes
-                List<TCScene> scenes = TCScenesManager.GetAllOnlineScenes();
+                IReadOnlyList<TCScene> scenes = TCScenesManager.GetAllOnlineScenes();
                 
                  EditorGUILayout.BeginHorizontal();
                  {

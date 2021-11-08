@@ -6,10 +6,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Cysharp.Threading.Tasks;
 using JetBrains.Annotations;
 using Mirror;
+using NetFabric.Hyperlinq;
 using Team_Capture.Console;
 using Team_Capture.Integrations.Steamworks;
 using Team_Capture.UserManagement;
@@ -100,13 +100,13 @@ namespace Team_Capture.Core.Networking
                 RefuseClientConnection(conn);
                 return;
             }
-
+            
             Logger.Debug("Got {UserAccountsNum} user accounts from {UserId}", msg.UserAccounts.Length,
                 conn.connectionId);
 
             //Get the user account the server wants
-            IUser user = msg.UserAccounts.FirstOrDefault(x => x.UserProvider == AuthMethod);
-            if (user == null)
+            Option<IUser> userResult = msg.UserAccounts.AsValueEnumerable().Where(x => x.UserProvider == AuthMethod).First();
+            if (userResult.IsNone)
             {
                 SendRequestResponseMessage(conn, HttpCode.Unauthorized, "No valid user accounts sent!");
                 Logger.Warn("Client {Id} sent no valid user accounts!. Rejecting connection.", conn.connectionId);
@@ -114,6 +114,8 @@ namespace Team_Capture.Core.Networking
                 RefuseClientConnection(conn);
                 return;
             }
+
+            IUser user = userResult.Value;
 
             if (authAccounts.ContainsValue(user))
             {

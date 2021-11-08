@@ -7,8 +7,8 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Reflection;
+using NetFabric.Hyperlinq;
 using Team_Capture.Helper.Extensions;
 using Team_Capture.Settings;
 using Team_Capture.UI.Elements.Settings;
@@ -207,7 +207,7 @@ namespace Team_Capture.UI
         private void CreateEnumDropdown(int val, FieldInfo field, GameObject panel)
         {
             string[] names = Enum.GetNames(field.FieldType);
-            val = names.ToList().IndexOf(Enum.GetName(field.FieldType, val));
+            val = names.AsValueEnumerable().IndexOf(Enum.GetName(field.FieldType, val));
 
             TMP_Dropdown dropdown = settingsPanel.AddDropdownToPanel(panel, field.GetObjectDisplayText(), names, val);
 
@@ -223,9 +223,9 @@ namespace Team_Capture.UI
         private object GetSettingObject(FieldInfo field)
         {
             //Find the first setting group where the group type matches that of the field's declaring type
-            PropertyInfo settingGroup =
-                GameSettings.GetSettingClasses().First(p => p.PropertyType == field.DeclaringType);
-            return settingGroup.GetValue(null);
+            Option<PropertyInfo> settingGroup =
+                GameSettings.GetSettingClasses().AsValueEnumerable().Where(p => p.PropertyType == field.DeclaringType).First();
+            return settingGroup.Value.GetValue(null);
         }
 
         // ReSharper restore UnusedParameter.Local

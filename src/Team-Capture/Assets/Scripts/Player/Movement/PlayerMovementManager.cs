@@ -208,8 +208,10 @@ namespace Team_Capture.Player.Movement
 
             Physics.SyncTransforms();
 
-            foreach (PlayerInputs clientState in clientMotorStates)
-                DoMovement(clientState);
+            for (int i = 0; i < clientMotorStates.Count; i++)
+            {
+                DoMovement(clientMotorStates[i]);
+            }
         }
 
         [Server]

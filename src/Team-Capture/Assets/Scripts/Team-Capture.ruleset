@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RuleSet Name="New Rule Set" Description=" " ToolsVersion="10.0">
+  <Rules AnalyzerId="NetFabric.Hyperlinq.Analyzer" RuleNamespace="NetFabric.Hyperlinq.Analyzer">
+    <Rule Id="HLQ002" Action="Error" />
+  </Rules>
+</RuleSet>

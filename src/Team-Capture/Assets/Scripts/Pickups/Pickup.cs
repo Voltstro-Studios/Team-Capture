@@ -123,9 +123,11 @@ namespace Team_Capture.Pickups
 
         private void SetMeshRenderMaterials()
         {
-            foreach (PickupMaterials pickupMaterial in pickupMaterials)
-                pickupMaterial.MeshRenderer.material =
-                    isPickedUp ? pickupMaterial.PickedUpMaterial : pickupMaterial.DefaultMaterial;
+            for (int i = 0; i < pickupMaterials.Count; i++)
+            {
+                pickupMaterials[i].MeshRenderer.material =
+                    isPickedUp ? pickupMaterials[i].PickedUpMaterial : pickupMaterials[i].DefaultMaterial;
+            }
         }
 
         private struct PickupMaterials
