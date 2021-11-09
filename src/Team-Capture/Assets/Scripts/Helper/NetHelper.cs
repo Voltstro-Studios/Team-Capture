@@ -36,7 +36,7 @@ namespace Team_Capture.Helper
                 networkInterface.OperationalStatus == OperationalStatus.Up && !networkInterface.IsReceiveOnly).ToList();
 
             //If there is more then one network interface, default to local host
-            if (activeNetworkInterfaces.Count > 1)
+            if (activeNetworkInterfaces.Count is > 1 or < 1)
                 return "127.0.0.1";
 
             //Get the address

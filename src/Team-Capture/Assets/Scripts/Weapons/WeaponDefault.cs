@@ -16,7 +16,10 @@ using Team_Capture.Player;
 using Team_Capture.Pooling;
 using Team_Capture.SceneManagement;
 using Team_Capture.Weapons.Effects;
+using Team_Capture.Weapons.Jobs;
 using Team_Capture.Weapons.UI;
+using Unity.Collections;
+using Unity.Jobs;
 using UnityEngine;
 using Logger = Team_Capture.Logging.Logger;
 using Random = UnityEngine.Random;
@@ -270,14 +273,15 @@ namespace Team_Capture.Weapons
             
             //Calculate directions first
             Stopwatch directionSetup = Stopwatch.StartNew();
-            Vector3[] directions = new Vector3[bulletsPerShot];
-            for (int i = 0; i < bulletsPerShot; i++)
+            NativeArray<Vector3> directions = new(bulletsPerShot, Allocator.TempJob);
+            CreateDirectionsJob createDirectionsJob = new()
             {
-                directions[i] = new Vector3(
-                    Random.Range(-spreadFactor, spreadFactor),
-                    Random.Range(-spreadFactor, spreadFactor),
-                    Random.Range(-spreadFactor, spreadFactor));
-            }
+                Directions = directions,
+                SpreadFactor = spreadFactor,
+                Random = new Unity.Mathematics.Random((uint)Random.Range(uint.MinValue, uint.MaxValue))
+            };
+            createDirectionsJob.Schedule(bulletsPerShot, 32).Complete();
+
             directionSetup.Stop();
             Logger.Debug("Took {Milliseconds} to setup directions.", directionSetup.Elapsed.TotalMilliseconds);
 
@@ -313,6 +317,8 @@ namespace Team_Capture.Weapons
                     break;
                 }
             }
+
+            directions.Dispose();
             
             DoWeaponEffects(new DefaultEffectsMessage(targets.ToArray(), targetsNormal.ToArray()));
             
