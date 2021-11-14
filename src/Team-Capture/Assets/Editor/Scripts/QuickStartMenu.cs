@@ -63,8 +63,10 @@ namespace Team_Capture.Editor
                     if (GUILayout.Button("Start"))
                     {
                         //Start each process
-                        foreach (QuickStartEntry entry in quickstartData.entries)
+                        for (int i = 0; i < quickstartData.entries.Count; i++)
                         {
+                            QuickStartEntry entry = quickstartData.entries[i];
+                            
                             //Build arguments
                             string arguments = $"-scene {scenes[quickstartData.selectedSceneIndex].SceneFileName} -auth-method {quickstartData.authMode.ToString()} ";
                             if (entry.server)
@@ -90,8 +92,9 @@ namespace Team_Capture.Editor
                     if (GUILayout.Button("Stop All"))
                     {
                         //Kill each started process
-                        foreach (Process process in StartedProcesses)
+                        for (int i = 0; i < StartedProcesses.Count; i++)
                         {
+                            Process process = StartedProcesses[i];
                             if(process.HasExited)
                                 continue;
                             
