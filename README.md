@@ -117,10 +117,10 @@ You can launch a build from the editor by going to Team-Capture **->** Build **-
 
 Team-Capture plans to support most large x64-bit based desktop platforms.
 
-|OS             |Client|Server|Notes                                                                                                                            |
-|---------------|------|------|---------------------------------------------------------------------------------------------------------------------------------|
+|OS             |Client |Server |Notes                                                                                                                            |
+|---------------|------ |------ |---------------------------------------------------------------------------------------------------------------------------------|
 |Windows (x64)  |✔     |✔     |Native.                                                                                                                          |
-|GNU/Linux (x64)|✔     |✔     |Native. Requires [VA-API support](https://github.com/Voltstro-Studios/UnityWebBrowser#enable-va-api-support) for some components.|
+|Linux (x64)    |✔     |✔     |Native. Some parts may require additional configuration. See [Linux Terminal](https://github.com/Voltstro-Studios/Team-Capture/wiki/Linux-Terminal) in the wiki for more info.|
 |macOS (x64)    |✖     |✖     |No physical hardware to test or develop on.                                                                                      |
 
 # License
