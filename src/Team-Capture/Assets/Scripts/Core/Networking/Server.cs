@@ -337,13 +337,36 @@ namespace Team_Capture.Core.Networking
                 Logger.Error("A server is already running!");
                 return;
             }
+            
+#if UNITY_EDITOR
+            string tcApp = $"{GameBuilder.GetBuildDirectory()}Team-Capture-Quick/";
+#else
+            string tcApp = Game.GetGameExecutePath();
+#endif
 
-            //Create and start the process
-            Process newTcServer = new()
+#if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
+            tcApp += "/Team-Capture.exe";
+#else
+            tcApp += "/Team-Capture";
+#endif
+
+            string tcArguments = $"-batchmode -nographics -gamename \"{gameName}\" -scene {sceneName} -maxplayers {maxPlayers} -auth-method {userProvider.ToString()}" +
+                                 $"{(shutOnDisconnect ? " -closeserveronfirstclientdisconnect" : string.Empty)} -high";
+
+#if UNITY_EDITOR_LINUX || UNITY_STANDALONE_LINUX
+            ProcessHelper.LaunchLinuxTerminalAndLaunchProcess(tcApp, tcArguments);
+#else
+            Process tcProcess = new Process()
             {
-                StartInfo = GetTCProcessStartInfo(gameName, sceneName, maxPlayers, userProvider, shutOnDisconnect)
+                StartInfo = new ProcessStartInfo
+                {
+                    FileName = tcApp,
+                    Arguments = tcArguments,
+                    WorkingDirectory = Game.GetGameExecutePath()
+                }
             };
-            newTcServer.Start();
+            tcProcess.Start();
+#endif
 
             //We need to wait for the server online file, and to not cause the game to freeze we run it async
             WaitForServerOnlineFile(serverOnlinePath, onServerStarted, onServerFailedToStart).Forget();
@@ -426,49 +449,6 @@ namespace Team_Capture.Core.Networking
                 Directory.CreateDirectory(directory);
             
             File.WriteAllText(motdPath, MotdDefaultText);
-        }
-
-        private static ProcessStartInfo GetTCProcessStartInfo(string gameName, string sceneName, int maxPlayers,
-            UserProvider userProvider, bool shutOnDisconnect)
-        {
-            ProcessStartInfo startInfo = new();
-
-            #region Windows StartInfo
-
-#if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
-			startInfo.Arguments =
-				$"-batchmode -nographics -gamename \"{gameName}\" -scene {sceneName} -maxplayers {maxPlayers} -auth-method {userProvider.ToString()}" +
-				$"{(shutOnDisconnect ? " -closeserveronfirstclientdisconnect" : string.Empty)} -high";
-#if UNITY_EDITOR_WIN
-			startInfo.FileName =
-                $"{GameBuilder.GetBuildDirectory()}Team-Capture-Quick/Team-Capture.exe";
-#elif UNITY_STANDALONE_WIN
-			startInfo.FileName = $"Team-Capture.exe";
-			startInfo.WorkingDirectory = Game.GetGameExecutePath();
-#endif
-#endif
-
-            #endregion
-
-            #region Linux StartInfo
-
-            //TODO: Other terminals?
-#if UNITY_EDITOR_LINUX || UNITY_STANDALONE_LINUX
-
-#if UNITY_EDITOR
-            startInfo.FileName = $"{GameBuilder.GetBuildDirectory()}Team-Capture-Quick/Team-Capture";
-#else
-			startInfo.FileName = "./Team-Capture";
-#endif
-
-            startInfo.Arguments =
-                $"-batchmode -nographics -gamename \"{gameName}\" -scene {sceneName} -maxplayers {maxPlayers} -auth-method {userProvider.ToString()}" +
-                $"{(shutOnDisconnect ? " -closeserveronfirstclientdisconnect" : string.Empty)} -high";
-#endif
-
-            #endregion
-
-            return startInfo;
         }
 
         /// <summary>

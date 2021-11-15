@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using Team_Capture.Helper;
 using Team_Capture.SceneManagement;
 using Team_Capture.UserManagement;
 using UnityEditor;
@@ -72,6 +73,14 @@ namespace Team_Capture.Editor
                             if (entry.server)
                                 arguments += "-batchmode -nographics ";
                             arguments += entry.additionalArguments;
+
+#if UNITY_EDITOR_LINUX
+                            if (entry.server)
+                            {
+                                ProcessHelper.LaunchLinuxTerminalAndLaunchProcess(tcFullPath, arguments);
+                                continue;
+                            }
+#endif
                             
                             //Setup and start the process
                             Process newProcess = new Process

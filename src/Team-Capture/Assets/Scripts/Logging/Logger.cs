@@ -5,6 +5,7 @@
 // For more details see the LICENSE file.
 
 using System;
+using System.Diagnostics;
 using Serilog;
 using Serilog.Core;
 using Serilog.Events;
@@ -63,7 +64,7 @@ namespace Team_Capture.Logging
 #if UNITY_EDITOR //Default to debug logging in the editor
         internal static bool DebugLogMode = true;
 #else
-		public static bool DebugLogMode = false;
+		internal static bool DebugLogMode = false;
 #endif
 
         /// <summary>
@@ -128,6 +129,39 @@ namespace Team_Capture.Logging
             level.MinimumLevel = DebugLogMode ? LogEventLevel.Debug : LogEventLevel.Information;
         }
 
+        private static void CheckInitialization()
+        {
+#if !UNITY_EDITOR
+            if (!IsLoggerInitialized)
+                throw new InitializationException("The logger isn't initialized!");
+#endif
+        }
+
+
+        [Conditional("UNITY_EDITOR")]
+        private static void LogIfUnInitialized(string message, LogEventLevel logLevel)
+        {
+#if UNITY_EDITOR
+            switch (logLevel)
+            {
+                case LogEventLevel.Verbose:
+                case LogEventLevel.Debug:
+                case LogEventLevel.Information:
+                    UnityEngine.Debug.Log(message);
+                    break;
+                case LogEventLevel.Warning:
+                    UnityEngine.Debug.LogWarning(message);
+                    break;
+                case LogEventLevel.Error:
+                case LogEventLevel.Fatal:
+                    UnityEngine.Debug.LogError(message);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(logLevel), logLevel, null);
+            }
+#endif
+        }
+
         #region Debug Logging
 
         /// <summary>
@@ -136,8 +170,12 @@ namespace Team_Capture.Logging
         /// <param name="message"></param>
         public static void Debug(string message)
         {
-            if (!IsLoggerInitialized)
-                throw new InitializationException("The logger isn't initialized!");
+            CheckInitialization();
+            LogIfUnInitialized(message, LogEventLevel.Debug);
+#if UNITY_EDITOR
+            if(!IsLoggerInitialized)
+                return;
+#endif
 
             if (DebugLogMode)
                 log.Debug(message);
@@ -150,8 +188,11 @@ namespace Team_Capture.Logging
         /// <param name="values"></param>
         public static void Debug(string message, params object[] values)
         {
-            if (!IsLoggerInitialized)
-                throw new InitializationException("The logger isn't initialized!");
+            CheckInitialization();
+#if UNITY_EDITOR
+            if(!IsLoggerInitialized)
+                return;
+#endif
 
             if (DebugLogMode)
                 log.Debug(message, values);
@@ -167,8 +208,12 @@ namespace Team_Capture.Logging
         /// <param name="message"></param>
         public static void Info(string message)
         {
-            if (!IsLoggerInitialized)
-                throw new InitializationException("The logger isn't initialized!");
+            CheckInitialization();
+            LogIfUnInitialized(message, LogEventLevel.Information);
+#if UNITY_EDITOR
+            if(!IsLoggerInitialized)
+                return;
+#endif
 
             log.Information(message);
         }
@@ -180,8 +225,11 @@ namespace Team_Capture.Logging
         /// <param name="values"></param>
         public static void Info(string message, params object[] values)
         {
-            if (!IsLoggerInitialized)
-                throw new InitializationException("The logger isn't initialized!");
+            CheckInitialization();
+#if UNITY_EDITOR
+            if(!IsLoggerInitialized)
+                return;
+#endif
 
             log.Information(message, values);
         }
@@ -196,8 +244,12 @@ namespace Team_Capture.Logging
         /// <param name="message"></param>
         public static void Warn(string message)
         {
-            if (!IsLoggerInitialized)
-                throw new InitializationException("The logger isn't initialized!");
+            CheckInitialization();
+            LogIfUnInitialized(message, LogEventLevel.Warning);
+#if UNITY_EDITOR
+            if(!IsLoggerInitialized)
+                return;
+#endif
 
             log.Warning(message);
         }
@@ -209,8 +261,11 @@ namespace Team_Capture.Logging
         /// <param name="values"></param>
         public static void Warn(string message, params object[] values)
         {
-            if (!IsLoggerInitialized)
-                throw new InitializationException("The logger isn't initialized!");
+            CheckInitialization();
+#if UNITY_EDITOR
+            if(!IsLoggerInitialized)
+                return;
+#endif
 
             log.Warning(message, values);
         }
@@ -225,8 +280,12 @@ namespace Team_Capture.Logging
         /// <param name="message"></param>
         public static void Error(string message)
         {
-            if (!IsLoggerInitialized)
-                throw new InitializationException("The logger isn't initialized!");
+            CheckInitialization();
+            LogIfUnInitialized(message, LogEventLevel.Error);
+#if UNITY_EDITOR
+            if(!IsLoggerInitialized)
+                return;
+#endif
 
             log.Error(message);
         }
@@ -238,8 +297,11 @@ namespace Team_Capture.Logging
         /// <param name="values"></param>
         public static void Error(string message, params object[] values)
         {
-            if (!IsLoggerInitialized)
-                throw new InitializationException("The logger isn't initialized!");
+            CheckInitialization();
+#if UNITY_EDITOR
+            if(!IsLoggerInitialized)
+                return;
+#endif
 
             log.Error(message, values);
         }
@@ -251,8 +313,11 @@ namespace Team_Capture.Logging
         /// <param name="message"></param>
         public static void Error(Exception exception, string message)
         {
-            if (!IsLoggerInitialized)
-                throw new InitializationException("The logger isn't initialized!");
+            CheckInitialization();
+#if UNITY_EDITOR
+            if(!IsLoggerInitialized)
+                return;
+#endif
 
             log.Error(exception, message);
         }
@@ -265,8 +330,11 @@ namespace Team_Capture.Logging
         /// <param name="values"></param>
         public static void Error(Exception exception, string message, params object[] values)
         {
-            if (!IsLoggerInitialized)
-                throw new InitializationException("The logger isn't initialized!");
+            CheckInitialization();
+#if UNITY_EDITOR
+            if(!IsLoggerInitialized)
+                return;
+#endif
 
             log.Error(exception, message, values);
         }

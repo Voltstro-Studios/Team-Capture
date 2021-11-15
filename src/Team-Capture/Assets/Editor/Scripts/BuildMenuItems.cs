@@ -6,13 +6,14 @@
 
 using System.Diagnostics;
 using System.IO;
+using Team_Capture.Helper;
 using UnityEditor;
 using UnityVoltBuilder.Build;
 using Debug = UnityEngine.Debug;
 
 namespace Team_Capture.Editor
 {
-	public static class BuildMenuItems
+	public static class hguBuildMenuItems
 	{
 #if UNITY_EDITOR_WIN
 		private const string ApplicationName = "Team-Capture.exe";
@@ -23,25 +24,25 @@ namespace Team_Capture.Editor
 		[MenuItem("Team-Capture/Build/Launch Player Server")]
 		public static void LaunchPlayerServer()
 		{
-			LaunchApp("-nographics -batchmode");
+			LaunchApp(true, string.Empty);
 		}
 		
 		[MenuItem("Team-Capture/Build/Launch Player Server (Offline)")]
 		public static void LaunchPlayerServerOffline()
 		{
-			LaunchApp("-nographics -batchmode -auth-method Offline");
+			LaunchApp(true, "-auth-method Offline");
 		}
 
 		[MenuItem("Team-Capture/Build/Launch Player Client")]
 		public static void LaunchPlayerClient()
 		{
-			LaunchApp("-novid -high");
+			LaunchApp(false, "-novid -high");
 		}
 		
 		[MenuItem("Team-Capture/Build/Launch Player Client (Offline)")]
 		public static void LaunchPlayerClientOffline()
 		{
-			LaunchApp("-novid -high -auth-method Offline");
+			LaunchApp(false, "-novid -high -auth-method Offline");
 		}
 
 		[MenuItem("Team-Capture/Build/Launch Player Server", true)]
@@ -53,7 +54,7 @@ namespace Team_Capture.Editor
 			return GetBuildDir() != null;
 		}
 
-		private static void LaunchApp(string arguments)
+		private static void LaunchApp(bool isServer, string arguments)
 		{
 			//Make sure the build exists
 			string buildPath = GetBuildDir();
@@ -66,6 +67,15 @@ namespace Team_Capture.Editor
 			
 			string buildDirWorking = Path.GetDirectoryName(buildPath);
 
+			if (isServer)
+			{
+				arguments += " -batchmode -nographics";
+#if UNITY_EDITOR_LINUX
+				ProcessHelper.LaunchLinuxTerminalAndLaunchProcess(buildPath, arguments);
+				return;
+#endif
+			}
+			
 			Process.Start(new ProcessStartInfo
 			{
 				FileName = buildPath,

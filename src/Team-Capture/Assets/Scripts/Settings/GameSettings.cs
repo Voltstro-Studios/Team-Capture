@@ -46,6 +46,11 @@ namespace Team_Capture.Settings
         [SettingsPropertyDisplayText("Text", "Settings_Multiplayer")]
         internal static MultiplayerSettingsClass MultiplayerSettings { get; } = new();
 
+#if UNITY_EDITOR_LINUX || UNITY_STANDALONE_LINUX
+        [SettingsDontShow]
+        internal static LinuxSettingsClass LinuxSettings { get; } = new();
+#endif
+
         #endregion
 
         #region Saving, loading and resetting setting functions
@@ -104,7 +109,6 @@ namespace Team_Capture.Settings
                 try
                 {
                     string name = settingProp.Name;
-                    Logger.Debug("Got settings `{@Name}`", name);
 
                     if (File.Exists(settingsSaveDirectory + name + SettingsFileExtension))
                         //This will enable us to use internal setters on our settings to avoid anyone being able to edit them
@@ -116,7 +120,7 @@ namespace Team_Capture.Settings
                 {
                     // ignored
                 }
-
+            
             Logger.Debug("Loaded settings");
 
             //Notify other classes that settings have updated
