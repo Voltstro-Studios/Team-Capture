@@ -79,7 +79,7 @@ We also upload [releases](https://github.com/Voltstro-Studios/Team-Capture/relea
 #### Prerequisites
 
 ```
-Unity 2021.2.2f1
+Unity 2021.2.3f1
 .NET 5+
 ```
 
