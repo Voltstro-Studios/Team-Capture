@@ -337,11 +337,8 @@
       "version": "https://gitlab.com/Voltstro-Studios/WebBrowser/Package.git#2.x",
       "depth": 0,
       "source": "git",
-      "dependencies": {
-        "org.nuget.voltrpc": "1.1.1",
-        "org.nuget.voltrpc.communication.pipes": "1.1.0"
-      },
-      "hash": "26b061d95f678fed506edce51be8d0725ea46f3d"
+      "dependencies": {},
+      "hash": "7ab688c164d0770ea4cdfc2bb0487c3ecd4a9978"
     },
     "dev.voltstro.unitywebbrowser.engine.cef": {
       "version": "https://gitlab.com/Voltstro-Studios/WebBrowser/Package.git#engine/cef/base",
@@ -350,16 +347,25 @@
       "dependencies": {
         "dev.voltstro.unitywebbrowser": "2.0.0"
       },
-      "hash": "a4e667a66abcc411ab19afbcdf7a397edbb171d2"
+      "hash": "686480728e4118cda76d623cddbb51dae71e367f"
+    },
+    "dev.voltstro.unitywebbrowser.engine.cef.linux.x64": {
+      "version": "https://gitlab.com/Voltstro-Studios/WebBrowser/Package.git#engine/cef/linux-x64",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "dev.voltstro.unitywebbrowser.engine.cef": "95.7.18"
+      },
+      "hash": "34472c56933f8b62eb6e9a64a10cdb0f8b343c2b"
     },
     "dev.voltstro.unitywebbrowser.engine.cef.win.x64": {
       "version": "https://gitlab.com/Voltstro-Studios/WebBrowser/Package.git#engine/cef/win-x64",
       "depth": 0,
       "source": "git",
       "dependencies": {
-        "dev.voltstro.unitywebbrowser.engine.cef": "95.7.10"
+        "dev.voltstro.unitywebbrowser.engine.cef": "95.7.18"
       },
-      "hash": "a5f30f29505b13543e93b24d785e5d6456e8de90"
+      "hash": "e2ed220dcf5510f2ba059eb4b1ffdae334c53200"
     },
     "nl.elraccoone.tweens": {
       "version": "1.11.1",
@@ -502,22 +508,6 @@
       "source": "registry",
       "dependencies": {
         "org.nuget.system.runtime.compilerservices.unsafe": "4.5.3"
-      },
-      "url": "https://unitynuget-registry.azurewebsites.net"
-    },
-    "org.nuget.voltrpc": {
-      "version": "1.1.1",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://unitynuget-registry.azurewebsites.net"
-    },
-    "org.nuget.voltrpc.communication.pipes": {
-      "version": "1.1.0",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {
-        "org.nuget.voltrpc": "1.1.0"
       },
       "url": "https://unitynuget-registry.azurewebsites.net"
     },
