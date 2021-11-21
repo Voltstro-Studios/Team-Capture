@@ -85,6 +85,11 @@ MonoBehaviour:
     m_Address: Assets/Settings/Volume.asset
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: 68de6836340990d66b141c70e8875e55
+    m_Address: Assets/Settings/Weapons/Machete.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Weapon
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 31dc88cf5cd9dc44ead1cd2deab1bc53, type: 2}
   m_SchemaSet:

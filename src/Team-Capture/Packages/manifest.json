@@ -2,7 +2,7 @@
   "dependencies": {
     "com.cysharp.slnmerge": "1.4.0",
     "com.cysharp.unitask": "2.2.5",
-    "com.mirror-networking.mirror": "https://github.com/VoltUnityPackages/Mirror.git?path=/Assets/Mirror#newV",
+    "com.mirror-networking.mirror": "https://github.com/VoltUnityPackages/Mirror.git?path=/Assets/Mirror",
     "com.psydack.uimgui": "https://github.com/Voltstro-Studios/uimgui.git",
     "com.unity.addressables": "1.19.11",
     "com.unity.assetbundlebrowser": "1.7.0",

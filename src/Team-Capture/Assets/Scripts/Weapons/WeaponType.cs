@@ -14,6 +14,11 @@ namespace Team_Capture.Weapons
         /// <summary>
         ///     'Default' ray-casting gun
         /// </summary>
-        Default
+        Default,
+        
+        /// <summary>
+        ///     A Melee weapon
+        /// </summary>
+        Melee
     }
 }

@@ -8,6 +8,8 @@ namespace Team_Capture.Weapons.Effects
 {
     public enum EffectsType : byte
     {
-        Default
+        Default,
+        
+        Melee
     }
 }

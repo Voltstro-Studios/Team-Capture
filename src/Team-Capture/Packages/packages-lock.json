@@ -15,13 +15,13 @@
       "url": "https://package.openupm.com"
     },
     "com.mirror-networking.mirror": {
-      "version": "https://github.com/VoltUnityPackages/Mirror.git?path=/Assets/Mirror#newV",
+      "version": "https://github.com/VoltUnityPackages/Mirror.git?path=/Assets/Mirror",
       "depth": 0,
       "source": "git",
       "dependencies": {
         "org.nuget.system.threading.tasks.extensions": "4.5.4"
       },
-      "hash": "58d38888ab1d19cc42394321e01f15fcd8a4060d"
+      "hash": "bca54c3ec902e490287a0951b7be80bf8cc0beca"
     },
     "com.psydack.uimgui": {
       "version": "https://github.com/Voltstro-Studios/uimgui.git",

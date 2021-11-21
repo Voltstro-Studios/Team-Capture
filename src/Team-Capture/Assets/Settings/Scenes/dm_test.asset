@@ -29,6 +29,7 @@ MonoBehaviour:
   canLoadTo: 1
   respawnTime: 13
   stockWeapons:
+  - {fileID: 11400000, guid: 68de6836340990d66b141c70e8875e55, type: 2}
   - {fileID: 11400000, guid: da803de1f5f09f247aac351f1c13c59a, type: 2}
   traceEffectPrefab: {fileID: 5622775260631071782, guid: aeeb5910131c55e4cb505d9f7ebab423,
     type: 3}

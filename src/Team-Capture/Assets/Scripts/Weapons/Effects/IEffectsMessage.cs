@@ -33,6 +33,8 @@ namespace Team_Capture.Weapons.Effects
             {
                 case EffectsType.Default:
                     return new DefaultEffectsMessage(reader);
+                case EffectsType.Melee:
+                    return new MeleeEffectsMessage(reader);
                 default:
                     throw new ArgumentOutOfRangeException();
             }
