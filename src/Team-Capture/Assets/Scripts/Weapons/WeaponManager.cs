@@ -55,7 +55,7 @@ namespace Team_Capture.Weapons
         /// <summary>
         ///     What is the selected weapon
         /// </summary>
-        [field: SyncVar]
+        [field: SyncVar(hook = nameof(OnWeaponIndexSet))]
         public int SelectedWeaponIndex { get; private set; }
 
         /// <summary>
@@ -140,9 +140,19 @@ namespace Team_Capture.Weapons
         ///     Get the active weapon
         /// </summary>
         /// <returns></returns>
-        internal WeaponBase GetActiveWeapon()
+        internal WeaponBase GetActiveWeapon() => GetWeaponAtIndex(SelectedWeaponIndex);
+
+        /// <summary>
+        ///     Gets a weapon at the index
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        internal WeaponBase GetWeaponAtIndex(int index)
         {
-            return weapons.Count == 0 ? null : weapons[SelectedWeaponIndex];
+            if (index > weapons.Count)
+                throw new ArgumentOutOfRangeException(nameof(index));
+            
+            return weapons.Count == 0 ? null : weapons[index];
         }
 
         /// <summary>
@@ -313,7 +323,7 @@ namespace Team_Capture.Weapons
         #endregion
 
         #region Weapon Selection
-
+        
         /// <summary>
         ///     Sets the <see cref="SelectedWeaponIndex" /> to your index
         /// </summary>
@@ -338,12 +348,19 @@ namespace Team_Capture.Weapons
         private void SetClientWeaponIndex(int index)
         {
             GetActiveWeapon().OnSwitchOff();
-            
             SelectedWeaponIndex = index;
-            
             GetActiveWeapon().OnSwitchOnTo();
             
             RpcSelectWeapon(index);
+        }
+
+        private void OnWeaponIndexSet(int oldIndex, int newIndex)
+        {
+            if (!isServer && !isLocalPlayer) 
+                return;
+            
+            GetWeaponAtIndex(oldIndex).OnSwitchOff();
+            GetWeaponAtIndex(newIndex).OnSwitchOnTo();
         }
 
         /// <summary>

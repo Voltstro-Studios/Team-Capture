@@ -175,11 +175,23 @@ namespace Team_Capture.Weapons
                 HudAmmoControls.ammoText.text = defaultHudUpdateMessage.CurrentBullets.ToString();
                 HudAmmoControls.maxAmmoText.text = maxBullets.ToString();
                 HudAmmoControls.reloadTextGameObject.SetActive(defaultHudUpdateMessage.IsReloading);
+
+                isReloading = defaultHudUpdateMessage.IsReloading;
             }
         }
 
         public override void OnSwitchOnTo()
         {
+            if (isLocalClient)
+            {
+                HudAmmoControls.ammoText.gameObject.SetActive(true);
+                HudAmmoControls.maxAmmoText.gameObject.SetActive(true);
+                HudAmmoControls.reloadTextGameObject.gameObject.SetActive(isReloading);
+            }
+            
+            if(!isServer)
+                return;
+            
             //Start reloading again if we switch to and we our out of bullets
             if (currentBulletCount <= 0)
                 OnReload();
@@ -189,6 +201,16 @@ namespace Team_Capture.Weapons
 
         public override void OnSwitchOff()
         {
+            if (isLocalClient)
+            {
+                HudAmmoControls.ammoText.gameObject.SetActive(false);
+                HudAmmoControls.maxAmmoText.gameObject.SetActive(false);
+                HudAmmoControls.reloadTextGameObject.gameObject.SetActive(false);
+            }
+            
+            if(!isServer)
+                return;
+            
             CancelReload();
             shootRepeatedlyCancellation?.Cancel();
         }
@@ -205,6 +227,7 @@ namespace Team_Capture.Weapons
 
             if (isLocalClient)
             {
+                isReloading = false;
                 OnUIUpdate(new DefaultHudUpdateMessage(null, currentBulletCount, isReloading));
             }
 
