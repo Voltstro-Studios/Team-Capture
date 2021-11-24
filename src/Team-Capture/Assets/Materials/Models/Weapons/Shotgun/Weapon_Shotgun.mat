@@ -23,7 +23,7 @@ Material:
   m_Name: Weapon_Shotgun
   m_Shader: {fileID: 4800000, guid: 933532a4fcc9baf4fa0491de14d08ed7, type: 3}
   m_ShaderKeywords: _METALLICSPECGLOSSMAP _NORMALMAP _OCCLUSIONMAP
-  m_LightmapFlags: 6
+  m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: 2000
@@ -62,11 +62,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
-        m_Texture: {fileID: 2800000, guid: ccb1184b42c55aa4ab4a13b292a6b593, type: 3}
+        m_Texture: {fileID: 2800000, guid: c581cd0cf833d47a6a6ef022a7abba12, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:
-        m_Texture: {fileID: 2800000, guid: dc0ce05964792ef48ad5bbcc3bd87ecb, type: 3}
+        m_Texture: {fileID: 2800000, guid: c581cd0cf833d47a6a6ef022a7abba12, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ParallaxMap:
