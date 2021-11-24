@@ -36,6 +36,8 @@ namespace Team_Capture.Weapons
         ///     The <see cref="WeaponType"/> that this instance is
         /// </summary>
         public abstract WeaponType WeaponType { get; }
+        
+        public abstract bool IsReloadable { get; }
 
         /// <summary>
         ///     Access to instantiated weapon object

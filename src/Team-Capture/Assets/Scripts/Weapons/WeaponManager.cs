@@ -218,6 +218,9 @@ namespace Team_Capture.Weapons
         [Client]
         internal void ClientReloadWeapon()
         {
+            if(!GetActiveWeapon().IsReloadable)
+                return;
+
             //Ask the server kindly to reload the weapon
             CmdReloadPlayerWeapon();
         }
@@ -229,6 +232,9 @@ namespace Team_Capture.Weapons
         private void CmdReloadPlayerWeapon()
         {
             WeaponBase weapon = GetActiveWeapon();
+            if(!weapon.IsReloadable)
+                return;
+
             weapon.OnReload();
         }
         

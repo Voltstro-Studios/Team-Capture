@@ -109,6 +109,8 @@ namespace Team_Capture.Weapons
         private GameObjectPool bulletHolesPool;
         
         public override WeaponType WeaponType => WeaponType.Default;
+        
+        public override bool IsReloadable => true;
 
         public override void OnPerform(bool buttonDown)
         {
@@ -138,6 +140,9 @@ namespace Team_Capture.Weapons
             
             if(reloadCancellation != null)
                 CancelReload();
+            
+            if(currentBulletCount == maxBullets)
+                return;
             
             isReloading = true;
             reloadCancellation = new CancellationTokenSource();

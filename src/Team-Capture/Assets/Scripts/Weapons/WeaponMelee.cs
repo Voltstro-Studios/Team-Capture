@@ -34,7 +34,9 @@ namespace Team_Capture.Weapons
         public float weaponFireRate = 10;
         
         public override WeaponType WeaponType => WeaponType.Melee;
-        
+
+        public override bool IsReloadable => false;
+
         private float nextTimeToFire;
         
         private GameObjectPool bulletHolesPool;
