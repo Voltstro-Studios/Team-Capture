@@ -13,8 +13,12 @@ MonoBehaviour:
   m_Name: Machete
   m_EditorClassIdentifier: 
   weaponId: Machete
-  weaponObjectPrefab: {fileID: 2917641174818545424, guid: a7ba700490bbf943897d5bbd4a72777a,
-    type: 3}
+  weaponObjectPrefab:
+    assetReference:
+      m_AssetGUID: a7ba700490bbf943897d5bbd4a72777a
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
   weaponRange: 5
   weaponDamage: 25
   weaponFireRate: 4

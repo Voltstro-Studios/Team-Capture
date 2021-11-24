@@ -13,8 +13,12 @@ MonoBehaviour:
   m_Name: Pistol
   m_EditorClassIdentifier: 
   weaponId: Pistol
-  weaponObjectPrefab: {fileID: 2985817369304730979, guid: 5f5edb97b2388714ca78daa416284087,
-    type: 3}
+  weaponObjectPrefab:
+    assetReference:
+      m_AssetGUID: 5f5edb97b2388714ca78daa416284087
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
   weaponDamage: 15
   weaponDamageDropOff:
     serializedVersion: 2

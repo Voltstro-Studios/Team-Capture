@@ -13,8 +13,12 @@ MonoBehaviour:
   m_Name: Shotgun
   m_EditorClassIdentifier: 
   weaponId: Shotgun
-  weaponObjectPrefab: {fileID: 6483300518943973296, guid: 9c2bb8364aefe81478a0db7da57b20e5,
-    type: 3}
+  weaponObjectPrefab:
+    assetReference:
+      m_AssetGUID: 9c2bb8364aefe81478a0db7da57b20e5
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
   weaponDamage: 12
   weaponDamageDropOff:
     serializedVersion: 2

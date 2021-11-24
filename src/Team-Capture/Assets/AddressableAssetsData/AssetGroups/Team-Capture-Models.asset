@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Team-Capture-Models
+  m_EditorClassIdentifier: 
+  m_GroupName: Team-Capture-Models
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 9853379beeee2d8cc8b0b3b66f4e2849
+  m_SerializeEntries:
+  - m_GUID: c6720e520dd637a9b8f98e4887effb7d
+    m_Address: Assets/Models/Weapons/Weapon_Shotgun.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 4fc3ff22e6f710e00be2cb7038ac5666
+    m_Address: Assets/Models/Weapons/Weapon_Rifle.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 1fdcd5124f1da82a39d05140e0972b3c
+    m_Address: Assets/Models/Weapons/Weapon_Pistol.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: e4a9fd12ae60382269219e45bab1b1b3
+    m_Address: Assets/Models/Weapons/Weapon_Machete.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 31dc88cf5cd9dc44ead1cd2deab1bc53, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 579acb65e435673e483648065f3bb7f5, type: 2}
+    - {fileID: 11400000, guid: d95ae8ddb86912c67a46e0c36b5b8a75, type: 2}

@@ -274,7 +274,7 @@ namespace Team_Capture.Weapons
             if (weapon == null)
                 return null;
 
-            GameObject newWeapon = Instantiate(weapon.weaponObjectPrefab, weaponsHolderSpot);
+            GameObject newWeapon = Instantiate(weapon.weaponObjectPrefab.Value, weaponsHolderSpot);
 
             if (isLocalPlayer)
                 SetupWeaponObjectLocal(newWeapon);

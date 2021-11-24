@@ -6,6 +6,7 @@
 
 using System;
 using Mirror;
+using Team_Capture.AddressablesAddons;
 using Team_Capture.UI;
 using Team_Capture.Weapons.Effects;
 using Team_Capture.Weapons.UI;
@@ -29,8 +30,8 @@ namespace Team_Capture.Weapons
         ///     The prefab of the weapon
         /// </summary>
         [Tooltip("The prefab of the weapon")]
-        public GameObject weaponObjectPrefab;
-        
+        public CachedAddressable<GameObject> weaponObjectPrefab;
+
         /// <summary>
         ///     The <see cref="WeaponType"/> that this instance is
         /// </summary>
