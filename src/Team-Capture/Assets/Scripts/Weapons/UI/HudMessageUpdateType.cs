@@ -6,7 +6,10 @@
 
 namespace Team_Capture.Weapons.UI
 {
-    public enum UIUpdateType : byte
+    /// <summary>
+    ///     UI update type
+    /// </summary>
+    public enum HudMessageUpdateType : byte
     {
         Default
     }

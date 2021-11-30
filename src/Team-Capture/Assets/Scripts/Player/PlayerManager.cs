@@ -389,9 +389,5 @@ namespace Team_Capture.Player
         }
 
         #endregion
-
-        #region Naming
-
-        #endregion
     }
 }

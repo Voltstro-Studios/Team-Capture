@@ -20,11 +20,22 @@ using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.Weapons
 {
+    /// <summary>
+    ///     Melee based weapon
+    /// </summary>
     [CreateAssetMenu(fileName = "New Melee Type Weapon", menuName = "Team-Capture/Weapons/Melee")]
     internal class WeaponMelee : WeaponBase
     {
+        /// <summary>
+        ///     How far does the weapon hit
+        /// </summary>
+        [Tooltip("How far does the weapon hit")]
         public float weaponRange = 25;
         
+        /// <summary>
+        ///     How much damage does the weapon do per hit
+        /// </summary>
+        [Tooltip("How much damage does the weapon do per hit")]
         public int weaponDamage = 25;
         
         /// <summary>
@@ -44,6 +55,7 @@ namespace Team_Capture.Weapons
         
         public override void OnPerform(bool buttonDown)
         {
+            //If the button is pressed or held down, perform
             if (buttonDown)
             {
                 shootRepeatedlyCancellation?.Cancel();
@@ -91,10 +103,10 @@ namespace Team_Capture.Weapons
                 if(!meleeEffectsMessage.HitNormal.HasValue || !meleeEffectsMessage.HitPoint.HasValue)
                     return;
                 
-                //Do hole
-                GameObject bulletHole = bulletHolesPool.GetPooledObject();
-                bulletHole.transform.position = meleeEffectsMessage.HitPoint.Value;
-                bulletHole.transform.rotation = Quaternion.LookRotation(meleeEffectsMessage.HitNormal.Value);
+                //Do hole (your mum's hole)
+                GameObject weaponHitHole = bulletHolesPool.GetPooledObject();
+                weaponHitHole.transform.position = meleeEffectsMessage.HitPoint.Value;
+                weaponHitHole.transform.rotation = Quaternion.LookRotation(meleeEffectsMessage.HitNormal.Value);
             }
         }
 
@@ -136,6 +148,7 @@ namespace Team_Capture.Weapons
             Vector3? hitPoint = null;
             Vector3? hitNormal = null;
 
+            //We need to filter through each hit
             foreach (RaycastHit hit in hits)
             {
                 //Don't count if we hit the shooting player

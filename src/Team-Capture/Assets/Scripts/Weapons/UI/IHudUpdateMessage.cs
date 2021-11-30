@@ -10,9 +10,12 @@ using UnityEngine.Scripting;
 
 namespace Team_Capture.Weapons.UI
 {
+    /// <summary>
+    ///     Message to the local client when a hud update is required
+    /// </summary>
     public interface IHudUpdateMessage : NetworkMessage
     {
-        public UIUpdateType UpdateType { get; }
+        public HudMessageUpdateType UpdateType { get; }
         public string WeaponId { get; set; }
 
         //TODO: It seems like we do this a lot, maybe have one interface with this?
@@ -30,10 +33,10 @@ namespace Team_Capture.Weapons.UI
 
         public static IHudUpdateMessage Read(this NetworkReader reader)
         {
-            UIUpdateType updateType = (UIUpdateType) reader.ReadByte();
+            HudMessageUpdateType updateType = (HudMessageUpdateType) reader.ReadByte();
             switch (updateType)
             {
-                case UIUpdateType.Default:
+                case HudMessageUpdateType.Default:
                     return new DefaultHudUpdateMessage(reader);
                 default:
                     throw new ArgumentOutOfRangeException();

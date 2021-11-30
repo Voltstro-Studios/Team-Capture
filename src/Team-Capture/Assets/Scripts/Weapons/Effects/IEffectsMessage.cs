@@ -10,9 +10,12 @@ using UnityEngine.Scripting;
 
 namespace Team_Capture.Weapons.Effects
 {
+    /// <summary>
+    ///     Message for clients to play an effect
+    /// </summary>
     public interface IEffectsMessage : NetworkMessage
     {
-        public EffectsType EffectsType { get; }
+        public EffectsMessageType EffectsMessageType { get; }
 
         public void Serialize(NetworkWriter writer);
     }
@@ -22,18 +25,18 @@ namespace Team_Capture.Weapons.Effects
     {
         public static void Write(this NetworkWriter writer, IEffectsMessage effectsMessage)
         {
-            writer.WriteByte((byte)effectsMessage.EffectsType);
+            writer.WriteByte((byte)effectsMessage.EffectsMessageType);
             effectsMessage.Serialize(writer);
         }
 
         public static IEffectsMessage Read(this NetworkReader reader)
         {
-            EffectsType effectsType = (EffectsType)reader.ReadByte();
-            switch (effectsType)
+            EffectsMessageType effectsMessageType = (EffectsMessageType)reader.ReadByte();
+            switch (effectsMessageType)
             {
-                case EffectsType.Default:
+                case EffectsMessageType.Default:
                     return new DefaultEffectsMessage(reader);
-                case EffectsType.Melee:
+                case EffectsMessageType.Melee:
                     return new MeleeEffectsMessage(reader);
                 default:
                     throw new ArgumentOutOfRangeException();

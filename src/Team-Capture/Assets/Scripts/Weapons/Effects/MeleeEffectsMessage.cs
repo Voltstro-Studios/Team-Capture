@@ -9,6 +9,9 @@ using UnityEngine;
 
 namespace Team_Capture.Weapons.Effects
 {
+    /// <summary>
+    ///     Melee <see cref="IEffectsMessage"/> for <see cref="WeaponMelee"/>
+    /// </summary>
     public struct MeleeEffectsMessage : IEffectsMessage
     {
         public MeleeEffectsMessage(NetworkReader reader)
@@ -23,9 +26,16 @@ namespace Team_Capture.Weapons.Effects
             HitNormal = hitNormal;
         }
         
-        public EffectsType EffectsType => EffectsType.Melee;
+        public EffectsMessageType EffectsMessageType => EffectsMessageType.Melee;
 
+        /// <summary>
+        ///     Where did we hit
+        /// </summary>
         public Vector3? HitPoint;
+        
+        /// <summary>
+        ///     The normal of the hit point
+        /// </summary>
         public Vector3? HitNormal;
         
         public void Serialize(NetworkWriter writer)

@@ -8,6 +8,9 @@ using Mirror;
 
 namespace Team_Capture.Weapons.UI
 {
+    /// <summary>
+    ///     Default hud update for the <see cref="WeaponDefault"/> type
+    /// </summary>
     public struct DefaultHudUpdateMessage : IHudUpdateMessage
     {
         public DefaultHudUpdateMessage(NetworkReader reader)
@@ -24,10 +27,17 @@ namespace Team_Capture.Weapons.UI
             IsReloading = isReloading;
         }
         
-        public UIUpdateType UpdateType => UIUpdateType.Default;
+        public HudMessageUpdateType UpdateType => HudMessageUpdateType.Default;
         public string WeaponId { get; set; }
 
+        /// <summary>
+        ///     The current amount of bullets
+        /// </summary>
         public int CurrentBullets { get; }
+        
+        /// <summary>
+        ///     Is the weapon reloading
+        /// </summary>
         public bool IsReloading { get; }
         
         public void Serialize(NetworkWriter writer)

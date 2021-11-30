@@ -23,7 +23,7 @@ namespace Team_Capture.Weapons.Effects
             TargetsNormals = targetsNormals;
         }
         
-        public EffectsType EffectsType => EffectsType.Default;
+        public EffectsMessageType EffectsMessageType => EffectsMessageType.Default;
         
         public Vector3[] Targets;
         public Vector3[] TargetsNormals;
