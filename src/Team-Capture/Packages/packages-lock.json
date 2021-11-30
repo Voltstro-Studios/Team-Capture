@@ -67,7 +67,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.burst": {
-      "version": "1.6.2",
+      "version": "1.6.3",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -76,7 +76,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.cinemachine": {
-      "version": "2.8.2",
+      "version": "2.8.3",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
@@ -403,7 +403,7 @@
       "url": "https://unitynuget-registry.azurewebsites.net"
     },
     "org.nuget.microsoft.bcl.asyncinterfaces": {
-      "version": "5.0.0",
+      "version": "6.0.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -428,7 +428,7 @@
       "url": "https://unitynuget-registry.azurewebsites.net"
     },
     "org.nuget.serilog.sinks.console": {
-      "version": "4.0.0",
+      "version": "4.0.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {
