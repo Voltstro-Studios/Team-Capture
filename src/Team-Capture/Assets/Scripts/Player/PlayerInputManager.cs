@@ -181,6 +181,9 @@ namespace Team_Capture.Player
 
         private void OnPlayerScoreBoard()
         {
+            if (ClientUI.IsPauseMenuOpen)
+                return;
+            
             uiManager.ToggleScoreboard();
         }
 

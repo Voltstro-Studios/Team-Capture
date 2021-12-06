@@ -118,10 +118,12 @@ namespace Team_Capture.UI
 
             if (state)
             {
+                //Toggle scoreboard off
                 scoreBoardObject.SetActive(false);
+                
+                //Toggle chat off
                 if (chat.IsChatOpen)
                     chat.ActivateChat(false);
-
                 chat.gameObject.SetActive(false);
             }
             else
@@ -129,7 +131,9 @@ namespace Team_Capture.UI
                 chat.gameObject.SetActive(true);
             }
 
-            if (PlayerManager.IsDead) return;
+            if (PlayerManager.IsDead) 
+                return;
+            
             ActivateHud(!state);
         }
 
