@@ -120,6 +120,9 @@ namespace Team_Capture.Console
         {
             if (!IsOpen())
                 return;
+            
+            if(string.IsNullOrWhiteSpace(inputField.text))
+                return;
 
             inputField.text = ConsoleBackend.AutoComplete(inputField.text);
             SetInputFieldCaretPos(inputField.text.Length);
