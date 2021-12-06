@@ -27,6 +27,31 @@ namespace Team_Capture.UI.MOTD
 
         private Action onCloseAction;
 
+        private const string InjectJavaScriptCode = @"
+function hideControls() {
+    const navControls = document.getElementById('controls-nav');
+        if(typeof(navControls) !== 'undefined') {
+            navControls.style.visibility = 'hidden';
+            document.getElementById('controls-footer-social').style.visibility = 'hidden';
+        }
+    }
+
+    function hideAllControls() {
+        const navControls = document.getElementById('controls-nav');
+        if(typeof(navControls) !== 'undefined') {
+            navControls.style.visibility = 'hidden';
+            document.getElementById('footer').style.visibility = 'hidden';
+        }
+    }
+
+    function setName(name) {
+        const playerName = document.getElementById('playerName');
+        if(typeof(playerName) !== 'undefined') {
+            playerName.innerText = name;
+        }
+    }
+";
+
         /// <summary>
         ///     Setup the MOTD UI
         /// </summary>
@@ -66,11 +91,11 @@ namespace Team_Capture.UI.MOTD
 
         private void OnLoadFinish(string url)
         {
-            string javaScriptCode =
-                "class UserDetails { constructor(username) { this.UserName = username; } }" +
-                $"let userDetails = new UserDetails(\"{User.GetActiveUser().UserName}\");";
+            string javaScriptCode = $"{InjectJavaScriptCode}\n" +
+                                    "hideControls();\n" +
+                                    $"setName(\"{User.GetActiveUser().UserName}\");";
 
-            webBrowserUI.ExecuteJs(javaScriptCode);
+                webBrowserUI.ExecuteJs(javaScriptCode);
         }
 
         public void CloseMOTD()
