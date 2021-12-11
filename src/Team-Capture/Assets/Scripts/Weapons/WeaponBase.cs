@@ -174,6 +174,8 @@ namespace Team_Capture.Weapons
                     return WeaponDefault.OnDeserialize(reader);
                 case WeaponType.Melee:
                     return WeaponMelee.OnDeserialize(reader);
+                case WeaponType.Projectile:
+                    return WeaponProjectile.OnDeserialize(reader);
                 default:
                     throw new ArgumentOutOfRangeException();
             }

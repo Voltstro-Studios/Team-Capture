@@ -106,6 +106,15 @@ MonoBehaviour:
     m_Address: Assets/Prefabs/Weapons/Weapon_Shotgun.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: 20b8c763278f32186b7529feb0c4bf4a
+    m_Address: Assets/Prefabs/Weapons/Weapon_RocketLauncher.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 6b99a84d6151d6feba6c63448e9e5679
+    m_Address: Assets/Settings/Weapons/RocketLauncher.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Weapon
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 31dc88cf5cd9dc44ead1cd2deab1bc53, type: 2}
   m_SchemaSet:

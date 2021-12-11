@@ -19,6 +19,11 @@ namespace Team_Capture.Weapons
         /// <summary>
         ///     A Melee weapon
         /// </summary>
-        Melee
+        Melee,
+        
+        /// <summary>
+        ///     Shoots a physical object
+        /// </summary>
+        Projectile
     }
 }

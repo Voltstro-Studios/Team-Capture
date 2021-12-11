@@ -30,7 +30,7 @@ namespace Team_Capture.Weapons
         /// <summary>
         ///     Where all the weapons are created
         /// </summary>
-        [SerializeField] private Transform weaponsHolderSpot;
+        [SerializeField] internal Transform weaponsHolderSpot;
 
         /// <summary>
         ///     Player's camera
