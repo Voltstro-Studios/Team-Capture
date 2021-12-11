@@ -1,3 +1,4 @@
+using System;
 using Mirror;
 using UnityEngine;
 
@@ -6,11 +7,6 @@ namespace Team_Capture.Weapons.Projectiles
     public class ProjectileRocket : NetworkBehaviour
     {
         public float appliedForce = 100;
-
-        public void AddForce(Vector3 force)
-        {
-            
-        }
         
         private void Start()
         {
@@ -18,6 +14,14 @@ namespace Team_Capture.Weapons.Projectiles
             
             if(isServer)
                 GetComponent<Rigidbody>().AddForce(force);
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            //Spawn explosion particle
+            
+            //TODO: We should use a game object pool
+            Destroy(gameObject);
         }
     }
 }

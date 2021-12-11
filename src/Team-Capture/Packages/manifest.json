@@ -30,6 +30,7 @@
     "com.unity.toolchain.linux-x86_64": "0.1.19-preview",
     "com.unity.ugui": "1.0.0",
     "com.unity.vectorgraphics": "2.0.0-preview.18",
+    "com.unity.visualeffectgraph": "12.1.2",
     "dev.voltstro.unitycommandlineparser": "https://github.com/Voltstro-Studios/UnityCommandLineParser.git",
     "dev.voltstro.unityvoltbuilder": "https://github.com/Voltstro-Studios/UnityVoltBuilder.git",
     "dev.voltstro.unitywebbrowser": "https://gitlab.com/Voltstro-Studios/WebBrowser/Package.git#2.x",

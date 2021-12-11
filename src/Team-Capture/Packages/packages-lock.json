@@ -315,6 +315,15 @@
       },
       "url": "https://packages.unity.com"
     },
+    "com.unity.visualeffectgraph": {
+      "version": "12.1.2",
+      "depth": 0,
+      "source": "builtin",
+      "dependencies": {
+        "com.unity.shadergraph": "12.1.2",
+        "com.unity.render-pipelines.core": "12.1.2"
+      }
+    },
     "dev.voltstro.unitycommandlineparser": {
       "version": "https://github.com/Voltstro-Studios/UnityCommandLineParser.git",
       "depth": 0,
