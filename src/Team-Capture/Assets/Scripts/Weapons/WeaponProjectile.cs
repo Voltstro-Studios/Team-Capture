@@ -5,6 +5,7 @@
 // For more details see the LICENSE file.
 
 using Mirror;
+using Team_Capture.Helper;
 using Team_Capture.Helper.Extensions;
 using Team_Capture.Weapons.Effects;
 using Team_Capture.Weapons.UI;
@@ -17,6 +18,8 @@ namespace Team_Capture.Weapons
     public class WeaponProjectile : WeaponBase
     {
         public GameObject projectilePrefab;
+
+        public float projectileAutoAimMinRange = 10f;
         
         public override WeaponType WeaponType => WeaponType.Projectile;
         public override bool IsReloadable => true;
@@ -83,9 +86,36 @@ namespace Team_Capture.Weapons
         [Server]
         private void FireWeapon()
         {
-            Transform rocketSpawnPoint = weaponGraphics.bulletTracerPosition;
+            Transform projectileSpawnPoint = weaponGraphics.bulletTracerPosition;
+            Transform playerFacingDirection = weaponManager.localPlayerCamera;
+            
+            //Figure out where the projectile should aim for
+            RaycastHit[] hits = RaycastHelper.RaycastAllSorted(playerFacingDirection.position, playerFacingDirection.forward, float.MaxValue, 
+                weaponManager.raycastLayerMask);
 
-            GameObject newProjectile = Instantiate(projectilePrefab, rocketSpawnPoint.position, rocketSpawnPoint.rotation);
+            //We need to filter through each hit
+            RaycastHit? raycastHit = null;
+            foreach (RaycastHit hit in hits)
+            {
+                //Don't count if we hit the shooting player
+                if (hit.collider.name == weaponManager.transform.name)
+                    continue;
+
+                raycastHit = hit;
+            }
+            
+            //Spawn the object
+            GameObject newProjectile = Instantiate(projectilePrefab, projectileSpawnPoint.position, projectileSpawnPoint.rotation);
+            if (raycastHit.HasValue)
+            {
+                RaycastHit hit = raycastHit.Value;
+                if (hit.distance > projectileAutoAimMinRange)
+                {
+                    newProjectile.transform.LookAt(hit.point);
+                    Logger.Debug("Pointing player's projectile at cross-hair.");
+                }
+            }
+            
             NetworkServer.Spawn(newProjectile);
         }
     }
