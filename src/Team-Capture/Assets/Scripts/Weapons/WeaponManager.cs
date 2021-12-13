@@ -199,13 +199,13 @@ namespace Team_Capture.Weapons
         [Command(channel = Channels.Unreliable)]
         internal void CmdShootWeapon(bool buttonDown)
         {
-            GetActiveWeapon().OnPerform(buttonDown);
+            GetActiveWeapon()?.OnPerform(buttonDown);
         }
 
         [ClientRpc(channel = Channels.Unreliable)]
         internal void RpcDoWeaponEffects(IEffectsMessage effectsMessage)
         {
-            GetActiveWeapon().OnWeaponEffects(effectsMessage);
+            GetActiveWeapon()?.OnWeaponEffects(effectsMessage);
         }
 
         #endregion

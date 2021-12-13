@@ -167,8 +167,14 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   appliedForce: 1200
+  explosionDamage: 70
+  explosionSize: 5
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 2147483647
   explosionPrefab: {fileID: 4846036453981969604, guid: c85a9a7f2c5d98dc89c8b3bd4c168799,
     type: 3}
+  colliderHitsBufferSize: 4
 --- !u!54 &6880144716987926442
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -8,6 +8,7 @@ using Mirror;
 using Team_Capture.Helper;
 using Team_Capture.Helper.Extensions;
 using Team_Capture.Weapons.Effects;
+using Team_Capture.Weapons.Projectiles;
 using Team_Capture.Weapons.UI;
 using UnityEngine;
 using Logger = Team_Capture.Logging.Logger;
@@ -115,7 +116,16 @@ namespace Team_Capture.Weapons
                     Logger.Debug("Pointing player's projectile at cross-hair.");
                 }
             }
+
+            //TODO: We should have a projectile base instead, and built the rocket on top of it
+            ProjectileRocket projectile = newProjectile.GetComponent<ProjectileRocket>();
+            if (projectile == null)
+            {
+                Logger.Error("Weapon projectile doesn't have a projectile base on it!");
+                return;
+            }
             
+            projectile.Setup(weaponManager.playerManager);
             NetworkServer.Spawn(newProjectile);
         }
     }
