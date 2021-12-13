@@ -7,6 +7,8 @@ namespace Team_Capture.Weapons.Projectiles
     public class ProjectileRocket : NetworkBehaviour
     {
         public float appliedForce = 100;
+
+        public GameObject explosionPrefab;
         
         private void Start()
         {
@@ -19,9 +21,10 @@ namespace Team_Capture.Weapons.Projectiles
         private void OnTriggerEnter(Collider other)
         {
             //Spawn explosion particle
+            Instantiate(explosionPrefab, transform.position, transform.rotation);
             
-            //TODO: We should use a game object pool
-            Destroy(gameObject);
+            if(isServer)
+                NetworkServer.Destroy(gameObject);
         }
     }
 }

@@ -241,4 +241,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  appliedForce: 100
+  appliedForce: 1200
+  explosionPrefab: {fileID: 4846036453981969604, guid: c85a9a7f2c5d98dc89c8b3bd4c168799,
+    type: 3}
