@@ -110,13 +110,11 @@ namespace Team_Capture.Weapons
             switch (op)
             {
                 case SyncList<WeaponBase>.Operation.OP_ADD:
-                    if(isServer)
-                        break;
-                    
                     GameObject newWeaponModel = CreateNewWeaponModel(newWeapon);
                     newWeapon.Setup(this, isServer, isLocalPlayer, newWeaponModel);
-                    Logger.Info("On add weapon");
+                    SetIndex(itemIndex);
                     break;
+                
                 case SyncList<WeaponBase>.Operation.OP_CLEAR:
                     RemoveAllWeaponsModels();
                     break;
@@ -263,11 +261,9 @@ namespace Team_Capture.Weapons
                 return;
 
             WeaponBase newWeapon = Instantiate(weapon);
-            GameObject weaponObject = CreateNewWeaponModel(newWeapon);
-            newWeapon.Setup(this, true, false, weaponObject);
             weapons.Add(newWeapon);
-
-            if (weapons.Count > 1) 
+            
+            if(weapons.Count != 0)
                 SetClientWeaponIndex(weapons.Count - 1);
         }
 
@@ -341,8 +337,7 @@ namespace Team_Capture.Weapons
             
             if (result.IsNone)
                 return;
-
-            Logger.Debug($"Player `{transform.name}` set their weapon index to `{index}`.");
+            
             SetClientWeaponIndex(index);
         }
 
@@ -353,6 +348,8 @@ namespace Team_Capture.Weapons
         [Server]
         private void SetClientWeaponIndex(int index)
         {
+            Logger.Debug($"Player `{transform.name}` set their weapon index to `{index}`.");
+            
             GetActiveWeapon().OnSwitchOff();
             SelectedWeaponIndex = index;
             GetActiveWeapon().OnSwitchOnTo();
@@ -375,6 +372,11 @@ namespace Team_Capture.Weapons
         /// <param name="index"></param>
         [ClientRpc(channel = Channels.Unreliable)]
         private void RpcSelectWeapon(int index)
+        {
+            SetIndex(index);
+        }
+
+        private void SetIndex(int index)
         {
             for (int i = 0; i < weaponsHolderSpot.childCount; i++)
                 weaponsHolderSpot.GetChild(i).gameObject.SetActive(i == index);
