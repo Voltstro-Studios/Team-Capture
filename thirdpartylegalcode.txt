@@ -1,5 +1,6 @@
-Team Capture uses third party code for certain functions.
-The required legal notices for using such code and libraries are down below.
+Team-Capture makes use of third-party libraries for certain functions.
+For legal notices regarding assets, see 'thirdpartylegalassets.txt'.
+The required legal notices for using such libraries are down below.
 
 ================================================================================
 Mirror
