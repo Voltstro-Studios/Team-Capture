@@ -167,8 +167,10 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   appliedForce: 1200
-  explosionDamage: 70
-  explosionSize: 5
+  explosionDamage: 60
+  explosionSize: 6
+  explosionForce: 35
+  percentageRemoveOfOwner: 0.2
   layerMask:
     serializedVersion: 2
     m_Bits: 2147483647

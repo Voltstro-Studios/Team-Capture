@@ -340,6 +340,15 @@ namespace Team_Capture.Player.Movement
 
         #region Movement
 
+        public void KnockBack(Vector3 direction, float force)
+        {
+            if (isServer || isLocalPlayer)
+            {
+                float playerMass = 5f;
+                velocity += force * direction / playerMass;
+            }
+        }
+
         private void DoMovement(PlayerInputs input)
         {
             input.MovementDir.x = input.MovementDir.x.PreciseSign();

@@ -1,6 +1,7 @@
 using System;
 using Mirror;
 using Team_Capture.Player;
+using Team_Capture.Player.Movement;
 using UnityEngine;
 
 namespace Team_Capture.Weapons.Projectiles
@@ -21,6 +22,8 @@ namespace Team_Capture.Weapons.Projectiles
         ///     The size of the explosion
         /// </summary>
         [SerializeField] private float explosionSize = 6f;
+
+        [SerializeField] private float explosionForce = 100f;
 
         [SerializeField] private float percentageRemoveOfOwner = 0.60f;
         
@@ -61,14 +64,16 @@ namespace Team_Capture.Weapons.Projectiles
         {
             //Spawn explosion particle
             Instantiate(explosionPrefab, transform.position, transform.rotation);
-
-            if (isServer)
+            
+            int size = Physics.OverlapSphereNonAlloc(transform.position, explosionSize, rayCastHits, layerMask);
+            for (int i = 0; i < size; i++)
             {
-                int size = Physics.OverlapSphereNonAlloc(transform.position, explosionSize, rayCastHits, layerMask);
-                for (int i = 0; i < size; i++)
+                PlayerManager player = rayCastHits[i].GetComponent<PlayerManager>();
+                if (player != null)
                 {
-                    PlayerManager player = rayCastHits[i].GetComponent<PlayerManager>();
-                    if (player != null)
+                    player.GetComponent<PlayerMovementManager>().KnockBack(player.transform.position - transform.position, explosionForce);
+                        
+                    if(isServer)
                     {
                         int damage = explosionDamage;
                         if (player == rocketOwner)
@@ -76,13 +81,13 @@ namespace Team_Capture.Weapons.Projectiles
                             float reducedDamage = damage * percentageRemoveOfOwner;
                             damage = Mathf.RoundToInt(reducedDamage);
                         }
-                        
                         player.TakeDamage(damage, rocketOwner.transform.name);
                     }
                 }
-
-                NetworkServer.Destroy(gameObject);
             }
+
+            if (isServer)
+                NetworkServer.Destroy(gameObject);
         }
 
 #if UNITY_EDITOR
