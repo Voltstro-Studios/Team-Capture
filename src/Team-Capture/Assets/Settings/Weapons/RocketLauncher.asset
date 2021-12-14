@@ -21,4 +21,7 @@ MonoBehaviour:
       m_EditorAssetChanged: 0
   projectilePrefab: {fileID: 8197683935473045189, guid: aeee56d8504e890689596ca349205694,
     type: 3}
-  projectileAutoAimMinRange: 4
+  projectileAutoAimMinRange: 3
+  maxWeaponProjectileCount: 4
+  weaponFireRate: 2
+  weaponReloadTime: 2000

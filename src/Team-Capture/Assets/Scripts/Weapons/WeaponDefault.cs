@@ -91,10 +91,10 @@ namespace Team_Capture.Weapons
         public int weaponReloadTime = 2000;
         
         /// <summary>
-        ///     What the weapon's <see cref="WeaponReloadMode"/> is
+        ///     What the weapon's <see cref="WeaponDefaultReloadMode"/> is
         /// </summary>
         [Tooltip("What the weapon's reload mode is")]
-        public WeaponReloadMode weaponReloadMode;
+        public WeaponDefaultReloadMode weaponReloadMode;
 
         private int currentBulletCount;
         private bool isReloading;
@@ -366,13 +366,13 @@ namespace Team_Capture.Weapons
 
             switch (weaponReloadMode)
             {
-                case WeaponReloadMode.Clip:
+                case WeaponDefaultReloadMode.Clip:
                     await UniTask.Delay(weaponReloadTime, cancellationToken: reloadCancellation.Token);
 
                     currentBulletCount = maxBullets;
                     FinishReload();
                     break;
-                case WeaponReloadMode.Shells:
+                case WeaponDefaultReloadMode.Shells:
                     await TimeHelper.CountUp(
                         maxBullets - currentBulletCount, weaponReloadTime, tick =>
                         {

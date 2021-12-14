@@ -9,7 +9,7 @@ namespace Team_Capture.Weapons
     /// <summary>
     ///     How to reload a weapon
     /// </summary>
-    public enum WeaponReloadMode : byte
+    public enum WeaponDefaultReloadMode : byte
     {
         /// <summary>
         ///     Reload the entire clip each time

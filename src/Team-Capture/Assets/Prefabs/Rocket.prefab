@@ -166,7 +166,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  appliedForce: 1200
+  appliedForce: 1400
   explosionDamage: 60
   explosionSize: 6
   explosionForce: 35
@@ -232,6 +232,11 @@ MonoBehaviour:
   bufferSizeLimit: 64
   catchupThreshold: 4
   catchupMultiplier: 0.6
+  onlySyncOnChange: 0
+  bufferResetMultiplier: 5
+  positionSensitivity: 0
+  rotationSensitivity: 0
+  scaleSensitivity: 0
   showGizmos: 0
   showOverlay: 0
   overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
