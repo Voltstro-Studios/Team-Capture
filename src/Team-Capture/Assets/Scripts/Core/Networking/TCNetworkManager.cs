@@ -205,17 +205,17 @@ namespace Team_Capture.Core.Networking
             Client.OnClientStop();
         }
 
-        public override void OnClientConnect(NetworkConnection conn)
+        public override void OnClientConnect()
         {
-            Client.OnClientConnect(conn);
+            Client.OnClientConnect(NetworkClient.connection);
         }
 
-        public override void OnClientDisconnect(NetworkConnection conn)
+        public override void OnClientDisconnect()
         {
-            Client.OnClientDisconnect(conn);
+            Client.OnClientDisconnect(NetworkClient.connection);
         }
 
-        public override void OnClientSceneChanged(NetworkConnection conn)
+        public override void OnClientSceneChanged()
         {
             Client.OnClientSceneChanged();
         }
