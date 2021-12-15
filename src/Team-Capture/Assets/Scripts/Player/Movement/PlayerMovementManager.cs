@@ -49,7 +49,10 @@ namespace Team_Capture.Player.Movement
         private readonly InputData storedInput = new();
         private PlayerCameraRoll cameraRoll;
 
-        private CharacterController characterController;
+        /// <summary>
+        ///     <see cref="CharacterController"/> of this client
+        /// </summary>
+        internal CharacterController CharacterController { get; private set; }
 
         private bool isReady;
 
@@ -64,7 +67,7 @@ namespace Team_Capture.Player.Movement
 
         private void Awake()
         {
-            characterController = GetComponent<CharacterController>();
+            CharacterController = GetComponent<CharacterController>();
         }
 
         private void Start()
@@ -89,7 +92,7 @@ namespace Team_Capture.Player.Movement
         {
             FixedUpdateManager.OnFixedUpdate += OnFixedUpdate;
 
-            characterController.enabled = true;
+            CharacterController.enabled = true;
 
             if (isReady && !isLocalPlayer)
                 transformSync.enabled = true;
@@ -121,7 +124,7 @@ namespace Team_Capture.Player.Movement
             rotationY = 0f;
             wishJump = false;
 
-            characterController.enabled = false;
+            CharacterController.enabled = false;
         }
 
         public override void OnStartAuthority()
@@ -369,7 +372,7 @@ namespace Team_Capture.Player.Movement
             rotationX = Mathf.Clamp(rotationX, -90, 90);
 
             //Move character
-            characterController.Move(velocity * Time.fixedDeltaTime);
+            CharacterController.Move(velocity * Time.fixedDeltaTime);
             transform.rotation = Quaternion.Euler(0, rotationY, 0);
             cameraHolderTransform.rotation = Quaternion.Euler(rotationX, rotationY, 0);
 

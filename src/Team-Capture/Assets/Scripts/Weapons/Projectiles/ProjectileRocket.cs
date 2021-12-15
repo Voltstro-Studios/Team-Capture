@@ -1,7 +1,6 @@
-using System;
 using Mirror;
+using Team_Capture.Core;
 using Team_Capture.Player;
-using Team_Capture.Player.Movement;
 using UnityEngine;
 
 namespace Team_Capture.Weapons.Projectiles
@@ -38,6 +37,8 @@ namespace Team_Capture.Weapons.Projectiles
         [SerializeField] private GameObject explosionPrefab;
 
         [SerializeField] private int colliderHitsBufferSize = 4;
+
+        [SyncVar] private string ownerPlayerName;
         
         private Collider[] rayCastHits;
         private PlayerManager rocketOwner;
@@ -45,6 +46,7 @@ namespace Team_Capture.Weapons.Projectiles
         public void Setup(PlayerManager owner)
         {
             rocketOwner = owner;
+            ownerPlayerName = owner.transform.name;
         }
 
         private void Start()
@@ -58,34 +60,51 @@ namespace Team_Capture.Weapons.Projectiles
 
                 rayCastHits = new Collider[colliderHitsBufferSize];
             }
+            else
+            {
+                rocketOwner = GameManager.GetPlayer(ownerPlayerName);
+            }
         }
 
         private void OnTriggerEnter(Collider other)
         {
-            //Spawn explosion particle
-            Instantiate(explosionPrefab, transform.position, transform.rotation);
+            if(rocketOwner == null)
+                return;
             
-            int size = Physics.OverlapSphereNonAlloc(transform.position, explosionSize, rayCastHits, layerMask);
+            //Don't explode on the player who owns this rocket
+            if(other == rocketOwner.playerMovementManager.CharacterController)
+                return;
+            
+            Transform rocketTransform = transform;
+            Vector3 rocketPosition = rocketTransform.position;
+            
+            //Spawn explosion particle
+            Instantiate(explosionPrefab, rocketPosition, rocketTransform.rotation);
+            
+            int size = Physics.OverlapSphereNonAlloc(rocketPosition, explosionSize, rayCastHits, layerMask);
             for (int i = 0; i < size; i++)
             {
                 PlayerManager player = rayCastHits[i].GetComponent<PlayerManager>();
-                if (player != null)
+                if (player == null) 
+                    continue;
+                
+                //We do knock-back, do it both on the local client and server
+                player.playerMovementManager.KnockBack(player.transform.position - rocketPosition, explosionForce);
+
+                if (!isServer) 
+                    continue;
+                
+                //Whoever is the owner of this rocket will have reduced damage done to them
+                int damage = explosionDamage;
+                if (player == rocketOwner)
                 {
-                    player.GetComponent<PlayerMovementManager>().KnockBack(player.transform.position - transform.position, explosionForce);
-                        
-                    if(isServer)
-                    {
-                        int damage = explosionDamage;
-                        if (player == rocketOwner)
-                        {
-                            float reducedDamage = damage * percentageRemoveOfOwner;
-                            damage = Mathf.RoundToInt(reducedDamage);
-                        }
-                        player.TakeDamage(damage, rocketOwner.transform.name);
-                    }
+                    float reducedDamage = damage * percentageRemoveOfOwner;
+                    damage = Mathf.RoundToInt(reducedDamage);
                 }
+                player.TakeDamage(damage, rocketOwner.transform.name);
             }
 
+            //Destroy this object
             if (isServer)
                 NetworkServer.Destroy(gameObject);
         }

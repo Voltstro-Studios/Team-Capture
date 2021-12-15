@@ -44,7 +44,7 @@ namespace Team_Capture.Player
         /// <summary>
         ///     The player's <see cref="PlayerMovementManager" />
         /// </summary>
-        private PlayerMovementManager playerMovementManager;
+        internal PlayerMovementManager playerMovementManager;
 
         #endregion
 
