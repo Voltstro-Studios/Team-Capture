@@ -142,9 +142,6 @@ namespace Team_Capture.Weapons
                 OnUIUpdate(new DefaultHudUpdateMessage(null, currentProjectileCount, isReloading));
             }
             
-            if(!isServer)
-                return;
-            
             weaponGraphics = weaponObjectInstance.GetComponent<WeaponGraphics>();
             if (weaponGraphics == null)
                 Logger.Error("Weapon model doesn't contain a weapon graphics!");
@@ -161,6 +158,10 @@ namespace Team_Capture.Weapons
 
         public override void OnWeaponEffects(IEffectsMessage effectsMessage)
         {
+            if (effectsMessage is ProjectileEffectsMessage)
+            {
+                weaponGraphics.muzzleFlash.Play();
+            }
         }
 
         public override void OnUIUpdate(IHudUpdateMessage hudUpdateMessage)
@@ -264,6 +265,7 @@ namespace Team_Capture.Weapons
             
             projectile.Setup(weaponManager.playerManager);
             NetworkServer.Spawn(newProjectile);
+            DoWeaponEffects(new ProjectileEffectsMessage());
         }
 
         [Server]

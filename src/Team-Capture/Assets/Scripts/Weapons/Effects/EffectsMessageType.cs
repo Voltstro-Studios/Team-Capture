@@ -19,6 +19,11 @@ namespace Team_Capture.Weapons.Effects
         /// <summary>
         ///     Melee message type for <see cref="WeaponMelee"/>
         /// </summary>
-        Melee
+        Melee,
+        
+        /// <summary>
+        ///     Projectile weapon message type
+        /// </summary>
+        Projectile
     }
 }
