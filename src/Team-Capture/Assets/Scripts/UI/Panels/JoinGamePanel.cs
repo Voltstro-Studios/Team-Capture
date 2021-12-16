@@ -155,9 +155,9 @@ namespace Team_Capture.UI.Panels
             ClearList();
 
             //Tell Mirror to connect to the server's IP
-            NetworkManager.singleton.networkAddress = ip.Address.ToString();
-            NetworkManager.singleton.StartClient();
-
+            netManager.networkAddress = ip.Address.ToString();
+            netManager.StartClient();
+            
             CheckConnection().Forget();
 
             //Set our status text
@@ -167,19 +167,18 @@ namespace Team_Capture.UI.Panels
 
         private async UniTaskVoid CheckConnection()
         {
-            while (NetworkClient.isConnecting)
-            {
-                await UniTask.Delay(25);
-            }
-
-            if (!NetworkClient.isConnected)
-            {
-                joiningServerPanel.FailToJoin();
-                RefreshServerList();
-                cancelButton.interactable = true;
-                refreshButton.interactable = true;
-                menuController.allowPanelToggling = true;
-            }
+            await UniTask.Delay(25);
+            
+            //Wait while we are still connecting
+            await UniTask.WaitWhile(() => NetworkClient.isConnecting);
+            
+            //We should be connected, so we should only see this if something fucked up
+            joiningServerPanel.FailToJoin();
+            RefreshServerList();
+            cancelButton.interactable = true;
+            refreshButton.interactable = true;
+            menuController.allowPanelToggling = true;
+            netManager.StopHost();
         }
 
         private void AddServerItem(TCServerResponse server)
