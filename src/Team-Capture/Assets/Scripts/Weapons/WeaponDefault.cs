@@ -222,19 +222,12 @@ namespace Team_Capture.Weapons
 
         protected override void OnAdd()
         {
-            if (isServer)
-            {
-                nextTimeToFire = 0f;
-                currentBulletCount = maxBullets;
-                isReloading = false;
-                UpdateUI();
-            }
+            nextTimeToFire = 0f;
+            currentBulletCount = maxBullets;
+            isReloading = false;
 
             if (isLocalClient)
-            {
-                isReloading = false;
                 OnUIUpdate(new DefaultHudUpdateMessage(null, currentBulletCount, isReloading));
-            }
 
             tracerPool = GameSceneManager.Instance.tracersEffectsPool;
             bulletHolesPool = GameSceneManager.Instance.bulletHolePool;

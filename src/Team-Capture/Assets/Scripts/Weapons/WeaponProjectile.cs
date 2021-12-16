@@ -128,20 +128,13 @@ namespace Team_Capture.Weapons
 
         protected override void OnAdd()
         {
-            if (isServer)
-            {
-                nextTimeToFire = 0f;
-                currentProjectileCount = maxWeaponProjectileCount;
-                isReloading = false;
-                UpdateUI();
-            }
+            nextTimeToFire = 0f;
+            currentProjectileCount = maxWeaponProjectileCount;
+            isReloading = false;
             
             if (isLocalClient)
-            {
-                isReloading = false;
                 OnUIUpdate(new DefaultHudUpdateMessage(null, currentProjectileCount, isReloading));
-            }
-            
+
             weaponGraphics = weaponObjectInstance.GetComponent<WeaponGraphics>();
             if (weaponGraphics == null)
                 Logger.Error("Weapon model doesn't contain a weapon graphics!");

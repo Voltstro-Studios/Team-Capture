@@ -173,12 +173,15 @@ namespace Team_Capture.UI.Panels
             await UniTask.WaitWhile(() => NetworkClient.isConnecting);
             
             //We should be connected, so we should only see this if something fucked up
-            joiningServerPanel.FailToJoin();
-            RefreshServerList();
-            cancelButton.interactable = true;
-            refreshButton.interactable = true;
-            menuController.allowPanelToggling = true;
-            netManager.StopHost();
+            if (NetworkClient.connection == null)
+            {
+                joiningServerPanel.FailToJoin();
+                RefreshServerList();
+                cancelButton.interactable = true;
+                refreshButton.interactable = true;
+                menuController.allowPanelToggling = true;
+                netManager.StopHost();
+            }
         }
 
         private void AddServerItem(TCServerResponse server)
