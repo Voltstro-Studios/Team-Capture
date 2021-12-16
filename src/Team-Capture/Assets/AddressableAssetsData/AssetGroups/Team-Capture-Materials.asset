@@ -97,6 +97,46 @@ MonoBehaviour:
     m_Address: Assets/Materials/Models/Weapons/Shotgun/Weapon_Shotgun.mat
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: 9a5e7ef7833df67a795947b8ed329d6d
+    m_Address: Assets/Materials/Models/Projectiles/ProjectileRocket/ProjectileRocket_Albedo.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 10e535690e9ac7f45b35d80696b455f7
+    m_Address: Assets/Materials/Models/Projectiles/ProjectileRocket/ProjectileRocket_Masks.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 4d1baf372e52369d083df73d544c4a60
+    m_Address: Assets/Materials/Models/Projectiles/ProjectileRocket/ProjectileRocket_Normal.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 094a45270f67bcd3fb475337926542c4
+    m_Address: Assets/Materials/Models/Projectiles/ProjectileRocket/ProjectileRocket.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 6cbf2b10a011fdb72896cbfe34559ac0
+    m_Address: Assets/Materials/Models/Weapons/RocketLauncher
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 43cd60cbee5da0411b51415744d5b5ae
+    m_Address: Assets/Materials/Models/Weapons/RocketLauncher/Weapon_RocketLauncher_Masks.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 74bd6306a07d1d22cb3f9b7f2312837c
+    m_Address: Assets/Materials/Models/Weapons/RocketLauncher/Weapon_RocketLauncher_Normal.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 158c159b0eab37533a5a054e14e922b8
+    m_Address: Assets/Materials/Models/Weapons/RocketLauncher/Weapon_RocketLauncher_Albedo.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: fefeb769dae07a9cbab06e8e13257cf0
+    m_Address: Assets/Materials/Models/Weapons/RocketLauncher/Weapon_RocketLauncher.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 94968928f2b8956b580d8fde35abf015
+    m_Address: Assets/Materials/Models/Projectiles/ProjectileRocket
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 31dc88cf5cd9dc44ead1cd2deab1bc53, type: 2}
   m_SchemaSet:

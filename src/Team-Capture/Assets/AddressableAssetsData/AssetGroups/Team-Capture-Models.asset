@@ -33,6 +33,14 @@ MonoBehaviour:
     m_Address: Assets/Models/Weapons/Weapon_Machete.fbx
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: 9af697645d1c1b0589fd10f0ac051287
+    m_Address: Assets/Models/Weapons/Weapon_RocketLauncher.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: d9e2d6ab1854f09a08d6e0190a82c890
+    m_Address: Assets/Models/Projectiles/ProjectileRocket.fbx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 31dc88cf5cd9dc44ead1cd2deab1bc53, type: 2}
   m_SchemaSet:
