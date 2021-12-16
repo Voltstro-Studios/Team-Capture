@@ -362,8 +362,10 @@ namespace Team_Capture.Weapons
             if (!isServer && !isLocalPlayer) 
                 return;
             
-            GetWeaponAtIndex(oldIndex).OnSwitchOff();
-            GetWeaponAtIndex(newIndex).OnSwitchOnTo();
+            if(oldIndex < weapons.Count)
+                GetWeaponAtIndex(oldIndex).OnSwitchOff();
+            if(newIndex < weapons.Count)
+                GetWeaponAtIndex(newIndex).OnSwitchOnTo();
         }
 
         /// <summary>
