@@ -1,11 +1,10 @@
 using Mirror;
-using Team_Capture.Core;
 using Team_Capture.Player;
 using UnityEngine;
 
 namespace Team_Capture.Weapons.Projectiles
 {
-    public class ProjectileRocket : NetworkBehaviour
+    public class ProjectileRocket : ProjectileBase
     {
         /// <summary>
         ///     How much force is applied to the rocket for it to go forward
@@ -22,8 +21,14 @@ namespace Team_Capture.Weapons.Projectiles
         /// </summary>
         [SerializeField] private float explosionSize = 6f;
 
+        /// <summary>
+        ///     How much force to give players on explode
+        /// </summary>
         [SerializeField] private float explosionForce = 100f;
 
+        /// <summary>
+        ///     Whats the percentage of damage we will do to the owner of the rocket
+        /// </summary>
         [SerializeField] private float percentageRemoveOfOwner = 0.60f;
         
         /// <summary>
@@ -36,21 +41,16 @@ namespace Team_Capture.Weapons.Projectiles
         /// </summary>
         [SerializeField] private GameObject explosionPrefab;
 
+        /// <summary>
+        ///     Max hits we can do in a raycast
+        /// </summary>
         [SerializeField] private int colliderHitsBufferSize = 4;
 
-        [SyncVar] private string ownerPlayerName;
-        
         private Collider[] rayCastHits;
-        private PlayerManager rocketOwner;
-
-        public void Setup(PlayerManager owner)
+        
+        protected override void Setup()
         {
-            rocketOwner = owner;
-            ownerPlayerName = owner.transform.name;
-        }
-
-        private void Start()
-        {
+            base.Setup();
             Vector3 force = appliedForce * transform.forward;
             
             //TODO: We should do the force stuff on the client as well, and not sync the pos, instead only sending a message on where it hit
@@ -60,19 +60,12 @@ namespace Team_Capture.Weapons.Projectiles
 
                 rayCastHits = new Collider[colliderHitsBufferSize];
             }
-            else
-            {
-                rocketOwner = GameManager.GetPlayer(ownerPlayerName);
-            }
         }
 
         private void OnTriggerEnter(Collider other)
         {
-            if(rocketOwner == null)
-                return;
-            
             //Don't explode on the player who owns this rocket
-            if(other == rocketOwner.playerMovementManager.CharacterController)
+            if(other == ProjectileOwner.playerMovementManager.CharacterController)
                 return;
             
             Transform rocketTransform = transform;
@@ -96,12 +89,12 @@ namespace Team_Capture.Weapons.Projectiles
                 
                 //Whoever is the owner of this rocket will have reduced damage done to them
                 int damage = explosionDamage;
-                if (player == rocketOwner)
+                if (player == ProjectileOwner)
                 {
                     float reducedDamage = damage * percentageRemoveOfOwner;
                     damage = Mathf.RoundToInt(reducedDamage);
                 }
-                player.TakeDamage(damage, rocketOwner.transform.name);
+                player.TakeDamage(damage, ProjectileOwner.transform.name);
             }
 
             //Destroy this object

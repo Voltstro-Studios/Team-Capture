@@ -247,9 +247,8 @@ namespace Team_Capture.Weapons
                     Logger.Debug("Pointing player's projectile at cross-hair.");
                 }
             }
-
-            //TODO: We should have a projectile base instead, and built the rocket on top of it
-            ProjectileRocket projectile = newProjectile.GetComponent<ProjectileRocket>();
+            
+            ProjectileBase projectile = newProjectile.GetComponent<ProjectileBase>();
             if (projectile == null)
             {
                 Logger.Error("Weapon projectile doesn't have a projectile base on it!");
