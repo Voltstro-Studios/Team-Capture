@@ -11,6 +11,7 @@ using Team_Capture.Core;
 using Team_Capture.Helper.Extensions;
 using Team_Capture.Player.Movement.States;
 using UnityEngine;
+using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.Player.Movement
 {
@@ -184,7 +185,7 @@ namespace Team_Capture.Player.Movement
         {
             storedInput.MovementDir = new Vector2(horizontal, vertical);
             storedInput.Jump = jump;
-            storedInput.LookMovements.Push(new Vector2(lookY, lookX));
+            storedInput.LookMovements.PushFront(new Vector2(lookY, lookX));
         }
 
         [Client]
@@ -259,14 +260,10 @@ namespace Team_Capture.Player.Movement
             Vector2 lookMoveAverage = Vector2.zero;
             foreach (Vector2 lookMovement in storedInput.LookMovements)
             {
-                Vector2 movement = lookMovement;
-                if (float.IsNaN(lookMovement.x) || float.IsNaN(lookMovement.y))
-                    movement = Vector2.zero;
-
-                lookMoveAverage += movement;
+                lookMoveAverage += lookMovement;
             }
 
-            lookMoveAverage /= storedInput.LookMovements.Count;
+            lookMoveAverage /= storedInput.LookMovements.Size;
 
             //Sometimes it can be NaN
             if (float.IsNaN(lookMoveAverage.x))
@@ -336,7 +333,7 @@ namespace Team_Capture.Player.Movement
         {
             public bool Jump;
 
-            public readonly SamplingStack<Vector2> LookMovements = new(64);
+            public readonly CircularBuffer<Vector2> LookMovements = new(64);
 
             public Vector2 MovementDir;
         }
