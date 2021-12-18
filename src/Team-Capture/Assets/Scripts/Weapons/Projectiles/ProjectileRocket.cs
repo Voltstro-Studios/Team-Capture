@@ -1,6 +1,8 @@
 using Mirror;
+using Team_Capture.Misc;
 using Team_Capture.Player;
 using UnityEngine;
+using UnityEngine.VFX;
 
 namespace Team_Capture.Weapons.Projectiles
 {
@@ -45,6 +47,10 @@ namespace Team_Capture.Weapons.Projectiles
         ///     Max hits we can do in a raycast
         /// </summary>
         [SerializeField] private int colliderHitsBufferSize = 4;
+
+        [SerializeField] private VisualEffect rocketTrail;
+
+        [SerializeField] private float rocketTrailDestroyTime = 6f;
 
         private Collider[] rayCastHits;
         
@@ -96,6 +102,11 @@ namespace Team_Capture.Weapons.Projectiles
                 }
                 player.TakeDamage(damage, ProjectileOwner.transform.name);
             }
+            
+            //Change the rocket trail parent
+            rocketTrail.Stop();
+            rocketTrail.transform.SetParent(null);
+            rocketTrail.gameObject.AddComponent<TimedDestroyer>().destroyDelayTime = rocketTrailDestroyTime;
 
             //Destroy this object
             if (isServer)
