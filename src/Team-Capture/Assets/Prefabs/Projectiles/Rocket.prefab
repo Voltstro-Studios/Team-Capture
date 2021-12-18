@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 3332066518651529665}
   - component: {fileID: 6880144716987926442}
   - component: {fileID: 2353103736786857675}
-  - component: {fileID: 6755105535482960609}
   - component: {fileID: -7538128309390651353}
   m_Layer: 11
   m_Name: Rocket
@@ -94,40 +93,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.2843073, y: 0.28597826, z: 1.2829983}
   m_Center: {x: -0.0023607612, y: -0.0027690902, z: -0.0060973167}
---- !u!114 &6755105535482960609
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8197683935473045189}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f74aedd71d9a4f55b3ce499326d45fb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  clientAuthority: 0
-  sendInterval: 0
-  syncPosition: 1
-  syncRotation: 1
-  syncScale: 0
-  interpolatePosition: 0
-  interpolateRotation: 0
-  interpolateScale: 0
-  bufferTimeMultiplier: 1
-  bufferSizeLimit: 64
-  catchupThreshold: 4
-  catchupMultiplier: 0.6
-  onlySyncOnChange: 0
-  bufferResetMultiplier: 5
-  positionSensitivity: 0
-  rotationSensitivity: 0
-  scaleSensitivity: 0
-  showGizmos: 0
-  showOverlay: 0
-  overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
 --- !u!114 &-7538128309390651353
 MonoBehaviour:
   m_ObjectHideFlags: 0

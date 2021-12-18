@@ -1,8 +1,10 @@
 using Mirror;
+using Team_Capture.Core;
 using Team_Capture.Misc;
 using Team_Capture.Player;
 using UnityEngine;
 using UnityEngine.VFX;
+using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.Weapons.Projectiles
 {
@@ -56,16 +58,17 @@ namespace Team_Capture.Weapons.Projectiles
         
         protected override void Setup()
         {
-            base.Setup();
-            Vector3 force = appliedForce * transform.forward;
-            
-            //TODO: We should do the force stuff on the client as well, and not sync the pos, instead only sending a message on where it hit
-            if(isServer)
+            Rigidbody rb = GetComponent<Rigidbody>();
+            if (rb == null)
             {
-                GetComponent<Rigidbody>().AddForce(force);
-
-                rayCastHits = new Collider[colliderHitsBufferSize];
+                Logger.Error("Rocket doesn't have a rigidbody attached to it!");
+                return;
             }
+
+            Vector3 force = appliedForce * transform.forward;
+            rb.AddForce(force);
+            
+            rayCastHits = new Collider[colliderHitsBufferSize];
         }
 
         private void OnTriggerEnter(Collider other)
@@ -104,9 +107,12 @@ namespace Team_Capture.Weapons.Projectiles
             }
             
             //Change the rocket trail parent
-            rocketTrail.Stop();
-            rocketTrail.transform.SetParent(null);
-            rocketTrail.gameObject.AddComponent<TimedDestroyer>().destroyDelayTime = rocketTrailDestroyTime;
+            if (!Game.IsHeadless)
+            {
+                rocketTrail.Stop();
+                rocketTrail.transform.SetParent(null);
+                rocketTrail.gameObject.AddComponent<TimedDestroyer>().destroyDelayTime = rocketTrailDestroyTime;
+            }
 
             //Destroy this object
             if (isServer)

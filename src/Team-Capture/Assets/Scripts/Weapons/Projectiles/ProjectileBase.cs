@@ -28,15 +28,6 @@ namespace Team_Capture.Weapons.Projectiles
             ProjectileOwner = playerManager;
         }
 
-        /// <summary>
-        ///     Called on setup
-        /// </summary>
-        protected virtual void Setup()
-        {
-            if(ProjectileOwner == null)
-                Logger.Error("Projectile owner is null!");
-        }
-
         private void Start()
         {
             if (isServer)
@@ -46,9 +37,23 @@ namespace Team_Capture.Weapons.Projectiles
             }
         }
 
-        [ClientRpc]
+        /// <summary>
+        ///     Called on setup
+        /// </summary>
+        protected abstract void Setup();
+
+        //The owner is the server
+        [ClientRpc(includeOwner = false)]
         private void RpcSetupOnAllClients(string ownerPlayerId)
         {
+            Logger.Info("Got SETUP");
+            
+            if (string.IsNullOrWhiteSpace(ownerPlayerId))
+            {
+                Logger.Error("Passed in player ID is empty or null!");
+                return;
+            }
+            
             ProjectileOwner = GameManager.GetPlayer(ownerPlayerId);
             Setup();
         }
