@@ -142,6 +142,9 @@ namespace Team_Capture.Logging
         private static void LogIfUnInitialized(string message, LogEventLevel logLevel)
         {
 #if UNITY_EDITOR
+            if(IsLoggerInitialized)
+                return;
+            
             switch (logLevel)
             {
                 case LogEventLevel.Verbose:
