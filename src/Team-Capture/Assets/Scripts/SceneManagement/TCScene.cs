@@ -70,6 +70,8 @@ namespace Team_Capture.SceneManagement
 
         public GameObject bulletHoleEffectPrefab;
 
+        public GameObject rocketPrefab;
+
         /// <summary>
         ///     The scene, but only its name (So no 'Assets/Scenes/*.unity' stuff)
         /// </summary>

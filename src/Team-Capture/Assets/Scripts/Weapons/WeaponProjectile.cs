@@ -8,6 +8,8 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using Mirror;
 using Team_Capture.Helper;
+using Team_Capture.Pooling;
+using Team_Capture.SceneManagement;
 using Team_Capture.Weapons.Effects;
 using Team_Capture.Weapons.Projectiles;
 using Team_Capture.Weapons.UI;
@@ -57,6 +59,8 @@ namespace Team_Capture.Weapons
         
         private CancellationTokenSource reloadCancellation;
         private CancellationTokenSource shootRepeatedlyCancellation;
+
+        private NetworkProjectileObjectsPool projectileObjectsPool;
         
         public override void OnPerform(bool buttonDown)
         {
@@ -131,6 +135,9 @@ namespace Team_Capture.Weapons
             nextTimeToFire = 0f;
             currentProjectileCount = maxWeaponProjectileCount;
             isReloading = false;
+            
+            if (isServer)
+                projectileObjectsPool = GameSceneManager.Instance.rocketsPool;
             
             if (isLocalClient)
                 OnUIUpdate(new DefaultHudUpdateMessage(null, currentProjectileCount, isReloading));
@@ -237,7 +244,7 @@ namespace Team_Capture.Weapons
             }
             
             //Spawn the object
-            GameObject newProjectile = Instantiate(projectilePrefab, projectileSpawnPoint.position, projectileSpawnPoint.rotation);
+            GameObject newProjectile = projectileObjectsPool.GetPooledObject();
             if (raycastHit.HasValue)
             {
                 RaycastHit hit = raycastHit.Value;
@@ -255,8 +262,9 @@ namespace Team_Capture.Weapons
                 return;
             }
             
-            projectile.Setup(weaponManager.playerManager);
-            NetworkServer.Spawn(newProjectile);
+            projectile.SetupOwner(weaponManager.playerManager);
+            projectile.ServerEnable(projectileSpawnPoint.position, projectileSpawnPoint.rotation.eulerAngles);
+
             DoWeaponEffects(new ProjectileEffectsMessage());
         }
 

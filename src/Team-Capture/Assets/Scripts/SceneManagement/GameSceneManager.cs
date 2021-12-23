@@ -29,6 +29,7 @@ namespace Team_Capture.SceneManagement
 
             tracersEffectsPool = new GameObjectPool(ActiveScene.traceEffectPrefab);
             bulletHolePool = new GameObjectPool(ActiveScene.bulletHoleEffectPrefab);
+            rocketsPool = new NetworkProjectileObjectsPool(ActiveScene.rocketPrefab);
         }
 
         #region TCScene
@@ -49,6 +50,7 @@ namespace Team_Capture.SceneManagement
 
         internal GameObjectPool tracersEffectsPool;
         internal GameObjectPool bulletHolePool;
+        internal NetworkProjectileObjectsPool rocketsPool;
 
         #endregion
     }
