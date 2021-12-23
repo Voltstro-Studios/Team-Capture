@@ -1,4 +1,5 @@
 using System;
+using Mirror;
 using Team_Capture.Core;
 using Team_Capture.Misc;
 using Team_Capture.Player;
@@ -77,6 +78,7 @@ namespace Team_Capture.Weapons.Projectiles
         private Collider[] rayCastHits;
         private VisualEffect rocketTrail;
         private Rigidbody rb;
+        private bool hasExploded;
 
         private void Awake()
         {
@@ -93,6 +95,7 @@ namespace Team_Capture.Weapons.Projectiles
         protected override void Enable(Vector3 location, Vector3 rotation)
         {
             base.Enable(location, rotation);
+            hasExploded = false;
 
             Vector3 force = appliedForce * transform.forward;
             rb.AddForce(force);
@@ -115,13 +118,24 @@ namespace Team_Capture.Weapons.Projectiles
             if(other == ProjectileOwner.playerMovementManager.CharacterController)
                 return;
             
-            Transform rocketTransform = transform;
-            Vector3 rocketPosition = rocketTransform.position;
-            
+            Explode(transform.position);
+        }
+        
+        [ClientRpc(includeOwner = false)]
+        private void RpcExplode(Vector3 position)
+        {
+            Explode(position);
+        }
+
+        private void Explode(Vector3 position)
+        {
+            if(hasExploded)
+                return;
+
             //Spawn explosion particle
-            Instantiate(explosionPrefab, rocketPosition, rocketTransform.rotation);
+            Instantiate(explosionPrefab, position, Quaternion.identity);
             
-            int size = Physics.OverlapSphereNonAlloc(rocketPosition, explosionSize, rayCastHits, layerMask);
+            int size = Physics.OverlapSphereNonAlloc(position, explosionSize, rayCastHits, layerMask);
             for (int i = 0; i < size; i++)
             {
                 PlayerManager player = rayCastHits[i].GetComponent<PlayerManager>();
@@ -129,7 +143,7 @@ namespace Team_Capture.Weapons.Projectiles
                     continue;
                 
                 //We do knock-back, do it both on the local client and server
-                player.playerMovementManager.KnockBack(player.transform.position - rocketPosition, explosionForce);
+                player.playerMovementManager.KnockBack(player.transform.position - position, explosionForce);
 
                 if (!isServer) 
                     continue;
@@ -143,18 +157,24 @@ namespace Team_Capture.Weapons.Projectiles
                 }
                 player.TakeDamage(damage, ProjectileOwner.transform.name);
             }
+
+            hasExploded = true;
             
-            //Change the rocket trail parent
+            //Change the rocket trail parent and set it up to destroy it self
             if (!Game.IsHeadless)
             {
                 rocketTrail.Stop();
                 rocketTrail.transform.SetParent(null);
                 rocketTrail.gameObject.AddComponent<TimedDestroyer>().destroyDelayTime = rocketTrailDestroyTime;
             }
-
+            
             //Return the object
             if (isServer)
             {
+                //While Rpc explode calls this function again,
+                //it won't run on the server as it is marked not include the owner (the server)
+                RpcExplode(position);
+                
                 ServerDisable();
                 ServerReturnToPool();
             }
