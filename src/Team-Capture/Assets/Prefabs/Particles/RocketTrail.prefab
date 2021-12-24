@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 4514885835423395497}
   - component: {fileID: 4514885835423395496}
   - component: {fileID: 4514885835423395495}
+  - component: {fileID: 7166895863873346351}
+  - component: {fileID: 2854785413084332564}
   m_Layer: 0
   m_Name: RocketTrail
   m_TagString: Untagged
@@ -69,13 +71,22 @@ VisualEffect:
       - m_Value: {x: 0, y: 4, z: 0}
         m_Name: SmokeVelocity
         m_Overridden: 1
+      - m_Value: {x: 0, y: 0, z: 0}
+        m_Name: SmokePosition_position
+        m_Overridden: 1
+      - m_Value: {x: -0, y: 0, z: 0}
+        m_Name: SmokePosition_angles
+        m_Overridden: 1
+      - m_Value: {x: 1, y: 1, z: 1}
+        m_Name: SmokePosition_scale
+        m_Overridden: 1
     m_Vector4f:
       m_Array: []
     m_Uint:
       m_Array: []
     m_Int:
       m_Array:
-      - m_Value: 85
+      - m_Value: 250
         m_Name: SmokeSpawnRate
         m_Overridden: 1
     m_Matrix4x4f:
@@ -128,3 +139,34 @@ VFXRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!114 &7166895863873346351
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4514885835423395494}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cdafc37f32b176349b1684c4455b98e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ExecuteInEditor: 1
+  m_Bindings:
+  - {fileID: 2854785413084332564}
+  m_VisualEffect: {fileID: 4514885835423395496}
+--- !u!114 &2854785413084332564
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4514885835423395494}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07c3070554d0a8944a95ff8f018c2c9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Property:
+    m_Name: SmokePosition
+  Target: {fileID: 4514885835423395497}

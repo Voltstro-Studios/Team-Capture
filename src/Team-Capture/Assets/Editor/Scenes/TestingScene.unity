@@ -891,6 +891,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4514885835423395496, guid: 8ae202793fb2d72d28547343b6911d83,
         type: 3}
+      propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.data[0].m_Value.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4514885835423395496, guid: 8ae202793fb2d72d28547343b6911d83,
+        type: 3}
+      propertyPath: m_PropertySheet.m_Vector3f.m_Array.Array.data[3].m_Value.z
+      value: -2.08
+      objectReference: {fileID: 0}
+    - target: {fileID: 4514885835423395496, guid: 8ae202793fb2d72d28547343b6911d83,
+        type: 3}
       propertyPath: m_PropertySheet.m_Vector2f.m_Array.Array.data[0].m_Overridden
       value: 1
       objectReference: {fileID: 0}
@@ -949,5 +959,43 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 7166895863873346351, guid: 8ae202793fb2d72d28547343b6911d83,
+        type: 3}
+      propertyPath: m_Bindings.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7166895863873346351, guid: 8ae202793fb2d72d28547343b6911d83,
+        type: 3}
+      propertyPath: m_Bindings.Array.data[0]
+      value: 
+      objectReference: {fileID: 4514885835320173235}
+    m_RemovedComponents:
+    - {fileID: 5063273809178567738, guid: 8ae202793fb2d72d28547343b6911d83, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 8ae202793fb2d72d28547343b6911d83, type: 3}
+--- !u!1 &4514885835320173233 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4514885835423395494, guid: 8ae202793fb2d72d28547343b6911d83,
+    type: 3}
+  m_PrefabInstance: {fileID: 4514885835320173232}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &4514885835320173234 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4514885835423395497, guid: 8ae202793fb2d72d28547343b6911d83,
+    type: 3}
+  m_PrefabInstance: {fileID: 4514885835320173232}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4514885835320173235
+MonoBehaviour:
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4514885835320173233}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07c3070554d0a8944a95ff8f018c2c9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Property:
+    m_Name: SmokePosition
+  Target: {fileID: 4514885835320173234}
