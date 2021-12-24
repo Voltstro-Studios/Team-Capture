@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: RocketLauncher
   m_EditorClassIdentifier: 
   weaponId: RocketLauncher
+  weaponSwayAmountMultiplier: 0.1
+  weaponSwayMax: {x: 0.05, y: 0.005}
   weaponObjectPrefab:
     assetReference:
       m_AssetGUID: 20b8c763278f32186b7529feb0c4bf4a

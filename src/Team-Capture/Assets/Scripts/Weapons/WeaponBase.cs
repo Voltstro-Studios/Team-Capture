@@ -27,6 +27,17 @@ namespace Team_Capture.Weapons
         public string weaponId;
 
         /// <summary>
+        ///     The multiplier for the weapon sway amount
+        /// </summary>
+        [Range(0, 1)]
+        public float weaponSwayAmountMultiplier = 1.0f;
+
+        /// <summary>
+        ///     The amount of weapon sway on the X and Y axis
+        /// </summary>
+        public Vector2 weaponSwayMax = new (0.25f, 0.2f);
+
+        /// <summary>
         ///     The prefab of the weapon
         /// </summary>
         [Tooltip("The prefab of the weapon")]
@@ -62,7 +73,7 @@ namespace Team_Capture.Weapons
         /// <summary>
         ///     <see cref="HudAmmoControls"/>, for controlling the local client's ammo part of the HUD
         /// </summary>
-        protected HudAmmoControls HudAmmoControls => weaponManager.playerManager.PlayerUIManager.HudAmmoControls;
+        protected HudAmmoControls? HudAmmoControls => weaponManager.playerManager.PlayerUIManager.HudAmmoControls;
         
         /// <summary>
         ///     Tells clients to to the RPC effects

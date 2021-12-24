@@ -54,12 +54,10 @@ namespace Team_Capture.Pooling
 
         private void OnTakeObject(GameObject gameObject)
         {
-            gameObject.SetActive(true);
         }
 
         private void OnReturnObject(GameObject gameObject)
         {
-            gameObject.SetActive(false);
         }
 
         private void OnDestroyObject(GameObject gameObject)

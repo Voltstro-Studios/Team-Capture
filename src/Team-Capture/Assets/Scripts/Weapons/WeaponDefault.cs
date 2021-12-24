@@ -177,9 +177,14 @@ namespace Team_Capture.Weapons
         {
             if (hudUpdateMessage is DefaultHudUpdateMessage defaultHudUpdateMessage)
             {
-                HudAmmoControls.ammoText.text = defaultHudUpdateMessage.CurrentBullets.ToString();
-                HudAmmoControls.maxAmmoText.text = maxBullets.ToString();
-                HudAmmoControls.reloadTextGameObject.SetActive(defaultHudUpdateMessage.IsReloading);
+                if(!HudAmmoControls.HasValue)
+                    return;
+
+                Team_Capture.UI.HudAmmoControls controls = HudAmmoControls.Value;
+                
+                controls.ammoText.text = defaultHudUpdateMessage.CurrentBullets.ToString();
+                controls.maxAmmoText.text = maxBullets.ToString();
+                controls.reloadTextGameObject.SetActive(defaultHudUpdateMessage.IsReloading);
 
                 isReloading = defaultHudUpdateMessage.IsReloading;
             }
@@ -189,9 +194,14 @@ namespace Team_Capture.Weapons
         {
             if (isLocalClient)
             {
-                HudAmmoControls.ammoText.gameObject.SetActive(true);
-                HudAmmoControls.maxAmmoText.gameObject.SetActive(true);
-                HudAmmoControls.reloadTextGameObject.gameObject.SetActive(isReloading);
+                if(!HudAmmoControls.HasValue)
+                    return;
+
+                Team_Capture.UI.HudAmmoControls controls = HudAmmoControls.Value;
+                
+                controls.ammoText.gameObject.SetActive(true);
+                controls.maxAmmoText.gameObject.SetActive(true);
+                controls.reloadTextGameObject.gameObject.SetActive(isReloading);
             }
             
             if(!isServer)
@@ -208,9 +218,14 @@ namespace Team_Capture.Weapons
         {
             if (isLocalClient)
             {
-                HudAmmoControls.ammoText.gameObject.SetActive(false);
-                HudAmmoControls.maxAmmoText.gameObject.SetActive(false);
-                HudAmmoControls.reloadTextGameObject.gameObject.SetActive(false);
+                if(!HudAmmoControls.HasValue)
+                    return;
+
+                Team_Capture.UI.HudAmmoControls controls = HudAmmoControls.Value;
+                
+                controls.ammoText.gameObject.SetActive(false);
+                controls.maxAmmoText.gameObject.SetActive(false);
+                controls.reloadTextGameObject.gameObject.SetActive(false);
             }
             
             if(!isServer)

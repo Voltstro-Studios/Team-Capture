@@ -88,6 +88,9 @@ namespace Team_Capture.Weapons
             
             //Setup our add weapon callback
             weapons.Callback += WeaponListCallback;
+            
+            if(isLocalPlayer)
+                WeaponSway.SetWeapon(weapons[SelectedWeaponIndex]);
         }
 
         #endregion
@@ -382,6 +385,14 @@ namespace Team_Capture.Weapons
         {
             for (int i = 0; i < weaponsHolderSpot.childCount; i++)
                 weaponsHolderSpot.GetChild(i).gameObject.SetActive(i == index);
+
+            if (isLocalPlayer)
+            {
+                if(index + 1 > weapons.Count)
+                    return;
+                
+                WeaponSway.SetWeapon(weapons[index]);
+            }
         }
 
         #endregion
