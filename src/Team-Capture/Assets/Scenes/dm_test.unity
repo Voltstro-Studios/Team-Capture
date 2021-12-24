@@ -656,7 +656,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh28694
+  m_Name: pb_Mesh34824
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -845,6 +845,7 @@ Transform:
   - {fileID: 1144383447}
   - {fileID: 1233522334}
   - {fileID: 2090816266}
+  - {fileID: 2494245516010478801}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1844,7 +1845,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh35074
+  m_Name: pb_Mesh34778
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -2008,7 +2009,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh28642
+  m_Name: pb_Mesh34754
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -3633,7 +3634,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7777778, y: 1}
+    m_SensorSize: {x: 1.3333334, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -3743,7 +3744,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh28666
+  m_Name: pb_Mesh34794
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -4245,7 +4246,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh28618
+  m_Name: pb_Mesh34728
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -4477,3 +4478,83 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0ae707cd6882ff842951820829382e2a, type: 3}
+--- !u!4 &2494245516010478801 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4815992145953519818, guid: 08470dc43882217b0b364dd552cd85a2,
+    type: 3}
+  m_PrefabInstance: {fileID: 6937936254449951771}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &6937936254449951771
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 958358809}
+    m_Modifications:
+    - target: {fileID: 1161327035757429613, guid: 08470dc43882217b0b364dd552cd85a2,
+        type: 3}
+      propertyPath: sceneId
+      value: 2385298962
+      objectReference: {fileID: 0}
+    - target: {fileID: 4815992145953519818, guid: 08470dc43882217b0b364dd552cd85a2,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4815992145953519818, guid: 08470dc43882217b0b364dd552cd85a2,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 15.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 4815992145953519818, guid: 08470dc43882217b0b364dd552cd85a2,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4815992145953519818, guid: 08470dc43882217b0b364dd552cd85a2,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -24
+      objectReference: {fileID: 0}
+    - target: {fileID: 4815992145953519818, guid: 08470dc43882217b0b364dd552cd85a2,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4815992145953519818, guid: 08470dc43882217b0b364dd552cd85a2,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4815992145953519818, guid: 08470dc43882217b0b364dd552cd85a2,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4815992145953519818, guid: 08470dc43882217b0b364dd552cd85a2,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4815992145953519818, guid: 08470dc43882217b0b364dd552cd85a2,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4815992145953519818, guid: 08470dc43882217b0b364dd552cd85a2,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4815992145953519818, guid: 08470dc43882217b0b364dd552cd85a2,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4815992145953519821, guid: 08470dc43882217b0b364dd552cd85a2,
+        type: 3}
+      propertyPath: m_Name
+      value: Pickup_RocketLauncher
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 08470dc43882217b0b364dd552cd85a2, type: 3}
