@@ -23,12 +23,20 @@ namespace Team_Capture.Weapons
         /// <summary>
         ///     The 'ID' of the weapon, what will be used to share across on the network, so make it unique
         /// </summary>
+        [Header("Weapon Details")]
         [Tooltip("The 'ID' of the weapon, what will be used to share across on the network, so make it unique")]
         public string weaponId;
+        
+        /// <summary>
+        ///     The prefab of the weapon
+        /// </summary>
+        [Tooltip("The prefab of the weapon")]
+        public CachedAddressable<GameObject> weaponObjectPrefab;
 
         /// <summary>
         ///     The multiplier for the weapon sway amount
         /// </summary>
+        [Header("Weapon Sway")]
         [Range(0, 1)]
         public float weaponSwayAmountMultiplier = 1.0f;
 
@@ -36,12 +44,6 @@ namespace Team_Capture.Weapons
         ///     The amount of weapon sway on the X and Y axis
         /// </summary>
         public Vector2 weaponSwayMax = new (0.25f, 0.2f);
-
-        /// <summary>
-        ///     The prefab of the weapon
-        /// </summary>
-        [Tooltip("The prefab of the weapon")]
-        public CachedAddressable<GameObject> weaponObjectPrefab;
 
         /// <summary>
         ///     The <see cref="WeaponType"/> that this instance is

@@ -35,6 +35,7 @@ namespace Team_Capture.Weapons
         /// <summary>
         ///     How much damage the weapon does
         /// </summary>
+        [Header("Weapon Damage")]
         [Tooltip("How much damage the weapon does")]
         public int weaponDamage = 15;
         
@@ -57,6 +58,7 @@ namespace Team_Capture.Weapons
         /// <summary>
         ///     The fire rate of the weapon
         /// </summary>
+        [Header("Weapon Raycast Settings")]
         [Tooltip("The fire rate of the weapon")]
         public float weaponFireRate = 10;
 
@@ -87,6 +89,7 @@ namespace Team_Capture.Weapons
         /// <summary>
         ///     How long it takes for the weapon to reload (in milliseconds)
         /// </summary>
+        [Header("Weapon Reloading")]
         [Tooltip("How long it takes for the weapon to reload (in milliseconds)")]
         public int weaponReloadTime = 2000;
         

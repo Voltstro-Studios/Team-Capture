@@ -22,18 +22,15 @@ namespace Team_Capture.Weapons
     public class WeaponProjectile : WeaponBase
     {
         /// <summary>
-        ///     The <see cref="GameObject"/> that the weapon will spawn on fire
-        /// </summary>
-        public GameObject projectilePrefab;
-
-        /// <summary>
         ///     How far does something have to be for "auto aim" to kick in
         /// </summary>
+        [Header("Weapon Aiming")]
         public float projectileAutoAimMinRange = 10f;
 
         /// <summary>
         ///     How many projectiles to hold
         /// </summary>
+        [Header("Weapon Raycast Settings")]
         public int maxWeaponProjectileCount = 4;
         
         /// <summary>
@@ -45,6 +42,7 @@ namespace Team_Capture.Weapons
         /// <summary>
         ///     How long it takes for the weapon to reload (in milliseconds)
         /// </summary>
+        [Header("Weapon Reloading")]
         [Tooltip("How long it takes for the weapon to reload (in milliseconds)")]
         public int weaponReloadTime = 2000;
         

@@ -27,22 +27,24 @@ namespace Team_Capture.Weapons
     internal class WeaponMelee : WeaponBase
     {
         /// <summary>
-        ///     How far does the weapon hit
-        /// </summary>
-        [Tooltip("How far does the weapon hit")]
-        public float weaponRange = 25;
-        
-        /// <summary>
         ///     How much damage does the weapon do per hit
         /// </summary>
+        [Header("Weapon Damage")]
         [Tooltip("How much damage does the weapon do per hit")]
         public int weaponDamage = 25;
         
         /// <summary>
         ///     The fire rate of the weapon
         /// </summary>
+        [Header("Weapon Raycast Settings")]
         [Tooltip("The fire rate of the weapon")]
         public float weaponFireRate = 10;
+        
+        /// <summary>
+        ///     How far does the weapon hit
+        /// </summary>
+        [Tooltip("How far does the weapon hit")]
+        public float weaponRange = 25;
         
         public override WeaponType WeaponType => WeaponType.Melee;
 
