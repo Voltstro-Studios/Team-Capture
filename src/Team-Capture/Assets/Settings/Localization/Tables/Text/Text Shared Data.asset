@@ -327,6 +327,34 @@ MonoBehaviour:
     m_Key: Death_ReSpawningIn
     m_Metadata:
       m_Items: []
+  - m_Id: 25128267470737408
+    m_Key: Death_HpLeft
+    m_Metadata:
+      m_Items: []
+  - m_Id: 25128540356349952
+    m_Key: Death_KilledUrSelf1
+    m_Metadata:
+      m_Items: []
+  - m_Id: 25128762700599296
+    m_Key: Death_KilledUrSelf2
+    m_Metadata:
+      m_Items: []
+  - m_Id: 25128897186762752
+    m_Key: Death_KilledUrSelf3
+    m_Metadata:
+      m_Items: []
+  - m_Id: 25129167325106176
+    m_Key: Death_KilledUrSelf4
+    m_Metadata:
+      m_Items: []
+  - m_Id: 25129356861509632
+    m_Key: Death_KilledUrSelf5
+    m_Metadata:
+      m_Items: []
+  - m_Id: 25138808545218560
+    m_Key: Death_KilledUrSelf_Message
+    m_Metadata:
+      m_Items: []
   - m_Id: 106540911169536
     m_Key: Console_Console
     m_Metadata:
@@ -342,10 +370,11 @@ MonoBehaviour:
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
-    id: 0
+    rid: 0
   references:
-    version: 1
-    00000000:
+    version: 2
+    RefIds:
+    - rid: 0
       type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables,
         asm: Unity.Localization}
       data:

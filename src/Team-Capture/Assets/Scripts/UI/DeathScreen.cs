@@ -6,6 +6,7 @@
 
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using Team_Capture.AddressablesAddons;
 using Team_Capture.Helper;
 using Team_Capture.Player;
 using TMPro;
@@ -16,6 +17,10 @@ namespace Team_Capture.UI
 {
     internal class DeathScreen : MonoBehaviour
     {
+        [SerializeField] private CachedLocalizedString hpLeftText;
+        [SerializeField] private CachedLocalizedString yourselfText;
+        [SerializeField] private CachedLocalizedString[] killedYourSelfText;
+        
         [SerializeField] private GameObject playerDeathPrefab;
         [SerializeField] private GameObject panelsObject;
         [SerializeField] private TMP_Text countDownText;
@@ -61,10 +66,19 @@ namespace Team_Capture.UI
             deathCamObject.SetActive(true);
 
             killedByPanel.SetActive(true);
-            killedByText.text = killer.User.UserName;
-            killedByHealthText.text = $"{killer.Health.ToString()} HP Left.";
-            killedByProfileImage.texture = playerManager.User.UserProfilePicture;
-
+            if (killer == playerManager)
+            {
+                killedByText.text = yourselfText.Value;
+                int messageIndex = Random.Range(0, killedYourSelfText.Length - 1);
+                killedByHealthText.text = killedYourSelfText[messageIndex].Value;
+            }
+            else
+            {
+                killedByText.text = killer.User.UserName;
+                killedByHealthText.text = string.Format(hpLeftText.Value, killer.Health.ToString());
+            }
+            
+            killedByProfileImage.texture = killer.User.UserProfilePicture;
 
             if (killer != playerManager)
                 playerDeathCam.StartTrackingPlayer(killer);

@@ -17,7 +17,7 @@ MonoBehaviour:
   m_SharedData: {fileID: 11400000, guid: 34afaa7d41c0a49428742c07472e0e20, type: 2}
   m_Metadata:
     m_Items:
-    - id: 0
+    - rid: 0
   m_TableData:
   - m_Id: 4723791499264
     m_Localized: Cancel
@@ -145,7 +145,7 @@ MonoBehaviour:
     m_Localized: Joining Server {0}...
     m_Metadata:
       m_Items:
-      - id: 0
+      - rid: 0
   - m_Id: 60516830154752
     m_Localized: 'You are on your way to:'
     m_Metadata:
@@ -346,9 +346,39 @@ MonoBehaviour:
     m_Localized: Enter command...
     m_Metadata:
       m_Items: []
+  - m_Id: 25128267470737408
+    m_Localized: '{0} HP Left.'
+    m_Metadata:
+      m_Items:
+      - rid: 0
+  - m_Id: 25128540356349952
+    m_Localized: You killed yourself! You bloody idiot!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 25128762700599296
+    m_Localized: Goodbye, cruel world.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 25128897186762752
+    m_Localized: WTF!11!!!! HACKS!!!11!!!!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 25129167325106176
+    m_Localized: Too good for this world.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 25129356861509632
+    m_Localized: Self Destruction!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 25138808545218560
+    m_Localized: Yourself!
+    m_Metadata:
+      m_Items: []
   references:
-    version: 1
-    00000000:
+    version: 2
+    RefIds:
+    - rid: 0
       type: {class: SmartFormatTag, ns: UnityEngine.Localization.Metadata, asm: Unity.Localization}
       data:
-        m_Entries: 0010ea9d0a350000
+        m_Entries: 0010ea9d0a35000000106ab006465900
