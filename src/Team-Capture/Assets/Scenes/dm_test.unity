@@ -1406,12 +1406,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 958358809}
     m_Modifications:
-    - target: {fileID: 589062603364544928, guid: 1cb2406c378873a439e6d27fee28a882,
-        type: 3}
-      propertyPath: weapon
-      value: 
-      objectReference: {fileID: 11400000, guid: 7f2272658027c3c4088001bda3a587b5,
-        type: 2}
     - target: {fileID: 739785285574288705, guid: 1cb2406c378873a439e6d27fee28a882,
         type: 3}
       propertyPath: m_RootOrder
@@ -1420,7 +1414,7 @@ PrefabInstance:
     - target: {fileID: 739785285574288705, guid: 1cb2406c378873a439e6d27fee28a882,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -10.5
+      value: 8.918
       objectReference: {fileID: 0}
     - target: {fileID: 739785285574288705, guid: 1cb2406c378873a439e6d27fee28a882,
         type: 3}
@@ -1430,7 +1424,7 @@ PrefabInstance:
     - target: {fileID: 739785285574288705, guid: 1cb2406c378873a439e6d27fee28a882,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 9.4209385
+      value: -24.838
       objectReference: {fileID: 0}
     - target: {fileID: 739785285574288705, guid: 1cb2406c378873a439e6d27fee28a882,
         type: 3}
@@ -1469,18 +1463,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 739785285574288710, guid: 1cb2406c378873a439e6d27fee28a882,
         type: 3}
-      propertyPath: m_Icon
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 739785285574288710, guid: 1cb2406c378873a439e6d27fee28a882,
-        type: 3}
       propertyPath: m_Name
       value: Pickup_Rifle
       objectReference: {fileID: 0}
     - target: {fileID: 6344015274723330416, guid: 1cb2406c378873a439e6d27fee28a882,
         type: 3}
       propertyPath: sceneId
-      value: 1389874619
+      value: 2261046483
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1cb2406c378873a439e6d27fee28a882, type: 3}
@@ -3634,7 +3623,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.3333334, y: 1}
+    m_SensorSize: {x: 1.7777778, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0

@@ -20,7 +20,8 @@ namespace Team_Capture.Weapons
         [ConVar("cl_sway_enable", "Whether or not weapons will sway", true)]
         public static bool SwayEnabled = true;
 
-        public float smooth = 3.0f;
+        [ConVar("cl_sway_smoothness", "How \"Smooth\" the weapon sway is.", true)]
+        public static float Smoothness = 2.0f;
 
         private float axisX;
         private float axisY;
@@ -49,7 +50,7 @@ namespace Team_Capture.Weapons
             fy = Mathf.Clamp(fy, -maxWeaponSway.y, maxWeaponSway.y);
 
             Vector3 detection = new(localPosition.x + fx, localPosition.y + fy, localPosition.z);
-            transform.localPosition = Vector3.Lerp(transform.localPosition, detection, Time.deltaTime * smooth);
+            transform.localPosition = Vector3.Lerp(transform.localPosition, detection, Time.deltaTime * Smoothness);
         }
 
         private void OnDestroy()

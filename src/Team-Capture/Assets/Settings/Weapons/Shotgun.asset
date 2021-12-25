@@ -19,6 +19,8 @@ MonoBehaviour:
       m_SubObjectName: 
       m_SubObjectType: 
       m_EditorAssetChanged: 0
+  weaponSwayAmountMultiplier: 0.45
+  weaponSwayMax: {x: 0.15, y: 0.15}
   weaponDamage: 12
   weaponDamageDropOff:
     serializedVersion: 2

@@ -19,6 +19,8 @@ MonoBehaviour:
       m_SubObjectName: 
       m_SubObjectType: 
       m_EditorAssetChanged: 0
-  weaponRange: 5
+  weaponSwayAmountMultiplier: 0.4
+  weaponSwayMax: {x: 0.15, y: 0.2}
   weaponDamage: 25
   weaponFireRate: 4
+  weaponRange: 5
