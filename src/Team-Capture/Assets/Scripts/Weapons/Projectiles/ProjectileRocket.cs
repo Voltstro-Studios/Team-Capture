@@ -1,4 +1,6 @@
 using System;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using Mirror;
 using Team_Capture.Core;
 using Team_Capture.Misc;
@@ -33,6 +35,11 @@ namespace Team_Capture.Weapons.Projectiles
         ///     How much force to give players on explode
         /// </summary>
         [SerializeField] private float explosionForce = 100f;
+
+        /// <summary>
+        ///     The time until the rocket will self explode
+        /// </summary>
+        [SerializeField] private int selfExplodeTime = 10000;
 
         /// <summary>
         ///     Explosion damage
@@ -80,6 +87,8 @@ namespace Team_Capture.Weapons.Projectiles
         private Rigidbody rb;
         private bool hasExploded;
 
+        private CancellationTokenSource selfExplodeToken;
+
         private void Awake()
         {
             rb = GetComponent<Rigidbody>();
@@ -103,6 +112,12 @@ namespace Team_Capture.Weapons.Projectiles
             rayCastHits = new Collider[colliderHitsBufferSize];
 
             rocketTrail = Instantiate(rocketTrailVfxPrefab, rocketTrailSpawnPoint).GetComponent<VisualEffect>();
+
+            if (isServer)
+            {
+                selfExplodeToken = new CancellationTokenSource();
+                ExplodeIfTraveledLongEnough(selfExplodeToken.Token).Forget();
+            }
         }
 
         protected override void Disable()
@@ -171,6 +186,9 @@ namespace Team_Capture.Weapons.Projectiles
             //Return the object
             if (isServer)
             {
+                selfExplodeToken.Cancel();
+                selfExplodeToken.Dispose();
+                
                 //While Rpc explode calls this function again,
                 //it won't run on the server as it is marked not include the owner (the server)
                 RpcExplode(position);
@@ -178,6 +196,16 @@ namespace Team_Capture.Weapons.Projectiles
                 ServerDisable();
                 ServerReturnToPool();
             }
+        }
+
+        private async UniTask ExplodeIfTraveledLongEnough(CancellationToken cancellationToken)
+        {
+            await UniTask.Delay(selfExplodeTime, cancellationToken: cancellationToken);
+            
+            if(cancellationToken.IsCancellationRequested)
+                return;
+            
+            Explode(transform.position);
         }
 
 #if UNITY_EDITOR
