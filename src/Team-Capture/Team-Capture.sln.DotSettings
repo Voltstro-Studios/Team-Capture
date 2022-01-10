@@ -31,7 +31,7 @@
 	<s:Boolean x:Key="/Default/CodeStyle/CodeFormatting/XmlFormatter/USE_INDENT_FROM_VS/@EntryValue">True</s:Boolean>
 	<s:String x:Key="/Default/CodeStyle/FileHeader/FileHeaderRegionName/@EntryValue"></s:String>
 	<s:String x:Key="/Default/CodeStyle/FileHeader/FileHeaderText/@EntryValue">Team-Capture
-Copyright (C) 2019-$CURRENT_YEAR$ Voltstro-Studios
+Copyright (c) 2019-$CURRENT_YEAR$ Voltstro-Studios
 
 This project is governed by the AGPLv3 License.
 For more details see the LICENSE file.</s:String>

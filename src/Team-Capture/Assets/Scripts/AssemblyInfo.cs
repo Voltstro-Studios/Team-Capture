@@ -13,11 +13,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Team-Capture")]
-[assembly: AssemblyDescription("The main game code")]
+[assembly: AssemblyDescription("Team-Capture's main game assembly.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Voltstro-Studios")]
 [assembly: AssemblyProduct("Team-Capture")]
-[assembly: AssemblyCopyright("Copyright © 2020 Voltstro-Studios")]
+[assembly: AssemblyCopyright("Copyright (c) 2019-2022 Voltstro-Studios")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
