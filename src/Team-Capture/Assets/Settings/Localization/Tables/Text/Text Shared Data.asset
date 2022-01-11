@@ -299,8 +299,24 @@ MonoBehaviour:
     m_Key: Settings_Adv_Antialiasing
     m_Metadata:
       m_Items: []
+  - m_Id: 31221846798635008
+    m_Key: Settings_Adv_ShadowTitle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31222009457938432
+    m_Key: Settings_Adv_RenderingTitle
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31222127259160576
+    m_Key: Settings_Adv_CameraTitle
+    m_Metadata:
+      m_Items: []
   - m_Id: 96866975485952
     m_Key: Settings_Multiplayer
+    m_Metadata:
+      m_Items: []
+  - m_Id: 31221578451259392
+    m_Key: Settings_Multiplayer_WeaponTitle
     m_Metadata:
       m_Items: []
   - m_Id: 96905974124544

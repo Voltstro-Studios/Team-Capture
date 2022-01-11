@@ -13,14 +13,12 @@ namespace Team_Capture.Settings.SettingClasses
 {
 	internal sealed class AdvSettingsClass : Setting
 	{
-		[SettingsPropertyDisplayText("Text", "Settings_Adv_MSAA")] 
-		public MSAAQuality MsaaQuality = MSAAQuality.X4;
+		[SettingsHeader("Text", "Settings_Adv_RenderingTitle")]
+		[SettingsPropertyDisplayText("Text", "Settings_Adv_HDR")]
+		public bool HDR = true;
 		
 		[SettingsPropertyDisplayText("Text", "Settings_Adv_PostProcessing")] 
 		public bool PostProcessing = true;
-
-		[SettingsPropertyDisplayText("Text", "Settings_Adv_HDR")]
-		public bool HDR = true;
 
 		//Motion blur settings
 		[SettingsPropertyDisplayText("Text", "Settings_Adv_MotionBlur")]
@@ -45,6 +43,7 @@ namespace Team_Capture.Settings.SettingClasses
 		public float RenderScale = 1.0f;
 
 		//Shadow settings
+		[SettingsHeader("Text", "Settings_Adv_ShadowTitle")]
 		[SettingsPropertyDisplayText("Text", "Settings_Adv_ShadowDistance")] 
 		[Range(10, 100)] public int ShadowDistance = 45;
 
@@ -52,6 +51,7 @@ namespace Team_Capture.Settings.SettingClasses
 		public ShadowCascadesCount ShadowCascades = ShadowCascadesCount.FourCascades;
 
 		//Camera Settings
+		[SettingsHeader("Text", "Settings_Adv_CameraTitle")]
 		[SettingsPropertyDisplayText("Text", "Settings_Adv_FOV")] 
 		[Range(50, 100)] public int CameraFOV = 90;
 
@@ -59,5 +59,8 @@ namespace Team_Capture.Settings.SettingClasses
 		public AntialiasingMode CameraAntialiasing = AntialiasingMode.SubpixelMorphologicalAntiAliasing;
 
 		[SettingsDontShow] public AntialiasingQuality CameraAntialiasingQuality = AntialiasingQuality.High;
+		
+		[SettingsPropertyDisplayText("Text", "Settings_Adv_MSAA")] 
+		public MSAAQuality MsaaQuality = MSAAQuality.X4;
 	}
 }

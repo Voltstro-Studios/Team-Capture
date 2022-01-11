@@ -52,6 +52,20 @@ namespace Team_Capture.UI
     {
     }
 
+    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
+    internal class SettingsHeaderAttribute : PreserveAttribute
+    {
+        internal readonly TableEntryReference tableEntryReference;
+
+        internal readonly TableReference tableReference;
+        
+        public SettingsHeaderAttribute(string table, string tableEntry)
+        {
+            tableReference = table;
+            tableEntryReference = tableEntry;
+        }
+    }
+
     #endregion
 
     /// <summary>
@@ -103,6 +117,13 @@ namespace Team_Capture.UI
                     //If it has the don't show attribute, then, well... don't show it
                     if (settingField.DontShowObject())
                         continue;
+                    
+                    //Check if it has a header attached to it
+                    string header = settingField.GetHeader();
+                    if (header != null)
+                    {
+                        CreateSubHeader(header, panel);
+                    }
 
                     Type fieldType = settingField.FieldType;
 
@@ -136,6 +157,11 @@ namespace Team_Capture.UI
         // ReSharper disable ParameterHidesMember
         // ReSharper disable MemberCanBeMadeStatic.Local
         // ReSharper disable UnusedParameter.Local
+
+        private void CreateSubHeader(string header, GameObject panel)
+        {
+            settingsPanel.AddSubHeaderToPanel(panel, header);
+        }
 
         private void CreateIntSlider(int val, FieldInfo field, GameObject panel)
         {
@@ -249,6 +275,18 @@ namespace Team_Capture.UI
         public static bool DontShowObject(this MemberInfo info)
         {
             return Attribute.GetCustomAttribute(info, typeof(SettingsDontShowAttribute)) != null;
+        }
+
+        public static string GetHeader(this MemberInfo info)
+        {
+            if (Attribute.GetCustomAttribute(info,
+                    typeof(SettingsHeaderAttribute)) is SettingsHeaderAttribute attribute)
+            {
+                return new LocalizedString(attribute.tableReference, attribute.tableEntryReference)
+                    .GetLocalizedString();
+            }
+
+            return null;
         }
 
         /// <summary>

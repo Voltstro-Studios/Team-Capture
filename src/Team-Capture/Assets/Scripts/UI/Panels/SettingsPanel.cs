@@ -29,6 +29,7 @@ namespace Team_Capture.UI.Panels
         private GameObject panelPrefab;
 
         [SerializeField] private GameObject settingsTitlePrefab;
+        [SerializeField] private GameObject settingsSubHeaderPrefab;
         [SerializeField] private GameObject settingsButtonPrefab;
         [SerializeField] private GameObject settingsTogglePrefab;
         [SerializeField] private GameObject settingsSliderPrefab;
@@ -180,6 +181,17 @@ namespace Team_Capture.UI.Panels
             //Create new title object
             GameObject titleObject = Instantiate(settingsTitlePrefab, GetPanelItemArea(panel), false);
             titleObject.GetComponent<TextMeshProUGUI>().text = title;
+        }
+        
+        /// <summary>
+        ///     Adds a sub-header to a panel
+        /// </summary>
+        /// <param name="panel"></param>
+        /// <param name="header"></param>
+        public void AddSubHeaderToPanel(GameObject panel, string header)
+        {
+            GameObject titleObject = Instantiate(settingsSubHeaderPrefab, GetPanelItemArea(panel), false);
+            titleObject.GetComponentInChildren<TextMeshProUGUI>().text = header;
         }
 
         /// <summary>
