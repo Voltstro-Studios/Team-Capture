@@ -70,10 +70,11 @@ namespace Team_Capture.Integrations.Steamworks
         private static void OnAuthResponse(SteamId steamId, SteamId ownerId, AuthResponse status)
         {
             //TODO: If the user cancels their auth ticket, we need to disconnect them
-            Option<KeyValuePair<SteamUser, AuthResult>> result = authResults.AsValueEnumerable().Where(x => x.Key.UserId == steamId).First();
-            if(result.IsNone)
+            Option<KeyValuePair<SteamUser, AuthResult>> result =
+                authResults.AsValueEnumerable().Where(x => x.Key.UserId == steamId).First();
+            if (result.IsNone)
                 return;
-            
+
             (SteamUser key, AuthResult authResult) = result.Value;
             if (key.Equals(null))
                 return;

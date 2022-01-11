@@ -18,11 +18,11 @@ using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.Player
 {
-	/// <summary>
-	///     The primary <see cref="Behaviour" /> for managing the player.
-	///     <para>This class manages health, death, respawning as well some other minor things.</para>
-	/// </summary>
-	public sealed class PlayerManager : NetworkBehaviour
+    /// <summary>
+    ///     The primary <see cref="Behaviour" /> for managing the player.
+    ///     <para>This class manages health, death, respawning as well some other minor things.</para>
+    /// </summary>
+    public sealed class PlayerManager : NetworkBehaviour
     {
         /// <summary>
         ///     <see cref="GameObject" />s to disable/enable on death and respawn
@@ -48,20 +48,6 @@ namespace Team_Capture.Player
 
         #endregion
 
-        #region Client Variables
-
-        /// <summary>
-        ///     Manages UI
-        /// </summary>
-        private PlayerUIManager uiManager;
-
-        /// <summary>
-        ///     Gets the <see cref="PlayerUIManager"/>
-        /// </summary>
-        internal PlayerUIManager PlayerUIManager => uiManager;
-
-        #endregion
-
         /// <summary>
         ///     The max health
         /// </summary>
@@ -73,6 +59,20 @@ namespace Team_Capture.Player
             Logger.Info($"Change username to {user.UserName}");
             User = user;
         }
+
+        #region Client Variables
+
+        /// <summary>
+        ///     Manages UI
+        /// </summary>
+        private PlayerUIManager uiManager;
+
+        /// <summary>
+        ///     Gets the <see cref="PlayerUIManager" />
+        /// </summary>
+        internal PlayerUIManager PlayerUIManager => uiManager;
+
+        #endregion
 
         #region Sync Vars
 

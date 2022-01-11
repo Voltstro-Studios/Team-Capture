@@ -157,7 +157,7 @@ namespace Team_Capture.UI.Panels
             //Tell Mirror to connect to the server's IP
             netManager.networkAddress = ip.Address.ToString();
             netManager.StartClient();
-            
+
             CheckConnection().Forget();
 
             //Set our status text
@@ -168,10 +168,10 @@ namespace Team_Capture.UI.Panels
         private async UniTaskVoid CheckConnection()
         {
             await UniTask.Delay(25);
-            
+
             //Wait while we are still connecting
             await UniTask.WaitWhile(() => NetworkClient.isConnecting);
-            
+
             //We should be connected, so we should only see this if something fucked up
             if (NetworkClient.connection == null)
             {

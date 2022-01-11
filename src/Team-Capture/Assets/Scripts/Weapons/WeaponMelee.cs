@@ -29,32 +29,30 @@ namespace Team_Capture.Weapons
         /// <summary>
         ///     How much damage does the weapon do per hit
         /// </summary>
-        [Header("Weapon Damage")]
-        [Tooltip("How much damage does the weapon do per hit")]
+        [Header("Weapon Damage")] [Tooltip("How much damage does the weapon do per hit")]
         public int weaponDamage = 25;
-        
+
         /// <summary>
         ///     The fire rate of the weapon
         /// </summary>
-        [Header("Weapon Raycast Settings")]
-        [Tooltip("The fire rate of the weapon")]
+        [Header("Weapon Raycast Settings")] [Tooltip("The fire rate of the weapon")]
         public float weaponFireRate = 10;
-        
+
         /// <summary>
         ///     How far does the weapon hit
         /// </summary>
         [Tooltip("How far does the weapon hit")]
         public float weaponRange = 25;
-        
+
+        private GameObjectPool bulletHolesPool;
+
+        private float nextTimeToFire;
+        private CancellationTokenSource shootRepeatedlyCancellation;
+
         public override WeaponType WeaponType => WeaponType.Melee;
 
         public override bool IsReloadable => false;
 
-        private float nextTimeToFire;
-        
-        private GameObjectPool bulletHolesPool;
-        private CancellationTokenSource shootRepeatedlyCancellation;
-        
         public override void OnPerform(bool buttonDown)
         {
             //If the button is pressed or held down, perform
@@ -62,7 +60,8 @@ namespace Team_Capture.Weapons
             {
                 shootRepeatedlyCancellation?.Cancel();
                 shootRepeatedlyCancellation = new CancellationTokenSource();
-                TimeHelper.InvokeRepeatedly(SwingWeapon, 1f / weaponFireRate, shootRepeatedlyCancellation.Token).Forget();
+                TimeHelper.InvokeRepeatedly(SwingWeapon, 1f / weaponFireRate, shootRepeatedlyCancellation.Token)
+                    .Forget();
             }
             else
             {
@@ -102,9 +101,9 @@ namespace Team_Capture.Weapons
         {
             if (effectsMessage is MeleeEffectsMessage meleeEffectsMessage)
             {
-                if(!meleeEffectsMessage.HitNormal.HasValue || !meleeEffectsMessage.HitPoint.HasValue)
+                if (!meleeEffectsMessage.HitNormal.HasValue || !meleeEffectsMessage.HitPoint.HasValue)
                     return;
-                
+
                 //Do hole (your mum's hole)
                 GameObject weaponHitHole = bulletHolesPool.GetPooledObject();
                 weaponHitHole.transform.position = meleeEffectsMessage.HitPoint.Value;
@@ -123,11 +122,11 @@ namespace Team_Capture.Weapons
 
         private void SwingWeapon()
         {
-            if(Time.time < nextTimeToFire)
+            if (Time.time < nextTimeToFire)
                 return;
-            
+
             nextTimeToFire = Time.time + 1f / weaponFireRate;
-            
+
             try
             {
                 SimulationHelper.SimulateCommand(weaponManager.playerManager, WeaponRayCast);
@@ -144,7 +143,7 @@ namespace Team_Capture.Weapons
 
             Vector3 direction = playerFacingDirection.forward;
 
-            RaycastHit[] hits = RaycastHelper.RaycastAllSorted(playerFacingDirection.position, direction, weaponRange, 
+            RaycastHit[] hits = RaycastHelper.RaycastAllSorted(playerFacingDirection.position, direction, weaponRange,
                 weaponManager.raycastLayerMask);
 
             Vector3? hitPoint = null;
@@ -159,19 +158,19 @@ namespace Team_Capture.Weapons
 
                 hitPoint = hit.point;
                 hitNormal = hit.normal;
-                
+
                 //So if we hit a player then do damage
                 PlayerManager hitPlayer = hit.collider.GetComponent<PlayerManager>();
-                if (hitPlayer == null) 
+                if (hitPlayer == null)
                     break;
-                
+
                 hitPlayer.TakeDamage(weaponDamage, weaponManager.transform.name);
                 break;
             }
-            
+
             DoWeaponEffects(new MeleeEffectsMessage(hitPoint, hitNormal));
         }
-        
+
         internal static WeaponMelee OnDeserialize(NetworkReader reader)
         {
             string weaponId = reader.ReadString();

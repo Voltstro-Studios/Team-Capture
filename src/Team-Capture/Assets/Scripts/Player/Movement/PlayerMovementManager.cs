@@ -11,7 +11,6 @@ using Team_Capture.Core;
 using Team_Capture.Helper.Extensions;
 using Team_Capture.Player.Movement.States;
 using UnityEngine;
-using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.Player.Movement
 {
@@ -50,11 +49,6 @@ namespace Team_Capture.Player.Movement
         private readonly InputData storedInput = new();
         private PlayerCameraRoll cameraRoll;
 
-        /// <summary>
-        ///     <see cref="CharacterController"/> of this client
-        /// </summary>
-        internal CharacterController CharacterController { get; private set; }
-
         private bool isReady;
 
         private uint lastClientStateReceived;
@@ -65,6 +59,11 @@ namespace Team_Capture.Player.Movement
 
         private Vector3 velocity;
         private bool wishJump;
+
+        /// <summary>
+        ///     <see cref="CharacterController" /> of this client
+        /// </summary>
+        internal CharacterController CharacterController { get; private set; }
 
         private void Awake()
         {
@@ -197,11 +196,11 @@ namespace Team_Capture.Player.Movement
             PlayerState serverState = receivedServerMotorState.Value;
             FixedUpdateManager.AddTiming(serverState.TimingStepChange);
             receivedServerMotorState = null;
-            
+
             int index = clientMotorStates.FindIndex(x => x.FixedFrame == serverState.FixedFrame);
             if (index != -1)
                 clientMotorStates.RemoveRange(0, index + 1);
-            
+
             transform.position = serverState.Position;
             transform.rotation = Quaternion.Euler(0, serverState.Rotation.y, 0);
             cameraHolderTransform.rotation = Quaternion.Euler(serverState.Rotation.x, serverState.Rotation.y, 0);
@@ -212,10 +211,7 @@ namespace Team_Capture.Player.Movement
 
             Physics.SyncTransforms();
 
-            for (int i = 0; i < clientMotorStates.Count; i++)
-            {
-                DoMovement(clientMotorStates[i]);
-            }
+            for (int i = 0; i < clientMotorStates.Count; i++) DoMovement(clientMotorStates[i]);
         }
 
         [Server]
@@ -230,7 +226,7 @@ namespace Team_Capture.Player.Movement
                 timingStepChange = -1;
             else if (receivedClientMotorStates.Count > 1)
                 timingStepChange = 1;
-            
+
             if (receivedClientMotorStates.Count > 0)
             {
                 PlayerInputs state = receivedClientMotorStates.Dequeue();
@@ -245,7 +241,7 @@ namespace Team_Capture.Player.Movement
                     WishJump = wishJump,
                     TimingStepChange = timingStepChange
                 };
-                
+
                 TargetServerStateUpdate(connectionToClient, responseState);
             }
             else if (timingStepChange != 0)
@@ -258,10 +254,7 @@ namespace Team_Capture.Player.Movement
         private void SendInputs()
         {
             Vector2 lookMoveAverage = Vector2.zero;
-            foreach (Vector2 lookMovement in storedInput.LookMovements)
-            {
-                lookMoveAverage += lookMovement;
-            }
+            foreach (Vector2 lookMovement in storedInput.LookMovements) lookMoveAverage += lookMovement;
 
             lookMoveAverage /= storedInput.LookMovements.Size;
 
@@ -281,10 +274,10 @@ namespace Team_Capture.Player.Movement
                 WishJump = storedInput.Jump
             };
             clientMotorStates.Add(state);
-            
+
             int targetArraySize = Mathf.Min(clientMotorStates.Count, 1 + PastStatesToSend);
-            var statesToSend = new PlayerInputs[targetArraySize];
-            
+            PlayerInputs[] statesToSend = new PlayerInputs[targetArraySize];
+
             for (int i = 0; i < targetArraySize; i++)
                 statesToSend[targetArraySize - 1 - i] = clientMotorStates[clientMotorStates.Count - 1 - i];
 
@@ -297,10 +290,10 @@ namespace Team_Capture.Player.Movement
         {
             if (states == null || states.Length == 0)
                 return;
-            
+
             if (isClient && hasAuthority)
                 return;
-            
+
             for (int i = 0; i < states.Length; i++)
                 if (states[i].FixedFrame > lastClientStateReceived)
                 {
@@ -331,9 +324,8 @@ namespace Team_Capture.Player.Movement
 
         private class InputData
         {
-            public bool Jump;
-
             public readonly CircularBuffer<Vector2> LookMovements = new(64);
+            public bool Jump;
 
             public Vector2 MovementDir;
         }

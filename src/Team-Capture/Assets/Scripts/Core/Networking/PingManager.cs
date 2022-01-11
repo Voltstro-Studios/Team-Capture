@@ -26,10 +26,10 @@ namespace Team_Capture.Core.Networking
 
         internal struct PingClientMessage : NetworkMessage
         {
-	        /// <summary>
-	        ///     The current time of the client
-	        /// </summary>
-	        public double ClientTime;
+            /// <summary>
+            ///     The current time of the client
+            /// </summary>
+            public double ClientTime;
         }
 
         internal struct PingServerMessage : NetworkMessage

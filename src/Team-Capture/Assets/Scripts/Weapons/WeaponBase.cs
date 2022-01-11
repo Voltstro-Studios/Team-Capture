@@ -26,57 +26,54 @@ namespace Team_Capture.Weapons
         [Header("Weapon Details")]
         [Tooltip("The 'ID' of the weapon, what will be used to share across on the network, so make it unique")]
         public string weaponId;
-        
+
         /// <summary>
         ///     The prefab of the weapon
         /// </summary>
-        [Tooltip("The prefab of the weapon")]
-        public CachedAddressable<GameObject> weaponObjectPrefab;
+        [Tooltip("The prefab of the weapon")] public CachedAddressable<GameObject> weaponObjectPrefab;
 
         /// <summary>
         ///     The multiplier for the weapon sway amount
         /// </summary>
-        [Header("Weapon Sway")]
-        [Range(0, 1)]
-        public float weaponSwayAmountMultiplier = 1.0f;
+        [Header("Weapon Sway")] [Range(0, 1)] public float weaponSwayAmountMultiplier = 1.0f;
 
         /// <summary>
         ///     The amount of weapon sway on the X and Y axis
         /// </summary>
-        public Vector2 weaponSwayMax = new (0.25f, 0.2f);
+        public Vector2 weaponSwayMax = new(0.25f, 0.2f);
 
-        /// <summary>
-        ///     The <see cref="WeaponType"/> that this instance is
-        /// </summary>
-        public abstract WeaponType WeaponType { get; }
-        
-        public abstract bool IsReloadable { get; }
-
-        /// <summary>
-        ///     Access to instantiated weapon object
-        /// </summary>
-        protected GameObject weaponObjectInstance;
-        
-        /// <summary>
-        ///     Access to the player's <see cref="WeaponManager"/>
-        /// </summary>
-        protected WeaponManager weaponManager;
-        
-        /// <summary>
-        ///     Is this running on a server?
-        /// </summary>
-        protected bool isServer;
-        
         /// <summary>
         ///     Is this running on a local client
         /// </summary>
         protected bool isLocalClient;
 
         /// <summary>
-        ///     <see cref="HudAmmoControls"/>, for controlling the local client's ammo part of the HUD
+        ///     Is this running on a server?
+        /// </summary>
+        protected bool isServer;
+
+        /// <summary>
+        ///     Access to the player's <see cref="WeaponManager" />
+        /// </summary>
+        protected WeaponManager weaponManager;
+
+        /// <summary>
+        ///     Access to instantiated weapon object
+        /// </summary>
+        protected GameObject weaponObjectInstance;
+
+        /// <summary>
+        ///     The <see cref="WeaponType" /> that this instance is
+        /// </summary>
+        public abstract WeaponType WeaponType { get; }
+
+        public abstract bool IsReloadable { get; }
+
+        /// <summary>
+        ///     <see cref="HudAmmoControls" />, for controlling the local client's ammo part of the HUD
         /// </summary>
         protected HudAmmoControls? HudAmmoControls => weaponManager.playerManager.PlayerUIManager.HudAmmoControls;
-        
+
         /// <summary>
         ///     Tells clients to to the RPC effects
         /// </summary>
@@ -96,7 +93,7 @@ namespace Team_Capture.Weapons
         }
 
         /// <summary>
-        ///     Sets up this <see cref="WeaponBase"/>
+        ///     Sets up this <see cref="WeaponBase" />
         /// </summary>
         /// <param name="weaponMan"></param>
         /// <param name="server"></param>
@@ -110,7 +107,7 @@ namespace Team_Capture.Weapons
             weaponManager = weaponMan;
             OnAdd();
         }
-        
+
         /// <summary>
         ///     Called when we want to fire
         /// </summary>
@@ -126,7 +123,7 @@ namespace Team_Capture.Weapons
         ///     Called when the weapon is switched onto
         /// </summary>
         public abstract void OnSwitchOnTo();
-        
+
         /// <summary>
         ///     Called when the weapon is switched off
         /// </summary>
@@ -136,51 +133,54 @@ namespace Team_Capture.Weapons
         ///     Called when the weapon is added
         /// </summary>
         protected abstract void OnAdd();
-        
+
         /// <summary>
         ///     Called when the weapon is removed
         /// </summary>
         public abstract void OnRemove();
-        
+
         /// <summary>
         ///     Called on clients when the server requests to player the weapon's UI effects
         /// </summary>
         /// <param name="effectsMessage"></param>
         public abstract void OnWeaponEffects(IEffectsMessage effectsMessage);
-        
+
         /// <summary>
         ///     Called on local client when the server provides new UI info
         /// </summary>
         /// <param name="hudUpdateMessage"></param>
         public abstract void OnUIUpdate(IHudUpdateMessage hudUpdateMessage);
-        
+
         //Networking
-        
+
         /// <summary>
-        ///     Writes <see cref="WeaponBase"/> info to a <see cref="NetworkWriter"/>
+        ///     Writes <see cref="WeaponBase" /> info to a <see cref="NetworkWriter" />
         /// </summary>
         /// <param name="writer"></param>
-        internal void Serialize(NetworkWriter writer) => OnSerialize(writer);
-        
+        internal void Serialize(NetworkWriter writer)
+        {
+            OnSerialize(writer);
+        }
+
         /// <summary>
-        ///     Called when the weapon info needs to be written to a <see cref="NetworkWriter"/>
+        ///     Called when the weapon info needs to be written to a <see cref="NetworkWriter" />
         /// </summary>
         /// <param name="writer"></param>
         protected abstract void OnSerialize(NetworkWriter writer);
     }
-    
+
     [Preserve]
     public static class WeaponNetworkWriteReader
     {
         public static void Write(this NetworkWriter writer, WeaponBase weapon)
         {
-            writer.WriteByte((byte)weapon.WeaponType);
+            writer.WriteByte((byte) weapon.WeaponType);
             weapon.Serialize(writer);
         }
 
         public static WeaponBase Read(this NetworkReader reader)
         {
-            WeaponType weaponType = (WeaponType)reader.ReadByte();
+            WeaponType weaponType = (WeaponType) reader.ReadByte();
             switch (weaponType)
             {
                 case WeaponType.Default:

@@ -4,7 +4,6 @@
 // This project is governed by the AGPLv3 License.
 // For more details see the LICENSE file.
 
-using System;
 using Mirror;
 using Team_Capture.Console;
 using Team_Capture.Input;
@@ -28,7 +27,7 @@ namespace Team_Capture.Player
         [SerializeField] private float yMouseSensitivity = 100.0f;
 
         [SerializeField] private bool reverseMouse;
-        
+
         private PlayerMovementManager playerInput;
         private PlayerManager playerManager;
         private PlayerUIManager uiManager;
@@ -183,7 +182,7 @@ namespace Team_Capture.Player
         {
             if (ClientUI.IsPauseMenuOpen)
                 return;
-            
+
             uiManager.ToggleScoreboard();
         }
 

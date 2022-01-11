@@ -18,7 +18,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Logger = Team_Capture.Logging.Logger;
-
 #if UNITY_EDITOR
 using UnityVoltBuilder.Build;
 #endif
@@ -98,7 +97,7 @@ namespace Team_Capture.UI.Panels
             onlineTCScenes = TCScenesManager.GetAllOnlineScenes().ToList();
 
             //And all the scenes to the map dropdown
-            var scenes = onlineTCScenes.Select(scene => scene.DisplayNameLocalized).ToList();
+            List<string> scenes = onlineTCScenes.Select(scene => scene.DisplayNameLocalized).ToList();
             mapsDropdown.AddOptions(scenes);
             mapsDropdown.RefreshShownValue();
 

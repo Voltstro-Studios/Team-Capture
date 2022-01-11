@@ -27,8 +27,9 @@ namespace Team_Capture.Tweens
         /// <returns></returns>
         public TweenObject GetTweenObject(string tweenObjectName)
         {
-            Option<TweenObject> result = tweenedObjects.AsValueEnumerable().Where(x => x.tweenObjectName == tweenObjectName).First();
-            if (result.IsSome) 
+            Option<TweenObject> result = tweenedObjects.AsValueEnumerable()
+                .Where(x => x.tweenObjectName == tweenObjectName).First();
+            if (result.IsSome)
                 return result.Value;
 
             Logger.Error("The tween object {TweenObjectName) doesn't exist!", tweenObjectName);

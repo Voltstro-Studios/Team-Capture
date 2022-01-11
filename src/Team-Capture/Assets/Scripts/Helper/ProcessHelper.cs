@@ -25,7 +25,7 @@ namespace Team_Capture.Helper
                 WorkingDirectory = Game.GetGameExecutePath()
             };
 
-            Process process = new Process
+            Process process = new()
             {
                 StartInfo = startInfo
             };

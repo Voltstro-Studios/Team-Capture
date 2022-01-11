@@ -116,13 +116,13 @@ namespace Team_Capture.UI.Panels
         public void OpenPanel(string panelName)
         {
             //Close all other panels
-            foreach (var panel in settingPanels)
+            foreach (KeyValuePair<Button, GameObject> panel in settingPanels)
             {
                 panel.Value.SetActive(false);
                 panel.Key.interactable = true;
             }
 
-            var menuPanel = GetMenuPanel(panelName);
+            KeyValuePair<Button, GameObject> menuPanel = GetMenuPanel(panelName);
             menuPanel.Value.SetActive(true);
             menuPanel.Key.interactable = false;
         }
@@ -133,7 +133,7 @@ namespace Team_Capture.UI.Panels
         public void ClearPanels()
         {
             //Remove all panels
-            foreach (var panel in settingPanels)
+            foreach (KeyValuePair<Button, GameObject> panel in settingPanels)
             {
                 Destroy(panel.Value);
                 Destroy(panel.Key.gameObject);
@@ -159,7 +159,7 @@ namespace Team_Capture.UI.Panels
         /// <returns></returns>
         private KeyValuePair<Button, GameObject> GetMenuPanel(string panelName)
         {
-            var result = from a in settingPanels
+            IEnumerable<KeyValuePair<Button, GameObject>> result = from a in settingPanels
                 where a.Value.name == panelName
                 select a;
 
@@ -252,7 +252,7 @@ namespace Team_Capture.UI.Panels
             dropdownSettings.settingsName.text = sideText;
 
             //Create options
-            var optionDatas = new List<TMP_Dropdown.OptionData>(options.Length);
+            List<TMP_Dropdown.OptionData> optionDatas = new List<TMP_Dropdown.OptionData>(options.Length);
             optionDatas.AddRange(options.Select(text => new TMP_Dropdown.OptionData(text)));
 
             //Add options and set current index

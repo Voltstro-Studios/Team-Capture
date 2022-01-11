@@ -26,9 +26,9 @@ namespace Team_Capture.Weapons
 
         private void OnEnable()
         {
-            if(muzzleFlash == null)
+            if (muzzleFlash == null)
                 return;
-            
+
             LightingChange += ChangeLighting;
             GameSettings.SettingsUpdated += ApplySettings;
             ApplySettings();

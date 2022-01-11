@@ -95,7 +95,7 @@ namespace Team_Capture.UI
                 GameObject panel = settingsPanel.AddPanel(optionOptionsMenu);
 
                 //Get each property in the settings
-                var menuFields =
+                FieldInfo[] menuFields =
                     settingInfo.PropertyType.GetFields(BindingFlags.Instance | BindingFlags.Public |
                                                        BindingFlags.NonPublic);
                 foreach (FieldInfo settingField in menuFields)
@@ -181,8 +181,8 @@ namespace Team_Capture.UI
 
         private void CreateResolutionDropdown(Resolution currentRes, FieldInfo field, GameObject panel)
         {
-            var resolutions = Screen.resolutions;
-            var resolutionsText = new List<string>();
+            Resolution[] resolutions = Screen.resolutions;
+            List<string> resolutionsText = new List<string>();
             int activeResIndex = 0;
 
             //Find the active current resolution, as well as add each resolution option to the list of resolutions text
@@ -224,7 +224,8 @@ namespace Team_Capture.UI
         {
             //Find the first setting group where the group type matches that of the field's declaring type
             Option<PropertyInfo> settingGroup =
-                GameSettings.GetSettingClasses().AsValueEnumerable().Where(p => p.PropertyType == field.DeclaringType).First();
+                GameSettings.GetSettingClasses().AsValueEnumerable().Where(p => p.PropertyType == field.DeclaringType)
+                    .First();
             return settingGroup.Value.GetValue(null);
         }
 
@@ -240,22 +241,22 @@ namespace Team_Capture.UI
     /// </summary>
     internal static class DynamicSettingsUIHelper
     {
-	    /// <summary>
-	    ///     Don't show this object
-	    /// </summary>
-	    /// <param name="info"></param>
-	    /// <returns></returns>
-	    public static bool DontShowObject(this MemberInfo info)
+        /// <summary>
+        ///     Don't show this object
+        /// </summary>
+        /// <param name="info"></param>
+        /// <returns></returns>
+        public static bool DontShowObject(this MemberInfo info)
         {
             return Attribute.GetCustomAttribute(info, typeof(SettingsDontShowAttribute)) != null;
         }
 
-	    /// <summary>
-	    ///     Gets the display text
-	    /// </summary>
-	    /// <param name="info"></param>
-	    /// <returns></returns>
-	    public static string GetObjectDisplayText(this MemberInfo info)
+        /// <summary>
+        ///     Gets the display text
+        /// </summary>
+        /// <param name="info"></param>
+        /// <returns></returns>
+        public static string GetObjectDisplayText(this MemberInfo info)
         {
             string text = info.Name;
             if (Attribute.GetCustomAttribute(info, typeof(SettingsPropertyDisplayTextAttribute)) is

@@ -19,10 +19,10 @@ using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.Core.Networking
 {
-	/// <summary>
-	///     <see cref="NetworkAuthenticator" /> for Team-Capture
-	/// </summary>
-	internal class TCAuthenticator : NetworkAuthenticator
+    /// <summary>
+    ///     <see cref="NetworkAuthenticator" /> for Team-Capture
+    /// </summary>
+    internal class TCAuthenticator : NetworkAuthenticator
     {
         [ConVar("sv_auth_method", "What account system to use to check clients")]
         [CommandLineArgument("auth-method", "What account system to use to check clients")]
@@ -100,12 +100,13 @@ namespace Team_Capture.Core.Networking
                 RefuseClientConnection(conn);
                 return;
             }
-            
+
             Logger.Debug("Got {UserAccountsNum} user accounts from {UserId}", msg.UserAccounts.Length,
                 conn.connectionId);
 
             //Get the user account the server wants
-            Option<IUser> userResult = msg.UserAccounts.AsValueEnumerable().Where(x => x.UserProvider == AuthMethod).First();
+            Option<IUser> userResult =
+                msg.UserAccounts.AsValueEnumerable().Where(x => x.UserProvider == AuthMethod).First();
             if (userResult.IsNone)
             {
                 SendRequestResponseMessage(conn, HttpCode.Unauthorized, "No valid user accounts sent!");
@@ -214,7 +215,7 @@ namespace Team_Capture.Core.Networking
 
         public override void OnClientAuthenticate()
         {
-            var users = User.GetUsers();
+            IUser[] users = User.GetUsers();
             foreach (IUser user in users)
                 try
                 {

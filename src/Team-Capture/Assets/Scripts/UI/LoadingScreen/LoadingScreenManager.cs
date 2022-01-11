@@ -13,20 +13,20 @@ using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.UI.LoadingScreen
 {
-	/// <summary>
-	///     Handles when to create <see cref="LoadingScreenUI" /> and manages it.
-	/// </summary>
-	internal class LoadingScreenManager : SingletonMonoBehaviour<LoadingScreenManager>
+    /// <summary>
+    ///     Handles when to create <see cref="LoadingScreenUI" /> and manages it.
+    /// </summary>
+    internal class LoadingScreenManager : SingletonMonoBehaviour<LoadingScreenManager>
     {
-	    /// <summary>
-	    ///     Are we loading?
-	    /// </summary>
-	    public static bool IsLoading;
+        /// <summary>
+        ///     Are we loading?
+        /// </summary>
+        public static bool IsLoading;
 
-	    /// <summary>
-	    ///     Is the <see cref="LoadingScreenManager" /> setup?
-	    /// </summary>
-	    private static bool isSetup;
+        /// <summary>
+        ///     Is the <see cref="LoadingScreenManager" /> setup?
+        /// </summary>
+        private static bool isSetup;
 
         [SerializeField] private GameObject loadingScenePrefab;
 

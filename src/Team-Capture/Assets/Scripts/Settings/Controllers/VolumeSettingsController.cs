@@ -5,7 +5,6 @@
 // For more details see the LICENSE file.
 
 using Team_Capture.Console;
-using Team_Capture.Core;
 using Team_Capture.Settings.SettingClasses;
 using UnityEngine;
 using UnityEngine.Rendering;

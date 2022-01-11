@@ -13,14 +13,14 @@ namespace Team_Capture.UserManagement
     /// </summary>
     public enum UserProvider : byte
     {
-	    /// <summary>
-	    ///     Account details are from Steam
-	    /// </summary>
-	    Steam,
+        /// <summary>
+        ///     Account details are from Steam
+        /// </summary>
+        Steam,
 
-	    /// <summary>
-	    ///     Its an offline account, all details comes from us
-	    /// </summary>
-	    Offline
+        /// <summary>
+        ///     Its an offline account, all details comes from us
+        /// </summary>
+        Offline
     }
 }

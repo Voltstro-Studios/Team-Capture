@@ -10,7 +10,7 @@ using UnityEngine;
 namespace Team_Capture.Weapons.Effects
 {
     /// <summary>
-    ///     Melee <see cref="IEffectsMessage"/> for <see cref="WeaponMelee"/>
+    ///     Melee <see cref="IEffectsMessage" /> for <see cref="WeaponMelee" />
     /// </summary>
     public struct MeleeEffectsMessage : IEffectsMessage
     {
@@ -25,19 +25,19 @@ namespace Team_Capture.Weapons.Effects
             HitPoint = hitPoint;
             HitNormal = hitNormal;
         }
-        
+
         public EffectsMessageType EffectsMessageType => EffectsMessageType.Melee;
 
         /// <summary>
         ///     Where did we hit
         /// </summary>
         public Vector3? HitPoint;
-        
+
         /// <summary>
         ///     The normal of the hit point
         /// </summary>
         public Vector3? HitNormal;
-        
+
         public void Serialize(NetworkWriter writer)
         {
             writer.WriteVector3Nullable(HitPoint);

@@ -22,7 +22,7 @@ namespace Team_Capture.Pickups
             WeaponManager weaponManager = player.GetComponent<WeaponManager>();
 
             //Don't want to pickup the same weapon
-            if (weaponManager.GetWeaponFromId(weapon.weaponId) != null) 
+            if (weaponManager.GetWeaponFromId(weapon.weaponId) != null)
                 return;
 
             weaponManager.AddWeapon(weapon);

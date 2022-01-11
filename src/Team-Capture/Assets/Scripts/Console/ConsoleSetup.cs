@@ -18,7 +18,7 @@ namespace Team_Capture.Console
     internal partial class ConsoleSetup : MonoBehaviour
     {
         private const string ConsoleUiPrefabPath = "Assets/Prefabs/UI/ConsoleGUI.prefab";
-        
+
         internal static IConsoleUI ConsoleUI;
 
         private void Start()
@@ -46,7 +46,7 @@ namespace Team_Capture.Console
             {
                 GameObject consoleUiPrefab =
                     Addressables.LoadAssetAsync<GameObject>(ConsoleUiPrefabPath).WaitForCompletion();
-                
+
                 //Create in-game console GUI
                 ConsoleUI = Instantiate(consoleUiPrefab, transform).GetComponent<ConsoleGUI>();
             }

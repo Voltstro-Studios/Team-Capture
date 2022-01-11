@@ -44,9 +44,9 @@ namespace Team_Capture.Pooling
                 Logger.Error(errorMsg);
                 throw new NullReferenceException(errorMsg);
             }
-            
+
             projectileBase.SetupPool(this);
-            
+
             NetworkServer.Spawn(newObj);
 
             return newObj;

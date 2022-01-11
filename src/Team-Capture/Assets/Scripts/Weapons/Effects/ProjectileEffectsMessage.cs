@@ -11,7 +11,7 @@ namespace Team_Capture.Weapons.Effects
     public struct ProjectileEffectsMessage : IEffectsMessage
     {
         public EffectsMessageType EffectsMessageType => EffectsMessageType.Projectile;
-        
+
         public void Serialize(NetworkWriter writer)
         {
         }

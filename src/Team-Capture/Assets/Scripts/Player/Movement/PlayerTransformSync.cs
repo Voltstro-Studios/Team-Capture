@@ -167,12 +167,12 @@ namespace Team_Capture.Player.Movement
             //Compute snapshot interpolation & apply if any was spit out
             //TODO: We don't have Time.deltaTime double yet. float is fine.
             if (SnapshotInterpolation.Compute(
-                NetworkTime.localTime, Time.deltaTime,
-                ref clientInterpolationTime,
-                BufferTime, clientBuffer,
-                catchupThreshold, catchupMultiplier,
-                interpolate,
-                out PlayerTransformSnapshot computed))
+                    NetworkTime.localTime, Time.deltaTime,
+                    ref clientInterpolationTime,
+                    BufferTime, clientBuffer,
+                    catchupThreshold, catchupMultiplier,
+                    interpolate,
+                    out PlayerTransformSnapshot computed))
             {
                 PlayerTransformSnapshot start = clientBuffer.Values[0];
                 PlayerTransformSnapshot goal = clientBuffer.Values[1];

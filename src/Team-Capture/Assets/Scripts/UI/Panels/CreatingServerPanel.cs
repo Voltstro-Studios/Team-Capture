@@ -11,33 +11,33 @@ using UnityEngine.Localization;
 
 namespace Team_Capture.UI.Panels
 {
-	/// <summary>
-	///     A panel that is displayed when the server is starting
-	/// </summary>
-	internal class CreatingServerPanel : PanelBase
+    /// <summary>
+    ///     A panel that is displayed when the server is starting
+    /// </summary>
+    internal class CreatingServerPanel : PanelBase
     {
-	    /// <summary>
-	    ///     Whats the locale to use for the starting message
-	    /// </summary>
-	    [Tooltip("Whats the locale to use for the starting message")]
+        /// <summary>
+        ///     Whats the locale to use for the starting message
+        /// </summary>
+        [Tooltip("Whats the locale to use for the starting message")]
         public CachedLocalizedString startingMessageLocale;
 
-	    /// <summary>
-	    ///     Whats the locale to use for the failed to start message
-	    /// </summary>
-	    [Tooltip("Whats the locale to use for the failed to start message")]
+        /// <summary>
+        ///     Whats the locale to use for the failed to start message
+        /// </summary>
+        [Tooltip("Whats the locale to use for the failed to start message")]
         public CachedLocalizedString failedToStartMessageLocale;
 
-	    /// <summary>
-	    ///     <see cref="LocalizedString" /> for the failed to connect message
-	    /// </summary>
-	    [Tooltip("LocalizedString for the failed to connect message")]
+        /// <summary>
+        ///     <see cref="LocalizedString" /> for the failed to connect message
+        /// </summary>
+        [Tooltip("LocalizedString for the failed to connect message")]
         public CachedLocalizedString failedToConnectMessageLocale;
 
-	    /// <summary>
-	    ///     The text object of where the text will be placed
-	    /// </summary>
-	    public TMP_Text messageText;
+        /// <summary>
+        ///     The text object of where the text will be placed
+        /// </summary>
+        public TMP_Text messageText;
 
         private void Start()
         {

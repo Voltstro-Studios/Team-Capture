@@ -10,10 +10,10 @@ using UnityEngine.Scripting;
 
 namespace Team_Capture.Core.Networking
 {
-	/// <summary>
-	///     Config for server settings
-	/// </summary>
-	internal struct ServerConfig : NetworkMessage
+    /// <summary>
+    ///     Config for server settings
+    /// </summary>
+    internal struct ServerConfig : NetworkMessage
     {
         internal ServerConfig(string gameName, Server.ServerMOTDMode motdMode, string motdText, string motdUrl)
             : this()

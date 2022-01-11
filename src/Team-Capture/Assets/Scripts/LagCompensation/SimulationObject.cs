@@ -13,12 +13,12 @@ namespace Team_Capture.LagCompensation
 {
     internal class SimulationObject : MonoBehaviour
     {
-	    /// <summary>
-	    ///     A <see cref="Dictionary{TKey,TValue}" /> containing the stored <see cref="SimulationFrameData" />, accessible by
-	    ///     frame index (stored in
-	    ///     <see cref="StoredFrames" />).
-	    /// </summary>
-	    [NonSerialized] public readonly Dictionary<int, SimulationFrameData> FrameData = new();
+        /// <summary>
+        ///     A <see cref="Dictionary{TKey,TValue}" /> containing the stored <see cref="SimulationFrameData" />, accessible by
+        ///     frame index (stored in
+        ///     <see cref="StoredFrames" />).
+        /// </summary>
+        [NonSerialized] public readonly Dictionary<int, SimulationFrameData> FrameData = new();
 
         private readonly SimulationFrameData savedFrameData = new();
 

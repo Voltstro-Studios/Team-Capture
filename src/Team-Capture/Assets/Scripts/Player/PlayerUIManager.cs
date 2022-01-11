@@ -6,7 +6,6 @@
 
 using Team_Capture.UI;
 using Team_Capture.UI.Chat;
-using Team_Capture.Weapons;
 using UnityEngine;
 
 namespace Team_Capture.Player
@@ -20,6 +19,11 @@ namespace Team_Capture.Player
         private ClientUI ui;
 
         /// <summary>
+        ///     Controls for the hud's ammo
+        /// </summary>
+        internal HudAmmoControls HudAmmoControls => ui.hud.HudAmmoControls;
+
+        /// <summary>
         ///     Sets up <see cref="PlayerUIManager" />
         /// </summary>
         /// <param name="clientUI"></param>
@@ -28,11 +32,6 @@ namespace Team_Capture.Player
             ui = clientUI;
             GetComponent<PlayerManager>().PlayerDamaged += OnPlayerDamaged;
         }
-
-        /// <summary>
-        ///     Controls for the hud's ammo
-        /// </summary>
-        internal HudAmmoControls HudAmmoControls => ui.hud.HudAmmoControls;
 
         /// <summary>
         ///     Toggles the pause menu

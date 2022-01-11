@@ -143,7 +143,7 @@ namespace Team_Capture.Core
                 return;
             }
 
-            foreach (var playerManager in Players)
+            foreach (KeyValuePair<string, PlayerManager> playerManager in Players)
                 playerManager.Value.GetComponent<PlayerMovementManager>().SetLocation(new Vector3(xPos, yPos, zPos));
         }
 

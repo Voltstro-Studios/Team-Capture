@@ -7,20 +7,20 @@
 namespace Team_Capture.Weapons.Effects
 {
     /// <summary>
-    ///     Type for 
+    ///     Type for
     /// </summary>
     public enum EffectsMessageType : byte
     {
         /// <summary>
-        ///     Default message type for <see cref="WeaponDefault"/>
+        ///     Default message type for <see cref="WeaponDefault" />
         /// </summary>
         Default,
-        
+
         /// <summary>
-        ///     Melee message type for <see cref="WeaponMelee"/>
+        ///     Melee message type for <see cref="WeaponMelee" />
         /// </summary>
         Melee,
-        
+
         /// <summary>
         ///     Projectile weapon message type
         /// </summary>

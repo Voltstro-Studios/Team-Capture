@@ -22,12 +22,12 @@ namespace Team_Capture.Weapons.Effects
             Targets = targets;
             TargetsNormals = targetsNormals;
         }
-        
+
         public EffectsMessageType EffectsMessageType => EffectsMessageType.Default;
-        
+
         public Vector3[] Targets;
         public Vector3[] TargetsNormals;
-        
+
         public void Serialize(NetworkWriter writer)
         {
             writer.WriteArray(Targets);

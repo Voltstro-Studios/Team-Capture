@@ -8,10 +8,10 @@ using UnityEngine;
 
 namespace Team_Capture.Misc
 {
-	/// <summary>
-	///     Destroys a <see cref="GameObject" /> after a certain amount of time
-	/// </summary>
-	public class TimedDestroyer : MonoBehaviour
+    /// <summary>
+    ///     Destroys a <see cref="GameObject" /> after a certain amount of time
+    /// </summary>
+    public class TimedDestroyer : MonoBehaviour
     {
         /// <summary>
         ///     What delay to use until destroy

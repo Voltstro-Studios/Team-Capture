@@ -65,7 +65,7 @@ namespace Team_Capture.Console
         /// </summary>
         private static void RegisterCommands()
         {
-            foreach (var command in GetConCommands())
+            foreach (KeyValuePair<ConCommand, MethodInfo> command in GetConCommands())
             {
                 ConCommand attribute = command.Key;
 
@@ -99,7 +99,7 @@ namespace Team_Capture.Console
         /// </summary>
         private static void RegisterConVars()
         {
-            foreach (var conVar in GetConVars())
+            foreach (KeyValuePair<ConVar, FieldInfo> conVar in GetConVars())
             {
                 ConVar attribute = conVar.Key;
                 FieldInfo fieldInfo = conVar.Value;
@@ -169,7 +169,7 @@ namespace Team_Capture.Console
         /// <returns></returns>
         internal static Dictionary<ConCommand, MethodInfo> GetConCommands()
         {
-            var conCommands = new Dictionary<ConCommand, MethodInfo>();
+            Dictionary<ConCommand, MethodInfo> conCommands = new Dictionary<ConCommand, MethodInfo>();
 
             foreach (Type type in Assembly.GetExecutingAssembly().GetTypes())
             foreach (MethodInfo method in type.GetMethods(BindingFlags))
@@ -194,7 +194,7 @@ namespace Team_Capture.Console
         /// <returns></returns>
         internal static Dictionary<ConVar, FieldInfo> GetConVars()
         {
-            var conVars = new Dictionary<ConVar, FieldInfo>();
+            Dictionary<ConVar, FieldInfo> conVars = new Dictionary<ConVar, FieldInfo>();
 
             foreach (Type type in Assembly.GetExecutingAssembly().GetTypes())
             foreach (FieldInfo fieldInfo in type.GetFields(BindingFlags))
@@ -248,7 +248,7 @@ namespace Team_Capture.Console
             historyNextIndex++;
             historyIndex = historyNextIndex;
 
-            var tokens = Tokenize(command);
+            List<string> tokens = Tokenize(command);
             if (tokens.Count < 1)
                 return;
 
@@ -321,10 +321,10 @@ namespace Team_Capture.Console
         /// <returns></returns>
         public static string AutoComplete(string prefix)
         {
-            var possibleMatches = new List<string>();
+            List<string> possibleMatches = new List<string>();
 
             //Go through all commands, and find if they start with the prefix
-            foreach (var command in commands)
+            foreach (KeyValuePair<string, ConsoleCommand> command in commands)
             {
                 string name = command.Key;
                 if (!name.StartsWith(prefix, true, null))
@@ -403,7 +403,7 @@ namespace Team_Capture.Console
         private static List<string> Tokenize(string input)
         {
             int pos = 0;
-            var res = new List<string>();
+            List<string> res = new List<string>();
             int c = 0;
             while (pos < input.Length && c++ < 10000)
             {

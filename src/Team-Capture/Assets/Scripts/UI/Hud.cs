@@ -4,7 +4,6 @@
 // This project is governed by the AGPLv3 License.
 // For more details see the LICENSE file.
 
-using Team_Capture.Weapons;
 using TMPro;
 using UnityEngine;
 
@@ -18,15 +17,13 @@ namespace Team_Capture.UI
         /// <summary>
         ///     Controls for ammo
         /// </summary>
-        [Tooltip("Controls for ammo")]
-        [SerializeField]
+        [Tooltip("Controls for ammo")] [SerializeField]
         private HudAmmoControls hudAmmoControls;
 
         /// <summary>
         ///     The health text
         /// </summary>
-        [Tooltip("The health text")] 
-        [SerializeField]
+        [Tooltip("The health text")] [SerializeField]
         private TextMeshProUGUI healthText;
 
         private ClientUI clientUI;

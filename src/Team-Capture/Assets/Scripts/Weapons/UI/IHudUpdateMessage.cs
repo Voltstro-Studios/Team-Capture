@@ -27,7 +27,7 @@ namespace Team_Capture.Weapons.UI
     {
         public static void Write(this NetworkWriter writer, IHudUpdateMessage hudUpdateMessage)
         {
-            writer.WriteByte((byte)hudUpdateMessage.UpdateType);
+            writer.WriteByte((byte) hudUpdateMessage.UpdateType);
             hudUpdateMessage.Serialize(writer);
         }
 

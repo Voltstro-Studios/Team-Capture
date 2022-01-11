@@ -9,12 +9,12 @@ using UnityEngine;
 
 namespace Team_Capture.Settings.SettingClasses
 {
-	internal class MouseSettingsClass : Setting
-	{
-		[Range(50, 200)] [SettingsPropertyDisplayText("Text", "Settings_Mouse_Sensitivity")]
-		public int MouseSensitivity = 100;
+    internal class MouseSettingsClass : Setting
+    {
+        [Range(50, 200)] [SettingsPropertyDisplayText("Text", "Settings_Mouse_Sensitivity")]
+        public int MouseSensitivity = 100;
 
-		[SettingsPropertyDisplayText("Text", "Settings_Mouse_Reverse")]
-		public bool ReverseMouse;
-	}
+        [SettingsPropertyDisplayText("Text", "Settings_Mouse_Reverse")]
+        public bool ReverseMouse;
+    }
 }

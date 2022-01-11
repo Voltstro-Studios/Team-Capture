@@ -18,15 +18,15 @@ using ILogger = UnityEngine.ILogger;
 
 namespace Team_Capture.Logging
 {
-	/// <summary>
-	///     An API to provide the ability to record events that occur in the game.
-	///     <para>
-	///         Try to use this API rather then Unity's <see cref="UnityEngine.Debug" /> methods.
-	///         If your code needs to run in the editor, then use Unity's <see cref="UnityEngine.Debug" /> methods.
-	///     </para>
-	///     <para>Never use Serilog's <see cref="Log" />, as it is never setup!</para>
-	/// </summary>
-	public static class Logger
+    /// <summary>
+    ///     An API to provide the ability to record events that occur in the game.
+    ///     <para>
+    ///         Try to use this API rather then Unity's <see cref="UnityEngine.Debug" /> methods.
+    ///         If your code needs to run in the editor, then use Unity's <see cref="UnityEngine.Debug" /> methods.
+    ///     </para>
+    ///     <para>Never use Serilog's <see cref="Log" />, as it is never setup!</para>
+    /// </summary>
+    public static class Logger
     {
         private static Serilog.Core.Logger log;
 
@@ -142,9 +142,9 @@ namespace Team_Capture.Logging
         private static void LogIfUnInitialized(string message, LogEventLevel logLevel)
         {
 #if UNITY_EDITOR
-            if(IsLoggerInitialized)
+            if (IsLoggerInitialized)
                 return;
-            
+
             switch (logLevel)
             {
                 case LogEventLevel.Verbose:
@@ -176,7 +176,7 @@ namespace Team_Capture.Logging
             CheckInitialization();
             LogIfUnInitialized(message, LogEventLevel.Debug);
 #if UNITY_EDITOR
-            if(!IsLoggerInitialized)
+            if (!IsLoggerInitialized)
                 return;
 #endif
 
@@ -193,7 +193,7 @@ namespace Team_Capture.Logging
         {
             CheckInitialization();
 #if UNITY_EDITOR
-            if(!IsLoggerInitialized)
+            if (!IsLoggerInitialized)
                 return;
 #endif
 
@@ -214,7 +214,7 @@ namespace Team_Capture.Logging
             CheckInitialization();
             LogIfUnInitialized(message, LogEventLevel.Information);
 #if UNITY_EDITOR
-            if(!IsLoggerInitialized)
+            if (!IsLoggerInitialized)
                 return;
 #endif
 
@@ -230,7 +230,7 @@ namespace Team_Capture.Logging
         {
             CheckInitialization();
 #if UNITY_EDITOR
-            if(!IsLoggerInitialized)
+            if (!IsLoggerInitialized)
                 return;
 #endif
 
@@ -250,7 +250,7 @@ namespace Team_Capture.Logging
             CheckInitialization();
             LogIfUnInitialized(message, LogEventLevel.Warning);
 #if UNITY_EDITOR
-            if(!IsLoggerInitialized)
+            if (!IsLoggerInitialized)
                 return;
 #endif
 
@@ -266,7 +266,7 @@ namespace Team_Capture.Logging
         {
             CheckInitialization();
 #if UNITY_EDITOR
-            if(!IsLoggerInitialized)
+            if (!IsLoggerInitialized)
                 return;
 #endif
 
@@ -286,7 +286,7 @@ namespace Team_Capture.Logging
             CheckInitialization();
             LogIfUnInitialized(message, LogEventLevel.Error);
 #if UNITY_EDITOR
-            if(!IsLoggerInitialized)
+            if (!IsLoggerInitialized)
                 return;
 #endif
 
@@ -302,7 +302,7 @@ namespace Team_Capture.Logging
         {
             CheckInitialization();
 #if UNITY_EDITOR
-            if(!IsLoggerInitialized)
+            if (!IsLoggerInitialized)
                 return;
 #endif
 
@@ -318,7 +318,7 @@ namespace Team_Capture.Logging
         {
             CheckInitialization();
 #if UNITY_EDITOR
-            if(!IsLoggerInitialized)
+            if (!IsLoggerInitialized)
                 return;
 #endif
 
@@ -335,7 +335,7 @@ namespace Team_Capture.Logging
         {
             CheckInitialization();
 #if UNITY_EDITOR
-            if(!IsLoggerInitialized)
+            if (!IsLoggerInitialized)
                 return;
 #endif
 

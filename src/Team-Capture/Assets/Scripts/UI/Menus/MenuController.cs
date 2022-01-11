@@ -136,7 +136,7 @@ namespace Team_Capture.UI.Menus
             if (!allowPanelToggling)
                 return;
 
-            var panel = GetMenuPanel(panelName);
+            KeyValuePair<MenuPanel, GameObject> panel = GetMenuPanel(panelName);
             if (panel.Key == null)
             {
                 Logger.Error("No such panel with the name of {PanelName}!", name);
@@ -208,7 +208,7 @@ namespace Team_Capture.UI.Menus
             Option<KeyValuePair<MenuPanel, GameObject>> result = activeMenuPanels.AsValueEnumerable()
                 .Where(x => x.Key.name == panelName)
                 .First();
-            
+
             return result.Value;
         }
 
@@ -221,7 +221,7 @@ namespace Team_Capture.UI.Menus
             Option<KeyValuePair<MenuPanel, GameObject>> result = activeMenuPanels.AsValueEnumerable()
                 .Where(x => x.Value.activeSelf)
                 .First();
-            
+
             return result.Value;
         }
 

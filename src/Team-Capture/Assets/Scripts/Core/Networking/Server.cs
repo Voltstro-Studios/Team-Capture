@@ -5,7 +5,6 @@
 // For more details see the LICENSE file.
 
 using System;
-using System.Diagnostics;
 using System.IO;
 using Cysharp.Threading.Tasks;
 using Mirror;
@@ -337,7 +336,7 @@ namespace Team_Capture.Core.Networking
                 Logger.Error("A server is already running!");
                 return;
             }
-            
+
 #if UNITY_EDITOR
             string tcApp = $"{GameBuilder.GetBuildDirectory()}Team-Capture-Quick/";
 #else
@@ -350,8 +349,9 @@ namespace Team_Capture.Core.Networking
             tcApp += "/Team-Capture";
 #endif
 
-            string tcArguments = $"-batchmode -nographics -gamename \"{gameName}\" -scene {sceneName} -maxplayers {maxPlayers} -auth-method {userProvider.ToString()}" +
-                                 $"{(shutOnDisconnect ? " -closeserveronfirstclientdisconnect" : string.Empty)} -high";
+            string tcArguments =
+                $"-batchmode -nographics -gamename \"{gameName}\" -scene {sceneName} -maxplayers {maxPlayers} -auth-method {userProvider.ToString()}" +
+                $"{(shutOnDisconnect ? " -closeserveronfirstclientdisconnect" : string.Empty)} -high";
 
 #if UNITY_EDITOR_LINUX || UNITY_STANDALONE_LINUX
             ProcessHelper.LaunchLinuxTerminalAndLaunchProcess(tcApp, tcArguments);
@@ -447,7 +447,7 @@ namespace Team_Capture.Core.Networking
             string directory = Path.GetDirectoryName(motdPath);
             if (!Directory.Exists(directory))
                 Directory.CreateDirectory(directory);
-            
+
             File.WriteAllText(motdPath, MotdDefaultText);
         }
 

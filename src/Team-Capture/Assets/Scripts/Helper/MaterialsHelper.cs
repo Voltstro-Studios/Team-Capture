@@ -12,10 +12,10 @@ using UnityEngine.Rendering;
 // ReSharper disable StringLiteralTypo
 namespace Team_Capture.Helper
 {
-	/// <summary>
-	///     Provides helper for materials
-	/// </summary>
-	public static class MaterialsHelper
+    /// <summary>
+    ///     Provides helper for materials
+    /// </summary>
+    public static class MaterialsHelper
     {
         //Material surface type change code based off from here:
         //https://answers.unity.com/questions/1608815/change-surface-type-with-lwrp.html

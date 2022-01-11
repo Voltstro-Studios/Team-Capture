@@ -128,7 +128,7 @@ namespace Team_Capture.Integrations.Steamworks
 
         private async UniTaskVoid LoadSteamAvatarAsync()
         {
-            var imageTask = await SteamFriends.GetLargeAvatarAsync(UserId).AsUniTask();
+            Image? imageTask = await SteamFriends.GetLargeAvatarAsync(UserId).AsUniTask();
             if (!imageTask.HasValue)
                 return;
 

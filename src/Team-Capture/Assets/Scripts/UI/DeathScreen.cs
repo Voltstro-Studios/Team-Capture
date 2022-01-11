@@ -20,7 +20,7 @@ namespace Team_Capture.UI
         [SerializeField] private CachedLocalizedString hpLeftText;
         [SerializeField] private CachedLocalizedString yourselfText;
         [SerializeField] private CachedLocalizedString[] killedYourSelfText;
-        
+
         [SerializeField] private GameObject playerDeathPrefab;
         [SerializeField] private GameObject panelsObject;
         [SerializeField] private TMP_Text countDownText;
@@ -77,7 +77,7 @@ namespace Team_Capture.UI
                 killedByText.text = killer.User.UserName;
                 killedByHealthText.text = string.Format(hpLeftText.Value, killer.Health.ToString());
             }
-            
+
             killedByProfileImage.texture = killer.User.UserProfilePicture;
 
             if (killer != playerManager)

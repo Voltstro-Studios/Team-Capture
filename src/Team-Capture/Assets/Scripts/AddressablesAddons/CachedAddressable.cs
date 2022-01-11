@@ -14,7 +14,7 @@ namespace Team_Capture.AddressablesAddons
     public class CachedAddressable<T> where T : Object
     {
         public AssetReference assetReference;
-        
+
         private T cachedItem;
         private bool isWaitingForLoad;
 

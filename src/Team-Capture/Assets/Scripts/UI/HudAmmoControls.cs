@@ -16,19 +16,16 @@ namespace Team_Capture.UI
         /// <summary>
         ///     The ammo text
         /// </summary>
-        [Tooltip("The ammo text")] 
-        public TextMeshProUGUI ammoText;
+        [Tooltip("The ammo text")] public TextMeshProUGUI ammoText;
 
         /// <summary>
         ///     The max ammo text
         /// </summary>
-        [Tooltip("The max ammo text")] 
-        public TextMeshProUGUI maxAmmoText;
+        [Tooltip("The max ammo text")] public TextMeshProUGUI maxAmmoText;
 
         /// <summary>
         ///     The reload text
         /// </summary>
-        [Tooltip("The reload text")] 
-        public GameObject reloadTextGameObject;
+        [Tooltip("The reload text")] public GameObject reloadTextGameObject;
     }
 }

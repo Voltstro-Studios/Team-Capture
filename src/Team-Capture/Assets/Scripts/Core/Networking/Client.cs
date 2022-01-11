@@ -18,10 +18,10 @@ using Object = UnityEngine.Object;
 
 namespace Team_Capture.Core.Networking
 {
-	/// <summary>
-	///     A class for handling stuff on the client
-	/// </summary>
-	internal static class Client
+    /// <summary>
+    ///     A class for handling stuff on the client
+    /// </summary>
+    internal static class Client
     {
         private static TCNetworkManager netManager;
         private static bool clientHasPlayer;
@@ -183,20 +183,20 @@ namespace Team_Capture.Core.Networking
         /// </summary>
         internal enum ClientMOTDMode
         {
-	        /// <summary>
-	        ///     The client has disabled MOTDs
-	        /// </summary>
-	        Disable,
+            /// <summary>
+            ///     The client has disabled MOTDs
+            /// </summary>
+            Disable,
 
-	        /// <summary>
-	        ///     The client only accepts Text only MOTDs
-	        /// </summary>
-	        TextOnly,
+            /// <summary>
+            ///     The client only accepts Text only MOTDs
+            /// </summary>
+            TextOnly,
 
-	        /// <summary>
-	        ///     The client accepts both text and web MOTDs
-	        /// </summary>
-	        WebSupport
+            /// <summary>
+            ///     The client accepts both text and web MOTDs
+            /// </summary>
+            WebSupport
         }
 
         #region Console Commands

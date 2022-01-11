@@ -56,7 +56,7 @@ namespace Team_Capture.Console
         public void Shutdown()
         {
             InputReader.DisableConsoleInput();
-            
+
             InputReader.ConsoleToggle -= ToggleConsole;
             InputReader.ConsoleAutoComplete -= AutoCompleteConsole;
             InputReader.ConsoleHistoryUp -= HistoryUp;
@@ -120,8 +120,8 @@ namespace Team_Capture.Console
         {
             if (!IsOpen())
                 return;
-            
-            if(string.IsNullOrWhiteSpace(inputField.text))
+
+            if (string.IsNullOrWhiteSpace(inputField.text))
                 return;
 
             inputField.text = ConsoleBackend.AutoComplete(inputField.text);
@@ -194,8 +194,8 @@ namespace Team_Capture.Console
         public static void HelpCommand(string[] args)
         {
             Stopwatch stopwatch = Stopwatch.StartNew();
-            var helpList = new List<string>();
-            foreach (var command in ConsoleBackend.GetAllCommands())
+            List<string> helpList = new List<string>();
+            foreach (KeyValuePair<string, ConsoleCommand> command in ConsoleBackend.GetAllCommands())
                 helpList.Add($"\n`{command.Key}` - {command.Value.CommandSummary}");
 
             helpList.Sort(string.Compare);

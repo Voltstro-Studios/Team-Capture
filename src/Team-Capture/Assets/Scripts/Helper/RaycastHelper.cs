@@ -26,7 +26,7 @@ namespace Team_Capture.Helper
             int layerMask)
         {
             // ReSharper disable once Unity.PreferNonAllocApi
-            var rays = Physics.RaycastAll(origin, direction, maxDirection, layerMask);
+            RaycastHit[] rays = Physics.RaycastAll(origin, direction, maxDirection, layerMask);
             Array.Sort(rays, (hit, raycastHit) => hit.distance.CompareTo(raycastHit.distance));
             return rays;
         }

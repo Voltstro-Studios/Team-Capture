@@ -10,18 +10,18 @@ using UnityEngine;
 
 namespace Team_Capture.Settings.SettingClasses
 {
-	internal sealed class VideoSettingsClass : Setting
-	{
-		[SettingsPropertyDisplayText("Text", "Settings_Video_Resolution")]
-		public Resolution Resolution = Screen.currentResolution;
+    internal sealed class VideoSettingsClass : Setting
+    {
+        [SettingsPropertyDisplayText("Text", "Settings_Video_Resolution")]
+        public Resolution Resolution = Screen.currentResolution;
 
-		[SettingsPropertyDisplayText("Text", "Settings_Video_ScreenMode")]
-		public ScreenMode ScreenMode = ScreenMode.Fullscreen;
+        [SettingsPropertyDisplayText("Text", "Settings_Video_ScreenMode")]
+        public ScreenMode ScreenMode = ScreenMode.Fullscreen;
 
-		[SettingsPropertyDisplayText("Text", "Settings_Video_TextureQuality")]
-		public TextureQuality TextureQuality = TextureQuality.FullRes;
+        [SettingsPropertyDisplayText("Text", "Settings_Video_TextureQuality")]
+        public TextureQuality TextureQuality = TextureQuality.FullRes;
 
-		[SettingsPropertyDisplayText("Text", "Settings_Video_VSync")]
-		public VSync VSync = VSync.Disable;
-	}
+        [SettingsPropertyDisplayText("Text", "Settings_Video_VSync")]
+        public VSync VSync = VSync.Disable;
+    }
 }

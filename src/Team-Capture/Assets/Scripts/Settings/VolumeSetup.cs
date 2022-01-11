@@ -7,13 +7,13 @@ using UnityEngine.Rendering;
 namespace Team_Capture.Settings
 {
     /// <summary>
-    ///     Setups up a <see cref="Volume"/>.
+    ///     Setups up a <see cref="Volume" />.
     /// </summary>
     [CreateOnInit(ObjectNameOverride = "Volume")]
     internal partial class VolumeSetup : MonoBehaviour
     {
         private const string DefaultVolumeProfilePath = "Assets/Settings/Volume.asset";
-        
+
         private void Awake()
         {
             //No point in doing volume stuff if we are the server

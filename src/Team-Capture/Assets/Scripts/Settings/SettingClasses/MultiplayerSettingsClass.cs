@@ -10,19 +10,18 @@ using UnityEngine;
 
 namespace Team_Capture.Settings.SettingClasses
 {
-	internal class MultiplayerSettingsClass : Setting
-	{
-		[SettingsPropertyDisplayText("Text", "Settings_Multiplayer_MuzzleFlashLighting")]
-		public bool WeaponMuzzleFlashLighting = true;
+    internal class MultiplayerSettingsClass : Setting
+    {
+        [SettingsPropertyDisplayText("Text", "Settings_Multiplayer_MOTDMode")]
+        public Client.ClientMOTDMode MOTDMode = Client.ClientMOTDMode.WebSupport;
 
-		[SettingsPropertyDisplayText("Text", "Settings_Multiplayer_WeaponSway")]
-		public bool WeaponSwayEnabled = true;
+        [SettingsPropertyDisplayText("Text", "Settings_Multiplayer_MuzzleFlashLighting")]
+        public bool WeaponMuzzleFlashLighting = true;
 
-		[Range(0, 15)]
-		[SettingsPropertyDisplayText("Text", "Settings_Multiplayer_WeaponSwayAmount")]
-		public float WeaponSwayAmount = 0.1f;
+        [Range(0, 15)] [SettingsPropertyDisplayText("Text", "Settings_Multiplayer_WeaponSwayAmount")]
+        public float WeaponSwayAmount = 0.1f;
 
-		[SettingsPropertyDisplayText("Text", "Settings_Multiplayer_MOTDMode")]
-		public Client.ClientMOTDMode MOTDMode = Client.ClientMOTDMode.WebSupport;
-	}
+        [SettingsPropertyDisplayText("Text", "Settings_Multiplayer_WeaponSway")]
+        public bool WeaponSwayEnabled = true;
+    }
 }

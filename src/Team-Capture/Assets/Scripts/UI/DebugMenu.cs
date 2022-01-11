@@ -110,7 +110,7 @@ namespace Team_Capture.UI
         private void OnDisable()
         {
             InputReader.DisableDebugMenuInput();
-            
+
             mainThreadRecorder.Dispose();
             totalMemoryUsedRecorder.Dispose();
             gcReservedMemoryRecorder.Dispose();
@@ -203,7 +203,7 @@ namespace Team_Capture.UI
             if (samplesCount == 0)
                 return 0;
 
-            var samples = new List<ProfilerRecorderSample>(samplesCount);
+            List<ProfilerRecorderSample> samples = new List<ProfilerRecorderSample>(samplesCount);
             recorder.CopyTo(samples);
             double r = samples.Aggregate<ProfilerRecorderSample, double>(0,
                 (current, sample) => current + sample.Value);

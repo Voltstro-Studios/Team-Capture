@@ -46,7 +46,7 @@ namespace Team_Capture.Core.Compression
             length = data.Length;
             Span<byte> target = new byte[LZ4Codec.MaximumOutputSize(data.Length)];
             int compressedLength = LZ4Codec.Encode(data, target);
-            var compressed = target.Slice(0, compressedLength);
+            Span<byte> compressed = target.Slice(0, compressedLength);
             Logger.Debug("Compressed data from {UncompressedSize} to {CompressedSize}", length, compressed.Length);
             return compressed;
         }

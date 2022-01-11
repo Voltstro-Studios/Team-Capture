@@ -18,20 +18,20 @@ namespace Team_Capture.Weapons.Projectiles
         /// <summary>
         ///     The game object that will hold everything
         /// </summary>
-        [Header("Component")]
-        [SerializeField] private GameObject projectileObject;
-        
-        /// <summary>
-        ///     <see cref="Player.PlayerManager"/> who "owns" this projectile
-        /// </summary>
-        protected PlayerManager ProjectileOwner;
+        [Header("Component")] [SerializeField] private GameObject projectileObject;
 
         /// <summary>
         ///     Game objects pool
         /// </summary>
         protected NetworkProjectileObjectsPool NetworkProjectileObjectsPool;
 
-        [SyncVar(hook = nameof(OnOwnerUpdate))] private string ownerPlayerId;
+        [SyncVar(hook = nameof(OnOwnerUpdate))]
+        private string ownerPlayerId;
+
+        /// <summary>
+        ///     <see cref="Player.PlayerManager" /> who "owns" this projectile
+        /// </summary>
+        protected PlayerManager ProjectileOwner;
 
         /// <summary>
         ///     Internal setup method for projectiles
@@ -94,7 +94,7 @@ namespace Team_Capture.Weapons.Projectiles
         {
             projectileObject.SetActive(false);
         }
-        
+
         [ClientRpc(includeOwner = false)]
         private void RpcEnable(Vector3 location, Vector3 rotation)
         {
@@ -109,7 +109,7 @@ namespace Team_Capture.Weapons.Projectiles
 
         private void OnOwnerUpdate(string oldId, string newId)
         {
-            if(isClient)
+            if (isClient)
                 OnUserIdUpdate(newId);
         }
     }

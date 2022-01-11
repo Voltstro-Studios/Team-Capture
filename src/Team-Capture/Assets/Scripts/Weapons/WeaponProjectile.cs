@@ -10,6 +10,7 @@ using Mirror;
 using Team_Capture.Helper;
 using Team_Capture.Pooling;
 using Team_Capture.SceneManagement;
+using Team_Capture.UI;
 using Team_Capture.Weapons.Effects;
 using Team_Capture.Weapons.Projectiles;
 using Team_Capture.Weapons.UI;
@@ -24,70 +25,68 @@ namespace Team_Capture.Weapons
         /// <summary>
         ///     How far does something have to be for "auto aim" to kick in
         /// </summary>
-        [Header("Weapon Aiming")]
-        public float projectileAutoAimMinRange = 10f;
+        [Header("Weapon Aiming")] public float projectileAutoAimMinRange = 10f;
 
         /// <summary>
         ///     How many projectiles to hold
         /// </summary>
-        [Header("Weapon Raycast Settings")]
-        public int maxWeaponProjectileCount = 4;
-        
+        [Header("Weapon Raycast Settings")] public int maxWeaponProjectileCount = 4;
+
         /// <summary>
         ///     The fire rate of the weapon
         /// </summary>
         [Tooltip("The fire rate of the weapon")]
         public float weaponFireRate = 10;
-        
+
         /// <summary>
         ///     How long it takes for the weapon to reload (in milliseconds)
         /// </summary>
-        [Header("Weapon Reloading")]
-        [Tooltip("How long it takes for the weapon to reload (in milliseconds)")]
+        [Header("Weapon Reloading")] [Tooltip("How long it takes for the weapon to reload (in milliseconds)")]
         public int weaponReloadTime = 2000;
-        
-        public override WeaponType WeaponType => WeaponType.Projectile;
-        public override bool IsReloadable => true;
-        
+
         private int currentProjectileCount;
         private bool isReloading;
-        
+
         private float nextTimeToFire;
-        private WeaponGraphics weaponGraphics;
-        
-        private CancellationTokenSource reloadCancellation;
-        private CancellationTokenSource shootRepeatedlyCancellation;
 
         private NetworkProjectileObjectsPool projectileObjectsPool;
-        
+
+        private CancellationTokenSource reloadCancellation;
+        private CancellationTokenSource shootRepeatedlyCancellation;
+        private WeaponGraphics weaponGraphics;
+
+        public override WeaponType WeaponType => WeaponType.Projectile;
+        public override bool IsReloadable => true;
+
         public override void OnPerform(bool buttonDown)
         {
             if (buttonDown)
             {
                 shootRepeatedlyCancellation?.Cancel();
                 shootRepeatedlyCancellation = new CancellationTokenSource();
-                TimeHelper.InvokeRepeatedly(FireWeapon, 1f / weaponFireRate, shootRepeatedlyCancellation.Token).Forget();
+                TimeHelper.InvokeRepeatedly(FireWeapon, 1f / weaponFireRate, shootRepeatedlyCancellation.Token)
+                    .Forget();
                 return;
             }
 
-            if (shootRepeatedlyCancellation == null) 
+            if (shootRepeatedlyCancellation == null)
                 return;
-            
+
             shootRepeatedlyCancellation.Cancel();
             shootRepeatedlyCancellation = null;
         }
 
         public override void OnReload()
         {
-            if(isReloading)
+            if (isReloading)
                 return;
-            
-            if(reloadCancellation != null)
+
+            if (reloadCancellation != null)
                 CancelReload();
-            
-            if(currentProjectileCount == maxWeaponProjectileCount)
+
+            if (currentProjectileCount == maxWeaponProjectileCount)
                 return;
-            
+
             isReloading = true;
             reloadCancellation = new CancellationTokenSource();
             ReloadTask().Forget();
@@ -97,23 +96,23 @@ namespace Team_Capture.Weapons
         {
             if (isLocalClient)
             {
-                if(!HudAmmoControls.HasValue)
+                if (!HudAmmoControls.HasValue)
                     return;
 
-                Team_Capture.UI.HudAmmoControls controls = HudAmmoControls.Value;
-                
+                HudAmmoControls controls = HudAmmoControls.Value;
+
                 controls.ammoText.gameObject.SetActive(true);
                 controls.maxAmmoText.gameObject.SetActive(true);
                 controls.reloadTextGameObject.gameObject.SetActive(isReloading);
             }
-            
-            if(!isServer)
+
+            if (!isServer)
                 return;
-            
+
             //Start reloading again if we switch to and we our out of projectiles
             if (currentProjectileCount <= 0)
                 OnReload();
-            
+
             UpdateUI();
         }
 
@@ -121,19 +120,19 @@ namespace Team_Capture.Weapons
         {
             if (isLocalClient)
             {
-                if(!HudAmmoControls.HasValue)
+                if (!HudAmmoControls.HasValue)
                     return;
 
-                Team_Capture.UI.HudAmmoControls controls = HudAmmoControls.Value;
-                
+                HudAmmoControls controls = HudAmmoControls.Value;
+
                 controls.ammoText.gameObject.SetActive(false);
                 controls.maxAmmoText.gameObject.SetActive(false);
                 controls.reloadTextGameObject.gameObject.SetActive(false);
             }
-            
-            if(!isServer)
+
+            if (!isServer)
                 return;
-            
+
             CancelReload();
             shootRepeatedlyCancellation?.Cancel();
         }
@@ -143,10 +142,10 @@ namespace Team_Capture.Weapons
             nextTimeToFire = 0f;
             currentProjectileCount = maxWeaponProjectileCount;
             isReloading = false;
-            
+
             if (isServer)
                 projectileObjectsPool = GameSceneManager.Instance.rocketsPool;
-            
+
             if (isLocalClient)
                 OnUIUpdate(new DefaultHudUpdateMessage(null, currentProjectileCount, isReloading));
 
@@ -157,30 +156,27 @@ namespace Team_Capture.Weapons
 
         public override void OnRemove()
         {
-            if(!isServer)
+            if (!isServer)
                 return;
-            
+
             CancelReload();
             shootRepeatedlyCancellation?.Cancel();
         }
 
         public override void OnWeaponEffects(IEffectsMessage effectsMessage)
         {
-            if (effectsMessage is ProjectileEffectsMessage)
-            {
-                weaponGraphics.muzzleFlash.Play();
-            }
+            if (effectsMessage is ProjectileEffectsMessage) weaponGraphics.muzzleFlash.Play();
         }
 
         public override void OnUIUpdate(IHudUpdateMessage hudUpdateMessage)
         {
             if (hudUpdateMessage is DefaultHudUpdateMessage defaultHudUpdateMessage)
             {
-                if(!HudAmmoControls.HasValue)
+                if (!HudAmmoControls.HasValue)
                     return;
 
-                Team_Capture.UI.HudAmmoControls controls = HudAmmoControls.Value;
-                
+                HudAmmoControls controls = HudAmmoControls.Value;
+
                 controls.ammoText.text = defaultHudUpdateMessage.CurrentBullets.ToString();
                 controls.maxAmmoText.text = maxWeaponProjectileCount.ToString();
                 controls.reloadTextGameObject.SetActive(defaultHudUpdateMessage.IsReloading);
@@ -211,21 +207,21 @@ namespace Team_Capture.Weapons
             //We out of projectiles, reload
             if (currentProjectileCount <= 0)
             {
-                if(isReloading)
+                if (isReloading)
                     return;
-                
+
                 OnReload();
                 return;
             }
 
-            if(Time.time < nextTimeToFire)
+            if (Time.time < nextTimeToFire)
                 return;
-            
+
             if (isReloading)
             {
-                if(currentProjectileCount <= 0)
+                if (currentProjectileCount <= 0)
                     return;
-                
+
                 CancelReload();
             }
 
@@ -240,9 +236,10 @@ namespace Team_Capture.Weapons
         {
             Transform projectileSpawnPoint = weaponGraphics.bulletTracerPosition;
             Transform playerFacingDirection = weaponManager.localPlayerCamera;
-            
+
             //Figure out where the projectile should aim for
-            RaycastHit[] hits = RaycastHelper.RaycastAllSorted(playerFacingDirection.position, playerFacingDirection.forward, float.MaxValue, 
+            RaycastHit[] hits = RaycastHelper.RaycastAllSorted(playerFacingDirection.position,
+                playerFacingDirection.forward, float.MaxValue,
                 weaponManager.raycastLayerMask);
 
             //We need to filter through each hit
@@ -255,7 +252,7 @@ namespace Team_Capture.Weapons
 
                 raycastHit = hit;
             }
-            
+
             //Spawn the object
             GameObject newProjectile = projectileObjectsPool.GetPooledObject();
             if (raycastHit.HasValue)
@@ -267,14 +264,14 @@ namespace Team_Capture.Weapons
                     Logger.Debug("Pointing player's projectile at cross-hair.");
                 }
             }
-            
+
             ProjectileBase projectile = newProjectile.GetComponent<ProjectileBase>();
             if (projectile == null)
             {
                 Logger.Error("Weapon projectile doesn't have a projectile base on it!");
                 return;
             }
-            
+
             projectile.SetupOwner(weaponManager.playerManager);
             projectile.ServerEnable(projectileSpawnPoint.position, projectileSpawnPoint.rotation.eulerAngles);
 
@@ -286,7 +283,7 @@ namespace Team_Capture.Weapons
         {
             Logger.Debug("Reloading player's weapon.");
             UpdateUI();
-            
+
             await UniTask.Delay(weaponReloadTime, cancellationToken: reloadCancellation.Token);
 
             currentProjectileCount = maxWeaponProjectileCount;
@@ -308,7 +305,7 @@ namespace Team_Capture.Weapons
                 reloadCancellation = null;
             }
         }
-        
+
         [Server]
         private void UpdateUI()
         {

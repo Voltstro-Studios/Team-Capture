@@ -47,8 +47,7 @@ namespace Team_Capture.Settings
         internal static MultiplayerSettingsClass MultiplayerSettings { get; } = new();
 
 #if UNITY_EDITOR_LINUX || UNITY_STANDALONE_LINUX
-        [SettingsDontShow]
-        internal static LinuxSettingsClass LinuxSettings { get; } = new();
+        [SettingsDontShow] internal static LinuxSettingsClass LinuxSettings { get; } = new();
 #endif
 
         #endregion
@@ -63,14 +62,14 @@ namespace Team_Capture.Settings
         internal static IEnumerable<PropertyInfo> GetSettingClasses()
         {
             //Find all of the setting sub-types, and their instances in out main class
-            var settingTypes = ReflectionHelper.GetInheritedTypes<Setting>();
+            IReadOnlyList<Type> settingTypes = ReflectionHelper.GetInheritedTypes<Setting>();
 
             //Get a list of all of the properties in our settings class
-            var settingProps = typeof(GameSettings).GetTypeInfo()
+            PropertyInfo[] settingProps = typeof(GameSettings).GetTypeInfo()
                 .GetProperties(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static);
 
             //Only add properties that are one of our inherited setting types
-            var foundSettings = settingProps.Where(p => settingTypes.Contains(p.PropertyType));
+            IEnumerable<PropertyInfo> foundSettings = settingProps.Where(p => settingTypes.Contains(p.PropertyType));
 
             return foundSettings;
         }
@@ -120,7 +119,7 @@ namespace Team_Capture.Settings
                 {
                     // ignored
                 }
-            
+
             Logger.Debug("Loaded settings");
 
             //Notify other classes that settings have updated

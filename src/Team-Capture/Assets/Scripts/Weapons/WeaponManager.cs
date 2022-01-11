@@ -47,6 +47,8 @@ namespace Team_Capture.Weapons
         /// </summary>
         private readonly SyncList<WeaponBase> weapons = new();
 
+        [NonSerialized] public PlayerManager playerManager;
+
         /// <summary>
         ///     <see cref="Weapons.WeaponSway" /> script, for use by <see cref="PlayerInputManager" />
         /// </summary>
@@ -62,38 +64,6 @@ namespace Team_Capture.Weapons
         ///     Gets how many weapons are on the weapon holder spot
         /// </summary>
         public int WeaponHolderSpotChildCount => weaponsHolderSpot.childCount;
-
-        [NonSerialized] public PlayerManager playerManager;
-
-        #region Unity Event Functions
-
-        private void Awake()
-        {
-            playerManager = GetComponent<PlayerManager>();
-        }
-
-        private void Start()
-        {
-            //Create all existing weapons on start
-            for (int i = 0; i < weapons.Count; i++)
-            {
-                GameObject newWeapon = CreateNewWeaponModel(weapons[i]);
-                weapons[i].Setup(this, isServer, isLocalPlayer, newWeapon);
-
-                if (isLocalPlayer)
-                    SetupWeaponObjectLocal(newWeapon);
-
-                newWeapon.SetActive(SelectedWeaponIndex == i);
-            }
-            
-            //Setup our add weapon callback
-            weapons.Callback += WeaponListCallback;
-            
-            if(isLocalPlayer)
-                WeaponSway.SetWeapon(weapons[SelectedWeaponIndex]);
-        }
-
-        #endregion
 
         public override void OnStopServer()
         {
@@ -117,13 +87,13 @@ namespace Team_Capture.Weapons
                     newWeapon.Setup(this, isServer, isLocalPlayer, newWeaponModel);
                     SetIndex(itemIndex);
                     break;
-                
+
                 case SyncList<WeaponBase>.Operation.OP_CLEAR:
                     RemoveAllWeaponsModels();
                     break;
             }
         }
-        
+
         #region Network Overrides
 
         public override void OnStartLocalPlayer()
@@ -135,13 +105,46 @@ namespace Team_Capture.Weapons
 
         #endregion
 
+        #region Unity Event Functions
+
+        private void Awake()
+        {
+            playerManager = GetComponent<PlayerManager>();
+        }
+
+        private void Start()
+        {
+            //Create all existing weapons on start
+            for (int i = 0; i < weapons.Count; i++)
+            {
+                GameObject newWeapon = CreateNewWeaponModel(weapons[i]);
+                weapons[i].Setup(this, isServer, isLocalPlayer, newWeapon);
+
+                if (isLocalPlayer)
+                    SetupWeaponObjectLocal(newWeapon);
+
+                newWeapon.SetActive(SelectedWeaponIndex == i);
+            }
+
+            //Setup our add weapon callback
+            weapons.Callback += WeaponListCallback;
+
+            if (isLocalPlayer)
+                WeaponSway.SetWeapon(weapons[SelectedWeaponIndex]);
+        }
+
+        #endregion
+
         #region Weapon List Management
 
         /// <summary>
         ///     Get the active weapon
         /// </summary>
         /// <returns></returns>
-        internal WeaponBase GetActiveWeapon() => GetWeaponAtIndex(SelectedWeaponIndex);
+        internal WeaponBase GetActiveWeapon()
+        {
+            return GetWeaponAtIndex(SelectedWeaponIndex);
+        }
 
         /// <summary>
         ///     Gets a weapon at the index
@@ -152,7 +155,7 @@ namespace Team_Capture.Weapons
         {
             if (index > weapons.Count)
                 throw new ArgumentOutOfRangeException(nameof(index));
-            
+
             return weapons.Count == 0 ? null : weapons[index];
         }
 
@@ -193,7 +196,7 @@ namespace Team_Capture.Weapons
         {
             string weaponId = hudUpdateMessage.WeaponId;
             WeaponBase weapon = GetWeaponFromId(weaponId);
-            if(weapon != null)
+            if (weapon != null)
                 weapon.OnUIUpdate(hudUpdateMessage);
         }
 
@@ -210,7 +213,7 @@ namespace Team_Capture.Weapons
         }
 
         #endregion
-        
+
         #region Weapon Reloading
 
         /// <summary>
@@ -219,7 +222,7 @@ namespace Team_Capture.Weapons
         [Client]
         internal void ClientReloadWeapon()
         {
-            if(!GetActiveWeapon().IsReloadable)
+            if (!GetActiveWeapon().IsReloadable)
                 return;
 
             //Ask the server kindly to reload the weapon
@@ -233,12 +236,12 @@ namespace Team_Capture.Weapons
         private void CmdReloadPlayerWeapon()
         {
             WeaponBase weapon = GetActiveWeapon();
-            if(!weapon.IsReloadable)
+            if (!weapon.IsReloadable)
                 return;
 
             weapon.OnReload();
         }
-        
+
         #endregion
 
         #region Add Weapons
@@ -265,8 +268,8 @@ namespace Team_Capture.Weapons
 
             WeaponBase newWeapon = Instantiate(weapon);
             weapons.Add(newWeapon);
-            
-            if(weapons.Count != 0)
+
+            if (weapons.Count != 0)
                 SetClientWeaponIndex(weapons.Count - 1);
         }
 
@@ -328,7 +331,7 @@ namespace Team_Capture.Weapons
         #endregion
 
         #region Weapon Selection
-        
+
         /// <summary>
         ///     Sets the <see cref="SelectedWeaponIndex" /> to your index
         /// </summary>
@@ -337,10 +340,10 @@ namespace Team_Capture.Weapons
         public void CmdSetWeaponIndex(int index)
         {
             Option<WeaponBase> result = weapons.AsValueEnumerable().ElementAt(index);
-            
+
             if (result.IsNone)
                 return;
-            
+
             SetClientWeaponIndex(index);
         }
 
@@ -352,22 +355,22 @@ namespace Team_Capture.Weapons
         private void SetClientWeaponIndex(int index)
         {
             Logger.Debug($"Player `{transform.name}` set their weapon index to `{index}`.");
-            
+
             GetActiveWeapon().OnSwitchOff();
             SelectedWeaponIndex = index;
             GetActiveWeapon().OnSwitchOnTo();
-            
+
             RpcSelectWeapon(index);
         }
 
         private void OnWeaponIndexSet(int oldIndex, int newIndex)
         {
-            if (!isServer && !isLocalPlayer) 
+            if (!isServer && !isLocalPlayer)
                 return;
-            
-            if(oldIndex < weapons.Count)
+
+            if (oldIndex < weapons.Count)
                 GetWeaponAtIndex(oldIndex).OnSwitchOff();
-            if(newIndex < weapons.Count)
+            if (newIndex < weapons.Count)
                 GetWeaponAtIndex(newIndex).OnSwitchOnTo();
         }
 
@@ -388,9 +391,9 @@ namespace Team_Capture.Weapons
 
             if (isLocalPlayer)
             {
-                if(index + 1 > weapons.Count)
+                if (index + 1 > weapons.Count)
                     return;
-                
+
                 WeaponSway.SetWeapon(weapons[index]);
             }
         }

@@ -11,10 +11,10 @@ using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.Console
 {
-	/// <summary>
-	///     Console system for Linux
-	/// </summary>
-	internal class ConsoleLinux : IConsoleUI
+    /// <summary>
+    ///     Console system for Linux
+    /// </summary>
+    internal class ConsoleLinux : IConsoleUI
     {
         private readonly string consoleTitle;
         private string currentLine;

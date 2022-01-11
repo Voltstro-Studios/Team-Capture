@@ -54,7 +54,7 @@ namespace Team_Capture.Core
         ///     Current fixed frame. Applied before any events are invoked.
         /// </summary>
         public static uint FixedFrame { get; private set; }
-        
+
         private void Update()
         {
             UpdateTicks(Time.deltaTime);

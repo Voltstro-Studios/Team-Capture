@@ -17,7 +17,7 @@ namespace Team_Capture.Weapons.Jobs
     {
         [ReadOnly] public float SpreadFactor;
         [ReadOnly] public Random Random;
-        
+
         [WriteOnly] public NativeArray<Vector3> Directions;
 
         public void Execute(int index)

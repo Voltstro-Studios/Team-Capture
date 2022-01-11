@@ -58,13 +58,14 @@ namespace Team_Capture.Helper
             }
         }
 
-        public static async UniTask InvokeRepeatedly(Action invoke, float repeatRate, CancellationToken cancellationToken)
+        public static async UniTask InvokeRepeatedly(Action invoke, float repeatRate,
+            CancellationToken cancellationToken)
         {
-            int milliSeconds = (int)(repeatRate * 1000f);
+            int milliSeconds = (int) (repeatRate * 1000f);
             while (!cancellationToken.IsCancellationRequested)
             {
                 invoke.Invoke();
-                
+
                 await UniTask.Delay(milliSeconds, cancellationToken: cancellationToken);
             }
         }

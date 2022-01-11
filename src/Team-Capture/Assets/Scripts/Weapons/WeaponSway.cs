@@ -8,7 +8,6 @@ using Team_Capture.Console;
 using Team_Capture.Settings;
 using Team_Capture.Settings.SettingClasses;
 using UnityEngine;
-using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.Weapons
 {
@@ -26,7 +25,7 @@ namespace Team_Capture.Weapons
         private float axisX;
         private float axisY;
         private Vector3 localPosition;
-        
+
         private Vector2 maxWeaponSway = new(0.25f, 0.2f);
         private float weaponSwayAmount = 1f;
 

@@ -25,13 +25,13 @@ namespace Team_Capture.Weapons.Effects
     {
         public static void Write(this NetworkWriter writer, IEffectsMessage effectsMessage)
         {
-            writer.WriteByte((byte)effectsMessage.EffectsMessageType);
+            writer.WriteByte((byte) effectsMessage.EffectsMessageType);
             effectsMessage.Serialize(writer);
         }
 
         public static IEffectsMessage Read(this NetworkReader reader)
         {
-            EffectsMessageType effectsMessageType = (EffectsMessageType)reader.ReadByte();
+            EffectsMessageType effectsMessageType = (EffectsMessageType) reader.ReadByte();
             switch (effectsMessageType)
             {
                 case EffectsMessageType.Default:

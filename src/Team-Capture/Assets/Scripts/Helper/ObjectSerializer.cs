@@ -9,11 +9,11 @@ using Newtonsoft.Json;
 
 namespace Team_Capture.Helper
 {
-	/// <summary>
-	///     Serialization and Deserialization using <see cref="JsonConvert" />.
-	///     <para>Saves to the config dir</para>
-	/// </summary>
-	public static class ObjectSerializer
+    /// <summary>
+    ///     Serialization and Deserialization using <see cref="JsonConvert" />.
+    ///     <para>Saves to the config dir</para>
+    /// </summary>
+    public static class ObjectSerializer
     {
         #region Serialization
 

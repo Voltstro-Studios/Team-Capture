@@ -97,7 +97,7 @@ namespace Team_Capture.Pickups
         private void GeneratePickupMaterials()
         {
             //Get all mesh renderers
-            var meshRenderers = gameObject.GetComponentsInChildren<MeshRenderer>();
+            MeshRenderer[] meshRenderers = gameObject.GetComponentsInChildren<MeshRenderer>();
             foreach (MeshRenderer meshRenderer in meshRenderers)
             {
                 //Get the non-picked up material
@@ -124,10 +124,8 @@ namespace Team_Capture.Pickups
         private void SetMeshRenderMaterials()
         {
             for (int i = 0; i < pickupMaterials.Count; i++)
-            {
                 pickupMaterials[i].MeshRenderer.material =
                     isPickedUp ? pickupMaterials[i].PickedUpMaterial : pickupMaterials[i].DefaultMaterial;
-            }
         }
 
         private struct PickupMaterials

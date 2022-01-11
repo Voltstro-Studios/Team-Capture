@@ -6,6 +6,7 @@
 
 using System;
 using ElRaccoone.Tweens;
+using ElRaccoone.Tweens.Core;
 using NetFabric.Hyperlinq;
 using Team_Capture.Core;
 using UnityEngine;
@@ -71,7 +72,7 @@ namespace Team_Capture.Tweens
                 //If this is a moving tween event
                 if (uiTweenEvent.moving)
                 {
-                    var moveTween =
+                    Tween<float> moveTween =
                         objectToTween.TweenAnchoredPositionY(uiTweenEvent.moveTo, uiTweenEvent.duration);
                     moveTween.SetFrom(uiTweenEvent.moveFrom);
                     moveTween.SetOnComplete(() => OnEnd(uiTweenEvent.activeOnEnd));
@@ -80,7 +81,7 @@ namespace Team_Capture.Tweens
                 //This is a fading tween event
                 if (uiTweenEvent.fading)
                 {
-                    var fadeTween = objectToTween.GetComponent<Graphic>()
+                    Tween<float> fadeTween = objectToTween.GetComponent<Graphic>()
                         .TweenGraphicAlpha(uiTweenEvent.fadeTo, uiTweenEvent.duration);
                     fadeTween.SetFrom(uiTweenEvent.fadeFrom);
                     fadeTween.SetOnComplete(() => OnEnd(uiTweenEvent.activeOnEnd));

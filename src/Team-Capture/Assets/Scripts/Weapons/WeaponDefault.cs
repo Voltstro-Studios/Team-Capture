@@ -15,6 +15,7 @@ using Team_Capture.LagCompensation;
 using Team_Capture.Player;
 using Team_Capture.Pooling;
 using Team_Capture.SceneManagement;
+using Team_Capture.UI;
 using Team_Capture.Weapons.Effects;
 using Team_Capture.Weapons.Jobs;
 using Team_Capture.Weapons.UI;
@@ -35,10 +36,9 @@ namespace Team_Capture.Weapons
         /// <summary>
         ///     How much damage the weapon does
         /// </summary>
-        [Header("Weapon Damage")]
-        [Tooltip("How much damage the weapon does")]
+        [Header("Weapon Damage")] [Tooltip("How much damage the weapon does")]
         public int weaponDamage = 15;
-        
+
         /// <summary>
         ///     Based on distance, what is the weapon's damage dropoff.
         ///     <para>
@@ -58,8 +58,7 @@ namespace Team_Capture.Weapons
         /// <summary>
         ///     The fire rate of the weapon
         /// </summary>
-        [Header("Weapon Raycast Settings")]
-        [Tooltip("The fire rate of the weapon")]
+        [Header("Weapon Raycast Settings")] [Tooltip("The fire rate of the weapon")]
         public float weaponFireRate = 10;
 
         /// <summary>
@@ -67,7 +66,7 @@ namespace Team_Capture.Weapons
         /// </summary>
         [Tooltip("How many bullets to do when the weapon is shot")]
         public int bulletsPerShot = 1;
-        
+
         /// <summary>
         ///     The max amount of bullets to hold
         /// </summary>
@@ -79,74 +78,72 @@ namespace Team_Capture.Weapons
         /// </summary>
         [Tooltip("The weapon's spread factor")]
         public float spreadFactor = 0.05f;
-        
+
         /// <summary>
-        ///     The <see cref="WeaponFireMode"/>
+        ///     The <see cref="WeaponFireMode" />
         /// </summary>
-        [Tooltip("The weapon's fire mode")]
-        public WeaponFireMode weaponFireMode;
+        [Tooltip("The weapon's fire mode")] public WeaponFireMode weaponFireMode;
 
         /// <summary>
         ///     How long it takes for the weapon to reload (in milliseconds)
         /// </summary>
-        [Header("Weapon Reloading")]
-        [Tooltip("How long it takes for the weapon to reload (in milliseconds)")]
+        [Header("Weapon Reloading")] [Tooltip("How long it takes for the weapon to reload (in milliseconds)")]
         public int weaponReloadTime = 2000;
-        
+
         /// <summary>
-        ///     What the weapon's <see cref="WeaponDefaultReloadMode"/> is
+        ///     What the weapon's <see cref="WeaponDefaultReloadMode" /> is
         /// </summary>
         [Tooltip("What the weapon's reload mode is")]
         public WeaponDefaultReloadMode weaponReloadMode;
 
+        private GameObjectPool bulletHolesPool;
+
         private int currentBulletCount;
         private bool isReloading;
-        
+
         private float nextTimeToFire;
-        private WeaponGraphics weaponGraphics;
-        
+
         private CancellationTokenSource reloadCancellation;
         private CancellationTokenSource shootRepeatedlyCancellation;
 
         private GameObjectPool tracerPool;
-        private GameObjectPool bulletHolesPool;
-        
+        private WeaponGraphics weaponGraphics;
+
         public override WeaponType WeaponType => WeaponType.Default;
-        
+
         public override bool IsReloadable => true;
 
         public override void OnPerform(bool buttonDown)
         {
-            if(buttonDown && weaponFireMode == WeaponFireMode.Semi)
+            if (buttonDown && weaponFireMode == WeaponFireMode.Semi)
                 ShootWeapon();
             if (buttonDown && weaponFireMode == WeaponFireMode.Auto)
             {
                 shootRepeatedlyCancellation?.Cancel();
                 shootRepeatedlyCancellation = new CancellationTokenSource();
-                TimeHelper.InvokeRepeatedly(ShootWeapon, 1f / weaponFireRate, shootRepeatedlyCancellation.Token).Forget();
+                TimeHelper.InvokeRepeatedly(ShootWeapon, 1f / weaponFireRate, shootRepeatedlyCancellation.Token)
+                    .Forget();
             }
 
             if (!buttonDown && weaponFireMode == WeaponFireMode.Auto)
-            {
                 if (shootRepeatedlyCancellation != null)
                 {
                     shootRepeatedlyCancellation.Cancel();
                     shootRepeatedlyCancellation = null;
                 }
-            }
         }
-        
+
         public override void OnReload()
         {
-            if(isReloading)
+            if (isReloading)
                 return;
-            
-            if(reloadCancellation != null)
+
+            if (reloadCancellation != null)
                 CancelReload();
-            
-            if(currentBulletCount == maxBullets)
+
+            if (currentBulletCount == maxBullets)
                 return;
-            
+
             isReloading = true;
             reloadCancellation = new CancellationTokenSource();
             ReloadTask().Forget();
@@ -157,7 +154,7 @@ namespace Team_Capture.Weapons
             if (effectsMessage is DefaultEffectsMessage defaultEffects)
             {
                 weaponGraphics.muzzleFlash.Play();
-                
+
                 for (int i = 0; i < defaultEffects.Targets.Length; i++)
                 {
                     //Do bullet tracer
@@ -180,11 +177,11 @@ namespace Team_Capture.Weapons
         {
             if (hudUpdateMessage is DefaultHudUpdateMessage defaultHudUpdateMessage)
             {
-                if(!HudAmmoControls.HasValue)
+                if (!HudAmmoControls.HasValue)
                     return;
 
-                Team_Capture.UI.HudAmmoControls controls = HudAmmoControls.Value;
-                
+                HudAmmoControls controls = HudAmmoControls.Value;
+
                 controls.ammoText.text = defaultHudUpdateMessage.CurrentBullets.ToString();
                 controls.maxAmmoText.text = maxBullets.ToString();
                 controls.reloadTextGameObject.SetActive(defaultHudUpdateMessage.IsReloading);
@@ -197,23 +194,23 @@ namespace Team_Capture.Weapons
         {
             if (isLocalClient)
             {
-                if(!HudAmmoControls.HasValue)
+                if (!HudAmmoControls.HasValue)
                     return;
 
-                Team_Capture.UI.HudAmmoControls controls = HudAmmoControls.Value;
-                
+                HudAmmoControls controls = HudAmmoControls.Value;
+
                 controls.ammoText.gameObject.SetActive(true);
                 controls.maxAmmoText.gameObject.SetActive(true);
                 controls.reloadTextGameObject.gameObject.SetActive(isReloading);
             }
-            
-            if(!isServer)
+
+            if (!isServer)
                 return;
-            
+
             //Start reloading again if we switch to and we our out of bullets
             if (currentBulletCount <= 0)
                 OnReload();
-            
+
             UpdateUI();
         }
 
@@ -221,19 +218,19 @@ namespace Team_Capture.Weapons
         {
             if (isLocalClient)
             {
-                if(!HudAmmoControls.HasValue)
+                if (!HudAmmoControls.HasValue)
                     return;
 
-                Team_Capture.UI.HudAmmoControls controls = HudAmmoControls.Value;
-                
+                HudAmmoControls controls = HudAmmoControls.Value;
+
                 controls.ammoText.gameObject.SetActive(false);
                 controls.maxAmmoText.gameObject.SetActive(false);
                 controls.reloadTextGameObject.gameObject.SetActive(false);
             }
-            
-            if(!isServer)
+
+            if (!isServer)
                 return;
-            
+
             CancelReload();
             shootRepeatedlyCancellation?.Cancel();
         }
@@ -249,7 +246,7 @@ namespace Team_Capture.Weapons
 
             tracerPool = GameSceneManager.Instance.tracersEffectsPool;
             bulletHolesPool = GameSceneManager.Instance.bulletHolePool;
-            
+
             weaponGraphics = weaponObjectInstance.GetComponent<WeaponGraphics>();
             if (weaponGraphics == null)
                 Logger.Error("Weapon model doesn't contain a weapon graphics!");
@@ -261,6 +258,14 @@ namespace Team_Capture.Weapons
             CancelReload();
         }
 
+        [Server]
+        private void UpdateUI()
+        {
+            DefaultHudUpdateMessage message = new(weaponId, currentBulletCount, isReloading);
+            Logger.Debug("Sent client UI weapon update: {@Message}", message);
+            DoPlayerUIUpdate(message);
+        }
+
         #region Weapon Shooting
 
         [Server]
@@ -269,21 +274,21 @@ namespace Team_Capture.Weapons
             //We out of bullets, reload
             if (currentBulletCount <= 0)
             {
-                if(isReloading)
+                if (isReloading)
                     return;
-                
+
                 OnReload();
                 return;
             }
 
-            if(Time.time < nextTimeToFire)
+            if (Time.time < nextTimeToFire)
                 return;
-            
+
             if (isReloading)
             {
-                if(currentBulletCount <= 0)
+                if (currentBulletCount <= 0)
                     return;
-                
+
                 CancelReload();
             }
 
@@ -297,7 +302,7 @@ namespace Team_Capture.Weapons
             {
                 Logger.Error(ex, "Error occured while simulating weapon shooting!");
             }
-            
+
             UpdateUI();
         }
 
@@ -309,7 +314,7 @@ namespace Team_Capture.Weapons
             Transform playerFacingDirection = weaponManager.localPlayerCamera;
             List<Vector3> targets = new();
             List<Vector3> targetsNormal = new();
-            
+
             //Calculate directions first
             Stopwatch directionSetup = Stopwatch.StartNew();
             NativeArray<Vector3> directions = new(bulletsPerShot, Allocator.TempJob);
@@ -317,7 +322,7 @@ namespace Team_Capture.Weapons
             {
                 Directions = directions,
                 SpreadFactor = spreadFactor,
-                Random = new Unity.Mathematics.Random((uint)Random.Range(uint.MinValue, uint.MaxValue))
+                Random = new Unity.Mathematics.Random((uint) Random.Range(uint.MinValue, uint.MaxValue))
             };
             createDirectionsJob.Schedule(bulletsPerShot, 32).Complete();
 
@@ -329,7 +334,7 @@ namespace Team_Capture.Weapons
                 //Calculate random spread
                 Vector3 direction = playerFacingDirection.forward;
                 direction += playerFacingDirection.TransformDirection(directions[i]);
-                
+
                 //Do our raycast
                 RaycastHit[] hits = RaycastHelper.RaycastAllSorted(playerFacingDirection.position, direction,
                     float.MaxValue, weaponManager.raycastLayerMask);
@@ -345,9 +350,9 @@ namespace Team_Capture.Weapons
 
                     //So if we hit a player then do damage
                     PlayerManager hitPlayer = hit.collider.GetComponent<PlayerManager>();
-                    if (hitPlayer == null) 
+                    if (hitPlayer == null)
                         break;
-                    
+
                     //Calculate damage
                     float damageMultiplier = weaponDamageDropOff.Evaluate(hit.distance);
                     int damage = Mathf.FloorToInt(weaponDamage * damageMultiplier);
@@ -358,17 +363,17 @@ namespace Team_Capture.Weapons
             }
 
             directions.Dispose();
-            
+
             DoWeaponEffects(new DefaultEffectsMessage(targets.ToArray(), targetsNormal.ToArray()));
-            
+
             stopwatch.Stop();
             Logger.Debug("Took {Milliseconds} to fire weapon.", stopwatch.Elapsed.TotalMilliseconds);
         }
-        
+
         #endregion
 
         #region Weapon Reloading
-        
+
         [Server]
         private async UniTask ReloadTask()
         {
@@ -395,7 +400,7 @@ namespace Team_Capture.Weapons
                             currentBulletCount++;
                             UpdateUI();
                         }, reloadCancellation.Token);
-                    
+
                     FinishReload();
                     break;
                 default:
@@ -411,7 +416,7 @@ namespace Team_Capture.Weapons
             reloadCancellation.Dispose();
             reloadCancellation = null;
         }
-        
+
         [Server]
         private void CancelReload()
         {
@@ -426,14 +431,6 @@ namespace Team_Capture.Weapons
         }
 
         #endregion
-
-        [Server]
-        private void UpdateUI()
-        {
-            DefaultHudUpdateMessage message = new(weaponId, currentBulletCount, isReloading);
-            Logger.Debug("Sent client UI weapon update: {@Message}", message);
-            DoPlayerUIUpdate(message);
-        }
 
         #region Networking
 

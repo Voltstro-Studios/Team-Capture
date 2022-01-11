@@ -5,6 +5,7 @@
 // For more details see the LICENSE file.
 
 // ReSharper disable once RedundantUsingDirective
+
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;

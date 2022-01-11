@@ -9,7 +9,7 @@ namespace Team_Capture.Settings.SettingClasses
 {
     internal class LinuxSettingsClass : Setting
     {
-        public LinuxTerminalSettings linuxTerminalSettings = new LinuxTerminalSettings
+        public LinuxTerminalSettings linuxTerminalSettings = new()
         {
             TerminalCommand = "x-terminal-emulator",
             TerminalExecute = "-e '{0} {1}'"

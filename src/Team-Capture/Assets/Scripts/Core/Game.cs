@@ -21,10 +21,10 @@ using UnityEditor;
 
 namespace Team_Capture.Core
 {
-	/// <summary>
-	///     Some core functions relating to the game
-	/// </summary>
-	public static class Game
+    /// <summary>
+    ///     Some core functions relating to the game
+    /// </summary>
+    public static class Game
     {
         /// <summary>
         ///     Whether or not we are running in headless mode

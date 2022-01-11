@@ -14,19 +14,11 @@ using UnityWebBrowser;
 
 namespace Team_Capture.UI.MOTD
 {
-	/// <summary>
-	///     UI for displaying MOTDs
-	/// </summary>
-	internal class MOTDUI : MonoBehaviour
+    /// <summary>
+    ///     UI for displaying MOTDs
+    /// </summary>
+    internal class MOTDUI : MonoBehaviour
     {
-        [SerializeField] private TextMeshProUGUI motdTitleText;
-        [SerializeField] private TextMeshProUGUI motdText;
-
-        [SerializeField] private GameObject motdTextScroll;
-        [SerializeField] private WebBrowserUI webBrowserUI;
-
-        private Action onCloseAction;
-
         private const string InjectJavaScriptCode = @"
 function hideControls() {
     const navControls = document.getElementById('controls-nav');
@@ -51,6 +43,14 @@ function hideControls() {
         }
     }
 ";
+
+        [SerializeField] private TextMeshProUGUI motdTitleText;
+        [SerializeField] private TextMeshProUGUI motdText;
+
+        [SerializeField] private GameObject motdTextScroll;
+        [SerializeField] private WebBrowserUI webBrowserUI;
+
+        private Action onCloseAction;
 
         /// <summary>
         ///     Setup the MOTD UI
@@ -95,7 +95,7 @@ function hideControls() {
                                     "hideControls();\n" +
                                     $"setName(\"{User.GetActiveUser().UserName}\");";
 
-                webBrowserUI.ExecuteJs(javaScriptCode);
+            webBrowserUI.ExecuteJs(javaScriptCode);
         }
 
         public void CloseMOTD()

@@ -7,16 +7,15 @@
 using System;
 using Steamworks;
 using Team_Capture.Core.Networking;
+using Team_Capture.Logging;
 using Team_Capture.UserManagement;
-using UnityEngine;
-using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.Integrations.Steamworks
 {
-	/// <summary>
-	///     Handles connecting to Steam
-	/// </summary>
-	[CreateOnInit]
+    /// <summary>
+    ///     Handles connecting to Steam
+    /// </summary>
+    [CreateOnInit]
     internal partial class SteamManager : SingletonMonoBehaviourSettings<SteamManager, SteamSettings>
     {
         protected override string SettingsPath => "Assets/Settings/Integrations/SteamSettings.asset";

@@ -8,11 +8,11 @@ using System;
 
 namespace Team_Capture.Console
 {
-	/// <summary>
-	///     Marks a field to be used as an editable variable by the in-game console.
-	///     <para>FIELD MUST BE STATIC</para>
-	/// </summary>
-	[AttributeUsage(AttributeTargets.Field)]
+    /// <summary>
+    ///     Marks a field to be used as an editable variable by the in-game console.
+    ///     <para>FIELD MUST BE STATIC</para>
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Field)]
     public class ConVar : Attribute
     {
         public ConVar(string name, string summary)
