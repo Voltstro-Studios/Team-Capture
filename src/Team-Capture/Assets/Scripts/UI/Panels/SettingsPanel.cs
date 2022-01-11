@@ -221,7 +221,7 @@ namespace Team_Capture.UI.Panels
             SettingsSlider sliderSettings = sliderObject.GetComponent<SettingsSlider>();
 
             //Set up the existing value
-            sliderSettings.Setup(currentValue);
+            sliderSettings.Setup(currentValue, wholeNumbers);
 
             //Set the text
             sliderSettings.propertyText.text = sideText;

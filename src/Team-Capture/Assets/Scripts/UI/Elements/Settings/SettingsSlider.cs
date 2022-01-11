@@ -32,19 +32,26 @@ namespace Team_Capture.UI.Elements.Settings
         /// </summary>
         public Slider slider;
 
+        private bool wholeNumbers;
+
         /// <summary>
         ///     Sets up the slider
         /// </summary>
         /// <param name="initialValue"></param>
-        public void Setup(float initialValue)
+        /// <param name="wholeNums"></param>
+        public void Setup(float initialValue, bool wholeNums)
         {
-            slider.onValueChanged.AddListener(SetSliderValueText);
-            valueText.text = initialValue.ToString(CultureInfo.InvariantCulture);
+            wholeNumbers = wholeNums;
+            slider.onValueChanged.AddListener(SetTextValue);
+            SetTextValue(initialValue);
         }
 
-        private void SetSliderValueText(float value)
+        private void SetTextValue(float value)
         {
-            valueText.text = Convert.ToDecimal($"{value:F2}").ToString(CultureInfo.InvariantCulture);
+            if(wholeNumbers)
+                valueText.text = Convert.ToDecimal($"{value}").ToString(CultureInfo.InvariantCulture);
+            else
+                valueText.text = Convert.ToDecimal($"{value:F2}").ToString(CultureInfo.InvariantCulture);
         }
     }
 }
