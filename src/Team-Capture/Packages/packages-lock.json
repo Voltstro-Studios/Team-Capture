@@ -21,7 +21,7 @@
       "dependencies": {
         "org.nuget.system.threading.tasks.extensions": "4.5.4"
       },
-      "hash": "89ca653ef338aefe21f0726bbcd5fd5d0caf4a4b"
+      "hash": "2f49845fa2631d3d3c9377e44eca2be0da361edf"
     },
     "com.psydack.uimgui": {
       "version": "https://github.com/Voltstro-Studios/uimgui.git",
@@ -39,7 +39,7 @@
       "dependencies": {}
     },
     "com.unity.addressables": {
-      "version": "1.19.15",
+      "version": "1.19.17",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -67,7 +67,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.burst": {
-      "version": "1.6.3",
+      "version": "1.6.4",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -97,7 +97,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.rider": {
-      "version": "3.0.9",
+      "version": "3.0.10",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -106,7 +106,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.visualstudio": {
-      "version": "2.0.12",
+      "version": "2.0.14",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -148,7 +148,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.memoryprofiler": {
-      "version": "0.4.3-preview.1",
+      "version": "0.4.4-preview.2",
       "depth": 0,
       "source": "registry",
       "dependencies": {
