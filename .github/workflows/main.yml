@@ -38,7 +38,7 @@ jobs:
       - name: Cache for ${{ matrix.targetPlatform }}
         uses: actions/cache@v2.1.6
         with:
-          path: ${{ matrix.projectPath }}/Library
+          path: src/Team-Capture/Library/
           key: Library-${{ matrix.targetPlatform }}-v3
           restore-keys: |
             Library-${{ matrix.targetPlatform }}-v3
