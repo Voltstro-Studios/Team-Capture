@@ -356,9 +356,9 @@ namespace Team_Capture.Core.Networking
 #if UNITY_EDITOR_LINUX || UNITY_STANDALONE_LINUX
             ProcessHelper.LaunchLinuxTerminalAndLaunchProcess(tcApp, tcArguments);
 #else
-            Process tcProcess = new Process()
+            System.Diagnostics.Process tcProcess = new()
             {
-                StartInfo = new ProcessStartInfo
+                StartInfo = new System.Diagnostics.ProcessStartInfo
                 {
                     FileName = tcApp,
                     Arguments = tcArguments,
