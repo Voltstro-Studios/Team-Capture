@@ -3,7 +3,7 @@
     "com.cysharp.slnmerge": "1.4.0",
     "com.cysharp.unitask": "2.2.5",
     "com.mirror-networking.mirror": "https://github.com/VoltUnityPackages/Mirror.git?path=/Assets/Mirror",
-    "com.psydack.uimgui": "https://github.com/Voltstro-Studios/uimgui.git",
+    "dev.voltstro.unityimgui": "https://github.com/Voltstro-Studios/uimgui.git",
     "com.unity.addressables": "1.19.17",
     "com.unity.assetbundlebrowser": "1.7.0",
     "com.unity.build-report-inspector": "0.2.2-preview",

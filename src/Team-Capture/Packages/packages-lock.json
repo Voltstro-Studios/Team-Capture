@@ -23,15 +23,6 @@
       },
       "hash": "2f49845fa2631d3d3c9377e44eca2be0da361edf"
     },
-    "com.psydack.uimgui": {
-      "version": "https://github.com/Voltstro-Studios/uimgui.git",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {
-        "org.nuget.system.runtime.compilerservices.unsafe": "5.0.0"
-      },
-      "hash": "1f5d5af9bd15fb59d47686086265af77b962cc8b"
-    },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
       "depth": 1,
@@ -332,6 +323,15 @@
         "org.nuget.mcmaster.extensions.commandlineutils": "3.1.0"
       },
       "hash": "42a3a11d9b3cb30021bf1c22518880df9e0b12ab"
+    },
+    "dev.voltstro.unityimgui": {
+      "version": "https://github.com/Voltstro-Studios/uimgui.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "org.nuget.system.runtime.compilerservices.unsafe": "5.0.0"
+      },
+      "hash": "e44241cd5b881311ab3546ebec197567682439d1"
     },
     "dev.voltstro.unityvoltbuilder": {
       "version": "https://github.com/Voltstro-Studios/UnityVoltBuilder.git",
