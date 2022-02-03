@@ -43,7 +43,8 @@ namespace Team_Capture.UI
         /// <summary>
         ///     How often to refresh the fps counter
         /// </summary>
-        public float refreshRate = 1f;
+        [ConVar("cl_debugmenu_refreshrate", "The refresh rate of the debug menu", true)]
+        public static float RefreshRate = 1f;
 
         private int drawCalls;
         private int fps;
@@ -90,7 +91,7 @@ namespace Team_Capture.UI
             outMessageCount = 0;
             outMessageBytes = 0;
 
-            timer = Time.unscaledTime + refreshRate;
+            timer = Time.unscaledTime + RefreshRate;
         }
 
         private void OnEnable()
