@@ -296,7 +296,7 @@ namespace Team_Capture.Weapons
             currentBulletCount--;
             try
             {
-                SimulationHelper.SimulateCommand(weaponManager.playerManager, WeaponRayCast);
+                LagCompensationManager.Simulate(weaponManager.playerManager, WeaponRayCast);
             }
             catch (Exception ex)
             {

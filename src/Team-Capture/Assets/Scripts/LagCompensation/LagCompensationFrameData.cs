@@ -8,9 +8,12 @@ using UnityEngine;
 
 namespace Team_Capture.LagCompensation
 {
-    internal readonly struct SimulationFrameData
+    /// <summary>
+    ///     Contains data about the position and rotation of an object
+    /// </summary>
+    internal readonly struct LagCompensationFrameData
     {
-        public SimulationFrameData(Vector3 position, Quaternion rotation)
+        public LagCompensationFrameData(Vector3 position, Quaternion rotation)
         {
             Position = position;
             Rotation = rotation;

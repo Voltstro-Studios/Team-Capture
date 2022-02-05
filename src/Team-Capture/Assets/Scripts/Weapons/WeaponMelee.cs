@@ -129,7 +129,7 @@ namespace Team_Capture.Weapons
 
             try
             {
-                SimulationHelper.SimulateCommand(weaponManager.playerManager, WeaponRayCast);
+                LagCompensationManager.Simulate(weaponManager.playerManager, WeaponRayCast);
             }
             catch (Exception ex)
             {

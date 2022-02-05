@@ -130,7 +130,7 @@ namespace Team_Capture.Core.Networking
             if (mode == NetworkManagerMode.ServerOnly)
             {
                 PingManager.ServerPingUpdate();
-                SimulationHelper.UpdateSimulationObjectData();
+                LagCompensationManager.ServerUpdate();
             }
         }
 

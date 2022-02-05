@@ -4,7 +4,6 @@
 // This project is governed by the AGPLv3 License.
 // For more details see the LICENSE file.
 
-using System;
 using System.Collections.Generic;
 using Mirror;
 using Team_Capture.Collections;
@@ -14,9 +13,12 @@ using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.LagCompensation
 {
-    internal class SimulationObject : MonoBehaviour
+    /// <summary>
+    ///     An object that is lag compensated
+    /// </summary>
+    internal class LagCompensatedObject : MonoBehaviour
     {
-        private Dictionary<double, SimulationFrameData> frameData;
+        private Dictionary<double, LagCompensationFrameData> frameData;
         private FixedQueue<double> frameKeys;
 
         private Vector3 lastPosition;
@@ -27,18 +29,18 @@ namespace Team_Capture.LagCompensation
         private void Start()
         {
             maxFrames = TCNetworkManager.Instance.GetMaxFramePoints();
-            frameData = new Dictionary<double, SimulationFrameData>();
+            frameData = new Dictionary<double, LagCompensationFrameData>();
             frameKeys = new FixedQueue<double>(maxFrames);
-            SimulationHelper.SimulationObjects.Add(this);
+            LagCompensationManager.AddLagCompensatedObject(this);
         }
 
         private void OnDestroy()
         {
-            SimulationHelper.SimulationObjects.Remove(this);
+            LagCompensationManager.RemoveLagCompensatedObject(this);
         }
 
         /// <summary>
-        ///     Creates and stores a new <see cref="SimulationFrameData" /> using the current position and rotation data
+        ///     Creates and stores a new <see cref="LagCompensationFrameData" /> using the current position and rotation data
         /// </summary>
         public void AddFrame()
         {
@@ -47,7 +49,7 @@ namespace Team_Capture.LagCompensation
 
             double time = NetworkTime.time;
             Transform objTransform = transform;
-            frameData.Add(time, new SimulationFrameData(objTransform.position, objTransform.rotation));
+            frameData.Add(time, new LagCompensationFrameData(objTransform.position, objTransform.rotation));
             frameKeys.Enqueue(time);
         }
 

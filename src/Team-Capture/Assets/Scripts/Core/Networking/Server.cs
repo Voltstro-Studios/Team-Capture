@@ -128,9 +128,10 @@ namespace Team_Capture.Core.Networking
             //Set what network address to use and start to advertise the server on lan
             netManager.networkAddress = NetHelper.LocalIpAddress();
             netManager.gameDiscovery.AdvertiseServer();
-
-            //Start ping service
+            
+            //Setup ping related stuff
             PingManager.ServerSetup();
+            LagCompensationManager.ServerSetup();
 
             //Run the server autoexec config
             ConsoleBackend.ExecuteFile("server-autoexec");
@@ -164,6 +165,8 @@ namespace Team_Capture.Core.Networking
         internal static void OnStopServer()
         {
             Logger.Info("Stopping server...");
+            
+            LagCompensationManager.ServerShutdown();
             PingManager.ServerShutdown();
 
             //Stop advertising the server when the server stops
@@ -297,7 +300,7 @@ namespace Team_Capture.Core.Networking
 
             //Create the player object
             GameObject player = Object.Instantiate(playerPrefab, spawnPoint.position, spawnPoint.rotation);
-            player.AddComponent<SimulationObject>();
+            player.AddComponent<LagCompensatedObject>();
 
             //Add the connection for the player
             NetworkServer.AddPlayerForConnection(conn, player);
