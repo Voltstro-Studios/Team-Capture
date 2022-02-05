@@ -4,6 +4,7 @@
 // This project is governed by the AGPLv3 License.
 // For more details see the LICENSE file.
 
+using System;
 using System.Collections.Generic;
 using Mirror;
 using Team_Capture.Console;
@@ -87,7 +88,7 @@ namespace Team_Capture.Core.Networking
         /// </summary>
         internal static void PingClients()
         {
-            NetworkServer.SendToAll(new PingServerMessage());
+            NetworkServer.SendToAll(new PingServerMessage(), sendToReadyOnly: true);
         }
 
         /// <summary>
@@ -99,6 +100,21 @@ namespace Team_Capture.Core.Networking
             conn.Send(new PingServerMessage());
         }
 
+        internal static ExponentialMovingAverage AddClient(NetworkConnection conn)
+        {
+            ExponentialMovingAverage rtt = new(NetworkTime.PingWindowSize);
+            try
+            {
+                rtt.Add(0);
+                clientsPing.Add(conn.connectionId, rtt);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex, "Error adding client to client pings!");
+            }
+            return rtt;
+        }
+
         private static void OnReceiveClientPingMessage(NetworkConnection conn, PingClientMessage message)
         {
             ExponentialMovingAverage rtt;
@@ -108,13 +124,12 @@ namespace Team_Capture.Core.Networking
             }
             else
             {
-                rtt = new ExponentialMovingAverage(NetworkTime.PingWindowSize);
-                clientsPing.Add(conn.connectionId, rtt);
+                rtt = AddClient(conn);
             }
 
             double clientRttValue = NetworkTime.time - message.ClientTime;
             rtt.Add(clientRttValue);
-            Logger.Debug("Got client {@ClientConnectionId}'s rtt of {@ClientRtt}ms", conn.connectionId, rtt.Value);
+            Logger.Debug("Got client {ClientConnectionId}'s rtt of {ClientRtt}ms", conn.connectionId, rtt.Value);
         }
 
         #endregion

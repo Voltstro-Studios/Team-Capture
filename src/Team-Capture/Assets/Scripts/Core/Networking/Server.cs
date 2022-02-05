@@ -302,6 +302,7 @@ namespace Team_Capture.Core.Networking
             NetworkServer.AddPlayerForConnection(conn, player);
 
             //Make initial ping
+            PingManager.AddClient(conn);
             PingManager.PingClient(conn);
 
             Logger.Info("Created player object for {NetID}", conn.identity.netId);
