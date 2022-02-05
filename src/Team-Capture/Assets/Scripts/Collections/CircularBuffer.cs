@@ -27,22 +27,22 @@ namespace Team_Capture.Collections
     [Preserve]
     public class CircularBuffer<T> : IEnumerable<T>
     {
-        private readonly T[] _buffer;
+        private readonly T[] buffer;
 
         /// <summary>
         ///     The _end. Index after the last element in the buffer.
         /// </summary>
-        private int _end;
+        private int end;
 
         /// <summary>
         ///     The _size. Buffer size.
         /// </summary>
-        private int _size;
+        private int size;
 
         /// <summary>
         ///     The _start. Index of the first element in buffer.
         /// </summary>
-        private int _start;
+        private int start;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="CircularBuffer{T}" /> class.
@@ -76,20 +76,20 @@ namespace Team_Capture.Collections
                 throw new ArgumentException(
                     "Too many items to fit circular buffer", nameof(items));
 
-            _buffer = new T[capacity];
+            buffer = new T[capacity];
 
-            Array.Copy(items, _buffer, items.Length);
-            _size = items.Length;
+            Array.Copy(items, buffer, items.Length);
+            size = items.Length;
 
-            _start = 0;
-            _end = _size == capacity ? 0 : _size;
+            start = 0;
+            end = size == capacity ? 0 : size;
         }
 
         /// <summary>
         ///     Maximum capacity of the buffer. Elements pushed into the buffer after
         ///     maximum capacity is reached (IsFull = true), will remove an element.
         /// </summary>
-        public int Capacity => _buffer.Length;
+        public int Capacity => buffer.Length;
 
         /// <summary>
         ///     Boolean indicating if Circular is at full capacity.
@@ -107,7 +107,7 @@ namespace Team_Capture.Collections
         /// <summary>
         ///     Current buffer size (the number of elements that the buffer has).
         /// </summary>
-        public int Size => _size;
+        public int Size => size;
 
         /// <summary>
         ///     Index access to elements in buffer.
@@ -123,22 +123,22 @@ namespace Team_Capture.Collections
                 if (IsEmpty)
                     throw new IndexOutOfRangeException(string.Format("Cannot access index {0}. Buffer is empty",
                         index));
-                if (index >= _size)
+                if (index >= size)
                     throw new IndexOutOfRangeException(string.Format("Cannot access index {0}. Buffer size is {1}",
-                        index, _size));
+                        index, size));
                 int actualIndex = InternalIndex(index);
-                return _buffer[actualIndex];
+                return buffer[actualIndex];
             }
             set
             {
                 if (IsEmpty)
                     throw new IndexOutOfRangeException(string.Format("Cannot access index {0}. Buffer is empty",
                         index));
-                if (index >= _size)
+                if (index >= size)
                     throw new IndexOutOfRangeException(string.Format("Cannot access index {0}. Buffer size is {1}",
-                        index, _size));
+                        index, size));
                 int actualIndex = InternalIndex(index);
-                _buffer[actualIndex] = value;
+                buffer[actualIndex] = value;
             }
         }
 
@@ -174,7 +174,7 @@ namespace Team_Capture.Collections
         public T Front()
         {
             ThrowIfEmpty();
-            return _buffer[_start];
+            return buffer[start];
         }
 
         /// <summary>
@@ -184,16 +184,16 @@ namespace Team_Capture.Collections
         public T Back()
         {
             ThrowIfEmpty();
-            return _buffer[(_end != 0 ? _end : Capacity) - 1];
+            return buffer[(end != 0 ? end : Capacity) - 1];
         }
 
         public void Clear()
         {
-            for (int i = 0; i < _buffer.Length; i++)
-                _buffer[i] = default;
+            for (int i = 0; i < buffer.Length; i++)
+                buffer[i] = default;
 
-            _start = 0;
-            _end = 0;
+            start = 0;
+            end = 0;
         }
 
         /// <summary>
@@ -207,15 +207,15 @@ namespace Team_Capture.Collections
         {
             if (IsFull)
             {
-                _buffer[_end] = item;
-                Increment(ref _end);
-                _start = _end;
+                buffer[end] = item;
+                Increment(ref end);
+                start = end;
             }
             else
             {
-                _buffer[_end] = item;
-                Increment(ref _end);
-                ++_size;
+                buffer[end] = item;
+                Increment(ref end);
+                ++size;
             }
         }
 
@@ -230,15 +230,15 @@ namespace Team_Capture.Collections
         {
             if (IsFull)
             {
-                Decrement(ref _start);
-                _end = _start;
-                _buffer[_start] = item;
+                Decrement(ref start);
+                end = start;
+                buffer[start] = item;
             }
             else
             {
-                Decrement(ref _start);
-                _buffer[_start] = item;
-                ++_size;
+                Decrement(ref start);
+                buffer[start] = item;
+                ++size;
             }
         }
 
@@ -249,9 +249,9 @@ namespace Team_Capture.Collections
         public void PopBack()
         {
             ThrowIfEmpty("Cannot take elements from an empty buffer.");
-            Decrement(ref _end);
-            _buffer[_end] = default;
-            --_size;
+            Decrement(ref end);
+            buffer[end] = default;
+            --size;
         }
 
         /// <summary>
@@ -261,9 +261,9 @@ namespace Team_Capture.Collections
         public void PopFront()
         {
             ThrowIfEmpty("Cannot take elements from an empty buffer.");
-            _buffer[_start] = default;
-            Increment(ref _start);
-            --_size;
+            buffer[start] = default;
+            Increment(ref start);
+            --size;
         }
 
         /// <summary>
@@ -338,7 +338,7 @@ namespace Team_Capture.Collections
         /// </param>
         private int InternalIndex(int index)
         {
-            return _start + (index < Capacity - _start ? index : index - Capacity);
+            return start + (index < Capacity - start ? index : index - Capacity);
         }
 
         // doing ArrayOne and ArrayTwo methods returning ArraySegment<T> as seen here: 
@@ -355,18 +355,18 @@ namespace Team_Capture.Collections
         {
             if (IsEmpty)
                 return new ArraySegment<T>(new T[0]);
-            if (_start < _end)
-                return new ArraySegment<T>(_buffer, _start, _end - _start);
-            return new ArraySegment<T>(_buffer, _start, _buffer.Length - _start);
+            if (start < end)
+                return new ArraySegment<T>(buffer, start, end - start);
+            return new ArraySegment<T>(buffer, start, buffer.Length - start);
         }
 
         private ArraySegment<T> ArrayTwo()
         {
             if (IsEmpty)
                 return new ArraySegment<T>(new T[0]);
-            if (_start < _end)
-                return new ArraySegment<T>(_buffer, _end, 0);
-            return new ArraySegment<T>(_buffer, 0, _end);
+            if (start < end)
+                return new ArraySegment<T>(buffer, end, 0);
+            return new ArraySegment<T>(buffer, 0, end);
         }
 
         #endregion

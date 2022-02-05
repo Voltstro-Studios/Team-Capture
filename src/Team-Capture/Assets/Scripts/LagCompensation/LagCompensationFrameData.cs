@@ -18,7 +18,7 @@ namespace Team_Capture.LagCompensation
             Position = position;
             Rotation = rotation;
         }
-        
+
         public Vector3 Position { get; }
         public Quaternion Rotation { get; }
     }

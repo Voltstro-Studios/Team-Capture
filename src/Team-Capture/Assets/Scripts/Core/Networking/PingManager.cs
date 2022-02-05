@@ -8,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using Mirror;
 using Team_Capture.Console;
-using UnityEngine;
 using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.Core.Networking

@@ -66,7 +66,7 @@ namespace Team_Capture.LagCompensation
         public void SetStateTransform(double secondsAgo)
         {
             Transform objTransform = transform;
-            
+
             //Save last state
             lastPosition = objTransform.position;
             lastRotation = objTransform.rotation;
@@ -77,28 +77,30 @@ namespace Team_Capture.LagCompensation
             double previousTime = 0f;
             double nextTime = 0f;
             for (int i = 0; i < frameKeys.Count; i++)
-            {
                 if (previousTime <= targetTime && frameKeys.ElementAt(i) >= targetTime)
                 {
                     nextTime = frameKeys.ElementAt(i);
                     break;
                 }
                 else
+                {
                     previousTime = frameKeys.ElementAt(i);
-            }
+                }
 
             if (nextTime == 0)
-                    nextTime = frameKeys.GetMostRecentElement();
+                nextTime = frameKeys.GetMostRecentElement();
 
             double timeBetweenFrames = nextTime - previousTime;
             double timeAwayFromPrevious = currentTime - previousTime;
-            
-            //We loose some accuracy here, but Unity's transforms are floats
-            float lerpProgress = (float)(timeAwayFromPrevious / timeBetweenFrames);
-            
-            Logger.Debug("TimeAgo: {TimeAgo}, previousTime: {PreviousTime}, nextTime: {NextTime}, lerp: {Lerp}", secondsAgo, previousTime, nextTime, lerpProgress);
 
-            objTransform.position = Vector3.Lerp(frameData[previousTime].Position, frameData[nextTime].Position, lerpProgress);
+            //We loose some accuracy here, but Unity's transforms are floats
+            float lerpProgress = (float) (timeAwayFromPrevious / timeBetweenFrames);
+
+            Logger.Debug("TimeAgo: {TimeAgo}, previousTime: {PreviousTime}, nextTime: {NextTime}, lerp: {Lerp}",
+                secondsAgo, previousTime, nextTime, lerpProgress);
+
+            objTransform.position =
+                Vector3.Lerp(frameData[previousTime].Position, frameData[nextTime].Position, lerpProgress);
             objTransform.rotation = Quaternion.Slerp(frameData[previousTime].Rotation, frameData[nextTime].Rotation,
                 lerpProgress);
         }
