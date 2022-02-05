@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 1601811758747872254}
   - component: {fileID: 1601811758747872249}
   - component: {fileID: 1601811758747872243}
-  - component: {fileID: 8891563245170481125}
   m_Layer: 0
   m_Name: _NetworkManager
   m_TagString: Untagged
@@ -150,24 +149,9 @@ MonoBehaviour:
   ReceiveWindowSize: 128
   MaxRetransmit: 40
   NonAlloc: 1
+  MaximizeSendReceiveBuffersToOSLimit: 1
   ReliableMaxMessageSize: 149224
   UnreliableMaxMessageSize: 1199
   debugLog: 0
   statisticsGUI: 0
   statisticsLog: 0
---- !u!114 &8891563245170481125
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1601811758747872240}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 39adc6e09d5544ed955a50ce8600355a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  visRange: 9999
-  rebuildInterval: 1
-  checkMethod: 0
-  showSlider: 0
