@@ -6,14 +6,17 @@
 
 using UnityEngine;
 
-//Todo: make this readonly and use a constructor
 namespace Team_Capture.LagCompensation
 {
-    //Todo: make this readonly and use a constructor
-    //TODO: Also add documentation and a scale vector
-    internal class SimulationFrameData
+    internal readonly struct SimulationFrameData
     {
-        public Vector3 Position { get; set; }
-        public Quaternion Rotation { get; set; }
+        public SimulationFrameData(Vector3 position, Quaternion rotation)
+        {
+            Position = position;
+            Rotation = rotation;
+        }
+        
+        public Vector3 Position { get; }
+        public Quaternion Rotation { get; }
     }
 }

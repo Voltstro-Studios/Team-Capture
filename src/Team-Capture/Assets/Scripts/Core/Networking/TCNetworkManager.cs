@@ -49,7 +49,8 @@ namespace Team_Capture.Core.Networking
         /// <summary>
         ///     How many frames to keep
         /// </summary>
-        [Tooltip("How many frames to keep")] public int maxFrameCount = 128;
+        [Tooltip("How many frames to keep")] 
+        public float secondsHistory = 4f;
 
         /// <summary>
         ///     The active <see cref="TCGameDiscovery" />
@@ -113,8 +114,6 @@ namespace Team_Capture.Core.Networking
             //We are running in headless mode
             if (Game.IsHeadless && !Game.IsGameQuitting)
             {
-                Application.targetFrameRate = serverTickRate;
-
                 //Start the server
                 StartServer();
             }
@@ -128,13 +127,16 @@ namespace Team_Capture.Core.Networking
 
         public void Update()
         {
-            if (mode == NetworkManagerMode.ServerOnly) PingManager.ServerPingUpdate();
+            if (mode == NetworkManagerMode.ServerOnly)
+            {
+                PingManager.ServerPingUpdate();
+                SimulationHelper.UpdateSimulationObjectData();
+            }
         }
 
-        public void FixedUpdate()
+        public int GetMaxFramePoints()
         {
-            //If we are the server then update simulated objects
-            if (mode == NetworkManagerMode.ServerOnly) SimulationHelper.UpdateSimulationObjectData();
+            return (int) (secondsHistory / (1f / serverTickRate));
         }
 
         [ConCommand("stop", "Stops the current game, whether that is disconnecting or stopping the server")]

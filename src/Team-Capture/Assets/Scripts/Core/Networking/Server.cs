@@ -115,6 +115,7 @@ namespace Team_Capture.Core.Networking
 
             //Setup the server's config
             SetupServerConfig();
+            Application.targetFrameRate = netManager.serverTickRate;
 
             //Make some adjustments to scenes config if we are running headless
             if (Game.IsHeadless)
