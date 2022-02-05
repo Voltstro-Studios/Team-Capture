@@ -19,9 +19,9 @@ namespace Team_Capture.Core.Networking
     public static class PingManager
     {
         [ConVar("sv_pingfrequency", "How often will the server ping the clients")]
-        private static readonly float PingFrequency = 2.0f;
+        private static readonly double PingFrequency = 2.0f;
 
-        private static float lastPingTime;
+        private static double lastPingTime;
 
         private static Dictionary<int, ExponentialMovingAverage> clientsPing;
 
@@ -57,7 +57,7 @@ namespace Team_Capture.Core.Networking
         /// </summary>
         internal static void ServerSetup()
         {
-            lastPingTime = Time.time - 1;
+            lastPingTime = NetworkTime.time - 1;
             clientsPing = new Dictionary<int, ExponentialMovingAverage>();
             NetworkServer.RegisterHandler<PingClientMessage>(OnReceiveClientPingMessage, false);
         }
@@ -76,10 +76,10 @@ namespace Team_Capture.Core.Networking
         /// </summary>
         internal static void ServerPingUpdate()
         {
-            if (Time.time - lastPingTime >= PingFrequency)
+            if (NetworkTime.time - lastPingTime >= PingFrequency)
             {
                 PingClients();
-                lastPingTime = Time.time;
+                lastPingTime = NetworkTime.time;
             }
         }
 
