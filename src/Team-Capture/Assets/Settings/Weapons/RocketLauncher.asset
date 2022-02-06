@@ -13,17 +13,15 @@ MonoBehaviour:
   m_Name: RocketLauncher
   m_EditorClassIdentifier: 
   weaponId: RocketLauncher
-  weaponSwayAmountMultiplier: 0.1
-  weaponSwayMax: {x: 0.05, y: 0.005}
   weaponObjectPrefab:
     assetReference:
       m_AssetGUID: 20b8c763278f32186b7529feb0c4bf4a
       m_SubObjectName: 
       m_SubObjectType: 
       m_EditorAssetChanged: 0
-  projectilePrefab: {fileID: 8197683935473045189, guid: aeee56d8504e890689596ca349205694,
-    type: 3}
+  weaponSwayAmountMultiplier: 0.1
+  weaponSwayMax: {x: 0.05, y: 0.005}
   projectileAutoAimMinRange: 3
   maxWeaponProjectileCount: 4
   weaponFireRate: 2
-  weaponReloadTime: 2000
+  weaponReloadTime: 600

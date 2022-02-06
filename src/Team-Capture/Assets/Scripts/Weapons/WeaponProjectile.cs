@@ -282,11 +282,21 @@ namespace Team_Capture.Weapons
         private async UniTask ReloadTask()
         {
             Logger.Debug("Reloading player's weapon.");
+            isReloading = true;
             UpdateUI();
+            
+            await TimeHelper.CountUp(
+                maxWeaponProjectileCount - currentProjectileCount, weaponReloadTime, tick =>
+                {
+                    //Backup
+                    if (currentProjectileCount == maxWeaponProjectileCount)
+                        return;
 
-            await UniTask.Delay(weaponReloadTime, cancellationToken: reloadCancellation.Token);
-
-            currentProjectileCount = maxWeaponProjectileCount;
+                    //Increase projectiles
+                    currentProjectileCount++;
+                    UpdateUI();
+                }, reloadCancellation.Token);
+            
             isReloading = false;
             UpdateUI();
             reloadCancellation.Dispose();
