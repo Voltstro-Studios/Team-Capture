@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using Team_Capture.Helper;
 using Team_Capture.SceneManagement;
 using Team_Capture.UserManagement;
@@ -89,6 +90,7 @@ namespace Team_Capture.Editor
                             };
                             newProcess.Start();
                             StartedProcesses.Add(newProcess);
+                            Thread.Sleep(200);
                         }
 
                         Debug.Log(quickstartData.entries.Count > 1

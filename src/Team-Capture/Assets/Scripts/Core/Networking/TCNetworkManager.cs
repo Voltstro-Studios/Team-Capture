@@ -5,6 +5,7 @@
 // For more details see the LICENSE file.
 
 using System;
+using Cysharp.Threading.Tasks;
 using Mirror;
 using Team_Capture.Console;
 using Team_Capture.Core.Networking.Discovery;
@@ -120,9 +121,18 @@ namespace Team_Capture.Core.Networking
 
             if (!Game.IsHeadless && autoConnectIpAddress != null)
             {
-                networkAddress = autoConnectIpAddress;
-                StartClient();
+                WaitAndThenConnect().Forget();
             }
+        }
+
+        private async UniTaskVoid WaitAndThenConnect()
+        {
+            await UniTask.Delay(1000);
+            
+            UniTask.SwitchToMainThread();
+            
+            networkAddress = autoConnectIpAddress;
+            StartClient();
         }
 
         public void Update()
