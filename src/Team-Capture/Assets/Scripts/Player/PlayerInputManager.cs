@@ -254,6 +254,9 @@ namespace Team_Capture.Player
 
         private void OnChatToggle()
         {
+            if(ClientUI.IsPauseMenuOpen)
+                return;
+            
             uiManager.ToggleChat();
         }
 
