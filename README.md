@@ -3,7 +3,7 @@
 # Team-Capture
 [![License](https://img.shields.io/github/license/Voltstro-Studios/Team-Capture.svg)](/LICENSE)
 [![CI Build](https://img.shields.io/github/workflow/status/Voltstro-Studios/Team-Capture/Game%20Build/master?label=Build&logo=github)](https://github.com/Voltstro-Studios/Team-Capture/actions)
-[![Discord](https://img.shields.io/badge/Discord-Voltstro-7289da.svg?logo=discord)](https://discord.voltstro.dev) 
+[![Discord](https://img.shields.io/badge/Discord-Voltstro-7289da.svg?logo=discord)](https://discord.voltstro.dev)
 [![YouTube](https://img.shields.io/badge/Youtube-Voltstro-red.svg?logo=youtube)](https://www.youtube.com/Voltstro)
 
 **This project is in a very early alpha, a lot of things are either broken or buggy, not implemented, or are in the process of being implemented!**
@@ -79,7 +79,7 @@ We also upload [releases](https://github.com/Voltstro-Studios/Team-Capture/relea
 #### Prerequisites
 
 ```
-Unity 2021.2.9f1
+Unity 2021.2.14f1
 .NET 5+
 ```
 
