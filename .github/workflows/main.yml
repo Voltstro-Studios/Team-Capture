@@ -21,7 +21,8 @@ jobs:
           - src/Team-Capture
         targetPlatform:
           - StandaloneWindows64
-          - StandaloneLinux64
+        customImageName:
+          - 'unityci/editor:2021.2.17f1-windows-mono-1'
 
     steps:
       #Clone the repo
@@ -60,6 +61,7 @@ jobs:
           version: ${{ env.version }}
           androidVersionCode: 1 #This is here so we can stop getting warnings about it, even tho we have no plans to support Android
           buildMethod: Team_Capture.Editor.CIBuilder.StartVoltBuilder
+          customImage: ${{ matrix.customImageName }}
 
       #Upload the build as an artifact
       - name: Upload Build
