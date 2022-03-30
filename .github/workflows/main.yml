@@ -10,6 +10,7 @@ on:
 env:
   gameName: 'Team-Capture'
   version: 'v0.2-Alpha'
+  unityProjectPath: src/Team-Capture
 
 jobs:
   build:
@@ -22,8 +23,7 @@ jobs:
             customImageName: unityci/editor:2021.2.17f1-windows-mono-1
           - targetPlatform: StandaloneLinux64
             customImageName: unityci/editor:2021.2.17f1-linux-il2cpp-1
-        projectPath:
-          - src/Team-Capture
+        
 
     steps:
       #Clone the repo
@@ -54,10 +54,10 @@ jobs:
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
           UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
         with:
-          projectPath: ${{ matrix.projectPath }}
+          projectPath: ${{ env.unityProjectPath }}
           targetPlatform: ${{ matrix.targetPlatform }}
           buildName: ${{ env.gameName }}
-          buildsPath: '${{ matrix.projectPath }}/Builds'
+          buildsPath: '${{ env.unityProjectPath }}/Builds'
           versioning: Custom
           version: ${{ env.version }}
           androidVersionCode: 1 #This is here so we can stop getting warnings about it, even tho we have no plans to support Android
@@ -69,4 +69,4 @@ jobs:
         uses: actions/upload-artifact@v2.3.1
         with:
           name: '${{ env.gameName }}-${{ matrix.targetPlatform }}-${{ env.version }}-DevOpsBuild'
-          path: '${{ matrix.projectPath }}/Builds/${{ matrix.targetPlatform }}-DevOpsBuild.zip'
+          path: '${{ env.unityProjectPath }}/Builds/${{ matrix.targetPlatform }}-DevOpsBuild.zip'
