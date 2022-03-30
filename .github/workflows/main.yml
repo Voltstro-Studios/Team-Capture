@@ -21,8 +21,11 @@ jobs:
           - src/Team-Capture
         targetPlatform:
           - StandaloneWindows64
+          - StandaloneLinux64
+        #We need to specify the image to use due to some issue, idk
         customImageName:
           - unityci/editor:2021.2.17f1-windows-mono-1
+          - unityci/editor:2021.2.17f1-linux-il2cpp-1
 
     steps:
       #Clone the repo
