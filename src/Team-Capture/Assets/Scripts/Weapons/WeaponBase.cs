@@ -43,6 +43,16 @@ namespace Team_Capture.Weapons
         public Vector2 weaponSwayMax = new(0.25f, 0.2f);
 
         /// <summary>
+        ///     Recoil effect on the camera
+        /// </summary>
+        [Header("Weapon Recoil")]
+        [Tooltip("Recoil effect on the camera")]
+        public Vector3 weaponCameraRecoilAmount = new(4f, 0f, 0f);
+
+        public float weaponRecoilCameraSpeed = 6f;
+        public float weaponRecoilCameraReturnSpeed = 25f;
+
+        /// <summary>
         ///     Is this running on a local client
         /// </summary>
         protected bool isLocalClient;

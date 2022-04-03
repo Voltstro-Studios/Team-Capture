@@ -21,6 +21,9 @@ MonoBehaviour:
       m_EditorAssetChanged: 0
   weaponSwayAmountMultiplier: 0.1
   weaponSwayMax: {x: 0.05, y: 0.005}
+  weaponCameraRecoilAmount: {x: 8, y: 0, z: 0}
+  weaponRecoilCameraSpeed: 7
+  weaponRecoilCameraReturnSpeed: 15
   projectileAutoAimMinRange: 3
   maxWeaponProjectileCount: 4
   weaponFireRate: 2

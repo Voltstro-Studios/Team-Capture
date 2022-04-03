@@ -8,6 +8,7 @@ using System;
 using Mirror;
 using NetFabric.Hyperlinq;
 using Team_Capture.Helper;
+using Team_Capture.Helper.Extensions;
 using Team_Capture.Player;
 using Team_Capture.SceneManagement;
 using Team_Capture.Weapons.Effects;
@@ -54,6 +55,8 @@ namespace Team_Capture.Weapons
         /// </summary>
         [NonSerialized] internal WeaponSway WeaponSway;
 
+        [NonSerialized] internal PlayerCameraEffects CameraEffects;
+
         /// <summary>
         ///     What is the selected weapon
         /// </summary>
@@ -95,14 +98,7 @@ namespace Team_Capture.Weapons
         }
 
         #region Network Overrides
-
-        public override void OnStartLocalPlayer()
-        {
-            base.OnStartLocalPlayer();
-
-            WeaponSway = weaponsHolderSpot.gameObject.AddComponent<WeaponSway>();
-        }
-
+        
         #endregion
 
         #region Unity Event Functions
@@ -129,8 +125,19 @@ namespace Team_Capture.Weapons
             //Setup our add weapon callback
             weapons.Callback += WeaponListCallback;
 
+            WeaponBase weapon = weapons[SelectedWeaponIndex];
             if (isLocalPlayer)
-                WeaponSway.SetWeapon(weapons[SelectedWeaponIndex]);
+            {
+                WeaponSway = weaponsHolderSpot.gameObject.AddComponent<WeaponSway>();
+                WeaponSway.SetWeapon(weapon);
+            }
+
+            if (isLocalPlayer || isServer)
+            {
+                CameraEffects = this.GetComponentOrThrow<PlayerSetup>().PlayerVCam
+                    .GetComponentOrThrow<PlayerCameraEffects>("The PlayerCameraEffects component should exist! Ensure this script executes AFTER PlayerSetup!");
+                CameraEffects.OnWeaponChange(weapon.weaponRecoilCameraSpeed, weapon.weaponRecoilCameraReturnSpeed);
+            }
         }
 
         #endregion
@@ -389,13 +396,14 @@ namespace Team_Capture.Weapons
             for (int i = 0; i < weaponsHolderSpot.childCount; i++)
                 weaponsHolderSpot.GetChild(i).gameObject.SetActive(i == index);
 
+            if (index + 1 > weapons.Count)
+                return;
+            WeaponBase weapon = weapons[index];
+            
             if (isLocalPlayer)
-            {
-                if (index + 1 > weapons.Count)
-                    return;
-
-                WeaponSway.SetWeapon(weapons[index]);
-            }
+                WeaponSway.SetWeapon(weapon);
+            if (isLocalPlayer || isServer)
+                CameraEffects.OnWeaponChange(weapon.weaponRecoilCameraSpeed, weapon.weaponRecoilCameraReturnSpeed);
         }
 
         #endregion

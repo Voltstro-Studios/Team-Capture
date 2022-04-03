@@ -20,7 +20,6 @@ namespace Team_Capture.Player.Movement
         private const int PastStatesToSend = 3;
 
         [SerializeField] private Transform cameraHolderTransform;
-        [SerializeField] private GameObject cameraGameObject;
         [SerializeField] private GameObject gfxObject;
 
         [Header("Movement Settings")] [SerializeField]
@@ -47,7 +46,7 @@ namespace Team_Capture.Player.Movement
         private readonly Queue<PlayerInputs> receivedClientMotorStates = new();
 
         private readonly InputData storedInput = new();
-        private PlayerCameraRoll cameraRoll;
+        private PlayerCameraEffects cameraEffects;
 
         private bool isReady;
 
@@ -81,8 +80,7 @@ namespace Team_Capture.Player.Movement
             {
                 Destroy(sync);
 
-                cameraRoll = cameraGameObject.AddComponent<PlayerCameraRoll>();
-                cameraRoll.SetBaseTransform(transform);
+                cameraEffects = GetComponent<PlayerSetup>().PlayerVCam.GetComponent<PlayerCameraEffects>();
             }
 
             isReady = true;
@@ -365,8 +363,8 @@ namespace Team_Capture.Player.Movement
             transform.rotation = Quaternion.Euler(0, rotationY, 0);
             cameraHolderTransform.rotation = Quaternion.Euler(rotationX, rotationY, 0);
 
-            if (isLocalPlayer && cameraRoll != null)
-                cameraRoll.SetVelocity(velocity);
+            if (isLocalPlayer && cameraEffects != null)
+                cameraEffects.SetVelocity(velocity);
         }
 
         private void GroundMove(PlayerInputs input)

@@ -165,7 +165,11 @@ namespace Team_Capture.Weapons
 
         public override void OnWeaponEffects(IEffectsMessage effectsMessage)
         {
-            if (effectsMessage is ProjectileEffectsMessage) weaponGraphics.muzzleFlash.Play();
+            if (effectsMessage is ProjectileEffectsMessage)
+            {
+                weaponGraphics.muzzleFlash.Play();
+                weaponManager.CameraEffects.OnWeaponFire(weaponCameraRecoilAmount);
+            }
         }
 
         public override void OnUIUpdate(IHudUpdateMessage hudUpdateMessage)
@@ -276,6 +280,7 @@ namespace Team_Capture.Weapons
             projectile.ServerEnable(projectileSpawnPoint.position, projectileSpawnPoint.rotation.eulerAngles);
 
             DoWeaponEffects(new ProjectileEffectsMessage());
+            weaponManager.CameraEffects.OnWeaponFire(weaponCameraRecoilAmount);
         }
 
         [Server]

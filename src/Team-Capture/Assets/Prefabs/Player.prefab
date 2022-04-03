@@ -220,7 +220,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  playerVCam: {fileID: 2875055674057562374}
+  <PlayerVCam>k__BackingField: {fileID: 2875055674057562374}
   clientUiPrefab: {fileID: 2142721828509503496, guid: 8f7e8441a5d36bf47babd28e6be83faf,
     type: 3}
   gfxMeshes:
@@ -242,7 +242,7 @@ MonoBehaviour:
   syncInterval: 0
   weaponLayerName: LocalWeapon
   weaponsHolderSpot: {fileID: 8771585192178499609}
-  localPlayerCamera: {fileID: 6438375964343202627}
+  localPlayerCamera: {fileID: 3166049507595539325}
   raycastLayerMask:
     serializedVersion: 2
     m_Bits: 19
@@ -279,7 +279,6 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   cameraHolderTransform: {fileID: 6438375964343202627}
-  cameraGameObject: {fileID: 8259615540335341460}
   gfxObject: {fileID: 6438375964401219431}
   moveSpeed: 15
   friction: 12

@@ -21,6 +21,9 @@ MonoBehaviour:
       m_EditorAssetChanged: 0
   weaponSwayAmountMultiplier: 0.45
   weaponSwayMax: {x: 0.2, y: 0.2}
+  weaponCameraRecoilAmount: {x: 3, y: 0, z: 0}
+  weaponRecoilCameraSpeed: 6
+  weaponRecoilCameraReturnSpeed: 20
   weaponDamage: 6
   weaponDamageDropOff:
     serializedVersion: 2

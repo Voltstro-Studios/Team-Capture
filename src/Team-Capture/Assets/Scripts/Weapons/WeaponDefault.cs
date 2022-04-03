@@ -153,7 +153,9 @@ namespace Team_Capture.Weapons
         {
             if (effectsMessage is DefaultEffectsMessage defaultEffects)
             {
+                //Muzzle flash and recoil
                 weaponGraphics.muzzleFlash.Play();
+                weaponManager.CameraEffects.OnWeaponFire(weaponCameraRecoilAmount);
 
                 for (int i = 0; i < defaultEffects.Targets.Length; i++)
                 {
@@ -364,6 +366,7 @@ namespace Team_Capture.Weapons
 
             directions.Dispose();
 
+            weaponManager.CameraEffects.OnWeaponFire(weaponCameraRecoilAmount);
             DoWeaponEffects(new DefaultEffectsMessage(targets.ToArray(), targetsNormal.ToArray()));
 
             stopwatch.Stop();

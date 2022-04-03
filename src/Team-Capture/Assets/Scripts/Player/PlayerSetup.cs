@@ -20,8 +20,11 @@ namespace Team_Capture.Player
         /// <summary>
         ///     Player's local <see cref="Camera" />
         /// </summary>
-        [Tooltip("Player's VCamera")] [SerializeField]
-        private CinemachineVirtualCamera playerVCam;
+        [Tooltip("Player's VCamera")] 
+        [field: SerializeField]
+        //Note: It is set by in the Unity editor as it is marked with SerializeField
+        //ReSharper disable once UnusedAutoPropertyAccessor.Local
+        public CinemachineVirtualCamera PlayerVCam { get; private set; }
 
         /// <summary>
         ///     The prefab for the client's UI
@@ -50,7 +53,7 @@ namespace Team_Capture.Player
                 gfxMesh.enabled = false;
 
             //Set up scene stuff
-            playerVCam.enabled = true;
+            PlayerVCam.enabled = true;
 
             //Player Input
             gameObject.AddComponent<PlayerInputManager>().Setup();
@@ -70,6 +73,13 @@ namespace Team_Capture.Player
         public void Start()
         {
             GameManager.AddPlayer(netId.ToString(), GetComponent<PlayerManager>());
+
+            //Setup player camera effects
+            if (isLocalPlayer || isServer)
+            {
+                PlayerCameraEffects cameraEffects = PlayerVCam.gameObject.AddComponent<PlayerCameraEffects>();
+                cameraEffects.Setup(transform, isServer);
+            }
         }
 
         private void OnDisable()
@@ -83,7 +93,7 @@ namespace Team_Capture.Player
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
 
-            playerVCam.enabled = false;
+            PlayerVCam.enabled = false;
         }
 
         #endregion
