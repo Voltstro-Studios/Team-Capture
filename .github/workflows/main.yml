@@ -18,12 +18,9 @@ jobs:
     runs-on: Ubuntu-20.04
     strategy:
       matrix:
-        include:
-          - targetPlatform: StandaloneWindows64
-            customImageName: unityci/editor:2021.2.17f1-windows-mono-1
-          - targetPlatform: StandaloneLinux64
-            customImageName: unityci/editor:2021.2.17f1-linux-il2cpp-1
-        
+        targetPlatform:
+          - StandaloneWindows64
+          - StandaloneLinux64
 
     steps:
       #Clone the repo
@@ -48,7 +45,7 @@ jobs:
 
       #Build the player using TC's CIBuilder.StartVoltBuilder
       - name: Build Player for ${{ matrix.targetPlatform }}
-        uses: game-ci/unity-builder@v2.0.0-alpha-14
+        uses: game-ci/unity-builder@v2.0.0
         env:
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
@@ -62,7 +59,6 @@ jobs:
           version: ${{ env.version }}
           androidVersionCode: 1 #This is here so we can stop getting warnings about it, even tho we have no plans to support Android
           buildMethod: Team_Capture.Editor.CIBuilder.StartVoltBuilder
-          customImage: '${{ matrix.customImageName }}'
 
       #Upload the build as an artifact
       - name: Upload Build
