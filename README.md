@@ -1,6 +1,7 @@
 ![Logo](media/tc-banner.png)
 
 # Team-Capture
+
 [![License](https://img.shields.io/github/license/Voltstro-Studios/Team-Capture.svg)](/LICENSE)
 [![CI Build](https://img.shields.io/github/workflow/status/Voltstro-Studios/Team-Capture/Game%20Build/master?label=Build&logo=github)](https://github.com/Voltstro-Studios/Team-Capture/actions)
 [![Discord](https://img.shields.io/badge/Discord-Voltstro-7289da.svg?logo=discord)](https://discord.voltstro.dev)
@@ -19,7 +20,7 @@ Team-Capture is built using the [Unity game engine](https://unity.com/), using [
 Please remember that this project is still in early development!
 
 - In-Game Console
-    - With commands!
+  - With commands!
 - Working weapon shooting/reloading
 - Working weapon switching
 - Working pickups (Weapons/Health)
@@ -29,11 +30,11 @@ Please remember that this project is still in early development!
 - Dynamic settings save system
 - Discord Game RPC integration
 - Steam integration
-    - Steam Server Auth
+  - Steam Server Auth
 - Server MOTDs (HTML or regular text)
 - Full offline play
 - Cross-platform play (Windows, Linux)
-    - Both headless server and player
+  - Both headless server and player
 - Well documented API
 
 For a roadmap of what is either being worked on, or planed to come, check out the [projects](https://github.com/Voltstro-Studios/Team-Capture/projects) tab.
@@ -54,15 +55,13 @@ We will usually always use whatever is the latest release version of a package f
 
 Here is a list of people who work on the project:
 
-* [Voltstro](https://github.com/Voltstro) - *Project Lead*
-
-    - [Email](mailto:me@voltstro.dev) - [Website](https://voltstro.dev)
+- [Voltstro](https://github.com/Voltstro) - *Project Lead*
+  - [Email](mailto:me@voltstro.dev) - [Website](https://voltstro.dev)
 
 And here are some people who have worked on the project in the past:
 
-* [EternalClickbait](https://github.com/EternalClickbait) - *Programmer*
-
-* [HelloHowIsItGoing](https://github.com/HelloHowIsItGoing) - *Testing & Ideas*
+- [EternalClickbait](https://github.com/EternalClickbait) - *Programmer*
+- [HelloHowIsItGoing](https://github.com/HelloHowIsItGoing) - *Testing & Ideas*
 
 If you think you can help out the team, please don't hesitate to email me (project lead)
 
@@ -79,7 +78,7 @@ We also upload [releases](https://github.com/Voltstro-Studios/Team-Capture/relea
 #### Prerequisites
 
 ```
-Unity 2021.2.17f1
+Unity 2021.2.18f1
 .NET 5+
 ```
 
@@ -156,10 +155,12 @@ See [`thirdpartylegalcode.txt`](/thirdpartylegalcode.txt) and [`thirdpartylegala
 # Special Thanks
 
 To these projects:
+
 - [Mirror](https://mirror-networking.com/) - Networking Code
 - [FPSSample](https://github.com/Unity-Technologies/FPSSample) - Lots of code design inspiration, console backbone code and other stuff.
 
-And to:
+And as well as to:
+
 - Family
 - Friends
 - Other fellow students and staff at school for suggestions, ideas and bug hunting.
