@@ -9,6 +9,7 @@ using System.Collections;
 using Mirror;
 using Team_Capture.Core;
 using Team_Capture.Core.Networking;
+using Team_Capture.Helper.Extensions;
 using Team_Capture.Player.Movement;
 using Team_Capture.SceneManagement;
 using Team_Capture.UserManagement;
@@ -169,14 +170,15 @@ namespace Team_Capture.Player
 
         private void Awake()
         {
-            playerMovementManager = GetComponent<PlayerMovementManager>();
+            playerMovementManager = this.GetComponentOrThrow<PlayerMovementManager>();
         }
 
         private void Start()
         {
-            if (!isLocalPlayer) return;
+            if (!isLocalPlayer) 
+                return;
 
-            uiManager = GetComponent<PlayerUIManager>();
+            uiManager = this.GetComponentOrThrow<PlayerUIManager>();
         }
 
         #endregion
@@ -187,7 +189,7 @@ namespace Team_Capture.Player
         {
             ChangeUserData(TCNetworkManager.Authenticator.GetAccount(netIdentity.connectionToClient.connectionId));
             Health = MaxHealth;
-            weaponManager = GetComponent<WeaponManager>();
+            weaponManager = this.GetComponentOrThrow<WeaponManager>();
 
             StartCoroutine(UpdateLatency());
             StartCoroutine(ServerPlayerRespawn(true));

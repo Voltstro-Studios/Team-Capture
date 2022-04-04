@@ -5,6 +5,7 @@
 // For more details see the LICENSE file.
 
 using Team_Capture.Core;
+using Team_Capture.Helper.Extensions;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using Logger = Team_Capture.Logging.Logger;
@@ -48,7 +49,7 @@ namespace Team_Capture.Console
                     Addressables.LoadAssetAsync<GameObject>(ConsoleUiPrefabPath).WaitForCompletion();
 
                 //Create in-game console GUI
-                ConsoleUI = Instantiate(consoleUiPrefab, transform).GetComponent<ConsoleGUI>();
+                ConsoleUI = Instantiate(consoleUiPrefab, transform).GetComponentOrThrow<ConsoleGUI>();
             }
 
             //Init the console

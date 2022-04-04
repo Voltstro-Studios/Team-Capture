@@ -1,4 +1,5 @@
 using Cinemachine;
+using Team_Capture.Helper.Extensions;
 using Team_Capture.Input;
 using UnityEngine;
 
@@ -17,7 +18,7 @@ namespace Team_Capture.Player
 
         private void Awake()
         {
-            virtualCamera = GetComponent<CinemachineVirtualCamera>();
+            virtualCamera = this.GetComponentOrThrow<CinemachineVirtualCamera>();
         }
 
         internal void Update()

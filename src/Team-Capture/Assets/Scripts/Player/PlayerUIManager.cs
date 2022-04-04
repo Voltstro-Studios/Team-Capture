@@ -4,6 +4,7 @@
 // This project is governed by the AGPLv3 License.
 // For more details see the LICENSE file.
 
+using Team_Capture.Helper.Extensions;
 using Team_Capture.UI;
 using Team_Capture.UI.Chat;
 using UnityEngine;
@@ -31,7 +32,7 @@ namespace Team_Capture.Player
         internal void Setup(ClientUI clientUI)
         {
             ui = clientUI;
-            GetComponent<PlayerManager>().PlayerDamaged += OnPlayerDamaged;
+            this.GetComponentOrThrow<PlayerManager>().PlayerDamaged += OnPlayerDamaged;
         }
 
         /// <summary>

@@ -67,12 +67,12 @@ namespace Team_Capture.Player.Movement
 
         private void Awake()
         {
-            CharacterController = GetComponent<CharacterController>();
+            CharacterController = this.GetComponentOrThrow<CharacterController>();
         }
 
         private void Start()
         {
-            PlayerTransformSync sync = GetComponent<PlayerTransformSync>();
+            PlayerTransformSync sync = this.GetComponentOrThrow<PlayerTransformSync>();
             if (!isLocalPlayer)
             {
                 transformSync = sync;
@@ -81,7 +81,7 @@ namespace Team_Capture.Player.Movement
             {
                 Destroy(sync);
 
-                cameraEffects = GetComponent<PlayerSetup>().PlayerVCam.GetComponent<PlayerCameraEffects>();
+                cameraEffects = this.GetComponentOrThrow<PlayerSetup>().PlayerVCam.GetComponentOrThrow<PlayerCameraEffects>();
             }
 
             isReady = true;

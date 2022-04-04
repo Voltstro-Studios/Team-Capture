@@ -7,6 +7,7 @@
 using Cinemachine;
 using Mirror;
 using Team_Capture.Core;
+using Team_Capture.Helper.Extensions;
 using Team_Capture.UI;
 using UnityEngine;
 
@@ -68,12 +69,12 @@ namespace Team_Capture.Player
 
         private void Awake()
         {
-            playerManager = GetComponent<PlayerManager>();
+            playerManager = this.GetComponentOrThrow<PlayerManager>();
         }
 
         public void Start()
         {
-            GameManager.AddPlayer(netId.ToString(), GetComponent<PlayerManager>());
+            GameManager.AddPlayer(netId.ToString(), playerManager);
 
             //Setup player camera effects
             if (isLocalPlayer || isServer)
