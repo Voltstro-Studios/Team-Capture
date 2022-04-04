@@ -13,6 +13,7 @@ namespace Team_Capture.Player
     /// <summary>
     ///     Handles messages from the server
     /// </summary>
+    [DefaultExecutionOrder(1100)]
     internal sealed class PlayerServerMessages : MonoBehaviour
     {
         private PlayerUIManager uiManager;

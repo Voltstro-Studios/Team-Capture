@@ -22,6 +22,7 @@ namespace Team_Capture.Player
     ///     The primary <see cref="Behaviour" /> for managing the player.
     ///     <para>This class manages health, death, respawning as well some other minor things.</para>
     /// </summary>
+    [DefaultExecutionOrder(1100)]
     public sealed class PlayerManager : NetworkBehaviour
     {
         /// <summary>

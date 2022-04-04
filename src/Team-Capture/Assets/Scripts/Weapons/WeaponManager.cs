@@ -21,6 +21,7 @@ namespace Team_Capture.Weapons
     /// <summary>
     ///     Weapon management, such as adding, removing and selecting weapons
     /// </summary>
+    [DefaultExecutionOrder(1100)]
     public class WeaponManager : NetworkBehaviour
     {
         /// <summary>

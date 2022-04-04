@@ -14,6 +14,7 @@ namespace Team_Capture.Player
     ///     Provides an easy way of calling methods for related functions in the <see cref="ClientUI" />
     ///     <para>This is only created on the client side</para>
     /// </summary>
+    [DefaultExecutionOrder(1100)]
     internal sealed class PlayerUIManager : MonoBehaviour
     {
         private ClientUI ui;

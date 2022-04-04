@@ -15,6 +15,7 @@ namespace Team_Capture.Player
     /// <summary>
     ///     Handles setting up the player
     /// </summary>
+    [DefaultExecutionOrder(1000)]
     internal sealed class PlayerSetup : NetworkBehaviour
     {
         /// <summary>

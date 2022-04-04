@@ -14,6 +14,7 @@ using UnityEngine;
 
 namespace Team_Capture.Player.Movement
 {
+    [DefaultExecutionOrder(1100)]
     internal class PlayerMovementManager : NetworkBehaviour
     {
         private const int MaximumReceivedClientMotorStates = 10;

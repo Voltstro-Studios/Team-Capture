@@ -6,6 +6,7 @@
 
 using Mirror;
 using Team_Capture.Console;
+using Team_Capture.Helper.Extensions;
 using Team_Capture.Input;
 using Team_Capture.Player.Movement;
 using Team_Capture.Settings;
@@ -19,6 +20,7 @@ namespace Team_Capture.Player
     /// <summary>
     ///     Handles input
     /// </summary>
+    [DefaultExecutionOrder(1200)]
     internal sealed class PlayerInputManager : NetworkBehaviour
     {
         [Header("Player Movement")] [SerializeField]
@@ -35,10 +37,10 @@ namespace Team_Capture.Player
 
         private void Start()
         {
-            weaponManager = GetComponent<WeaponManager>();
-            playerManager = GetComponent<PlayerManager>();
-            playerInput = GetComponent<PlayerMovementManager>();
-            uiManager = GetComponent<PlayerUIManager>();
+            weaponManager = this.GetComponentOrThrow<WeaponManager>();
+            playerManager = this.GetComponentOrThrow<PlayerManager>();
+            playerInput = this.GetComponentOrThrow<PlayerMovementManager>();
+            uiManager = this.GetComponentOrThrow<PlayerUIManager>();
 
             GameSettings.SettingsUpdated += UpdateSettings;
 
