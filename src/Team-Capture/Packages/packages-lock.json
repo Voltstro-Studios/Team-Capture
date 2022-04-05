@@ -21,7 +21,7 @@
       "dependencies": {
         "org.nuget.system.threading.tasks.extensions": "4.5.4"
       },
-      "hash": "2f49845fa2631d3d3c9377e44eca2be0da361edf"
+      "hash": "9c9a43ca80e0a76fb49d25f17271051b6a828334"
     },
     "com.unity.2d.sprite": {
       "version": "1.0.0",

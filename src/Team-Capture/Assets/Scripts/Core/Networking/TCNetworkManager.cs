@@ -178,17 +178,17 @@ namespace Team_Capture.Core.Networking
             Server.OnStopServer();
         }
 
-        public override void OnServerConnect(NetworkConnection conn)
+        public override void OnServerConnect(NetworkConnectionToClient conn)
         {
             Server.OnServerAddClient(conn);
         }
 
-        public override void OnServerDisconnect(NetworkConnection conn)
+        public override void OnServerDisconnect(NetworkConnectionToClient conn)
         {
             Server.OnServerRemoveClient(conn);
         }
 
-        public override void OnServerAddPlayer(NetworkConnection conn)
+        public override void OnServerAddPlayer(NetworkConnectionToClient conn)
         {
             Server.ServerCreatePlayerObject(conn, playerPrefab);
         }

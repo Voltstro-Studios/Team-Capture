@@ -221,7 +221,7 @@ namespace Team_Capture.Core.Networking
         ///     Call when a client disconnects
         /// </summary>
         /// <param name="conn"></param>
-        internal static void OnServerRemoveClient(NetworkConnection conn)
+        internal static void OnServerRemoveClient(NetworkConnectionToClient conn)
         {
             NetworkServer.DestroyPlayerForConnection(conn);
             if (netManager == null)
@@ -294,7 +294,7 @@ namespace Team_Capture.Core.Networking
         /// </summary>
         /// <param name="conn"></param>
         /// <param name="playerPrefab"></param>
-        internal static void ServerCreatePlayerObject(NetworkConnection conn, GameObject playerPrefab)
+        internal static void ServerCreatePlayerObject(NetworkConnectionToClient conn, GameObject playerPrefab)
         {
             Transform spawnPoint = netManager.GetStartPosition();
 

@@ -74,11 +74,7 @@ namespace Team_Capture.Core.Networking
             authAccounts.Clear();
         }
 
-        public override void OnServerAuthenticate(NetworkConnection conn)
-        {
-        }
-
-        private void OnRequestJoin(NetworkConnection conn, JoinRequestMessage msg)
+        private void OnRequestJoin(NetworkConnectionToClient conn, JoinRequestMessage msg)
         {
             //Check versions
             if (msg.ApplicationVersion != Application.version)
@@ -172,13 +168,13 @@ namespace Team_Capture.Core.Networking
             }
         }
 
-        private void RefuseClientConnection(NetworkConnection conn)
+        private void RefuseClientConnection(NetworkConnectionToClient conn)
         {
             conn.isAuthenticated = false;
             DisconnectClientDelayed(conn).Forget();
         }
 
-        private async UniTask DisconnectClientDelayed(NetworkConnection conn)
+        private async UniTask DisconnectClientDelayed(NetworkConnectionToClient conn)
         {
             await UniTask.Delay(1000);
 
