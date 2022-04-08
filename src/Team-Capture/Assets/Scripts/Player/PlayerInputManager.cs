@@ -1,4 +1,4 @@
-﻿// Team-Capture
+// Team-Capture
 // Copyright (C) 2019-2021 Voltstro-Studios
 // 
 // This project is governed by the AGPLv3 License.
@@ -14,6 +14,7 @@ using Team_Capture.Settings.SettingClasses;
 using Team_Capture.UI;
 using Team_Capture.Weapons;
 using UnityEngine;
+using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.Player
 {
@@ -87,7 +88,8 @@ namespace Team_Capture.Player
 
                 //Send inputs
                 playerInput.SetInput(horizontal, vertical, rotationX, rotationY, wishToJump);
-                weaponManager.WeaponSway.SetInput(rotationX, rotationY);
+                if(weaponManager.WeaponSway != null)
+                    weaponManager.WeaponSway.SetInput(rotationX, rotationY);
             }
             else
             {

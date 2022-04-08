@@ -53,14 +53,14 @@ namespace Team_Capture.Weapons
 
         public override bool IsReloadable => false;
 
-        public override void OnPerform(bool buttonDown)
+        public override void OnPerform(WeaponManager weaponManager, bool buttonDown)
         {
             //If the button is pressed or held down, perform
             if (buttonDown)
             {
                 shootRepeatedlyCancellation?.Cancel();
                 shootRepeatedlyCancellation = new CancellationTokenSource();
-                TimeHelper.InvokeRepeatedly(SwingWeapon, 1f / weaponFireRate, shootRepeatedlyCancellation.Token)
+                TimeHelper.InvokeRepeatedly(() => SwingWeapon(weaponManager), 1f / weaponFireRate, shootRepeatedlyCancellation.Token)
                     .Forget();
             }
             else
@@ -73,20 +73,20 @@ namespace Team_Capture.Weapons
             }
         }
 
-        public override void OnReload()
+        public override void OnReload(WeaponManager weaponManager)
         {
         }
 
-        public override void OnSwitchOnTo()
+        public override void OnSwitchOnTo(WeaponManager weaponManager)
         {
         }
 
-        public override void OnSwitchOff()
+        public override void OnSwitchOff(WeaponManager weaponManager)
         {
             shootRepeatedlyCancellation?.Cancel();
         }
 
-        protected override void OnAdd()
+        protected override void OnAdd(WeaponManager weaponManager)
         {
             bulletHolesPool = GameSceneManager.Instance.bulletHolePool;
             nextTimeToFire = 0f;
@@ -97,7 +97,7 @@ namespace Team_Capture.Weapons
             shootRepeatedlyCancellation?.Cancel();
         }
 
-        public override void OnWeaponEffects(IEffectsMessage effectsMessage)
+        public override void OnWeaponEffects(WeaponManager weaponManager, IEffectsMessage effectsMessage)
         {
             if (effectsMessage is MeleeEffectsMessage meleeEffectsMessage)
             {
@@ -111,7 +111,7 @@ namespace Team_Capture.Weapons
             }
         }
 
-        public override void OnUIUpdate(IHudUpdateMessage hudUpdateMessage)
+        public override void OnUIUpdate(WeaponManager weaponManager, IHudUpdateMessage hudUpdateMessage)
         {
         }
 
@@ -120,7 +120,7 @@ namespace Team_Capture.Weapons
             writer.WriteString(weaponId);
         }
 
-        private void SwingWeapon()
+        private void SwingWeapon(WeaponManager weaponManager)
         {
             if (Time.time < nextTimeToFire)
                 return;
@@ -129,7 +129,7 @@ namespace Team_Capture.Weapons
 
             try
             {
-                LagCompensationManager.Simulate(weaponManager.playerManager, WeaponRayCast);
+                LagCompensationManager.Simulate(weaponManager.playerManager, () => WeaponRayCast(weaponManager));
             }
             catch (Exception ex)
             {
@@ -137,7 +137,7 @@ namespace Team_Capture.Weapons
             }
         }
 
-        private void WeaponRayCast()
+        private void WeaponRayCast(WeaponManager weaponManager)
         {
             Transform playerFacingDirection = weaponManager.localPlayerCamera;
 
@@ -168,14 +168,16 @@ namespace Team_Capture.Weapons
                 break;
             }
 
-            DoWeaponEffects(new MeleeEffectsMessage(hitPoint, hitNormal));
+            DoWeaponEffects(weaponManager, new MeleeEffectsMessage(hitPoint, hitNormal));
         }
 
         internal static WeaponMelee OnDeserialize(NetworkReader reader)
         {
             string weaponId = reader.ReadString();
-            WeaponMelee weapon = WeaponsResourceManager.GetWeapon(weaponId) as WeaponMelee;
-            return weapon;
+            WeaponMelee weaponResource = WeaponsResourceManager.GetWeapon(weaponId) as WeaponMelee;
+            WeaponMelee newWeapon = Instantiate(weaponResource);
+            
+            return newWeapon;
         }
     }
 }

@@ -7,11 +7,11 @@
 using System;
 using Mirror;
 using Team_Capture.AddressablesAddons;
-using Team_Capture.UI;
 using Team_Capture.Weapons.Effects;
 using Team_Capture.Weapons.UI;
 using UnityEngine;
 using UnityEngine.Scripting;
+using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.Weapons
 {
@@ -63,14 +63,9 @@ namespace Team_Capture.Weapons
         protected bool isServer;
 
         /// <summary>
-        ///     Access to the player's <see cref="WeaponManager" />
-        /// </summary>
-        protected WeaponManager weaponManager;
-
-        /// <summary>
         ///     Access to instantiated weapon object
         /// </summary>
-        protected GameObject weaponObjectInstance;
+        public GameObject weaponObjectInstance;
 
         /// <summary>
         ///     The <see cref="WeaponType" /> that this instance is
@@ -80,15 +75,11 @@ namespace Team_Capture.Weapons
         public abstract bool IsReloadable { get; }
 
         /// <summary>
-        ///     <see cref="HudAmmoControls" />, for controlling the local client's ammo part of the HUD
-        /// </summary>
-        protected HudAmmoControls? HudAmmoControls => weaponManager.playerManager.PlayerUIManager.HudAmmoControls;
-
-        /// <summary>
         ///     Tells clients to to the RPC effects
         /// </summary>
+        /// <param name="weaponManager"></param>
         /// <param name="effectsMessage"></param>
-        protected void DoWeaponEffects(IEffectsMessage effectsMessage)
+        protected void DoWeaponEffects(WeaponManager weaponManager, IEffectsMessage effectsMessage)
         {
             weaponManager.RpcDoWeaponEffects(effectsMessage);
         }
@@ -96,8 +87,9 @@ namespace Team_Capture.Weapons
         /// <summary>
         ///     Tells the local client that this belongs to, to update their UI
         /// </summary>
+        /// <param name="weaponManager"></param>
         /// <param name="hudUpdateMessage"></param>
-        protected void DoPlayerUIUpdate(IHudUpdateMessage hudUpdateMessage)
+        protected void DoPlayerUIUpdate(WeaponManager weaponManager, IHudUpdateMessage hudUpdateMessage)
         {
             weaponManager.RpcUpdateUI(hudUpdateMessage);
         }
@@ -111,38 +103,54 @@ namespace Team_Capture.Weapons
         /// <param name="objectInstance"></param>
         internal void Setup(WeaponManager weaponMan, bool server, bool localClient, GameObject objectInstance)
         {
+            Logger.Debug("Setup weapon {WeaponName}(Instance: {InstanceId}) on {ClientName}({ClientObjectID}, {NetId}) (Server: {IsServer}, LocalClient: {LocalClient})", 
+                weaponId, GetInstanceID(), weaponMan.playerManager.User.UserName, weaponMan.transform.name, weaponMan.netId, server, localClient);
+
+            if (weaponMan == null)
+            {
+                Logger.Error("The parsed in weapon manager was null!");
+                throw new NullReferenceException("The parsed in weapon manager was null!");
+            }
+
+            if (objectInstance == null)
+            {
+                Logger.Error("The parsed in object instance was null!");
+                throw new NullReferenceException("The parsed in object instance was null!");
+            }
+            
             weaponObjectInstance = objectInstance;
             isServer = server;
             isLocalClient = localClient;
-            weaponManager = weaponMan;
-            OnAdd();
+
+            OnAdd(weaponMan);
         }
 
         /// <summary>
         ///     Called when we want to fire
         /// </summary>
+        /// <param name="weaponManager"></param>
         /// <param name="buttonDown"></param>
-        public abstract void OnPerform(bool buttonDown);
+        public abstract void OnPerform(WeaponManager weaponManager, bool buttonDown);
 
         /// <summary>
         ///     Called when we want to reload
         /// </summary>
-        public abstract void OnReload();
+        public abstract void OnReload(WeaponManager weaponManager);
 
         /// <summary>
         ///     Called when the weapon is switched onto
         /// </summary>
-        public abstract void OnSwitchOnTo();
+        public abstract void OnSwitchOnTo(WeaponManager weaponManager);
 
         /// <summary>
         ///     Called when the weapon is switched off
         /// </summary>
-        public abstract void OnSwitchOff();
+        public abstract void OnSwitchOff(WeaponManager weaponManager);
 
         /// <summary>
         ///     Called when the weapon is added
         /// </summary>
-        protected abstract void OnAdd();
+        protected abstract void OnAdd(WeaponManager weaponManager);
 
         /// <summary>
         ///     Called when the weapon is removed
@@ -152,14 +160,16 @@ namespace Team_Capture.Weapons
         /// <summary>
         ///     Called on clients when the server requests to player the weapon's UI effects
         /// </summary>
+        /// <param name="weaponManager"></param>
         /// <param name="effectsMessage"></param>
-        public abstract void OnWeaponEffects(IEffectsMessage effectsMessage);
+        public abstract void OnWeaponEffects(WeaponManager weaponManager, IEffectsMessage effectsMessage);
 
         /// <summary>
         ///     Called on local client when the server provides new UI info
         /// </summary>
+        /// <param name="weaponManager"></param>
         /// <param name="hudUpdateMessage"></param>
-        public abstract void OnUIUpdate(IHudUpdateMessage hudUpdateMessage);
+        public abstract void OnUIUpdate(WeaponManager weaponManager, IHudUpdateMessage hudUpdateMessage);
 
         //Networking
 
@@ -190,6 +200,7 @@ namespace Team_Capture.Weapons
 
         public static WeaponBase Read(this NetworkReader reader)
         {
+            Logger.Debug("Read network weapon");
             WeaponType weaponType = (WeaponType) reader.ReadByte();
             switch (weaponType)
             {

@@ -1,10 +1,11 @@
-﻿// Team-Capture
+// Team-Capture
 // Copyright (C) 2019-2021 Voltstro-Studios
 // 
 // This project is governed by the AGPLv3 License.
 // For more details see the LICENSE file.
 
 using System;
+using System.Collections.Generic;
 using Mirror;
 using NetFabric.Hyperlinq;
 using Team_Capture.Helper;
@@ -74,32 +75,8 @@ namespace Team_Capture.Weapons
             RemoveAllWeapons();
         }
 
-        /// <summary>
-        ///     Server callback for when <see cref="weapons" /> is modified
-        /// </summary>
-        /// <param name="op"></param>
-        /// <param name="itemIndex"></param>
-        /// <param name="oldWeapon"></param>
-        /// <param name="newWeapon"></param>
-        private void WeaponListCallback(SyncList<WeaponBase>.Operation op, int itemIndex,
-            WeaponBase oldWeapon, WeaponBase newWeapon)
-        {
-            switch (op)
-            {
-                case SyncList<WeaponBase>.Operation.OP_ADD:
-                    GameObject newWeaponModel = CreateNewWeaponModel(newWeapon);
-                    newWeapon.Setup(this, isServer, isLocalPlayer, newWeaponModel);
-                    SetIndex(itemIndex);
-                    break;
-
-                case SyncList<WeaponBase>.Operation.OP_CLEAR:
-                    RemoveAllWeaponsModels();
-                    break;
-            }
-        }
-
         #region Network Overrides
-        
+
         #endregion
 
         #region Unity Event Functions
@@ -111,33 +88,49 @@ namespace Team_Capture.Weapons
 
         private void Start()
         {
-            //Create all existing weapons on start
-            for (int i = 0; i < weapons.Count; i++)
+            weapons.Callback += OnWeaponCallback;
+            
+            if (!isServer)
             {
-                GameObject newWeapon = CreateNewWeaponModel(weapons[i]);
-                weapons[i].Setup(this, isServer, isLocalPlayer, newWeapon);
+                for (int i = 0; i < weapons.Count; i++)
+                {
+                    WeaponBase weapon = weapons[i];
+                    GameObject newWeaponModel = CreateNewWeaponModel(weapon);
+                    weapon.Setup(this, isServer, isLocalPlayer, newWeaponModel);
 
-                if (isLocalPlayer)
-                    SetupWeaponObjectLocal(newWeapon);
-
-                newWeapon.SetActive(SelectedWeaponIndex == i);
+                    newWeaponModel.SetActive(SelectedWeaponIndex == i);
+                }
             }
 
-            //Setup our add weapon callback
-            weapons.Callback += WeaponListCallback;
-
-            WeaponBase weapon = weapons[SelectedWeaponIndex];
+            WeaponBase selectedWeapon = weapons[SelectedWeaponIndex];
             if (isLocalPlayer)
             {
                 WeaponSway = weaponsHolderSpot.gameObject.AddComponent<WeaponSway>();
-                WeaponSway.SetWeapon(weapon);
+                WeaponSway.SetWeapon(selectedWeapon);
             }
 
             if (isLocalPlayer || isServer)
             {
                 CameraEffects = this.GetComponentOrThrow<PlayerSetup>().PlayerVCam
                     .GetComponentOrThrow<PlayerCameraEffects>("The PlayerCameraEffects component should exist! Ensure this script executes AFTER PlayerSetup!");
-                CameraEffects.OnWeaponChange(weapon.weaponRecoilCameraSpeed, weapon.weaponRecoilCameraReturnSpeed);
+                CameraEffects.OnWeaponChange(selectedWeapon.weaponRecoilCameraSpeed, selectedWeapon.weaponRecoilCameraReturnSpeed);
+            }
+        }
+        
+        private void OnWeaponCallback(SyncList<WeaponBase>.Operation op, int itemIndex, WeaponBase oldItem, WeaponBase newItem)
+        {
+            if (op == SyncList<WeaponBase>.Operation.OP_CLEAR)
+                RemoveAllWeaponsModels();
+            
+            else if (op == SyncList<WeaponBase>.Operation.OP_ADD)
+            {
+                GameObject newWeaponObj = CreateNewWeaponModel(newItem);
+                newItem.Setup(this, isServer, isLocalPlayer, newWeaponObj);
+            
+                if(isLocalPlayer)
+                    SetupWeaponObjectLocal(newWeaponObj);
+                
+                SetIndex(itemIndex);
             }
         }
 
@@ -192,7 +185,7 @@ namespace Team_Capture.Weapons
                 .Where(a => a == weapon)
                 .First();
 
-            return result.IsNone ? null : WeaponsResourceManager.GetWeapon(result.Value.weaponId);
+            return result.Value;
         }
 
         #endregion
@@ -205,19 +198,31 @@ namespace Team_Capture.Weapons
             string weaponId = hudUpdateMessage.WeaponId;
             WeaponBase weapon = GetWeaponFromId(weaponId);
             if (weapon != null)
-                weapon.OnUIUpdate(hudUpdateMessage);
+                weapon.OnUIUpdate(this, hudUpdateMessage);
         }
 
         [Command(channel = Channels.Unreliable)]
         internal void CmdShootWeapon(bool buttonDown)
         {
-            GetActiveWeapon()?.OnPerform(buttonDown);
+            Logger.Debug("Got request to fire player {PlayerId}'s weapon.", transform.name);
+            WeaponBase weapon = GetActiveWeapon();
+            if (weapon == null)
+            {
+                Logger.Error("Getting player's current weapon returned null!");
+                return;
+            }
+            
+            weapon.OnPerform(this, buttonDown);
         }
 
         [ClientRpc(channel = Channels.Unreliable)]
         internal void RpcDoWeaponEffects(IEffectsMessage effectsMessage)
         {
-            GetActiveWeapon()?.OnWeaponEffects(effectsMessage);
+            WeaponBase weaponBase = GetActiveWeapon();
+            if(weaponBase != null)
+            {
+                weaponBase.OnWeaponEffects(this, effectsMessage);
+            }
         }
 
         #endregion
@@ -247,7 +252,7 @@ namespace Team_Capture.Weapons
             if (!weapon.IsReloadable)
                 return;
 
-            weapon.OnReload();
+            weapon.OnReload(this);
         }
 
         #endregion
@@ -275,11 +280,14 @@ namespace Team_Capture.Weapons
                 return;
 
             WeaponBase newWeapon = Instantiate(weapon);
+            GameObject newWeaponModel = CreateNewWeaponModel(newWeapon);
+            newWeapon.Setup(this, isServer, isLocalPlayer, newWeaponModel);
             weapons.Add(newWeapon);
 
             if (weapons.Count != 0)
                 SetClientWeaponIndex(weapons.Count - 1);
         }
+
 
         /// <summary>
         ///     Instantiates a weapon model in all clients
@@ -297,7 +305,7 @@ namespace Team_Capture.Weapons
 
             return newWeapon;
         }
-
+        
         private void SetupWeaponObjectLocal(GameObject weaponObject)
         {
             LayersHelper.SetLayerRecursively(weaponObject, LayerMask.NameToLayer(weaponLayerName));
@@ -364,9 +372,9 @@ namespace Team_Capture.Weapons
         {
             Logger.Debug($"Player `{transform.name}` set their weapon index to `{index}`.");
 
-            GetActiveWeapon().OnSwitchOff();
+            GetActiveWeapon().OnSwitchOff(this);
             SelectedWeaponIndex = index;
-            GetActiveWeapon().OnSwitchOnTo();
+            GetActiveWeapon().OnSwitchOnTo(this);
 
             RpcSelectWeapon(index);
         }
@@ -377,9 +385,9 @@ namespace Team_Capture.Weapons
                 return;
 
             if (oldIndex < weapons.Count)
-                GetWeaponAtIndex(oldIndex).OnSwitchOff();
+                GetWeaponAtIndex(oldIndex).OnSwitchOff(this);
             if (newIndex < weapons.Count)
-                GetWeaponAtIndex(newIndex).OnSwitchOnTo();
+                GetWeaponAtIndex(newIndex).OnSwitchOnTo(this);
         }
 
         /// <summary>

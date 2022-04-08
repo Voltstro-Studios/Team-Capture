@@ -129,7 +129,7 @@ namespace Team_Capture.Core.Networking
         {
             await UniTask.Delay(1000);
             
-            UniTask.SwitchToMainThread();
+            await UniTask.SwitchToMainThread();
             
             networkAddress = autoConnectIpAddress;
             StartClient();

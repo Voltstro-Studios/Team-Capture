@@ -113,15 +113,15 @@ namespace Team_Capture.Weapons
 
         public override bool IsReloadable => true;
 
-        public override void OnPerform(bool buttonDown)
+        public override void OnPerform(WeaponManager weaponManager, bool buttonDown)
         {
             if (buttonDown && weaponFireMode == WeaponFireMode.Semi)
-                ShootWeapon();
+                ShootWeapon(weaponManager);
             if (buttonDown && weaponFireMode == WeaponFireMode.Auto)
             {
                 shootRepeatedlyCancellation?.Cancel();
                 shootRepeatedlyCancellation = new CancellationTokenSource();
-                TimeHelper.InvokeRepeatedly(ShootWeapon, 1f / weaponFireRate, shootRepeatedlyCancellation.Token)
+                TimeHelper.InvokeRepeatedly(() => ShootWeapon(weaponManager), 1f / weaponFireRate, shootRepeatedlyCancellation.Token)
                     .Forget();
             }
 
@@ -133,7 +133,7 @@ namespace Team_Capture.Weapons
                 }
         }
 
-        public override void OnReload()
+        public override void OnReload(WeaponManager weaponManager)
         {
             if (isReloading)
                 return;
@@ -146,10 +146,10 @@ namespace Team_Capture.Weapons
 
             isReloading = true;
             reloadCancellation = new CancellationTokenSource();
-            ReloadTask().Forget();
+            ReloadTask(weaponManager).Forget();
         }
 
-        public override void OnWeaponEffects(IEffectsMessage effectsMessage)
+        public override void OnWeaponEffects(WeaponManager weaponManager, IEffectsMessage effectsMessage)
         {
             if (effectsMessage is DefaultEffectsMessage defaultEffects)
             {
@@ -176,14 +176,11 @@ namespace Team_Capture.Weapons
             }
         }
 
-        public override void OnUIUpdate(IHudUpdateMessage hudUpdateMessage)
+        public override void OnUIUpdate(WeaponManager weaponManager, IHudUpdateMessage hudUpdateMessage)
         {
             if (hudUpdateMessage is DefaultHudUpdateMessage defaultHudUpdateMessage)
             {
-                if (!HudAmmoControls.HasValue)
-                    return;
-
-                HudAmmoControls controls = HudAmmoControls.Value;
+                HudAmmoControls controls = weaponManager.playerManager.PlayerUIManager.HudAmmoControls;
 
                 controls.ammoText.text = defaultHudUpdateMessage.CurrentBullets.ToString();
                 controls.maxAmmoText.text = maxBullets.ToString();
@@ -193,14 +190,11 @@ namespace Team_Capture.Weapons
             }
         }
 
-        public override void OnSwitchOnTo()
+        public override void OnSwitchOnTo(WeaponManager weaponManager)
         {
             if (isLocalClient)
             {
-                if (!HudAmmoControls.HasValue)
-                    return;
-
-                HudAmmoControls controls = HudAmmoControls.Value;
+                HudAmmoControls controls = weaponManager.playerManager.PlayerUIManager.HudAmmoControls;
 
                 controls.ammoText.gameObject.SetActive(true);
                 controls.maxAmmoText.gameObject.SetActive(true);
@@ -212,19 +206,16 @@ namespace Team_Capture.Weapons
 
             //Start reloading again if we switch to and we our out of bullets
             if (currentBulletCount <= 0)
-                OnReload();
+                OnReload(weaponManager);
 
-            UpdateUI();
+            UpdateUI(weaponManager);
         }
 
-        public override void OnSwitchOff()
+        public override void OnSwitchOff(WeaponManager weaponManager)
         {
             if (isLocalClient)
             {
-                if (!HudAmmoControls.HasValue)
-                    return;
-
-                HudAmmoControls controls = HudAmmoControls.Value;
+                HudAmmoControls controls = weaponManager.playerManager.PlayerUIManager.HudAmmoControls;
 
                 controls.ammoText.gameObject.SetActive(false);
                 controls.maxAmmoText.gameObject.SetActive(false);
@@ -238,14 +229,20 @@ namespace Team_Capture.Weapons
             shootRepeatedlyCancellation?.Cancel();
         }
 
-        protected override void OnAdd()
+        protected override void OnAdd(WeaponManager weaponManager)
         {
             nextTimeToFire = 0f;
             currentBulletCount = maxBullets;
             isReloading = false;
 
+            if (weaponManager == null)
+            {
+                Logger.Error("The weapon manager is null!");
+                throw new NullReferenceException("The weapon manager is null!");
+            }
+
             if (isLocalClient)
-                OnUIUpdate(new DefaultHudUpdateMessage(null, currentBulletCount, isReloading));
+                OnUIUpdate(weaponManager, new DefaultHudUpdateMessage(null, currentBulletCount, isReloading));
 
             tracerPool = GameSceneManager.Instance.tracersEffectsPool;
             bulletHolesPool = GameSceneManager.Instance.bulletHolePool;
@@ -262,17 +259,16 @@ namespace Team_Capture.Weapons
         }
 
         [Server]
-        private void UpdateUI()
+        private void UpdateUI(WeaponManager weaponManager)
         {
             DefaultHudUpdateMessage message = new(weaponId, currentBulletCount, isReloading);
-            Logger.Debug("Sent client UI weapon update: {@Message}", message);
-            DoPlayerUIUpdate(message);
+            DoPlayerUIUpdate(weaponManager, message);
         }
 
         #region Weapon Shooting
 
         [Server]
-        private void ShootWeapon()
+        private void ShootWeapon(WeaponManager weaponManager)
         {
             //We out of bullets, reload
             if (currentBulletCount <= 0)
@@ -280,7 +276,7 @@ namespace Team_Capture.Weapons
                 if (isReloading)
                     return;
 
-                OnReload();
+                OnReload(weaponManager);
                 return;
             }
 
@@ -299,18 +295,18 @@ namespace Team_Capture.Weapons
             currentBulletCount--;
             try
             {
-                LagCompensationManager.Simulate(weaponManager.playerManager, WeaponRayCast);
+                LagCompensationManager.Simulate(weaponManager.playerManager, () => WeaponRayCast(weaponManager));
             }
             catch (Exception ex)
             {
                 Logger.Error(ex, "Error occured while simulating weapon shooting!");
             }
 
-            UpdateUI();
+            UpdateUI(weaponManager);
         }
 
         [Server]
-        private void WeaponRayCast()
+        private void WeaponRayCast(WeaponManager weaponManager)
         {
             Stopwatch stopwatch = Stopwatch.StartNew();
 
@@ -368,7 +364,7 @@ namespace Team_Capture.Weapons
             directions.Dispose();
 
             weaponManager.CameraEffects.OnWeaponFire(weaponCameraRecoilAmount);
-            DoWeaponEffects(new DefaultEffectsMessage(targets.ToArray(), targetsNormal.ToArray()));
+            DoWeaponEffects(weaponManager, new DefaultEffectsMessage(targets.ToArray(), targetsNormal.ToArray()));
 
             stopwatch.Stop();
             Logger.Debug("Took {Milliseconds} to fire weapon.", stopwatch.Elapsed.TotalMilliseconds);
@@ -379,10 +375,9 @@ namespace Team_Capture.Weapons
         #region Weapon Reloading
 
         [Server]
-        private async UniTask ReloadTask()
+        private async UniTask ReloadTask(WeaponManager weaponManager)
         {
-            Logger.Debug("Reloading player's weapon.");
-            UpdateUI();
+            UpdateUI(weaponManager);
 
             switch (weaponReloadMode)
             {
@@ -390,7 +385,7 @@ namespace Team_Capture.Weapons
                     await UniTask.Delay(weaponReloadTime, cancellationToken: reloadCancellation.Token);
 
                     currentBulletCount = maxBullets;
-                    FinishReload();
+                    FinishReload(weaponManager);
                     break;
                 case WeaponDefaultReloadMode.Shells:
                     await TimeHelper.CountUp(
@@ -402,10 +397,10 @@ namespace Team_Capture.Weapons
 
                             //Increase bullets
                             currentBulletCount++;
-                            UpdateUI();
+                            UpdateUI(weaponManager);
                         }, reloadCancellation.Token);
 
-                    FinishReload();
+                    FinishReload(weaponManager);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -413,10 +408,10 @@ namespace Team_Capture.Weapons
         }
 
         [Server]
-        private void FinishReload()
+        private void FinishReload(WeaponManager weaponManager)
         {
             isReloading = false;
-            UpdateUI();
+            UpdateUI(weaponManager);
             reloadCancellation.Dispose();
             reloadCancellation = null;
         }
@@ -448,10 +443,11 @@ namespace Team_Capture.Weapons
         internal static WeaponDefault OnDeserialize(NetworkReader reader)
         {
             string weaponId = reader.ReadString();
-            WeaponDefault weapon = WeaponsResourceManager.GetWeapon(weaponId) as WeaponDefault;
-            weapon.currentBulletCount = reader.ReadInt();
-            weapon.isReloading = reader.ReadBool();
-            return weapon;
+            WeaponDefault weaponResource = WeaponsResourceManager.GetWeapon(weaponId) as WeaponDefault;
+            WeaponDefault newWeapon = Instantiate(weaponResource);
+            newWeapon.currentBulletCount = reader.ReadInt();
+            newWeapon.isReloading = reader.ReadBool();
+            return newWeapon;
         }
 
         #endregion

@@ -58,13 +58,13 @@ namespace Team_Capture.Weapons
         public override WeaponType WeaponType => WeaponType.Projectile;
         public override bool IsReloadable => true;
 
-        public override void OnPerform(bool buttonDown)
+        public override void OnPerform(WeaponManager weaponManager, bool buttonDown)
         {
             if (buttonDown)
             {
                 shootRepeatedlyCancellation?.Cancel();
                 shootRepeatedlyCancellation = new CancellationTokenSource();
-                TimeHelper.InvokeRepeatedly(FireWeapon, 1f / weaponFireRate, shootRepeatedlyCancellation.Token)
+                TimeHelper.InvokeRepeatedly(() => FireWeapon(weaponManager), 1f / weaponFireRate, shootRepeatedlyCancellation.Token)
                     .Forget();
                 return;
             }
@@ -76,7 +76,7 @@ namespace Team_Capture.Weapons
             shootRepeatedlyCancellation = null;
         }
 
-        public override void OnReload()
+        public override void OnReload(WeaponManager weaponManager)
         {
             if (isReloading)
                 return;
@@ -89,17 +89,14 @@ namespace Team_Capture.Weapons
 
             isReloading = true;
             reloadCancellation = new CancellationTokenSource();
-            ReloadTask().Forget();
+            ReloadTask(weaponManager).Forget();
         }
 
-        public override void OnSwitchOnTo()
+        public override void OnSwitchOnTo(WeaponManager weaponManager)
         {
             if (isLocalClient)
             {
-                if (!HudAmmoControls.HasValue)
-                    return;
-
-                HudAmmoControls controls = HudAmmoControls.Value;
+                HudAmmoControls controls = weaponManager.playerManager.PlayerUIManager.HudAmmoControls;
 
                 controls.ammoText.gameObject.SetActive(true);
                 controls.maxAmmoText.gameObject.SetActive(true);
@@ -111,19 +108,16 @@ namespace Team_Capture.Weapons
 
             //Start reloading again if we switch to and we our out of projectiles
             if (currentProjectileCount <= 0)
-                OnReload();
+                OnReload(weaponManager);
 
-            UpdateUI();
+            UpdateUI(weaponManager);
         }
 
-        public override void OnSwitchOff()
+        public override void OnSwitchOff(WeaponManager weaponManager)
         {
             if (isLocalClient)
             {
-                if (!HudAmmoControls.HasValue)
-                    return;
-
-                HudAmmoControls controls = HudAmmoControls.Value;
+                HudAmmoControls controls = weaponManager.playerManager.PlayerUIManager.HudAmmoControls;
 
                 controls.ammoText.gameObject.SetActive(false);
                 controls.maxAmmoText.gameObject.SetActive(false);
@@ -137,7 +131,7 @@ namespace Team_Capture.Weapons
             shootRepeatedlyCancellation?.Cancel();
         }
 
-        protected override void OnAdd()
+        protected override void OnAdd(WeaponManager weaponManager)
         {
             nextTimeToFire = 0f;
             currentProjectileCount = maxWeaponProjectileCount;
@@ -147,7 +141,7 @@ namespace Team_Capture.Weapons
                 projectileObjectsPool = GameSceneManager.Instance.rocketsPool;
 
             if (isLocalClient)
-                OnUIUpdate(new DefaultHudUpdateMessage(null, currentProjectileCount, isReloading));
+                OnUIUpdate(weaponManager, new DefaultHudUpdateMessage(null, currentProjectileCount, isReloading));
 
             weaponGraphics = weaponObjectInstance.GetComponent<WeaponGraphics>();
             if (weaponGraphics == null)
@@ -163,7 +157,7 @@ namespace Team_Capture.Weapons
             shootRepeatedlyCancellation?.Cancel();
         }
 
-        public override void OnWeaponEffects(IEffectsMessage effectsMessage)
+        public override void OnWeaponEffects(WeaponManager weaponManager, IEffectsMessage effectsMessage)
         {
             if (effectsMessage is ProjectileEffectsMessage)
             {
@@ -173,14 +167,11 @@ namespace Team_Capture.Weapons
             }
         }
 
-        public override void OnUIUpdate(IHudUpdateMessage hudUpdateMessage)
+        public override void OnUIUpdate(WeaponManager weaponManager, IHudUpdateMessage hudUpdateMessage)
         {
             if (hudUpdateMessage is DefaultHudUpdateMessage defaultHudUpdateMessage)
             {
-                if (!HudAmmoControls.HasValue)
-                    return;
-
-                HudAmmoControls controls = HudAmmoControls.Value;
+                HudAmmoControls controls = weaponManager.playerManager.PlayerUIManager.HudAmmoControls;
 
                 controls.ammoText.text = defaultHudUpdateMessage.CurrentBullets.ToString();
                 controls.maxAmmoText.text = maxWeaponProjectileCount.ToString();
@@ -190,24 +181,8 @@ namespace Team_Capture.Weapons
             }
         }
 
-        protected override void OnSerialize(NetworkWriter writer)
-        {
-            writer.WriteString(weaponId);
-            writer.WriteInt(currentProjectileCount);
-            writer.WriteBool(isReloading);
-        }
-
-        public static WeaponProjectile OnDeserialize(NetworkReader reader)
-        {
-            string weaponId = reader.ReadString();
-            WeaponProjectile weapon = WeaponsResourceManager.GetWeapon(weaponId) as WeaponProjectile;
-            weapon.currentProjectileCount = reader.ReadInt();
-            weapon.isReloading = reader.ReadBool();
-            return weapon;
-        }
-
         [Server]
-        private void FireWeapon()
+        private void FireWeapon(WeaponManager weaponManager)
         {
             //We out of projectiles, reload
             if (currentProjectileCount <= 0)
@@ -215,7 +190,7 @@ namespace Team_Capture.Weapons
                 if (isReloading)
                     return;
 
-                OnReload();
+                OnReload(weaponManager);
                 return;
             }
 
@@ -232,12 +207,12 @@ namespace Team_Capture.Weapons
 
             nextTimeToFire = Time.time + 1f / weaponFireRate;
             currentProjectileCount--;
-            DoProjectile();
-            UpdateUI();
+            DoProjectile(weaponManager);
+            UpdateUI(weaponManager);
         }
 
         [Server]
-        private void DoProjectile()
+        private void DoProjectile(WeaponManager weaponManager)
         {
             Transform projectileSpawnPoint = weaponGraphics.bulletTracerPosition;
             Transform playerFacingDirection = weaponManager.localPlayerCamera;
@@ -280,16 +255,16 @@ namespace Team_Capture.Weapons
             projectile.SetupOwner(weaponManager.playerManager);
             projectile.ServerEnable(projectileSpawnPoint.position, projectileSpawnPoint.rotation.eulerAngles);
 
-            DoWeaponEffects(new ProjectileEffectsMessage());
+            DoWeaponEffects(weaponManager, new ProjectileEffectsMessage());
             weaponManager.CameraEffects.OnWeaponFire(weaponCameraRecoilAmount);
         }
 
         [Server]
-        private async UniTask ReloadTask()
+        private async UniTask ReloadTask(WeaponManager weaponManager)
         {
             Logger.Debug("Reloading player's weapon.");
             isReloading = true;
-            UpdateUI();
+            UpdateUI(weaponManager);
             
             await TimeHelper.CountUp(
                 maxWeaponProjectileCount - currentProjectileCount, weaponReloadTime, tick =>
@@ -300,11 +275,11 @@ namespace Team_Capture.Weapons
 
                     //Increase projectiles
                     currentProjectileCount++;
-                    UpdateUI();
+                    UpdateUI(weaponManager);
                 }, reloadCancellation.Token);
             
             isReloading = false;
-            UpdateUI();
+            UpdateUI(weaponManager);
             reloadCancellation.Dispose();
             reloadCancellation = null;
         }
@@ -323,11 +298,32 @@ namespace Team_Capture.Weapons
         }
 
         [Server]
-        private void UpdateUI()
+        private void UpdateUI(WeaponManager weaponManager)
         {
             DefaultHudUpdateMessage message = new(weaponId, currentProjectileCount, isReloading);
             Logger.Debug("Sent client UI weapon update: {@Message}", message);
-            DoPlayerUIUpdate(message);
+            DoPlayerUIUpdate(weaponManager, message);
         }
+
+        #region Networking
+
+        protected override void OnSerialize(NetworkWriter writer)
+        {
+            writer.WriteString(weaponId);
+            writer.WriteInt(currentProjectileCount);
+            writer.WriteBool(isReloading);
+        }
+
+        public static WeaponProjectile OnDeserialize(NetworkReader reader)
+        {
+            string weaponId = reader.ReadString();
+            WeaponProjectile weaponResource = WeaponsResourceManager.GetWeapon(weaponId) as WeaponProjectile;
+            WeaponProjectile newWeapon = Instantiate(weaponResource);
+            newWeapon.currentProjectileCount = reader.ReadInt();
+            newWeapon.isReloading = reader.ReadBool();
+            return newWeapon;
+        }
+
+        #endregion
     }
 }
