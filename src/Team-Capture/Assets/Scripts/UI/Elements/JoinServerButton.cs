@@ -5,6 +5,7 @@
 // For more details see the LICENSE file.
 
 using System;
+using System.Globalization;
 using Team_Capture.Core.Networking.Discovery;
 using TMPro;
 using UnityEngine;
@@ -33,10 +34,23 @@ namespace Team_Capture.UI.Elements
         {
             baseButton.onClick.AddListener(delegate { call(); });
 
+            SetTextValues(server);
+        }
+
+        /// <summary>
+        ///     Sets the text on the button
+        /// </summary>
+        /// <param name="server"></param>
+        internal void SetTextValues(TCServerResponse server)
+        {
             gameNameText.text = server.GameName.String;
             mapNameText.text = server.SceneName;
-            pingText.text = "0";
             playerCountText.text = $"{server.CurrentAmountOfPlayers}/{server.MaxPlayers}";
+            
+            //Calculate ping
+            double rounded = Math.Round(server.TimeDifference * 1000, 0);
+            
+            pingText.text = rounded.ToString(CultureInfo.InvariantCulture);
         }
     }
 }

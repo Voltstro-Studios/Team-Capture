@@ -12,6 +12,7 @@ using NetFabric.Hyperlinq;
 using Team_Capture.AddressablesAddons;
 using Team_Capture.Core.Networking;
 using Team_Capture.Core.Networking.Discovery;
+using Team_Capture.Helper.Extensions;
 using Team_Capture.UI.Elements;
 using Team_Capture.UI.Menus;
 using TMPro;
@@ -56,7 +57,7 @@ namespace Team_Capture.UI.Panels
 
         public CachedLocalizedString connectingToServerText;
 
-        private readonly List<TCServerResponse> servers = new();
+        private readonly Dictionary<TCServerResponse, JoinServerButton> servers = new();
         private TCGameDiscovery gameDiscovery;
         private TCNetworkManager netManager;
         
@@ -126,12 +127,20 @@ namespace Team_Capture.UI.Panels
                 return;
 
             //If the server already exists in the list then ignore it
-            if (servers.AsValueEnumerable().Any(x => Equals(x.EndPoint, server.EndPoint)))
+            Option<KeyValuePair<TCServerResponse, JoinServerButton>> foundServer = servers.AsValueEnumerable()
+                .Where(x => Equals(x.Key.EndPoint, server.EndPoint))
+                .First();
+
+            if (foundServer.IsSome)
+            {
+                foundServer.Value.Value.SetTextValues(server);
                 return;
+            }
 
             //Add the server to the list
-            servers.Add(server);
-            AddServerItem(server);
+            JoinServerButton item = AddServerItem(server);
+            servers.Add(server, item);
+            
 
             statusText.gameObject.SetActive(false);
 
@@ -180,11 +189,13 @@ namespace Team_Capture.UI.Panels
             }
         }
 
-        private void AddServerItem(TCServerResponse server)
+        private JoinServerButton AddServerItem(TCServerResponse server)
         {
             //Instantiate a new button for a server
             GameObject newItem = Instantiate(serverItemPrefab, serverListTransform, false);
-            newItem.GetComponent<JoinServerButton>().SetupConnectButton(server, () => ConnectToServer(server.EndPoint));
+            JoinServerButton button = newItem.GetComponentOrThrow<JoinServerButton>();
+            button.SetupConnectButton(server, () => ConnectToServer(server.EndPoint));
+            return button;
         }
     }
 }

@@ -22,6 +22,8 @@ namespace Team_Capture.Core.Networking.Discovery
     internal class TCServerRequest : NetworkMessage
     {
         public string ApplicationVersion;
+
+        public float ClientTime;
     }
 
     internal class TCServerResponse : NetworkMessage
@@ -34,6 +36,9 @@ namespace Team_Capture.Core.Networking.Discovery
 
         public string SceneName;
 
+        public float ClientTime;
+
+        public float TimeDifference { get; set; }
         public IPEndPoint EndPoint { get; set; }
     }
 
@@ -48,6 +53,7 @@ namespace Team_Capture.Core.Networking.Discovery
             response.GameName.Write(writer);
             writer.WriteInt(response.MaxPlayers);
             writer.WriteString(response.SceneName);
+            writer.WriteFloat(response.ClientTime);
         }
 
         public static TCServerResponse ReadServerResponse(this NetworkReader reader)
@@ -57,7 +63,8 @@ namespace Team_Capture.Core.Networking.Discovery
                 CurrentAmountOfPlayers = reader.ReadInt(),
                 GameName = CompressedNetworkString.Read(reader),
                 MaxPlayers = reader.ReadInt(),
-                SceneName = reader.ReadString()
+                SceneName = reader.ReadString(),
+                ClientTime = reader.ReadFloat()
             };
         }
     }
@@ -75,6 +82,8 @@ namespace Team_Capture.Core.Networking.Discovery
         /// </summary>
         private TCNetworkManager netManager;
 
+        private TCScene scene;
+
         private void Awake()
         {
             //Get our network manager
@@ -85,6 +94,12 @@ namespace Team_Capture.Core.Networking.Discovery
 
             if (!Game.IsGameQuitting)
                 Logger.Debug("Game discovery is ready!");
+        }
+
+        public override void Start()
+        {
+            scene = TCScenesManager.GetActiveScene();
+            TCScenesManager.OnSceneLoadedEvent += tcScene => scene = tcScene;
         }
 
         protected override TCServerResponse ProcessRequest(TCServerRequest request, IPEndPoint endpoint)
@@ -98,10 +113,11 @@ namespace Team_Capture.Core.Networking.Discovery
 
                 return new TCServerResponse
                 {
-                    GameName = TCNetworkManager.Instance.serverConfig.GameName,
+                    GameName = netManager.serverConfig.GameName,
                     MaxPlayers = netManager.maxConnections,
-                    CurrentAmountOfPlayers = netManager.numPlayers,
-                    SceneName = TCScenesManager.GetActiveScene().name
+                    CurrentAmountOfPlayers = NetworkServer.connections.Count,
+                    SceneName = scene.name,
+                    ClientTime = request.ClientTime
                 };
             }
             catch (NotImplementedException)
@@ -123,6 +139,7 @@ namespace Team_Capture.Core.Networking.Discovery
                 return;
 
             //So we found a server, invoke the onServerFound event
+            response.TimeDifference = Time.time - response.ClientTime;
             response.EndPoint = endpoint;
             OnServerFound.Invoke(response);
         }
@@ -131,7 +148,8 @@ namespace Team_Capture.Core.Networking.Discovery
         {
             return new TCServerRequest
             {
-                ApplicationVersion = Application.version
+                ApplicationVersion = Application.version,
+                ClientTime = Time.time
             };
         }
 
