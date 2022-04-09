@@ -58,11 +58,9 @@ namespace Team_Capture.UI.Panels
 
         private readonly List<TCServerResponse> servers = new();
         private TCGameDiscovery gameDiscovery;
-
-        private bool isConnecting;
-        private MenuController menuController;
-
         private TCNetworkManager netManager;
+        
+        private MenuController menuController;
 
         private void Awake()
         {
@@ -147,33 +145,31 @@ namespace Team_Capture.UI.Panels
         public void ConnectToServer(IPEndPoint ip)
         {
             joiningServerPanel.gameObject.SetActive(true);
-
+            
             cancelButton.interactable = false;
             refreshButton.interactable = false;
             menuController.allowPanelToggling = false;
 
             ClearList();
+            
+            //Set our status text
+            statusText.gameObject.SetActive(true);
+            statusText.text = string.Format(connectingToServerText.Value, ip);
 
             //Tell Mirror to connect to the server's IP
             netManager.networkAddress = ip.Address.ToString();
             netManager.StartClient();
-
+            
+            //Start checking the connection
             CheckConnection().Forget();
-
-            //Set our status text
-            statusText.gameObject.SetActive(true);
-            statusText.text = string.Format(connectingToServerText.Value, ip);
         }
 
         private async UniTaskVoid CheckConnection()
         {
-            await UniTask.Delay(25);
-
             //Wait while we are still connecting
-            await UniTask.WaitWhile(() => NetworkClient.isConnecting);
+            await UniTask.WaitWhile(() => netManager.isNetworkActive);
 
-            //We should be connected, so we should only see this if something fucked up
-            if (NetworkClient.connection == null)
+            if (this != null)
             {
                 joiningServerPanel.FailToJoin();
                 RefreshServerList();
