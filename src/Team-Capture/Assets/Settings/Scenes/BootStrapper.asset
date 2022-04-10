@@ -31,17 +31,20 @@ MonoBehaviour:
   stockWeapons: []
   traceEffectPrefab: {fileID: 0}
   bulletHoleEffectPrefab: {fileID: 0}
-  showStartTime: 1
+  rocketPrefab: {fileID: 0}
+  showStartTime: 0
   isMainMenu: 0
   largeImageKey: tc_icon
   largeImageKeyText:
-    m_TableReference:
-      m_TableCollectionName: GUID:34afaa7d41c0a49428742c07472e0e20
-    m_TableEntryReference:
-      m_KeyId: 92286556442624
-      m_Key: 
-    m_FallbackState: 0
-    m_WaitForCompletion: 0
-    m_LocalVariables: []
+    localizedString:
+      m_TableReference:
+        m_TableCollectionName: 
+      m_TableEntryReference:
+        m_KeyId: 0
+        m_Key: 
+      m_FallbackState: 0
+      m_WaitForCompletion: 0
+      m_LocalVariables: []
   references:
-    version: 1
+    version: 2
+    RefIds: []

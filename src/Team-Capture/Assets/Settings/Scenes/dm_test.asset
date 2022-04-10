@@ -41,14 +41,15 @@ MonoBehaviour:
   isMainMenu: 0
   largeImageKey: tc_icon
   largeImageKeyText:
-    m_TableReference:
-      m_TableCollectionName: GUID:34afaa7d41c0a49428742c07472e0e20
-    m_TableEntryReference:
-      m_KeyId: 92286556442624
-      m_Key: 
-    m_FallbackState: 0
-    m_WaitForCompletion: 0
-    m_LocalVariables: []
+    localizedString:
+      m_TableReference:
+        m_TableCollectionName: GUID:d8f2b660806af1f43bd0b56aa914e2a8
+      m_TableEntryReference:
+        m_KeyId: 65475842048
+        m_Key: 
+      m_FallbackState: 0
+      m_WaitForCompletion: 1
+      m_LocalVariables: []
   references:
     version: 2
     RefIds: []

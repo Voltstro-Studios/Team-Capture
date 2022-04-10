@@ -4,6 +4,7 @@
 // This project is governed by the AGPLv3 License.
 // For more details see the LICENSE file.
 
+using System;
 using System.IO;
 using Mirror;
 using Team_Capture.AddressablesAddons;
@@ -99,13 +100,7 @@ namespace Team_Capture.SceneManagement
         /// </summary>
         [Tooltip("What large image to use")] public string largeImageKey = "tc_icon";
 
-        /// <summary>
-        ///     Discord large image key text
-        /// </summary>
-        [Tooltip("Discord large image key text")] [SerializeField]
-        private LocalizedString largeImageKeyText;
-
-        public string LargeImageKeyText => largeImageKeyText.GetLocalizedString();
+        public CachedLocalizedString largeImageKeyText;
 
         #endregion
     }

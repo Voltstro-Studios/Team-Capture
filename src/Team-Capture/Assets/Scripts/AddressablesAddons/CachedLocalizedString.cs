@@ -5,6 +5,7 @@
 // For more details see the LICENSE file.
 
 using System;
+using UnityEngine;
 using UnityEngine.Localization;
 
 namespace Team_Capture.AddressablesAddons
@@ -13,27 +14,23 @@ namespace Team_Capture.AddressablesAddons
     public class CachedLocalizedString
     {
         //TODO: On string update
-        public LocalizedString localizedString;
+        [SerializeField]
+        private LocalizedString localizedString;
 
+        private bool haveSetValue;
         private string cachedValue;
-
-        private bool isWaitingForLoad;
 
         public string Value
         {
             get
             {
-                if (isWaitingForLoad)
-                    return string.Empty;
-
-                if (cachedValue == null)
+                if (!haveSetValue)
                 {
-                    isWaitingForLoad = true;
                     cachedValue = localizedString.GetLocalizedString();
-                    isWaitingForLoad = false;
+                    haveSetValue = true;
                 }
 
-                return cachedValue;
+                return cachedValue!;
             }
         }
 

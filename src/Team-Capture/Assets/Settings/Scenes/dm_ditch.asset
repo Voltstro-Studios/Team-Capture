@@ -36,18 +36,20 @@ MonoBehaviour:
     type: 3}
   bulletHoleEffectPrefab: {fileID: 1323092306309459875, guid: 8741f47e93961d34f81bf7f96e1277ac,
     type: 3}
+  rocketPrefab: {fileID: 0}
   showStartTime: 1
   isMainMenu: 0
   largeImageKey: tc_icon
   largeImageKeyText:
-    m_TableReference:
-      m_TableCollectionName: GUID:34afaa7d41c0a49428742c07472e0e20
-    m_TableEntryReference:
-      m_KeyId: 92286556442624
-      m_Key: 
-    m_FallbackState: 0
-    m_WaitForCompletion: 0
-    m_LocalVariables: []
+    localizedString:
+      m_TableReference:
+        m_TableCollectionName: GUID:a839c4e8771a89944950e881792fa51a
+      m_TableEntryReference:
+        m_KeyId: 7783190528
+        m_Key: 
+      m_FallbackState: 0
+      m_WaitForCompletion: 1
+      m_LocalVariables: []
   references:
     version: 2
     RefIds: []

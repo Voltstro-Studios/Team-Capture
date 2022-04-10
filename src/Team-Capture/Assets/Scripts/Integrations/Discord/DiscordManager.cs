@@ -96,8 +96,7 @@ namespace Team_Capture.Integrations.Discord
             });
             activityManager = client?.GetActivityManager();
             userManager = client?.GetUserManager();
-
-            TCScenesManager.PreparingSceneLoadEvent += PreparingSceneLoad;
+            
             TCScenesManager.OnSceneLoadedEvent += SceneLoaded;
 
             SceneLoaded(TCScenesManager.GetActiveScene());
@@ -118,24 +117,6 @@ namespace Team_Capture.Integrations.Discord
 
         #region Scene Discord RPC Stuff
 
-        private void PreparingSceneLoad(TCScene scene)
-        {
-            Debug.Log(scene.scene);
-
-            //Update our RPC to show we are loading
-            if (client != null)
-                UpdateActivity(new Activity
-                {
-                    Assets = new ActivityAssets
-                    {
-                        LargeImage = scene.largeImageKey,
-                        LargeText = scene.LargeImageKeyText
-                    },
-                    Details = $"Loading into {scene.DisplayNameLocalized}",
-                    State = "Loading..."
-                });
-        }
-
         private void SceneLoaded(TCScene scene)
         {
             if (client != null)
@@ -144,8 +125,7 @@ namespace Team_Capture.Integrations.Discord
                 {
                     Assets = new ActivityAssets
                     {
-                        LargeImage = scene.largeImageKey,
-                        LargeText = scene.LargeImageKeyText
+                        LargeImage = scene.largeImageKey
                     }
                 };
 
@@ -157,8 +137,8 @@ namespace Team_Capture.Integrations.Discord
 
                 if (scene.isOnlineScene)
                 {
-                    presence.Details = TCScenesManager.GetActiveScene().DisplayNameLocalized;
-                    presence.State = "Team Capture";
+                    presence.Details = $"Playing on {scene.DisplayNameLocalized}";
+                    presence.Assets.LargeText = scene.largeImageKeyText.Value;
                 }
                 else if (scene.isMainMenu)
                 {
