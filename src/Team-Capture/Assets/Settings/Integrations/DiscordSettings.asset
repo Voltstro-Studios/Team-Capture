@@ -13,7 +13,37 @@ MonoBehaviour:
   m_Name: DiscordSettings
   m_EditorClassIdentifier: 
   clientId: 552773231472541696
-  defaultGameDetail: Loading...
-  defaultGameState: Loading...
-  defaultLargeImage: tc_icon
+  loadingText:
+    localizedString:
+      m_TableReference:
+        m_TableCollectionName: GUID:34afaa7d41c0a49428742c07472e0e20
+      m_TableEntryReference:
+        m_KeyId: 63824490029256704
+        m_Key: 
+      m_FallbackState: 0
+      m_WaitForCompletion: 0
+      m_LocalVariables: []
+  playingOnText:
+    localizedString:
+      m_TableReference:
+        m_TableCollectionName: GUID:34afaa7d41c0a49428742c07472e0e20
+      m_TableEntryReference:
+        m_KeyId: 63824571050627072
+        m_Key: 
+      m_FallbackState: 0
+      m_WaitForCompletion: 0
+      m_LocalVariables: []
+  mainMenuText:
+    localizedString:
+      m_TableReference:
+        m_TableCollectionName: GUID:34afaa7d41c0a49428742c07472e0e20
+      m_TableEntryReference:
+        m_KeyId: 63824527987707904
+        m_Key: 
+      m_FallbackState: 0
+      m_WaitForCompletion: 0
+      m_LocalVariables: []
   logLevel: 2
+  references:
+    version: 2
+    RefIds: []

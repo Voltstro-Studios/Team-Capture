@@ -391,6 +391,18 @@ MonoBehaviour:
     m_Localized: Camera
     m_Metadata:
       m_Items: []
+  - m_Id: 63824490029256704
+    m_Localized: Loading...
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63824527987707904
+    m_Localized: Main Menu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63824571050627072
+    m_Localized: Playing on {0}
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:

@@ -383,6 +383,18 @@ MonoBehaviour:
     m_Key: Console_Placeholder
     m_Metadata:
       m_Items: []
+  - m_Id: 63824490029256704
+    m_Key: Discord_Loading
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63824527987707904
+    m_Key: Discord_MainMenu
+    m_Metadata:
+      m_Items: []
+  - m_Id: 63824571050627072
+    m_Key: Discord_PlayingOn
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

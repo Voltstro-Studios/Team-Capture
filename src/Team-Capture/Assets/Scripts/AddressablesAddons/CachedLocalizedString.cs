@@ -38,5 +38,8 @@ namespace Team_Capture.AddressablesAddons
         {
             return Value;
         }
+
+        public static implicit operator string(CachedLocalizedString cachedLocalizedString) =>
+            cachedLocalizedString.Value;
     }
 }

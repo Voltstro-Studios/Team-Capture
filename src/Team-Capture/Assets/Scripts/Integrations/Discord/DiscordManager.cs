@@ -11,7 +11,6 @@ using Discord.GameSDK.Users;
 using Team_Capture.Core;
 using Team_Capture.Helper;
 using Team_Capture.SceneManagement;
-using UnityEngine;
 using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.Integrations.Discord
@@ -137,16 +136,16 @@ namespace Team_Capture.Integrations.Discord
 
                 if (scene.isOnlineScene)
                 {
-                    presence.Details = $"Playing on {scene.DisplayNameLocalized}";
-                    presence.Assets.LargeText = scene.largeImageKeyText.Value;
+                    presence.Details = string.Format(Settings.playingOnText, scene.DisplayNameLocalized);
+                    presence.Assets.LargeText = scene.largeImageKeyText;
                 }
                 else if (scene.isMainMenu)
                 {
-                    presence.Details = "Main Menu";
+                    presence.Details = Settings.mainMenuText;
                 }
                 else if (!scene.isMainMenu && !scene.isOnlineScene)
                 {
-                    presence.Details = "Loading...";
+                    presence.Details = Settings.loadingText;
                 }
                 else
                 {

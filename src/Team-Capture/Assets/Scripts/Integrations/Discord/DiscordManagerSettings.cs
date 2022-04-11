@@ -5,6 +5,7 @@
 // For more details see the LICENSE file.
 
 using Discord.GameSDK;
+using Team_Capture.AddressablesAddons;
 using UnityEngine;
 
 namespace Team_Capture.Integrations.Discord
@@ -19,22 +20,19 @@ namespace Team_Capture.Integrations.Discord
         public string clientId;
 
         /// <summary>
-        ///     The default game detail message
+        ///     Text used when loading
         /// </summary>
-        [Tooltip("The default game detail message")]
-        public string defaultGameDetail = "Loading...";
+        public CachedLocalizedString loadingText;
 
         /// <summary>
-        ///     The default game state message
+        ///     Text used to show when playing
         /// </summary>
-        [Tooltip("The default game state message")]
-        public string defaultGameState = "Loading...";
+        public CachedLocalizedString playingOnText;
 
         /// <summary>
-        ///     The default large image to use
+        ///     Main menu text
         /// </summary>
-        [Tooltip("The default large image to use")]
-        public string defaultLargeImage = "tc_icon";
+        public CachedLocalizedString mainMenuText;
 
         /// <summary>
         ///     The log level to use
