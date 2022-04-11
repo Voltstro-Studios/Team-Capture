@@ -393,6 +393,13 @@
       },
       "url": "https://unitynuget-registry.azurewebsites.net"
     },
+    "org.nuget.jdenticon-net": {
+      "version": "3.1.2",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://unitynuget-registry.azurewebsites.net"
+    },
     "org.nuget.k4os.compression.lz4": {
       "version": "1.2.16",
       "depth": 0,
@@ -425,6 +432,16 @@
       "depth": 0,
       "source": "registry",
       "dependencies": {},
+      "url": "https://unitynuget-registry.azurewebsites.net"
+    },
+    "org.nuget.serilog.enrichers.demystifier": {
+      "version": "1.0.2",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "org.nuget.ben.demystifier": "0.4.1",
+        "org.nuget.serilog": "2.10.0"
+      },
       "url": "https://unitynuget-registry.azurewebsites.net"
     },
     "org.nuget.serilog.sinks.async": {
