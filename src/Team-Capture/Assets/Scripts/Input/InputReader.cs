@@ -51,10 +51,12 @@ namespace Team_Capture.Input
                 gameInput.Player.ScoreBoard.performed += OnPlayerScoreBoard;
                 gameInput.Player.Suicide.performed += OnPlayerSuicide;
                 gameInput.Player.Jump.performed += OnPlayerJump;
-                gameInput.Player.Pause.performed += OnPlayerPause;
                 gameInput.Player.WeaponSelection.performed += OnPlayerWeaponSelection;
                 gameInput.Player.ShootWeapon.performed += OnPlayerWeaponShoot;
                 gameInput.Player.ReloadWeapon.performed += OnPlayerReloadWeapon;
+                
+                //Player UI
+                gameInput.PlayerUI.Pause.performed += OnPlayerPause;
 
                 //Chat
                 gameInput.Chat.SubmitChat.performed += OnChatSubmit;
@@ -88,10 +90,12 @@ namespace Team_Capture.Input
             gameInput.Player.ScoreBoard.performed -= OnPlayerScoreBoard;
             gameInput.Player.Suicide.performed -= OnPlayerSuicide;
             gameInput.Player.Jump.performed -= OnPlayerJump;
-            gameInput.Player.Pause.performed -= OnPlayerPause;
             gameInput.Player.WeaponSelection.performed -= OnPlayerWeaponSelection;
             gameInput.Player.ShootWeapon.performed -= OnPlayerWeaponShoot;
             gameInput.Player.ReloadWeapon.performed -= OnPlayerReloadWeapon;
+            
+            //Player UI
+            gameInput.PlayerUI.Pause.performed -= OnPlayerPause;
 
             //Chat
             gameInput.Chat.SubmitChat.performed -= OnSubmitInput;
@@ -215,7 +219,6 @@ namespace Team_Capture.Input
         public static event Action PlayerScoreboard;
         public static event Action PlayerSuicide;
         public static event Action<bool> PlayerJump;
-        public static event Action PlayerPause;
         public static event Action<float> PlayerWeaponSelection;
         public static event Action<bool> PlayerWeaponShoot;
         public static event Action PlayerWeaponReload;
@@ -233,11 +236,6 @@ namespace Team_Capture.Input
         private static void OnPlayerJump(InputAction.CallbackContext context)
         {
             PlayerJump?.Invoke(context.ReadValueAsButton());
-        }
-
-        private static void OnPlayerPause(InputAction.CallbackContext context)
-        {
-            PlayerPause?.Invoke();
         }
 
         public static Vector2 ReadPlayerMove()
@@ -273,6 +271,27 @@ namespace Team_Capture.Input
         public static void DisablePlayerInput()
         {
             gameInput.Player.Disable();
+        }
+
+        #endregion
+
+        #region Player UI
+        
+        public static event Action PlayerUIPause;
+
+        private static void OnPlayerPause(InputAction.CallbackContext context)
+        {
+            PlayerUIPause?.Invoke();
+        }
+
+        public static void EnablePlayerUI()
+        {
+            gameInput.PlayerUI.Enable();
+        }
+
+        public static void DisablePlayerUI()
+        {
+            gameInput.PlayerUI.Disable();
         }
 
         #endregion

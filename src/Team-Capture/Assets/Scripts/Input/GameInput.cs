@@ -300,15 +300,6 @@ namespace Team_Capture.Input
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""Pause"",
-                    ""type"": ""Button"",
-                    ""id"": ""a4954379-46da-4348-8f4c-3f87fc09e49d"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": ""Press"",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""WeaponSelection"",
                     ""type"": ""Value"",
                     ""id"": ""75e6bbb3-9a28-4b13-a87a-9dc96932b16e"",
@@ -438,17 +429,6 @@ namespace Team_Capture.Input
                 },
                 {
                     ""name"": """",
-                    ""id"": ""89111bc2-d9ba-46c0-a797-ed7dbf863d3c"",
-                    ""path"": ""<Keyboard>/escape"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""KeyboardMouse"",
-                    ""action"": ""Pause"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""872aef05-ccf2-40e0-99a3-ad826420a473"",
                     ""path"": ""<Mouse>/scroll/x"",
                     ""interactions"": """",
@@ -488,6 +468,34 @@ namespace Team_Capture.Input
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse"",
                     ""action"": ""ShootWeapon"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""PlayerUI"",
+            ""id"": ""b94f1c9c-7612-4dd6-80a7-0aa1c3ac4252"",
+            ""actions"": [
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""95892649-bf90-439b-a07f-0100ba5f29c8"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press"",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""0bd40eb5-e302-4e2e-bb99-f0e5b68194eb"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""KeyboardMouse"",
+                    ""action"": ""Pause"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -612,10 +620,12 @@ namespace Team_Capture.Input
             m_Player_ScoreBoard = m_Player.FindAction("ScoreBoard", throwIfNotFound: true);
             m_Player_Suicide = m_Player.FindAction("Suicide", throwIfNotFound: true);
             m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
-            m_Player_Pause = m_Player.FindAction("Pause", throwIfNotFound: true);
             m_Player_WeaponSelection = m_Player.FindAction("WeaponSelection", throwIfNotFound: true);
             m_Player_ReloadWeapon = m_Player.FindAction("ReloadWeapon", throwIfNotFound: true);
             m_Player_ShootWeapon = m_Player.FindAction("ShootWeapon", throwIfNotFound: true);
+            // PlayerUI
+            m_PlayerUI = asset.FindActionMap("PlayerUI", throwIfNotFound: true);
+            m_PlayerUI_Pause = m_PlayerUI.FindAction("Pause", throwIfNotFound: true);
             // Chat
             m_Chat = asset.FindActionMap("Chat", throwIfNotFound: true);
             m_Chat_ToggleChat = m_Chat.FindAction("ToggleChat", throwIfNotFound: true);
@@ -851,7 +861,6 @@ namespace Team_Capture.Input
         private readonly InputAction m_Player_ScoreBoard;
         private readonly InputAction m_Player_Suicide;
         private readonly InputAction m_Player_Jump;
-        private readonly InputAction m_Player_Pause;
         private readonly InputAction m_Player_WeaponSelection;
         private readonly InputAction m_Player_ReloadWeapon;
         private readonly InputAction m_Player_ShootWeapon;
@@ -864,7 +873,6 @@ namespace Team_Capture.Input
             public InputAction @ScoreBoard => m_Wrapper.m_Player_ScoreBoard;
             public InputAction @Suicide => m_Wrapper.m_Player_Suicide;
             public InputAction @Jump => m_Wrapper.m_Player_Jump;
-            public InputAction @Pause => m_Wrapper.m_Player_Pause;
             public InputAction @WeaponSelection => m_Wrapper.m_Player_WeaponSelection;
             public InputAction @ReloadWeapon => m_Wrapper.m_Player_ReloadWeapon;
             public InputAction @ShootWeapon => m_Wrapper.m_Player_ShootWeapon;
@@ -892,9 +900,6 @@ namespace Team_Capture.Input
                     @Jump.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
                     @Jump.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
                     @Jump.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
-                    @Pause.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPause;
-                    @Pause.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPause;
-                    @Pause.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnPause;
                     @WeaponSelection.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnWeaponSelection;
                     @WeaponSelection.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnWeaponSelection;
                     @WeaponSelection.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnWeaponSelection;
@@ -923,9 +928,6 @@ namespace Team_Capture.Input
                     @Jump.started += instance.OnJump;
                     @Jump.performed += instance.OnJump;
                     @Jump.canceled += instance.OnJump;
-                    @Pause.started += instance.OnPause;
-                    @Pause.performed += instance.OnPause;
-                    @Pause.canceled += instance.OnPause;
                     @WeaponSelection.started += instance.OnWeaponSelection;
                     @WeaponSelection.performed += instance.OnWeaponSelection;
                     @WeaponSelection.canceled += instance.OnWeaponSelection;
@@ -939,6 +941,39 @@ namespace Team_Capture.Input
             }
         }
         public PlayerActions @Player => new PlayerActions(this);
+
+        // PlayerUI
+        private readonly InputActionMap m_PlayerUI;
+        private IPlayerUIActions m_PlayerUIActionsCallbackInterface;
+        private readonly InputAction m_PlayerUI_Pause;
+        public struct PlayerUIActions
+        {
+            private @GameInput m_Wrapper;
+            public PlayerUIActions(@GameInput wrapper) { m_Wrapper = wrapper; }
+            public InputAction @Pause => m_Wrapper.m_PlayerUI_Pause;
+            public InputActionMap Get() { return m_Wrapper.m_PlayerUI; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(PlayerUIActions set) { return set.Get(); }
+            public void SetCallbacks(IPlayerUIActions instance)
+            {
+                if (m_Wrapper.m_PlayerUIActionsCallbackInterface != null)
+                {
+                    @Pause.started -= m_Wrapper.m_PlayerUIActionsCallbackInterface.OnPause;
+                    @Pause.performed -= m_Wrapper.m_PlayerUIActionsCallbackInterface.OnPause;
+                    @Pause.canceled -= m_Wrapper.m_PlayerUIActionsCallbackInterface.OnPause;
+                }
+                m_Wrapper.m_PlayerUIActionsCallbackInterface = instance;
+                if (instance != null)
+                {
+                    @Pause.started += instance.OnPause;
+                    @Pause.performed += instance.OnPause;
+                    @Pause.canceled += instance.OnPause;
+                }
+            }
+        }
+        public PlayerUIActions @PlayerUI => new PlayerUIActions(this);
 
         // Chat
         private readonly InputActionMap m_Chat;
@@ -1049,10 +1084,13 @@ namespace Team_Capture.Input
             void OnScoreBoard(InputAction.CallbackContext context);
             void OnSuicide(InputAction.CallbackContext context);
             void OnJump(InputAction.CallbackContext context);
-            void OnPause(InputAction.CallbackContext context);
             void OnWeaponSelection(InputAction.CallbackContext context);
             void OnReloadWeapon(InputAction.CallbackContext context);
             void OnShootWeapon(InputAction.CallbackContext context);
+        }
+        public interface IPlayerUIActions
+        {
+            void OnPause(InputAction.CallbackContext context);
         }
         public interface IChatActions
         {

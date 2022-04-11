@@ -109,13 +109,13 @@ namespace Team_Capture.Player
             InputReader.PlayerScoreboard -= OnPlayerScoreBoard;
             InputReader.PlayerSuicide -= OnPlayerSuicidePress;
             InputReader.PlayerJump -= OnPlayerJump;
-            InputReader.PlayerPause -= OnPlayerPause;
+            InputReader.PlayerUIPause -= OnPlayerPause;
             InputReader.PlayerWeaponSelection -= OnPlayerWeaponSelection;
             InputReader.PlayerWeaponShoot -= OnPlayerWeaponShoot;
             InputReader.PlayerWeaponReload -= OnPlayerWeaponReload;
 
-            InputReader.ChatSubmit -= OnChatSubmit;
-            InputReader.ChatToggle -= OnChatToggle;
+            InputReader.DisablePlayerUI();
+            DisablePlayerInputs();
         }
 
         public void Setup()
@@ -124,7 +124,7 @@ namespace Team_Capture.Player
             InputReader.PlayerScoreboard += OnPlayerScoreBoard;
             InputReader.PlayerSuicide += OnPlayerSuicidePress;
             InputReader.PlayerJump += OnPlayerJump;
-            InputReader.PlayerPause += OnPlayerPause;
+            InputReader.PlayerUIPause += OnPlayerPause;
             InputReader.PlayerWeaponSelection += OnPlayerWeaponSelection;
             InputReader.PlayerWeaponShoot += OnPlayerWeaponShoot;
             InputReader.PlayerWeaponReload += OnPlayerWeaponReload;
@@ -132,8 +132,20 @@ namespace Team_Capture.Player
             InputReader.ChatSubmit += OnChatSubmit;
             InputReader.ChatToggle += OnChatToggle;
 
+            InputReader.EnablePlayerUI();
+            EnablePlayerInputs();
+        }
+
+        public static void EnablePlayerInputs()
+        {
             InputReader.EnablePlayerInput();
             InputReader.EnableChatInput();
+        }
+
+        public static void DisablePlayerInputs()
+        {
+            InputReader.DisablePlayerInput();
+            InputReader.DisableChatInput();
         }
 
         #region Input Settings
@@ -184,9 +196,6 @@ namespace Team_Capture.Player
 
         private void OnPlayerScoreBoard()
         {
-            if (ClientUI.IsPauseMenuOpen)
-                return;
-
             uiManager.ToggleScoreboard();
         }
 
@@ -209,7 +218,7 @@ namespace Team_Capture.Player
 
         private void OnPlayerWeaponSelection(float value)
         {
-            if (ClientUI.IsPauseMenuOpen || uiManager.IsChatOpen)
+            if (uiManager.IsChatOpen)
                 return;
 
             int selectedWeaponIndex = weaponManager.SelectedWeaponIndex;
@@ -237,7 +246,7 @@ namespace Team_Capture.Player
 
         private void OnPlayerWeaponShoot(bool button)
         {
-            if (ClientUI.IsPauseMenuOpen || uiManager.IsChatOpen)
+            if (uiManager.IsChatOpen)
                 return;
 
             weaponManager.CmdShootWeapon(button);
@@ -245,7 +254,7 @@ namespace Team_Capture.Player
 
         private void OnPlayerWeaponReload()
         {
-            if (ClientUI.IsPauseMenuOpen || uiManager.IsChatOpen)
+            if (uiManager.IsChatOpen)
                 return;
 
             weaponManager.ClientReloadWeapon();
@@ -258,9 +267,6 @@ namespace Team_Capture.Player
 
         private void OnChatToggle()
         {
-            if(ClientUI.IsPauseMenuOpen)
-                return;
-            
             uiManager.ToggleChat();
         }
 

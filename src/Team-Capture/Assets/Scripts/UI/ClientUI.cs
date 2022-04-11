@@ -6,10 +6,10 @@
 
 using System;
 using Team_Capture.Console;
+using Team_Capture.Helper.Extensions;
 using Team_Capture.Player;
 using Team_Capture.SceneManagement;
 using Team_Capture.UI.Menus;
-using Team_Capture.Weapons;
 using UnityEngine;
 using Logger = Team_Capture.Logging.Logger;
 
@@ -61,11 +61,6 @@ namespace Team_Capture.UI
         [NonSerialized] public PlayerManager PlayerManager;
 
         /// <summary>
-        ///     The <see cref="Weapons.WeaponManager" />
-        /// </summary>
-        [NonSerialized] public WeaponManager WeaponManager;
-
-        /// <summary>
         ///     Sets up the UI
         /// </summary>
         /// <param name="playerManager"></param>
@@ -77,25 +72,16 @@ namespace Team_Capture.UI
             hud.Setup(this);
 
             PlayerManager = playerManager;
-            WeaponManager = playerManager.GetComponent<WeaponManager>();
 
             pauseMenu.gameObject.SetActive(false);
 
             scoreBoardObject.SetActive(false);
-            scoreBoardObject.GetComponent<ScoreBoard.ScoreBoard>().clientPlayer = playerManager;
+            scoreBoardObject.GetComponentOrThrow<ScoreBoard.ScoreBoard>().clientPlayer = playerManager;
 
-            pauseMenu.Setup(TogglePauseMenu);
+            pauseMenu.Setup(() => ActivatePauseMenu(!IsPauseMenuOpen));
             deathScreen.Setup(playerManager);
 
             Logger.Debug("The ClientUI is now ready.");
-        }
-
-        /// <summary>
-        ///     Toggles the pause menu
-        /// </summary>
-        public void TogglePauseMenu()
-        {
-            ActivatePauseMenu(!IsPauseMenuOpen);
         }
 
         /// <summary>
@@ -125,10 +111,13 @@ namespace Team_Capture.UI
                 if (chat.IsChatOpen)
                     chat.ActivateChat(false);
                 chat.gameObject.SetActive(false);
+                
+                PlayerInputManager.DisablePlayerInputs();
             }
             else
             {
                 chat.gameObject.SetActive(true);
+                PlayerInputManager.EnablePlayerInputs();
             }
 
             if (PlayerManager.IsDead)

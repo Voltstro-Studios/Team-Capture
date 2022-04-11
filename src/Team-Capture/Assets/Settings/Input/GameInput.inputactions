@@ -276,15 +276,6 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Pause",
-                    "type": "Button",
-                    "id": "a4954379-46da-4348-8f4c-3f87fc09e49d",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "Press",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "WeaponSelection",
                     "type": "Value",
                     "id": "75e6bbb3-9a28-4b13-a87a-9dc96932b16e",
@@ -414,17 +405,6 @@
                 },
                 {
                     "name": "",
-                    "id": "89111bc2-d9ba-46c0-a797-ed7dbf863d3c",
-                    "path": "<Keyboard>/escape",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "KeyboardMouse",
-                    "action": "Pause",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "872aef05-ccf2-40e0-99a3-ad826420a473",
                     "path": "<Mouse>/scroll/x",
                     "interactions": "",
@@ -464,6 +444,34 @@
                     "processors": "",
                     "groups": "KeyboardMouse",
                     "action": "ShootWeapon",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "PlayerUI",
+            "id": "b94f1c9c-7612-4dd6-80a7-0aa1c3ac4252",
+            "actions": [
+                {
+                    "name": "Pause",
+                    "type": "Button",
+                    "id": "95892649-bf90-439b-a07f-0100ba5f29c8",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "0bd40eb5-e302-4e2e-bb99-f0e5b68194eb",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "Pause",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

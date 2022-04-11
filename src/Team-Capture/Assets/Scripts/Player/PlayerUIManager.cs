@@ -41,7 +41,7 @@ namespace Team_Capture.Player
         internal void TogglePauseMenu()
         {
             if (ui.pauseMenu.GetActivePanel().Key == null)
-                ui.TogglePauseMenu();
+                SetPauseMenu(!ClientUI.IsPauseMenuOpen);
         }
 
         /// <summary>
