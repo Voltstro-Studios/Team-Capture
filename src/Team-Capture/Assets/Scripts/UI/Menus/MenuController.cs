@@ -63,7 +63,7 @@ namespace Team_Capture.UI.Menus
 
         private void Awake()
         {
-            tweeningManager = GetComponent<TweeningManager>();
+            tweeningManager = this.GetComponentOrThrow<TweeningManager>();
             allowPanelToggling = true;
         }
 

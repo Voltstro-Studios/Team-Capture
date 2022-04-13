@@ -7,12 +7,12 @@
 using System;
 using UnityEngine;
 
-namespace Team_Capture.Tweens
+namespace Team_Capture.Tweens.Events
 {
     /// <summary>
     ///     The base for a tween event
     /// </summary>
-    internal abstract class TweenEvent : ScriptableObject
+    internal abstract class TweenEventBase : ScriptableObject
     {
         /// <summary>
         ///     The duration of the tween

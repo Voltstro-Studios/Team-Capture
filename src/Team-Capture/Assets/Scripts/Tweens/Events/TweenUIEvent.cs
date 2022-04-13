@@ -9,13 +9,13 @@ using ElRaccoone.Tweens.Core;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Team_Capture.Tweens
+namespace Team_Capture.Tweens.Events
 {
     /// <summary>
     ///     A tween for a UI element
     /// </summary>
     [CreateAssetMenu(fileName = "UITweenEvent", menuName = "Team-Capture/Tweening/UITweenEvent")]
-    internal class UITweenEvent : TweenEvent
+    internal class TweenUIEvent : TweenEventBase
     {
         /// <summary>
         ///     Is this tween moving?

@@ -5,18 +5,19 @@
 // For more details see the LICENSE file.
 
 using Team_Capture.Tweens;
+using Team_Capture.Tweens.Events;
 using UnityEditor;
 
 namespace Team_Capture.Editor.CustomEditors
 {
-	[CustomEditor(typeof(UITweenEvent))]
+	[CustomEditor(typeof(TweenUIEvent))]
 	public class UITweensEditor : UnityEditor.Editor
 	{
-		private UITweenEvent tweenEvent;
+		private TweenUIEvent tweenEvent;
 
 		private void OnEnable()
 		{
-			tweenEvent = (UITweenEvent) target;
+			tweenEvent = (TweenUIEvent) target;
 		}
 
 		public override void OnInspectorGUI()

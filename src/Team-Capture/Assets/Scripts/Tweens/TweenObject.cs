@@ -7,6 +7,7 @@
 using System;
 using NetFabric.Hyperlinq;
 using Team_Capture.Core;
+using Team_Capture.Tweens.Events;
 using UnityEngine;
 using Logger = Team_Capture.Logging.Logger;
 
@@ -31,11 +32,11 @@ namespace Team_Capture.Tweens
         /// <summary>
         ///     What events can we play?
         /// </summary>
-        public TweenEvent[] eventsToPlay;
+        public TweenEventBase[] eventsToPlay;
 
         public void Setup()
         {
-            foreach (TweenEvent tweenEvent in eventsToPlay)
+            foreach (TweenEventBase tweenEvent in eventsToPlay)
                 tweenEvent.TweenSetup(objectToTween, () => OnEnd(tweenEvent.activeOnEnd));
         }
 
@@ -45,7 +46,7 @@ namespace Team_Capture.Tweens
         /// <param name="eventName"></param>
         public void PlayEvent(string eventName)
         {
-            Option<TweenEvent> tweenEvent = eventsToPlay.AsValueEnumerable().Where(x => x.name == eventName).First();
+            Option<TweenEventBase> tweenEvent = eventsToPlay.AsValueEnumerable().Where(x => x.name == eventName).First();
             if (tweenEvent.IsNone)
             {
                 Logger.Error("There is no tween event called {EventName} on tween object {ObjectName}!", eventName,
@@ -61,11 +62,11 @@ namespace Team_Capture.Tweens
         /// </summary>
         public void PlayAllEvents()
         {
-            foreach (TweenEvent tweenEvent in eventsToPlay)
+            foreach (TweenEventBase tweenEvent in eventsToPlay)
                 PlayTween(tweenEvent);
         }
 
-        private void PlayTween(TweenEvent tweenEvent)
+        private void PlayTween(TweenEventBase tweenEvent)
         {
             objectToTween.SetActive(true);
             tweenEvent.TweenPlay();
