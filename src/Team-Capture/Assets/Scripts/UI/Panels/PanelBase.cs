@@ -25,6 +25,11 @@ namespace Team_Capture.UI.Panels
         /// </summary>
         public TweenObject tweenObject;
 
+        private void Awake()
+        {
+            tweenObject.Setup();
+        }
+
         public virtual void OnEnable()
         {
             if (tweenObject.objectToTween != null)

@@ -4,6 +4,7 @@
 // This project is governed by the AGPLv3 License.
 // For more details see the LICENSE file.
 
+using System;
 using UnityEngine;
 
 namespace Team_Capture.Tweens
@@ -11,7 +12,7 @@ namespace Team_Capture.Tweens
     /// <summary>
     ///     The base for a tween event
     /// </summary>
-    internal class TweenEvent : ScriptableObject
+    internal abstract class TweenEvent : ScriptableObject
     {
         /// <summary>
         ///     The duration of the tween
@@ -22,5 +23,31 @@ namespace Team_Capture.Tweens
         ///     Will the gameobject being tweened be active on end
         /// </summary>
         public bool activeOnEnd = true;
+
+        /// <summary>
+        ///     The <see cref="GameObject"/> to do your tweens to
+        /// </summary>
+        protected GameObject objectToTween;
+        
+        /// <summary>
+        ///     Call this when you are done tweening
+        /// </summary>
+        protected Action onEnd;
+
+        /// <summary>
+        ///     Called on setup
+        /// </summary>
+        /// <param name="objToTween"></param>
+        /// <param name="onEndAction"></param>
+        public virtual void TweenSetup(GameObject objToTween, Action onEndAction)
+        {
+            objectToTween = objToTween;
+            onEnd = onEndAction;
+        }
+
+        /// <summary>
+        ///     Called when the tween needs to play
+        /// </summary>
+        public abstract void TweenPlay();
     }
 }

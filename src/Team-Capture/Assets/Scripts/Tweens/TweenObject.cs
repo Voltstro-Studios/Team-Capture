@@ -5,12 +5,9 @@
 // For more details see the LICENSE file.
 
 using System;
-using ElRaccoone.Tweens;
-using ElRaccoone.Tweens.Core;
 using NetFabric.Hyperlinq;
 using Team_Capture.Core;
 using UnityEngine;
-using UnityEngine.UI;
 using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.Tweens
@@ -35,6 +32,12 @@ namespace Team_Capture.Tweens
         ///     What events can we play?
         /// </summary>
         public TweenEvent[] eventsToPlay;
+
+        public void Setup()
+        {
+            foreach (TweenEvent tweenEvent in eventsToPlay)
+                tweenEvent.TweenSetup(objectToTween, () => OnEnd(tweenEvent.activeOnEnd));
+        }
 
         /// <summary>
         ///     Plays an event
@@ -64,33 +67,8 @@ namespace Team_Capture.Tweens
 
         private void PlayTween(TweenEvent tweenEvent)
         {
-            //For UI tween event
-            if (tweenEvent is UITweenEvent uiTweenEvent)
-            {
-                objectToTween.SetActive(true);
-
-                //If this is a moving tween event
-                if (uiTweenEvent.moving)
-                {
-                    Tween<float> moveTween =
-                        objectToTween.TweenAnchoredPositionY(uiTweenEvent.moveTo, uiTweenEvent.duration);
-                    moveTween.SetFrom(uiTweenEvent.moveFrom);
-                    moveTween.SetOnComplete(() => OnEnd(uiTweenEvent.activeOnEnd));
-                }
-
-                //This is a fading tween event
-                if (uiTweenEvent.fading)
-                {
-                    Tween<float> fadeTween = objectToTween.GetComponent<Graphic>()
-                        .TweenGraphicAlpha(uiTweenEvent.fadeTo, uiTweenEvent.duration);
-                    fadeTween.SetFrom(uiTweenEvent.fadeFrom);
-                    fadeTween.SetOnComplete(() => OnEnd(uiTweenEvent.activeOnEnd));
-                }
-            }
-            else
-            {
-                Logger.Error("Unsupported tween event type!");
-            }
+            objectToTween.SetActive(true);
+            tweenEvent.TweenPlay();
 
             if (!Game.IsGameQuitting)
                 Logger.Debug("Played event {@Event}", tweenEvent.name);
