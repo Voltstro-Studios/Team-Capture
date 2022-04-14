@@ -17,7 +17,7 @@
     "com.unity.mathematics": "1.2.6",
     "com.unity.memoryprofiler": "0.6.0-preview.1",
     "com.unity.nuget.newtonsoft-json": "2.0.2",
-    "com.unity.postprocessing": "3.2.1",
+    "com.unity.postprocessing": "3.2.2",
     "com.unity.probuilder": "5.0.4",
     "com.unity.render-pipelines.universal": "12.1.6",
     "com.unity.scriptablebuildpipeline": "1.19.6",
@@ -30,6 +30,7 @@
     "com.unity.ugui": "1.0.0",
     "com.unity.vectorgraphics": "2.0.0-preview.18",
     "com.unity.visualeffectgraph": "12.1.6",
+    "com.yasirkula.assetusagedetector": "2.2.0",
     "dev.voltstro.unitycommandlineparser": "https://github.com/Voltstro-Studios/UnityCommandLineParser.git",
     "dev.voltstro.unityimgui": "https://github.com/Voltstro-Studios/uimgui.git",
     "dev.voltstro.unityvoltbuilder": "https://github.com/Voltstro-Studios/UnityVoltBuilder.git",
@@ -65,8 +66,7 @@
     "com.unity.modules.umbra": "1.0.0",
     "com.unity.modules.unitywebrequest": "1.0.0",
     "com.unity.modules.video": "1.0.0",
-    "com.unity.modules.wind": "1.0.0",
-    "com.yasirkula.assetusagedetector": "2.2.0"
+    "com.unity.modules.wind": "1.0.0"
   },
   "scopedRegistries": [
     {
