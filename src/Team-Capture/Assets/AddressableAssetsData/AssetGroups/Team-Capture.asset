@@ -131,6 +131,10 @@ MonoBehaviour:
     m_Address: Assets/Prefabs/Pickups/Objects/Pickup_Object_HealthPack.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: aeee56d8504e890689596ca349205694
+    m_Address: Assets/Prefabs/Projectiles/Rocket.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 31dc88cf5cd9dc44ead1cd2deab1bc53, type: 2}
   m_SchemaSet:

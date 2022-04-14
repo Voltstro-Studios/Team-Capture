@@ -102,6 +102,7 @@ MonoBehaviour:
   appliedForce: 1400
   explosionSize: 6
   explosionForce: 35
+  selfExplodeTime: 10000
   explosionDamage: 60
   percentageRemoveOfOwner: 0.2
   layerMask:

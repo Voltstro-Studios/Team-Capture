@@ -62,15 +62,20 @@ MonoBehaviour:
     type: 3}
   autoCreatePlayer: 1
   playerSpawnMethod: 0
-  spawnPrefabs:
-  - {fileID: 8197683935473045189, guid: aeee56d8504e890689596ca349205694, type: 3}
+  spawnPrefabs: []
   gameMangerPrefab: {fileID: 5023681518765488030, guid: 924fec1313feb8346bd0bf297c02c3fb,
     type: 3}
   gameSceneManagerPrefab: {fileID: 7623168383795849458, guid: c3731f1259b842744b04204963a044ac,
     type: 3}
   motdUIPrefab: {fileID: 1451107585728086516, guid: a02253513dd58044e8caf924098aa371,
     type: 3}
-  maxFrameCount: 128
+  secondsHistory: 4
+  registeredSpawnableAddressables:
+  - assetReference:
+      m_AssetGUID: aeee56d8504e890689596ca349205694
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
   gameDiscovery: {fileID: 0}
 --- !u!114 &1601811758747872255
 MonoBehaviour:

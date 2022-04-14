@@ -2,6 +2,7 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using Mirror;
 using Team_Capture.Core;
+using Team_Capture.Helper.Extensions;
 using Team_Capture.Misc;
 using Team_Capture.Player;
 using UnityEngine;
@@ -85,18 +86,16 @@ namespace Team_Capture.Weapons.Projectiles
 
         private void Awake()
         {
-            rb = GetComponent<Rigidbody>();
+            rb = this.GetComponentOrThrow<Rigidbody>();
             if (rb == null)
                 Logger.Error("Rocket doesn't have a rigidbody attached to it!");
         }
 
 #if UNITY_EDITOR
-
-        private void OnDrawGizmos()
+        private void OnDrawGizmosSelected()
         {
             Gizmos.DrawSphere(transform.position, explosionSize);
         }
-
 #endif
 
         private void OnTriggerEnter(Collider other)

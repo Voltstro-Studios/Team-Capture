@@ -65,7 +65,8 @@
     "com.unity.modules.umbra": "1.0.0",
     "com.unity.modules.unitywebrequest": "1.0.0",
     "com.unity.modules.video": "1.0.0",
-    "com.unity.modules.wind": "1.0.0"
+    "com.unity.modules.wind": "1.0.0",
+    "com.yasirkula.assetusagedetector": "2.2.0"
   },
   "scopedRegistries": [
     {
@@ -79,10 +80,11 @@
       "name": "package.openupm.com",
       "url": "https://package.openupm.com",
       "scopes": [
-        "com.cysharp.unitask",
         "com.cysharp.slnmerge",
+        "com.cysharp.unitask",
         "com.neuecc.messagepack",
         "com.openupm",
+        "com.yasirkula.assetusagedetector",
         "nl.elraccoone.tweens"
       ]
     }

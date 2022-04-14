@@ -35,8 +35,12 @@ MonoBehaviour:
     type: 3}
   bulletHoleEffectPrefab: {fileID: 1323092306309459875, guid: 8741f47e93961d34f81bf7f96e1277ac,
     type: 3}
-  rocketPrefab: {fileID: 8197683935473045189, guid: aeee56d8504e890689596ca349205694,
-    type: 3}
+  rocketPrefab:
+    assetReference:
+      m_AssetGUID: aeee56d8504e890689596ca349205694
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
   showStartTime: 1
   isMainMenu: 0
   largeImageKey: tc_icon

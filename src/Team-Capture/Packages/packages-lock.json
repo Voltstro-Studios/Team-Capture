@@ -315,6 +315,13 @@
         "com.unity.render-pipelines.core": "12.1.6"
       }
     },
+    "com.yasirkula.assetusagedetector": {
+      "version": "2.2.0",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://package.openupm.com"
+    },
     "dev.voltstro.unitycommandlineparser": {
       "version": "https://github.com/Voltstro-Studios/UnityCommandLineParser.git",
       "depth": 0,

@@ -7,6 +7,7 @@
 using System;
 using Cysharp.Threading.Tasks;
 using Mirror;
+using Team_Capture.AddressablesAddons;
 using Team_Capture.Console;
 using Team_Capture.Core.Networking.Discovery;
 using Team_Capture.LagCompensation;
@@ -52,6 +53,11 @@ namespace Team_Capture.Core.Networking
         /// </summary>
         [Tooltip("How many frames to keep")] 
         public float secondsHistory = 4f;
+
+        /// <summary>
+        ///     Addressables that can be spawnable
+        /// </summary>
+        public CachedAddressable<GameObject>[] registeredSpawnableAddressables;
 
         /// <summary>
         ///     The active <see cref="TCGameDiscovery" />
@@ -112,6 +118,11 @@ namespace Team_Capture.Core.Networking
 
         public override void Start()
         {
+            foreach (CachedAddressable<GameObject> addressable in registeredSpawnableAddressables)
+            {
+                NetworkClient.RegisterPrefab(addressable);
+            }
+            
             //We are running in headless mode
             if (Game.IsHeadless && !Game.IsGameQuitting)
             {

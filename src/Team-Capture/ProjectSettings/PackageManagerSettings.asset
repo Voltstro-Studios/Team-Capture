@@ -36,10 +36,11 @@ MonoBehaviour:
     m_Name: package.openupm.com
     m_Url: https://package.openupm.com
     m_Scopes:
-    - com.cysharp.unitask
     - com.cysharp.slnmerge
+    - com.cysharp.unitask
     - com.neuecc.messagepack
     - com.openupm
+    - com.yasirkula.assetusagedetector
     - nl.elraccoone.tweens
     m_IsDefault: 0
     m_Capabilities: 0
