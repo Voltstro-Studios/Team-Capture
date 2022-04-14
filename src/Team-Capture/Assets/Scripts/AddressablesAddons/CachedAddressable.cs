@@ -5,6 +5,7 @@
 // For more details see the LICENSE file.
 
 using System;
+using UnityEngine;
 using UnityEngine.AddressableAssets;
 using Object = UnityEngine.Object;
 
@@ -13,27 +14,24 @@ namespace Team_Capture.AddressablesAddons
     [Serializable]
     public class CachedAddressable<T> where T : Object
     {
-        public AssetReference assetReference;
+        [SerializeField] private AssetReference assetReference;
 
+        private bool haveSetValue;
         private T cachedItem;
-        private bool isWaitingForLoad;
 
         public T Value
         {
             get
             {
-                if (isWaitingForLoad)
-                    return null;
-
-                if (cachedItem == null)
-                {
-                    isWaitingForLoad = true;
-                    cachedItem = assetReference.LoadAssetAsync<T>().WaitForCompletion();
-                    isWaitingForLoad = false;
-                }
-
+                if (haveSetValue) 
+                    return cachedItem;
+                
+                cachedItem = assetReference.LoadAssetAsync<T>().WaitForCompletion();
+                haveSetValue = true;
                 return cachedItem;
             }
         }
+
+        public static implicit operator T(CachedAddressable<T> cachedAddressable) => cachedAddressable.Value;
     }
 }

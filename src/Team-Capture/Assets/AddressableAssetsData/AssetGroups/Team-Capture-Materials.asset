@@ -137,6 +137,18 @@ MonoBehaviour:
     m_Address: Assets/Materials/Models/Projectiles/ProjectileRocket
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: e6ceb9d7ff377f64a94ba22b98ddcab6
+    m_Address: Assets/Materials/Models/Pickups/Pickup_HealthPack.tga
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 40f1d7055abf0d64e986f588b3c302e7
+    m_Address: Assets/Materials/Models/Pickups/Pickup_HealthPack.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: aea5d6b7c99cdb344ad6a5cf466e5281
+    m_Address: Assets/Materials/Models/Pickups/Pickup_HealthPackMetallic.tga
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 31dc88cf5cd9dc44ead1cd2deab1bc53, type: 2}
   m_SchemaSet:

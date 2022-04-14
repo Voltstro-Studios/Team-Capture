@@ -4,9 +4,11 @@
 // This project is governed by the AGPLv3 License.
 // For more details see the LICENSE file.
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Mirror;
+using Team_Capture.AddressablesAddons;
 using Team_Capture.Core;
 using Team_Capture.Core.Networking;
 using Team_Capture.Helper;
@@ -32,6 +34,10 @@ namespace Team_Capture.Pickups
         [Tooltip("The radius of the trigger")] [SerializeField]
         private float triggerRadius = 1.3f;
 
+        [SerializeField] private Transform gfxPosition;
+
+        [SerializeField] private CachedAddressable<GameObject> gfxObject;
+
         [SyncVar(hook = nameof(OnIsPickedUp))] private bool isPickedUp;
 
         private List<PickupMaterials> pickupMaterials;
@@ -46,6 +52,8 @@ namespace Team_Capture.Pickups
             }
 
             if (Game.IsHeadless) return;
+
+            Instantiate(gfxObject, gfxPosition);
 
             pickupMaterials = new List<PickupMaterials>();
 
@@ -88,6 +96,33 @@ namespace Team_Capture.Pickups
 
             isPickedUp = false;
         }
+
+#if UNITY_EDITOR
+        private void OnDrawGizmos()
+        {
+            if(gfxObject == null)
+                return;
+            
+            if(gfxPosition == null)
+                return;
+            
+            GameObject obj = gfxObject.Value;
+            if(obj == null)
+                return;
+            
+            MeshFilter[] meshes = obj.GetComponentsInChildren<MeshFilter>();
+            foreach (MeshFilter mesh in meshes)
+            {
+                Gizmos.DrawMesh(mesh.sharedMesh, gfxPosition.position, 
+                    obj.transform.rotation, obj.transform.localScale);
+            }
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            Gizmos.DrawSphere(transform.position, triggerRadius);
+        }
+#endif
 
         private void OnIsPickedUp(bool oldValue, bool newValue)
         {

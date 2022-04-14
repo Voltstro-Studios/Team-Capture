@@ -874,6 +874,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: RocketTrail
       objectReference: {fileID: 0}
+    - target: {fileID: 4514885835423395494, guid: 8ae202793fb2d72d28547343b6911d83,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4514885835423395495, guid: 8ae202793fb2d72d28547343b6911d83,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4514885835423395496, guid: 8ae202793fb2d72d28547343b6911d83,
         type: 3}
       propertyPath: m_PropertySheet.m_Int.m_Array.Array.data[0].m_Value
