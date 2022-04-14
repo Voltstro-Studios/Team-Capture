@@ -19,13 +19,7 @@ namespace Team_Capture.Tweens
         ///     What objects can be tweened
         /// </summary>
         public TweenObject[] tweenedObjects;
-
-        protected void Awake()
-        {
-            foreach (TweenObject tweenObject in tweenedObjects)
-                tweenObject.Setup();
-        }
-
+        
         /// <summary>
         ///     Gets a tweened object
         /// </summary>

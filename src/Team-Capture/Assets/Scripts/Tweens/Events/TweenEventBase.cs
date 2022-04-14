@@ -25,29 +25,8 @@ namespace Team_Capture.Tweens.Events
         public bool activeOnEnd = true;
 
         /// <summary>
-        ///     The <see cref="GameObject"/> to do your tweens to
-        /// </summary>
-        protected GameObject objectToTween;
-        
-        /// <summary>
-        ///     Call this when you are done tweening
-        /// </summary>
-        protected Action onEnd;
-
-        /// <summary>
-        ///     Called on setup
-        /// </summary>
-        /// <param name="objToTween"></param>
-        /// <param name="onEndAction"></param>
-        public virtual void TweenSetup(GameObject objToTween, Action onEndAction)
-        {
-            objectToTween = objToTween;
-            onEnd = onEndAction;
-        }
-
-        /// <summary>
         ///     Called when the tween needs to play
         /// </summary>
-        public abstract void TweenPlay();
+        public abstract void TweenPlay(GameObject objToTween, Action onEndAction);
     }
 }

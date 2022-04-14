@@ -24,12 +24,7 @@ namespace Team_Capture.UI.Panels
         ///     The <see cref="TweenObject" /> for this panel
         /// </summary>
         public TweenObject tweenObject;
-
-        private void Awake()
-        {
-            tweenObject.Setup();
-        }
-
+        
         public virtual void OnEnable()
         {
             if (tweenObject.objectToTween != null)

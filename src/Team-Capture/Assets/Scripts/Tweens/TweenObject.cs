@@ -34,12 +34,6 @@ namespace Team_Capture.Tweens
         /// </summary>
         public TweenEventBase[] eventsToPlay;
 
-        public void Setup()
-        {
-            foreach (TweenEventBase tweenEvent in eventsToPlay)
-                tweenEvent.TweenSetup(objectToTween, () => OnEnd(tweenEvent.activeOnEnd));
-        }
-
         /// <summary>
         ///     Plays an event
         /// </summary>
@@ -69,7 +63,7 @@ namespace Team_Capture.Tweens
         private void PlayTween(TweenEventBase tweenEvent)
         {
             objectToTween.SetActive(true);
-            tweenEvent.TweenPlay();
+            tweenEvent.TweenPlay(objectToTween, () => OnEnd(tweenEvent.activeOnEnd));
 
             if (!Game.IsGameQuitting)
                 Logger.Debug("Played event {@Event}", tweenEvent.name);

@@ -4,6 +4,7 @@
 // This project is governed by the AGPLv3 License.
 // For more details see the LICENSE file.
 
+using System;
 using ElRaccoone.Tweens;
 using ElRaccoone.Tweens.Core;
 using UnityEngine;
@@ -47,24 +48,24 @@ namespace Team_Capture.Tweens.Events
         /// </summary>
         public float fadeTo;
 
-        public override void TweenPlay()
+        public override void TweenPlay(GameObject objToTween, Action onEndAction)
         {
             //If this is a moving tween event
             if (moving)
             {
                 Tween<float> moveTween =
-                    objectToTween.TweenAnchoredPositionY(moveTo, duration);
+                    objToTween.TweenAnchoredPositionY(moveTo, duration);
                 moveTween.SetFrom(moveFrom);
-                moveTween.SetOnComplete(onEnd);
+                moveTween.SetOnComplete(onEndAction);
             }
 
             //This is a fading tween event
             if (fading)
             {
-                Tween<float> fadeTween = objectToTween.GetComponent<Graphic>()
+                Tween<float> fadeTween = objToTween.GetComponent<Graphic>()
                     .TweenGraphicAlpha(fadeTo, duration);
                 fadeTween.SetFrom(fadeFrom);
-                fadeTween.SetOnComplete(onEnd);
+                fadeTween.SetOnComplete(onEndAction);
             }
         }
     }
