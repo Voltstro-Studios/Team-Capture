@@ -5,6 +5,7 @@
 // For more details see the LICENSE file.
 
 using Mirror;
+using Team_Capture.Helper.Extensions;
 using Team_Capture.Misc;
 using TMPro;
 using UnityEngine;
@@ -93,10 +94,10 @@ namespace Team_Capture.UI.Chat
         internal void AddMessage(ChatMessage message)
         {
             string formattedMessage = $"{message.Player}: {message.Message.String}";
-            TMP_Text mainViewText = Instantiate(chatTextPrefab, mainViewTextViewport, false).GetComponent<TMP_Text>();
+            TMP_Text mainViewText = Instantiate(chatTextPrefab, mainViewTextViewport, false).GetComponentOrThrow<TMP_Text>();
             mainViewText.text = formattedMessage;
 
-            TMP_Text previewText = Instantiate(chatTextPrefab, previewTextViewport, false).GetComponent<TMP_Text>();
+            TMP_Text previewText = Instantiate(chatTextPrefab, previewTextViewport, false).GetComponentOrThrow<TMP_Text>();
             previewText.text = formattedMessage;
             previewText.gameObject.AddComponent<TimedDestroyer>().destroyDelayTime = previewTextDestroyDelayTime;
 
@@ -114,6 +115,8 @@ namespace Team_Capture.UI.Chat
         internal void SendChatMessage(ChatMessage message)
         {
             NetworkClient.connection.Send(message, Channels.Unreliable);
+            inputField.Select();
+            inputField.ActivateInputField();
         }
 
         /// <summary>
