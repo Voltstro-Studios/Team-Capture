@@ -108,5 +108,8 @@ namespace Team_Capture.Core.Compression
         {
             return @string;
         }
+        
+        public static implicit operator string(CompressedNetworkString cachedLocalizedString) =>
+            cachedLocalizedString.String;
     }
 }

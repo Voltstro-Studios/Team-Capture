@@ -16,6 +16,7 @@ namespace Team_Capture.UI.Chat
     /// </summary>
     public struct ChatMessage : NetworkMessage
     {
+        //TODO: We should have like 'metadata' or 'flags' to include stuff like if a message is a connect/disconnect related
         internal ChatMessage(string message)
             : this()
         {

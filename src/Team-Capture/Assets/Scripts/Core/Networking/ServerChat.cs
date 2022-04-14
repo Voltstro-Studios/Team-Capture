@@ -17,6 +17,9 @@ namespace Team_Capture.Core.Networking
     /// </summary>
     public static class ServerChat
     {
+        [ConVar("sv_chat_characters", "The maximum amount of characters in a single chat message")]
+        public static int MaxCharacters = 70;
+        
         /// <summary>
         ///     When we get a chat message from a client
         /// </summary>
@@ -24,6 +27,12 @@ namespace Team_Capture.Core.Networking
         /// <param name="message"></param>
         internal static void ReceivedChatMessage(NetworkConnection conn, ChatMessage message)
         {
+            if (!CheckMessageLenght(message.Message))
+            {
+                conn.Send(new ChatMessage($"Sorry, but your message is greater than {MaxCharacters} in lenght!"), Channels.Unreliable);
+                return;
+            }
+            
             message.Player = TCNetworkManager.Authenticator.GetAccount(conn.connectionId).UserName;
             SendChatMessage(message);
         }
@@ -50,6 +59,19 @@ namespace Team_Capture.Core.Networking
                 Player = name,
                 Message = new CompressedNetworkString(message)
             });
+        }
+
+        /// <summary>
+        ///     Checks to make sure a message is within lenght
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns>Returns true if it is all good</returns>
+        public static bool CheckMessageLenght(string message)
+        {
+            if (message.Length > MaxCharacters)
+                return false;
+
+            return true;
         }
 
         [ConCommand("send", "Sends a message to the chat", CommandRunPermission.ServerOnly)]
