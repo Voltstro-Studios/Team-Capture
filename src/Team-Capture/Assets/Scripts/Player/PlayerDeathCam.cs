@@ -1,3 +1,9 @@
+// Team-Capture
+// Copyright (c) 2019-2022 Voltstro-Studios
+// 
+// This project is governed by the AGPLv3 License.
+// For more details see the LICENSE file.
+
 using Cinemachine;
 using Team_Capture.Helper.Extensions;
 using Team_Capture.Input;
