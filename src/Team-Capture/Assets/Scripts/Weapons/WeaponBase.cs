@@ -65,7 +65,7 @@ namespace Team_Capture.Weapons
         /// <summary>
         ///     Access to instantiated weapon object
         /// </summary>
-        public GameObject weaponObjectInstance;
+        protected GameObject weaponObjectInstance;
 
         /// <summary>
         ///     The <see cref="WeaponType" /> that this instance is
