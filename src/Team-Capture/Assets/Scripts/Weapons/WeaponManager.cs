@@ -204,6 +204,9 @@ namespace Team_Capture.Weapons
         [Command(channel = Channels.Unreliable)]
         internal void CmdShootWeapon(bool buttonDown)
         {
+            if(playerManager.IsDead)
+                return;
+            
             Logger.Debug("Got request to fire player {PlayerId}'s weapon.", transform.name);
             WeaponBase weapon = GetActiveWeapon();
             if (weapon == null)
@@ -248,6 +251,9 @@ namespace Team_Capture.Weapons
         [Command(channel = Channels.Unreliable)]
         private void CmdReloadPlayerWeapon()
         {
+            if(playerManager.IsDead)
+                return;
+            
             WeaponBase weapon = GetActiveWeapon();
             if (!weapon.IsReloadable)
                 return;
@@ -355,6 +361,9 @@ namespace Team_Capture.Weapons
         [Command(channel = Channels.Unreliable)]
         public void CmdSetWeaponIndex(int index)
         {
+            if(playerManager.IsDead)
+                return;
+            
             Option<WeaponBase> result = weapons.AsValueEnumerable().ElementAt(index);
 
             if (result.IsNone)

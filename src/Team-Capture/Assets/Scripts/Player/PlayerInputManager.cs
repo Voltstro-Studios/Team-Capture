@@ -220,6 +220,9 @@ namespace Team_Capture.Player
         {
             if (uiManager.IsChatOpen)
                 return;
+            
+            if(playerManager.IsDead)
+                return;
 
             int selectedWeaponIndex = weaponManager.SelectedWeaponIndex;
             int weaponHolderChildCount = weaponManager.WeaponHolderSpotChildCount - 1;
@@ -248,6 +251,9 @@ namespace Team_Capture.Player
         {
             if (uiManager.IsChatOpen)
                 return;
+            
+            if(playerManager.IsDead)
+                return;
 
             weaponManager.CmdShootWeapon(button);
         }
@@ -255,6 +261,9 @@ namespace Team_Capture.Player
         private void OnPlayerWeaponReload()
         {
             if (uiManager.IsChatOpen)
+                return;
+            
+            if(playerManager.IsDead)
                 return;
 
             weaponManager.ClientReloadWeapon();
