@@ -201,6 +201,9 @@ namespace Team_Capture.Player
 
         private void OnPlayerSuicidePress()
         {
+            if(uiManager.IsChatOpen)
+                return;
+            
             if (!playerManager.IsDead)
                 playerManager.CmdSuicide();
         }
