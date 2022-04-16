@@ -6,9 +6,9 @@
 
 using Mirror;
 using Team_Capture.Console;
-using Team_Capture.Core.Compression;
 using Team_Capture.Logging;
 using Team_Capture.UI.Chat;
+using Team_Capture.UserManagement;
 
 namespace Team_Capture.Core.Networking
 {
@@ -29,11 +29,19 @@ namespace Team_Capture.Core.Networking
         {
             if (!CheckMessageLenght(message.Message))
             {
-                conn.Send(new ChatMessage($"Sorry, but your message is greater than {MaxCharacters} in lenght!"), Channels.Unreliable);
+                conn.Send(new ChatMessage(ChatFlag.TooLong), Channels.Unreliable);
+                return;
+            }
+
+            IUser user = TCNetworkManager.Authenticator.GetAccount(conn.connectionId);
+            if (user == null)
+            {
+                Logger.Warn("Got a message from the connection {ID} that has no auth user data!", conn.connectionId);
                 return;
             }
             
-            message.Player = TCNetworkManager.Authenticator.GetAccount(conn.connectionId).UserName;
+            message.Player = user.UserName;
+            message.Flag = ChatFlag.Message;
             SendChatMessage(message);
         }
 
@@ -44,21 +52,23 @@ namespace Team_Capture.Core.Networking
         public static void SendChatMessage(ChatMessage message)
         {
             NetworkServer.SendToAll(message, Channels.Unreliable, true);
-            Logger.Info($"Chat: {message.Player}: {message.Message.String}");
+            if (message.Flag is ChatFlag.Message or ChatFlag.GenericError or ChatFlag.Server)
+            {
+                Logger.Info(string.IsNullOrEmpty(message.Player)
+                    ? $"Chat: {message.Message}"
+                    : $"Chat: [{message.Player}] {message.Message}");
+            }
         }
 
         /// <summary>
         ///     Sends a <see cref="ChatMessage" /> to all clients
         /// </summary>
-        /// <param name="name"></param>
         /// <param name="message"></param>
-        public static void SendChatMessage(string name, string message)
+        /// <param name="flag"></param>
+        /// <param name="player"></param>
+        public static void SendChatMessage(string message, ChatFlag flag, string player = null)
         {
-            NetworkServer.SendToAll(new ChatMessage
-            {
-                Player = name,
-                Message = new CompressedNetworkString(message)
-            });
+            SendChatMessage(new ChatMessage(flag, message, player));
         }
 
         /// <summary>
@@ -78,10 +88,7 @@ namespace Team_Capture.Core.Networking
         internal static void SendMessageCommand(string[] args)
         {
             string message = string.Join(" ", args);
-            SendChatMessage(new ChatMessage(message)
-            {
-                Player = "Server"
-            });
+            SendChatMessage(message, ChatFlag.Server);
         }
     }
 }

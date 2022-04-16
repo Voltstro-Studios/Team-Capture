@@ -395,6 +395,30 @@ MonoBehaviour:
     m_Key: Discord_PlayingOn
     m_Metadata:
       m_Items: []
+  - m_Id: 65392396731027456
+    m_Key: Chat_Message
+    m_Metadata:
+      m_Items: []
+  - m_Id: 65392494382813184
+    m_Key: Chat_Connected
+    m_Metadata:
+      m_Items: []
+  - m_Id: 65392581938909184
+    m_Key: Chat_Disconnected
+    m_Metadata:
+      m_Items: []
+  - m_Id: 65393068461395968
+    m_Key: Chat_Server
+    m_Metadata:
+      m_Items: []
+  - m_Id: 65393192512131072
+    m_Key: Chat_Error_TooLong
+    m_Metadata:
+      m_Items: []
+  - m_Id: 65393852326481920
+    m_Key: Chat_Error_Generic
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

@@ -403,6 +403,30 @@ MonoBehaviour:
     m_Localized: Playing on {0}
     m_Metadata:
       m_Items: []
+  - m_Id: 65392396731027456
+    m_Localized: '<b>{0}</b>: {1}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 65392494382813184
+    m_Localized: '<b>Connected</b>: {0}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 65392581938909184
+    m_Localized: '<b>Disconnected</b>: {0}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 65393068461395968
+    m_Localized: '<b>Server</b>: {0}'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 65393192512131072
+    m_Localized: <b><color=#FF0000>Your message is too long!</color></b>
+    m_Metadata:
+      m_Items: []
+  - m_Id: 65393852326481920
+    m_Localized: <b><color=#FF0000>{0}</color></b>
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds:

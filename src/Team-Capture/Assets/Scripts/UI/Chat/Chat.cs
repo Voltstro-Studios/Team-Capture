@@ -4,7 +4,9 @@
 // This project is governed by the AGPLv3 License.
 // For more details see the LICENSE file.
 
+using System;
 using Mirror;
+using Team_Capture.AddressablesAddons;
 using Team_Capture.Helper.Extensions;
 using Team_Capture.Misc;
 using TMPro;
@@ -64,6 +66,40 @@ namespace Team_Capture.UI.Chat
         /// </summary>
         public Transform mainViewTextViewport;
 
+        #region Localization
+
+        /// <summary>
+        ///     Basic message template
+        /// </summary>
+        public CachedLocalizedString basicMessage;
+        
+        /// <summary>
+        ///     String for when a player connects to the server
+        /// </summary>
+        public CachedLocalizedString connectedMessage;
+
+        /// <summary>
+        ///     String for when a player disconnects
+        /// </summary>
+        public CachedLocalizedString disconnectedMessage;
+
+        /// <summary>
+        ///     Message from the server
+        /// </summary>
+        public CachedLocalizedString serverMessage;
+
+        /// <summary>
+        ///     Too long error message
+        /// </summary>
+        public CachedLocalizedString tooLongMessage;
+
+        /// <summary>
+        ///     Generic error message
+        /// </summary>
+        public CachedLocalizedString genericErrorMessage;
+
+        #endregion
+        
         /// <summary>
         ///     Is the chat opened?
         /// </summary>
@@ -93,7 +129,31 @@ namespace Team_Capture.UI.Chat
         /// <param name="message"></param>
         internal void AddMessage(ChatMessage message)
         {
-            string formattedMessage = $"{message.Player}: {message.Message.String}";
+            string formattedMessage;
+            switch(message.Flag)
+            {
+                case ChatFlag.Message:
+                    formattedMessage = string.Format(basicMessage, message.Player, message.Message);
+                    break;
+                case ChatFlag.Connected:
+                    formattedMessage = string.Format(connectedMessage, message.Player);
+                    break;
+                case ChatFlag.Disconnected:
+                    formattedMessage = string.Format(disconnectedMessage, message.Player);
+                    break;
+                case ChatFlag.Server:
+                    formattedMessage = string.Format(serverMessage, message.Message);
+                    break;
+                case ChatFlag.TooLong:
+                    formattedMessage = tooLongMessage;
+                    break;
+                case ChatFlag.GenericError:
+                    formattedMessage = string.Format(genericErrorMessage, message.Message);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
             TMP_Text mainViewText = Instantiate(chatTextPrefab, mainViewTextViewport, false).GetComponentOrThrow<TMP_Text>();
             mainViewText.text = formattedMessage;
 

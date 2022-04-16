@@ -214,7 +214,7 @@ namespace Team_Capture.Core.Networking
                 conn.address, conn.connectionId);
             IUser user = netManager.tcAuthenticator.GetAccount(conn.connectionId);
             if (user != null)
-                ServerChat.SendChatMessage("<b>Join</b>", user.UserName);
+                ServerChat.SendChatMessage(null, ChatFlag.Connected, user.UserName);
         }
 
         /// <summary>
@@ -234,7 +234,7 @@ namespace Team_Capture.Core.Networking
             {
                 IUser user = netManager.tcAuthenticator.GetAccount(conn.connectionId);
                 if (user != null)
-                    ServerChat.SendChatMessage("<b>Disconnect</b>", user.UserName);
+                    ServerChat.SendChatMessage(null, ChatFlag.Disconnected, user.UserName);
             }
 
             netManager.tcAuthenticator.OnServerClientDisconnect(conn);

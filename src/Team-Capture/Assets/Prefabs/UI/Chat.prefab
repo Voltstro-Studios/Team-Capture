@@ -846,6 +846,69 @@ MonoBehaviour:
   mainViewScroll: {fileID: 3385445376880692358}
   previewTextViewport: {fileID: 4718130580416019590}
   mainViewTextViewport: {fileID: 859344223688907629}
+  basicMessage:
+    localizedString:
+      m_TableReference:
+        m_TableCollectionName: GUID:34afaa7d41c0a49428742c07472e0e20
+      m_TableEntryReference:
+        m_KeyId: 65392396731027456
+        m_Key: 
+      m_FallbackState: 0
+      m_WaitForCompletion: 0
+      m_LocalVariables: []
+  connectedMessage:
+    localizedString:
+      m_TableReference:
+        m_TableCollectionName: GUID:34afaa7d41c0a49428742c07472e0e20
+      m_TableEntryReference:
+        m_KeyId: 65392494382813184
+        m_Key: 
+      m_FallbackState: 0
+      m_WaitForCompletion: 0
+      m_LocalVariables: []
+  disconnectedMessage:
+    localizedString:
+      m_TableReference:
+        m_TableCollectionName: GUID:34afaa7d41c0a49428742c07472e0e20
+      m_TableEntryReference:
+        m_KeyId: 65392581938909184
+        m_Key: 
+      m_FallbackState: 0
+      m_WaitForCompletion: 0
+      m_LocalVariables: []
+  serverMessage:
+    localizedString:
+      m_TableReference:
+        m_TableCollectionName: GUID:34afaa7d41c0a49428742c07472e0e20
+      m_TableEntryReference:
+        m_KeyId: 65393068461395968
+        m_Key: 
+      m_FallbackState: 0
+      m_WaitForCompletion: 0
+      m_LocalVariables: []
+  tooLongMessage:
+    localizedString:
+      m_TableReference:
+        m_TableCollectionName: GUID:34afaa7d41c0a49428742c07472e0e20
+      m_TableEntryReference:
+        m_KeyId: 65393192512131072
+        m_Key: 
+      m_FallbackState: 0
+      m_WaitForCompletion: 0
+      m_LocalVariables: []
+  genericErrorMessage:
+    localizedString:
+      m_TableReference:
+        m_TableCollectionName: GUID:34afaa7d41c0a49428742c07472e0e20
+      m_TableEntryReference:
+        m_KeyId: 65393852326481920
+        m_Key: 
+      m_FallbackState: 0
+      m_WaitForCompletion: 0
+      m_LocalVariables: []
+  references:
+    version: 2
+    RefIds: []
 --- !u!1 &1965067407918247884
 GameObject:
   m_ObjectHideFlags: 0
