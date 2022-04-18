@@ -27,6 +27,9 @@ namespace Team_Capture.Player
         //Note: It is set by in the Unity editor as it is marked with SerializeField
         //ReSharper disable once UnusedAutoPropertyAccessor.Local
         public CinemachineVirtualCamera PlayerVCam { get; private set; }
+        
+        [field: SerializeField]
+        public GameObject PlayerWeaponRecoilPoint { get; private set; }
 
         /// <summary>
         ///     The prefab for the client's UI
@@ -75,12 +78,15 @@ namespace Team_Capture.Player
         public void Start()
         {
             GameManager.AddPlayer(netId.ToString(), playerManager);
+            
+            PlayerWeaponRecoilPoint.AddComponent<PlayerWeaponRecoil>();
 
             //Setup player camera effects
             if (isLocalPlayer || isServer)
             {
                 PlayerCameraEffects cameraEffects = PlayerVCam.gameObject.AddComponent<PlayerCameraEffects>();
                 cameraEffects.Setup(transform, isServer);
+
             }
         }
 

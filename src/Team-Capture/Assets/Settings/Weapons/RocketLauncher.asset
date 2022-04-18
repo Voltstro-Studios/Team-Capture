@@ -24,6 +24,9 @@ MonoBehaviour:
   weaponCameraRecoilAmount: {x: 10, y: 0, z: 0}
   weaponRecoilCameraSpeed: 7
   weaponRecoilCameraReturnSpeed: 15
+  weaponRecoilRotation: {x: 28, y: 0, z: 0}
+  weaponRecoilRotationSpeed: 8
+  weaponRecoilRotationReturnSpeed: 24
   projectileAutoAimMinRange: 3
   maxWeaponProjectileCount: 4
   weaponFireRate: 2

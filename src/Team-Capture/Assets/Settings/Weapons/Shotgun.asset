@@ -24,6 +24,9 @@ MonoBehaviour:
   weaponCameraRecoilAmount: {x: 14, y: 0, z: 0}
   weaponRecoilCameraSpeed: 5
   weaponRecoilCameraReturnSpeed: 25
+  weaponRecoilRotation: {x: 32, y: 0, z: 0}
+  weaponRecoilRotationSpeed: 8
+  weaponRecoilRotationReturnSpeed: 18
   weaponDamage: 12
   weaponDamageDropOff:
     serializedVersion: 2

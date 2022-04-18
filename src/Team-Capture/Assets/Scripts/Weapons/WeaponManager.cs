@@ -58,6 +58,8 @@ namespace Team_Capture.Weapons
         [NonSerialized] internal WeaponSway WeaponSway;
 
         [NonSerialized] internal PlayerCameraEffects CameraEffects;
+        
+        internal PlayerWeaponRecoil WeaponRecoil { get; private set; }
 
         /// <summary>
         ///     What is the selected weapon
@@ -103,6 +105,10 @@ namespace Team_Capture.Weapons
             }
 
             WeaponBase selectedWeapon = weapons[SelectedWeaponIndex];
+            PlayerSetup setup = this.GetComponentOrThrow<PlayerSetup>();
+            WeaponRecoil = setup.PlayerWeaponRecoilPoint.GetComponentOrThrow<PlayerWeaponRecoil>();
+            WeaponRecoil.OnWeaponChange(selectedWeapon.weaponRecoilRotationSpeed, selectedWeapon.weaponRecoilRotationReturnSpeed);
+            
             if (isLocalPlayer)
             {
                 WeaponSway = weaponsHolderSpot.gameObject.AddComponent<WeaponSway>();
@@ -111,7 +117,7 @@ namespace Team_Capture.Weapons
 
             if (isLocalPlayer || isServer)
             {
-                CameraEffects = this.GetComponentOrThrow<PlayerSetup>().PlayerVCam
+                CameraEffects = setup.PlayerVCam
                     .GetComponentOrThrow<PlayerCameraEffects>("The PlayerCameraEffects component should exist! Ensure this script executes AFTER PlayerSetup!");
                 CameraEffects.OnWeaponChange(selectedWeapon.weaponRecoilCameraSpeed, selectedWeapon.weaponRecoilCameraReturnSpeed);
             }
@@ -417,6 +423,8 @@ namespace Team_Capture.Weapons
             if (index + 1 > weapons.Count)
                 return;
             WeaponBase weapon = weapons[index];
+            
+            WeaponRecoil.OnWeaponChange(weapon.weaponRecoilRotationSpeed, weapon.weaponRecoilRotationReturnSpeed);
             
             if (isLocalPlayer)
                 WeaponSway.SetWeapon(weapon);

@@ -162,6 +162,8 @@ namespace Team_Capture.Weapons
             if (effectsMessage is ProjectileEffectsMessage)
             {
                 weaponGraphics.muzzleFlash.Play();
+                weaponManager.WeaponRecoil.OnWeaponFire(weaponRecoilRotation);
+                
                 if(weaponManager.CameraEffects != null) //TODO: Other clients should also see recoil
                     weaponManager.CameraEffects.OnWeaponFire(weaponCameraRecoilAmount);
             }

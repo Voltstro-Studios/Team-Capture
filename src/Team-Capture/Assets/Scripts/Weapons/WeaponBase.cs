@@ -52,6 +52,10 @@ namespace Team_Capture.Weapons
         public float weaponRecoilCameraSpeed = 6f;
         public float weaponRecoilCameraReturnSpeed = 25f;
 
+        public Vector3 weaponRecoilRotation = new(10f, 0f, 0f);
+        public float weaponRecoilRotationSpeed = 8f;
+        public float weaponRecoilRotationReturnSpeed = 38f;
+
         /// <summary>
         ///     Is this running on a local client
         /// </summary>
