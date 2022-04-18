@@ -80,14 +80,8 @@ namespace Team_Capture.Player
             GameManager.AddPlayer(netId.ToString(), playerManager);
             
             PlayerWeaponRecoilPoint.AddComponent<PlayerWeaponRecoil>();
-
-            //Setup player camera effects
-            if (isLocalPlayer || isServer)
-            {
-                PlayerCameraEffects cameraEffects = PlayerVCam.gameObject.AddComponent<PlayerCameraEffects>();
-                cameraEffects.Setup(transform, isServer);
-
-            }
+            PlayerCameraEffects cameraEffects = PlayerVCam.gameObject.AddComponent<PlayerCameraEffects>();
+            cameraEffects.Setup(transform, isLocalPlayer);
         }
 
         private void OnDisable()

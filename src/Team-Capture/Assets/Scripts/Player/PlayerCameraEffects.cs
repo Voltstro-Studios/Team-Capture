@@ -44,6 +44,7 @@ namespace Team_Capture.Player
         #endregion
 
         private bool isServer;
+        private bool isLocalClient;
 
         private void OnEnable() => FixedUpdateManager.OnFixedUpdate += OnFixedUpdate;
 
@@ -53,11 +54,11 @@ namespace Team_Capture.Player
         ///     Setup <see cref="PlayerCameraEffects"/>
         /// </summary>
         /// <param name="newTransform"></param>
-        /// <param name="server"></param>
-        internal void Setup(Transform newTransform, bool server)
+        /// <param name="localClient"></param>
+        internal void Setup(Transform newTransform, bool localClient)
         {
             baseTransform = newTransform;
-            isServer = server;
+            isLocalClient = localClient;
         }
 
         /// <summary>
@@ -90,7 +91,7 @@ namespace Team_Capture.Player
             currentRecoilRotation = Vector3.Lerp(currentRecoilRotation, Vector3.zero, returnSpeed * Time.fixedDeltaTime);
             cameraRot = Vector3.Slerp(cameraRot, currentRecoilRotation, speed * Time.fixedDeltaTime);
             Vector3 result = cameraRot;
-            if(!isServer)
+            if(isLocalClient)
                 result.z += CalcRoll();
             
             transform.localRotation = Quaternion.Euler(result);

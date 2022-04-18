@@ -164,8 +164,7 @@ namespace Team_Capture.Weapons
                 weaponGraphics.muzzleFlash.Play();
                 weaponManager.WeaponRecoil.OnWeaponFire(weaponRecoilRotation);
                 
-                if(weaponManager.CameraEffects != null) //TODO: Other clients should also see recoil
-                    weaponManager.CameraEffects.OnWeaponFire(weaponCameraRecoilAmount);
+                weaponManager.CameraEffects.OnWeaponFire(weaponCameraRecoilAmount);
             }
         }
 
