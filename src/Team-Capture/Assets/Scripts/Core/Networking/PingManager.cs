@@ -66,7 +66,7 @@ namespace Team_Capture.Core.Networking
         /// </summary>
         internal static void ServerShutdown()
         {
-            clientsPing.Clear();
+            clientsPing?.Clear();
             NetworkServer.UnregisterHandler<PingClientMessage>();
         }
 

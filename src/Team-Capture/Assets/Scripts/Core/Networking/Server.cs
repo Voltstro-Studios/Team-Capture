@@ -149,7 +149,7 @@ namespace Team_Capture.Core.Networking
             }
             catch (IOException ex)
             {
-                Logger.Error(ex, "An error occurred while setting up the server!");
+                Logger.Error(ex, "An error occurred while setting up the server online file!");
                 netManager.StopHost();
 
                 return;
@@ -170,29 +170,32 @@ namespace Team_Capture.Core.Networking
             PingManager.ServerShutdown();
 
             //Stop advertising the server when the server stops
-            netManager.gameDiscovery.StopDiscovery();
+            if (netManager != null && netManager.gameDiscovery != null)
+                netManager.gameDiscovery.StopDiscovery();
 
             //Close server chat
             NetworkServer.UnregisterHandler<ChatMessage>();
 
             //Close server online file stream
-            try
+            if (serverOnlineFileStream != null)
             {
-                serverOnlineFileStream.Close();
-                serverOnlineFileStream.Dispose();
-                serverOnlineFileStream = null;
+                try
+                {
+                    serverOnlineFileStream.Close();
+                    serverOnlineFileStream.Dispose();
+                    serverOnlineFileStream = null;
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error(ex, "An error occured while trying to cleanup the server online file!");
+                }
+                
+                //Double check that the file is deleted
+                if (File.Exists(serverOnlineFilePath))
+                    File.Delete(serverOnlineFilePath);
             }
-            catch (Exception ex)
-            {
-                Logger.Error(ex, "An error occurred while shutting down the server!");
-            }
-
+            
             netManager = null;
-
-            //Double check that the file is deleted
-            if (File.Exists(serverOnlineFilePath))
-                File.Delete(serverOnlineFilePath);
-
             Logger.Info("Server stopped!");
         }
 

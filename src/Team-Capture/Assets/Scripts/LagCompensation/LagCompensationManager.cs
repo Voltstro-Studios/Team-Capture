@@ -46,7 +46,7 @@ namespace Team_Capture.LagCompensation
         /// </summary>
         internal static void ServerShutdown()
         {
-            lagCompensatedObjects.Clear();
+            lagCompensatedObjects?.Clear();
             lagCompensatedObjects = null;
         }
 

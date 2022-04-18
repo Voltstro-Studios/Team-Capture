@@ -164,13 +164,16 @@ namespace Team_Capture.Core.Networking
         public static void StopCommand(string[] args)
         {
             NetworkManager networkManager = singleton;
-            if (networkManager.mode == NetworkManagerMode.Offline)
+            if (networkManager != null)
             {
-                Logger.Error("You are not in a game!");
-                return;
-            }
+                if (networkManager.mode == NetworkManagerMode.Offline)
+                {
+                    Logger.Error("You are not in a game!");
+                    return;
+                }
 
-            networkManager.StopHost();
+                networkManager.StopHost();
+            }
 
             //Quit the game if we are headless
             if (Game.IsHeadless)
@@ -181,12 +184,30 @@ namespace Team_Capture.Core.Networking
 
         public override void OnStartServer()
         {
-            Server.OnStartServer(this);
+            try
+            {
+                Server.OnStartServer(this);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex, "Server failed to start!");
+                if(Game.IsHeadless)
+                    Game.QuitGame();
+            }
         }
 
         public override void OnStopServer()
         {
-            Server.OnStopServer();
+            try
+            {
+                Server.OnStopServer();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex, "Server failed to stop (lol)!");
+                if(Game.IsHeadless) //If the server has failed to stop, well... then something has seriously fucked up, and we will force close
+                    Environment.Exit(-1);
+            }
         }
 
         public override void OnServerConnect(NetworkConnectionToClient conn)
