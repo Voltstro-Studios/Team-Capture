@@ -121,22 +121,18 @@ namespace Team_Capture.Collections
             get
             {
                 if (IsEmpty)
-                    throw new IndexOutOfRangeException(string.Format("Cannot access index {0}. Buffer is empty",
-                        index));
+                    throw new IndexOutOfRangeException($"Cannot access index {index}. Buffer is empty");
                 if (index >= size)
-                    throw new IndexOutOfRangeException(string.Format("Cannot access index {0}. Buffer size is {1}",
-                        index, size));
+                    throw new IndexOutOfRangeException($"Cannot access index {index}. Buffer size is {size}");
                 int actualIndex = InternalIndex(index);
                 return buffer[actualIndex];
             }
             set
             {
                 if (IsEmpty)
-                    throw new IndexOutOfRangeException(string.Format("Cannot access index {0}. Buffer is empty",
-                        index));
+                    throw new IndexOutOfRangeException($"Cannot access index {index}. Buffer is empty");
                 if (index >= size)
-                    throw new IndexOutOfRangeException(string.Format("Cannot access index {0}. Buffer size is {1}",
-                        index, size));
+                    throw new IndexOutOfRangeException($"Cannot access index {index}. Buffer size is {size}");
                 int actualIndex = InternalIndex(index);
                 buffer[actualIndex] = value;
             }

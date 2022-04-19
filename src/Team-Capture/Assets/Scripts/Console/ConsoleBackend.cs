@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using Cysharp.Text;
 using Mirror;
 using Team_Capture.Console.TypeReader;
 using Team_Capture.Core;
@@ -346,7 +347,7 @@ namespace Team_Capture.Console
             if (possibleMatches.Count <= 1) return prefix;
 
             //Build a list of all possible matches
-            StringBuilder sb = new();
+            Utf16ValueStringBuilder sb = ZString.CreateStringBuilder();
             sb.Append("Possible matches:\n");
 
             for (int i = 0; i < possibleMatches.Count; i++)
@@ -357,6 +358,7 @@ namespace Team_Capture.Console
             }
 
             Logger.Info(sb.ToString());
+            sb.Dispose();
             return prefix;
         }
 

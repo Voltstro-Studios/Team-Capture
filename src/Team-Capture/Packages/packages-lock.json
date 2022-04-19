@@ -14,6 +14,13 @@
       "dependencies": {},
       "url": "https://package.openupm.com"
     },
+    "com.cysharp.zstring": {
+      "version": "2.4.4",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://package.openupm.com"
+    },
     "com.mirror-networking.mirror": {
       "version": "https://github.com/VoltUnityPackages/Mirror.git?path=/Assets/Mirror",
       "depth": 0,

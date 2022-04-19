@@ -6,6 +6,7 @@
 
 using System.Collections.Generic;
 using System.Net;
+using Cysharp.Text;
 using Cysharp.Threading.Tasks;
 using Mirror;
 using NetFabric.Hyperlinq;
@@ -141,7 +142,6 @@ namespace Team_Capture.UI.Panels
             JoinServerButton item = AddServerItem(server);
             servers.Add(server, item);
             
-
             statusText.gameObject.SetActive(false);
 
             Logger.Debug("Found server at {Address}", server.EndPoint.Address);
@@ -163,7 +163,7 @@ namespace Team_Capture.UI.Panels
             
             //Set our status text
             statusText.gameObject.SetActive(true);
-            statusText.text = string.Format(connectingToServerText.Value, ip);
+            statusText.text = ZString.Format(connectingToServerText.Value, ip);
 
             //Tell Mirror to connect to the server's IP
             netManager.networkAddress = ip.Address.ToString();

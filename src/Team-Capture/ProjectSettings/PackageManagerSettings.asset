@@ -38,6 +38,7 @@ MonoBehaviour:
     m_Scopes:
     - com.cysharp.slnmerge
     - com.cysharp.unitask
+    - com.cysharp.zstring
     - com.neuecc.messagepack
     - com.openupm
     - com.yasirkula.assetusagedetector

@@ -5,6 +5,7 @@
 // For more details see the LICENSE file.
 
 using System;
+using Cysharp.Text;
 using Mirror;
 using Team_Capture.AddressablesAddons;
 using Team_Capture.Helper.Extensions;
@@ -133,22 +134,22 @@ namespace Team_Capture.UI.Chat
             switch(message.Flag)
             {
                 case ChatFlag.Message:
-                    formattedMessage = string.Format(basicMessage, message.Player, message.Message);
+                    formattedMessage = ZString.Format(basicMessage, message.Player, message.Message);
                     break;
                 case ChatFlag.Connected:
-                    formattedMessage = string.Format(connectedMessage, message.Player);
+                    formattedMessage = ZString.Format(connectedMessage, message.Player);
                     break;
                 case ChatFlag.Disconnected:
-                    formattedMessage = string.Format(disconnectedMessage, message.Player);
+                    formattedMessage = ZString.Format(disconnectedMessage, message.Player);
                     break;
                 case ChatFlag.Server:
-                    formattedMessage = string.Format(serverMessage, message.Message);
+                    formattedMessage = ZString.Format(serverMessage, message.Message);
                     break;
                 case ChatFlag.TooLong:
                     formattedMessage = tooLongMessage;
                     break;
                 case ChatFlag.GenericError:
-                    formattedMessage = string.Format(genericErrorMessage, message.Message);
+                    formattedMessage = ZString.Format(genericErrorMessage, message.Message);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

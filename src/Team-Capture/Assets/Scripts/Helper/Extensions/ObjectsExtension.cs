@@ -5,6 +5,7 @@
 // For more details see the LICENSE file.
 
 using System;
+using Cysharp.Text;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -38,7 +39,7 @@ namespace Team_Capture.Helper.Extensions
             T component = obj.GetComponent<T>();
             if (component == null)
             {
-                exceptionMessage ??= string.Format(DefaultComponentThrowMessage, typeof(T).FullName, obj.name);
+                exceptionMessage ??= ZString.Format(DefaultComponentThrowMessage, typeof(T).FullName, obj.name);
                 throw new NullReferenceException(exceptionMessage);
             }
             
@@ -58,7 +59,7 @@ namespace Team_Capture.Helper.Extensions
             T component = obj.GetComponent<T>();
             if (component == null)
             {
-                exceptionMessage ??= string.Format(DefaultComponentThrowMessage, typeof(T).FullName, obj.name);
+                exceptionMessage ??= ZString.Format(DefaultComponentThrowMessage, typeof(T).FullName, obj.name);
                 throw new NullReferenceException(exceptionMessage);
             }
 

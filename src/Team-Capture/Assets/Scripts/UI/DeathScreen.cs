@@ -5,6 +5,7 @@
 // For more details see the LICENSE file.
 
 using System.Threading;
+using Cysharp.Text;
 using Cysharp.Threading.Tasks;
 using Team_Capture.AddressablesAddons;
 using Team_Capture.Helper;
@@ -75,7 +76,7 @@ namespace Team_Capture.UI
             else
             {
                 killedByText.text = killer.User.UserName;
-                killedByHealthText.text = string.Format(hpLeftText.Value, killer.Health.ToString());
+                killedByHealthText.text = ZString.Format(hpLeftText, killer.Health.ToString());
             }
 
             killedByProfileImage.texture = killer.User.UserProfilePicture;

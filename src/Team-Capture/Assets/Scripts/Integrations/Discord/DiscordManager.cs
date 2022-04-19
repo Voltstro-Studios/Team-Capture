@@ -5,6 +5,7 @@
 // For more details see the LICENSE file.
 
 using System;
+using Cysharp.Text;
 using Discord.GameSDK;
 using Discord.GameSDK.Activities;
 using Discord.GameSDK.Users;
@@ -136,7 +137,7 @@ namespace Team_Capture.Integrations.Discord
 
                 if (scene.isOnlineScene)
                 {
-                    presence.Details = string.Format(Settings.playingOnText, scene.DisplayNameLocalized);
+                    presence.Details = ZString.Format(Settings.playingOnText, scene.DisplayNameLocalized);
                     presence.Assets.LargeText = scene.largeImageKeyText;
                 }
                 else if (scene.isMainMenu)

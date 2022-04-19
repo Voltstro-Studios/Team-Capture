@@ -8,6 +8,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Cysharp.Text;
 using Team_Capture.Input;
 using TMPro;
 using UnityEngine;
@@ -199,8 +200,7 @@ namespace Team_Capture.Console
                 helpList.Add($"\n`{command.Key}` - {command.Value.CommandSummary}");
 
             helpList.Sort(string.Compare);
-
-            Logger.Info(string.Join("", helpList));
+            Logger.Info(ZString.Join("", helpList));
 
             stopwatch.Stop();
             Logger.Debug("Took {Time}ms to build help menu.", stopwatch.Elapsed.TotalMilliseconds);
