@@ -8,6 +8,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using Cysharp.Text;
 using Team_Capture.Input;
 using TMPro;
@@ -191,19 +192,30 @@ namespace Team_Capture.Console
 
         #region Console Commands
 
+        private static string helpMenu;
+
         [ConCommand("help", "Shows a list of all the commands")]
         public static void HelpCommand(string[] args)
         {
-            Stopwatch stopwatch = Stopwatch.StartNew();
-            List<string> helpList = new List<string>();
-            foreach (KeyValuePair<string, ConsoleCommand> command in ConsoleBackend.GetAllCommands())
-                helpList.Add($"\n`{command.Key}` - {command.Value.CommandSummary}");
+            if (helpMenu == null)
+            {
+                Stopwatch stopwatch = Stopwatch.StartNew();
 
-            helpList.Sort(string.Compare);
-            Logger.Info(ZString.Join("", helpList));
+                Dictionary<string, ConsoleCommand> commands = ConsoleBackend.GetAllCommands();
+                string[] helpList = new string[commands.Count];
+                for (int i = 0; i < commands.Count; i++)
+                {
+                    (string command, ConsoleCommand consoleCommand) = commands.ElementAt(i);
+                    helpList[i] = $"\n`{command}` - {consoleCommand.CommandSummary}";
+                }
 
-            stopwatch.Stop();
-            Logger.Debug("Took {Time}ms to build help menu.", stopwatch.Elapsed.TotalMilliseconds);
+                Array.Sort(helpList, string.Compare);
+                helpMenu = ZString.Join("", helpList);
+                stopwatch.Stop();
+                Logger.Debug("Took {Time}ms to build help menu.", stopwatch.Elapsed.TotalMilliseconds);
+            }
+            
+            Logger.Info(helpMenu);
         }
 
         [ConCommand("version", "Shows Team-Capture's current version")]
