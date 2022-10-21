@@ -12,7 +12,7 @@
       "depth": 0,
       "source": "registry",
       "dependencies": {},
-      "url": "https://package.openupm.com"
+      "url": "https://upm-pkgs.voltstro.dev"
     },
     "com.cysharp.zstring": {
       "version": "2.4.4",
@@ -97,7 +97,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.rider": {
-      "version": "3.0.15",
+      "version": "3.0.16",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -122,7 +122,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.inputsystem": {
-      "version": "1.4.2",
+      "version": "1.4.3",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -325,38 +325,38 @@
       }
     },
     "com.yasirkula.assetusagedetector": {
-      "version": "2.2.3",
+      "version": "2.3.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
       "url": "https://package.openupm.com"
     },
     "dev.voltstro.unitycommandlineparser": {
-      "version": "https://github.com/Voltstro-Studios/UnityCommandLineParser.git",
+      "version": "2.1.2",
       "depth": 0,
-      "source": "git",
+      "source": "registry",
       "dependencies": {
-        "org.nuget.mcmaster.extensions.commandlineutils": "3.1.0"
+        "org.nuget.mcmaster.extensions.commandlineutils": "4.0.1"
       },
-      "hash": "42a3a11d9b3cb30021bf1c22518880df9e0b12ab"
+      "url": "https://upm-pkgs.voltstro.dev"
     },
     "dev.voltstro.unityimgui": {
-      "version": "https://github.com/Voltstro-Studios/uimgui.git",
+      "version": "5.0.1",
       "depth": 0,
-      "source": "git",
+      "source": "registry",
       "dependencies": {
-        "org.nuget.system.runtime.compilerservices.unsafe": "5.0.0"
+        "org.nuget.system.runtime.compilerservices.unsafe": "6.0.0"
       },
-      "hash": "e44241cd5b881311ab3546ebec197567682439d1"
+      "url": "https://upm-pkgs.voltstro.dev"
     },
     "dev.voltstro.unityvoltbuilder": {
-      "version": "https://github.com/Voltstro-Studios/UnityVoltBuilder.git",
+      "version": "4.1.2",
       "depth": 0,
-      "source": "git",
+      "source": "registry",
       "dependencies": {
         "com.unity.settings-manager": "1.0.3"
       },
-      "hash": "c8c338d61d7a4c1229273f46bb2aafb9d8ed7d41"
+      "url": "https://upm-pkgs.voltstro.dev"
     },
     "dev.voltstro.unitywebbrowser": {
       "version": "https://gitlab.com/Voltstro-Studios/WebBrowser/Package.git#2.x",
@@ -407,14 +407,14 @@
         "org.nuget.system.reflection.metadata": "5.0.0",
         "org.nuget.system.threading.tasks.extensions": "4.5.4"
       },
-      "url": "https://unitynuget-registry.azurewebsites.net"
+      "url": "https://upm-pkgs.voltstro.dev"
     },
     "org.nuget.jdenticon-net": {
       "version": "3.1.2",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
-      "url": "https://unitynuget-registry.azurewebsites.net"
+      "url": "https://upm-pkgs.voltstro.dev"
     },
     "org.nuget.k4os.compression.lz4": {
       "version": "1.2.16",
@@ -423,16 +423,16 @@
       "dependencies": {
         "org.nuget.system.memory": "4.5.4"
       },
-      "url": "https://unitynuget-registry.azurewebsites.net"
+      "url": "https://upm-pkgs.voltstro.dev"
     },
     "org.nuget.mcmaster.extensions.commandlineutils": {
-      "version": "3.1.0",
+      "version": "4.0.1",
       "depth": 1,
       "source": "registry",
       "dependencies": {
         "org.nuget.system.componentmodel.annotations": "5.0.0"
       },
-      "url": "https://unitynuget-registry.azurewebsites.net"
+      "url": "https://upm-pkgs.voltstro.dev"
     },
     "org.nuget.microsoft.bcl.asyncinterfaces": {
       "version": "6.0.0",
@@ -441,14 +441,14 @@
       "dependencies": {
         "org.nuget.system.threading.tasks.extensions": "4.5.4"
       },
-      "url": "https://unitynuget-registry.azurewebsites.net"
+      "url": "https://upm-pkgs.voltstro.dev"
     },
     "org.nuget.serilog": {
       "version": "2.12.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
-      "url": "https://unitynuget-registry.azurewebsites.net"
+      "url": "https://upm-pkgs.voltstro.dev"
     },
     "org.nuget.serilog.enrichers.demystifier": {
       "version": "1.0.2",
@@ -458,7 +458,7 @@
         "org.nuget.ben.demystifier": "0.4.1",
         "org.nuget.serilog": "2.10.0"
       },
-      "url": "https://unitynuget-registry.azurewebsites.net"
+      "url": "https://upm-pkgs.voltstro.dev"
     },
     "org.nuget.serilog.sinks.async": {
       "version": "1.5.0",
@@ -467,7 +467,7 @@
       "dependencies": {
         "org.nuget.serilog": "2.9.0"
       },
-      "url": "https://unitynuget-registry.azurewebsites.net"
+      "url": "https://upm-pkgs.voltstro.dev"
     },
     "org.nuget.serilog.sinks.console": {
       "version": "4.1.0",
@@ -476,7 +476,7 @@
       "dependencies": {
         "org.nuget.serilog": "2.10.0"
       },
-      "url": "https://unitynuget-registry.azurewebsites.net"
+      "url": "https://upm-pkgs.voltstro.dev"
     },
     "org.nuget.serilog.sinks.file": {
       "version": "5.0.0",
@@ -485,14 +485,14 @@
       "dependencies": {
         "org.nuget.serilog": "2.10.0"
       },
-      "url": "https://unitynuget-registry.azurewebsites.net"
+      "url": "https://upm-pkgs.voltstro.dev"
     },
     "org.nuget.system.buffers": {
       "version": "4.5.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
-      "url": "https://unitynuget-registry.azurewebsites.net"
+      "url": "https://upm-pkgs.voltstro.dev"
     },
     "org.nuget.system.collections.immutable": {
       "version": "5.0.0",
@@ -501,14 +501,14 @@
       "dependencies": {
         "org.nuget.system.memory": "4.5.4"
       },
-      "url": "https://unitynuget-registry.azurewebsites.net"
+      "url": "https://upm-pkgs.voltstro.dev"
     },
     "org.nuget.system.componentmodel.annotations": {
       "version": "5.0.0",
       "depth": 2,
       "source": "registry",
       "dependencies": {},
-      "url": "https://unitynuget-registry.azurewebsites.net"
+      "url": "https://upm-pkgs.voltstro.dev"
     },
     "org.nuget.system.memory": {
       "version": "4.5.5",
@@ -519,14 +519,14 @@
         "org.nuget.system.numerics.vectors": "4.4.0",
         "org.nuget.system.runtime.compilerservices.unsafe": "4.5.3"
       },
-      "url": "https://unitynuget-registry.azurewebsites.net"
+      "url": "https://upm-pkgs.voltstro.dev"
     },
     "org.nuget.system.numerics.vectors": {
       "version": "4.4.0",
       "depth": 1,
       "source": "registry",
       "dependencies": {},
-      "url": "https://unitynuget-registry.azurewebsites.net"
+      "url": "https://upm-pkgs.voltstro.dev"
     },
     "org.nuget.system.reflection.metadata": {
       "version": "5.0.0",
@@ -535,14 +535,14 @@
       "dependencies": {
         "org.nuget.system.collections.immutable": "5.0.0"
       },
-      "url": "https://unitynuget-registry.azurewebsites.net"
+      "url": "https://upm-pkgs.voltstro.dev"
     },
     "org.nuget.system.runtime.compilerservices.unsafe": {
-      "version": "5.0.0",
+      "version": "6.0.0",
       "depth": 1,
       "source": "registry",
       "dependencies": {},
-      "url": "https://unitynuget-registry.azurewebsites.net"
+      "url": "https://upm-pkgs.voltstro.dev"
     },
     "org.nuget.system.threading.tasks.extensions": {
       "version": "4.5.4",
@@ -551,7 +551,7 @@
       "dependencies": {
         "org.nuget.system.runtime.compilerservices.unsafe": "4.5.3"
       },
-      "url": "https://unitynuget-registry.azurewebsites.net"
+      "url": "https://upm-pkgs.voltstro.dev"
     },
     "com.unity.modules.animation": {
       "version": "1.0.0",
