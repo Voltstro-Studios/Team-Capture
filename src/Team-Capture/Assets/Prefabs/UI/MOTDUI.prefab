@@ -28,6 +28,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3589815490834339113}
   m_RootOrder: 0
@@ -164,6 +165,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2504687705129561219}
   m_Father: {fileID: 0}
@@ -250,7 +252,7 @@ MonoBehaviour:
   motdTitleText: {fileID: 1194993569960543615}
   motdText: {fileID: 4979915225060793068}
   motdTextScroll: {fileID: 8401087233452366145}
-  webBrowserUI: {fileID: 3877039350965666297}
+  webBrowserUI: {fileID: 116679300404327738}
 --- !u!1 &1718537148597373534
 GameObject:
   m_ObjectHideFlags: 0
@@ -279,6 +281,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3589815490834339113}
   - {fileID: 2862600375759016823}
@@ -358,6 +361,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 418633927334736398}
   m_Father: {fileID: 2707617401405135833}
@@ -437,6 +441,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3940599529690146037}
   m_Father: {fileID: 7429448205124695654}
@@ -567,6 +572,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8654765594697842182}
   m_Father: {fileID: 7324702302373719565}
@@ -606,6 +612,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6106275424285130750}
   m_Father: {fileID: 2862600375759016823}
@@ -714,8 +721,8 @@ GameObject:
   - component: {fileID: 7179768754307090650}
   - component: {fileID: 5215684614827701939}
   - component: {fileID: 672742194670943262}
-  - component: {fileID: 3877039350965666297}
   - component: {fileID: 7181878127308309454}
+  - component: {fileID: 116679300404327738}
   m_Layer: 5
   m_Name: WebBrowserView
   m_TagString: Untagged
@@ -733,6 +740,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2504687705129561219}
   m_RootOrder: 2
@@ -777,47 +785,6 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
---- !u!114 &3877039350965666297
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5713883651575145112}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a1b3c29db30831458683c82a632cde6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  browserClient:
-    browserEngine: UnityWebBrowser.Engine.Cef
-    initialUrl: https://tc.voltstro.dev/motd
-    resolution:
-      Width: 1761
-      Height: 838
-    backgroundColor:
-      serializedVersion: 2
-      rgba: 4294967295
-    javascript: 1
-    cache: 1
-    webRtc: 0
-    proxySettings:
-      Username: 
-      Password: 
-      ProxyServer: 0
-    remoteDebugging: 0
-    remoteDebuggingPort: 9022
-    ipcSettings:
-      preferPipes: 1
-      outPipeName: UnityWebBrowserOut
-      inPipeName: UnityWebBrowserIn
-      outPort: 5555
-      inPort: 5556
-      connectionTimeout: 100000
-    engineStartupTimeout: 100000
-    logSeverity: 0
-  supportFullscreen: 0
-  hideOnFullscreen: []
 --- !u!114 &7181878127308309454
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -830,6 +797,45 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31af88fc1f66d3e4385c395202766cc2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &116679300404327738
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5713883651575145112}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53d0570114d34f649962da70092c0cea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  browserClient:
+    engine: {fileID: 11400000, guid: 649ce3cfdf00ca615abcf2bb62227f5c, type: 2}
+    initialUrl: https://voltstro.dev
+    resolution:
+      Width: 2050
+      Height: 838
+    backgroundColor:
+      serializedVersion: 2
+      rgba: 4294967295
+    javascript: 1
+    cache: 1
+    webRtc: 0
+    localStorage: 1
+    popupAction: 0
+    proxySettings:
+      Username: 
+      Password: 
+      ProxyServer: 0
+    remoteDebugging: 0
+    remoteDebuggingPort: 9022
+    communicationLayer: {fileID: 11400000, guid: 05fef73d64ae908d1b4ec02a676d1ccc,
+      type: 2}
+    engineStartupTimeout: 7000
+    logSeverity: 1
+  inputHandler: {fileID: 11400000, guid: 565be9a8022a65c7288f47df26d5fe7f, type: 2}
+  disableMouseInputs: 0
+  disableKeyboardInputs: 0
 --- !u!1 &5803078907941104289
 GameObject:
   m_ObjectHideFlags: 0
@@ -858,6 +864,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6662275051364993876}
   m_Father: {fileID: 2504687705129561219}
@@ -935,6 +942,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2451241907217156997}
   m_Father: {fileID: 2862600375759016823}
@@ -1024,6 +1032,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6106275424285130750}
   m_RootOrder: 0
@@ -1098,6 +1107,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1175377775722861701}
   m_Father: {fileID: 2504687705129561219}
@@ -1163,6 +1173,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1175377775722861701}
   m_RootOrder: 0
@@ -1308,7 +1319,8 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   references:
-    version: 1
+    version: 2
+    RefIds: []
 --- !u!1 &8401087233452366145
 GameObject:
   m_ObjectHideFlags: 0
@@ -1338,6 +1350,7 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2707617401405135833}
   - {fileID: 7324702302373719565}
@@ -1445,6 +1458,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2451241907217156997}
   m_RootOrder: 0

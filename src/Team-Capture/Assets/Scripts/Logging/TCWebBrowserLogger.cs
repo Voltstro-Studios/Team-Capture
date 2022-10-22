@@ -4,7 +4,7 @@
 // This project is governed by the AGPLv3 License.
 // For more details see the LICENSE file.
 
-using UnityWebBrowser.Logging;
+using VoltstroStudios.UnityWebBrowser.Logging;
 
 namespace Team_Capture.Logging
 {

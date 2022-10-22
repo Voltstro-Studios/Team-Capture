@@ -7,13 +7,13 @@
 using System.IO;
 using Team_Capture.Console;
 using UnityEngine;
-using UnityWebBrowser;
-using UnityWebBrowser.Shared;
+using VoltstroStudios.UnityWebBrowser;
+using VoltstroStudios.UnityWebBrowser.Shared;
 using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.UI
 {
-    [RequireComponent(typeof(WebBrowserUI))]
+    [RequireComponent(typeof(WebBrowserUIBasic))]
     public class TCWebBrowserController : MonoBehaviour
     {
         //[ConVar("cl_webbrowser_ipc_port", "The port that the game and the process will communicate on", true)]
@@ -43,7 +43,7 @@ namespace Team_Capture.UI
 
         private void Start()
         {
-            WebBrowserUI webBrowser = GetComponent<WebBrowserUI>();
+            WebBrowserUIBasic webBrowser = GetComponent<WebBrowserUIBasic>();
             webBrowser.browserClient.logSeverity = WebBrowserDebugLog ? LogSeverity.Debug : LogSeverity.Info;
             webBrowser.browserClient.javascript = WebBrowserJs;
             webBrowser.browserClient.cache = WebBrowserCache;

@@ -10,7 +10,7 @@ using Team_Capture.Logging;
 using Team_Capture.UserManagement;
 using TMPro;
 using UnityEngine;
-using UnityWebBrowser;
+using VoltstroStudios.UnityWebBrowser;
 
 namespace Team_Capture.UI.MOTD
 {
@@ -48,7 +48,7 @@ function hideControls() {
         [SerializeField] private TextMeshProUGUI motdText;
 
         [SerializeField] private GameObject motdTextScroll;
-        [SerializeField] private WebBrowserUI webBrowserUI;
+        [SerializeField] private WebBrowserUIBasic webBrowserUI;
 
         private Action onCloseAction;
 
