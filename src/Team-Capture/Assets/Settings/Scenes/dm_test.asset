@@ -33,27 +33,27 @@ MonoBehaviour:
   - {fileID: 11400000, guid: da803de1f5f09f247aac351f1c13c59a, type: 2}
   pooledObjects:
     list:
-    - Key:
+    - key:
         assetReference:
           m_AssetGUID: aeee56d8504e890689596ca349205694
           m_SubObjectName: 
           m_SubObjectType: 
           m_EditorAssetChanged: 0
-      Value: 1
-    - Key:
+      value: 1
+    - key:
         assetReference:
           m_AssetGUID: 8741f47e93961d34f81bf7f96e1277ac
           m_SubObjectName: 
           m_SubObjectType: 
           m_EditorAssetChanged: 0
-      Value: 0
-    - Key:
+      value: 0
+    - key:
         assetReference:
           m_AssetGUID: aeeb5910131c55e4cb505d9f7ebab423
           m_SubObjectName: 
           m_SubObjectType: 
           m_EditorAssetChanged: 0
-      Value: 0
+      value: 0
     keyCollision: 0
   showStartTime: 1
   isMainMenu: 0
