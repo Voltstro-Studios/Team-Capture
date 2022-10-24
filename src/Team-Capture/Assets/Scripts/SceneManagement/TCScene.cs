@@ -70,7 +70,7 @@ namespace Team_Capture.SceneManagement
         /// <summary>
         ///     Objects to pool
         /// </summary>
-        //[HideInInspector]
+        [HideInNormalInspector]
         public GenericDictionary<CachedAddressable<GameObject>, bool> pooledObjects;
 
         /// <summary>

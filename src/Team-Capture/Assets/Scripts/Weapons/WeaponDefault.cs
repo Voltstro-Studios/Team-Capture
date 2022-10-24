@@ -35,6 +35,17 @@ namespace Team_Capture.Weapons
     public class WeaponDefault : WeaponBase
     {
         /// <summary>
+        ///     The tracer that is used
+        /// </summary>
+        [Header("Weapon Graphics")]
+        public CachedAddressable<GameObject> weaponTracer;
+        
+        /// <summary>
+        ///     The bullet hole that is used
+        /// </summary>
+        public CachedAddressable<GameObject> weaponBulletHole;
+        
+        /// <summary>
         ///     How much damage the weapon does
         /// </summary>
         [Header("Weapon Damage")] [Tooltip("How much damage the weapon does")]
@@ -97,9 +108,6 @@ namespace Team_Capture.Weapons
         [Tooltip("What the weapon's reload mode is")]
         public WeaponDefaultReloadMode weaponReloadMode;
 
-        public CachedAddressable<GameObject> weaponTracer;
-        public CachedAddressable<GameObject> weaponBulletHole;
-        
         private int currentBulletCount;
         private bool isReloading;
 

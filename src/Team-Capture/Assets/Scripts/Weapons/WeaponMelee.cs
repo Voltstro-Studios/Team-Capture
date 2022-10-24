@@ -29,6 +29,12 @@ namespace Team_Capture.Weapons
     internal class WeaponMelee : WeaponBase
     {
         /// <summary>
+        ///     The hit hole that the melee will make
+        /// </summary>
+        [Header("Weapon Graphics")]
+        public CachedAddressable<GameObject> hitHole;
+        
+        /// <summary>
         ///     How much damage does the weapon do per hit
         /// </summary>
         [Header("Weapon Damage")] [Tooltip("How much damage does the weapon do per hit")]
@@ -45,8 +51,6 @@ namespace Team_Capture.Weapons
         /// </summary>
         [Tooltip("How far does the weapon hit")]
         public float weaponRange = 25;
-
-        public CachedAddressable<GameObject> hitHole;
 
         private GameObjectPoolBase bulletHolesPool;
 

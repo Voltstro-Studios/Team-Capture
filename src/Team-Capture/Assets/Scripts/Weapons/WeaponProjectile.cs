@@ -25,6 +25,12 @@ namespace Team_Capture.Weapons
     public class WeaponProjectile : WeaponBase
     {
         /// <summary>
+        ///     The projectile that will shot
+        /// </summary>
+        [Header("Weapon Graphics")]
+        public CachedAddressable<GameObject> projectileObject;
+        
+        /// <summary>
         ///     How far does something have to be for "auto aim" to kick in
         /// </summary>
         [Header("Weapon Aiming")] public float projectileAutoAimMinRange = 10f;
@@ -46,8 +52,6 @@ namespace Team_Capture.Weapons
         [Header("Weapon Reloading")] [Tooltip("How long it takes for the weapon to reload (in milliseconds)")]
         public int weaponReloadTime = 2000;
 
-        public CachedAddressable<GameObject> projectileObject;
-
         private int currentProjectileCount;
         private bool isReloading;
 
@@ -57,6 +61,7 @@ namespace Team_Capture.Weapons
 
         private CancellationTokenSource reloadCancellation;
         private CancellationTokenSource shootRepeatedlyCancellation;
+        
         private WeaponGraphics weaponGraphics;
 
         public override WeaponType WeaponType => WeaponType.Projectile;
