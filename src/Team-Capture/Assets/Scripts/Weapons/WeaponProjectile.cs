@@ -4,9 +4,11 @@
 // This project is governed by the AGPLv3 License.
 // For more details see the LICENSE file.
 
+using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Mirror;
+using Team_Capture.AddressablesAddons;
 using Team_Capture.Helper;
 using Team_Capture.Pooling;
 using Team_Capture.SceneManagement;
@@ -44,12 +46,14 @@ namespace Team_Capture.Weapons
         [Header("Weapon Reloading")] [Tooltip("How long it takes for the weapon to reload (in milliseconds)")]
         public int weaponReloadTime = 2000;
 
+        public CachedAddressable<GameObject> projectileObject;
+
         private int currentProjectileCount;
         private bool isReloading;
 
         private float nextTimeToFire;
 
-        private NetworkProjectileObjectsPool projectileObjectsPool;
+        private GameObjectPoolBase projectileObjectsPool;
 
         private CancellationTokenSource reloadCancellation;
         private CancellationTokenSource shootRepeatedlyCancellation;
@@ -138,7 +142,7 @@ namespace Team_Capture.Weapons
             isReloading = false;
 
             if (isServer)
-                projectileObjectsPool = GameSceneManager.Instance.rocketsPool;
+                projectileObjectsPool = GameSceneManager.Instance.GetPoolByObject(projectileObject);
 
             if (isLocalClient)
                 OnUIUpdate(weaponManager, new DefaultHudUpdateMessage(null, currentProjectileCount, isReloading));
@@ -180,6 +184,11 @@ namespace Team_Capture.Weapons
 
                 isReloading = defaultHudUpdateMessage.IsReloading;
             }
+        }
+
+        public override KeyValuePair<CachedAddressable<GameObject>, bool>[] GetObjectsNeededToBePooled()
+        {
+            return new[] { KeyValuePair.Create(projectileObject, true) };
         }
 
         [Server]

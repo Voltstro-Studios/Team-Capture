@@ -4,13 +4,12 @@
 // This project is governed by the AGPLv3 License.
 // For more details see the LICENSE file.
 
-using System;
 using System.IO;
 using Mirror;
 using Team_Capture.AddressablesAddons;
+using Team_Capture.Collections;
 using Team_Capture.Weapons;
 using UnityEngine;
-using UnityEngine.Localization;
 
 namespace Team_Capture.SceneManagement
 {
@@ -65,13 +64,14 @@ namespace Team_Capture.SceneManagement
         /// <summary>
         ///     The stock weapons to add to player
         /// </summary>
+        //TODO: Addressables
         [Header("Weapon Settings")] public WeaponBase[] stockWeapons;
 
-        public GameObject traceEffectPrefab;
-
-        public GameObject bulletHoleEffectPrefab;
-
-        public CachedAddressable<GameObject> rocketPrefab;
+        /// <summary>
+        ///     Objects to pool
+        /// </summary>
+        //[HideInInspector]
+        public GenericDictionary<CachedAddressable<GameObject>, bool> pooledObjects;
 
         /// <summary>
         ///     The scene, but only its name (So no 'Assets/Scenes/*.unity' stuff)

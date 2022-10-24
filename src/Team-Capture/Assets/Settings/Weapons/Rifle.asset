@@ -24,6 +24,9 @@ MonoBehaviour:
   weaponCameraRecoilAmount: {x: 5, y: 0, z: 0}
   weaponRecoilCameraSpeed: 6
   weaponRecoilCameraReturnSpeed: 20
+  weaponRecoilRotation: {x: 10, y: 0, z: 0}
+  weaponRecoilRotationSpeed: 8
+  weaponRecoilRotationReturnSpeed: 38
   weaponDamage: 6
   weaponDamageDropOff:
     serializedVersion: 2
@@ -65,3 +68,15 @@ MonoBehaviour:
   weaponFireMode: 0
   weaponReloadTime: 3000
   weaponReloadMode: 0
+  weaponTracer:
+    assetReference:
+      m_AssetGUID: aeeb5910131c55e4cb505d9f7ebab423
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+  weaponBulletHole:
+    assetReference:
+      m_AssetGUID: 8741f47e93961d34f81bf7f96e1277ac
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0

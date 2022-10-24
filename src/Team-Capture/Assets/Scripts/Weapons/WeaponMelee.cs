@@ -5,9 +5,11 @@
 // For more details see the LICENSE file.
 
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Mirror;
+using Team_Capture.AddressablesAddons;
 using Team_Capture.Helper;
 using Team_Capture.LagCompensation;
 using Team_Capture.Player;
@@ -44,7 +46,9 @@ namespace Team_Capture.Weapons
         [Tooltip("How far does the weapon hit")]
         public float weaponRange = 25;
 
-        private GameObjectPool bulletHolesPool;
+        public CachedAddressable<GameObject> hitHole;
+
+        private GameObjectPoolBase bulletHolesPool;
 
         private float nextTimeToFire;
         private CancellationTokenSource shootRepeatedlyCancellation;
@@ -88,7 +92,7 @@ namespace Team_Capture.Weapons
 
         protected override void OnAdd(WeaponManager weaponManager)
         {
-            bulletHolesPool = GameSceneManager.Instance.bulletHolePool;
+            bulletHolesPool = GameSceneManager.Instance.GetPoolByObject(hitHole);
             nextTimeToFire = 0f;
         }
 
@@ -113,6 +117,11 @@ namespace Team_Capture.Weapons
 
         public override void OnUIUpdate(WeaponManager weaponManager, IHudUpdateMessage hudUpdateMessage)
         {
+        }
+
+        public override KeyValuePair<CachedAddressable<GameObject>, bool>[] GetObjectsNeededToBePooled()
+        {
+            return new[] { KeyValuePair.Create(hitHole, false) };
         }
 
         protected override void OnSerialize(NetworkWriter writer)

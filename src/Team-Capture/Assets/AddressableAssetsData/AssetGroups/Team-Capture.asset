@@ -135,6 +135,14 @@ MonoBehaviour:
     m_Address: Assets/Prefabs/Projectiles/Rocket.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: aeeb5910131c55e4cb505d9f7ebab423
+    m_Address: Assets/Prefabs/Particles/BulletTracer.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 8741f47e93961d34f81bf7f96e1277ac
+    m_Address: Assets/Prefabs/Decals/BulletHole.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 31dc88cf5cd9dc44ead1cd2deab1bc53, type: 2}
   m_SchemaSet:

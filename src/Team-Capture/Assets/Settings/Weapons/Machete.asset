@@ -24,6 +24,15 @@ MonoBehaviour:
   weaponCameraRecoilAmount: {x: 0, y: 0, z: 0}
   weaponRecoilCameraSpeed: 0
   weaponRecoilCameraReturnSpeed: 0
+  weaponRecoilRotation: {x: 10, y: 0, z: 0}
+  weaponRecoilRotationSpeed: 8
+  weaponRecoilRotationReturnSpeed: 38
   weaponDamage: 25
   weaponFireRate: 4
   weaponRange: 5
+  hitHole:
+    assetReference:
+      m_AssetGUID: 8741f47e93961d34f81bf7f96e1277ac
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0

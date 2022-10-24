@@ -68,3 +68,15 @@ MonoBehaviour:
   weaponFireMode: 0
   weaponReloadTime: 2000
   weaponReloadMode: 0
+  weaponTracer:
+    assetReference:
+      m_AssetGUID: aeeb5910131c55e4cb505d9f7ebab423
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+  weaponBulletHole:
+    assetReference:
+      m_AssetGUID: 8741f47e93961d34f81bf7f96e1277ac
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0

@@ -160,6 +160,10 @@ namespace Team_Capture.SceneManagement
         /// <returns></returns>
         public static TCScene FindSceneInfo(string name)
         {
+            //TODO: We don't want to be doing this check all the time, only when we need to
+            if (scenes == null)
+                LoadAllScenes();
+            
             Option<TCScene> result = scenes.AsValueEnumerable().Where(s => s.name == name).First();
             if (result.IsNone)
                 return null;
@@ -173,6 +177,9 @@ namespace Team_Capture.SceneManagement
         /// <returns></returns>
         public static TCScene GetActiveScene()
         {
+            if (scenes == null)
+                LoadAllScenes();
+            
             return FindSceneInfo(SceneManager.GetActiveScene().name);
         }
 

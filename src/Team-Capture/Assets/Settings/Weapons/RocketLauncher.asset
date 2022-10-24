@@ -31,3 +31,9 @@ MonoBehaviour:
   maxWeaponProjectileCount: 4
   weaponFireRate: 2
   weaponReloadTime: 600
+  projectileObject:
+    assetReference:
+      m_AssetGUID: aeee56d8504e890689596ca349205694
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0

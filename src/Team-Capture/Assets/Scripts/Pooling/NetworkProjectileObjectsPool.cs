@@ -8,33 +8,19 @@ using System;
 using Mirror;
 using Team_Capture.Weapons.Projectiles;
 using UnityEngine;
-using UnityEngine.Pool;
 using Logger = Team_Capture.Logging.Logger;
 using Object = UnityEngine.Object;
 
 namespace Team_Capture.Pooling
 {
-    public sealed class NetworkProjectileObjectsPool
+    public sealed class NetworkProjectileObjectsPool : GameObjectPoolBase
     {
-        private readonly IObjectPool<GameObject> objectPool;
-
         public NetworkProjectileObjectsPool(GameObject prefab)
+            : base(prefab)
         {
-            objectPool = new LinkedPool<GameObject>(() => CreateObject(prefab), OnTakeObject, OnReturnObject,
-                OnDestroyObject);
         }
 
-        public GameObject GetPooledObject()
-        {
-            return objectPool.Get();
-        }
-
-        public void ReturnPooledObject(GameObject gameObject)
-        {
-            objectPool.Release(gameObject);
-        }
-
-        private GameObject CreateObject(GameObject prefab)
+        protected override GameObject CreateObject(GameObject prefab)
         {
             GameObject newObj = Object.Instantiate(prefab);
             ProjectileBase projectileBase = newObj.GetComponent<ProjectileBase>();
@@ -52,15 +38,15 @@ namespace Team_Capture.Pooling
             return newObj;
         }
 
-        private void OnTakeObject(GameObject gameObject)
+        protected override void OnTakeObject(GameObject gameObject)
         {
         }
 
-        private void OnReturnObject(GameObject gameObject)
+        protected override void OnReturnObject(GameObject gameObject)
         {
         }
 
-        private void OnDestroyObject(GameObject gameObject)
+        protected override void OnDestroyObject(GameObject gameObject)
         {
             NetworkServer.Destroy(gameObject);
         }

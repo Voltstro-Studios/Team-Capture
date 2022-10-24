@@ -5,31 +5,17 @@
 // For more details see the LICENSE file.
 
 using UnityEngine;
-using UnityEngine.Pool;
 
 namespace Team_Capture.Pooling
 {
-    internal sealed class GameObjectPool
+    public sealed class GameObjectPool : GameObjectPoolBase
     {
-        private readonly IObjectPool<GameObject> objectPool;
-
         public GameObjectPool(GameObject prefab)
+            : base(prefab)
         {
-            objectPool = new LinkedPool<GameObject>(() => CreateObject(prefab), OnTakeObject, OnReturnObject,
-                OnDestroyObject);
         }
 
-        public GameObject GetPooledObject()
-        {
-            return objectPool.Get();
-        }
-
-        public void ReturnPooledObject(GameObject gameObject)
-        {
-            objectPool.Release(gameObject);
-        }
-
-        private GameObject CreateObject(GameObject prefab)
+        protected override GameObject CreateObject(GameObject prefab)
         {
             GameObject newObj = Object.Instantiate(prefab);
             PoolReturn returnComponent = newObj.GetComponent<PoolReturn>();
@@ -37,21 +23,6 @@ namespace Team_Capture.Pooling
                 returnComponent.Setup(this);
 
             return newObj;
-        }
-
-        private void OnTakeObject(GameObject gameObject)
-        {
-            gameObject.SetActive(true);
-        }
-
-        private void OnReturnObject(GameObject gameObject)
-        {
-            gameObject.SetActive(false);
-        }
-
-        private void OnDestroyObject(GameObject gameObject)
-        {
-            Object.Destroy(gameObject);
         }
     }
 }

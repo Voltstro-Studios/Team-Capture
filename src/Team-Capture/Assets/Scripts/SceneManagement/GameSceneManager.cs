@@ -4,9 +4,13 @@
 // This project is governed by the AGPLv3 License.
 // For more details see the LICENSE file.
 
-using Team_Capture.Logging;
+using System.Collections.Generic;
+using NetFabric.Hyperlinq;
+using Team_Capture.AddressablesAddons;
 using Team_Capture.Pooling;
+using UnityEngine;
 using UnityEngine.SceneManagement;
+using Logger = Team_Capture.Logging.Logger;
 
 namespace Team_Capture.SceneManagement
 {
@@ -27,9 +31,19 @@ namespace Team_Capture.SceneManagement
                 return;
             }
 
-            tracersEffectsPool = new GameObjectPool(ActiveScene.traceEffectPrefab);
-            bulletHolePool = new GameObjectPool(ActiveScene.bulletHoleEffectPrefab);
-            rocketsPool = new NetworkProjectileObjectsPool(ActiveScene.rocketPrefab);
+            gameObjectPools = new KeyValuePair<CachedAddressable<GameObject>, GameObjectPoolBase>[ActiveScene.pooledObjects.Count];
+            for (int i = 0; i < ActiveScene.pooledObjects.Count; i++)
+            {
+                KeyValuePair<CachedAddressable<GameObject>, bool> pooledObject = ActiveScene.pooledObjects
+                    .AsValueEnumerable()
+                    .ElementAt(i).Value;
+
+                gameObjectPools[i] = pooledObject.Value
+                    ? KeyValuePair.Create<CachedAddressable<GameObject>, GameObjectPoolBase>(pooledObject.Key,
+                        new NetworkProjectileObjectsPool(pooledObject.Key.Value))
+                    : KeyValuePair.Create<CachedAddressable<GameObject>, GameObjectPoolBase>(pooledObject.Key,
+                        new GameObjectPool(pooledObject.Key.Value));
+            }
         }
 
         #region TCScene
@@ -48,9 +62,18 @@ namespace Team_Capture.SceneManagement
 
         #region Pools
 
-        internal GameObjectPool tracersEffectsPool;
-        internal GameObjectPool bulletHolePool;
-        internal NetworkProjectileObjectsPool rocketsPool;
+        private KeyValuePair<CachedAddressable<GameObject>, GameObjectPoolBase>[] gameObjectPools;
+
+        public GameObjectPoolBase GetPoolByObject(CachedAddressable<GameObject> objectToGet)
+        {
+            //ReSharper doesn't seem to pickup on it's NetFabric.Hyperlinq
+            // ReSharper disable once ReplaceWithSingleCallToFirst
+            Option<KeyValuePair<CachedAddressable<GameObject>, GameObjectPoolBase>> pool = gameObjectPools
+                .AsValueEnumerable()
+                .Where(x => x.Key.Equals(objectToGet)).First();
+
+            return pool.Value.Value;
+        }
 
         #endregion
     }

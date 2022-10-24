@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Mirror;
+using Team_Capture.AddressablesAddons;
 using Team_Capture.Helper;
 using Team_Capture.LagCompensation;
 using Team_Capture.Player;
@@ -96,8 +97,9 @@ namespace Team_Capture.Weapons
         [Tooltip("What the weapon's reload mode is")]
         public WeaponDefaultReloadMode weaponReloadMode;
 
-        private GameObjectPool bulletHolesPool;
-
+        public CachedAddressable<GameObject> weaponTracer;
+        public CachedAddressable<GameObject> weaponBulletHole;
+        
         private int currentBulletCount;
         private bool isReloading;
 
@@ -106,7 +108,9 @@ namespace Team_Capture.Weapons
         private CancellationTokenSource reloadCancellation;
         private CancellationTokenSource shootRepeatedlyCancellation;
 
-        private GameObjectPool tracerPool;
+        private GameObjectPoolBase bulletHolesPool;
+        private GameObjectPoolBase tracerPool;
+        
         private WeaponGraphics weaponGraphics;
 
         public override WeaponType WeaponType => WeaponType.Default;
@@ -191,6 +195,11 @@ namespace Team_Capture.Weapons
             }
         }
 
+        public override KeyValuePair<CachedAddressable<GameObject>, bool>[] GetObjectsNeededToBePooled()
+        {
+            return new[] { KeyValuePair.Create(weaponBulletHole, false), KeyValuePair.Create(weaponTracer, false) };
+        }
+
         public override void OnSwitchOnTo(WeaponManager weaponManager)
         {
             if (isLocalClient)
@@ -245,8 +254,8 @@ namespace Team_Capture.Weapons
             if (isLocalClient)
                 OnUIUpdate(weaponManager, new DefaultHudUpdateMessage(null, currentBulletCount, isReloading));
 
-            tracerPool = GameSceneManager.Instance.tracersEffectsPool;
-            bulletHolesPool = GameSceneManager.Instance.bulletHolePool;
+            tracerPool = GameSceneManager.Instance.GetPoolByObject(weaponTracer);
+            bulletHolesPool = GameSceneManager.Instance.GetPoolByObject(weaponBulletHole);
 
             weaponGraphics = weaponObjectInstance.GetComponent<WeaponGraphics>();
             if (weaponGraphics == null)

@@ -5,6 +5,7 @@
 // For more details see the LICENSE file.
 
 using System;
+using System.Collections.Generic;
 using Mirror;
 using Team_Capture.AddressablesAddons;
 using Team_Capture.Weapons.Effects;
@@ -174,6 +175,12 @@ namespace Team_Capture.Weapons
         /// <param name="weaponManager"></param>
         /// <param name="hudUpdateMessage"></param>
         public abstract void OnUIUpdate(WeaponManager weaponManager, IHudUpdateMessage hudUpdateMessage);
+
+        /// <summary>
+        ///     Objects that need to be pooled
+        /// </summary>
+        /// <returns></returns>
+        public abstract KeyValuePair<CachedAddressable<GameObject>, bool>[] GetObjectsNeededToBePooled();
 
         //Networking
 

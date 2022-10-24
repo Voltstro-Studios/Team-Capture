@@ -33,5 +33,16 @@ namespace Team_Capture.AddressablesAddons
         }
 
         public static implicit operator T(CachedAddressable<T> cachedAddressable) => cachedAddressable.Value;
+
+        public override bool Equals(object obj)
+        {
+            if (obj is CachedAddressable<T> cachedAddressable)
+            {
+                if (cachedAddressable.assetReference.AssetGUID == assetReference.AssetGUID)
+                    return true;
+            }
+
+            return false;
+        }
     }
 }
