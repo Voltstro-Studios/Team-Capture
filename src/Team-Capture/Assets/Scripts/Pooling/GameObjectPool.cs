@@ -8,8 +8,15 @@ using UnityEngine;
 
 namespace Team_Capture.Pooling
 {
+    /// <summary>
+    ///     A standard object pool for <see cref="GameObject"/>s
+    /// </summary>
     public sealed class GameObjectPool : GameObjectPoolBase
     {
+        /// <summary>
+        ///     Instantiates a new <see cref="GameObjectPool"/>
+        /// </summary>
+        /// <param name="prefab"></param>
         public GameObjectPool(GameObject prefab)
             : base(prefab)
         {

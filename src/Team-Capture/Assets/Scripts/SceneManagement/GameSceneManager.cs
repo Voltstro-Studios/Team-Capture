@@ -4,6 +4,7 @@
 // This project is governed by the AGPLv3 License.
 // For more details see the LICENSE file.
 
+using System;
 using System.Collections.Generic;
 using NetFabric.Hyperlinq;
 using Team_Capture.AddressablesAddons;
@@ -31,13 +32,14 @@ namespace Team_Capture.SceneManagement
                 return;
             }
 
+            //Create our object pools
             gameObjectPools = new KeyValuePair<CachedAddressable<GameObject>, GameObjectPoolBase>[ActiveScene.pooledObjects.Count];
             for (int i = 0; i < ActiveScene.pooledObjects.Count; i++)
             {
                 KeyValuePair<CachedAddressable<GameObject>, bool> pooledObject = ActiveScene.pooledObjects
                     .AsValueEnumerable()
                     .ElementAt(i).Value;
-
+                
                 gameObjectPools[i] = pooledObject.Value
                     ? KeyValuePair.Create<CachedAddressable<GameObject>, GameObjectPoolBase>(pooledObject.Key,
                         new NetworkProjectileObjectsPool(pooledObject.Key.Value))
@@ -53,6 +55,10 @@ namespace Team_Capture.SceneManagement
         /// </summary>
         public TCScene ActiveScene { get; private set; }
 
+        /// <summary>
+        ///     Gets the active scene
+        /// </summary>
+        /// <returns></returns>
         public static TCScene GetActiveScene()
         {
             return Instance.ActiveScene;
@@ -64,6 +70,11 @@ namespace Team_Capture.SceneManagement
 
         private KeyValuePair<CachedAddressable<GameObject>, GameObjectPoolBase>[] gameObjectPools;
 
+        /// <summary>
+        ///     Gets a <see cref="GameObjectPoolBase"/> that is for a <see cref="GameObject"/>
+        /// </summary>
+        /// <param name="objectToGet"></param>
+        /// <returns></returns>
         public GameObjectPoolBase GetPoolByObject(CachedAddressable<GameObject> objectToGet)
         {
             //ReSharper doesn't seem to pickup on it's NetFabric.Hyperlinq
@@ -71,6 +82,9 @@ namespace Team_Capture.SceneManagement
             Option<KeyValuePair<CachedAddressable<GameObject>, GameObjectPoolBase>> pool = gameObjectPools
                 .AsValueEnumerable()
                 .Where(x => x.Key.Equals(objectToGet)).First();
+
+            if (pool.IsNone)
+                throw new ArgumentException("A pool doesn't exist for that object!", nameof(objectToGet));
 
             return pool.Value.Value;
         }

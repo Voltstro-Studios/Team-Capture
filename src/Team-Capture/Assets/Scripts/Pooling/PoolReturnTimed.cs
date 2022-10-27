@@ -3,12 +3,18 @@ using Cysharp.Threading.Tasks;
 
 namespace Team_Capture.Pooling
 {
+    /// <summary>
+    ///     A timed pool returner
+    /// </summary>
     public class PoolReturnTimed : PoolReturn
     {
+        /// <summary>
+        ///     How longer to wait until the object is returned back to the pool
+        /// </summary>
         public int timeTillReturn = 5;
 
         private readonly CancellationTokenSource cancellationTokenSource = new();
-        private GameObjectPool pool;
+        private GameObjectPoolBase pool;
 
         private void OnEnable()
         {
@@ -30,7 +36,7 @@ namespace Team_Capture.Pooling
             pool.ReturnPooledObject(gameObject);
         }
 
-        internal override void Setup(GameObjectPool setupPool)
+        internal override void Setup(GameObjectPoolBase setupPool)
         {
             pool = setupPool;
         }
