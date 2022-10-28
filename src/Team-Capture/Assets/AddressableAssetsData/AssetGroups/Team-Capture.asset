@@ -17,6 +17,58 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: db0dfe5ff5d090f4da4feb00168006be
   m_SerializeEntries:
+  - m_GUID: 8741f47e93961d34f81bf7f96e1277ac
+    m_Address: Assets/Prefabs/Decals/BulletHole.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: aeeb5910131c55e4cb505d9f7ebab423
+    m_Address: Assets/Prefabs/Particles/BulletTracer.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 2a8c6e674b7b6d7baaa2ed7b379310dd
+    m_Address: Assets/Prefabs/Pickups/Objects/Pickup_Object_HealthPack.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: fe683fdb2c8587ad48efa74e6ca33754
+    m_Address: Assets/Prefabs/Pickups/Objects/Pickup_Object_Weapon_Rifle.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: bc2dab9c36b8df299b2daf799024a1ac
+    m_Address: Assets/Prefabs/Pickups/Objects/Pickup_Object_Weapon_RocketLauncher.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 5c8796beb7a4115d9abbf088e83e913c
+    m_Address: Assets/Prefabs/Pickups/Objects/Pickup_Object_Weapon_Shotgun.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: aeee56d8504e890689596ca349205694
+    m_Address: Assets/Prefabs/Projectiles/Rocket.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 5f6ed9e4996ff504e845787b05563f99
+    m_Address: Assets/Prefabs/UI/ConsoleGUI.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: a7ba700490bbf943897d5bbd4a72777a
+    m_Address: Assets/Prefabs/Weapons/Weapon_Machete.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 5f5edb97b2388714ca78daa416284087
+    m_Address: Assets/Prefabs/Weapons/Weapon_Pistol.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: f4d0c2754ceeacc43bdc51d9f4d15d71
+    m_Address: Assets/Prefabs/Weapons/Weapon_Rifle.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 20b8c763278f32186b7529feb0c4bf4a
+    m_Address: Assets/Prefabs/Weapons/Weapon_RocketLauncher.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 9c2bb8364aefe81478a0db7da57b20e5
+    m_Address: Assets/Prefabs/Weapons/Weapon_Shotgun.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   - m_GUID: c5ab1e1994811b541b92db7b0c527bfd
     m_Address: Assets/Settings/Integrations/DiscordSettings.asset
     m_ReadOnly: 0
@@ -25,38 +77,27 @@ MonoBehaviour:
     m_Address: Assets/Settings/Integrations/SteamSettings.asset
     m_ReadOnly: 0
     m_SerializedLabels: []
-  - m_GUID: 362135e29414fcc4cb8b6717cd3ff4c2
-    m_Address: Assets/Settings/Weapons/Shotgun.asset
+  - m_GUID: 5dfccef36e7310bafb5f685bca150af4
+    m_Address: Assets/Settings/QuitMessages.asset
     m_ReadOnly: 0
-    m_SerializedLabels:
-    - Weapon
-  - m_GUID: 7f2272658027c3c4088001bda3a587b5
-    m_Address: Assets/Settings/Weapons/Rifle.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Weapon
-  - m_GUID: da803de1f5f09f247aac351f1c13c59a
-    m_Address: Assets/Settings/Weapons/Pistol.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Weapon
-  - m_GUID: 471b24a2f0e2fda498c460d76acfa1e5
-    m_Address: Assets/Settings/Scenes/StartVideo.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - Scene
+    m_SerializedLabels: []
   - m_GUID: 5cd505926b50b204ab2384084cef92cf
     m_Address: Assets/Settings/Scenes/BootStrapper.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - Scene
-  - m_GUID: d17c98ad28f6b4548896e9555aba2efc
-    m_Address: Assets/Settings/Scenes/dm_ditch.asset
+  - m_GUID: fee6dc6d01051db4c8826c383c58d001
+    m_Address: Assets/Settings/Scenes/MainMenu.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - Scene
-  - m_GUID: fee6dc6d01051db4c8826c383c58d001
-    m_Address: Assets/Settings/Scenes/MainMenu.asset
+  - m_GUID: 471b24a2f0e2fda498c460d76acfa1e5
+    m_Address: Assets/Settings/Scenes/StartVideo.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Scene
+  - m_GUID: d17c98ad28f6b4548896e9555aba2efc
+    m_Address: Assets/Settings/Scenes/dm_ditch.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - Scene
@@ -73,14 +114,6 @@ MonoBehaviour:
     m_Address: Assets/Settings/SplashScreen.asset
     m_ReadOnly: 0
     m_SerializedLabels: []
-  - m_GUID: 5dfccef36e7310bafb5f685bca150af4
-    m_Address: Assets/Settings/QuitMessages.asset
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: 5f6ed9e4996ff504e845787b05563f99
-    m_Address: Assets/Prefabs/UI/ConsoleGUI.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
   - m_GUID: 17d0d3072e0bc494ab8f859f016e632a
     m_Address: Assets/Settings/Volume.asset
     m_ReadOnly: 0
@@ -90,59 +123,26 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - Weapon
-  - m_GUID: a7ba700490bbf943897d5bbd4a72777a
-    m_Address: Assets/Prefabs/Weapons/Weapon_Machete.prefab
+  - m_GUID: da803de1f5f09f247aac351f1c13c59a
+    m_Address: Assets/Settings/Weapons/Pistol.asset
     m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: 5f5edb97b2388714ca78daa416284087
-    m_Address: Assets/Prefabs/Weapons/Weapon_Pistol.prefab
+    m_SerializedLabels:
+    - Weapon
+  - m_GUID: 7f2272658027c3c4088001bda3a587b5
+    m_Address: Assets/Settings/Weapons/Rifle.asset
     m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: f4d0c2754ceeacc43bdc51d9f4d15d71
-    m_Address: Assets/Prefabs/Weapons/Weapon_Rifle.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: 9c2bb8364aefe81478a0db7da57b20e5
-    m_Address: Assets/Prefabs/Weapons/Weapon_Shotgun.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: 20b8c763278f32186b7529feb0c4bf4a
-    m_Address: Assets/Prefabs/Weapons/Weapon_RocketLauncher.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Weapon
   - m_GUID: 6b99a84d6151d6feba6c63448e9e5679
     m_Address: Assets/Settings/Weapons/RocketLauncher.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - Weapon
-  - m_GUID: bc2dab9c36b8df299b2daf799024a1ac
-    m_Address: Assets/Prefabs/Pickups/Objects/Pickup_Object_Weapon_RocketLauncher.prefab
+  - m_GUID: 362135e29414fcc4cb8b6717cd3ff4c2
+    m_Address: Assets/Settings/Weapons/Shotgun.asset
     m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: 5c8796beb7a4115d9abbf088e83e913c
-    m_Address: Assets/Prefabs/Pickups/Objects/Pickup_Object_Weapon_Shotgun.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: fe683fdb2c8587ad48efa74e6ca33754
-    m_Address: Assets/Prefabs/Pickups/Objects/Pickup_Object_Weapon_Rifle.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: 2a8c6e674b7b6d7baaa2ed7b379310dd
-    m_Address: Assets/Prefabs/Pickups/Objects/Pickup_Object_HealthPack.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: aeee56d8504e890689596ca349205694
-    m_Address: Assets/Prefabs/Projectiles/Rocket.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: aeeb5910131c55e4cb505d9f7ebab423
-    m_Address: Assets/Prefabs/Particles/BulletTracer.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: 8741f47e93961d34f81bf7f96e1277ac
-    m_Address: Assets/Prefabs/Decals/BulletHole.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Weapon
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 31dc88cf5cd9dc44ead1cd2deab1bc53, type: 2}
   m_SchemaSet:

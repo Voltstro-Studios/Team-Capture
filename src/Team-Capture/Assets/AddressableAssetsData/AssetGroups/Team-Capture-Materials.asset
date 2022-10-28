@@ -17,84 +17,24 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: c0d0de13c7db78ff0b9c762752d7c0e4
   m_SerializeEntries:
-  - m_GUID: 7d4c6f410060d1241abb50869ed6cbdb
-    m_Address: Assets/Materials/Models/Weapons/Shotgun
+  - m_GUID: 40f1d7055abf0d64e986f588b3c302e7
+    m_Address: Assets/Materials/Models/Pickups/Pickup_HealthPack.mat
     m_ReadOnly: 0
     m_SerializedLabels: []
-  - m_GUID: 4bd583b947b7ccb41a35250cddfa2c00
-    m_Address: Assets/Materials/Models/Weapons/Rifle
+  - m_GUID: e6ceb9d7ff377f64a94ba22b98ddcab6
+    m_Address: Assets/Materials/Models/Pickups/Pickup_HealthPack.tga
     m_ReadOnly: 0
     m_SerializedLabels: []
-  - m_GUID: 77100812c99937b40b287e8a3779b59b
-    m_Address: Assets/Materials/Models/Weapons/Pistol
+  - m_GUID: aea5d6b7c99cdb344ad6a5cf466e5281
+    m_Address: Assets/Materials/Models/Pickups/Pickup_HealthPackMetallic.tga
     m_ReadOnly: 0
     m_SerializedLabels: []
-  - m_GUID: f22221b4595d36ab090d523cdda0a253
-    m_Address: Assets/Materials/Models/Weapons/Machete
+  - m_GUID: 94968928f2b8956b580d8fde35abf015
+    m_Address: Assets/Materials/Models/Projectiles/ProjectileRocket
     m_ReadOnly: 0
     m_SerializedLabels: []
-  - m_GUID: 133249645d90b037b964dfbee55c3c95
-    m_Address: Assets/Materials/Models/Weapons/Machete/Weapon_Machete_Normal.png
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: 705e9816eb87f6e408f241938e25b186
-    m_Address: Assets/Materials/Models/Weapons/Machete/Weapon_Machete_Masks.png
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: ee84fd010d8df0151aa5fdd8ea45bfb8
-    m_Address: Assets/Materials/Models/Weapons/Machete/Weapon_Machete_Albedo.png
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: edc3d1e4f8a6de6b3a02f6e97dec2e17
-    m_Address: Assets/Materials/Models/Weapons/Machete/Weapon_Machete_Machete_Machete.mat
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: 904d6ed11d39f30bf80cb305e8f03683
-    m_Address: Assets/Materials/Models/Weapons/Pistol/Weapon_Pistol_Masks.png
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: b67350c76ec7c3547845de2af4ff62a6
-    m_Address: Assets/Materials/Models/Weapons/Pistol/Weapon_Pistol_Normal.png
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: fa4894df064e1f44eb4a211c31d6331e
-    m_Address: Assets/Materials/Models/Weapons/Pistol/Weapon_Pistol_Albedo.png
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: 1652dff1204e21a44b41efa007b054e5
-    m_Address: Assets/Materials/Models/Weapons/Pistol/Weapon_Pistol.mat
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: 0bc68992d61a1b3299cb19e08ceaf22f
-    m_Address: Assets/Materials/Models/Weapons/Rifle/Weapon_Rifle_Masks.png
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: d97f5ff76285c6641ac9dd2bce3afe71
-    m_Address: Assets/Materials/Models/Weapons/Rifle/Weapon_Rifle_Normal.png
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: 6bff16e5a04c81a47881c0bd2d516143
-    m_Address: Assets/Materials/Models/Weapons/Rifle/Weapon_Rifle_Albedo.png
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: 45f09010330b7a34ab72b5a25362e6aa
-    m_Address: Assets/Materials/Models/Weapons/Rifle/Weapon_Rifle.mat
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: c581cd0cf833d47a6a6ef022a7abba12
-    m_Address: Assets/Materials/Models/Weapons/Shotgun/Weapon_Shotgun_Masks.png
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: 376dd890afe1b2949ab47678246765ae
-    m_Address: Assets/Materials/Models/Weapons/Shotgun/Weapon_Shotgun_Normal.png
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: d2047661005377349a70fdf6f5ea4b8e
-    m_Address: Assets/Materials/Models/Weapons/Shotgun/Weapon_Shotgun_Albedo.png
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: 59fc9ccbb5aeda34b891e6cbfd880995
-    m_Address: Assets/Materials/Models/Weapons/Shotgun/Weapon_Shotgun.mat
+  - m_GUID: 094a45270f67bcd3fb475337926542c4
+    m_Address: Assets/Materials/Models/Projectiles/ProjectileRocket/ProjectileRocket.mat
     m_ReadOnly: 0
     m_SerializedLabels: []
   - m_GUID: 9a5e7ef7833df67a795947b8ed329d6d
@@ -109,12 +49,76 @@ MonoBehaviour:
     m_Address: Assets/Materials/Models/Projectiles/ProjectileRocket/ProjectileRocket_Normal.png
     m_ReadOnly: 0
     m_SerializedLabels: []
-  - m_GUID: 094a45270f67bcd3fb475337926542c4
-    m_Address: Assets/Materials/Models/Projectiles/ProjectileRocket/ProjectileRocket.mat
+  - m_GUID: f22221b4595d36ab090d523cdda0a253
+    m_Address: Assets/Materials/Models/Weapons/Machete
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: ee84fd010d8df0151aa5fdd8ea45bfb8
+    m_Address: Assets/Materials/Models/Weapons/Machete/Weapon_Machete_Albedo.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: edc3d1e4f8a6de6b3a02f6e97dec2e17
+    m_Address: Assets/Materials/Models/Weapons/Machete/Weapon_Machete_Machete_Machete.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 705e9816eb87f6e408f241938e25b186
+    m_Address: Assets/Materials/Models/Weapons/Machete/Weapon_Machete_Masks.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 133249645d90b037b964dfbee55c3c95
+    m_Address: Assets/Materials/Models/Weapons/Machete/Weapon_Machete_Normal.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 77100812c99937b40b287e8a3779b59b
+    m_Address: Assets/Materials/Models/Weapons/Pistol
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 1652dff1204e21a44b41efa007b054e5
+    m_Address: Assets/Materials/Models/Weapons/Pistol/Weapon_Pistol.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: fa4894df064e1f44eb4a211c31d6331e
+    m_Address: Assets/Materials/Models/Weapons/Pistol/Weapon_Pistol_Albedo.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 904d6ed11d39f30bf80cb305e8f03683
+    m_Address: Assets/Materials/Models/Weapons/Pistol/Weapon_Pistol_Masks.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: b67350c76ec7c3547845de2af4ff62a6
+    m_Address: Assets/Materials/Models/Weapons/Pistol/Weapon_Pistol_Normal.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 4bd583b947b7ccb41a35250cddfa2c00
+    m_Address: Assets/Materials/Models/Weapons/Rifle
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 45f09010330b7a34ab72b5a25362e6aa
+    m_Address: Assets/Materials/Models/Weapons/Rifle/Weapon_Rifle.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 6bff16e5a04c81a47881c0bd2d516143
+    m_Address: Assets/Materials/Models/Weapons/Rifle/Weapon_Rifle_Albedo.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 0bc68992d61a1b3299cb19e08ceaf22f
+    m_Address: Assets/Materials/Models/Weapons/Rifle/Weapon_Rifle_Masks.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: d97f5ff76285c6641ac9dd2bce3afe71
+    m_Address: Assets/Materials/Models/Weapons/Rifle/Weapon_Rifle_Normal.png
     m_ReadOnly: 0
     m_SerializedLabels: []
   - m_GUID: 6cbf2b10a011fdb72896cbfe34559ac0
     m_Address: Assets/Materials/Models/Weapons/RocketLauncher
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: fefeb769dae07a9cbab06e8e13257cf0
+    m_Address: Assets/Materials/Models/Weapons/RocketLauncher/Weapon_RocketLauncher.mat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 158c159b0eab37533a5a054e14e922b8
+    m_Address: Assets/Materials/Models/Weapons/RocketLauncher/Weapon_RocketLauncher_Albedo.png
     m_ReadOnly: 0
     m_SerializedLabels: []
   - m_GUID: 43cd60cbee5da0411b51415744d5b5ae
@@ -125,28 +129,24 @@ MonoBehaviour:
     m_Address: Assets/Materials/Models/Weapons/RocketLauncher/Weapon_RocketLauncher_Normal.png
     m_ReadOnly: 0
     m_SerializedLabels: []
-  - m_GUID: 158c159b0eab37533a5a054e14e922b8
-    m_Address: Assets/Materials/Models/Weapons/RocketLauncher/Weapon_RocketLauncher_Albedo.png
+  - m_GUID: 7d4c6f410060d1241abb50869ed6cbdb
+    m_Address: Assets/Materials/Models/Weapons/Shotgun
     m_ReadOnly: 0
     m_SerializedLabels: []
-  - m_GUID: fefeb769dae07a9cbab06e8e13257cf0
-    m_Address: Assets/Materials/Models/Weapons/RocketLauncher/Weapon_RocketLauncher.mat
+  - m_GUID: 59fc9ccbb5aeda34b891e6cbfd880995
+    m_Address: Assets/Materials/Models/Weapons/Shotgun/Weapon_Shotgun.mat
     m_ReadOnly: 0
     m_SerializedLabels: []
-  - m_GUID: 94968928f2b8956b580d8fde35abf015
-    m_Address: Assets/Materials/Models/Projectiles/ProjectileRocket
+  - m_GUID: d2047661005377349a70fdf6f5ea4b8e
+    m_Address: Assets/Materials/Models/Weapons/Shotgun/Weapon_Shotgun_Albedo.png
     m_ReadOnly: 0
     m_SerializedLabels: []
-  - m_GUID: e6ceb9d7ff377f64a94ba22b98ddcab6
-    m_Address: Assets/Materials/Models/Pickups/Pickup_HealthPack.tga
+  - m_GUID: c581cd0cf833d47a6a6ef022a7abba12
+    m_Address: Assets/Materials/Models/Weapons/Shotgun/Weapon_Shotgun_Masks.png
     m_ReadOnly: 0
     m_SerializedLabels: []
-  - m_GUID: 40f1d7055abf0d64e986f588b3c302e7
-    m_Address: Assets/Materials/Models/Pickups/Pickup_HealthPack.mat
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-  - m_GUID: aea5d6b7c99cdb344ad6a5cf466e5281
-    m_Address: Assets/Materials/Models/Pickups/Pickup_HealthPackMetallic.tga
+  - m_GUID: 376dd890afe1b2949ab47678246765ae
+    m_Address: Assets/Materials/Models/Weapons/Shotgun/Weapon_Shotgun_Normal.png
     m_ReadOnly: 0
     m_SerializedLabels: []
   m_ReadOnly: 0
