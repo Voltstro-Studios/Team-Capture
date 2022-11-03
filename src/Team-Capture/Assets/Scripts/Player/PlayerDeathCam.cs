@@ -7,43 +7,50 @@
 using Cinemachine;
 using Team_Capture.Helper.Extensions;
 using Team_Capture.Input;
+using Team_Capture.Settings;
+using Team_Capture.Settings.SettingClasses;
 using UnityEngine;
 
 namespace Team_Capture.Player
 {
-    [RequireComponent(typeof(CinemachineVirtualCamera))]
-    internal class PlayerDeathCam : MonoBehaviour
+    [RequireComponent(typeof(CinemachineFreeLook))]
+    internal class PlayerDeathCam : MonoBehaviour, AxisState.IInputAxisProvider
     {
-        [SerializeField] private float lookSensitivity = 100f;
+        [SerializeField] private float xMouseSensitivity = 100f;
+        [SerializeField] private float yMouseSensitivity = 100f;
+        [SerializeField] private bool reverseMouse;
+        
+        [SerializeField]
+        private CinemachineFreeLook.Orbit[] orbitsLookAround =
+        {
+            new(5f, 7f),
+            new(0f, 7f),
+            new(-5f, 7f)
+        };
+
         private PlayerManager playerManager;
+        private PlayerManager ourPlayer;
 
-        private float rotationX;
-        private float rotationY;
+        private CinemachineCollider cameraCollider;
+        private CinemachineFreeLook virtualCamera;
 
-        private CinemachineVirtualCamera virtualCamera;
+        private bool lookAround;
+
+        internal void Setup(PlayerManager localPlayer)
+        {
+            ourPlayer = localPlayer;
+        }
 
         private void Awake()
         {
-            virtualCamera = this.GetComponentOrThrow<CinemachineVirtualCamera>();
-        }
-
-        internal void Update()
-        {
-            if (playerManager != null)
-            {
-                if (playerManager.IsDead)
-                    StopTrackingPlayer();
-
-                return;
-            }
-
-            Vector2 look = InputReader.ReadPlayerDeathCamLook() * Time.deltaTime * lookSensitivity;
-            rotationX -= look.y;
-            rotationY += look.x;
-
-            rotationX = Mathf.Clamp(rotationX, -90, 90);
-
-            transform.rotation = Quaternion.Euler(rotationX, rotationY, 0);
+            cameraCollider = this.GetComponentOrThrow<CinemachineCollider>();
+            cameraCollider.enabled = false;
+            
+            virtualCamera = this.GetComponentOrThrow<CinemachineFreeLook>();
+            virtualCamera.m_Orbits = orbitsLookAround;
+            
+            GameSettings.SettingsUpdated += UpdateSettings;
+            UpdateSettings();
         }
 
         private void OnEnable()
@@ -53,21 +60,55 @@ namespace Team_Capture.Player
 
         private void OnDisable()
         {
-            rotationX = 0;
-            rotationY = 0;
             InputReader.DisablePlayerDeathCamInput();
+            StopTrackingPlayer();
         }
 
         internal void StartTrackingPlayer(PlayerManager playerToTrack)
         {
             playerManager = playerToTrack;
             virtualCamera.m_LookAt = playerManager.transform;
+            
+            //Its our player, so epic spinnny camera
+            if (playerToTrack == ourPlayer)
+            {
+                virtualCamera.m_Follow = playerManager.transform;
+                cameraCollider.enabled = true;
+                
+                lookAround = true;
+            }
         }
 
         internal void StopTrackingPlayer()
         {
+            cameraCollider.enabled = false;
             playerManager = null;
-            virtualCamera.LookAt = null;
+            virtualCamera.m_LookAt = null;
+            virtualCamera.m_Follow = null;
+            lookAround = false;
+        }
+        
+        private void UpdateSettings()
+        {
+            MouseSettingsClass mouseSettings = GameSettings.MouseSettings;
+            xMouseSensitivity = mouseSettings.MouseSensitivity;
+            yMouseSensitivity = mouseSettings.MouseSensitivity;
+            reverseMouse = mouseSettings.ReverseMouse;
+        }
+
+        public float GetAxisValue(int axis)
+        {
+            if (!lookAround)
+                return 0;
+            
+            Vector2 look = InputReader.ReadPlayerDeathCamLook() * Time.fixedDeltaTime;
+            switch (axis)
+            {
+                case 0: return reverseMouse ? look.y * yMouseSensitivity : look.x * xMouseSensitivity;
+                case 1: return reverseMouse ? look.x * xMouseSensitivity : look.y * yMouseSensitivity;
+            }
+
+            return 0;
         }
     }
 }

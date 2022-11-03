@@ -4,6 +4,7 @@
 // This project is governed by the AGPLv3 License.
 // For more details see the LICENSE file.
 
+using System;
 using Cinemachine;
 using Team_Capture.Console;
 using Team_Capture.Core;
@@ -15,10 +16,10 @@ namespace Team_Capture.Settings.Controllers
     /// <summary>
     ///     Handles controlling the <see cref="Camera" />'s settings.
     /// </summary>
-    [RequireComponent(typeof(CinemachineVirtualCamera))]
+    [RequireComponent(typeof(CinemachineVirtualCameraBase))]
     internal class CameraSettingsController : MonoBehaviour
     {
-        private CinemachineVirtualCamera cameraToChange;
+        private CinemachineVirtualCameraBase cameraToChange;
 
         private void Start()
         {
@@ -28,7 +29,7 @@ namespace Team_Capture.Settings.Controllers
                 return;
             }
 
-            cameraToChange = GetComponent<CinemachineVirtualCamera>();
+            cameraToChange = GetComponent<CinemachineVirtualCameraBase>();
 
             GameSettings.SettingsUpdated += UpdateSettings;
             UpdateSettings();
@@ -41,7 +42,19 @@ namespace Team_Capture.Settings.Controllers
 
         private void UpdateSettings()
         {
-            cameraToChange.m_Lens.FieldOfView = GameSettings.AdvSettings.CameraFOV;
+            //Not the most pretty solution, but it works
+            switch (cameraToChange)
+            {
+                case CinemachineFreeLook freeLook:
+                    freeLook.m_Lens.FieldOfView = GameSettings.AdvSettings.CameraFOV;
+                    break;
+                case CinemachineVirtualCamera virtualCamera:
+                    virtualCamera.m_Lens.FieldOfView = GameSettings.AdvSettings.CameraFOV;
+                    break;
+                default:
+                    throw new IndexOutOfRangeException(
+                        "I don't support this Cinemachine camera type! Please add me to the code!");
+            }
         }
 
         [ConCommand("cl_fov", "FOV of the camera", CommandRunPermission.ClientOnly, 1, 1, true)]

@@ -48,6 +48,7 @@ namespace Team_Capture.UI
         {
             playerManager = setPlayerManager;
             playerDeathCam = Instantiate(playerDeathPrefab).GetComponent<PlayerDeathCam>();
+            playerDeathCam.Setup(setPlayerManager);
             playerDeathCam.gameObject.SetActive(false);
         }
 
@@ -80,9 +81,8 @@ namespace Team_Capture.UI
             }
 
             killedByProfileImage.texture = killer.User.UserProfilePicture;
-
-            if (killer != playerManager)
-                playerDeathCam.StartTrackingPlayer(killer);
+            
+            playerDeathCam.StartTrackingPlayer(killer);
 
             if (cancellationTokenSource != null)
             {
