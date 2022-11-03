@@ -9,6 +9,7 @@ using Cysharp.Text;
 using Cysharp.Threading.Tasks;
 using Team_Capture.AddressablesAddons;
 using Team_Capture.Helper;
+using Team_Capture.Helper.Extensions;
 using Team_Capture.Player;
 using TMPro;
 using UnityEngine;
@@ -22,7 +23,7 @@ namespace Team_Capture.UI
         [SerializeField] private CachedLocalizedString yourselfText;
         [SerializeField] private CachedLocalizedString[] killedYourSelfText;
 
-        [SerializeField] private GameObject playerDeathPrefab;
+        [SerializeField] private CachedAddressable<GameObject> playerDeathPrefab;
         [SerializeField] private GameObject panelsObject;
         [SerializeField] private TMP_Text countDownText;
         [SerializeField] private GameObject killedByPanel;
@@ -47,7 +48,7 @@ namespace Team_Capture.UI
         internal void Setup(PlayerManager setPlayerManager)
         {
             playerManager = setPlayerManager;
-            playerDeathCam = Instantiate(playerDeathPrefab).GetComponent<PlayerDeathCam>();
+            playerDeathCam = Instantiate(playerDeathPrefab.Value).GetComponentOrThrow<PlayerDeathCam>();
             playerDeathCam.Setup(setPlayerManager);
             playerDeathCam.gameObject.SetActive(false);
         }
@@ -92,12 +93,12 @@ namespace Team_Capture.UI
 
             cancellationTokenSource = new CancellationTokenSource();
 
-            TimeHelper.CountDown(time, OnCountdownTick, cancellationTokenSource.Token).ContinueWith(
-                () =>
+            TimeHelper.CountDown(time, OnCountdownTick, cancellationTokenSource.Token)
+                .ContinueWith(() =>
                 {
                     cancellationTokenSource.Dispose();
                     cancellationTokenSource = null;
-                });
+                }).Forget();
         }
 
         private void OnCountdownTick(int tick)

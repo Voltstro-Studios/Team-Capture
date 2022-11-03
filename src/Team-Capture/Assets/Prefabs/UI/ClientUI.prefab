@@ -252,8 +252,12 @@ MonoBehaviour:
       m_FallbackState: 0
       m_WaitForCompletion: 0
       m_LocalVariables: []
-  playerDeathPrefab: {fileID: 7275721963195213966, guid: 2c6bcbc732ef12c4b8e606e4ba6b1bff,
-    type: 3}
+  playerDeathPrefab:
+    assetReference:
+      m_AssetGUID: 2c6bcbc732ef12c4b8e606e4ba6b1bff
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
   panelsObject: {fileID: 4581844139149034755}
   countDownText: {fileID: 7104801475544782569}
   killedByPanel: {fileID: 7442269189025398499}
