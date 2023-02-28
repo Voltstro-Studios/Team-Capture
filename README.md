@@ -84,9 +84,17 @@ Unity 2021.3.0f1
 
 ### Pre-Setup
 
-We first need to build Team-Capture's .NET Source generator, which as the name suggests is responsible for generating some TC specific code.
+You **MUST FIRST** build Team-Capture's .NET Source generator, which as the name suggests is responsible for generating some TC specific code.
 
-Open up [`src/Team-Capture.sln`](src/Team-Capture/Team-Capture.sln) in your IDE of choice and build the solution. The generator will be copied to the correct location on successful build. You can close the solution now and continue on.
+Open up [`src/Team-Capture.sln`](src/Team-Capture/Team-Capture.sln) in your IDE of choice and build the solution.
+
+Alternatively, you can run the `dotnet build` command, like so:
+
+```
+dotnet build Team-Capture.sln
+```
+
+Once built, the generator will be copied to the correct location on successful build. It will be placed at `src/Team-Capture/Assets/Editor/Plugins/Team-Capture.Generator.dll`.
 
 #### Setup
 
