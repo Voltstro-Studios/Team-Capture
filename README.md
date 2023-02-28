@@ -3,7 +3,7 @@
 # Team-Capture
 
 [![License](https://img.shields.io/github/license/Voltstro-Studios/Team-Capture.svg)](/LICENSE)
-[![CI Build](https://img.shields.io/github/workflow/status/Voltstro-Studios/Team-Capture/Game%20Build/master?label=Build&logo=github)](https://github.com/Voltstro-Studios/Team-Capture/actions)
+[![CI Build](https://img.shields.io/github/actions/workflow/status/Voltstro-Studios/Team-Capture/main.yml?branch=master)](https://github.com/Voltstro-Studios/Team-Capture/actions)
 [![Discord](https://img.shields.io/badge/Discord-Voltstro-7289da.svg?logo=discord)](https://discord.voltstro.dev)
 [![YouTube](https://img.shields.io/badge/Youtube-Voltstro-red.svg?logo=youtube)](https://www.youtube.com/Voltstro)
 
@@ -60,7 +60,7 @@ Here is a list of people who work on the project:
 
 And here are some people who have worked on the project in the past:
 
-- [EternalClickbait](https://github.com/EternalClickbait) - *Programmer*
+- [Ararem](https://github.com/Ararem) (Formally EternalClickbait) - *Programmer*
 - [HelloHowIsItGoing](https://github.com/HelloHowIsItGoing) - *Testing & Ideas*
 
 If you think you can help out the team, please don't hesitate to email me (project lead)
@@ -78,8 +78,8 @@ We also upload [releases](https://github.com/Voltstro-Studios/Team-Capture/relea
 #### Prerequisites
 
 ```
-Unity 2021.3.0f1
-.NET 5+
+Unity 2021.3.19f1
+.NET 6+
 ```
 
 ### Pre-Setup
